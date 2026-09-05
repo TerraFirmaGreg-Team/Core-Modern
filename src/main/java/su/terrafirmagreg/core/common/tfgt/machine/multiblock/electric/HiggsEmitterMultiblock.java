@@ -117,20 +117,20 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
 
     private void addStatusText(List<Component> textList) {
         if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.higgs_emitter.active").withStyle(ChatFormatting.GREEN));
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
         } else if (getEnergyInputPerSec() < computeEnergyPerTick()) {
-            textList.add(Component.translatable("tfg.machine.higgs_emitter.status.no_energy").withStyle(ChatFormatting.RED));
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy").withStyle(ChatFormatting.RED));
         } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
             for (Component reason : recipeLogic.getFailureReasons()) {
                 textList.add(reason.copy().withStyle(ChatFormatting.RED));
             }
         } else {
-            textList.add(Component.translatable("tfg.machine.higgs_emitter.idle").withStyle(ChatFormatting.GRAY));
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
         }
 
         textList.add(Component.translatable("tfg.machine.higgs_emitter.radius",
                 FormattingUtil.formatNumbers(getRadius())).withStyle(ChatFormatting.AQUA));
-        textList.add(Component.translatable("tfg.machine.higgs_emitter.energy",
+        textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
                 String.format("%,d", computeEnergyPerTick()))
                 .withStyle(ChatFormatting.AQUA));
     }
@@ -175,7 +175,7 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
-        detachProvider();
+        removeProvider();
     }
 
     @Override
@@ -199,8 +199,8 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     private void removeProvider() {
         if (manager != null) {
             manager.removeGravityProvider(getPos());
-            provider = null;
         }
+        provider = null;
     }
 
     // ==================== IEnvironmentMachine ====================

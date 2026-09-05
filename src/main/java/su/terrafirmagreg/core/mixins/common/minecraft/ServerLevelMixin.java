@@ -10,12 +10,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CalendarSleepHelper;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
@@ -55,5 +58,10 @@ public abstract class ServerLevelMixin {
     @Inject(method = "wakeUpAllPlayers", at = @At("TAIL"))
     private void tfg$onWakeUpAllPlayers(CallbackInfo ci) {
         CalendarSleepHelper.onPlayersFinishedSleeping((ServerLevel) (Object) this);
+    }
+
+    @Inject(method = "onBlockStateChange", at = @At("HEAD"))
+    private void tfg$onBlockStateChange(BlockPos pos, BlockState oldState, BlockState newState, CallbackInfo ci) {
+        EnvironmentSystem.onBlockStateChange((ServerLevel) (Object) this, pos, oldState, newState);
     }
 }

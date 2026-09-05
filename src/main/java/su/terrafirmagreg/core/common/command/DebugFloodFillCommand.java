@@ -26,6 +26,7 @@ import su.terrafirmagreg.core.common.environment.RoomScan;
 /**
  * /tfg debug floodfill [maxBlocks] [pos]
  * /tfg debug floodfill diag [maxBlocks] [pos] : Spawn trace
+ * /tfg debug floodfill perm [maxBlocks] [pos] : Air-only passability (heat pump permissive fill)
  * /tfg debug uncacheable
  */
 public class DebugFloodFillCommand {
@@ -35,38 +36,73 @@ public class DebugFloodFillCommand {
                 // /tfg debug floodfill
                 .executes(c -> {
                     BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-                    return runFloodFill(c.getSource(), pos, 1_000_000, 256, false);
+                    return runFloodFill(c.getSource(), pos, 1_000_000, 256, false, false);
                 })
-                // /tfg debug floodfill diag [maxBlocks] [pos]
-                .then(literal("diag")
+                // /tfg debug floodfill perm [...]
+                .then(literal("perm")
                         .executes(c -> {
                             BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-                            return runFloodFill(c.getSource(), pos, 1_000_000, 256, true);
+                            return runFloodFill(c.getSource(), pos, 1_000_000, 256, false, true);
                         })
+                        .then(literal("diag")
+                                .executes(c -> {
+                                    BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                                    return runFloodFill(c.getSource(), pos, 1_000_000, 256, true, true);
+                                })
+                                .then(argument("maxBlocks", IntegerArgumentType.integer(0, 1_000_000))
+                                        .executes(c -> {
+                                            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                                            int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, true, true);
+                                        })
+                                        .then(argument("pos", BlockPosArgument.blockPos())
+                                                .executes(c -> {
+                                                    BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
+                                                    int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                                    return runFloodFill(c.getSource(), pos, maxBlocks, 256, true, true);
+                                                }))))
                         .then(argument("maxBlocks", IntegerArgumentType.integer(0, 1_000_000))
                                 .executes(c -> {
                                     BlockPos pos = BlockPos.containing(c.getSource().getPosition());
                                     int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
-                                    return runFloodFill(c.getSource(), pos, maxBlocks, 256, true);
+                                    return runFloodFill(c.getSource(), pos, maxBlocks, 256, false, true);
                                 })
                                 .then(argument("pos", BlockPosArgument.blockPos())
                                         .executes(c -> {
                                             BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
                                             int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
-                                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, true);
+                                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, false, true);
+                                        }))))
+                // /tfg debug floodfill diag [maxBlocks] [pos]
+                .then(literal("diag")
+                        .executes(c -> {
+                            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                            return runFloodFill(c.getSource(), pos, 1_000_000, 256, true, false);
+                        })
+                        .then(argument("maxBlocks", IntegerArgumentType.integer(0, 1_000_000))
+                                .executes(c -> {
+                                    BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                                    int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                    return runFloodFill(c.getSource(), pos, maxBlocks, 256, true, false);
+                                })
+                                .then(argument("pos", BlockPosArgument.blockPos())
+                                        .executes(c -> {
+                                            BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
+                                            int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, true, false);
                                         }))))
                 // /tfg debug floodfill <maxBlocks> [pos]
                 .then(argument("maxBlocks", IntegerArgumentType.integer(0, 1_000_000))
                         .executes(c -> {
                             BlockPos pos = BlockPos.containing(c.getSource().getPosition());
                             int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
-                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, false);
+                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, false, false);
                         })
                         .then(argument("pos", BlockPosArgument.blockPos())
                                 .executes(c -> {
                                     BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
                                     int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
-                                    return runFloodFill(c.getSource(), pos, maxBlocks, 256, false);
+                                    return runFloodFill(c.getSource(), pos, maxBlocks, 256, false, false);
                                 }))));
 
         debug.then(literal("pressure")
@@ -96,19 +132,20 @@ public class DebugFloodFillCommand {
                 }));
     }
 
-    private static int runFloodFill(CommandSourceStack source, BlockPos start, int maxBlocks, int maxHorizontalDistance, boolean diagnostic) {
+    private static int runFloodFill(CommandSourceStack source, BlockPos start, int maxBlocks, int maxHorizontalDistance, boolean diagnostic, boolean permissive) {
         ServerLevel level = source.getLevel();
+        FloodFill.PassMode passMode = permissive ? FloodFill.PassMode.PERMISSIVE : FloodFill.PassMode.DIRECTIONAL;
 
         source.sendSuccess(() -> Component.literal(String.format(
-                "Running %sflood fill from %s with max %d blocks...",
-                diagnostic ? "diagnostic " : "", start.toShortString(), maxBlocks)), false);
+                "Running %sflood fill from %s with max %d blocks (%s)...",
+                diagnostic ? "diagnostic " : "", start.toShortString(), maxBlocks, passMode)), false);
 
         RoomScan result;
         long startTime = System.nanoTime();
         if (diagnostic) {
-            result = DiagnosticFloodFill.fill(level, start, maxBlocks, maxHorizontalDistance);
+            result = DiagnosticFloodFill.fill(level, start, maxBlocks, maxHorizontalDistance, passMode);
         } else {
-            result = FloodFill.fill(level, start, maxBlocks, maxHorizontalDistance);
+            result = FloodFill.fill(level, start, maxBlocks, maxHorizontalDistance, passMode);
         }
         long elapsed = System.nanoTime() - startTime;
 

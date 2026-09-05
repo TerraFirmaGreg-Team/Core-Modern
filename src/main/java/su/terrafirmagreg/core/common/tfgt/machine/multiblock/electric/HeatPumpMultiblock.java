@@ -32,32 +32,31 @@ import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
-import su.terrafirmagreg.core.common.environment.TemperatureProvider;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.ISpaceHeaterHost;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.SpaceHeaterMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.HeatPumpMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.IHeatPumpHost;
 
 /**
- * GT multiblock wrapper for SpaceHeaterMachine.
+ * GT multiblock wrapper for HeatPumpMachine.
  */
-public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine implements ISpaceHeaterHost, IMachineLife {
+public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implements IHeatPumpHost, IMachineLife {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            SpaceHeaterMultiblock.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            HeatPumpMultiblock.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Override
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
 
-    private final SpaceHeaterMachine machine;
+    private final HeatPumpMachine machine;
 
     @Persisted
     @DescSynced
     private boolean showTraceButton;
 
-    public SpaceHeaterMultiblock(IMachineBlockEntity holder, Object... args) {
+    public HeatPumpMultiblock(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
-        this.machine = new SpaceHeaterMachine(this);
+        this.machine = new HeatPumpMachine(this);
     }
 
     //////////////////////////////////////
@@ -115,43 +114,38 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
 
     private void addStatusText(List<Component> textList) {
         if (machine.isBlocked()) {
-            textList.add(Component.translatable("tfg.machine.space_heater.status.blocked")
-                    .withStyle(ChatFormatting.RED));
-            return;
-        }
-
-        if (machine.isBackVentInsufficient()) {
-            textList.add(Component.translatable("tfg.machine.space_heater.status.no_vent_space")
+            textList.add(Component.translatable("tfg.machine.heat_pump.status.blocked")
                     .withStyle(ChatFormatting.RED));
             return;
         }
 
         if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.space_heater.active").withStyle(ChatFormatting.GREEN));
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
         } else if (getEnergyInputPerSec() < machine.computeEnergyCostPerTick()) {
-            textList.add(Component.translatable("tfg.machine.space_heater.status.no_energy")
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy")
                     .withStyle(ChatFormatting.RED));
         } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
             for (Component reason : recipeLogic.getFailureReasons()) {
                 textList.add(reason.copy().withStyle(ChatFormatting.RED));
             }
         } else {
-            textList.add(Component.translatable("tfg.machine.space_heater.idle").withStyle(ChatFormatting.GRAY));
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
         }
 
-        if (machine.getMode() == TemperatureProvider.Mode.SEALED) {
-            textList.add(Component.translatable("tfg.machine.space_heater.status.sealed")
+        switch (machine.getFrontScan().status()) {
+            case SEALED, SAVED_DATA -> textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.sealed")
                     .withStyle(ChatFormatting.AQUA));
-        } else {
-            textList.add(Component.translatable("tfg.machine.space_heater.status.vented")
+            case ESCAPED_DIMENSION, ESCAPED_BUILD_HEIGHT, ESCAPED_UNLOADED -> textList
+                    .add(Component.translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.YELLOW));
+            case BLOCK_LIMIT -> textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.scan_limit")
+                    .withStyle(ChatFormatting.YELLOW));
+            case NULL -> textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.scanning")
                     .withStyle(ChatFormatting.YELLOW));
         }
 
-        textList.add(Component.translatable("tfg.machine.space_heater.front_size",
-                FormattingUtil.formatNumbers(machine.getFrontGoodCount())).withStyle(ChatFormatting.AQUA));
-        textList.add(Component.translatable("tfg.machine.space_heater.back_size",
-                FormattingUtil.formatNumbers(machine.getBackHazardCount())).withStyle(ChatFormatting.RED));
-        textList.add(Component.translatable("tfg.machine.space_heater.energy",
+        textList.add(Component.translatable("tfg.machine.oxygen_distributor.size",
+                FormattingUtil.formatNumbers(machine.getFrontInteriorSize())).withStyle(ChatFormatting.AQUA));
+        textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
                 String.format("%,.0f", machine.computeEnergyCostPerTick())).withStyle(ChatFormatting.AQUA));
     }
 
@@ -162,20 +156,20 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
     @Override
     public void onLoad() {
         super.onLoad();
-        TFGCore.LOGGER.debug("[spaceheater-multi] onLoad, pos={}", getPos());
+        TFGCore.LOGGER.debug("[heatpump-multi] onLoad, pos={}", getPos());
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        TFGCore.LOGGER.debug("[spaceheater-multi] onUnload, pos={}", getPos());
+        TFGCore.LOGGER.debug("[heatpump-multi] onUnload, pos={}", getPos());
         machine.onUnload();
     }
 
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
-        TFGCore.LOGGER.debug("[spaceheater-multi] onStructureFormed, pos={}", getPos());
+        TFGCore.LOGGER.debug("[heatpump-multi] onStructureFormed, pos={}", getPos());
         if (getLevel() instanceof ServerLevel serverLevel) {
             machine.onLoad(serverLevel);
         }
@@ -184,30 +178,24 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
-        TFGCore.LOGGER.debug("[spaceheater-multi] onStructureInvalid, pos={}", getPos());
+        TFGCore.LOGGER.debug("[heatpump-multi] onStructureInvalid, pos={}", getPos());
         machine.onRemoved();
     }
 
     @Override
     public void onMachineRemoved() {
-        TFGCore.LOGGER.debug("[spaceheater-multi] onMachineRemoved, pos={}", getPos());
+        TFGCore.LOGGER.debug("[heatpump-multi] onMachineRemoved, pos={}", getPos());
         machine.onRemoved();
     }
 
     //////////////////////////////////////
-    // **** ISpaceHeaterHost **********//
+    // **** IHeatPumpHost **************//
     //////////////////////////////////////
 
     @Override
     public long getEnergyInputPerSec() {
         var energy = getEnergyContainer();
         return energy != null ? Math.max(0, energy.getInputPerSec()) : 0;
-    }
-
-    @Override
-    public long getHatchVoltage() {
-        var energy = getEnergyContainer();
-        return energy != null ? Math.max(0, energy.getHighestInputVoltage()) : 0;
     }
 
     @Override
@@ -222,11 +210,11 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
 
     /** Scales energy consumption based on the front region size. */
     public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
-        if (machine instanceof SpaceHeaterMultiblock heater) {
-            if (heater.machine.isBlocked() || heater.machine.isBackVentInsufficient()) {
+        if (machine instanceof HeatPumpMultiblock pump) {
+            if (pump.machine.isBlocked() || !pump.machine.isFrontSealed()) {
                 return ModifierFunction.NULL;
             }
-            double energy = heater.machine.computeEnergyCostPerTick();
+            double energy = pump.machine.computeEnergyCostPerTick();
             double baseEUt = recipe.getInputEUt().getTotalEU();
             if (baseEUt <= 0) {
                 return ModifierFunction.NULL;

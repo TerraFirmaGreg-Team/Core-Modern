@@ -3,9 +3,9 @@ package su.terrafirmagreg.core.common.tfgt.machine.electric;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 
 /**
- * Implemented by GT wrappers that host a {@link SpaceHeaterMachine}.
+ * Implemented by GT wrappers that host a {@link HeatPumpMachine}.
  */
-public interface ISpaceHeaterHost extends IRecipeLogicMachine {
+public interface IHeatPumpHost extends IRecipeLogicMachine {
 
     /**
      * The EU/t the machine can draw from its energy input (0 when no hatch / not formed).
@@ -14,13 +14,7 @@ public interface ISpaceHeaterHost extends IRecipeLogicMachine {
     long getEnergyInputPerSec();
 
     /**
-     * The highest input voltage of the energy hatch (0 when no hatch / not formed).
-     * Used to derive the fixed 0.5A open-room energy draw.
-     */
-    long getHatchVoltage();
-
-    /**
-     * Whether the find-leak UI button should be visible (only when the front region is vented).
+     * Whether the find-leak UI button should be visible (only when the front region is unsealed).
      */
     boolean showTraceButton();
 

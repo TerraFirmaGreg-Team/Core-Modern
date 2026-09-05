@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkEvent;
@@ -326,6 +327,14 @@ public final class EnvironmentSystem {
     @SubscribeEvent
     public static void FluidPlaceBlockEvent(BlockEvent.FluidPlaceBlockEvent e) {
         onBlockChange(e, "fluidPlace");
+    }
+
+    /** Called when a block state changes in place. */
+    public static void onBlockStateChange(ServerLevel level, BlockPos pos, BlockState oldState, BlockState newState) {
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager != null) {
+            manager.onBlockStateChange(pos, oldState, newState);
+        }
     }
 
     /**

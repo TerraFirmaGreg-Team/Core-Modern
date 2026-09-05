@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.common.environment;
 
 /**
- * Shared energy-per-volume curve for enclosed-room machines (oxygen distributor, space heater,
+ * Shared energy-per-volume curve for enclosed-room machines (oxygen distributor, heat pump,
  * higgs emitter). A room 10x larger costs only 4x as much.
  */
 public final class EnclosedRoomEnergyCurve {

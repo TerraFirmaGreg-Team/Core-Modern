@@ -53,7 +53,14 @@ public final class DiagnosticFloodFill {
      * Convenience overload for main-thread callers (commands, etc.)
      */
     public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
-        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension);
+        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension, FloodFill.PassMode.DIRECTIONAL);
+    }
+
+    /**
+     * Convenience overload for main-thread callers (commands, etc.)
+     */
+    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension, FloodFill.PassMode passMode) {
+        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension, passMode);
     }
 
     /**
@@ -69,8 +76,25 @@ public final class DiagnosticFloodFill {
      * @return RoomScan with escapePath populated if there's an escape
      */
     public static RoomScan fill(AsyncBlockReader reader, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+        return fill(reader, start, maxBlocks, maxHorizontalDimension, FloodFill.PassMode.DIRECTIONAL);
+    }
+
+    /**
+     * Perform a diagnostic flood fill with shortest path tracking.
+     *
+     * <p>First runs regular DFS to find the room and escape point, then uses BFS
+     * through the interior blocks with parent tracking to find the shortest path to the escape.
+     *
+     * @param reader                 Block reader (thread-safe for async use)
+     * @param start                  Starting position
+     * @param maxBlocks              Maximum number of interior blocks we should find
+     * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
+     * @param passMode               How block passability is determined
+     * @return RoomScan with escapePath populated if there's an escape
+     */
+    public static RoomScan fill(AsyncBlockReader reader, BlockPos start, int maxBlocks, int maxHorizontalDimension, FloodFill.PassMode passMode) {
         // Run regular flood fill to find the room and escape point
-        RoomScan result = FloodFill.fill(reader, start, maxBlocks, maxHorizontalDimension);
+        RoomScan result = FloodFill.fill(reader, start, maxBlocks, maxHorizontalDimension, passMode);
 
         // If no escape point, return as-is (sealed room or block limit)
         if (result.escapePoint() == null) {

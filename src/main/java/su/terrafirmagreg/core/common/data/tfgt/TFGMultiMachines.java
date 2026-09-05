@@ -1376,11 +1376,11 @@ public class TFGMultiMachines {
                     .where(" ", Predicates.any())
                     .build())
             .register();
-    public static final MultiblockMachineDefinition SPACE_HEATER = REGISTRATE
-            .multiblock("space_heater", SpaceHeaterMultiblock::new)
+    public static final MultiblockMachineDefinition HEAT_PUMP = REGISTRATE
+            .multiblock("heat_pump", HeatPumpMultiblock::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.SPACE_HEATING)
-            .recipeModifier(SpaceHeaterMultiblock::recipeModifier, true)
+            .recipeModifier(HeatPumpMultiblock::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_solid_steel"),

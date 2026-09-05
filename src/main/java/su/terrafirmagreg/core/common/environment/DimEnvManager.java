@@ -20,6 +20,7 @@ import net.minecraftforge.event.level.BlockEvent;
 
 import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 import earth.terrarium.adastra.common.blocks.properties.SlidingDoorPartProperty;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -591,7 +592,7 @@ public class DimEnvManager extends SavedData {
      */
     public void onBlockChange(BlockEvent event) {
         BlockPos pos = event.getPos();
-        if (blockChangeListeners.get(new ChunkPos(pos)) == null)
+        if (blockChangeListeners.get(pos.getX() >> 4, pos.getZ() >> 4) == null)
             return;
 
         if (event instanceof BlockEvent.BreakEvent breakEvent) {
@@ -641,6 +642,30 @@ public class DimEnvManager extends SavedData {
     }
 
     /**
+     * Called when a block state changes in place.
+     *
+     * @param pos      Position of the changed block
+     * @param oldState State before the change
+     * @param newState State after the change
+     */
+    public void onBlockStateChange(BlockPos pos, BlockState oldState, BlockState newState) {
+        Set<IBlockSensitiveMachine> machines = blockChangeListeners.get(pos.getX() >> 4, pos.getZ() >> 4);
+        if (machines == null)
+            return;
+
+        PassInfo before = getCachedPassInfo(oldState);
+        PassInfo after = getCachedPassInfo(newState);
+        if (before.type() != PassType.NO_CACHE && after.type() != PassType.NO_CACHE && before.equals(after)) {
+            return;
+        }
+
+        TFGCore.LOGGER.debug("Dispatching state change at {} to {} machines", pos, machines.size());
+        for (IBlockSensitiveMachine machine : machines) {
+            machine.onBlockChangeAt(pos);
+        }
+    }
+
+    /**
      * Expands a SlidingDoorBlock event to all 9 block positions of the structure.
      * This is necessary for breaking and placing because the other 8 block updates don't fire events.
      */
@@ -664,8 +689,7 @@ public class DimEnvManager extends SavedData {
 
     /** Dispatches a block change at the given position to all machines listening in that chunk. */
     private void dispatchToMachines(BlockPos pos) {
-        ChunkPos chunkPos = new ChunkPos(pos);
-        Set<IBlockSensitiveMachine> machines = blockChangeListeners.get(chunkPos);
+        Set<IBlockSensitiveMachine> machines = blockChangeListeners.get(pos.getX() >> 4, pos.getZ() >> 4);
         if (machines == null)
             return;
 
@@ -685,7 +709,7 @@ public class DimEnvManager extends SavedData {
         Set<IBlockSensitiveMachine> machinesAffected = new HashSet<>();
         for (int cx = minChunk.x; cx <= maxChunk.x; cx++) {
             for (int cz = minChunk.z; cz <= maxChunk.z; cz++) {
-                var machinesInChunk = blockChangeListeners.get(new ChunkPos(cx, cz));
+                var machinesInChunk = blockChangeListeners.get(cx, cz);
                 if (machinesInChunk != null) {
                     machinesAffected.addAll(machinesInChunk);
                 }
@@ -782,7 +806,7 @@ public class DimEnvManager extends SavedData {
      * Meant for quick lookup of providers and machines based on the ChunkPos.
      */
     public static class ChunkRegistry<T> {
-        private final Map<ChunkPos, Set<T>> map = new HashMap<>();
+        private final Long2ObjectOpenHashMap<Set<T>> map = new Long2ObjectOpenHashMap<>();
 
         public void update(T item, Set<ChunkPos> toRemove, Set<ChunkPos> toAdd) {
             remove(item, toRemove);
@@ -802,21 +826,29 @@ public class DimEnvManager extends SavedData {
         }
 
         public void addSingle(T item, ChunkPos chunk) {
-            map.computeIfAbsent(chunk, k -> new HashSet<>())
+            addSingle(item, chunk.x, chunk.z);
+        }
+
+        public void addSingle(T item, int chunkX, int chunkZ) {
+            map.computeIfAbsent(ChunkPos.asLong(chunkX, chunkZ), k -> new HashSet<>())
                     .add(item);
         }
 
         public void removeSingle(T item, ChunkPos chunk) {
-            Set<T> set = map.get(chunk);
+            Set<T> set = map.get(chunk.toLong());
             if (set != null) {
                 set.remove(item);
                 if (set.isEmpty())
-                    map.remove(chunk);
+                    map.remove(chunk.toLong());
             }
         }
 
         public Set<T> get(ChunkPos chunk) {
-            return map.get(chunk);
+            return get(chunk.x, chunk.z);
+        }
+
+        public Set<T> get(int chunkX, int chunkZ) {
+            return map.get(ChunkPos.asLong(chunkX, chunkZ));
         }
 
         public boolean isEmpty() {

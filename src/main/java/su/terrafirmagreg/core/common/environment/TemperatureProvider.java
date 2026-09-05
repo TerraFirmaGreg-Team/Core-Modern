@@ -13,38 +13,32 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 
 /**
- * Temperature provider for the Space Heater multiblock.
- * Persists in DimEnvManager's SavedData so queries work even before the machine's chunk loads.
+ * Temperature provider for the Heat Pump multiblock.
  */
 public class TemperatureProvider {
-
-    public enum Mode {
-        SEALED,
-        VENTED
-    }
 
     /** The target ambiental temperature. */
     public static final float FRONT_TARGET_TEMP = 15f;
 
     private final BlockPos machinePos;
 
-    /** Passable blocks in the front region that get comfortable temperature. */
-    private Set<BlockPos> frontGood = Set.of();
-
-    /** Passable blocks in the back region that get uncomfortable temperature. */
-    private Set<BlockPos> backHazard = Set.of();
-
-    /** The front room scan (only meaningful when sealed). */
+    /** The sealed heated-space scan from the front of the machine. */
     private RoomScan frontScan = RoomScan.empty();
+
+    /** The scan from behind the machine, used only to detect a trapped exhaust. */
+    private RoomScan backScan = RoomScan.empty();
+
+    /** Anchor of the proximity exhaust heat field (centre of the machine's back). */
+    private BlockPos exhaustAnchor = BlockPos.ZERO;
+
+    /** Radius (blocks) of the proximity exhaust heat field. */
+    private int exhaustRadius = 0;
+
+    /** Whether the exhaust is trapped (back region sealed), making the machine unable to work. */
+    private boolean blocked = false;
 
     /** Cached chunk footprint. */
     private Set<ChunkPos> affectedChunks = Set.of();
-
-    /** Whether the front region is a sealed room (SEALED) or a vented greedy fill (VENTED). */
-    private Mode mode = Mode.VENTED;
-
-    /** Whether the front and back regions reach each other, making the machine unable to work. */
-    private boolean blocked = false;
 
     @Nullable
     private IEnvironmentMachine attachedMachine;
@@ -57,51 +51,54 @@ public class TemperatureProvider {
     }
 
     /**
-     * Sets the front/back region data produced by an async validation run.
+     * Sets the region data produced by an async validation run.
      * Called on the main thread by the machine driver.
      */
-    public void setRegions(Set<BlockPos> frontGood, Set<BlockPos> backHazard, Mode mode,
-            boolean blocked, RoomScan frontScan) {
-        this.frontGood = frontGood == null ? Set.of() : frontGood;
-        this.backHazard = backHazard == null ? Set.of() : backHazard;
-        this.mode = mode == null ? Mode.VENTED : mode;
-        this.blocked = blocked;
+    public void setRegions(RoomScan frontScan, RoomScan backScan, boolean blocked,
+            BlockPos exhaustAnchor, int exhaustRadius) {
         this.frontScan = frontScan == null ? RoomScan.empty() : frontScan;
+        this.backScan = backScan == null ? RoomScan.empty() : backScan;
+        this.blocked = blocked;
+        this.exhaustAnchor = exhaustAnchor == null ? machinePos : exhaustAnchor;
+        this.exhaustRadius = exhaustRadius;
         this.affectedChunks = computeAffectedChunks();
     }
 
     private Set<ChunkPos> computeAffectedChunks() {
         Set<ChunkPos> chunks = new HashSet<>(frontScan.touchedChunks());
-        for (BlockPos pos : backHazard) {
-            chunks.add(new ChunkPos(pos));
+        chunks.addAll(backScan.touchedChunks());
+
+        int r = Math.max(0, exhaustRadius);
+        int minCX = (exhaustAnchor.getX() - r) >> 4;
+        int maxCX = (exhaustAnchor.getX() + r) >> 4;
+        int minCZ = (exhaustAnchor.getZ() - r) >> 4;
+        int maxCZ = (exhaustAnchor.getZ() + r) >> 4;
+        for (int cx = minCX; cx <= maxCX; cx++) {
+            for (int cz = minCZ; cz <= maxCZ; cz++) {
+                chunks.add(new ChunkPos(cx, cz));
+            }
         }
         return chunks;
-    }
-
-    public Set<BlockPos> getFrontGood() {
-        return frontGood;
-    }
-
-    public Set<BlockPos> getBackHazard() {
-        return backHazard;
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public boolean isBlocked() {
-        return blocked;
     }
 
     public RoomScan getFrontScan() {
         return frontScan;
     }
 
+    public RoomScan getBackScan() {
+        return backScan;
+    }
+
+    public BlockPos getExhaustAnchor() {
+        return exhaustAnchor;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
     /**
      * Checks if this provider supplies safe temperature to the given position.
-     * Only the front region is comfortable; the back is a hazard. 
-     * Works even when the machine is unloaded — assumes working when unloaded.
      */
     public boolean hasTemperature(BlockPos pos) {
         if (blocked)
@@ -109,12 +106,11 @@ public class TemperatureProvider {
         if (attachedMachine != null && !attachedMachine.isWorking()) {
             return false;
         }
-        return frontGood.contains(pos);
+        return frontScan.isSealed() && frontScan.containsInterior(pos);
     }
 
     /**
      * Checks the target temperature this provider supplies to the given position.
-     * the machine is unloaded — assumes working when unloaded.
      */
     public Optional<Float> getTargetTemperature(BlockPos pos) {
         if (blocked)
@@ -123,13 +119,21 @@ public class TemperatureProvider {
             return Optional.empty();
         }
 
-        if (frontGood.contains(pos)) {
+        if (frontScan.isSealed() && frontScan.containsInterior(pos)) {
             return Optional.of(FRONT_TARGET_TEMP);
         }
-        if (backHazard.contains(pos) && level != null) {
-            return Optional.of((float) (15 - Climate.getTemperature(level, pos)));
+
+        if (frontScan.isSealed() && level != null && isWithinExhaust(pos)) {
+            float climate = Climate.getTemperature(level, pos);
+            double dist = Math.sqrt(pos.distSqr(exhaustAnchor));
+            float falloff = (float) Math.max(0.0, 1.0 - dist / exhaustRadius);
+            return Optional.of(climate + (FRONT_TARGET_TEMP - climate) * falloff);
         }
         return Optional.empty();
+    }
+
+    private boolean isWithinExhaust(BlockPos pos) {
+        return exhaustRadius > 0 && pos.distSqr(exhaustAnchor) <= (double) exhaustRadius * exhaustRadius;
     }
 
     public boolean isMachineLoaded() {
@@ -165,8 +169,9 @@ public class TemperatureProvider {
 
     public void save(CompoundTag tag) {
         tag.putLong("pos", machinePos.asLong());
-        tag.putString("mode", mode.name());
         tag.putBoolean("blocked", blocked);
+        tag.putLong("exhaustAnchor", exhaustAnchor.asLong());
+        tag.putInt("exhaustRadius", exhaustRadius);
         tag.putLongArray("chunks", chunkPosToLongs(affectedChunks));
     }
 
@@ -174,14 +179,9 @@ public class TemperatureProvider {
         BlockPos pos = BlockPos.of(tag.getLong("pos"));
         TemperatureProvider provider = new TemperatureProvider(pos);
 
-        Mode mode = Mode.VENTED;
-        try {
-            mode = Mode.valueOf(tag.getString("mode"));
-        } catch (Exception e) {
-            mode = Mode.VENTED;
-        }
-        provider.mode = mode;
         provider.blocked = tag.getBoolean("blocked");
+        provider.exhaustAnchor = BlockPos.of(tag.getLong("exhaustAnchor"));
+        provider.exhaustRadius = tag.getInt("exhaustRadius");
         provider.affectedChunks = longsToChunkSet(tag.getLongArray("chunks"));
         return provider;
     }

@@ -92,14 +92,15 @@ public class DebugEnvironmentCommand {
             BlockPos mPos = provider.getMachinePos();
             boolean loaded = provider.isMachineLoaded();
             boolean working = provider.isMachineWorking();
-            String mode = provider.getMode().name();
-            int frontSize = provider.getFrontGood().size();
-            int backSize = provider.getBackHazard().size();
+            String frontStatus = provider.getFrontScan().status().name();
+            String backStatus = provider.getBackScan().status().name();
+            int frontSize = provider.getFrontScan().interiorSize();
+            int backSize = provider.getBackScan().interiorSize();
             boolean blocked = provider.isBlocked();
 
             source.sendSuccess(() -> Component.literal(String.format(
-                    "  %s: mode=%s, frontSize=%d, backSize=%d, blocked=%s, loaded=%s, working=%s",
-                    mPos.toShortString(), mode, frontSize, backSize, blocked, loaded, working)), false);
+                    "  %s: front=%s(%d), back=%s(%d), blocked=%s, loaded=%s, working=%s",
+                    mPos.toShortString(), frontStatus, frontSize, backStatus, backSize, blocked, loaded, working)), false);
         }
         if (tempCount == 0) {
             source.sendSuccess(() -> Component.literal("  (none)"), false);

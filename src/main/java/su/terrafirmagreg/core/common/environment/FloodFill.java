@@ -25,6 +25,15 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
  */
 public class FloodFill {
 
+    /** How block passability is determined during a fill. */
+    public enum PassMode {
+        /** Doors, window panes and pipes can be passable. */
+        DIRECTIONAL,
+
+        /** Only air counts as passable.  */
+        PERMISSIVE
+    }
+
     private FloodFill() {
     }
 
@@ -33,7 +42,15 @@ public class FloodFill {
      * Convenience overload for main-thread callers (commands, etc.)
      */
     public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
-        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension);
+        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension, PassMode.DIRECTIONAL);
+    }
+
+    /**
+     * Performs a DFS flood fill starting from the given position.
+     * Convenience overload for main-thread callers (commands, etc.)
+     */
+    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension, PassMode passMode) {
+        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension, passMode);
     }
 
     /**
@@ -46,6 +63,20 @@ public class FloodFill {
      * @return RoomScan containing the room data
      */
     public static RoomScan fill(AsyncBlockReader reader, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+        return fill(reader, start, maxBlocks, maxHorizontalDimension, PassMode.DIRECTIONAL);
+    }
+
+    /**
+     * Performs a DFS flood fill starting from the given position.
+     *
+     * @param reader                 Block reader (thread-safe for async use)
+     * @param start                  Starting position (typically one block from machine)
+     * @param maxBlocks              Maximum number of interior blocks we should find
+     * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
+     * @param passMode               How block passability is determined ({@link PassMode#DIRECTIONAL} or {@link PassMode#PERMISSIVE})
+     * @return RoomScan containing the room data
+     */
+    public static RoomScan fill(AsyncBlockReader reader, BlockPos start, int maxBlocks, int maxHorizontalDimension, PassMode passMode) {
         State state = new State();
 
         // Init
@@ -78,6 +109,20 @@ public class FloodFill {
                 state.hitUnloadedChunk = true;
                 state.escapePoint = pos.immutable();
                 return buildResult(state);
+            }
+
+            if (passMode == PassMode.PERMISSIVE) {
+                if (blockState.isAir()) {
+                    state.addInteriorBlock(posLong);
+                    if (state.interior.size() > maxBlocks) {
+                        state.hitBlockLimit = true;
+                        return buildResult(state);
+                    }
+                    queueNeighbors(state, pos, posLong, ALL_DIRECTIONS);
+                } else {
+                    state.addEnvelopeBlock(posLong);
+                }
+                continue;
             }
 
             PassableResult result = PassabilityChecker.isPassable(reader, pos, posLong, blockState, state.visitDirections);

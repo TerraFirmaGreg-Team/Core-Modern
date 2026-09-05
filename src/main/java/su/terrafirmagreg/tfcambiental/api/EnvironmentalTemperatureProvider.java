@@ -249,7 +249,7 @@ public interface EnvironmentalTemperatureProvider {
         }).orElse(TempModifier.none());
     }
 
-    static Optional<Float> getSpaceHeaterTemperature(Player player) {
+    static Optional<Float> getHeatPumpTemperature(Player player) {
         DimEnvManager manager = EnvironmentSystem.getManager((ServerLevel) player.level());
         return manager.getTargetTemperature(player.blockPosition());
     }
@@ -259,9 +259,9 @@ public interface EnvironmentalTemperatureProvider {
     }
 
     static void evaluateAll(Player player, TempModifierStorage storage, boolean nether) {
-        Optional<Float> spaceHeaterTemperature = getSpaceHeaterTemperature(player);
-        if (spaceHeaterTemperature.isPresent()) {
-            storage.add(new TempModifier(spaceHeaterTemperature.get(), 10f));
+        Optional<Float> heatPumpTemperature = getHeatPumpTemperature(player);
+        if (heatPumpTemperature.isPresent()) {
+            storage.add(new TempModifier(heatPumpTemperature.get(), 10f));
         } else if (nether) {
             for (EnvironmentalTemperatureProvider provider : NETHER_PROVIDERS) {
                 storage.add(provider.getModifier(player));
