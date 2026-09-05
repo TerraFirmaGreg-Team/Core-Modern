@@ -240,7 +240,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
     // Minimum burn of 1mB every 10 sec
     public double getFuelBurnRate() {
-        return getFuelType().getFuelBurnRate(targetDirection.value * 32, tier);
+        return getFuelType().getFuelBurnRate(tier);
     }
 
     public SmartBlockEntity self() {
