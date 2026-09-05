@@ -166,6 +166,9 @@ public class TFGBlocks_Casings {
     public static final BlockEntry<Block> PTFE_BLACK_CASING = createCasingBlock("casings/machine_casing_ptfe_black",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_ptfe_black")));
 
+    public static final BlockEntry<Block> ROBUST_BLUE_STEEL_CASING = createCasingBlock("casings/machine_casing_robust_blue_steel",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/robust_blue_steel")));
+
     public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_blue_solar_panel",
             (ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
                     GTCEu.id("block/casings/steam/steel/side"),
@@ -259,6 +262,10 @@ public class TFGBlocks_Casings {
             ModelUtils.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")),
             SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, true);
 
+    public static final BlockEntry<ActiveBlock> CRUSHING_WHEELS_RED = createActiveCasingBlock("casings/crushing_wheels_red",
+            ModelUtils.createActiveModel(TFGCore.id("block/casings/unique/crushing_wheels_red")),
+            SoundType.METAL, 6, 5, MapColor.COLOR_RED, true);
+
     public static final BlockEntry<ActiveBlock> ULTRAVIOLET_CASING = createActiveCasingBlock("casings/machine_casing_ultraviolet",
             ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ultraviolet")),
             SoundType.GLASS, 6, 5, MapColor.COLOR_LIGHT_GRAY, false);
@@ -293,6 +300,9 @@ public class TFGBlocks_Casings {
 
     public static final BlockEntry<Block> STERLING_SILVER_CASING = createCasingBlock("casings/sterling_silver_casing",
             GTModels.cubeAllModel(TFGCore.id("block/casings/sterling_silver_casing")));
+
+    public static final BlockEntry<Block> SECURE_PULVERIZATION_CASING = createCasingBlock("casings/secure_pulverization_casing",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/unique/secure_maceration_red_casing")));
 
     public static final BlockEntry<ActiveBlock> AE2_CASING = createActiveCasingBlock("casings/machine_casing_ae2",
             ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ae2")),

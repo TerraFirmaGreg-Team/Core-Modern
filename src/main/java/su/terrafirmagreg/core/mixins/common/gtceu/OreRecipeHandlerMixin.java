@@ -12,6 +12,8 @@ import com.gregtechceu.gtceu.data.recipe.generated.OreRecipeHandler;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 
+import su.terrafirmagreg.core.common.data.TFGOreRecipeHandler;
+
 /**
  * Mixin to cancel the GT ore proc recipes so we can do our customize ones through kubejs
  */
@@ -20,9 +22,10 @@ import net.minecraft.data.recipes.FinishedRecipe;
 public abstract class OreRecipeHandlerMixin {
 
     @Inject(method = "run", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void tfg$cancelVanillaOreRecipes(Consumer<FinishedRecipe> provider,
+    private static void tfg$replaceOreRecipes(Consumer<FinishedRecipe> provider,
             Material material,
             CallbackInfo ci) {
+        TFGOreRecipeHandler.run(provider, material);
         ci.cancel();
     }
 }

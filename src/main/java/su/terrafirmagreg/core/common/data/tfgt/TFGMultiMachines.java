@@ -1487,5 +1487,138 @@ public class TFGMultiMachines {
             })
             .register();
 
+    public static final MultiblockMachineDefinition ORE_GRINDER = REGISTRATE
+            .multiblock("ore_grinder", OreGrinderMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.SECURE_PULVERIZATION_CASING)
+            .recipeType(TFGTRecipeTypes.TFG_ORE_MACERATOR_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAAAA", "BBABB", "BBBBB")
+                    .aisle("ALLLA", "BCCCB", "B###B")
+                    .aisle("ALLLA", "ACCCA", "B###B")
+                    .aisle("ALLLA", "BCCCB", "B###B")
+                    .aisle("AAAAA", "BBXBB", "BBBBB")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('A', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('B', Predicates.blocks(TFGBlocks_Casings.SECURE_PULVERIZATION_CASING.get()).setMinGlobalLimited(16)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, false)))
+                    .where('C', Predicates.blocks(TFGBlocks_Casings.CRUSHING_WHEELS_RED.get()))
+                    .where('L', Predicates.blocks(TFGBlocks_Casings.SECURE_PULVERIZATION_CASING.get()))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/unique/secure_maceration_red_casing"),
+                    GTCEu.id("block/multiblock/gcym/large_maceration_tower"))
+            .register();
+
+    public static final MultiblockMachineDefinition ORE_THERMAL_CENTRIFUGE = REGISTRATE
+            .multiblock("ore_thermal_centrifuge", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.ROBUST_BLUE_STEEL_CASING)
+            .recipeType(TFGTRecipeTypes.TFG_THERMAL_CENTRIFUGE_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("BBBBB", "EEEEE", "EEEEE")
+                    .aisle("BAAAB", "C###F", "EDDDE")
+                    .aisle("BBBBB", "EEXEE", "EEEEE")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('A', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('B', Predicates.blocks(GTBlocks.FIREBOX_STEEL.get()))
+                    .where('C', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where('D', Predicates.blocks(GTBlocks.CASING_GRATE.get()))
+                    .where('E', Predicates.blocks(TFGBlocks_Casings.ROBUST_BLUE_STEEL_CASING.get()).setMinGlobalLimited(16)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('F', Predicates.abilities(PartAbility.MUFFLER).setExactLimit(1))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/robust_blue_steel"),
+                    GTCEu.id("block/machines/thermal_centrifuge"))
+            .register();
+
+    public static final MultiblockMachineDefinition ORE_BATH = REGISTRATE
+            .multiblock("ore_bath", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.STERLING_SILVER_CASING)
+            .recipeTypes(TFGTRecipeTypes.TFG_ORE_WASHER_RECIPES, TFGTRecipeTypes.TFG_CHEMICAL_BATH_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAAAA", "EDDDE", "EEEEE")
+                    .aisle("AAAAA", "B###B", "EBBBE")
+                    .aisle("AAAAA", "EEXEE", "E   E")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('A', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('B', Predicates.blocks(GTBlocks.CASING_TEMPERED_GLASS.get()))
+                    .where('D', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ad_astra", "vent"))))
+                    .where('E', Predicates.blocks(TFGBlocks_Casings.STERLING_SILVER_CASING.get()).setMinGlobalLimited(8)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, false)))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/sterling_silver_casing"),
+                    GTCEu.id("block/machines/chemical_bath"))
+            .register();
+
+    public static final MultiblockMachineDefinition ORE_SIFTER = REGISTRATE
+            .multiblock("ore_sifter", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.SECURE_PULVERIZATION_CASING)
+            .recipeTypes(TFGTRecipeTypes.TFG_SIFTER_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAA", "EEE", "EEE", "CCC", "EEE")
+                    .aisle("AAA", "EDE", "EDE", "CDC", "EDE")
+                    .aisle("AAA", "EXE", "EEE", "CCC", "EEE")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('A', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('B', Predicates.blocks(GTBlocks.CASING_TEMPERED_GLASS.get()))
+                    .where('C', Predicates.blocks(TFGBlocks_Casings.STERLING_SILVER_CASING.get()))
+                    .where('D', Predicates.blocks(GTBlocks.CASING_GRATE.get()))
+                    .where('E', Predicates.blocks(TFGBlocks_Casings.SECURE_PULVERIZATION_CASING.get()).setMinGlobalLimited(8)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, false)))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/unique/secure_maceration_red_casing"),
+                    GTCEu.id("block/machines/sifter"))
+            .register();
+
+    public static final MultiblockMachineDefinition ORE_CENTRIFUGE = REGISTRATE
+            .multiblock("ore_centrifuge", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.ROBUST_BLUE_STEEL_CASING)
+            .recipeType(TFGTRecipeTypes.TFG_ORE_CENTRIFUGE_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle(" DDD ", "EEEEE", " EEE ")
+                    .aisle("DAAAD", "EB#BE", "EEDEE")
+                    .aisle("DAAAD", "E#C#E", "EDDDE")
+                    .aisle("DAAAD", "EB#BE", "EEDEE")
+                    .aisle(" DDD ", "EEXEE", " EEE ")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('A', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('B', Predicates.blocks(TFGBlocks_Casings.ROBUST_BLUE_STEEL_CASING.get()))
+                    .where('C', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where('D', Predicates.blocks(GTBlocks.CASING_GRATE.get()))
+                    .where('E', Predicates.blocks(TFGBlocks_Casings.ROBUST_BLUE_STEEL_CASING.get()).setMinGlobalLimited(16)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/robust_blue_steel"),
+                    GTCEu.id("block/machines/centrifuge"))
+            .register();
+
     // spotless:on
 }

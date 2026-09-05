@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/casings/secure_pulverization_casing"
+    }
+  }
+}

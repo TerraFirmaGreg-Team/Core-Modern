@@ -4,12 +4,17 @@ import java.util.Arrays;
 import java.util.Set;
 
 import com.forsteri.createliquidfuel.core.BurnerStomachHandler;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
+import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -65,6 +70,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory FLUID_VEIN_INFO = new EmiRecipeCategory(TFGCore.id("fluid_vein_info"),
             EmiStack.of(GTItems.PROSPECTOR_HV));
+
+    public static final EmiRecipeCategory ORE_PROCESSING_DIAGRAM = new EmiRecipeCategory(
+            TFGCore.id("ore_processing_diagram"), EmiStack.of(TFCItems.ORE_POWDERS.get(Ore.HEMATITE).get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -175,6 +183,23 @@ public class TFGEmiPlugin implements EmiPlugin {
             // return onLegacyWorldgen() ? legacyVein : !legacyVein;
             return onLegacyWorldgen() == legacyVein;
         }).forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+
+        // Ore Processing
+        emiRegistry.addCategory(ORE_PROCESSING_DIAGRAM);
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_GRINDER.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_BATH.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_THERMAL_CENTRIFUGE.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_CENTRIFUGE.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_SIFTER.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.MILLSTONE.asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.CRUSHING_WHEEL.asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.ENCASED_FAN.asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.MECHANICAL_PRESS.asItem()));
+        for (Material mat : GTCEuAPI.materialManager.getRegisteredMaterials()) {
+            if (mat.hasProperty(PropertyKey.ORE) && !mat.hasFlag(MaterialFlags.NO_ORE_PROCESSING_TAB)) {
+                emiRegistry.addRecipe(new EmiOreProcessing(mat));
+            }
+        }
     }
 
     private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
