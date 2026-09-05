@@ -26,9 +26,9 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
+import electrolyte.greate.registry.EncasedFans;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
@@ -96,7 +96,7 @@ public class TFGOreByProduct {
 
         // set up machines as inputs
         List<ItemStack> simpleWashers = new ArrayList<>();
-        simpleWashers.add(new ItemStack(Items.CAULDRON));
+        simpleWashers.add(new ItemStack(EncasedFans.FANS[1].get().asItem()));
         simpleWashers.add(TFGMultiMachines.ORE_BATH.asStack());
 
         if (!material.hasProperty(PropertyKey.BLAST)) {

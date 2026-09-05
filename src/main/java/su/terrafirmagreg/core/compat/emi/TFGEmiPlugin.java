@@ -32,6 +32,10 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import electrolyte.greate.registry.CrushingWheels;
+import electrolyte.greate.registry.EncasedFans;
+import electrolyte.greate.registry.MechanicalPresses;
+import electrolyte.greate.registry.Millstones;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
@@ -191,10 +195,11 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_THERMAL_CENTRIFUGE.asStack()));
         emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_CENTRIFUGE.asStack()));
         emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_SIFTER.asStack()));
-        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.MILLSTONE.asItem()));
-        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.CRUSHING_WHEEL.asItem()));
-        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.ENCASED_FAN.asItem()));
-        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(AllBlocks.MECHANICAL_PRESS.asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(CrushingWheels.CRUSHING_WHEELS[1].get().asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(EncasedFans.FANS[1].get().asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(MechanicalPresses.MECHANICAL_PRESSES[1].get().asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(Millstones.MILLSTONES[1].get().asItem()));
+
         for (Material mat : GTCEuAPI.materialManager.getRegisteredMaterials()) {
             if (mat.hasProperty(PropertyKey.ORE) && !mat.hasFlag(MaterialFlags.NO_ORE_PROCESSING_TAB)) {
                 emiRegistry.addRecipe(new EmiOreProcessing(mat));

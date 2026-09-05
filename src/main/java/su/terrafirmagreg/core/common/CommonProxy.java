@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
+import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
@@ -122,6 +123,12 @@ public class CommonProxy {
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
             registerFlowerPots();
+
+            for (MachineDefinition def : GTMultiMachines.LARGE_MINER) {
+                if (def == null)
+                    continue;
+                def.setRecipeTypes(new GTRecipeType[] { TFGTRecipeTypes.TFG_ORE_MACERATOR_RECIPES });
+            }
         });
     }
 
