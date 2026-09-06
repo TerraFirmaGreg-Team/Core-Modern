@@ -107,6 +107,13 @@ public class TFGNetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(
                 id(),
+                WorldgenVersionSyncPacket.class,
+                WorldgenVersionSyncPacket::encode,
+                WorldgenVersionSyncPacket::decode,
+                WorldgenVersionSyncPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        INSTANCE.registerMessage(
+                id(),
                 EnvironmentQueryPacket.class,
                 EnvironmentQueryPacket::encode,
                 EnvironmentQueryPacket::decode,

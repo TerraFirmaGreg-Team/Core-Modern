@@ -52,6 +52,7 @@ import electrolyte.greate.content.kinetics.simpleRelays.ITieredShaftBlock;
 import electrolyte.greate.registry.GreateTagPrefixes;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 public class CombustionEngineBlock extends DirectionalKineticBlock implements IBE<CombustionEngineBlockEntity>, ITieredBlock, ITieredShaftBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -60,9 +61,9 @@ public class CombustionEngineBlock extends DirectionalKineticBlock implements IB
     private int tier;
     private Supplier<Block> shaftType;
 
-    public CombustionEngineBlock(Properties properties, Material material) {
+    public CombustionEngineBlock(Properties properties, String materialName) {
         super(properties);
-        this.shaftType = () -> ChemicalHelper.getBlock(GreateTagPrefixes.shaft, material);
+        this.shaftType = () -> ChemicalHelper.getBlock(GreateTagPrefixes.shaft, TFGHelpers.getMaterial(materialName));
         registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
     }
 
