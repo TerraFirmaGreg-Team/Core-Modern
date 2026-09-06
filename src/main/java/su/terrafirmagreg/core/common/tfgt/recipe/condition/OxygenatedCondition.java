@@ -23,7 +23,6 @@ import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
  * <p>- isOxygenated = false: passes when block does not have oxygen.
  * <p>
  */
-//TODO: wth is going on here some of this smells bad
 public class OxygenatedCondition extends RecipeCondition<OxygenatedCondition> {
 
     public static final Codec<OxygenatedCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)

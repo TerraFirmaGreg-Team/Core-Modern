@@ -53,7 +53,7 @@ public record DimensionEnvironment(
         REGISTRY.put(Planet.MOON, VACUUM);
         REGISTRY.put(Planet.MARS, new DimensionEnvironment(false, 0.379f, (short) -65, 0.006f));
         REGISTRY.put(Planet.VENUS, new DimensionEnvironment(false, 0.904f, (short) 464, 90.0f));
-        REGISTRY.put(Planet.MERCURY, new DimensionEnvironment(false, 0.377f, (short) 167, 0.0f));
+        REGISTRY.put(Planet.MERCURY, VACUUM);
         REGISTRY.put(Planet.GLACIO, new DimensionEnvironment(false, 0.379f, (short) -20, 0.0f));
 
         REGISTRY.put(Planet.EARTH_ORBIT, VACUUM);

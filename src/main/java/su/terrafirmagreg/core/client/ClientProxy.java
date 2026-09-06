@@ -76,7 +76,6 @@ public class ClientProxy extends CommonProxy {
         event.registerSpriteSet(TFGParticles.GEYSER_POOF.get(), GeyserPoofProvider::new);
         event.registerSpriteSet(TFGParticles.NOXIOUS_GAS.get(), NoxiousGasProvider::new);
         event.registerSpriteSet(TFGParticles.FISH_SCHOOL.get(), FishSchoolProvider::new);
-        event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
     }
 
     @SuppressWarnings("removal")

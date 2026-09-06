@@ -596,10 +596,8 @@ public class DimEnvManager extends SavedData {
             return;
 
         if (event instanceof BlockEvent.BreakEvent breakEvent) {
-            TFGCore.LOGGER.debug("breakEvent {}", breakEvent.getState());
             PassInfo before = getCachedPassInfo(breakEvent.getState());
             if (before.type() == PassType.EMPTY) {
-                TFGCore.LOGGER.debug("Ignored - empty block");
                 return;
             }
 
@@ -610,11 +608,9 @@ public class DimEnvManager extends SavedData {
             }
 
         } else if (event instanceof BlockEvent.EntityPlaceEvent placeEvent) {
-            TFGCore.LOGGER.debug("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
             PassInfo before = getCachedPassInfo(placeEvent.getBlockSnapshot().getReplacedBlock());
             PassInfo after = getCachedPassInfo(placeEvent.getPlacedBlock());
             if (before.equals(after) && before.type() != PassType.NO_CACHE) {
-                TFGCore.LOGGER.debug("Ignored - passability unchanged");
                 return;
             }
 
@@ -627,12 +623,9 @@ public class DimEnvManager extends SavedData {
         } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
             TFGCore.LOGGER.debug("neighborNotifyEvent {}", nighEvent.getState());
             PassInfo passInfo = getCachedPassInfo(nighEvent.getState());
-            // NO_CACHE blocks (airlocks, pistons, etc.) have dynamic passability, always dispatch
             if (passInfo.type() == PassType.NO_CACHE) {
-                TFGCore.LOGGER.debug("Dynamic block (NO_CACHE), always dispatching");
             } else {
                 if (passInfo.type() == PassType.EMPTY || passInfo.type() == PassType.FULL) {
-                    TFGCore.LOGGER.debug("Ignored - stable block type");
                     return;
                 }
             }
