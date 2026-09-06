@@ -1,25 +1,4 @@
 TODOs in no particular order:
-
-**General:**\
-Cleanroom-style room that is only safe inside.\
-Textures, models\
-Gameplay decisions (machine limits at tiers, what should be multiblocks, etc)
-
-**Oxygen machine:**\
-Working sound effect (higher pitch when breached and surroundings are lower pressure)\
-Oxygenation visualization like ad astra?\
-Make radius and max volume settings you can define for the machine in kubejs\
-Make oxygen machines in general kubejs-able
-
-**Space heater:**\
-Visual effects?\
-Radius visualization\
-Energy consumption GUI\
-Some kind of temperature gameplay that's not so binary? Gradient maybe? How to make it nice to play while also being interesting?
-
-**Higgs Emitter (gravity machine):**\
-Everything
-
 **Low Pressure Chamber (Cleanroom for Europa)**\
 Needs special flood fill handling for the walls
 
@@ -44,9 +23,9 @@ Right now my machines and ad astra's machines both work as expected, so players 
 
 ### Types
 
-**Oxygen Distributors** use flood fill to fill a room with atmosphere.\
-**Space Heaters** create a bubble of warm air\
-**TODO Higgs Emitter**, I'm thinking maybe it spreads outwards along a floor surface and above it? That could be cool, could be annoying. Gotta think what would be fun for gameplay and what's possible to code.\
+- **Oxygen Distributors** use flood fill to fill a room with atmosphere.
+- **Space Heaters** use flood fill to fill a room with a safe temperature and require that flood fill fails on their back side.
+- **Higgs Emitter** is just a trivial radius effect.\
 **TODO Low Pressure Chamber**, I'm thinking maybe it spreads outwards along a floor surface and above it? That could be cool, could be annoying. Gotta think what would be fun for gameplay and what's possible to code.
 
 ### Unloaded machines and machines just loaded from NBT are assumed to be working
