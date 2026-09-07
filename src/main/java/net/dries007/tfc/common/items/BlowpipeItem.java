@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 public class BlowpipeItem extends Item
 {
@@ -48,10 +49,14 @@ public class BlowpipeItem extends Item
         super(properties);
     }
 
+	/**
+	 * @author Redeix
+	 * Replace hardcoded use duration with TFG dynamic duration.
+	 */
     @Override
     public int getUseDuration(ItemStack stack)
     {
-        return 80;
+        return TFGHelpers.getGlassworkingStat(null, false);
     }
 
     @Override

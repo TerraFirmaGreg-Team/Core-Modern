@@ -36,6 +36,7 @@ import net.dries007.tfc.common.recipes.TFCRecipeTypes;
 import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.advancements.TFCAdvancements;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 public class GlassBlowpipeItem extends BlowpipeItem
 {
@@ -179,23 +180,23 @@ public class GlassBlowpipeItem extends BlowpipeItem
 
     protected void stopUsing(LivingEntity entity, ItemStack stack)
     {
-        if (entity instanceof Player player)
-        {
-            final ItemStack otherHand = getOtherHandItem(player);
-            final GlassOperation op = GlassOperation.get(otherHand, player);
-            if (op != null && stack.getItem() instanceof GlassBlowpipeItem)
-            {
-                GlassWorkData.apply(stack, op);
+		if (entity instanceof Player player) {
+			final ItemStack otherHand = getOtherHandItem(player);
+			final GlassOperation op = GlassOperation.get(otherHand, player);
+			if (op != null && stack.getItem() instanceof GlassBlowpipeItem) {
+				GlassWorkData.apply(stack, op);
 
-                final Level level = entity.level();
-                level.getRecipeManager().getRecipeFor(TFCRecipeTypes.GLASSWORKING.get(), new ItemStackInventory(stack), level).ifPresent(recipe -> {
-                    final boolean broken = consumeBlowpipe(player, player.getUsedItemHand(), stack);
-                    ItemHandlerHelper.giveItemToPlayer(player, recipe.getResultItem(level.registryAccess()));
-                    level.playSound(null, player.blockPosition(), broken ? SoundEvents.ITEM_BREAK : SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
-                });
-            }
-            player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-            Helpers.allItems(TFCTags.Items.ALL_BLOWPIPES).forEach(item -> player.getCooldowns().addCooldown(item, 80));
-        }
+				final Level level = entity.level();
+				level.getRecipeManager().getRecipeFor(TFCRecipeTypes.GLASSWORKING.get(), new ItemStackInventory(stack), level).ifPresent(recipe -> {
+					final boolean broken = consumeBlowpipe(player, player.getUsedItemHand(), stack);
+					ItemHandlerHelper.giveItemToPlayer(player, recipe.getResultItem(level.registryAccess()));
+					level.playSound(null, player.blockPosition(), broken ? SoundEvents.ITEM_BREAK : SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
+				});
+			}
+			player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+			int cooldown = TFGHelpers.getGlassworkingStat(player, true);
+			// Overwrite cooldown v
+			Helpers.allItems(TFCTags.Items.ALL_BLOWPIPES).forEach(item -> player.getCooldowns().addCooldown(item, cooldown));
+		}
     }
 }
