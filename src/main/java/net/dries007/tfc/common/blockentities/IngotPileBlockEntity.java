@@ -295,6 +295,25 @@ public class IngotPileBlockEntity extends TFCBlockEntity
                             targetPos = abovePos;
                             targetState = aboveState;
                         }
+                        // Handles placing new stacks above full piles.
+                        else if (aboveState.isAir())
+                        {
+                            if (!simulate)
+                            {
+                                lastInsertTick = time;
+                                BlockState newState = block.defaultBlockState().setValue(countProperty, 1);
+                                level.setBlock(abovePos, newState, 3);
+                                level.getBlockEntity(abovePos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(newPile -> {
+                                    ItemStack toInsert = stack.copy();
+                                    toInsert.setCount(1);
+                                    newPile.addIngots(toInsert);
+                                    Helpers.playPlaceSound(level, abovePos, newState);
+                                });
+                            }
+                            ItemStack result = stack.copy();
+                            result.shrink(1);
+                            return result;
+                        }
                         else
                         {
                             // Stack is full (or at least this block and everything above that is a pile).
