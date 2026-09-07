@@ -7,6 +7,8 @@
 package net.dries007.tfc.util.climate;
 
 import java.util.Random;
+
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -122,6 +124,7 @@ public class OverworldClimateModel implements WorldGenClimateModel
     }
 
     private long climateSeed = 0;
+	@Getter
     private float temperatureScale = 20_000f;
 
     // For world generation climate

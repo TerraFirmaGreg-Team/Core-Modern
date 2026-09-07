@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.world.chunkdata;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +24,6 @@ import net.dries007.tfc.util.Helpers;
 /**
  * A wrapper to allow mutable access to the underlying capability, due to the semantics of how promotion of proto chunks
  * to level chunks are handled. Access through {@link ChunkData} instead of using this.
- * todo: 1.21, remove
  */
 public class ChunkDataCapability implements ICapabilitySerializable<CompoundTag>
 {
@@ -30,7 +31,10 @@ public class ChunkDataCapability implements ICapabilitySerializable<CompoundTag>
     public static final ResourceLocation KEY = Helpers.identifier("chunk_data");
 
     private final LazyOptional<ChunkDataCapability> capability;
-    private ChunkData data;
+
+    @Getter
+	@Setter
+	private ChunkData data;
 
     public ChunkDataCapability(ChunkData data)
     {
@@ -55,15 +59,5 @@ public class ChunkDataCapability implements ICapabilitySerializable<CompoundTag>
     public void deserializeNBT(CompoundTag nbt)
     {
         data.deserializeNBT(nbt);
-    }
-
-    void setData(ChunkData data)
-    {
-        this.data = data;
-    }
-
-    ChunkData getData()
-    {
-        return this.data;
     }
 }
