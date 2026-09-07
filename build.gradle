@@ -35,8 +35,16 @@ base {
 
 idea {
     module {
-        downloadSources = true
+        inheritOutputDirs = true
         downloadJavadoc = true
+        downloadSources = true
+
+        excludeDirs = [
+                file(".github"),
+                file(".idea"),
+                file("build"),
+                file("run"),
+        ]
     }
 }
 
@@ -47,21 +55,27 @@ java {
 
 }
 
-mixin {
-    var refMap = add sourceSets.main, "${mod_id}.refmap.json"
-    jar.from refMap
-    config "${mod_id}.mixins.json"
-}
 
 sourceSets {
-    main.resources {
-        srcDir 'src/main/resources'
-        srcDir 'src/generated/resources'
+    main {
+        java {
+            srcDir 'src/main/java'
+            srcDir 'src/tfc/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'src/tfc/resources'
+            srcDir 'src/generated/resources'
+        }
     }
 
     dev {
-        java.srcDir("src/dev/java")
-        resources.srcDir("src/dev/resources")
+        java {
+            srcDir("src/dev/java")
+        }
+        resources {
+            srcDir("src/dev/resources")
+        }
         compileClasspath += sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
@@ -70,6 +84,21 @@ sourceSets {
         compileClasspath += main.output + main.compileClasspath
         runtimeClasspath += main.output + main.runtimeClasspath
     }
+}
+
+configurations {
+    testCompileClasspath.extendsFrom(compileClasspath)
+    testRuntimeClasspath.extendsFrom(runtimeClasspath)
+    testAnnotationProcessor.extendsFrom(annotationProcessor)
+}
+
+mixin {
+    var refMapTfc = add sourceSets.main, "tfc.refmap.json"
+    jar.from refMapTfc
+    config "tfc.mixins.json"
+    var refMap = add sourceSets.main, "${mod_id}.refmap.json"
+    jar.from refMap
+    config "${mod_id}.mixins.json"
 }
 
 // gradle-local.properties should have the following:
@@ -90,6 +119,9 @@ if (project.rootProject.file("gradle-local.properties").exists()) {
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
 
+    accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+
+
     runs {
         configureEach {
             gameDirectory = project.file('run')
@@ -102,7 +134,7 @@ legacyForge {
             ideName = "Client"
             sourceSet = sourceSets.dev
             gameDirectory = project.file('run/client')
-       }
+        }
 
         client2 {
             client()
@@ -130,9 +162,10 @@ legacyForge {
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--existing', file('src/tfc/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
 
-            String[] existingMods = new String[] {
+            String[] existingMods = new String[]{
                     "tfg", "gtceu", "tfc", "firmalife", "species",
                     "ad_astra", "wan_ancient_beasts", "rnr", "afc",
                     "beneath", "craftingstation"
@@ -162,22 +195,24 @@ legacyForge {
     }
 }
 
+
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     var replaceProperties = [
-            'mod_id'                 : "${mod_id}",
-            'mod_name'               : "${mod_name}",
-            'mod_version'            : "${mod_version}",
-            'mod_description'        : "${mod_description}",
-            'mod_authors'            : "${mod_authors}",
-            'mod_credits'            : "${mod_credits}",
-            'mod_url'                : "${mod_url}",
-            'mod_logo_path'          : "${mod_logo_path}",
+            'mod_id'              : "${mod_id}",
+            'mod_name'            : "${mod_name}",
+            'mod_version'         : "${mod_version}",
+            'mod_description'     : "${mod_description}",
+            'mod_authors'         : "${mod_authors}",
+            'mod_credits'         : "${mod_credits}",
+            'mod_url'             : "${mod_url}",
+            'mod_logo_path'       : "${mod_logo_path}",
 
-            'minecraft_version'      : "${minecraft_version}",
+            'minecraft_version'   : "${minecraft_version}",
 
-            'forge_version'          : "${forge_version}",
-            'forge_version_range'    : "${loader_version_range}",
-            'loader_version_range'   : "${loader_version_range}"
+            'forge_version'       : "${forge_version}",
+            'forge_version_range' : "${loader_version_range}",
+            'loader_version_range': "${loader_version_range}"
     ]
     var filterList = [
             'META-INF/mods.toml',
@@ -185,7 +220,6 @@ processResources {
     ]
 
     inputs.properties replaceProperties
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(filterList) { fcd ->
         fcd.expand(replaceProperties + [project: project])
     }
@@ -196,6 +230,8 @@ processDevResources {
 }
 
 tasks.withType(Jar).configureEach {
+    zip64 = true
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest.attributes([
             "Specification-Title"     : "${mod_id}",
             "Specification-Vendor"    : "${mod_authors}",
@@ -204,7 +240,7 @@ tasks.withType(Jar).configureEach {
             "Implementation-Version"  : "${mod_version}",
             "Implementation-Vendor"   : "${mod_authors}",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs"            : "${mod_id}.mixins.json"
+            "MixinConfigs"            : "${mod_id}.mixins.json,tfc.mixins.json"
     ])
 }
 

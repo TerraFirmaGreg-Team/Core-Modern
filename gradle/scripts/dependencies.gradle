@@ -33,46 +33,46 @@ dependencies {
     // Create
     modCompileOnly "dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"
     modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
-    modImplementation ("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    modImplementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
-    modImplementation ("maven.modrinth:createfluidlogistic:sP8O7ZIO") { transitive = false }
+    modImplementation("maven.modrinth:createfluidlogistic:sP8O7ZIO") { transitive = false }
 
     // Create: Vintage Improvements
-    modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
+    modImplementation("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
 
     // Greate
     modRuntimeOnly "curse.maven:copycats-968398:7634682"
     modRuntimeOnly "curse.maven:create-repair-1477958:8382254"
-    modImplementation ("maven.modrinth:greate:${greate_version}") { transitive = false }
+    modImplementation("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
-    modImplementation ("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
-    modImplementation ("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
+    modImplementation("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
+    modImplementation("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
 
     // KJS
     modImplementation "maven.modrinth:rhino:2001.2.2-build.18+forge"
     modImplementation "maven.modrinth:kubejs:2001.6.5-build.7+forge"
 
     // TFC
-    modImplementation ("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
-    modImplementation ("curse.maven:kubejs-tfc-841001:8283526") { transitive = false }
+    modImplementation("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
+    modImplementation("curse.maven:kubejs-tfc-841001:8283526") { transitive = false }
 
     // FirmaLife
     modImplementation "maven.modrinth:firmalife:${firmalife_version}"
 
     // Beneath
-    modImplementation ("maven.modrinth:beneath:${beneath_version}") { transitive = false }
+    modImplementation("maven.modrinth:beneath:${beneath_version}") { transitive = false }
 
     // FirmaCiv
-    modImplementation ("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
-    modImplementation ("maven.modrinth:firmaciv:${firmaciv_version}") { transitive = false }
+    modImplementation("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
+    modImplementation("maven.modrinth:firmaciv:${firmaciv_version}") { transitive = false }
 
     // TFC AstikorCarts
-    modImplementation ("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
-    modImplementation ("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
+    modImplementation("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
+    modImplementation("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
 
     // TFC hot or not
-    modImplementation ("curse.maven:tfc-hot-or-not-499096:6047294") { transitive = false }
+    modImplementation("curse.maven:tfc-hot-or-not-499096:6047294") { transitive = false }
 
     // AE2
     modImplementation "curse.maven:guideme-1173950:7013686"
@@ -85,10 +85,10 @@ dependencies {
     modImplementation "cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}"
 
     // FTB
-    modImplementation ("curse.maven:ftb-teams-forge-404468:7499810") { transitive = false }
-    modImplementation ("curse.maven:ftb-library-forge-404465:8226927") { transitive = false }
-    modImplementation ("curse.maven:ftb-chunks-forge-314906:8216874") { transitive = false }
-    modCompileOnly ("curse.maven:ftb-quests-forge-289412:8078538") { transitive = false }
+    modImplementation("curse.maven:ftb-teams-forge-404468:7499810") { transitive = false }
+    modImplementation("curse.maven:ftb-library-forge-404465:8226927") { transitive = false }
+    modImplementation("curse.maven:ftb-chunks-forge-314906:8216874") { transitive = false }
+    modCompileOnly("curse.maven:ftb-quests-forge-289412:8078538") { transitive = false }
 
     // Jade
     modImplementation "maven.modrinth:jade:11.13.2+forge"
@@ -97,20 +97,20 @@ dependencies {
     modImplementation "curse.maven:roads-and-roofs-tfc-1048212:8573489"
 
     // Ad Astra
-    modImplementation ("curse.maven:ad-astra-635042:6262032") { transitive = false }
-    modImplementation ("curse.maven:botarium-704113:5486070") { transitive = false }
-    modImplementation ("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
-    modImplementation ("curse.maven:resourceful-config-714059:6231176") { transitive = false }
+    modImplementation("curse.maven:ad-astra-635042:6262032") { transitive = false }
+    modImplementation("curse.maven:botarium-704113:5486070") { transitive = false }
+    modImplementation("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
+    modImplementation("curse.maven:resourceful-config-714059:6231176") { transitive = false }
 
     // Species
-    modImplementation ("maven.modrinth:species:3.5") { transitive = false }
+    modImplementation("maven.modrinth:species:3.5") { transitive = false }
 
     // Simply Stacked Dimensions
-    modImplementation ("curse.maven:simply-stacked-dimensions-523416:7657445") { transitive = false }
+    modImplementation("curse.maven:simply-stacked-dimensions-523416:7657445") { transitive = false }
 
     // Grappling Hook -- needless dependencies are dumb
     modImplementation "curse.maven:cloth-config-348521:5729105"
-    modImplementation ("curse.maven:grappling-hook-mod-reforged-1166811:6028357") { transitive = false }
+    modImplementation("curse.maven:grappling-hook-mod-reforged-1166811:6028357") { transitive = false }
 
     // Hang Glider
     modCompileOnly "maven.modrinth:puzzles-lib:${puzzleslib_version}"
