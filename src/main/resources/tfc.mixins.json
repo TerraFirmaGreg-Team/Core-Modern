@@ -84,5 +84,5 @@
         "client.compat.sodium.ItemColorsMixin"
     ],
     "required": true,
-    "refmap": "tfc.refmap.json"
+    "refmap": "tfg.refmap.json"
 }

@@ -91,11 +91,9 @@ configurations {
 }
 
 mixin {
-    var refMapTfc = add sourceSets.main, "tfc.refmap.json"
-    jar.from refMapTfc
-    config "tfc.mixins.json"
     var refMap = add sourceSets.main, "${mod_id}.refmap.json"
     jar.from refMap
+    config "tfc.mixins.json"
     config "${mod_id}.mixins.json"
 }
 
