@@ -149,6 +149,7 @@
         "common.gtceu.jetpacks.AdvancedJetpackMixin",
         "common.gtceu.jetpacks.AdvancedNanoMuscleSuiteMixin",
         "common.gtceu.jetpacks.JetpackMixin",
+        "common.gtceu.jetpacks.PowerlessJetpackMixin",
         "common.gtceu.materials.GTMaterialBlocksMixin",
         "common.gtceu.materials.MaterialPropertiesMixin",
         "common.gtceu.materials.OrePropertyMixin",

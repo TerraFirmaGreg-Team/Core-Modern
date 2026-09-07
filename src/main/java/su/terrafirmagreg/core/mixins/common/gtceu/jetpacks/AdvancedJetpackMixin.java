@@ -14,4 +14,19 @@ public class AdvancedJetpackMixin {
     private void tfg$getVerticalHoverSlowSpeed(CallbackInfoReturnable<Double> cir) {
         cir.setReturnValue(0D);
     }
+
+    @Inject(method = "getSidewaysSpeed", at = @At("HEAD"), remap = false, cancellable = true)
+    private void tfg$getSidewaysSpeed(CallbackInfoReturnable<Double> cir) {
+        cir.setReturnValue(0.1D);
+    }
+
+    @Inject(method = "getVerticalSpeed", at = @At("HEAD"), remap = false, cancellable = true)
+    private void tfg$getVerticalSpeed(CallbackInfoReturnable<Double> cir) {
+        cir.setReturnValue(0.35D);
+    }
+
+    @Inject(method = "getVerticalHoverSpeed", at = @At("HEAD"), remap = false, cancellable = true)
+    private void tfg$getVerticalHoverSpeed(CallbackInfoReturnable<Double> cir) {
+        cir.setReturnValue(0.3D);
+    }
 }

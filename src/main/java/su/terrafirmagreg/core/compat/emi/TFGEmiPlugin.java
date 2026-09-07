@@ -7,6 +7,7 @@ import com.forsteri.createliquidfuel.core.BurnerStomachHandler;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
@@ -120,7 +121,8 @@ public class TFGEmiPlugin implements EmiPlugin {
         for (var liquid_fuel : BurnerStomachHandler.LIQUID_BURNER_FUEL_MAP.entrySet()) {
             emiRegistry.addRecipe(new LiquidBlazeBurnerRecipe(liquid_fuel));
             // Don't like doing this here but at least it's at a point where all the fuels have been registered
-            LiquidFuelJetpack.registerFuel(liquid_fuel);
+            if (liquid_fuel.getKey() != GTMaterials.Steam.getFluid())
+                LiquidFuelJetpack.registerFuel(liquid_fuel);
         }
         for (var normal_fuel : ForgeRegistries.ITEMS.tags().getTag(AllTags.AllItemTags.BLAZE_BURNER_FUEL_REGULAR.tag).stream().toList()) {
             emiRegistry.addRecipe(new SolidBlazeBurnerRecipe(normal_fuel, false));
