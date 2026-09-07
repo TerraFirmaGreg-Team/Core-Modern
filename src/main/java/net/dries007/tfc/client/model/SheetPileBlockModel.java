@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.client.model;
 
+import java.util.ConcurrentModificationException;
 import java.util.function.Function;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,6 +16,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.blockentities.SheetPileBlockEntity;
@@ -40,10 +44,28 @@ public enum SheetPileBlockModel implements SimpleStaticBlockEntityModel<SheetPil
         {
             if (state.getValue(DirectionPropertyBlock.getProperty(direction))) // The properties are authoritative on which sides should be rendered
             {
-                final Metal metal = pile.getOrCacheMetal(direction);
-                sprite = textureAtlas.apply(metal.getTextureId());
+                final var stack = pile.getSheet(direction);
+                MaterialStack material;
 
-                renderSheet(poseStack, sprite, buffer, direction, packedLight, packedOverlay);
+                try
+                {
+                    material = ChemicalHelper.getMaterialStack(stack);
+                }
+                catch (ArrayIndexOutOfBoundsException | ConcurrentModificationException ex)
+                {
+                    return RenderHelpers.missingTexture();
+                }
+
+                final int primaryColor = material.material().getMaterialARGB(0);
+                final int secondaryColor = material.material().getMaterialARGB(1);
+                final Metal metalAtPos = pile.getOrCacheMetal(direction);
+
+                boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && !material.isEmpty());
+                ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getTextureId() : RenderHelpers.TFCMetalBlockTexturePattern;
+
+                sprite = textureAtlas.apply(metalResource);
+
+                renderSheet(poseStack, sprite, buffer, direction, packedLight, packedOverlay, shouldUseTFCRender, primaryColor, secondaryColor);
             }
         }
 
@@ -68,8 +90,15 @@ public enum SheetPileBlockModel implements SimpleStaticBlockEntityModel<SheetPil
         return 6 * 6;  // room for 6 faces x each sheet
     }
 
-    private void renderSheet(PoseStack poseStack, TextureAtlasSprite sprite, VertexConsumer buffer, Direction direction, int packedLight, int packedOverlay)
+    private void renderSheet(PoseStack poseStack, TextureAtlasSprite sprite, VertexConsumer buffer, Direction direction, int packedLight, int packedOverlay, boolean shouldUseTFCRender, int primaryColor, int secondaryColor)
     {
-        RenderHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, SheetPileBlock.getShapeForSingleFace(direction).bounds());
+        if (shouldUseTFCRender)
+        {
+            RenderHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, SheetPileBlock.getShapeForSingleFace(direction).bounds());
+        }
+        else
+        {
+            RenderHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, SheetPileBlock.getShapeForSingleFace(direction).bounds(), primaryColor, secondaryColor);
+        }
     }
 }

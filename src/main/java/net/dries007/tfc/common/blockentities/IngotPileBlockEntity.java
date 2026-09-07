@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,6 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Metal;
@@ -124,21 +129,61 @@ public class IngotPileBlockEntity extends TFCBlockEntity
 
     public void fillTooltip(Consumer<Component> tooltip)
     {
-        final Object2IntMap<Metal> map = new Object2IntOpenHashMap<>();
-        for (Entry entry : entries)
+        final Object2IntMap<Metal> mapMetals = new Object2IntOpenHashMap<>();
+        final Object2IntMap<Material> mapMaterials = new Object2IntOpenHashMap<>();
+        final Object2IntMap<Component> mapComponents = new Object2IntOpenHashMap<>();
+        int numberOfUnknown = 0;
+
+        for (int i = 0; i < entries.size(); i++)
         {
-            final Metal metal = entry.metal;
-            if (metal != null)
+            final Metal metal = getOrCacheMetal(i);
+            if (metal != Metal.unknown())
             {
-                map.mergeInt(metal, 1, Integer::sum);
+                mapMetals.mergeInt(metal, 1, Integer::sum);
+                continue;
             }
+
+            final ItemStack stack = entries.get(i).stack;
+            final MaterialStack materialStack = ChemicalHelper.getMaterialStack(stack);
+            if (!materialStack.isEmpty())
+            {
+                mapMaterials.mergeInt(materialStack.material(), 1, Integer::sum);
+                continue;
+            }
+
+            final Component nameComponent = stack.getHoverName();
+            if (!nameComponent.getString().isEmpty())
+            {
+                mapComponents.mergeInt(nameComponent, 1, Integer::sum);
+                continue;
+            }
+
+            if (metal == Metal.unknown())
+            {
+                mapMetals.mergeInt(metal, 1, Integer::sum);
+                continue;
+            }
+            numberOfUnknown++;
         }
-        map.forEach((metal, ct) -> tooltip.accept(Component.literal("" + ct + "x ").append(metal.getDisplayName())));
+
+        mapMetals.forEach((metal, ct) -> tooltip.accept(Component.literal("" + ct + "x ").append(metal.getDisplayName())));
+        mapMaterials.forEach((material, ct) -> tooltip.accept(Component.literal("" + ct + "x ").append(material.getLocalizedName())));
+        mapComponents.forEach((component, ct) -> tooltip.accept(Component.literal("" + ct + "x ").append(component)));
+
+        if (numberOfUnknown > 0)
+        {
+            tooltip.accept(Component.literal(numberOfUnknown + "x ").append(Metal.unknown().getDisplayName().copy().withStyle(ChatFormatting.RED)));
+        }
     }
 
     public ItemStack getPickedItemStack()
     {
         return entries.isEmpty() ? ItemStack.EMPTY : entries.get(0).stack.copy();
+    }
+
+    public ItemStack getEntryStack(int index)
+    {
+        return index >= 0 && index < entries.size() ? entries.get(index).stack : ItemStack.EMPTY;
     }
 
     static class Entry
