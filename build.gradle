@@ -60,11 +60,9 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir 'src/tfc/java'
         }
         resources {
             srcDir 'src/main/resources'
-            srcDir 'src/tfc/resources'
             srcDir 'src/generated/resources'
         }
     }
@@ -162,7 +160,6 @@ legacyForge {
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
-            programArguments.addAll '--existing', file('src/tfc/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
 
             String[] existingMods = new String[]{
