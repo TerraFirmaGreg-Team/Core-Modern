@@ -77,7 +77,12 @@ public class BreedBehavior<T extends Animal & BrainBreeder> extends Behavior<T>
     {
         AgeableMob target = animal.getBrain().getMemory(MemoryModuleType.BREED_TARGET).get();
         BehaviorUtils.lockGazeAndWalkToEachOther(animal, target, this.speedModifier);
-        if (animal.closerThan(target, 3.0D) && time >= this.spawnChildAtTime)
+		/*
+		 * Allow the spawn check to pass up to 10 ticks early to account for brain tick throttling.
+		 * Normally the spawning happens on the last valid tick of the BreedBehavior before timeout,
+		 * but with the throttle we might miss this moment.
+		 */
+        if (animal.closerThan(target, 3.0D) && time >= this.spawnChildAtTime - 10)
         {
             target.getBreedOffspring(level, animal);
             animal.getBrain().eraseMemory(MemoryModuleType.BREED_TARGET);

@@ -7,6 +7,8 @@
 package net.dries007.tfc.util;
 
 import java.util.Random;
+
+import earth.terrarium.adastra.api.planets.PlanetApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -39,6 +41,7 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.dries007.tfc.util.tracker.WorldTracker;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 /**
  * This is a helper class which handles environment effects
@@ -61,6 +64,13 @@ public final class EnvironmentHelpers
      */
     public static void tickChunk(ServerLevel level, LevelChunk chunk, ProfilerFiller profiler)
     {
+		// Stops TFC from trying to melt/freeze water on other planets, so ad astra can handle it instead.
+		// Also the beneath is never going to have snow, so we can just skip it.
+		var dim = level.dimension();
+		if (Level.OVERWORLD.equals(dim) || Level.NETHER.equals(dim)) {
+			return;
+		}
+
         final ChunkPos chunkPos = chunk.getPos();
         final BlockPos lcgPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
         final BlockPos surfacePos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, lcgPos);
@@ -88,7 +98,10 @@ public final class EnvironmentHelpers
 
     public static boolean isWater(BlockState state)
     {
-        return Helpers.isBlock(state, Blocks.WATER) || Helpers.isBlock(state, TFCBlocks.SALT_WATER.get());
+        return Helpers.isBlock(state, Blocks.WATER)
+				   || Helpers.isBlock(state, TFCBlocks.SALT_WATER.get())
+				   || Helpers.isBlock(state, TFGBlocks.MARS_WATER.get())
+				   || Helpers.isBlock(state, TFGBlocks.MUDDY_WATER.get());
     }
 
     public static boolean isAdjacentToWater(LevelAccessor level, BlockPos pos)

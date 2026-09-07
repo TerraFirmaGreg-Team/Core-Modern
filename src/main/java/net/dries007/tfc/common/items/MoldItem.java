@@ -250,6 +250,13 @@ public class MoldItem extends Item
             this.heat = new HeatHandler(1, 0, 0);
             this.tank = new FluidTank(capacity, fluid -> Metal.get(fluid.getFluid()) != null && Helpers.isFluid(fluid.getFluid(), fluidTag));
             this.capacity = capacity;
+			/*
+			 * @author Ujhik
+			 * @reason To fix ingot molds having different heat values on server and client because of a dummy initial value on
+			 * heatCapacity messing up with the forge Capability sync system generating inconsistencies.
+			 * By initializing it to the correct value, we ensure the temperature calculations stay consistent between client and server
+			 */
+			this.load();
         }
 
         @Override

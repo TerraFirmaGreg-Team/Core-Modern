@@ -15,6 +15,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.common.recipes.ingredients.BlockIngredient;
 import net.dries007.tfc.network.DataManagerSyncPacket;
 import net.dries007.tfc.util.collections.IndirectHashCollection;
+import su.terrafirmagreg.core.common.perf.SupportCache;
 
 public final class Support
 {
@@ -41,44 +43,25 @@ public final class Support
         return RANGE;
     }
 
-    /**
-     * Finds all unsupported positions in a large area. It's more efficient than checking each block individually and calling {@link Support#isSupported(BlockGetter, BlockPos)}
-     */
+	/**
+	 * @author Mqrius
+	 * Replace brute-force block scan with cache-based AABB intersection.
+	 */
     public static Set<BlockPos> findUnsupportedPositions(BlockGetter worldIn, BlockPos from, BlockPos to)
     {
-        Set<BlockPos> listSupported = new HashSet<>();
-        Set<BlockPos> listUnsupported = new HashSet<>();
-        int minX = Math.min(from.getX(), to.getX());
-        int maxX = Math.max(from.getX(), to.getX());
-        int minY = Math.min(from.getY(), to.getY());
-        int maxY = Math.max(from.getY(), to.getY());
-        int minZ = Math.min(from.getZ(), to.getZ());
-        int maxZ = Math.max(from.getZ(), to.getZ());
-        for (BlockPos searchingPoint : getMaximumSupportedAreaAround(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ)))
-        {
-            if (!listSupported.contains(searchingPoint))
-            {
-                listUnsupported.add(searchingPoint.immutable()); // Adding blocks that wasn't found supported
-            }
-            final BlockState supportState = worldIn.getBlockState(searchingPoint);
-            final Support support = get(supportState);
-            if (support != null)
-            {
-                for (BlockPos supported : support.getSupportedArea(searchingPoint))
-                {
-                    listSupported.add(supported.immutable()); // Adding all supported blocks by this support
-                    listUnsupported.remove(supported); // Remove if this block was added earlier
-                }
-            }
-        }
-        // Searching point wasn't from points between from <-> to but
-        // Time to remove the outsides that were added for convenience
-        listUnsupported.removeIf(content -> content.getX() < minX || content.getX() > maxX || content.getY() < minY || content.getY() > maxY || content.getZ() < minZ || content.getZ() > maxZ);
-        return listUnsupported;
+		if (worldIn instanceof Level level) {
+			return SupportCache.forLevel(level).findUnsupportedPositions(level, from, to);
+		}
+		return Set.of();
     }
 
     public static boolean isSupported(BlockGetter world, BlockPos pos)
     {
+		// Check our support cache to see if this position is supported by a HorizontalSupportBlock.
+		if (world instanceof Level level) {
+			return SupportCache.forLevel(level).isSupported(level, pos);
+		}
+
         for (BlockPos supportPos : getMaximumSupportedAreaAround(pos, pos))
         {
             final BlockState supportState = world.getBlockState(supportPos);

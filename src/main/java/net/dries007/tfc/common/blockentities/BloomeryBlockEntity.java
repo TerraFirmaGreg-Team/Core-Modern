@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import earth.terrarium.adastra.api.systems.OxygenApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -192,6 +194,11 @@ public class BloomeryBlockEntity extends TickableInventoryBlockEntity<ItemStackH
     public boolean light(BlockState state)
     {
         assert level != null;
+
+		if (!OxygenApi.API.hasOxygen(level, worldPosition)) {
+			Helpers.playSound(level, worldPosition, SoundEvents.FIRE_EXTINGUISH);
+			return false;
+		}
 
         if (state.getValue(BloomeryBlock.LIT))
         {

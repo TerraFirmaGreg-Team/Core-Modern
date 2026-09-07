@@ -54,17 +54,20 @@ public class RockData
 
     public RockSettings getRock(int x, int y, int z)
     {
-        assert generator != null;
-        if (surfaceHeight != null)
+		assert generator != null;
+		
+		/*
+		 * Fixes a crash where `RockData.getRock()` is called before surfaceHeight is initialized.
+		 * This can happen during world generation when features like ErosionFeature or LooseRockFeature
+		 * run on a chunk whose ChunkData hasn't had `generateFull()` called yet.
+		 */
+		if (this.surfaceHeight == null) {
+			TerraFirmaCraft.LOGGER.warn("Queried rock data for position ({}, {}, {}) before surface height cache was populated", x, y, z);
+			return this.generator.generateRock(x, y, z, 64, null);
+		}
+		else
         {
             return generator.generateRock(x, y, z, surfaceHeight[Units.index(x, z)], cache);
-        }
-        else
-        {
-            // Fallback in case a mod is trying to generate a TFC chunk before the surface height cache is populated,
-            // which has caused many crashes and incompatibilities in the past.
-            TerraFirmaCraft.LOGGER.warn("Queried rock data for position ({}, {}, {}) before surface height cache was populated", x, y, z);
-            return generator.generateRock(x, y, z, 64, cache);
         }
     }
 

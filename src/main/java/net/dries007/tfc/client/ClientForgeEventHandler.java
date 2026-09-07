@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
+import earth.terrarium.adastra.api.planets.Planet;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -107,6 +108,7 @@ import net.dries007.tfc.util.collections.IndirectHashCollection;
 import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
+import su.terrafirmagreg.core.client.TFGWindManager;
 
 import static net.minecraft.ChatFormatting.*;
 
@@ -440,7 +442,13 @@ public class ClientForgeEventHandler
     {
         if (!TFCConfig.CLIENT.enableWindParticles.get())
             return;
-        final Level level = ClientHelpers.getLevel();
+
+		final Level level = ClientHelpers.getLevel();
+		if (level != null && level.dimension().equals(Planet.MARS)) {
+			TFGWindManager.Mars.tickWind(level);
+			return;
+		}
+
         final Player player = ClientHelpers.getPlayer();
         if (player != null && level != null && level.getGameTime() % 2 == 0)
         {

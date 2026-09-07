@@ -108,7 +108,16 @@ public class LivestockAi
             // Chooses one of these behaviors to run. Notice that all three of these are basically the fallback walking around behaviors, and it doesn't make sense to check them all every time
             RandomStroll.stroll(1.0F), // picks a random place to walk to
             SetWalkTargetFromLookTarget.create(1.0F, 3), // walk to what it is looking at
-            new DoNothing(30, 60)
+            new DoNothing(30, 60),
+			/*
+			 * Make it much more likely for livestock to stand still.
+			 * Without this mixin livestock has a 1 in 3 chance to go on a random walk, 1 in 3 to walk to what it's looking at if anything,
+			 * and 1 in 3 to do nothing for 30 to 60 ticks.
+			 * This bumps the DoNothing up to 3 in 5 chance.
+			 * This doesn't affect high priority behaviors like following, breeding, escaping, etc.
+			 */
+			new DoNothing(30, 60),
+			new DoNothing(30, 60)
         )); // do nothing for a certain period of time
     }
 

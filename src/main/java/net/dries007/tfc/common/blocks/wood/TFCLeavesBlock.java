@@ -49,6 +49,7 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.Season;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFCLeavesBlock extends Block implements ILeavesBlock, IForgeBlockExtension, IFluidLoggable, ISlowEntities
 {
@@ -147,6 +148,11 @@ public class TFCLeavesBlock extends Block implements ILeavesBlock, IForgeBlockEx
     @SuppressWarnings("deprecation")
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
+		// Give leaves full collision if they have the SolidLeaves tag (eg Mars tree leaves)
+		if (state.is(TFGTags.Blocks.SolidLeaves)) {
+			return Shapes.block();
+		}
+
         return Shapes.empty();
     }
 

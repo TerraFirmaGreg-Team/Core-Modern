@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec2;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.tracker.WorldTracker;
+import su.terrafirmagreg.core.utils.ClientClimateHelpers;
 
 /**
  * This stores the climate parameters at the current client player location, for quick lookup in rendering purposes
@@ -45,7 +46,7 @@ public enum ClimateRenderCache
 
             ticks = Calendars.CLIENT.getTicks();
             averageTemperature = Climate.getAverageTemperature(level, pos);
-            temperature = Climate.getTemperature(level, pos);
+            temperature = ClientClimateHelpers.getTemperatureForTooltip(level, pos);
             rainfall = Climate.getRainfall(level, pos);
             wind = Climate.getWindVector(level, pos);
 

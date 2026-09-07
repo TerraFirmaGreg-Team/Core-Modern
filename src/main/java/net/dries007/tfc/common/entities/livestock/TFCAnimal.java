@@ -119,6 +119,15 @@ public abstract class TFCAnimal extends Animal implements TFCAnimalProperties, T
     @Override
     protected void customServerAiStep()
     {
+		/*
+		 * Throttle the TFC animal brain tick to once every 3 ticks.
+		 * The actual movement physics run independently in Minecraft aiStep/moveControl and are unaffected.
+		 * Interactive behaviors (temptation, following) should still be fast enough at max 3 ticks delay.
+		 */
+		if ((tickCount + getId()) % 3 != 0) {
+			return;
+		}
+
         super.customServerAiStep();
         tickBrain();
     }
