@@ -69,6 +69,7 @@ import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfRenderer;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -372,7 +373,7 @@ public final class ClientEventHandler {
         event.registerEntityRenderer(TFCEntities.SABERTOOTH.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, SabertoothModel::new, "sabertooth").shadow(0.8f).build());
         event.registerEntityRenderer(TFCEntities.TIGER.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, TigerModel::new, "tiger").shadow(0.8f).build());
         event.registerEntityRenderer(TFCEntities.CROCODILE.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CrocodileModel::new, "crocodile").shadow(0.8f).build());
-        event.registerEntityRenderer(TFCEntities.WOLF.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, TFCWolfModel::new, "wolf").shadow(0.5f).scale(1.1f).build());
+        event.registerEntityRenderer(TFCEntities.WOLF.get(), TFCWolfRenderer::new);
         event.registerEntityRenderer(TFCEntities.HYENA.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, HyenaModel::new, "hyena").shadow(0.5f).scale(1.1f).build());
         event.registerEntityRenderer(TFCEntities.DIREWOLF.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, DirewolfModel::new, "direwolf").shadow(0.9f).build());
         event.registerEntityRenderer(TFCEntities.SQUID.get(), ctx -> new TFCSquidRenderer<>(ctx, new SquidModel<>(RenderHelpers.bakeSimple(ctx, "squid"))));
