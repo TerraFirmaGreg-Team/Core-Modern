@@ -44,6 +44,7 @@ import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.registry.RegistrySoilVariant;
 import net.dries007.tfc.world.chunkdata.ChunkData;
+import su.terrafirmagreg.core.utils.ClientClimateHelpers;
 
 public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock, IForgeBlockExtension, EntityBlockExtension
 {
@@ -69,12 +70,12 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
 
     public static Component getTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, boolean allowWiggle)
     {
-        return getTemperatureTooltip(level, pos, validRange, Climate.getTemperature(level, pos), allowWiggle, "tfc.tooltip.farmland.temperature");
+        return getTemperatureTooltip(level, pos, validRange, ClientClimateHelpers.getTemperatureForTooltip(level, pos), allowWiggle, "tfc.tooltip.farmland.temperature");
     }
 
     public static Component getAverageTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, boolean allowWiggle)
     {
-        return getTemperatureTooltip(level, pos, validRange, Climate.getAverageTemperature(level, pos), allowWiggle, "tfc.tooltip.climate_average_temperature");
+        return getTemperatureTooltip(level, pos, validRange, ClientClimateHelpers.getAverageTemperatureForTooltip(level, pos), allowWiggle, "tfc.tooltip.climate_average_temperature");
     }
 
     public static Component getTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, float temperature, boolean allowWiggle, String translationKey)

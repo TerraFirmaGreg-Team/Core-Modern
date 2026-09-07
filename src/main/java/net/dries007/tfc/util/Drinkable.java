@@ -51,6 +51,8 @@ public class Drinkable extends FluidDefinition
     /** Amount of mB drank when drinking by hand on a source block */
     private static final int HAND_DRINK_MB = 25;
 
+	private static final String TFC_ALCOHOL_ID = "tfc:alcohol";
+
     @Nullable
     public static Drinkable get(Fluid fluid)
     {
@@ -58,6 +60,28 @@ public class Drinkable extends FluidDefinition
         {
             if (drinkable.matches(fluid))
             {
+				/*
+				 * Returns the drinkable for a fluid, used when drinking from containers
+				 * @author Ujhik
+				 * @reason To bypass tfc:alcohol drinkable that is hardcoded in firmaLife, so rose, sparkling and dessert wines return their correct drinkable (that has the corresponding buffing effects) instead of a generic tfc:alcohol) that does nothing
+				 */
+				if (!drinkable.getId().toString().equals(TFC_ALCOHOL_ID))
+					return drinkable;
+
+				// Get all Drinkables for this fluid
+				Collection<Drinkable> cachedMatchingDrinkables = Drinkable.CACHE.getAll(fluid);
+
+				// Only intervene if there are more than 1 drinkable
+				if (cachedMatchingDrinkables.size() < 2)
+					return drinkable;
+
+				// Find the next non-alcohol match
+				for (Drinkable candidateDrinkable : cachedMatchingDrinkables) {
+					if (candidateDrinkable.matches(fluid) && !candidateDrinkable.getId().toString().equals(TFC_ALCOHOL_ID)) {
+						return candidateDrinkable;
+					}
+				}
+
                 return drinkable;
             }
         }
