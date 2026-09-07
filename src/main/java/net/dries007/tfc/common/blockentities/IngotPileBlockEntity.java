@@ -44,7 +44,15 @@ public class IngotPileBlockEntity extends TFCBlockEntity
 
     public void addIngot(ItemStack stack)
     {
-        entries.add(new Entry(stack));
+        addIngots(stack);
+    }
+
+    public void addIngots(ItemStack stack)
+    {
+        while (!stack.isEmpty())
+        {
+            entries.add(new Entry(stack.split(1)));
+        }
         markForSync();
     }
 
@@ -60,13 +68,38 @@ public class IngotPileBlockEntity extends TFCBlockEntity
 
     public ItemStack removeIngot()
     {
+        final List<ItemStack> removed = removeIngots(1);
+        return removed.isEmpty() ? ItemStack.EMPTY : removed.get(0);
+    }
+
+    public List<ItemStack> removeIngotStack()
+    {
+        if (entries.isEmpty()) return List.of();
+        ItemStack lastStack = entries.get(entries.size() - 1).stack;
+        return removeIngots(lastStack.getMaxStackSize());
+    }
+
+    public List<ItemStack> removeIngots(int count)
+    {
+        final List<ItemStack> removed = new ArrayList<>();
         if (!entries.isEmpty())
         {
-            final Entry entry = entries.remove(entries.size() - 1);
+            final ItemStack lastStack = entries.get(entries.size() - 1).stack;
+            for (int i = entries.size() - 1; i >= 0 && removed.size() < count; i--)
+            {
+                final ItemStack currentStack = entries.get(i).stack;
+                if (ItemStack.isSameItemSameTags(lastStack, currentStack))
+                {
+                    removed.add(entries.remove(i).stack);
+                }
+                else
+                {
+                    break;
+                }
+            }
             markForSync();
-            return entry.stack;
         }
-        return ItemStack.EMPTY;
+        return removed;
     }
 
     /**

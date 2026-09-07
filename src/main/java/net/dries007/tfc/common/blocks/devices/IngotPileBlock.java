@@ -9,6 +9,7 @@ package net.dries007.tfc.common.blocks.devices;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import java.util.List;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -77,7 +78,7 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
     @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        if (!player.isShiftKeyDown())
+        if (!player.isShiftKeyDown() || (player.isShiftKeyDown() && player.isSprinting()))
         {
             // Attempt to remove from the ingot pile, or one above
             // First, climb up the current stack until we locate the top ingot pile
@@ -93,21 +94,46 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
 
             if (level.getBlockEntity(topPos) instanceof IngotPileBlockEntity pile)
             {
-                final ItemStack ingot = pile.removeIngot();
-                if (!player.isCreative())
+                if (player.isShiftKeyDown() && player.isSprinting())
                 {
-                    ItemHandlerHelper.giveItemToPlayer(player, ingot);
+                    final List<ItemStack> removed = pile.removeIngotStack();
+                    if (!player.isCreative())
+                    {
+                        for (ItemStack stack : removed)
+                        {
+                            ItemHandlerHelper.giveItemToPlayer(player, stack);
+                        }
+                    }
+
+                    final int toRemove = removed.size();
+                    if (topIngots == toRemove)
+                    {
+                        level.removeBlock(topPos, false);
+                    }
+                    else
+                    {
+                        level.setBlock(topPos, topState.setValue(getCountProperty(), topIngots - toRemove), Block.UPDATE_CLIENTS);
+                    }
+                }
+                else
+                {
+                    final ItemStack ingot = pile.removeIngot();
+                    if (!player.isCreative())
+                    {
+                        ItemHandlerHelper.giveItemToPlayer(player, ingot);
+                    }
+
+                    if (topIngots == 1)
+                    {
+                        level.removeBlock(topPos, false);
+                    }
+                    else
+                    {
+                        level.setBlock(topPos, topState.setValue(getCountProperty(), topIngots - 1), Block.UPDATE_CLIENTS);
+                    }
                 }
             }
 
-            if (topIngots == 1)
-            {
-                level.removeBlock(topPos, false);
-            }
-            else
-            {
-                level.setBlock(topPos, topState.setValue(getCountProperty(), topIngots - 1), Block.UPDATE_CLIENTS);
-            }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
