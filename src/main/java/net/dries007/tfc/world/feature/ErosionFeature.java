@@ -7,6 +7,7 @@
 package net.dries007.tfc.world.feature;
 
 import com.mojang.serialization.Codec;
+import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -37,17 +38,33 @@ public class ErosionFeature extends Feature<NoneFeatureConfiguration>
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
     {
-        final WorldGenLevel level = context.level();
-        final BlockPos pos = context.origin();
+		// Fixes a crash where `ErosionFeature` runs on chunks that aren't fully initialized.
+		// If the chunk data status is not FULL, we skip the feature to prevent NullPointerExceptions.
 
-        final ChunkAccess chunk = level.getChunk(pos);
+		// Check if the chunk generator is a TFC generator.
+		if (!(context.chunkGenerator() instanceof ChunkGeneratorExtension extension)) {
+			return false;
+		}
+
+		final WorldGenLevel level = context.level();
+		final BlockPos pos = context.origin();
+		final ChunkAccess chunk = level.getChunk(pos);
+
+		ChunkDataProvider provider = ChunkDataProvider.get(context.chunkGenerator());
+		ChunkData chunkData = provider.get(chunk);
+
+		// Check if chunk data is fully initialized.
+		if (chunkData.status() != ChunkData.Status.FULL) {
+			return false;
+		}
+
+		// TFC code continues from here
         final ChunkPos chunkPos = new ChunkPos(pos);
         final int chunkX = chunkPos.getMinBlockX(), chunkZ = chunkPos.getMinBlockZ();
         final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        final RockData rockData = ChunkDataProvider.get(context.chunkGenerator()).get(chunk).getRockData();
+        final RockData rockData = chunkData.getRockData();
 
-        final ChunkGeneratorExtension extension = (ChunkGeneratorExtension) context.chunkGenerator();
-        final RockLayerSettings rockSettings = extension.rockLayerSettings();
+		final RockLayerSettings rockSettings = extension.rockLayerSettings();
         final Aquifer aquifer = extension.getOrCreateAquifer(chunk);
         final MutableDensityFunctionContext point = new MutableDensityFunctionContext(mutablePos);
         final int minY = context.chunkGenerator().getMinY();

@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blocks;
 
+import earth.terrarium.adastra.api.planets.PlanetApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

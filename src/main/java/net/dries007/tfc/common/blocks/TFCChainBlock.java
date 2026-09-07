@@ -24,10 +24,11 @@ import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import org.jetbrains.annotations.Nullable;
+import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 
 public class TFCChainBlock extends RotatedPillarBlock implements IFluidLoggable
 {
-    public static final FluidProperty FLUID = TFCBlockStateProperties.WATER_AND_LAVA;
+    public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER_AND_LAVA;
 
     public TFCChainBlock(Properties properties)
     {

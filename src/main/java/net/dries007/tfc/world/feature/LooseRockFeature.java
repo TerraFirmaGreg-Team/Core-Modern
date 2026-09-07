@@ -7,10 +7,12 @@
 package net.dries007.tfc.world.feature;
 
 import com.mojang.serialization.Codec;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -76,6 +78,12 @@ public class LooseRockFeature extends Feature<NoneFeatureConfiguration>
 
     private boolean canGenerateOn(BlockState state)
     {
+		// Ice and sea ice had their #minecraft:ice tag removed (for reasons related to being able to pick them up
+		// and break them to move water sources around), so add the checks for those items back
+		if (state == Blocks.ICE.defaultBlockState() || state == TFCBlocks.SEA_ICE.get().defaultBlockState()) {
+			return false;
+		}
+
         return !Helpers.isBlock(state, BlockTags.ICE);
     }
 }

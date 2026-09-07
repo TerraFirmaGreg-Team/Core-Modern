@@ -7,6 +7,8 @@
 package net.dries007.tfc.world.feature.plant;
 
 import com.mojang.serialization.Codec;
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,7 +44,8 @@ public class CreepingPlantFeature extends Feature<CreepingPlantConfig>
                     if (x * x + z + z < radius * radius && context.random().nextFloat() < context.config().integrity())
                     {
                         cursor.setWithOffset(pos, x, y, z);
-                        if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor))
+						BlockState cursorState = level.getBlockState(pos);
+                        if (cursorState.isAir() || Helpers.isBlock(cursorState, TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE))
                         {
                             final BlockState newState = CreepingPlantBlock.updateStateFromSides(level, cursor, state);
                             if (!newState.isAir())

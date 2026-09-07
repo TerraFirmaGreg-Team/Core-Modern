@@ -38,12 +38,13 @@ import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.dries007.tfc.common.recipes.CollapseRecipe;
 import net.dries007.tfc.util.Helpers;
+import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 
 @SuppressWarnings("deprecation")
 public class RockSpikeBlock extends Block implements IFluidLoggable, IFallableBlock
 {
     public static final EnumProperty<Part> PART = TFCBlockStateProperties.ROCK_SPIKE_PART;
-    public static final FluidProperty FLUID = TFCBlockStateProperties.WATER_AND_LAVA;
+    public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER_AND_LAVA;
 
     public static final VoxelShape BASE_SHAPE = box(2, 0, 2, 14, 16, 14);
     public static final VoxelShape MIDDLE_SHAPE = box(4, 0, 4, 12, 16, 12);
