@@ -18,7 +18,6 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
@@ -27,7 +26,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.ActiveCardinalBlock;
@@ -200,9 +198,9 @@ public class TFGBlocks_Casings {
 
     public static final BlockEntry<Block> TEST_CASING = TFGCore.REGISTRATE.block("casings/test_casing", Block::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5f, 6f))
-            .tag(TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers")))
+            .tag(TFGTags.Blocks.HIDDEN)
             .defaultBlockstate()
-            .item(BlockItem::new).tag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"))).build()
+            .item(BlockItem::new).tag(TFGTags.Items.HIDDEN).build()
             .register();
 
     public static final BlockEntry<Block> SUPERCONDUCTOR_COIL_LARGE_BLOCK = createCasingBlock("superconductor_coil_large", GTModels.cubeAllModel(TFGCore.id("block/casings/superconductor_coil_large")),

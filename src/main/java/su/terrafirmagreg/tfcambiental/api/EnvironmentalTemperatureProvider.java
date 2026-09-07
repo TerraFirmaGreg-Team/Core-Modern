@@ -3,6 +3,7 @@ package su.terrafirmagreg.tfcambiental.api;
 import java.util.List;
 import java.util.Optional;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
-import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
 import su.terrafirmagreg.tfcambiental.capability.TemperatureCapability;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
@@ -136,7 +136,7 @@ public interface EnvironmentalTemperatureProvider {
         if (player.isInWater()) {
             BlockPos pos = player.getOnPos().above();
             BlockState state = player.level().getBlockState(pos);
-            if (state.getFluidState().is(TFCAmbiental.SPRING_WATER)) {
+            if (state.getFluidState().is(TFCTags.Fluids.SPRING_WATER)) {
                 return TempModifier.defined(5f, 6f, 10f);
             } else if (state.getBlock() == Blocks.LAVA) {
                 return TempModifier.defined(10f, 5f, -10f);

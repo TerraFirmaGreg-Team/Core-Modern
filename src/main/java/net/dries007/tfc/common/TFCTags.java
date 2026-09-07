@@ -102,8 +102,26 @@ public class TFCTags
         public static final TagKey<Block> POWDERKEG_BREAKING_BLOCKS = create("powderkeg_breaking_blocks");
         public static final TagKey<Block> KAOLIN_CLAY_REPLACEABLE = create("kaolin_clay_replaceable");
         public static final TagKey<Block> NO_ICICLE_GENERATION = create("no_icicle_generation");
+		public static final TagKey<Block> DIRT = create("dirt");
+		public static final TagKey<Block> MUD = create("mud");
+		public static final TagKey<Block> PATHS = create("paths");
+		public static final TagKey<Block> MUD_BRICKS = create("mud_bricks");
+		public static final TagKey<Block> CLAY = create("clay");
+		public static final TagKey<Block> CLAY_GRASS = create("clay_grass");
+		public static final TagKey<Block> MINEABLE_WITH_SHARP_TOOL = create("mineable_with_sharp_tool");
+		public static final TagKey<Block> WILD_FRUITS = create("wild_fruits");
+		public static final TagKey<Block> TOOL_RACKS = create("tool_racks");
+		public static final TagKey<Block> LOOMS = create("looms");
+		public static final TagKey<Block> SLUICES = create("sluices");
+		public static final TagKey<Block> BARRELS = create("barrels");
+		public static final TagKey<Block> LECTERNS = create("lecterns");
+		public static final TagKey<Block> SCRIBING_TABLES = create("scribing_tables");
+		public static final TagKey<Block> SEWING_TABLES = create("sewing_tables");
+		public static final TagKey<Block> JAR_SHELVES = create("jar_shelves");
+		public static final TagKey<Block> BOOKSHELVES = create("bookshelves");
+		public static final TagKey<Block> CROPS = create("crops");
 
-        private static TagKey<Block> create(String id)
+		private static TagKey<Block> create(String id)
         {
             return TagKey.create(Registries.BLOCK, Helpers.identifier(id));
         }
@@ -143,6 +161,8 @@ public class TFCTags
         public static final TagKey<Fluid> USABLE_IN_INGOT_MOLD = create("usable_in_ingot_mold");
         public static final TagKey<Fluid> USABLE_IN_TOOL_HEAD_MOLD = create("usable_in_tool_head_mold");
         public static final TagKey<Fluid> USABLE_IN_BELL_MOLD = create("usable_in_bell_mold");
+		public static final TagKey<Fluid> DRINKABLES = create("drinkables");
+		public static final TagKey<Fluid> SPRING_WATER = create("spring_water");
 
         private static TagKey<Fluid> create(String id)
         {
@@ -260,8 +280,34 @@ public class TFCTags
         public static final TagKey<Item> SEWING_LIGHT_CLOTH = create("sewing_light_cloth");
         public static final TagKey<Item> SEWING_NEEDLES = create("sewing_needles");
         public static final TagKey<Item> EMPTY_JAR_WITH_LID = create("empty_jar_with_lid");
+		public static final TagKey<Item> DIRT = create("dirt");
+		public static final TagKey<Item> GRASS = create("grass");
+		public static final TagKey<Item> FARMLAND = create("farmland");
+		public static final TagKey<Item> DRY_MUD_BRICKS = create("dry_mud_bricks");
+		public static final TagKey<Item> PATHS = create("paths");
+		public static final TagKey<Item> MUD = create("mud");
+		public static final TagKey<Item> CLAY = create("clay");
+		public static final TagKey<Item> FIRED_VESSELS = create("fired_vessels");
+		public static final TagKey<Item> GLASS_BLOWPIPES = create("glass_blowpipes");
+		public static final TagKey<Item> SHARP_TOOLS = create("sharp_tools");
+		public static final TagKey<Item> FOODS_FRUITS = create("foods/fruits");
+		public static final TagKey<Item> FRUIT_TREE_LEAVES = create("fruit_tree_leaves");
+		public static final TagKey<Item> WILD_FRUITS = create("wild_fruits");
+		public static final TagKey<Item> PLANTS = create("plants");
+		public static final TagKey<Item> KAOLIN_CLAY = create("kaolin_clay");
+		public static final TagKey<Item> TWIGS = create("twigs");
+		public static final TagKey<Item> TOOL_RACKS = create("tool_racks");
+		public static final TagKey<Item> WORKBENCHES = create("workbenches");
+		public static final TagKey<Item> LOOMS = create("looms");
+		public static final TagKey<Item> SLUICES = create("sluices");
+		public static final TagKey<Item> BARRELS = create("barrels");
+		public static final TagKey<Item> LECTERNS = create("lecterns");
+		public static final TagKey<Item> SCRIBING_TABLES = create("scribing_tables");
+		public static final TagKey<Item> SEWING_TABLES = create("sewing_tables");
+		public static final TagKey<Item> JAR_SHELVES = create("jar_shelves");
+		public static final TagKey<Item> BOOKSHELVES = create("bookshelves");
 
-        public static TagKey<Item> mobEquipmentSlotTag(EquipmentSlot slot)
+		public static TagKey<Item> mobEquipmentSlotTag(EquipmentSlot slot)
         {
             return switch (slot)
                 {
