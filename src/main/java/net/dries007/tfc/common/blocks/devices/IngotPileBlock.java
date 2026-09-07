@@ -35,6 +35,7 @@ import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedBlock;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.capabilities.player.PlayerData;
 import net.dries007.tfc.util.Helpers;
 
 public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtension
@@ -78,7 +79,8 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
     @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        if (!player.isShiftKeyDown() || (player.isShiftKeyDown() && player.isSprinting()))
+        final boolean sprintKey = PlayerData.get(player).isSprintKeyDown();
+        if (!player.isShiftKeyDown() || (player.isShiftKeyDown() && sprintKey))
         {
             // Attempt to remove from the ingot pile, or one above
             // First, climb up the current stack until we locate the top ingot pile
@@ -94,7 +96,7 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
 
             if (level.getBlockEntity(topPos) instanceof IngotPileBlockEntity pile)
             {
-                if (player.isShiftKeyDown() && player.isSprinting())
+                if (player.isShiftKeyDown() && sprintKey)
                 {
                     final List<ItemStack> removed = pile.removeIngotStack();
                     if (!player.isCreative())

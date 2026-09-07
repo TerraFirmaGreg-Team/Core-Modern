@@ -51,6 +51,7 @@ import net.dries007.tfc.common.blocks.ThatchBedBlock;
 import net.dries007.tfc.common.blocks.devices.DoubleIngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.SheetPileBlock;
+import net.dries007.tfc.common.capabilities.player.PlayerData;
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.container.ItemStackContainerProvider;
 import net.dries007.tfc.common.container.KnappingContainer;
@@ -497,6 +498,7 @@ public final class InteractionManager
         final Player player = context.getPlayer();
         if (player != null && player.mayBuild() && player.isShiftKeyDown())
         {
+            final boolean sprintKey = PlayerData.get(player).isSprintKeyDown();
             final Level level = context.getLevel();
             final BlockPos posClicked = context.getClickedPos();
             final BlockState stateClicked = level.getBlockState(posClicked);
@@ -507,7 +509,7 @@ public final class InteractionManager
                 final int currentIngots = stateClicked.getValue(countProperty);
                 if (currentIngots < maxIngots)
                 {
-                    final int toAdd = player.isSprinting() ? Math.min(stack.getCount(), maxIngots - currentIngots) : 1;
+                    final int toAdd = sprintKey ? Math.min(stack.getCount(), maxIngots - currentIngots) : 1;
                     final ItemStack insertStack = stack.split(toAdd);
 
                     Helpers.playPlaceSound(level, posClicked, stateClicked);
@@ -530,7 +532,7 @@ public final class InteractionManager
                     {
                         // We must be at a non-full ingot pile, so we want to place another ingot on this pile instead
                         final int topIngots = topState.getValue(countProperty);
-                        final int toAdd = player.isSprinting() ? Math.min(stack.getCount(), maxIngots - topIngots) : 1;
+                        final int toAdd = sprintKey ? Math.min(stack.getCount(), maxIngots - topIngots) : 1;
                         final ItemStack insertStack = stack.split(toAdd);
 
                         Helpers.playPlaceSound(level, topPos, topState);
@@ -543,7 +545,7 @@ public final class InteractionManager
                         // We arrived at something that *isn't* an ingot pile, and we want to try and place another ingot on top
                         // We check for air, as we may have run into something solid - don't place anything if that's the case
                         final int initialCount = stack.getCount();
-                        final int targetAdd = player.isSprinting() ? Math.min(initialCount, maxIngots) : 1;
+                        final int targetAdd = sprintKey ? Math.min(initialCount, maxIngots) : 1;
                         final ItemStack stackToPlace = stack.copy();
                         stackToPlace.setCount(targetAdd);
 
@@ -575,7 +577,7 @@ public final class InteractionManager
             {
                 // We clicked on a non-ingot pile, so we want to try and place an ingot pile at the current location.
                 final int initialCount = stack.getCount();
-                final int targetAdd = player.isSprinting() ? Math.min(initialCount, maxIngots) : 1;
+                final int targetAdd = sprintKey ? Math.min(initialCount, maxIngots) : 1;
                 final ItemStack stackToPlace = stack.copy();
                 stackToPlace.setCount(targetAdd);
 
