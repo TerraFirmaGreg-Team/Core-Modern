@@ -43,8 +43,6 @@ public class IngotPileBlockEntity extends TFCBlockEntity
 {
     private final List<Entry> entries;
 
-    private long lastInsertTick = -1;
-    private long lastExtractTick = -1;
     private final LazyOptional<IItemHandler> inventoryCapability = LazyOptional.of(IngotPileInventory::new);
 
     public IngotPileBlockEntity(BlockPos pos, BlockState state)
@@ -272,12 +270,6 @@ public class IngotPileBlockEntity extends TFCBlockEntity
 
             if (level != null)
             {
-                long time = level.getGameTime();
-                if (time == lastInsertTick)
-                {
-                    return stack;
-                }
-
                 // Find the first pile in the stack that has room.
                 BlockPos targetPos = worldPosition;
                 BlockState targetState = getBlockState();
@@ -298,20 +290,20 @@ public class IngotPileBlockEntity extends TFCBlockEntity
                         // Handles placing new stacks above full piles.
                         else if (aboveState.isAir())
                         {
+                            int toAdd = Math.min(stack.getCount(), maxCount);
                             if (!simulate)
                             {
-                                lastInsertTick = time;
-                                BlockState newState = block.defaultBlockState().setValue(countProperty, 1);
+                                BlockState newState = block.defaultBlockState().setValue(countProperty, toAdd);
                                 level.setBlock(abovePos, newState, 3);
                                 level.getBlockEntity(abovePos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(newPile -> {
                                     ItemStack toInsert = stack.copy();
-                                    toInsert.setCount(1);
+                                    toInsert.setCount(toAdd);
                                     newPile.addIngots(toInsert);
                                     Helpers.playPlaceSound(level, abovePos, newState);
                                 });
                             }
                             ItemStack result = stack.copy();
-                            result.shrink(1);
+                            result.shrink(toAdd);
                             return result;
                         }
                         else
@@ -326,18 +318,18 @@ public class IngotPileBlockEntity extends TFCBlockEntity
                         int currentCount = targetPile.entries.size();
                         if (currentCount < maxCount)
                         {
+                            int toAdd = Math.min(stack.getCount(), maxCount - currentCount);
                             if (!simulate)
                             {
-                                lastInsertTick = time;
                                 ItemStack toInsert = stack.copy();
-                                toInsert.setCount(1);
+                                toInsert.setCount(toAdd);
                                 targetPile.addIngots(toInsert);
 
                                 // Update block state
-                                level.setBlock(targetPos, targetState.setValue(countProperty, currentCount + 1), 3);
+                                level.setBlock(targetPos, targetState.setValue(countProperty, currentCount + toAdd), 3);
                             }
                             ItemStack result = stack.copy();
-                            result.shrink(1);
+                            result.shrink(toAdd);
                             return result;
                         }
                     }
@@ -356,12 +348,6 @@ public class IngotPileBlockEntity extends TFCBlockEntity
 
             if (level != null)
             {
-                long time = level.getGameTime();
-                if (time == lastExtractTick)
-                {
-                    return ItemStack.EMPTY;
-                }
-
                 // Find top pile.
                 BlockPos topPos = worldPosition;
                 Block block = getBlockState().getBlock();
@@ -377,10 +363,15 @@ public class IngotPileBlockEntity extends TFCBlockEntity
                         return ItemStack.EMPTY;
                     }
 
+                    int toExtract = Math.min(amount, topPile.entries.size());
+
                     if (!simulate)
                     {
-                        lastExtractTick = time;
-                        ItemStack result = topPile.removeIngot();
+                        List<ItemStack> removed = topPile.removeIngots(toExtract);
+                        if (removed.isEmpty()) return ItemStack.EMPTY;
+
+                        ItemStack result = removed.get(0).copy();
+                        result.setCount(removed.size());
 
                         // Update block state.
                         BlockState topState = level.getBlockState(topPos);
@@ -401,7 +392,7 @@ public class IngotPileBlockEntity extends TFCBlockEntity
                     else
                     {
                         ItemStack result = topPile.entries.get(topPile.entries.size() - 1).stack.copy();
-                        result.setCount(1);
+                        result.setCount(toExtract);
                         return result;
                     }
                 }
