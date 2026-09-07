@@ -121,9 +121,6 @@ dependencies {
     modImplementation "curse.maven:wans-ancient-beasts-1108604:8761414"
     modImplementation "curse.maven:geckolib-388172:7553267"
 
-    // Immersive Aircraft
-    modCompileOnly "curse.maven:immersive-aircraft-666014:6742170"
-
     //Create Liquid Fuel
     modImplementation "curse.maven:create-liquid-fuel-840734:5217310"
 

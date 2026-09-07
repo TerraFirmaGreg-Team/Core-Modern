@@ -166,7 +166,6 @@
         "common.gtceu.tools.ToolRecipeHandlerMixin",
         "common.gtutilities.UtilToolRecipeHelperMixin",
         "common.hang_glider.GliderItemMixin",
-        "common.immersive_aircraft.BambooHopperEntityMixin",
         "common.kubejs.MiscForgeHelperMixin",
         "common.kubejs_tfc.AqueductBlockBuilderMixin",
         "common.kubejs_tfc.BuildFoodItemDataMixin",
