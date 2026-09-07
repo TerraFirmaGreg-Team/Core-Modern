@@ -7,6 +7,7 @@ import com.forsteri.createliquidfuel.core.BurnerStomachHandler;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
@@ -33,7 +34,9 @@ import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.TFGRegistries;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
+import su.terrafirmagreg.core.common.item.wearable.LiquidFuelJetpack;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
@@ -114,8 +117,12 @@ public class TFGEmiPlugin implements EmiPlugin {
         //Blaze Burner
         emiRegistry.addCategory(BLAZE_BURNER);
         emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
+        emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(TFGItems.LIQUID_FUEL_JETPACK));
         for (var liquid_fuel : BurnerStomachHandler.LIQUID_BURNER_FUEL_MAP.entrySet()) {
             emiRegistry.addRecipe(new LiquidBlazeBurnerRecipe(liquid_fuel));
+            // Don't like doing this here but at least it's at a point where all the fuels have been registered
+            if (liquid_fuel.getKey() != GTMaterials.Steam.getFluid())
+                LiquidFuelJetpack.registerFuel(liquid_fuel);
         }
         for (var normal_fuel : ForgeRegistries.ITEMS.tags().getTag(AllTags.AllItemTags.BLAZE_BURNER_FUEL_REGULAR.tag).stream().toList()) {
             emiRegistry.addRecipe(new SolidBlazeBurnerRecipe(normal_fuel, false));
