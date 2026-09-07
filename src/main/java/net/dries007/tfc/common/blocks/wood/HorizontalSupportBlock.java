@@ -9,6 +9,7 @@ package net.dries007.tfc.common.blocks.wood;
 import java.util.Map;
 
 import net.dries007.tfc.common.fluids.FluidHelpers;
+import net.dries007.tfc.util.Support;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -28,6 +29,7 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.util.Helpers;
+import su.terrafirmagreg.core.common.perf.SupportCache;
 
 public class HorizontalSupportBlock extends VerticalSupportBlock implements IForgeBlockExtension
 {
@@ -151,4 +153,32 @@ public class HorizontalSupportBlock extends VerticalSupportBlock implements IFor
         }
         return distance == -1 ? 0 : distance + 1;
     }
+
+	/**
+	 * Adds supports to the cache.
+	 * Fires on both client and server for all players when a support block is placed.
+	 */
+	@Override
+	public void onBlockStateChange(LevelReader levelReader, BlockPos pos, BlockState oldState, BlockState newState) {
+		if (!(levelReader instanceof Level level))
+			return;
+		Support support = Support.get(newState);
+		if (support != null) {
+			SupportCache.forLevel(level).addSupport(pos.immutable(), support);
+		}
+	}
+
+	/**
+	 * Unfortunately this is only called ServerSide, so the clientside cache may contain stale supports.
+	 * In practice this is no problem because we doublecheck all found supports and remove them if they're stale,
+	 * so clientside the cache is just a little lazier about removal.
+	 */
+	@SuppressWarnings({ "NullableProblems", "deprecation" })
+	@Override
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (state.getBlock() != newState.getBlock()) {
+			SupportCache.forLevel(level).removeSupport(pos);
+		}
+		super.onRemove(state, level, pos, newState, isMoving);
+	}
 }

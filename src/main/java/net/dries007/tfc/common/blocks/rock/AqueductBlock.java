@@ -9,8 +9,12 @@ package net.dries007.tfc.common.blocks.rock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -29,6 +33,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -39,6 +44,7 @@ import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
+import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 
 
 public class AqueductBlock extends HorizontalDirectionalBlock implements IFluidLoggable
@@ -48,7 +54,7 @@ public class AqueductBlock extends HorizontalDirectionalBlock implements IFluidL
     public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
     public static final BooleanProperty WEST = BlockStateProperties.WEST;
 
-    public static final FluidProperty FLUID = TFCBlockStateProperties.ALL_WATER;
+    public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER_AND_LAVA;
 
     private static final VoxelShape[] SHAPES = new VoxelShape[16];
 
@@ -214,6 +220,12 @@ public class AqueductBlock extends HorizontalDirectionalBlock implements IFluidL
     @Override
     public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state)
     {
+		// Prevent picking up lava from aqueducts, as that would allow you to get infinite lava
+		if (state.getValue(getFluidProperty()).getFluid().isSame(Fluids.LAVA)) {
+			level.playSound(null, pos, SoundEvents.BUCKET_EMPTY_LAVA, SoundSource.BLOCKS, 1f, 1f);
+			return ItemStack.EMPTY;
+		}
+
         if (state.getValue(getFluidProperty()).getFluid() != Fluids.EMPTY)
         {
             level.scheduleTick(pos, this, LONG_TICK_DELAY);
@@ -338,4 +350,26 @@ public class AqueductBlock extends HorizontalDirectionalBlock implements IFluidL
         // super method uses rotate which breaks the orientation of asymmetrical blocks
         return DirectionPropertyBlock.mirror(state, mirror).setValue(FACING, mirror.mirror(state.getValue(FACING)));
     }
+
+	// Copy over some methods from Beneath's aqueduct to handle lava
+
+	@Override
+	public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+		return state.getValue(getFluidProperty()).getFluid().getFluidType().getLightLevel();
+	}
+
+	@Override
+	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
+		if (state.getValue(getFluidProperty()).getFluid().isSame(Fluids.LAVA) && !entity.fireImmune() && entity instanceof LivingEntity) {
+			entity.hurt(level.damageSources().hotFloor(), 1.0F);
+		}
+		super.stepOn(level, pos, state, entity);
+	}
+
+	@Nullable
+	@Override
+	public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity) {
+		return state.getValue(getFluidProperty()).getFluid().isSame(Fluids.LAVA) ? BlockPathTypes.DAMAGE_FIRE : null;
+	}
+
 }

@@ -8,6 +8,8 @@ package net.dries007.tfc.common.blocks.devices;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -70,6 +72,12 @@ public class CrucibleBlock extends DeviceBlock implements EntityBlockExtension, 
     @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
+		// Fixes a compat issue with the mechanical arm and crucibles
+		var heldItem = player.getItemInHand(hand);
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof ArmItem) {
+			return InteractionResult.FAIL;
+		}
+
         if (!player.isShiftKeyDown())
         {
             if (player instanceof ServerPlayer serverPlayer)

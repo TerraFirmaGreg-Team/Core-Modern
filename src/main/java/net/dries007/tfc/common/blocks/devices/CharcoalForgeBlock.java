@@ -8,6 +8,8 @@ package net.dries007.tfc.common.blocks.devices;
 
 import java.util.Random;
 import java.util.function.BiPredicate;
+
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -145,6 +147,12 @@ public class CharcoalForgeBlock extends DeviceBlock implements IBellowsConsumer
     @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result)
     {
+		// Fixes a compat issue with the mechanical arm and lighting charcoal forges
+		var heldItem = player.getItemInHand(hand);
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof ArmItem) {
+			return InteractionResult.FAIL;
+		}
+
         CharcoalForgeBlockEntity forge = level.getBlockEntity(pos, TFCBlockEntities.CHARCOAL_FORGE.get()).orElse(null);
         if (forge != null)
         {

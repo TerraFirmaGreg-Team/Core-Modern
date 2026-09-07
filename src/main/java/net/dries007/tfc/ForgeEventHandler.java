@@ -7,9 +7,14 @@
 package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
+import earth.terrarium.adastra.api.planets.Planet;
+import net.dries007.tfc.world.region.Region;
+import net.dries007.tfc.world.region.RegionGenerator;
+import net.dries007.tfc.world.region.Units;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -221,6 +226,10 @@ import net.dries007.tfc.util.tracker.WorldTrackerCapability;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
+import su.terrafirmagreg.core.utils.CustomSpawnHelper;
+import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
+
+import static net.dries007.tfc.TerraFirmaCraft.LOGGER;
 
 
 public final class ForgeEventHandler
@@ -293,55 +302,113 @@ public final class ForgeEventHandler
      */
     public static void onCreateWorldSpawn(LevelEvent.CreateSpawnPosition event)
     {
-        if (event.getLevel() instanceof ServerLevel level && level.getChunkSource().getGenerator() instanceof ChunkGeneratorExtension extension)
-        {
-            final ChunkGenerator generator = extension.self();
-            final ServerLevelData levelData = event.getSettings();
-            final RandomSource random = new XoroshiroRandomSource(level.getSeed());
-            final ChunkPos chunkPos = new ChunkPos(extension.findSpawnBiome(random));
+		if (event.getLevel() instanceof ServerLevel level && level.getChunkSource().getGenerator() instanceof ChunkGeneratorExtension extension) {
+			final ChunkGenerator generator = extension.self();
+			final ServerLevelData levelData = event.getSettings();
 
-            levelData.setSpawn(chunkPos.getWorldPosition().offset(8, generator.getSpawnHeight(level), 8), 0.0F);
-            boolean foundExactSpawn = false;
-            int x = 0, z = 0;
-            int xStep = 0;
-            int zStep = -1;
+			ChunkPos chunkPos = null;
+			RandomSource random = new XoroshiroRandomSource(level.getSeed());
 
-            for (int tries = 0; tries < 1024; ++tries)
-            {
-                if (x > -16 && x <= 16 && z > -16 && z <= 16)
-                {
-                    final BlockPos spawnPos = PlayerRespawnLogic.getSpawnPosInChunk(level, new ChunkPos(chunkPos.x + x, chunkPos.z + z));
-                    if (spawnPos != null)
-                    {
-                        levelData.setSpawn(spawnPos, 0);
-                        foundExactSpawn = true;
-                        break;
-                    }
-                }
+			RegionGenerator regionGen = new RegionGenerator(extension.settings(), random);
 
-                if ((x == z) || (x < 0 && x == -z) || (x > 0 && x == 1 - z))
-                {
-                    final int swap = xStep;
-                    xStep = -zStep;
-                    zStep = swap;
-                }
+			var condition = CustomSpawnHelper.getFromConfig();
 
-                x += xStep;
-                z += zStep;
-            }
+			var settingsMultiplier = CustomSpawnHelper.findSettingsMultipliers(extension);
 
-            if (!foundExactSpawn)
-            {
-                LOGGER.warn("Unable to find a suitable spawn location!");
-            }
+			final var worldSettings = extension.settings();
+			// Viewer + "default": honor spawn center from world Settings (create-world UI / TFCGenViewer Save).
+			// Other TFG presets: use each preset's search center so switching the cycle button after preview
+			// does not keep searching around the viewer-chosen coordinates.
+			final boolean centerFromWorldSettings = CustomSpawnHelper.VIEWER_SPAWN_ID.equals(condition.id())
+														|| CustomSpawnHelper.DEFAULT_SPAWN.id().equals(condition.id());
+			final int spawnCenterBlockX = centerFromWorldSettings
+											  ? (int) (worldSettings.spawnCenterX() * settingsMultiplier.get(1))
+											  : (int) (condition.spawnCenterX() * settingsMultiplier.get(1));
+			final int spawnCenterBlockZ = centerFromWorldSettings
+											  ? (int) (worldSettings.spawnCenterZ() * settingsMultiplier.get(0))
+											  : (int) (condition.spawnCenterZ() * settingsMultiplier.get(0));
 
-            if (level.getServer().getWorldData().worldGenOptions().generateBonusChest())
-            {
-                LOGGER.warn("No bonus chest for you, you cheaty cheater!");
-            }
+			final int spawnRadiusBlocks = worldSettings.spawnDistance() * condition.spawnRadiusMultiplier();
 
-            event.setCanceled(true);
-        }
+			if (CustomSpawnHelper.VIEWER_SPAWN_ID.equals(condition.id())) {
+				// Preview Save sets this preset: honor Settings center/radius without tightening climate (avoids infinite loop).
+				chunkPos = new ChunkPos(CustomSpawnHelper.findSpawnBiome(spawnCenterBlockX, spawnCenterBlockZ, spawnRadiusBlocks, random, extension));
+			} else {
+				boolean climateMatch = false;
+				int seedTicker = 0;
+				final int maxClimateAttempts = 512;
+				while (!climateMatch) {
+					chunkPos = new ChunkPos(
+						CustomSpawnHelper.findSpawnBiome(spawnCenterBlockX, spawnCenterBlockZ, spawnRadiusBlocks, random, extension));
+					Region.Point regionPoint = regionGen.getOrCreateRegionPoint(Units.blockToGrid(chunkPos.getMinBlockX()), Units.blockToGrid(chunkPos.getMinBlockZ()));
+
+					//System.out.println("Testing chunkPos " + chunkPos.getWorldPosition());
+					//System.out.println(regionPoint.temperature);
+					//System.out.println(regionPoint.rainfall);
+					if (CustomSpawnHelper.testWithinRanges(regionPoint.temperature, regionPoint.rainfall, condition)) {
+						climateMatch = true;
+					} else {
+						++seedTicker;
+						random = new XoroshiroRandomSource(level.getSeed() + seedTicker);
+						if (seedTicker >= maxClimateAttempts) {
+							//LOGGER.warn("TFG: spawn preset \"{}\" did not match climate near chosen center after {} attempts; using last candidate.", condition.id(), maxClimateAttempts);
+							climateMatch = true;
+						}
+					}
+				}
+			}
+
+			BlockPos defaultPos = chunkPos.getWorldPosition().offset(8, generator.getSpawnHeight(level), 8);
+
+			levelData.setSpawn(defaultPos, 0.0F);
+
+			boolean foundExactSpawn = false;
+			int x = 0, z = 0;
+			int xStep = 0;
+			int zStep = -1;
+
+			GlobalPos globalSpawnPos = GlobalPos.of(ServerLevel.OVERWORLD, defaultPos);
+
+			for (int tries = 0; tries < 1024; ++tries) {
+				if (x > -16 && x <= 16 && z > -16 && z <= 16) {
+					final BlockPos spawnPos = PlayerRespawnLogic.getSpawnPosInChunk(level, new ChunkPos(chunkPos.x + x, chunkPos.z + z));
+					if (spawnPos != null) {
+						globalSpawnPos = GlobalPos.of(ServerLevel.OVERWORLD, spawnPos);
+						levelData.setSpawn(spawnPos, 0);
+						foundExactSpawn = true;
+						break;
+					}
+				}
+
+				if ((x == z) || (x < 0 && x == -z) || (x > 0 && x == 1 - z)) {
+					final int swap = xStep;
+					xStep = -zStep;
+					zStep = swap;
+				}
+
+				x += xStep;
+				z += zStep;
+			}
+
+			if (!foundExactSpawn) {
+				LOGGER.warn("Unable to find a suitable spawn location!");
+			}
+
+			if (level.getServer().getWorldData().worldGenOptions().generateBonusChest()) {
+				LOGGER.warn("No bonus chest for you, you cheaty cheater!");
+			}
+
+			if (condition.dimension() == ServerLevel.OVERWORLD) {
+				CustomSpawnSaveHandler.setSpawnPos(level, globalSpawnPos);
+			} else if (condition.dimension() == ServerLevel.NETHER) {
+				CustomSpawnSaveHandler.setSpawnPos(level, CustomSpawnHelper.BENEATH_PLACEHOLDER);
+			} else if (condition.dimension() == Planet.MARS) {
+				CustomSpawnSaveHandler.setSpawnPos(level, CustomSpawnHelper.MARS_PLACEHOLDER);
+			}
+
+			CustomSpawnHelper.resetConfigValue();
+			event.setCanceled(true);
+		}
     }
 
     public static void attachChunkCapabilities(AttachCapabilitiesEvent<LevelChunk> event)
@@ -579,10 +646,9 @@ public final class ForgeEventHandler
 
     public static void onCreateNetherPortal(BlockEvent.PortalSpawnEvent event)
     {
-        if (!TFCConfig.SERVER.enableNetherPortals.get())
-        {
-            event.setCanceled(true);
-        }
+		// Forcibly disable nether portals because there's some funky mod conflict going on with
+		// TFC, beneath, and TFG settings overwriting each other?
+       event.setCanceled(true);
     }
 
     public static void onFluidPlaceBlock(BlockEvent.FluidPlaceBlockEvent event)
@@ -1014,7 +1080,7 @@ public final class ForgeEventHandler
                     if (!TFCConfig.SERVER.enableVanillaMonstersOnSurface.get())
                     {
                         final BlockPos pos = entity.blockPosition();
-                        if (entity.getType() != EntityType.SLIME && level.getRawBrightness(pos, 0) != 0)
+                        if (level.getRawBrightness(pos, 0) != 0)
                         {
                             event.setSpawnCancelled(true);
                             event.setCanceled(true);
@@ -1136,6 +1202,20 @@ public final class ForgeEventHandler
         }
     }
 
+	private static boolean preventHotIceWater(ServerLevel level, BlockPos pos, BlockState currentState, BlockState newState)
+	{
+		Block currentBlock = currentState.getBlock();
+
+		// Only intercept packed/blue ice melting
+		if ((currentBlock == Blocks.PACKED_ICE || currentBlock == Blocks.BLUE_ICE) && newState.is(Blocks.WATER)) {
+			level.destroyBlock(pos, false);
+			return true;
+		}
+
+		// Otherwise do as usual
+		return level.setBlockAndUpdate(pos, newState);
+	}
+
     /**
      * If the item is heated, we check for blocks below and within that would cause it to cool.
      * Since we don't want the item to actually expire, we set the expiry time to a small number that allows us to revisit the same code soon.
@@ -1214,7 +1294,8 @@ public final class ForgeEventHandler
                         coolAmount = 125f;
                         if (level.random.nextFloat() < 0.005F)
                         {
-                            level.setBlockAndUpdate(belowPos, Blocks.WATER.defaultBlockState());
+							// Don't create water source blocks when hot items melt packed/blue ice
+							level.destroyBlock(belowPos, false);
                         }
                     }
                 }

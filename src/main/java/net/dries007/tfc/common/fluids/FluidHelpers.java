@@ -51,6 +51,7 @@ import net.dries007.tfc.common.blocks.rock.AqueductBlock;
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.mixin.accessor.FlowingFluidAccessor;
 import net.dries007.tfc.util.Helpers;
+import su.terrafirmagreg.core.common.data.TFGFluids;
 
 public final class FluidHelpers
 {
@@ -71,7 +72,11 @@ public final class FluidHelpers
      */
     public static boolean isInWaterLikeFluid(Entity entity)
     {
-        return entity.isInFluidType((fluidType, value) -> fluidType == TFCFluids.SALT_WATER.type().get() || fluidType == TFCFluids.SPRING_WATER.type().get());
+        return entity.isInFluidType((fluidType, value) ->
+										fluidType == TFCFluids.SALT_WATER.type().get()
+											|| fluidType == TFCFluids.SPRING_WATER.type().get()
+		|| fluidType == TFGFluids.MUDDY_WATER.type().get()
+		|| fluidType == TFGFluids.MARS_WATER.type().get());
     }
 
     /**
@@ -79,7 +84,10 @@ public final class FluidHelpers
      */
     public static boolean isEyeInWaterLikeFluid(Entity entity)
     {
-        return entity.isEyeInFluidType(TFCFluids.SALT_WATER.type().get()) || entity.isEyeInFluidType(TFCFluids.SPRING_WATER.type().get());
+        return entity.isEyeInFluidType(TFCFluids.SALT_WATER.type().get())
+				   || entity.isEyeInFluidType(TFCFluids.SPRING_WATER.type().get())
+			|| entity.isEyeInFluidType(TFGFluids.MUDDY_WATER.type().get())
+		|| entity.isEyeInFluidType(TFGFluids.MARS_WATER.type().get());
     }
 
 

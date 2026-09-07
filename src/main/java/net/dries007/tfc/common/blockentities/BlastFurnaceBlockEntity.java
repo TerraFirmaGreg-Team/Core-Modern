@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import earth.terrarium.adastra.api.systems.OxygenApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -308,6 +311,19 @@ public class BlastFurnaceBlockEntity extends TickableInventoryBlockEntity<BlastF
 
     public boolean light(Level level, BlockPos pos, BlockState state)
     {
+		boolean foundOxygen = false;
+		for (Direction dir : Direction.values()) {
+			if (OxygenApi.API.hasOxygen(level, pos.relative(dir))) {
+				foundOxygen = true;
+				break;
+			}
+		}
+
+		if (!foundOxygen) {
+			Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
+			return false;
+		}
+
         if (state.getValue(BlastFurnaceBlock.LIT))
         {
             return true; // Already lit
