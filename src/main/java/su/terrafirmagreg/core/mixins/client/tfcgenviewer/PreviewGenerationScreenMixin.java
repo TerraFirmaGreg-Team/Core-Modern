@@ -49,7 +49,7 @@ public class PreviewGenerationScreenMixin {
 
     /**
      * {@code applyUpdates(false)} pushes preview settings into Create World. When TFCGenViewer Spawn Overlay is ON, enable
-     * viewer spawn preset so {@link su.terrafirmagreg.core.mixins.common.tfc.ForgeEventHandlerMixin#onCreateWorldSpawn} honors
+     * viewer spawn preset so {@link net.dries007.tfc.ForgeEventHandler#onCreateWorldSpawn} honors
      * preview center without climate retries. When overlay is OFF, keep the Game Tab spawn preset; clear a stale viewer id.
      */
     @Inject(method = "applyUpdates(Z)V", at = @At("TAIL"), remap = false)
