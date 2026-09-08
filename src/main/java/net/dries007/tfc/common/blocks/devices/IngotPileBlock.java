@@ -9,6 +9,7 @@ package net.dries007.tfc.common.blocks.devices;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import java.util.List;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -34,8 +35,10 @@ import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedBlock;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.capabilities.player.PlayerData;
 import net.dries007.tfc.util.Helpers;
 
+@SuppressWarnings("deprecation")
 public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtension
 {
     public static final IntegerProperty COUNT = TFCBlockStateProperties.COUNT_1_64;
@@ -63,7 +66,6 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
     {
         if (direction == Direction.DOWN && !neighborState.isFaceSturdy(level, neighborPos, direction.getOpposite()) && !Helpers.isBlock(neighborState, this))
@@ -73,10 +75,11 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
         return state;
     }
 
+    /** Handles removing ingots. Adding ingots is handled in {@link net.dries007.tfc.util.InteractionManager} */
     @Override
-    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
+        final boolean sprintKey = PlayerData.get(player).isSprintKeyDown();
         if (!player.isShiftKeyDown())
         {
             // Attempt to remove from the ingot pile, or one above
@@ -93,28 +96,54 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
 
             if (level.getBlockEntity(topPos) instanceof IngotPileBlockEntity pile)
             {
-                final ItemStack ingot = pile.removeIngot();
-                if (!player.isCreative())
+                // If the sprint key is pressed, remove a full stack.
+                if (sprintKey)
                 {
-                    ItemHandlerHelper.giveItemToPlayer(player, ingot);
+                    final List<ItemStack> removed = pile.removeIngotStack();
+                    if (!player.isCreative())
+                    {
+                        for (ItemStack stack : removed)
+                        {
+                            ItemHandlerHelper.giveItemToPlayer(player, stack);
+                        }
+                    }
+
+                    final int toRemove = removed.size();
+                    if (topIngots == toRemove)
+                    {
+                        level.removeBlock(topPos, false);
+                    }
+                    else
+                    {
+                        level.setBlock(topPos, topState.setValue(getCountProperty(), topIngots - toRemove), Block.UPDATE_CLIENTS);
+                    }
+                }
+                // If the sprint key is not pressed, remove a single ingot.
+                else
+                {
+                    final ItemStack ingot = pile.removeIngot();
+                    if (!player.isCreative())
+                    {
+                        ItemHandlerHelper.giveItemToPlayer(player, ingot);
+                    }
+
+                    if (topIngots == 1)
+                    {
+                        level.removeBlock(topPos, false);
+                    }
+                    else
+                    {
+                        level.setBlock(topPos, topState.setValue(getCountProperty(), topIngots - 1), Block.UPDATE_CLIENTS);
+                    }
                 }
             }
 
-            if (topIngots == 1)
-            {
-                level.removeBlock(topPos, false);
-            }
-            else
-            {
-                level.setBlock(topPos, topState.setValue(getCountProperty(), topIngots - 1), Block.UPDATE_CLIENTS);
-            }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         if (!canSurvive(state, level, pos))
@@ -125,7 +154,6 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         final BlockPos adjacentPos = pos.below();
@@ -152,7 +180,6 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
         if (level.getBlockEntity(pos) instanceof IngotPileBlockEntity pile && newState.getBlock() != this)
@@ -169,7 +196,6 @@ public class IngotPileBlock extends ExtendedBlock implements EntityBlockExtensio
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
         return SHAPES[(state.getValue(getCountProperty()) - 1) / 8];

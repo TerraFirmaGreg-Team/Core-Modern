@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.common.capabilities.player;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -44,8 +46,13 @@ public class PlayerData implements ICapabilitySerializable<CompoundTag>
     private final LazyOptional<PlayerData> capability;
     @Nullable private CompoundTag delayedFoodNbt;
 
+    @Setter
+    @Getter
+    private boolean sprintKeyDown;
+    @Getter
     private long lastDrinkTick;
     private long intoxicationTick;
+    @Getter
     private ChiselRecipe.Mode chiselMode = ChiselRecipe.Mode.SMOOTH;
 
     public PlayerData(Player player)
@@ -87,20 +94,10 @@ public class PlayerData implements ICapabilitySerializable<CompoundTag>
         sync();
     }
 
-    public long getLastDrinkTick()
-    {
-        return lastDrinkTick;
-    }
-
     public void setLastDrinkTick(long lastDrinkTick)
     {
         this.lastDrinkTick = lastDrinkTick;
         sync();
-    }
-
-    public ChiselRecipe.Mode getChiselMode()
-    {
-        return chiselMode;
     }
 
     public void cycleChiselMode()
