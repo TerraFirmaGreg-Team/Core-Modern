@@ -59,6 +59,7 @@ public final class ServerConfig {
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> worldgenOverrides;
+    public final ForgeConfigSpec.BooleanValue finiteContinents;
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
@@ -135,6 +136,9 @@ public final class ServerConfig {
                         Changing this for an existing world can cause chunk boundary artifacts.\s
                         Format: list of "dimension_id=version", e.g. ["minecraft:overworld=1"]""")
                 .defineListAllowEmpty("worldgenOverrides", List.of(), o -> o instanceof String);
+        finiteContinents = builder
+                .comment("Restricts the continent generation to one \"cycle\" of the climates.\nEverything outside of that area becomes ocean.")
+                .define("finite_continents", false);
 
         builder.pop().push("mars_climate");
         sandAccumulateChance = builder

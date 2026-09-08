@@ -5,6 +5,8 @@ import com.mojang.serialization.Codec;
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.util.EnvironmentHelpers;
+import net.dries007.tfc.world.Seed;
+import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.minecraft.core.BlockPos;
@@ -17,8 +19,6 @@ import net.minecraft.world.level.material.Fluid;
 import su.terrafirmagreg.core.common.block.CreepingWaterPlantBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 
 public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
     public CreepingOceanPlantFeature(Codec<CreepingPlantConfig> codec) {
@@ -29,7 +29,7 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
     public boolean place(FeaturePlaceContext<CreepingPlantConfig> context) {
         final WorldGenLevel level = context.level();
         final Seed seed = Seed.of(level.getSeed());
-        final Noise2D maxTideHeight = TFGBiomeNoise.shoreTideLevelNoise(seed);
+        final Noise2D maxTideHeight = BiomeNoise.shoreTideLevelNoise(seed);
         final BlockPos pos = context.origin();
         final BlockState state = context.config().block().defaultBlockState();
         final int radius = context.config().radius();

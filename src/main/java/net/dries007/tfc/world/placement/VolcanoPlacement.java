@@ -65,11 +65,11 @@ public class VolcanoPlacement extends PlacementModifier
 
         final Biome biome = level.getBiome(pos).value();
         final BiomeExtension variants = TFCBiomes.getExtensionOrThrow(level, biome);
-        if (variants.isVolcanic())
+        if (variants.hasCinderCones())
         {
             if (center)
             {
-                final BlockPos center = local.volcanoNoise.calculateCenter(pos.getX(), pos.getY(), pos.getZ(), variants.getVolcanoRarity());
+                final BlockPos center = local.volcanoNoise.calculateCenter(pos.getX(), pos.getY(), pos.getZ(), variants.getCenteredFeatureRarity());
                 if (center != null)
                 {
                     if (level instanceof WorldGenRegion generating && !ensureCanWrite(generating, center))
@@ -79,7 +79,7 @@ public class VolcanoPlacement extends PlacementModifier
                     return Stream.of(center);
                 }
             }
-            else if (local.volcanoNoise.calculateEasing(pos.getX(), pos.getZ(), variants.getVolcanoRarity()) > this.distance)
+            else if (local.volcanoNoise.calculateEasing(pos.getX(), pos.getZ(), variants.getCenteredFeatureRarity()) > this.distance)
             {
                 return Stream.of(pos);
             }

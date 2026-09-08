@@ -9,6 +9,11 @@ package net.dries007.tfc.world.region;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+
+import net.dries007.tfc.world.biome.BiomeNoise;
+import net.dries007.tfc.world.chunkdata.ChunkDataGenerator;
+import net.dries007.tfc.world.chunkdata.RegionChunkDataGenerator;
+import net.dries007.tfc.world.settings.RockSettings;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
@@ -23,253 +28,308 @@ import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.settings.Settings;
+import su.terrafirmagreg.core.config.TFGConfig;
+import net.dries007.tfc.world.Seed;
 
 /**
- * This is a single-instance, threadsafe (accessible from multiple threads concurrently), generator. As such, all query-able fields of this class need to support concurrent access, either by being concurrent i.e. {@link FastConcurrentCache}, thread local {@link ThreadLocal}, or immutable / stateless i.e. {@link Noise2D}
+ * This is a single-instance, threadsafe (accessible from multiple threads concurrently), generator. As such, all query-able fields of this
+ * class need to support concurrent access, either by being concurrent i.e. {@link FastConcurrentCache}, thread local {@link ThreadLocal},
+ * or immutable / stateless i.e. {@link Noise2D}
  */
-public class RegionGenerator
+public final class RegionGenerator
 {
-    private static double triangle(double frequency, double value)
-    {
-        return Math.abs(4f * frequency * value + 1f - 4f * Mth.floor(frequency * value + 0.75f)) - 1f;
-    }
+	private static double triangle(double frequency, double value)
+	{
+		return Math.abs(4f * frequency * value + 1f - 4f * Mth.floor(frequency * value + 0.75f)) - 1f;
+	}
 
-    private static Noise2D baseNoise(boolean axisIsX, float scale, float constant)
-    {
-        final float frequency = Units.GRID_WIDTH_IN_BLOCK / (2f * scale);
-        return scale == 0 ?
-            (x, z) -> constant : axisIsX ?
-            (x, z) -> triangle(frequency, x) :
-            (x, z) -> triangle(frequency, z);
-    }
+	private static Noise2D baseNoise(boolean axisIsX, float scale, float constant)
+	{
+		final float frequency = Units.GRID_WIDTH_IN_BLOCK / (2f * scale);
+		return scale == 0 ?
+				   (x, z) -> constant : axisIsX ?
+											(x, z) -> triangle(frequency, x) :
+											(x, z) -> triangle(frequency, z);
+	}
 
-    public final Cellular2D cellNoise;
-    public final Noise2D continentNoise;
-    public final Noise2D temperatureNoise;
-    public final Noise2D rainfallNoise;
+	public final Cellular2D cellNoise;
+	public final Noise2D continentNoise;
+	public final Noise2D temperatureNoise;
+	public final Noise2D oceanicInfluenceNoise;
+	public final Noise2D rainfallNoise;
+	public final Noise2D rainfallVarianceNoise;
+	public final Settings settings;
+	public final Noise2D hotSpotAgeNoise;
+	public final Noise2D hotSpotIntensityNoise;
+	public final Cellular2D plateRegionNoise;
 
-    public final ThreadLocal<Area> biomeArea;
-    public final ThreadLocal<Area> rockArea;
+	public final ThreadLocal<Area> biomeArea;
+	public final ThreadLocal<Area> rockArea;
 
-    private final long seed;
-    private final FastConcurrentCache<Region> cellCache;
-    private final FastConcurrentCache<RegionPartition> partitionCache;
+	private final Seed seed;
+	private final FastConcurrentCache<Region> cellCache;
+	private final FastConcurrentCache<RegionPartition> partitionCache;
 
-    public RegionGenerator(Settings settings, RandomSource random)
-    {
-        this.seed = random.nextLong();
+	private final ChunkDataGenerator chunkDataGenerator;
 
-        this.cellNoise = new Cellular2D(random.nextLong()).spread(1f / Units.CELL_WIDTH_IN_GRID);
 
-        // Both of these caches are queried, and cached, on a cell-coordinate basis
-        // Since cells are large (~12km), a small concurrent cache should be enough
-        this.cellCache = new FastConcurrentCache<>(256);
-        this.partitionCache = new FastConcurrentCache<>(256);
+	public RegionGenerator(Settings settings, Seed seed)
+	{
+		this.settings = settings;
+		this.seed = seed;
 
-        float min = settings.continentalness() * 10f - 2.5f; // range [0, 1], default 0.5 -> 2.5 continentalness
-        this.continentNoise = cellNoise.then(c -> 1 - c.f1() / (0.37f + c.f2()))
-            .lazyProduct(new OpenSimplex2D(random.nextLong())
-                .spread(0.24f)
-                .scaled(min, 8.7f)
-                .octaves(4));
+		this.cellNoise = new Cellular2D(seed.next()).spread(1f / Units.CELL_WIDTH_IN_GRID);
 
-        this.temperatureNoise = baseNoise(false, settings.temperatureScale(), settings.temperatureConstant())
-            .scaled(-20f, 30f)
-            .add(new OpenSimplex2D(random.nextInt())
-                .octaves(2)
-                .spread(0.15f)
-                .scaled(-3f, 3f));
+		// Both of these caches are queried, and cached, on a cell-coordinate basis
+		// Since cells are large (~12km), a small concurrent cache should be enough
+		this.cellCache = new FastConcurrentCache<>(256);
+		this.partitionCache = new FastConcurrentCache<>(256);
 
-        this.rainfallNoise = baseNoise(true, settings.rainfallScale(), settings.rainfallConstant())
-            .scaled(0f, 500f)
-            .add(new OpenSimplex2D(random.nextInt())
-                .octaves(2)
-                .spread(0.15f)
-                .scaled(-80f, 40f)); // Bias slightly negative, as we bias near-ocean areas to be positive rainfall, so this encourages deserts inland
+		float min = settings.continentalness() * 10f - 2.5f; // range [0, 1], default 0.5 -> 2.5 continentalness
+		this.continentNoise = cellNoise.then(c -> 1 - c.f1() / (0.37f + c.f2()))
+								  .lazyProduct(new OpenSimplex2D(seed.next())
+												   .spread(0.24f)
+												   .scaled(min, 8.7f)
+												   .octaves(4));
 
-        final AreaFactory biomeAreaFactory = TFCLayers.createUniformLayer(random, 2);
-        final AreaFactory rockAreaFactory = TFCLayers.createUniformLayer(random, 3);
+		this.temperatureNoise = baseNoise(false, settings.temperatureScale(), settings.temperatureConstant())
+									.scaled(-20f, 30f)
+									.add(new OpenSimplex2D(seed.next())
+											 .octaves(2)
+											 .spread(0.15f)
+											 .scaled(-3f, 3f));
 
-        biomeArea = ThreadLocal.withInitial(biomeAreaFactory);
-        rockArea = ThreadLocal.withInitial(rockAreaFactory);
-    }
+		this.oceanicInfluenceNoise = new OpenSimplex2D(seed.next())
+										 .spread(0.02f);
 
-    public long seed()
-    {
-        return seed;
-    }
+		this.rainfallNoise = baseNoise(true, settings.rainfallScale(), settings.rainfallConstant())
+								 .scaled(0f, 500f)
+								 .add(new OpenSimplex2D(seed.next())
+										  .octaves(2)
+										  .spread(0.15f)
+										  .scaled(-80f, 40f)); // Bias slightly negative, as we bias near-ocean areas to be positive rainfall, so this encourages deserts inland
 
-    public RegionPartition.Point getOrCreatePartitionPoint(int gridX, int gridZ)
-    {
-        return getOrCreatePartition(gridX, gridZ).get(gridX, gridZ);
-    }
+		this.rainfallVarianceNoise = new OpenSimplex2D(seed.next())
+										 .octaves(2)
+										 .spread(0.1f)
+										 .scaled(0f, 20f);
 
-    private RegionPartition getOrCreatePartition(int gridX, int gridZ)
-    {
-        final int cellX = Units.gridToCell(gridX);
-        final int cellZ = Units.gridToCell(gridZ);
+		this.hotSpotAgeNoise = BiomeNoise.hotSpotAge(seed.seed()).spread(128);
+		this.hotSpotIntensityNoise = BiomeNoise.hotSpotIntensity(seed.seed()).spread(128);
+		this.plateRegionNoise = BiomeNoise.plateRegions(seed.seed()).spread(128);
 
-        RegionPartition entry = partitionCache.getIfPresent(cellX, cellZ);
-        if (entry == null)
-        {
-            entry = createPartition(cellX, cellZ);
-            partitionCache.set(cellX, cellZ, entry);
-        }
-        return entry;
-    }
+		final AreaFactory biomeAreaFactory = TFCLayers.createUniformLayer(seed, 2);
+		final AreaFactory rockAreaFactory = TFCLayers.createUniformLayer(seed, 3);
 
-    private RegionPartition createPartition(int cellX, int cellZ)
-    {
-        final List<Region> nearbyRegions = getAllRegionsIn3x3CellArea(cellX, cellZ);
-        final RegionPartition partition = new RegionPartition(cellX, cellZ);
+		biomeArea = ThreadLocal.withInitial(biomeAreaFactory);
+		rockArea = ThreadLocal.withInitial(rockAreaFactory);
 
-        for (Region region : nearbyRegions)
-        {
-            for (RiverEdge edge : region.rivers())
-            {
-                for (int partX = edge.minPartX; partX <= edge.maxPartX; partX++)
-                {
-                    for (int partZ = edge.minPartZ; partZ <= edge.maxPartZ; partZ++)
-                    {
-                        if (partition.isIn(partX, partZ))
-                        {
-                            partition.getFromPart(partX, partZ).rivers().add(edge);
-                        }
-                    }
-                }
-            }
-        }
-        return partition;
-    }
+		this.chunkDataGenerator = new RegionChunkDataGenerator(this, settings.rockLayerSettings(), seed);
+	}
 
-    private List<Region> getAllRegionsIn3x3CellArea(int cellX, int cellZ)
-    {
-        final List<Region> regions = new ArrayList<>(9);
-        for (int dx = -1; dx <= 1; dx++)
-        {
-            for (int dz = -1; dz <= 1; dz++)
-            {
-                final Cellular2D.Cell regionCell = sampleCell(Units.cellToGrid(cellX + dx), Units.cellToGrid(cellZ + dz));
-                regions.add(getOrCreateRegion(regionCell));
-            }
-        }
-        return regions;
-    }
+	public Seed seed()
+	{
+		return seed;
+	}
 
-    public Region.Point getOrCreateRegionPoint(int gridX, int gridZ)
-    {
-        return getOrCreateRegion(gridX, gridZ).requireAt(gridX, gridZ);
-    }
+	public ChunkDataGenerator chunkDataGenerator()
+	{
+		return chunkDataGenerator;
+	}
 
-    @VisibleForTesting
-    public Region getOrCreateRegion(int gridX, int gridZ)
-    {
-        return getOrCreateRegion(sampleCell(gridX, gridZ));
-    }
+	/**
+	 * @return A smoothly interpolated value in {@code [0, 1]} representing if we are within the finite continent region or not. Higher values
+	 * are within the finite continent region.
+	 */
+	public float continentFactor(Region.Point point)
+	{
+		if (TFGConfig.SERVER.finiteContinents.get())
+		{
+			// Finite continent area is within one pole-pole area. Interpolate from 1 -> 0 to 1.2x scale for smooth borders
+			final int scaleX = settings.rainfallScale();
+			final int scaleZ = settings.temperatureScale();
+			return Math.min(
+				scaleX == 0 ? 1f : Mth.clampedMap(Math.abs(Units.gridToBlock(point.x)), scaleX, 1.2f * scaleX, 1, 0),
+				scaleZ == 0 ? 1f : Mth.clampedMap(Math.abs(Units.gridToBlock(point.z) - 0.5f * scaleZ), scaleZ, 1.2f * scaleZ, 1, 0)
+			);
+		}
+		return 1f;
+	}
 
-    private Region getOrCreateRegion(Cellular2D.Cell cell)
-    {
-        final int cellX = Float.floatToIntBits((float) cell.x());
-        final int cellZ = Float.floatToIntBits((float) cell.y());
+	/**
+	 * @return The estimated surface rock type at the given grid coordinates. This should only be used during region point generation!
+	 */
+	public RockSettings getSurfaceRock(Region.Point point)
+	{
+		return settings.rockLayerSettings().sampleAtLayer(point.rock, 0);
+	}
 
-        Region entry = cellCache.getIfPresent(cellX, cellZ);
-        if (entry == null)
-        {
-            entry = createRegion(cell, (id, r) -> {});
-            cellCache.set(cellX, cellZ, entry);
-        }
-        return entry;
-    }
+	public RegionPartition.Point getOrCreatePartitionPoint(int gridX, int gridZ)
+	{
+		return getOrCreatePartition(gridX, gridZ).get(gridX, gridZ);
+	}
 
-    private Region createRegion(Cellular2D.Cell regionCell, BiConsumer<Task, Region> viewer)
-    {
-        return new Context(viewer, regionCell, seed).runTasks().region;
-    }
+	private RegionPartition getOrCreatePartition(int gridX, int gridZ)
+	{
+		final int cellX = Units.gridToCell(gridX);
+		final int cellZ = Units.gridToCell(gridZ);
 
-    public Cellular2D.Cell sampleCell(int gridX, int gridZ)
-    {
-        return cellNoise.cell(gridX, gridZ);
-    }
+		RegionPartition entry = partitionCache.getIfPresent(cellX, cellZ);
+		if (entry == null)
+		{
+			entry = createPartition(cellX, cellZ);
+			partitionCache.set(cellX, cellZ, entry);
+		}
+		return entry;
+	}
 
-    @TestOnly
-    public void visualizeRegion(int gridX, int gridZ, BiConsumer<Task, Region> viewer)
-    {
-        createRegion(sampleCell(gridX, gridZ), viewer);
-    }
+	private RegionPartition createPartition(int cellX, int cellZ)
+	{
+		final List<Region> nearbyRegions = getAllRegionsIn3x3CellArea(cellX, cellZ);
+		final RegionPartition partition = new RegionPartition(cellX, cellZ);
 
-    @VisibleForTesting
-    public enum Task
-    {
-        INIT(c -> {}),
-        ADD_CONTINENTS(AddContinents.INSTANCE),
-        SHRINK_TO_CELL(ShrinkToCell.INSTANCE),
-        ANNOTATE_DISTANCE_TO_CELL_EDGE(AnnotateDistanceToCellEdge.INSTANCE),
-        FLOOD_FILL_SMALL_OCEANS(FloodFillSmallOceans.INSTANCE),
-        ADD_ISLANDS(AddIslands.INSTANCE),
-        ANNOTATE_DISTANCE_TO_OCEAN(AnnotateDistanceToOcean.INSTANCE),
-        ANNOTATE_BASE_LAND_HEIGHT(AnnotateBaseLandHeight.INSTANCE),
-        ADD_MOUNTAINS(AddMountains.INSTANCE),
-        ANNOTATE_BIOME_ALTITUDE(AnnotateBiomeAltitude.INSTANCE),
-        ANNOTATE_CLIMATE(AnnotateClimate.INSTANCE),
-        ANNOTATE_RAINFALL(c -> {}),
-        CHOOSE_BIOMES(ChooseBiomes.INSTANCE),
-        CHOOSE_ROCKS(ChooseRocks.INSTANCE),
-        ADD_RIVERS_AND_LAKES(AddRiversAndLakes.INSTANCE),
-        ;
+		for (Region region : nearbyRegions)
+		{
+			for (RiverEdge edge : region.rivers())
+			{
+				for (int partX = edge.minPartX; partX <= edge.maxPartX; partX++)
+				{
+					for (int partZ = edge.minPartZ; partZ <= edge.maxPartZ; partZ++)
+					{
+						if (partition.isIn(partX, partZ))
+						{
+							partition.getFromPart(partX, partZ).rivers().add(edge);
+						}
+					}
+				}
+			}
+		}
+		return partition;
+	}
 
-        private static final Task[] VALUES = values();
+	private List<Region> getAllRegionsIn3x3CellArea(int cellX, int cellZ)
+	{
+		final List<Region> regions = new ArrayList<>(9);
+		for (int dx = -1; dx <= 1; dx++)
+		{
+			for (int dz = -1; dz <= 1; dz++)
+			{
+				final Cellular2D.Cell regionCell = sampleCell(Units.cellToGrid(cellX + dx), Units.cellToGrid(cellZ + dz));
+				regions.add(getOrCreateRegion(regionCell));
+			}
+		}
+		return regions;
+	}
 
-        private final RegionTask task;
+	public Region.Point getOrCreateRegionPoint(int gridX, int gridZ)
+	{
+		return getOrCreateRegion(gridX, gridZ).atOrThrow(gridX, gridZ);
+	}
 
-        Task(RegionTask task)
-        {
-            this.task = task;
-        }
-    }
+	@VisibleForTesting
+	public Region getOrCreateRegion(int gridX, int gridZ)
+	{
+		return getOrCreateRegion(sampleCell(gridX, gridZ));
+	}
 
-    public class Context
-    {
-        private final BiConsumer<Task, Region> viewer;
+	private Region getOrCreateRegion(Cellular2D.Cell cell)
+	{
+		final int cellX = Float.floatToIntBits((float) cell.x());
+		final int cellZ = Float.floatToIntBits((float) cell.y());
 
-        public final Cellular2D.Cell regionCell;
-        public final RandomSource random;
+		Region entry = cellCache.getIfPresent(cellX, cellZ);
+		if (entry == null)
+		{
+			entry = createRegion(cell, (id, r) -> {});
+			cellCache.set(cellX, cellZ, entry);
+		}
+		return entry;
+	}
 
-        public final Region region;
-        public int minX, maxX, minZ, maxZ;
+	private Region createRegion(Cellular2D.Cell regionCell, BiConsumer<Task, Region> viewer)
+	{
+		return new Context(viewer, regionCell, seed).runTasks().region;
+	}
 
-        Context(BiConsumer<Task, Region> viewer, Cellular2D.Cell regionCell, long seed)
-        {
-            this.viewer = viewer;
-            this.regionCell = regionCell;
-            this.region = new Region(regionCell);
+	public Cellular2D.Cell sampleCell(int gridX, int gridZ)
+	{
+		return cellNoise.cell(gridX, gridZ);
+	}
 
-            final long regionSeed = seed ^ Float.floatToIntBits((float) regionCell.noise()) * 7189234123L;
-            this.random = new XoroshiroRandomSource(regionSeed);
+	@TestOnly
+	public void visualizeRegion(int gridX, int gridZ, BiConsumer<Task, Region> viewer)
+	{
+		createRegion(sampleCell(gridX, gridZ), viewer);
+	}
 
-            this.minX = Integer.MAX_VALUE;
-            this.minZ = Integer.MAX_VALUE;
-            this.maxX = Integer.MIN_VALUE;
-            this.maxZ = Integer.MIN_VALUE;
-        }
+	@VisibleForTesting
+	public enum Task
+	{
+		INIT(Init.INSTANCE),
+		ADD_CONTINENTS(AddContinents.INSTANCE),
+		ANNOTATE_DISTANCE_TO_CELL_EDGE(AnnotateDistanceToCellEdge.INSTANCE),
+		FLOOD_FILL_SMALL_OCEANS(FloodFillSmallOceans.INSTANCE),
+		ADD_ISLANDS(AddIslands.INSTANCE),
+		ADD_HOTSPOTS(AddHotspots.INSTANCE),
+		ANNOTATE_DISTANCE_TO_OCEAN(AnnotateDistanceToOcean.INSTANCE),
+		ANNOTATE_BASE_LAND_HEIGHT(AnnotateBaseLandHeight.INSTANCE),
+		ANNOTATE_DISTANCE_TO_WEST_COAST(AnnotateDistanceToWestCoast.INSTANCE),
+		ADD_MOUNTAINS(AddMountains.INSTANCE),
+		ANNOTATE_BIOME_ALTITUDE(AnnotateBiomeAltitude.INSTANCE),
+		ANNOTATE_CLIMATE(AnnotateClimate.INSTANCE),
+		CHOOSE_ROCKS(ChooseRocks.INSTANCE),
+		ANNOTATE_KARST_SURFACE(KarstSurfaceRocks.INSTANCE),
+		CHOOSE_BIOMES(ChooseBiomes.INSTANCE),
+		ADD_RIVERS_AND_LAKES(AddRiversAndLakes.INSTANCE),
+		;
 
-        Context runTasks()
-        {
-            for (Task task : Task.VALUES)
-            {
-                run(task);
-            }
-            return this;
-        }
+		private static final Task[] VALUES = values();
 
-        void run(Task task)
-        {
-            task.task.apply(this);
-            viewer.accept(task, region);
-        }
+		private final RegionTask task;
 
-        public RegionGenerator generator()
-        {
-            return RegionGenerator.this;
-        }
-    }
+		Task(RegionTask task)
+		{
+			this.task = task;
+		}
+	}
+
+	public class Context
+	{
+		private final BiConsumer<Task, Region> viewer;
+
+		public final Cellular2D.Cell regionCell;
+		public final RandomSource random;
+
+		public final Region region;
+
+		Context(BiConsumer<Task, Region> viewer, Cellular2D.Cell regionCell, Seed seed)
+		{
+			this.viewer = viewer;
+			this.regionCell = regionCell;
+			this.region = new Region(regionCell);
+
+			final long regionSeed = seed.seed() ^ Float.floatToIntBits((float) regionCell.noise()) * 7189234123L;
+			this.random = new XoroshiroRandomSource(regionSeed);
+		}
+
+		Context runTasks()
+		{
+			for (Task task : Task.VALUES)
+			{
+				run(task);
+			}
+			return this;
+		}
+
+		void run(Task task)
+		{
+			task.task.apply(this);
+			viewer.accept(task, region);
+		}
+
+		public RegionGenerator generator()
+		{
+			return RegionGenerator.this;
+		}
+	}
 }

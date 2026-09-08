@@ -11,13 +11,13 @@ import com.notenoughmail.tfcgenviewer.color.BiomeColors;
 import com.notenoughmail.tfcgenviewer.color.ColorDefinition;
 
 import net.dries007.tfc.util.RegisteredDataManager;
+import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.resources.ResourceLocation;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.compat.tfcgenviewer.TfcgenViewerBiomeColorContext;
-import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 
 /**
  * Viewer biome colors: preview context for remaps ({@link TfcgenViewerBiomeColorContext}) and pre-registration so
@@ -40,7 +40,7 @@ public class BiomeColorsMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void tfg$preRegisterTfgBiomeDataSlots(CallbackInfo ci) {
         RegisteredDataManager<ColorDefinition> self = (RegisteredDataManager<ColorDefinition>) (Object) this;
-        for (ResourceLocation id : TFGBiomes.getExtensionKeys()) {
+        for (ResourceLocation id : TFCBiomes.getExtensionKeys()) {
             if (TFGCore.MOD_ID.equals(id.getNamespace()) && id.getPath().startsWith("earth/")) {
                 self.register(ResourceLocation.fromNamespaceAndPath("tfc", id.getPath().substring(6)));
             }

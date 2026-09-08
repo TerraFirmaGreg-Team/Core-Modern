@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.notenoughmail.tfcgenviewer.screen.PreviewGenerationScreen;
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.chunkdata.RegionChunkDataGenerator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.levelgen.WorldOptions;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 
 /**

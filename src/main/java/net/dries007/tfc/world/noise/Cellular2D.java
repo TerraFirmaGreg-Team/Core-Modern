@@ -8,96 +8,124 @@ package net.dries007.tfc.world.noise;
 
 import java.util.function.ToDoubleFunction;
 import it.unimi.dsi.fastutil.HashCommon;
+import net.dries007.tfc.util.Helpers;
 
 /**
  * Modified from {@link FastNoiseLite#SingleCellular(int, double, double)}
  */
 public class Cellular2D implements Noise2D
 {
-    public static final double JITTER = 0.43701595f;
+	private final double jitter;
+	private final int seed;
+	private final int sample;
+	private double frequency;
 
-    private final int seed;
-    private double frequency;
+	public Cellular2D(long seed)
+	{
+		this(seed, 0.43701595f, 1);
+	}
 
-    public Cellular2D(long seed)
-    {
-        this.seed = HashCommon.long2int(seed);
-        this.frequency = 1;
-    }
+	public Cellular2D(long seed, int sample)
+	{
+		this(seed, 0.43701595f, sample);
+	}
 
-    @Override
-    public double noise(double x, double y)
-    {
-        return cell(x, y).noise();
-    }
+	public Cellular2D(long seed, float jitter, int sample)
+	{
+		this.seed = HashCommon.long2int(seed);
+		this.frequency = 1;
+		this.jitter = jitter;
+		this.sample = sample;
+	}
 
-    @Override
-    public Cellular2D spread(double scaleFactor)
-    {
-        frequency *= scaleFactor;
-        return this;
-    }
+	@Override
+	public double noise(double x, double y)
+	{
+		return cell(x, y).noise();
+	}
 
-    public Noise2D then(ToDoubleFunction<Cell> f)
-    {
-        return (x, y) -> f.applyAsDouble(cell(x, y));
-    }
+	@Override
+	public Cellular2D spread(double scaleFactor)
+	{
+		frequency *= scaleFactor;
+		return this;
+	}
 
-    public Cell cell(double x, double y)
-    {
-        x *= frequency;
-        y *= frequency;
+	public Noise2D then(ToDoubleFunction<Cell> f)
+	{
+		return (x, y) -> f.applyAsDouble(cell(x, y));
+	}
 
-        final int primeX = 501125321;
-        final int primeY = 1136930381;
+	public Cell cell(double x, double y)
+	{
+		x *= frequency;
+		y *= frequency;
 
-        int xr = FastNoiseLite.FastFloor(x);
-        int yr = FastNoiseLite.FastFloor(y);
+		final int primeX = 501125321;
+		final int primeY = 1136930381;
 
-        double distance0 = Double.MAX_VALUE;
-        double distance1 = Double.MAX_VALUE;
-        double closestCenterX = 0;
-        double closestCenterY = 0;
-        int closestHash = 0;
-        int closestCellX = 0;
-        int closestCellY = 0;
+		int xr = FastNoiseLite.FastFloor(x);
+		int yr = FastNoiseLite.FastFloor(y);
 
-        int xPrimed = (xr - 1) * primeX;
-        int yPrimedBase = (yr - 1) * primeY;
+		double distance0 = Double.MAX_VALUE;
+		double distance1 = Double.MAX_VALUE;
+		double angle0 = -1;
+		double closestCenterX = 0;
+		double closestCenterY = 0;
+		int closestHash = 0;
+		int closestCellX = 0;
+		int closestCellY = 0;
 
-        for (int xi = xr - 1; xi <= xr + 1; xi++)
-        {
-            int yPrimed = yPrimedBase;
+		int xPrimed = (xr - 1) * primeX;
+		int yPrimedBase = (yr - 1) * primeY;
 
-            for (int yi = yr - 1; yi <= yr + 1; yi++)
-            {
-                int hash = FastNoiseLite.Hash(seed, xPrimed, yPrimed);
-                int idx = hash & (255 << 1);
+		for (int xi = xr - sample; xi <= xr + sample; xi++)
+		{
+			int yPrimed = yPrimedBase;
 
-                double vecX = xi + FastNoiseLite.RandVecs2D[idx] * JITTER;
-                double vecY = yi + FastNoiseLite.RandVecs2D[idx | 1] * JITTER;
+			for (int yi = yr - sample; yi <= yr + sample; yi++)
+			{
+				int hash = FastNoiseLite.Hash(seed, xPrimed, yPrimed);
+				int idx = hash & (255 << 1);
 
-                double newDistance = (vecX - x) * (vecX - x) + (vecY - y) * (vecY - y);
+				double vecX = xi + FastNoiseLite.RandVecs2D[idx] * jitter;
+				double vecY = yi + FastNoiseLite.RandVecs2D[idx | 1] * jitter;
 
-                distance1 = FastNoiseLite.FastMax(FastNoiseLite.FastMin(distance1, newDistance), distance0);
-                if (newDistance < distance0)
-                {
-                    distance0 = newDistance;
-                    closestHash = hash;
+				double newDistanceX = vecX - x;
+				double newDistanceY = vecY - y;
+				double newAngle = Helpers.diamondAngle(newDistanceX, newDistanceY);
+				double newDistance = newDistanceX * newDistanceX + newDistanceY * newDistanceY;
 
-                    // Store the last computed centers
-                    closestCenterX = vecX;
-                    closestCenterY = vecY;
-                    closestCellX = xi;
-                    closestCellY = yi;
-                }
-                yPrimed += primeY;
-            }
-            xPrimed += primeX;
-        }
+				distance1 = FastNoiseLite.FastMax(FastNoiseLite.FastMin(distance1, newDistance), distance0);
+				if (newDistance < distance0)
+				{
+					distance0 = newDistance;
+					angle0 = newAngle;
+					closestHash = hash;
 
-        return new Cell(closestCenterX / frequency, closestCenterY / frequency, closestCellX, closestCellY, distance0, distance1, closestHash * (1 / 2147483648.0f));
-    }
+					// Store the last computed centers
+					closestCenterX = vecX; // Cell 1 X
+					closestCenterY = vecY; // Cell 1 Y
+					closestCellX = xi; // Cell 2 X
+					closestCellY = yi; // Cell 2 Y
+				}
+				yPrimed += primeY;
+			}
+			xPrimed += primeX;
+		}
 
-    public record Cell(double x, double y, int cx, int cy, double f1, double f2, double noise) {}
+		return new Cell(closestCenterX / frequency, closestCenterY / frequency, closestCellX, closestCellY, distance0, distance1, closestHash * (1 / 2147483648.0f), angle0);
+	}
+
+	/**
+	 * @param x     "X"-coordinate of cell center. X/Y coordinates of cells are not tied to in game coordinates
+	 * @param y     "Y"-coordinate of cell center
+	 * @param cx    "X"-coordinate of the nearest cell (C2) center
+	 * @param cy    "Y"-coordinate of the nearest cell (C2) center
+	 * @param f1    Distance to x, y
+	 * @param f2    Distance to cx, cy
+	 * @param noise Hash value of the cell, range 0-1
+	 * @param angle Diamond angle to the center
+	 */
+	public record Cell(double x, double y, int cx, int cy, double f1, double f2, double noise, double angle) {}
 }

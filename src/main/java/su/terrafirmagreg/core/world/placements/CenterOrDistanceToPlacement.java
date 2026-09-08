@@ -8,7 +8,10 @@ package su.terrafirmagreg.core.world.placements;
 
 import java.util.stream.Stream;
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeExtension;
+import net.dries007.tfc.world.biome.TFCBiomes;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.util.RandomSource;
@@ -16,10 +19,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 
 /**
  * A placement modifier for an arbitrary {@link CenteredFeatureNoiseSampler} instance. A subclass only
@@ -50,7 +49,7 @@ public abstract class CenterOrDistanceToPlacement<T extends CenteredFeatureNoise
         }
 
         final Biome biome = level.getBiome(pos).value();
-        final BiomeExtension extension = TFGBiomes.getExtensionOrThrow(level, biome);
+        final BiomeExtension extension = TFCBiomes.getExtensionOrThrow(level, biome);
         if (local.context.isValidBiome(extension)) {
             if (center) {
                 final BlockPos centerPos = local.context.calculateCenter(pos, extension);
@@ -59,7 +58,7 @@ public abstract class CenterOrDistanceToPlacement<T extends CenteredFeatureNoise
                         SectionPos.blockToSectionCoord(centerPos.getZ()) == SectionPos.blockToSectionCoord(pos.getZ()) &&
                         // We only check whether the center biome is correct for the center version of the feature, because this check
                         // only works when the center is in the chunk we are placing within
-                        local.context.isValidBiome(TFGBiomes.getExtensionOrThrow(level, level.getBiome(centerPos).value()))) {
+                        local.context.isValidBiome(TFCBiomes.getExtensionOrThrow(level, level.getBiome(centerPos).value()))) {
                     return Stream.of(centerPos);
                 }
             } else if (local.context.calculateEasing(pos, extension) > this.distance) {

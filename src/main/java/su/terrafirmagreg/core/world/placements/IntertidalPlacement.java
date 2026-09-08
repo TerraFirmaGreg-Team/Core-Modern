@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.dries007.tfc.world.Seed;
+import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -19,8 +21,6 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 import su.terrafirmagreg.core.world.TFGPlacements;
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 
 public class IntertidalPlacement extends PlacementModifier {
     public static final Codec<IntertidalPlacement> PLACEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -56,7 +56,7 @@ public class IntertidalPlacement extends PlacementModifier {
     @Override
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
         final Seed seed = Seed.of(context.getLevel().getSeed());
-        Noise2D highTideHeightNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
+        Noise2D highTideHeightNoise = BiomeNoise.shoreTideLevelNoise(seed);
         if (isValid(highTideHeightNoise, pos)) {
             return Stream.of(pos);
         }

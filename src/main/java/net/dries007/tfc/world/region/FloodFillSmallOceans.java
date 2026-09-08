@@ -10,6 +10,7 @@ import java.util.BitSet;
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import org.jetbrains.annotations.Nullable;
 
 public enum FloodFillSmallOceans implements RegionTask
 {
@@ -17,67 +18,58 @@ public enum FloodFillSmallOceans implements RegionTask
 
     private static final int SMALL_OCEAN_FILL_THRESHOLD = 180;
 
-    @Override
-    public void apply(RegionGenerator.Context context)
-    {
-        final Region region = context.region;
-        final BitSet explored = new BitSet(region.sizeX() * region.sizeZ());
+	@Override
+	public void apply(RegionGenerator.Context context)
+	{
+		final Region region = context.region;
+		final BitSet explored = new BitSet(region.size());
 
-        for (int dx = 0; dx < region.sizeX(); dx++)
-        {
-            for (int dz = 0; dz < region.sizeZ(); dz++)
-            {
-                final int index = dx + region.sizeX() * dz;
-                final Region.Point point = region.data()[index];
-                if (!explored.get(index) && point != null && !point.land())
-                {
-                    floodFillSmallOcean(explored, index, region);
-                }
-            }
-        }
-    }
+		for (final var point : region.points())
+		{
+			if (point != null && !point.land() && !explored.get(point.index))
+			{
+				floodFillSmallOcean(explored, point.index, region);
+			}
+		}
+	}
 
-    private void floodFillSmallOcean(BitSet explored, int index, Region region)
-    {
-        final IntSet values = new IntOpenHashSet();
-        final IntArrayFIFOQueue queue = new IntArrayFIFOQueue();
-        queue.enqueue(index);
-        values.add(index);
-        boolean unbounded = false;
-        while (!queue.isEmpty())
-        {
-            final int last = queue.dequeueInt();
-            for (int dx = -1; dx <= 1; dx++)
-            {
-                for (int dz = -1; dz <= 1; dz++)
-                {
-                    final int next = region.offset(last, dx, dz);
-                    if (next == -1)
-                    {
-                        unbounded = true;
-                        continue;
-                    }
-                    final Region.Point point = region.data()[next];
-                    if (point == null)
-                    {
-                        unbounded = true;
-                        continue;
-                    }
-                    if (point.land() || explored.get(next))
-                    {
-                        continue;
-                    }
+	private void floodFillSmallOcean(BitSet explored, int index, Region region)
+	{
+		final IntSet values = new IntOpenHashSet();
+		final IntArrayFIFOQueue queue = new IntArrayFIFOQueue();
 
-                    explored.set(next);
-                    queue.enqueue(next);
-                    values.add(next);
-                }
-            }
-        }
+		queue.enqueue(index);
+		values.add(index);
 
-        if (values.size() < SMALL_OCEAN_FILL_THRESHOLD && !unbounded)
-        {
-            values.forEach(i -> region.data()[i].setLand());
-        }
-    }
+		boolean unbounded = false;
+		while (!queue.isEmpty())
+		{
+			final int last = queue.dequeueInt();
+			for (int dx = -1; dx <= 1; dx++)
+			{
+				for (int dz = -1; dz <= 1; dz++)
+				{
+					final @Nullable Region.Point point = region.atOffset(last, dx, dz);
+					if (point == null)
+					{
+						unbounded = true;
+						continue;
+					}
+					if (point.land() || explored.get(point.index))
+					{
+						continue;
+					}
+
+					explored.set(point.index);
+					queue.enqueue(point.index);
+					values.add(point.index);
+				}
+			}
+		}
+
+		if (values.size() < SMALL_OCEAN_FILL_THRESHOLD && !unbounded)
+		{
+			values.forEach(i -> region.atIndex(i).setLand());
+		}
+	}
 }

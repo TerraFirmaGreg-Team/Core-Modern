@@ -7,6 +7,10 @@
 package net.dries007.tfc.world.region;
 
 import java.util.List;
+import java.util.Objects;
+
+import com.google.common.collect.AbstractIterator;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.world.layer.TFCLayers;
@@ -15,183 +19,250 @@ import net.dries007.tfc.world.noise.FastNoiseLite;
 
 public final class Region
 {
-    private final double cellX;
-    private final double cellY;
-    private final double noise;
-    private int minX;
-    private int minZ;
-    private int maxX;
-    private int maxZ;
-    private int sizeX;
-    private int sizeZ;
-    private Point[] data;
-    private @Nullable List<RiverEdge> rivers;
+	private final double cellX;
+	private final double cellY;
+	private final double noise;
+	private int minX;
+	private int minZ;
+	private int maxX;
+	private int maxZ;
+	private int sizeX;
+	private int sizeZ;
+	private Point[] data;
+	private @Nullable List<RiverEdge> rivers;
 
-    Region(Cellular2D.Cell cell)
-    {
-        this.cellX = cell.x();
-        this.cellY = cell.y();
-        this.noise = cell.noise();
+	Region(Cellular2D.Cell cell)
+	{
+		this.cellX = cell.x();
+		this.cellY = cell.y();
+		this.noise = cell.noise();
 
-        final int cellX = FastNoiseLite.FastRound(cell.x());
-        final int cellZ = FastNoiseLite.FastRound(cell.y());
+		final int cellX = FastNoiseLite.FastRound(cell.x());
+		final int cellZ = FastNoiseLite.FastRound(cell.y());
 
-        this.minX = cellX - Units.REGION_RADIUS_IN_GRID;
-        this.minZ = cellZ - Units.REGION_RADIUS_IN_GRID;
-        this.maxX = cellX + Units.REGION_RADIUS_IN_GRID;
-        this.maxZ = cellZ + Units.REGION_RADIUS_IN_GRID;
+		this.minX = cellX - Units.REGION_RADIUS_IN_GRID;
+		this.minZ = cellZ - Units.REGION_RADIUS_IN_GRID;
+		this.maxX = cellX + Units.REGION_RADIUS_IN_GRID;
+		this.maxZ = cellZ + Units.REGION_RADIUS_IN_GRID;
 
-        this.sizeX = 1 + maxX - minX;
-        this.sizeZ = 1 + maxZ - minZ;
+		this.sizeX = 1 + maxX - minX;
+		this.sizeZ = 1 + maxZ - minZ;
 
-        this.data = new Point[Units.REGION_WIDTH_IN_GRID * Units.REGION_WIDTH_IN_GRID];
-    }
+		this.data = new Point[0]; // Must initialize via `setRegionArea()` first
+	}
 
-    public Point atInit(int gridX, int gridZ)
-    {
-        final int index = index(gridX, gridZ);
-        final Point point = new Point();
+	/**
+	 * @return An iterator through all points present within this region.
+	 */
+	public Iterable<Point> points()
+	{
+		return () -> new AbstractIterator<>()
+		{
+			int index = -1;
 
-        assert data[index] == null;
-        data[index] = point;
-        return point;
-    }
+			@Override
+			protected Point computeNext()
+			{
+				do { index++; } while (index < data.length && data[index] == null);
+				return index < data.length ? data[index] : endOfData();
+			}
+		};
+	}
 
-    public Point requireAt(int gridX, int gridZ)
-    {
-        final Point point = at(gridX, gridZ);
-        assert point != null : "Region %s does not contain point at (%d, %d)".formatted(this, gridX, gridZ);
-        return point;
-    }
+	/**
+	 * @return A randomly chosen point within the region, possibly null.
+	 */
+	@Nullable
+	public Point random(RandomSource random)
+	{
+		return data[random.nextInt(data.length)];
+	}
 
-    /**
-     * @return The {@link Point} at the specified grid coordinates. Errors if the coordinates are out of range of this {@link Region}'s bounding box and returns {@code null} if they are outside this {@link Region}.
-     */
-    @Nullable
-    public Point at(int gridX, int gridZ)
-    {
-        return data[index(gridX, gridZ)];
-    }
+	/**
+	 * @return The {@link Point} at the specified grid coordinates. Returns {@code null} if the coordinates are out of the
+	 * region's bounding box.
+	 */
+	@Nullable
+	public Point at(int gridX, int gridZ)
+	{
+		return isIn(gridX, gridZ) ? data[index(gridX, gridZ)] : null;
+	}
 
-    /**
-     * @return The {@link Point} at the specified grid coordinates. Returns {@code null} if the coordinates are out of range of this {@link Region}'s bounding box or outside this {@link Region}.
-     */
-    @Nullable
-    public Point maybeAt(int gridX, int gridZ)
-    {
-        return isIn(gridX, gridZ) ? data[index(gridX, gridZ)] : null;
-    }
+	/**
+	 * This is similar to {@link #atOffset} except with a zero offset, simply returns the point within the region
+	 * for a known point and index.
+	 */
+	public Point atIndex(int index)
+	{
+		return data[index];
+	}
 
-    /**
-     * @return {@code true} if the specified grid coordinates {@code (gridX, gridZ)} are within this {@link Region}'s bounding box.
-     */
-    public boolean isIn(int gridX, int gridZ)
-    {
-        return gridX >= minX && gridX <= maxX && gridZ >= minZ && gridZ <= maxZ;
-    }
+	/**
+	 * @param index An index obtained from {@link Point#index} representing a point within this region.
+	 * @return The point at a given {@code index}, offset by {@code (dx, dz)}, or {@code null} if the point is out of the
+	 * region's bounding box.
+	 */
+	@Nullable
+	public Point atOffset(int index, int dx, int dz)
+	{
+		final int localX = dx + (index % sizeX);
+		final int localZ = dz + (index / sizeX);
+		return localX >= 0 && localX < sizeX && localZ >= 0 && localZ < sizeZ
+				   ? data[localX + sizeX * localZ]
+				   : null;
+	}
 
-    /**
-     * @return An index into {@link #data()}, based on the target index, plus a coordinate offset of {@code (offsetX, offsetZ)}. Returns {@code -1} if this is out of this {@link Region}'s bounding box.
-     */
-    public int offset(int index, int offsetX, int offsetZ)
-    {
-        final int localX = offsetX + (index % sizeX);
-        final int localZ = offsetZ + (index / sizeX);
-        return localX >= 0 && localX < sizeX && localZ >= 0 && localZ < sizeZ ? localX + sizeX * localZ : -1;
-    }
+	public void setRivers(List<RiverEdge> rivers)
+	{
+		assert this.rivers == null;
+		this.rivers = rivers;
+	}
 
-    /**
-     * @return An index into {@link #data()}, based on the global grid coordinates.
-     */
-    public int index(int gridX, int gridZ)
-    {
-        assert isIn(gridX, gridZ) : "Point (" + gridX + ", " + gridZ + ") not in region [" + minX + ", " + maxX + "] x [" + minZ + ", " + maxZ + "]";
+	public List<RiverEdge> rivers()
+	{
+		return Objects.requireNonNull(rivers);
+	}
 
-        final int localX = gridX - minX;
-        final int localZ = gridZ - minZ;
+	public double noise() { return noise; }
 
-        return localX + sizeX * localZ;
-    }
+	public int minX() { return minX; }
+	public int minZ() { return minZ; }
+	public int maxX() { return maxX; }
+	public int maxZ() { return maxZ; }
+	public int sizeX() { return sizeX; }
+	public int sizeZ() { return sizeZ; }
 
-    public double noise() { return noise; }
+	/**
+	 * @return An estimate for the region's size, useful for pre-allocating bitsets to the correct capacity.
+	 */
+	public int size()
+	{
+		return sizeX * sizeZ;
+	}
 
-    public int minX() { return minX; }
-    public int minZ() { return minZ; }
-    public int maxX() { return maxX; }
-    public int maxZ() { return maxZ; }
-    public int sizeX() { return sizeX; }
-    public int sizeZ() { return sizeZ; }
+	@Override
+	public String toString()
+	{
+		return "Region [%d, %d] x [%d, %d] at cell (%f, %f)".formatted(minX, maxX, minZ, maxZ, cellX, cellY);
+	}
 
-    public void setRegionArea(Point[] data, int minX, int minZ, int maxX, int maxZ)
-    {
-        this.data = data;
-        this.minX = minX;
-        this.minZ = minZ;
-        this.maxX = maxX;
-        this.maxZ = maxZ;
-        this.sizeX = 1 + maxX - minX;
-        this.sizeZ = 1 + maxZ - minZ;
+	/**
+	 * Used by region generation, ensures that the queried point is present within the region
+	 */
+	Point atOrThrow(int gridX, int gridZ)
+	{
+		final Point point = data[index(gridX, gridZ)];
+		assert point != null : "Region %s does not contain point at (%d, %d)".formatted(this, gridX, gridZ);
+		return point;
+	}
 
-        assert data.length == sizeX * sizeZ : "setRegionArea() data.length = %d != sizeX (%d) * sizeZ (%d)".formatted(data.length, sizeX, sizeZ);
-    }
+	/**
+	 * @return An index into {@link #data}, based on the global grid coordinates.
+	 */
+	int index(int gridX, int gridZ)
+	{
+		assert isIn(gridX, gridZ) : "Point (" + gridX + ", " + gridZ + ") not in region [" + minX + ", " + maxX + "] x [" + minZ + ", " + maxZ + "]";
 
-    public void setRivers(List<RiverEdge> rivers)
-    {
-        assert this.rivers == null;
-        this.rivers = rivers;
-    }
+		final int localX = gridX - minX;
+		final int localZ = gridZ - minZ;
 
+		return localX + sizeX * localZ;
+	}
 
-    public Point[] data() { return data; }
-    public List<RiverEdge> rivers() { assert rivers != null; return rivers; }
+	/**
+	 * Used by the initialization step to first initialize the point array
+	 */
+	void setRegionArea(int minX, int minZ, int maxX, int maxZ)
+	{
+		this.sizeX = 1 + maxX - minX;
+		this.sizeZ = 1 + maxZ - minZ;
+		this.data = new Point[sizeX * sizeZ];
+		this.minX = minX;
+		this.minZ = minZ;
+		this.maxX = maxX;
+		this.maxZ = maxZ;
+	}
 
-    @Override
-    public String toString()
-    {
-        return "Region [%d, %d] x [%d, %d] at cell (%f, %f)".formatted(minX, maxX, minZ, maxZ, cellX, cellY);
-    }
+	/**
+	 * Initializes the point at the given x, z, marking it as within the region.
+	 */
+	void init(int gridX, int gridZ)
+	{
+		final int index = index(gridX, gridZ);
+		data[index] = new Point(gridX, gridZ, index);
+	}
 
-    public static class Point
-    {
-        static final short FLAG_LAND = 0b1;
-        static final short FLAG_ISLAND = 0b10;
-        static final short FLAG_RIVER = 0b100;
-        static final short FLAG_LAKE = 0b1000;
-        static final short FLAG_MOUNTAIN = 0b10000;
-        static final short FLAG_COASTAL_MOUNTAIN = 0b100000;
+	/**
+	 * @return {@code true} if the specified grid coordinates {@code (gridX, gridZ)} are within this {@link Region}'s bounding box.
+	 */
+	private boolean isIn(int gridX, int gridZ)
+	{
+		return gridX >= minX && gridX <= maxX && gridZ >= minZ && gridZ <= maxZ;
+	}
 
-        /** Distance to the nearest ocean. Note the actual distance may be lower if {@code distanceToEdge} is smaller than this. Negative values indicate an ocean, where {@code -2} indicates an ocean adjacent to land. */
-        public byte distanceToOcean = 0;
-        /** Distance to the nearest edge of the region. This is important because certain tasks need to not go too near to the edge to avoid continuity issues */
-        public byte distanceToEdge = 0;
-        public byte baseOceanDepth = 0;
-        public byte baseLandHeight = 0;
-        public byte biomeAltitude = 0;
+	public static class Point
+	{
+		static final short FLAG_LAND = 0b1;
+		static final short FLAG_ISLAND = 0b10;
+		static final short FLAG_RIVER = 0b100;
+		static final short FLAG_LAKE = 0b1000;
+		static final short FLAG_MOUNTAIN = 0b10000;
+		static final short FLAG_COASTAL_MOUNTAIN = 0b100000;
 
-        public float rainfall;
-        public float temperature;
+		/** Distance to the nearest ocean. Note the actual distance may be lower if {@code distanceToEdge} is smaller than this. Negative values indicate an ocean, where {@code -2} indicates an ocean adjacent to land. */
+		public byte distanceToOcean = 0;
+		/** Distance to the nearest edge of the region. This is important because certain tasks need to not go too near to the edge to avoid continuity issues */
+		public byte distanceToEdge = 0;
+		public byte distanceToWestCoast = 0;
+		public byte baseOceanDepth = 0;
+		public byte baseLandHeight = 0;
+		public byte biomeAltitude = 0;
 
-        public int biome = TFCLayers.OCEAN;
-        public int rock = 0;
+		public float rainfall;
+		public float rainfallVariance;
+		public float temperature;
 
-        private short flags;
+		public int biome = TFCLayers.OCEAN;
+		public int rock = 0;
+		public boolean isSurfaceRockKarst = false;
+		public byte hotSpotAge = 0;
 
-        public boolean land() { return (flags & FLAG_LAND) != 0; }
-        public boolean island() { return (flags & FLAG_ISLAND) != 0; }
-        public boolean shore() { return distanceToOcean == -2; }
-        public boolean river() { return (flags & FLAG_RIVER) != 0; }
-        public boolean lake() { return (flags & FLAG_LAKE) != 0; }
-        public boolean mountain() { return (flags & FLAG_MOUNTAIN) != 0; }
-        public boolean coastalMountain() { return (flags & FLAG_COASTAL_MOUNTAIN) != 0; }
+		private short flags;
 
-        public int discreteBiomeAltitude() { return Math.floorDiv(biomeAltitude, AnnotateBiomeAltitude.WIDTH); }
+		public final int x, z;
+		public final int index;
 
-        public void setLand() { flags |= FLAG_LAND; }
-        public void setIsland() { flags |= FLAG_ISLAND; }
-        public void setShore() { distanceToOcean = -2; }
-        public void setRiver() { flags |= FLAG_RIVER; }
-        public void setLake() { flags |= FLAG_LAKE; }
-        public void setMountain() { flags |= FLAG_MOUNTAIN; }
-        public void setCoastalMountain() { flags |= FLAG_COASTAL_MOUNTAIN; }
-    }
+		Point(int x, int z, int index)
+		{
+			this.x = x;
+			this.z = z;
+			this.index = index;
+		}
+
+		// Used by TFCGenViewer
+		public Point()
+		{
+			this.x = 0;
+			this.z = 0;
+			this.index = 0;
+		}
+
+		public boolean land() { return (flags & FLAG_LAND) != 0; }
+		public boolean island() { return (flags & FLAG_ISLAND) != 0; }
+		public boolean shore() { return distanceToOcean == -2; }
+		public boolean river() { return (flags & FLAG_RIVER) != 0; }
+		public boolean lake() { return (flags & FLAG_LAKE) != 0; }
+		public boolean mountain() { return (flags & FLAG_MOUNTAIN) != 0; }
+		public boolean coastalMountain() { return (flags & FLAG_COASTAL_MOUNTAIN) != 0; }
+
+		public int discreteBiomeAltitude() { return Math.floorDiv(biomeAltitude, AnnotateBiomeAltitude.WIDTH); }
+
+		public void setLand() { flags |= FLAG_LAND; }
+		public void setIsland() { flags |= FLAG_ISLAND; }
+		public void setShore() { distanceToOcean = -2; }
+		public void setRiver() { flags |= FLAG_RIVER; }
+		public void setLake() { flags |= FLAG_LAKE; }
+		public void setMountain() { flags |= FLAG_MOUNTAIN; }
+		public void setCoastalMountain() { flags |= FLAG_COASTAL_MOUNTAIN; }
+	}
 }

@@ -10,12 +10,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.dries007.tfc.world.Codecs;
+import net.dries007.tfc.world.Seed;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 import su.terrafirmagreg.core.world.TFGPlacements;
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoise;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 
 public class TuffRingPlacement extends CenterOrDistanceToPlacement<CenteredFeatureNoiseSampler> {
     public static final Codec<TuffRingPlacement> PLACEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(

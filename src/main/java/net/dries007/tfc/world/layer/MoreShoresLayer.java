@@ -17,13 +17,31 @@ public enum MoreShoresLayer implements AdjacentTransformLayer
     INSTANCE;
 
     @Override
-    public int apply(AreaContext context, int north, int east, int south, int west, int center)
-    {
-        Predicate<IntPredicate> matcher = p -> p.test(north) || p.test(east) || p.test(south) || p.test(west);
-        if (matcher.test(layer -> layer == TFCLayers.SHORE) && center == TFCLayers.OCEAN && !matcher.test(TFCLayers::isMountains))
-        {
-            return TFCLayers.TIDAL_FLATS;
-        }
-        return center;
-    }
+	public int apply(AreaContext context, int north, int east, int south, int west, int center) {
+		if (center != TFCLayers.OCEAN) {
+			Predicate<IntPredicate> matcher = p -> p.test(north) || p.test(east) || p.test(south) || p.test(west);
+			if (matcher.test(layer -> layer == TFCLayers.TERRACE_LOWER)) {
+				return TFCLayers.TERRACE_UPPER;
+			}
+			if (matcher.test(layer -> layer == TFCLayers.SEA_STACKS)) {
+				return TFCLayers.SEA_STACKS;
+			}
+			if (matcher.test(layer -> layer == TFCLayers.TIDAL_FLATS || layer == TFCLayers.SHORE)) {
+				return TFCLayers.SHORE;
+			}
+			if (matcher.test(layer -> layer == TFCLayers.COASTAL_DUNES)) {
+				return TFCLayers.COASTAL_DUNES;
+			}
+			if (matcher.test(layer -> layer == TFCLayers.SETBACK_CLIFFS)) {
+				return TFCLayers.SETBACK_CLIFFS;
+			}
+			if (matcher.test(layer -> layer == TFCLayers.ROCKY_SHORES)) {
+				return TFCLayers.ROCKY_SHORES;
+			}
+			if (matcher.test(layer -> layer == TFCLayers.EMBAYMENTS)) {
+				return TFCLayers.EMBAYMENTS;
+			}
+		}
+		return center;
+	}
 }
