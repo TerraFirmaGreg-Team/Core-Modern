@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.client.model;
 
+import java.util.ConcurrentModificationException;
 import java.util.function.Function;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,6 +15,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
@@ -34,8 +38,26 @@ public enum DoubleIngotPileBlockModel implements SimpleStaticBlockEntityModel<Do
         TextureAtlasSprite sprite = null;
         for (int i = 0; i < ingots; i++)
         {
-            final Metal metal = pile.getOrCacheMetal(i);
-            sprite = textureAtlas.apply(metal.getSoftTextureId());
+            final var stack = pile.getEntryStack(i);
+            MaterialStack material;
+
+            try
+            {
+                material = ChemicalHelper.getMaterialStack(stack);
+            }
+            catch (ArrayIndexOutOfBoundsException | ConcurrentModificationException ex)
+            {
+                return RenderHelpers.missingTexture();
+            }
+
+            final int primaryColor = material.material().getMaterialARGB(0);
+            final int secondaryColor = material.material().getMaterialARGB(1);
+            final Metal metalAtPos = pile.getOrCacheMetal(i);
+
+            boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && !material.isEmpty());
+            ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId() : RenderHelpers.TFCMetalBlockTexturePattern;
+
+            sprite = textureAtlas.apply(metalResource);
 
             final int layer = (i + 6) / 6;
             final boolean oddLayer = (layer % 2) == 1;
@@ -62,7 +84,14 @@ public enum DoubleIngotPileBlockModel implements SimpleStaticBlockEntityModel<Do
             final float maxY = scale * (minY + 5);
             final float maxZ = scale * (minZ + 15);
 
-            RenderHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 10, 5, 15, oddLayer);
+            if (shouldUseTFCRender)
+            {
+                RenderHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 10, 5, 15, oddLayer);
+            }
+            else
+            {
+                RenderHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 10, 5, 15, oddLayer, primaryColor, secondaryColor);
+            }
 
             poseStack.popPose();
         }
