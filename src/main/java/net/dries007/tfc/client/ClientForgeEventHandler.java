@@ -76,6 +76,7 @@ import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.forge.ForgingBonus;
 import net.dries007.tfc.common.capabilities.forge.ForgingCapability;
 import net.dries007.tfc.common.capabilities.glass.GlassWorkData;
+import net.dries007.tfc.common.capabilities.player.PlayerData;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.capabilities.size.ItemSizeManager;
@@ -91,6 +92,7 @@ import net.dries007.tfc.network.CycleChiselModePacket;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.PlaceBlockSpecialPacket;
 import net.dries007.tfc.network.RequestClimateModelPacket;
+import net.dries007.tfc.network.SprintKeyPacket;
 import net.dries007.tfc.network.StackFoodPacket;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
 import net.dries007.tfc.util.Fertilizer;
@@ -411,6 +413,8 @@ public class ClientForgeEventHandler
         }
     }
 
+    private static boolean lastSprintKeyState = false;
+
     public static void onClientTick(TickEvent.ClientTickEvent event)
     {
         Level world = Minecraft.getInstance().level;
@@ -419,6 +423,18 @@ public class ClientForgeEventHandler
             Calendars.CLIENT.onClientTick();
             ClimateRenderCache.INSTANCE.onClientTick();
             tickWind();
+
+            final Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null)
+            {
+                boolean isDown = mc.options.keySprint.isDown();
+                if (isDown != lastSprintKeyState)
+                {
+                    lastSprintKeyState = isDown;
+                    PlayerData.get(mc.player).setSprintKeyDown(isDown);
+                    PacketHandler.send(PacketDistributor.SERVER.noArg(), new SprintKeyPacket(isDown));
+                }
+            }
         }
     }
 
@@ -591,7 +607,7 @@ public class ClientForgeEventHandler
     }
 
     /**
-     * Vanilla will first make a decision about which hands to render, then optionally render each one. (In {@link net.minecraft.client.renderer.ItemInHandRenderer#evaluateWhichHandsToRender(LocalPlayer)})
+     * Vanilla will first make a decision about which hands to render, then optionally render each one. (In evaluateWhichHandsToRender(LocalPlayer)})
      * We have to intercept both hands individually, *after* vanilla's decision has been made, and cooperate with it. As if vanilla decides not to render a given hand, it will not even fire this event to give us the chance.
      */
     public static void onHandRender(RenderHandEvent event)

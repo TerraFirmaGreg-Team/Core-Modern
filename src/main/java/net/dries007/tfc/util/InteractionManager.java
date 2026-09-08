@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,8 +21,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -50,14 +46,13 @@ import net.dries007.tfc.common.blocks.CharcoalPileBlock;
 import net.dries007.tfc.common.blocks.DirectionPropertyBlock;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
 import net.dries007.tfc.common.blocks.SnowPileBlock;
-import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.ThatchBedBlock;
 import net.dries007.tfc.common.blocks.devices.DoubleIngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.SheetPileBlock;
+import net.dries007.tfc.common.capabilities.player.PlayerData;
 import net.dries007.tfc.common.capabilities.Capabilities;
-import net.dries007.tfc.common.container.ItemStackContainer;
 import net.dries007.tfc.common.container.ItemStackContainerProvider;
 import net.dries007.tfc.common.container.KnappingContainer;
 import net.dries007.tfc.common.container.TFCContainerProviders;
@@ -71,7 +66,7 @@ import net.dries007.tfc.util.events.StartFireEvent;
 /**
  * This exists due to problems in handling right click events
  * Forge provides a right click block event. This works for intercepting would-be calls to {@link BlockState#use(Level, Player, InteractionHand, BlockHitResult)}
- * However, this cannot be used (maintaining vanilla behavior) for item usages, or calls to {@link ItemStack#onItemUse(UseOnContext, Function)}, as the priority of those two behaviors are very different (blocks take priority, cancelling the event with an item behavior forces the item to take priority).
+ * However, this cannot be used (maintaining vanilla behavior) for item usages, or calls to {onItemUse}, as the priority of those two behaviors are very different (blocks take priority, cancelling the event with an item behavior forces the item to take priority).
  * For clicking items *not* on blocks, the event {@link net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem} is used, and is passed through this system (as the "target air" parameter).
  * <p>
  * In vanilla, the sequence of actions starts on client, where first, a {@link net.minecraft.client.multiplayer.MultiPlayerGameMode#useItemOn(LocalPlayer, InteractionHand, BlockHitResult)} is invoked, which accounts for "use item on block" behavior. This triggers {@link Block#use(BlockState, Level, BlockPos, Player, InteractionHand, BlockHitResult)} first, then {@link Item#useOn(UseOnContext)}. If this does not do anything, the client will then invoke {@link net.minecraft.client.multiplayer.MultiPlayerGameMode#useItem(Player, InteractionHand)}, which eventually invokes {@link Item#use(Level, Player, InteractionHand)}.
@@ -503,6 +498,7 @@ public final class InteractionManager
         final Player player = context.getPlayer();
         if (player != null && player.mayBuild() && player.isShiftKeyDown())
         {
+            final boolean sprintKey = PlayerData.get(player).isSprintKeyDown();
             final Level level = context.getLevel();
             final BlockPos posClicked = context.getClickedPos();
             final BlockState stateClicked = level.getBlockState(posClicked);
@@ -513,11 +509,12 @@ public final class InteractionManager
                 final int currentIngots = stateClicked.getValue(countProperty);
                 if (currentIngots < maxIngots)
                 {
-                    final ItemStack insertStack = stack.split(1);
+                    final int toAdd = sprintKey ? Math.min(stack.getCount(), maxIngots - currentIngots) : 1;
+                    final ItemStack insertStack = stack.split(toAdd);
 
                     Helpers.playPlaceSound(level, posClicked, stateClicked);
-                    level.setBlock(posClicked, stateClicked.setValue(countProperty, currentIngots + 1), Block.UPDATE_CLIENTS);
-                    level.getBlockEntity(posClicked, TFCBlockEntities.INGOT_PILE.get()).ifPresent(pile -> pile.addIngot(insertStack));
+                    level.setBlock(posClicked, stateClicked.setValue(countProperty, currentIngots + toAdd), Block.UPDATE_CLIENTS);
+                    level.getBlockEntity(posClicked, TFCBlockEntities.INGOT_PILE.get()).ifPresent(pile -> pile.addIngots(insertStack));
                     return InteractionResult.SUCCESS;
                 }
                 else
@@ -534,27 +531,42 @@ public final class InteractionManager
                     if (Helpers.isBlock(topState, pileBlock))
                     {
                         // We must be at a non-full ingot pile, so we want to place another ingot on this pile instead
-                        final ItemStack insertStack = stack.split(1);
                         final int topIngots = topState.getValue(countProperty);
+                        final int toAdd = sprintKey ? Math.min(stack.getCount(), maxIngots - topIngots) : 1;
+                        final ItemStack insertStack = stack.split(toAdd);
 
                         Helpers.playPlaceSound(level, topPos, topState);
-                        level.setBlock(topPos, topState.setValue(countProperty, topIngots + 1), Block.UPDATE_CLIENTS);
-                        level.getBlockEntity(topPos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(topPile -> topPile.addIngot(insertStack));
+                        level.setBlock(topPos, topState.setValue(countProperty, topIngots + toAdd), Block.UPDATE_CLIENTS);
+                        level.getBlockEntity(topPos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(topPile -> topPile.addIngots(insertStack));
                         return InteractionResult.SUCCESS;
                     }
                     else if (topState.isAir())
                     {
                         // We arrived at something that *isn't* an ingot pile, and we want to try and place another ingot on top
                         // We check for air, as we may have run into something solid - don't place anything if that's the case
-                        final ItemStack stackBefore = stack.copy();
+                        final int initialCount = stack.getCount();
+                        final int targetAdd = sprintKey ? Math.min(initialCount, maxIngots) : 1;
+                        final ItemStack stackToPlace = stack.copy();
+                        stackToPlace.setCount(targetAdd);
+
                         final BlockPos topOfIngotPilePos = topPos.below();
                         final UseOnContext topOfIngotPileContext = new UseOnContext(player, context.getHand(), new BlockHitResult(Vec3.ZERO, Direction.UP, topOfIngotPilePos, false));
                         final InteractionResult result = ingotPilePlacement.onItemUse(stack, topOfIngotPileContext);
                         if (result.consumesAction())
                         {
-                            // Shrinking is already handled by the placement onItemUse() call, we just need to insert the stack
-                            stackBefore.setCount(1);
-                            level.getBlockEntity(topPos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(topPile -> topPile.addIngot(stackBefore));
+                            if (targetAdd > 1)
+                            {
+                                stack.shrink(targetAdd - 1);
+                            }
+                            BlockPos finalTopPos = topPos;
+                            level.getBlockEntity(topPos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(topPile -> {
+                                topPile.addIngots(stackToPlace);
+                                final BlockState placedState = level.getBlockState(finalTopPos);
+                                if (Helpers.isBlock(placedState, pileBlock))
+                                {
+                                    level.setBlock(finalTopPos, placedState.setValue(countProperty, targetAdd), Block.UPDATE_CLIENTS);
+                                }
+                            });
                         }
                         return InteractionResult.SUCCESS;
                     }
@@ -564,8 +576,10 @@ public final class InteractionManager
             else
             {
                 // We clicked on a non-ingot pile, so we want to try and place an ingot pile at the current location.
-                // Shrinking is already handled by the placement onItemUse() call, we just need to insert the stack
-                final ItemStack stackBefore = stack.copyWithCount(1);
+                final int initialCount = stack.getCount();
+                final int targetAdd = sprintKey ? Math.min(initialCount, maxIngots) : 1;
+                final ItemStack stackToPlace = stack.copy();
+                stackToPlace.setCount(targetAdd);
 
                 // The block as set through onItemUse() might be set at either the clicked, or relative position.
                 // We need to construct this BlockPlaceContext before onItemUse is called, so it has the same value for the actual block placed pos
@@ -573,7 +587,21 @@ public final class InteractionManager
                 final InteractionResult result = ingotPilePlacement.onItemUse(stack, context);
                 if (result.consumesAction())
                 {
-                    level.getBlockEntity(actualPlacedPos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(pile -> pile.addIngot(stackBefore));
+                    if (targetAdd > 1)
+                    {
+                        stack.shrink(targetAdd - 1);
+                    }
+                    level.getBlockEntity(actualPlacedPos, TFCBlockEntities.INGOT_PILE.get()).ifPresent(pile -> {
+                        pile.addIngots(stackToPlace);
+                        if (targetAdd > 1)
+                        {
+                            final BlockState placedState = level.getBlockState(actualPlacedPos);
+                            if (Helpers.isBlock(placedState, pileBlock))
+                            {
+                                level.setBlock(actualPlacedPos, placedState.setValue(countProperty, targetAdd), Block.UPDATE_CLIENTS);
+                            }
+                        }
+                    });
                 }
                 return result;
             }
