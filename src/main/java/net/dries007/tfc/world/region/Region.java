@@ -78,6 +78,14 @@ public final class Region
 		return data[random.nextInt(data.length)];
 	}
 
+	// Required for TFCGenViewer
+	public Point requireAt(int gridX, int gridZ)
+	{
+		final Point point = at(gridX, gridZ);
+		assert point != null : "Region %s does not contain point at (%d, %d)".formatted(this, gridX, gridZ);
+		return point;
+	}
+
 	/**
 	 * @return The {@link Point} at the specified grid coordinates. Returns {@code null} if the coordinates are out of the
 	 * region's bounding box.
@@ -239,7 +247,7 @@ public final class Region
 			this.index = index;
 		}
 
-		// Used by TFCGenViewer
+		// Needed for TFCGenViewer
 		public Point()
 		{
 			this.x = 0;

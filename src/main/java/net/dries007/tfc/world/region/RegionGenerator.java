@@ -72,6 +72,11 @@ public final class RegionGenerator
 
 	private final ChunkDataGenerator chunkDataGenerator;
 
+	// Needed for TFCGenViewer
+	public RegionGenerator(Settings settings, RandomSource random)
+	{
+		this(settings, Seed.of(random.nextLong()));
+	}
 
 	public RegionGenerator(Settings settings, Seed seed)
 	{
@@ -99,7 +104,7 @@ public final class RegionGenerator
 											 .spread(0.15f)
 											 .scaled(-3f, 3f));
 
-		this.oceanicInfluenceNoise = new OpenSimplex2D(seed.next())
+		this.oceanicInfluenceNoise = new OpenSimplex2D(seed.seed())
 										 .spread(0.02f);
 
 		this.rainfallNoise = baseNoise(true, settings.rainfallScale(), settings.rainfallConstant())
@@ -124,7 +129,7 @@ public final class RegionGenerator
 		biomeArea = ThreadLocal.withInitial(biomeAreaFactory);
 		rockArea = ThreadLocal.withInitial(rockAreaFactory);
 
-		this.chunkDataGenerator = new RegionChunkDataGenerator(this, settings.rockLayerSettings(), seed);
+		this.chunkDataGenerator = RegionChunkDataGenerator.create(seed, settings.rockLayerSettings(), this);
 	}
 
 	public Seed seed()
