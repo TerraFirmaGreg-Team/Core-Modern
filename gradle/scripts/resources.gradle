@@ -1,13 +1,13 @@
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
-def mainResources = file('src/main/resources')
-def generatedResources = file('src/generated/resources')
+File mainResources = file('src/main/resources')
+File generatedResources = file('src/generated/resources')
 
 processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-    var replaceProperties = [
+    Map<String, Object> replaceProperties = [
             'mod_id'              : "${mod_id}",
             'mod_name'            : "${mod_name}",
             'mod_version'         : "${mod_version}",
@@ -22,19 +22,19 @@ processResources {
             'loader_version_range': "${loader_version_range}"
     ]
 
-    var filterList = [
+    List<String> filterList = [
             'META-INF/mods.toml',
             'pack.mcmeta'
     ]
 
-    inputs.properties replaceProperties
-    inputs.dir mainResources
-    inputs.dir generatedResources
+    inputs.properties(replaceProperties)
+    inputs.dir(mainResources)
+    inputs.dir(generatedResources)
 
     filesMatching(filterList) {
         expand(replaceProperties + [project: project])
     }
-    
+
     exclude {
         isTagJson(it.path)
     }
@@ -49,73 +49,80 @@ processDevResources {
 }
 
 static boolean isTagJson(String path) {
-    path ==~ /^data\/[^\/]+\/tags\/[^\/]+\/.+\.json$/
+    return path ==~ /^data\/[^\/]+\/tags\/[^\/]+\/.+\.json$/
 }
 
-static void mergeTags(File mainResources, File generatedResources, File destinationDir) {
-    def paths = new LinkedHashSet<String>()
+static void mergeTags(
+        File mainResources,
+        File generatedResources,
+        File destinationDir
+) {
+    Set<String> paths = new LinkedHashSet<>()
 
-    [mainResources, generatedResources].each { resources ->
+    [mainResources, generatedResources].each { File resources ->
         if (!resources.exists()) {
             return
         }
 
-        resources.eachFileRecurse { file ->
-            if (file.isFile()) {
-                def path = resources.toPath()
-                        .relativize(file.toPath())
-                        .toString()
-                        .replace('\\', '/')
+        resources.eachFileRecurse { File file ->
+            if (!file.isFile()) {
+                return
+            }
 
-                if (isTagJson(path)) {
-                    paths.add(path)
-                }
+            String path = resources.toPath()
+                    .relativize(file.toPath())
+                    .toString()
+                    .replace('\\', '/')
+
+            if (isTagJson(path)) {
+                paths.add(path)
             }
         }
     }
 
-    def slurper = new JsonSlurper()
+    JsonSlurper slurper = new JsonSlurper()
 
-    paths.each { path ->
-        def mainFile = new File(mainResources, path)
-        def generatedFile = new File(generatedResources, path)
-        def targetFile = new File(destinationDir, path)
+    paths.each { String path ->
+        File mainFile = new File(mainResources, path)
+        File generatedFile = new File(generatedResources, path)
+        File targetFile = new File(destinationDir, path)
+
+        targetFile.parentFile.mkdirs()
 
         if (!mainFile.exists()) {
-            targetFile.parentFile.mkdirs()
             targetFile.bytes = generatedFile.bytes
             return
         }
 
         if (!generatedFile.exists()) {
-            targetFile.parentFile.mkdirs()
             targetFile.bytes = mainFile.bytes
             return
         }
 
-        def main = slurper.parse(mainFile)
-        def generated = slurper.parse(generatedFile)
+        Map<String, Object> main = slurper.parse(mainFile) as Map<String, Object>
+        Map<String, Object> generated = slurper.parse(generatedFile) as Map<String, Object>
 
-        if (main.replace == true) {
-            targetFile.parentFile.mkdirs()
+        if (main['replace'] == true) {
             targetFile.bytes = mainFile.bytes
             return
         }
 
-        if (generated.replace == true) {
-            targetFile.parentFile.mkdirs()
+        if (generated['replace'] == true) {
             targetFile.bytes = generatedFile.bytes
             return
         }
 
-        def values = new LinkedHashSet(main.values ?: [])
-        values.addAll(generated.values ?: [])
+        Set<Object> values = new LinkedHashSet<>()
 
-        main.values = values.toList()
+        List<Object> mainValues = (main['values'] ?: []) as List<Object>
+        List<Object> generatedValues = (generated['values'] ?: []) as List<Object>
 
-        targetFile.parentFile.mkdirs()
-        targetFile.text = JsonOutput.prettyPrint(
-                JsonOutput.toJson(main)
+        values.addAll(mainValues)
+        values.addAll(generatedValues)
+
+        main['values'] = new ArrayList<>(values)
+
+        targetFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(main)
         )
     }
 }
