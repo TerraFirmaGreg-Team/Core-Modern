@@ -126,3 +126,32 @@ static void mergeTags(
         )
     }
 }
+
+tasks.register("prepareServerDev") {
+
+    File serverDir = file("run/server")
+    File eulaFile = file("${serverDir}/eula.txt")
+    File propsFile = file("${serverDir}/server.properties")
+
+    outputs.files(eulaFile, propsFile)
+
+    doLast {
+        serverDir.mkdirs()
+
+        eulaFile.text = 'eula=true\n'
+
+        Properties properties = new Properties()
+
+        if (propsFile.exists()) {
+            propsFile.withReader('UTF-8') {
+                properties.load(it)
+            }
+        }
+
+        properties.setProperty('online-mode', 'false')
+
+        propsFile.withWriter('UTF-8') {
+            properties.store(it, null)
+        }
+    }
+}

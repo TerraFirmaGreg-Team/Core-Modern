@@ -149,6 +149,8 @@ legacyForge {
             sourceSet = sourceSets.dev
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
+
+            taskBefore tasks.named("prepareServerDev")
         }
 
         data {
@@ -181,6 +183,8 @@ legacyForge {
             gameDirectory.set(file('run/gametest'))
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
             environment('TEST', 'true')
+
+            taskBefore tasks.named("prepareServerDev")
         }
 
     }
@@ -214,39 +218,6 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xlint:-removal"
     options.compilerArgs << "-Aquiet=true" // Suppress mixin notes
 
-}
-
-// Prepare server: patch Species, accept EULA, set offline mode
-tasks.register("prepareServerDev") {
-
-    def serverDir = file("run/server")
-    def propsFile = file("${serverDir}/server.properties")
-
-    outputs.file(propsFile)
-
-    doLast {
-        serverDir.mkdirs()
-
-        // Create or patch server.properties to set online-mode=false
-        if (propsFile.exists()) {
-            def content = propsFile.text
-            if (content.contains('online-mode=')) {
-                content = content.replaceAll(/online-mode=\w+/, 'online-mode=false')
-            } else {
-                content += '\nonline-mode=false'
-            }
-            propsFile.text = content
-        } else {
-            propsFile.text = 'online-mode=false\n'
-        }
-    }
-}
-
-// Runs Species patch before runServer.
-allprojects {
-    tasks.matching { it.name == "prepareServerRun" || it.name == "runGameTestServer" }.configureEach {
-        dependsOn("prepareServerDev")
-    }
 }
 
 if (enableCopyToInstance) {
