@@ -1,0 +1,121 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+def mainResources = file('src/main/resources')
+def generatedResources = file('src/generated/resources')
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    var replaceProperties = [
+            'mod_id'              : "${mod_id}",
+            'mod_name'            : "${mod_name}",
+            'mod_version'         : "${mod_version}",
+            'mod_description'     : "${mod_description}",
+            'mod_authors'         : "${mod_authors}",
+            'mod_credits'         : "${mod_credits}",
+            'mod_url'             : "${mod_url}",
+            'mod_logo_path'       : "${mod_logo_path}",
+            'minecraft_version'   : "${minecraft_version}",
+            'forge_version'       : "${forge_version}",
+            'forge_version_range' : "${loader_version_range}",
+            'loader_version_range': "${loader_version_range}"
+    ]
+
+    var filterList = [
+            'META-INF/mods.toml',
+            'pack.mcmeta'
+    ]
+
+    inputs.properties replaceProperties
+    inputs.dir mainResources
+    inputs.dir generatedResources
+
+    filesMatching(filterList) {
+        expand(replaceProperties + [project: project])
+    }
+    
+    exclude {
+        isTagJson(it.path)
+    }
+
+    doLast {
+        mergeTags(mainResources, generatedResources, destinationDir)
+    }
+}
+
+processDevResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+static boolean isTagJson(String path) {
+    path ==~ /^data\/[^\/]+\/tags\/[^\/]+\/.+\.json$/
+}
+
+static void mergeTags(File mainResources, File generatedResources, File destinationDir) {
+    def paths = new LinkedHashSet<String>()
+
+    [mainResources, generatedResources].each { resources ->
+        if (!resources.exists()) {
+            return
+        }
+
+        resources.eachFileRecurse { file ->
+            if (file.isFile()) {
+                def path = resources.toPath()
+                        .relativize(file.toPath())
+                        .toString()
+                        .replace('\\', '/')
+
+                if (isTagJson(path)) {
+                    paths.add(path)
+                }
+            }
+        }
+    }
+
+    def slurper = new JsonSlurper()
+
+    paths.each { path ->
+        def mainFile = new File(mainResources, path)
+        def generatedFile = new File(generatedResources, path)
+        def targetFile = new File(destinationDir, path)
+
+        if (!mainFile.exists()) {
+            targetFile.parentFile.mkdirs()
+            targetFile.bytes = generatedFile.bytes
+            return
+        }
+
+        if (!generatedFile.exists()) {
+            targetFile.parentFile.mkdirs()
+            targetFile.bytes = mainFile.bytes
+            return
+        }
+
+        def main = slurper.parse(mainFile)
+        def generated = slurper.parse(generatedFile)
+
+        if (main.replace == true) {
+            targetFile.parentFile.mkdirs()
+            targetFile.bytes = mainFile.bytes
+            return
+        }
+
+        if (generated.replace == true) {
+            targetFile.parentFile.mkdirs()
+            targetFile.bytes = generatedFile.bytes
+            return
+        }
+
+        def values = new LinkedHashSet(main.values ?: [])
+        values.addAll(generated.values ?: [])
+
+        main.values = values.toList()
+
+        targetFile.parentFile.mkdirs()
+        targetFile.text = JsonOutput.prettyPrint(
+                JsonOutput.toJson(main)
+        )
+    }
+}

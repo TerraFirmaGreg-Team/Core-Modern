@@ -23,9 +23,6 @@ plugins {
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
-apply from: 'gradle/scripts/repositories.gradle'
-apply from: 'gradle/scripts/dependencies.gradle'
-apply from: 'gradle/scripts/spotless.gradle'
 
 base {
     version = "${mod_version}"
@@ -112,6 +109,11 @@ if (project.rootProject.file("gradle-local.properties").exists()) {
     enableCopyToInstance = false
 }
 
+apply from: 'gradle/scripts/repositories.gradle'
+apply from: 'gradle/scripts/dependencies.gradle'
+apply from: 'gradle/scripts/resources.gradle'
+apply from: 'gradle/scripts/spotless.gradle'
+
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
 
@@ -190,39 +192,6 @@ legacyForge {
     }
 }
 
-
-processResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    var replaceProperties = [
-            'mod_id'              : "${mod_id}",
-            'mod_name'            : "${mod_name}",
-            'mod_version'         : "${mod_version}",
-            'mod_description'     : "${mod_description}",
-            'mod_authors'         : "${mod_authors}",
-            'mod_credits'         : "${mod_credits}",
-            'mod_url'             : "${mod_url}",
-            'mod_logo_path'       : "${mod_logo_path}",
-
-            'minecraft_version'   : "${minecraft_version}",
-
-            'forge_version'       : "${forge_version}",
-            'forge_version_range' : "${loader_version_range}",
-            'loader_version_range': "${loader_version_range}"
-    ]
-    var filterList = [
-            'META-INF/mods.toml',
-            'pack.mcmeta'
-    ]
-
-    inputs.properties replaceProperties
-    filesMatching(filterList) { fcd ->
-        fcd.expand(replaceProperties + [project: project])
-    }
-}
-
-processDevResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
 
 tasks.withType(Jar).configureEach {
     zip64 = true
