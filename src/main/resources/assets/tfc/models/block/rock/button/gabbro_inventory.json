@@ -1,0 +1,5 @@
+{
+    "parent": "block/button_inventory",
+    "textures": {"texture": "tfc:block/rock/raw/gabbro"},
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,11 @@
+{
+    "feature": "tfc:mossy_boulder_small_patch",
+    "placement": [
+        {
+            "chance": 36,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

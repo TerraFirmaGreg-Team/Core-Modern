@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:wood/bladed_axle/douglas_fir"},
+    "ingredients": [
+        {"item": "tfc:wood/axle/douglas_fir"},
+        {"tag": "forge:ingots/steel"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

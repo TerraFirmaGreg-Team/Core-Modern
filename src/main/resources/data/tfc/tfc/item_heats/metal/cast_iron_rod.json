@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 1228,
+    "ingredient": {"tag": "forge:rods/cast_iron"},
+    "heat_capacity": 1.429,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 921
+}

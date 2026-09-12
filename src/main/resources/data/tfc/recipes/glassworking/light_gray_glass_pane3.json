@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:light_gray_poured_glass"},
+    "operations": [
+        "soda_ash",
+        "soda_ash",
+        "graphite",
+        "table_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

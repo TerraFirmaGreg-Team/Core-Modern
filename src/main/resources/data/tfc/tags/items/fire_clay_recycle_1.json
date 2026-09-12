@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfc:ceramic/unfired_fire_brick",
+        "tfc:ceramic/unfired_fire_ingot_mold"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

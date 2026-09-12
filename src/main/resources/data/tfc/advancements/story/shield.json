@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/sheet",
+    "requirements": [["shields"]],
+    "criteria": {"shields": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:shields"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/shield/copper"},
+        "description": {"translate": "tfc.advancements.story.shield.description"},
+        "title": {"translate": "tfc.advancements.story.shield.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

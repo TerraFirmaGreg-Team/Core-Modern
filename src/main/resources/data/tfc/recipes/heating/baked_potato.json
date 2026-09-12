@@ -1,0 +1,7 @@
+{
+    "result_item": {"item": "tfc:food/baked_potato"},
+    "ingredient": {"item": "tfc:food/potato"},
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

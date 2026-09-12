@@ -1,0 +1,28 @@
+{
+    "parent": "tfc:world/nugget",
+    "requirements": [[
+        "ore/lignite",
+        "ore/bituminous_coal"
+    ]],
+    "criteria": {
+        "ore/bituminous_coal": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/bituminous_coal"]}]}
+        },
+        "ore/lignite": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/lignite"]}]}
+        }
+    },
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:ore/lignite"},
+        "description": {"translate": "tfc.advancements.world.coal.description"},
+        "title": {"translate": "tfc.advancements.world.coal.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

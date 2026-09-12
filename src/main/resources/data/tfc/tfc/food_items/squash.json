@@ -1,0 +1,8 @@
+{
+    "saturation": 1,
+    "ingredient": {"item": "tfc:food/squash"},
+    "decay_modifier": 1.67,
+    "__comment__": "This file was automatically created by mcresources",
+    "vegetables": 1.5,
+    "hunger": 4
+}

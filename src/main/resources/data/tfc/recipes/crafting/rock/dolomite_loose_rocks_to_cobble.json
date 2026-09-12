@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfc:rock/cobble/dolomite"},
+    "pattern": [
+        "XX",
+        "XX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:rock/loose/dolomite"}}
+}

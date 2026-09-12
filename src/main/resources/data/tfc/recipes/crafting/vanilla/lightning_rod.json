@@ -1,0 +1,11 @@
+{
+    "result": {"item": "minecraft:lightning_rod"},
+    "pattern": [
+        "X",
+        "X",
+        "X"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:rods/copper"}}
+}

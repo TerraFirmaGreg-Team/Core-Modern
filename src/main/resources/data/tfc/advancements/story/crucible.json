@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/fire_clay",
+    "requirements": [["crucible"]],
+    "criteria": {"crucible": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:crucible"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:crucible"},
+        "description": {"translate": "tfc.advancements.story.crucible.description"},
+        "title": {"translate": "tfc.advancements.story.crucible.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

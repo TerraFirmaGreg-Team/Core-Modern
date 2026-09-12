@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/raw/shale",
+        "top": "tfc:block/rock/raw/shale",
+        "bottom": "tfc:block/rock/raw/shale"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

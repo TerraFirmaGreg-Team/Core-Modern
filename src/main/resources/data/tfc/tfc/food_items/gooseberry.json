@@ -1,0 +1,9 @@
+{
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/gooseberry"},
+    "decay_modifier": 4.9,
+    "fruit": 0.75,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "hunger": 4
+}

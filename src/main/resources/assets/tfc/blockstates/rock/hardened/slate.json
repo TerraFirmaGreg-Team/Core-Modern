@@ -1,0 +1,31 @@
+{
+    "variants": {
+        "axis=z": [
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/slate"
+            },
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/slate_mirrored"
+            }
+        ],
+        "axis=x": [
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/slate"
+            },
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/slate_mirrored"
+            }
+        ],
+        "axis=y": [
+            {"model": "tfc:block/rock/raw/slate"},
+            {"model": "tfc:block/rock/raw/slate_mirrored"}
+        ]
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

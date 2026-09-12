@@ -1,0 +1,9 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/alabaster/polished/red",
+        "top": "tfc:block/alabaster/polished/red",
+        "bottom": "tfc:block/alabaster/polished/red"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

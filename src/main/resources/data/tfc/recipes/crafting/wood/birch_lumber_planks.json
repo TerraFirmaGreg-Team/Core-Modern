@@ -1,0 +1,15 @@
+{
+    "recipe": {
+        "result": {
+            "item": "tfc:wood/lumber/birch",
+            "count": 4
+        },
+        "ingredients": [
+            {"item": "tfc:wood/planks/birch"},
+            {"tag": "tfc:saws"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

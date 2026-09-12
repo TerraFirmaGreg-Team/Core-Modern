@@ -1,0 +1,8 @@
+{
+    "melt_temperature": 1540,
+    "tier": 3,
+    "ingots": {"tag": "forge:ingots/high_carbon_steel"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/high_carbon_steel",
+    "__comment__": "This file was automatically created by mcresources"
+}

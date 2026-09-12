@@ -1,0 +1,12 @@
+{
+    "duration": 1750,
+    "ingredient": [
+        {"item": "tfc:wood/log/birch"},
+        {"item": "tfc:wood/wood/birch"},
+        {"item": "tfc:wood/stripped_wood/birch"},
+        {"item": "tfc:wood/stripped_log/birch"}
+    ],
+    "purity": 0.95,
+    "temperature": 652,
+    "__comment__": "This file was automatically created by mcresources"
+}

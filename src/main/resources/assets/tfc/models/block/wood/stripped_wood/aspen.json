@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "side": "tfc:block/wood/stripped_log/aspen",
+        "end": "tfc:block/wood/stripped_log/aspen"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

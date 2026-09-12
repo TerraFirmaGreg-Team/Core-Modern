@@ -1,0 +1,14 @@
+{
+    "result": {
+        "item": "tfc:steel_pipe",
+        "count": 8
+    },
+    "input": {"tag": "forge:sheets/steel"},
+    "tier": 4,
+    "rules": [
+        "draw_last",
+        "bend_not_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

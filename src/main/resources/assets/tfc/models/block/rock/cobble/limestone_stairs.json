@@ -1,0 +1,9 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/cobble/limestone",
+        "top": "tfc:block/rock/cobble/limestone",
+        "bottom": "tfc:block/rock/cobble/limestone"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

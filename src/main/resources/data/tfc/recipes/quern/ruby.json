@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/ruby",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/ruby"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

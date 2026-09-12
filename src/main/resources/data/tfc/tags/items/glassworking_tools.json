@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:paddle",
+        "tfc:jacks",
+        "tfc:gem_saw"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

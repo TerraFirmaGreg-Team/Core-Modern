@@ -1,0 +1,22 @@
+{
+    "feature": "tfc:plant/marigold_patch",
+    "placement": [
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 17.1,
+            "max_rainfall": 390,
+            "type": "tfc:climate",
+            "min_rainfall": 50,
+            "min_temperature": -6.6
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

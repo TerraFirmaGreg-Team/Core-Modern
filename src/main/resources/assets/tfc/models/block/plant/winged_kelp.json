@@ -1,0 +1,91 @@
+{
+    "textures": {
+        "0": "tfc:block/plant/winged_kelp/top",
+        "particle": "tfc:block/plant/winged_kelp/top"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    16,
+                    8,
+                    15
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                1,
+                0,
+                8
+            ],
+            "to": [
+                15,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        1,
+                        0,
+                        15,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        1,
+                        0,
+                        15,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    1,
+                    8,
+                    16
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                8,
+                0,
+                1
+            ],
+            "to": [
+                8,
+                16,
+                15
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        1,
+                        0,
+                        15,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        1,
+                        0,
+                        15,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

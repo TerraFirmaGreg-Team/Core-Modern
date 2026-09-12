@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/sulfur",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/sulfur"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

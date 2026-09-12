@@ -1,0 +1,12 @@
+{
+    "values": [
+        "#forge:stone",
+        "#forge:cobblestone",
+        "#forge:stone_bricks",
+        "#forge:smooth_stone",
+        "#minecraft:base_stone_overworld",
+        "#forge:concrete"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

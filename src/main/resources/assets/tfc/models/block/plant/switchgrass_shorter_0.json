@@ -1,0 +1,5 @@
+{
+    "parent": "minecraft:block/tinted_cross",
+    "textures": {"cross": "tfc:block/plant/switchgrass/switchgrass_shorter_0"},
+    "credit": "Made with Blockbench"
+}

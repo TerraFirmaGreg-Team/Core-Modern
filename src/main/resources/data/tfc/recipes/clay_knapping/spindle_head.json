@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:ceramic/unfired_spindle_head"},
+    "outside_slot_required": false,
+    "pattern": [
+        "  X  ",
+        "XXXXX",
+        "  X  "
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
+}

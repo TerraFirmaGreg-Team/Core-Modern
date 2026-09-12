@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/metal/block/rose_gold_slab"},
+        "type=double": {"model": "tfc:block/metal/block/rose_gold"},
+        "type=top": {"model": "tfc:block/metal/block/rose_gold_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

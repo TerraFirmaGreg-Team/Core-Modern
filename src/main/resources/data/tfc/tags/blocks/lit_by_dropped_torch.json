@@ -1,0 +1,10 @@
+{
+    "values": [
+        "#tfc:fallen_leaves",
+        "tfc:log_pile",
+        "tfc:thatch",
+        "tfc:pit_kiln"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

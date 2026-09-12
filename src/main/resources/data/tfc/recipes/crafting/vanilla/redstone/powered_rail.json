@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "minecraft:powered_rail",
+        "count": 16
+    },
+    "pattern": [
+        "SWS",
+        "SRS",
+        "SWS"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"tag": "forge:rods/gold"},
+        "W": {"tag": "forge:rods/wooden"}
+    }
+}

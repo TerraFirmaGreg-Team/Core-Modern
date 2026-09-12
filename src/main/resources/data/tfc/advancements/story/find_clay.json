@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/firestarter",
+    "requirements": [["clay_ball"]],
+    "criteria": {"clay_ball": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["minecraft:clay_ball"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "minecraft:clay_ball"},
+        "description": {"translate": "tfc.advancements.story.find_clay.description"},
+        "title": {"translate": "tfc.advancements.story.find_clay.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

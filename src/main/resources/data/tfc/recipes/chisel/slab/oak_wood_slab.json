@@ -1,0 +1,8 @@
+{
+    "result": "tfc:wood/planks/oak_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:wood/planks/oak_slab"},
+    "ingredient": "tfc:wood/planks/oak",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

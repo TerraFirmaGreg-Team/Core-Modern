@@ -1,0 +1,5 @@
+{
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/plant/yucca/yucca_3"},
+    "__comment__": "This file was automatically created by mcresources"
+}

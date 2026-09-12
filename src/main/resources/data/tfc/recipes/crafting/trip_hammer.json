@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc:trip_hammer"},
+    "pattern": [
+        "XMZ",
+        "XMZ"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "forge:sheets/steel"},
+        "Z": {"tag": "forge:rods/steel"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "result": {"item": "tfc:wood/water_wheel/hickory"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/hickory"},
+        "A": {"item": "tfc:wood/axle/hickory"},
+        "L": {"item": "tfc:wood/lumber/hickory"}
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "result": "tfc:wood/planks/hickory_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:wood/planks/hickory_slab"},
+    "ingredient": "tfc:wood/planks/hickory",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

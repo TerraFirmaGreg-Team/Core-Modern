@@ -1,0 +1,14 @@
+{
+    "input_fluid": {
+        "amount": 500,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 72000,
+    "output_fluid": {
+        "amount": 500,
+        "fluid": "tfc:rum"
+    },
+    "input_item": {"ingredient": {"item": "minecraft:sugar"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

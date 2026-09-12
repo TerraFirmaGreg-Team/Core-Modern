@@ -1,0 +1,17 @@
+{
+    "values": [
+        "tfc:orca",
+        "tfc:dolphin",
+        "tfc:squid",
+        "tfc:octopoteuthis",
+        "tfc:isopod",
+        "tfc:lobster",
+        "tfc:horseshoe_crab",
+        "tfc:cod",
+        "tfc:pufferfish",
+        "tfc:tropical_fish",
+        "tfc:jellyfish"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

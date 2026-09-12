@@ -1,0 +1,8 @@
+{
+    "saturation": 2,
+    "ingredient": {"item": "tfc:food/baked_potato"},
+    "decay_modifier": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "vegetables": 1.5,
+    "hunger": 4
+}

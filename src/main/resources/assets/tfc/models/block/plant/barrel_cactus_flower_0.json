@@ -1,0 +1,75 @@
+{
+    "textures": {
+        "particle": "tfc:block/plant/barrel_cactus/flower_0",
+        "flower": "tfc:block/plant/barrel_cactus/flower_0"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "name": "BloomN-S",
+            "from": [
+                8,
+                16,
+                0
+            ],
+            "to": [
+                8,
+                32,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#flower"
+                },
+                "west": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#flower"
+                }
+            }
+        },
+        {
+            "name": "BloomE-W",
+            "from": [
+                0,
+                16,
+                8
+            ],
+            "to": [
+                16,
+                32,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#flower"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#flower"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/plant/stationary_bush_2",
+    "textures": {"bush": "tfc:block/berry_bush/flowering_bunchberry_bush"},
+    "__comment__": "This file was automatically created by mcresources"
+}

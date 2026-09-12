@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/firepit_log_3",
+    "textures": {"all": "tfc:block/devices/firepit/log_white"},
+    "__comment__": "This file was automatically created by mcresources"
+}

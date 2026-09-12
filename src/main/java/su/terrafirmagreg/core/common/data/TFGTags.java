@@ -15,6 +15,8 @@ public final class TFGTags {
 
     public static final class Items {
 
+        public static final TagKey<Item> HIDDEN = createItemTag(ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
+
         public static final TagKey<Item> Casings = createItemTag("casings");
 
         public static final TagKey<Item> Chains = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "chains"));
@@ -92,6 +94,11 @@ public final class TFGTags {
         public static final TagKey<Item> RICH_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "rich_raw_materials"));
         public static final TagKey<Item> POOR_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "poor_raw_materials"));
 
+        public static final TagKey<Item> ROPE = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "rope"));
+        public static final TagKey<Item> DEFAULT_CHESTS = createItemTag("default_chests");
+        public static final TagKey<Item> ROPE_LADDERS = createItemTag("rope_ladders");
+        public static final TagKey<Item> CRAFTING_STATIONS = createItemTag("crafting_stations");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }
@@ -102,6 +109,8 @@ public final class TFGTags {
     }
 
     public static final class Blocks {
+        public static final TagKey<Block> HIDDEN = createBlockTag(ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
+
         public static final TagKey<Block> Casings = createBlockTag("casings");
         public static final TagKey<Block> HarvesterHarvestable = createBlockTag("harvester_harvestable");
         public static final TagKey<Block> DoNotDestroyInSpace = createBlockTag("do_not_destroy_in_space");
@@ -123,6 +132,9 @@ public final class TFGTags {
         public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
         public static final TagKey<Block> TRACK_REPLACEABLE = createBlockTag("track_replaceable");
         public static final TagKey<Block> CAMEL_FASTER_ON = createBlockTag("camel_faster_on");
+        public static final TagKey<Block> BASE_COURSE_SOURCES = createBlockTag("base_course_sources");
+        public static final TagKey<Block> ROPE_LADDERS = createBlockTag("rope_ladders");
+        public static final TagKey<Block> CRAFTING_STATIONS = createBlockTag("crafting_stations");
 
         public static final TagKey<Block> GIRDER = createBlockTag("girder");
         public static final TagKey<Block> PAVING_GIRDER = createBlockTag("paving_girder");
@@ -151,6 +163,13 @@ public final class TFGTags {
 
     public static final class Fluids {
         public static final TagKey<Fluid> BreathableCompressedAir = createFluidTag("breathable_compressed_air");
+        public static final TagKey<Fluid> WarmingDrinks = createFluidTag("warming_drinks");
+        public static final TagKey<Fluid> CoolingDrinks = createFluidTag("cooling_drinks");
+        public static final TagKey<Fluid> WATER_BOILER = createFluidTag("water_boiler");
+        public static final TagKey<Fluid> WATER_BOILER_T2 = createFluidTag("water_boiler_t2");
+        public static final TagKey<Fluid> SMR_FLUIDS = createFluidTag("smr_fluids");
+        public static final TagKey<Fluid> GT_OILS = createFluidTag("oils");
+        public static final TagKey<Fluid> OreProcGas = createFluidTag("ore_proc_gas");
 
         private static TagKey<Fluid> createFluidTag(String path) {
             return createFluidTag(TFGCore.id(path));
@@ -159,8 +178,6 @@ public final class TFGTags {
         private static TagKey<Fluid> createFluidTag(ResourceLocation resLoc) {
             return TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), resLoc);
         }
-
-        public static final TagKey<Fluid> OreProcGas = createFluidTag("ore_proc_gas");
     }
 
     public static final class Entities {

@@ -1,0 +1,5 @@
+{
+    "ingredient": {"item": "tfc:deposit/native_silver/andesite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/native_silver_andesite"
+}

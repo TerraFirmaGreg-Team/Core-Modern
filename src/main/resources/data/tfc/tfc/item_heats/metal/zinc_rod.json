@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 336,
+    "ingredient": {"tag": "forge:rods/zinc"},
+    "heat_capacity": 2.381,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 252
+}

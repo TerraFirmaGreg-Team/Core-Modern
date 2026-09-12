@@ -1,0 +1,12 @@
+{
+    "duration": 1000,
+    "ingredient": [
+        {"item": "tfc:wood/log/aspen"},
+        {"item": "tfc:wood/wood/aspen"},
+        {"item": "tfc:wood/stripped_wood/aspen"},
+        {"item": "tfc:wood/stripped_log/aspen"}
+    ],
+    "purity": 0.95,
+    "temperature": 611,
+    "__comment__": "This file was automatically created by mcresources"
+}

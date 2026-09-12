@@ -1,0 +1,12 @@
+{
+    "duration": 1000,
+    "ingredient": [
+        {"item": "tfc:wood/log/willow"},
+        {"item": "tfc:wood/wood/willow"},
+        {"item": "tfc:wood/stripped_wood/willow"},
+        {"item": "tfc:wood/stripped_log/willow"}
+    ],
+    "purity": 0.95,
+    "temperature": 603,
+    "__comment__": "This file was automatically created by mcresources"
+}

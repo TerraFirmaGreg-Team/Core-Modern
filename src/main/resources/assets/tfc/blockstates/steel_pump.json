@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {
+            "y": 270,
+            "model": "tfc:block/pump"
+        },
+        "facing=south": {"model": "tfc:block/pump"},
+        "facing=north": {
+            "y": 180,
+            "model": "tfc:block/pump"
+        },
+        "facing=west": {
+            "y": 90,
+            "model": "tfc:block/pump"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

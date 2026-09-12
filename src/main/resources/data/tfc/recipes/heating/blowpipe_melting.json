@@ -1,0 +1,7 @@
+{
+    "result_item": {"item": "tfc:blowpipe"},
+    "ingredient": {"item": "tfc:blowpipe_with_glass"},
+    "temperature": 1500,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

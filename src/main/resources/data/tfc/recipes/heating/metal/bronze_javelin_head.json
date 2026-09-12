@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/bronze"
+    },
+    "ingredient": {"item": "tfc:metal/javelin_head/bronze"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

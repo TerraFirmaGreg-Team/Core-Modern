@@ -1,0 +1,44 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfc:block/plant/ivy"},
+        "when": {"down": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"east": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"north": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"south": "true"}
+    },
+    {
+        "apply": {
+            "x": 180,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"up": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"west": "true"}
+    }
+]}

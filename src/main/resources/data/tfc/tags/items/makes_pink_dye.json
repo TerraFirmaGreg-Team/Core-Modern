@@ -1,0 +1,13 @@
+{
+    "values": [
+        "tfc:plant/foxglove",
+        "tfc:plant/sacred_datura",
+        "tfc:plant/tulip_pink",
+        "tfc:plant/snapdragon_pink",
+        "tfc:plant/hibiscus",
+        "tfc:plant/lotus",
+        "tfc:plant/maiden_pink"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

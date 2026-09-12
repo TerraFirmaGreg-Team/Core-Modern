@@ -1,0 +1,14 @@
+{
+    "result": {
+        "item": "minecraft:ladder",
+        "count": 16
+    },
+    "pattern": [
+        "X X",
+        "X X",
+        "X X"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "tfc:lumber"}}
+}

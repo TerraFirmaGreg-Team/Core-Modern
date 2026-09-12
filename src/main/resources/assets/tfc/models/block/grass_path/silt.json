@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/grass_path",
+    "textures": {
+        "side": "tfc:block/grass_path/silt_side",
+        "top": "tfc:block/grass_path/silt_top",
+        "dirt": "tfc:block/dirt/silt"
+    }
+}

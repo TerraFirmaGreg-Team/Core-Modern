@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/bismuth_bronze"
+    },
+    "ingredient": {"item": "tfc:metal/saw_blade/bismuth_bronze"},
+    "temperature": 985,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

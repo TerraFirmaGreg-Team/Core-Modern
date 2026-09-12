@@ -1,0 +1,9 @@
+{
+    "parent": "forge:item/default",
+    "textures": {
+        "armor": "tfc:item/metal/helmet/wrought_iron",
+        "trim": "tfc:item/helmet_trim"
+    },
+    "loader": "tfc:trim",
+    "__comment__": "This file was automatically created by mcresources"
+}

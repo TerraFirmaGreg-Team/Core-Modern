@@ -1,0 +1,11 @@
+{
+    "result": {"item": "tfc:wood/barrel/pine"},
+    "pattern": [
+        "X X",
+        "X X",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/lumber/pine"}}
+}

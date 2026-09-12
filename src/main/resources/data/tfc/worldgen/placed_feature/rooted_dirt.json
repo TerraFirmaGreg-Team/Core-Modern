@@ -1,0 +1,22 @@
+{
+    "feature": "tfc:rooted_dirt",
+    "placement": [
+        {
+            "chance": 4,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_rainfall": 350,
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_forest": "normal",
+            "fuzzy": true
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

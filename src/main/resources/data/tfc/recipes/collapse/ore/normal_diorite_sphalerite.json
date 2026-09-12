@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/normal_sphalerite/diorite",
+    "ingredient": "tfc:ore/rich_sphalerite/diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

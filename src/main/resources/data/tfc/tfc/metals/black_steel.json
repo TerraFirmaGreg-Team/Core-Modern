@@ -1,0 +1,10 @@
+{
+    "melt_temperature": 1485,
+    "sheets": {"tag": "forge:sheets/black_steel"},
+    "double_ingots": {"tag": "forge:double_ingots/black_steel"},
+    "tier": 5,
+    "ingots": {"tag": "forge:ingots/black_steel"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/black_steel",
+    "__comment__": "This file was automatically created by mcresources"
+}

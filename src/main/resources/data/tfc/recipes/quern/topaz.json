@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/topaz",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/topaz"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:wood/sign/willow",
+        "count": 3
+    },
+    "pattern": [
+        "XXX",
+        "XXX",
+        " Y "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/lumber/willow"},
+        "Y": {"tag": "forge:rods/wooden"}
+    }
+}

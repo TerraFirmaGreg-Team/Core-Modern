@@ -1,0 +1,95 @@
+{
+    "textures": {
+        "cross": "tfc:block/plant/sapphire_tower/sapphire_tower_3",
+        "particle": "tfc:block/plant/sapphire_tower/sapphire_tower_3"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                -7.2,
+                0,
+                8
+            ],
+            "to": [
+                23.2,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                -7.2
+            ],
+            "to": [
+                8,
+                16,
+                23.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        }
+    ]
+}

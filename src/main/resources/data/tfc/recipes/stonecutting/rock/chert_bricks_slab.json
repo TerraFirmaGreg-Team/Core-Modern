@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/bricks/chert_slab",
+    "ingredient": {"item": "tfc:rock/bricks/chert"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

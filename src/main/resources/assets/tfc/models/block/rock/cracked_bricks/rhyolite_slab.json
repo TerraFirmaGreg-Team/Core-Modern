@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/cracked_bricks/rhyolite",
+        "top": "tfc:block/rock/cracked_bricks/rhyolite",
+        "bottom": "tfc:block/rock/cracked_bricks/rhyolite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

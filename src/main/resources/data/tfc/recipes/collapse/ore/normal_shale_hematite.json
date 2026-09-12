@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/normal_hematite/shale",
+    "ingredient": "tfc:ore/rich_hematite/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

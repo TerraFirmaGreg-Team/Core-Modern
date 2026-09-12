@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "stage=1": {"model": "tfc:block/plant/desert_flame_1"},
+        "stage=0": {"model": "tfc:block/plant/desert_flame_0"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

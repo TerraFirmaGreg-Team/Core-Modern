@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:raw_boulder",
+    "placement": [
+        {
+            "chance": 22,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "flatness": 0.4,
+            "type": "tfc:flat_enough"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

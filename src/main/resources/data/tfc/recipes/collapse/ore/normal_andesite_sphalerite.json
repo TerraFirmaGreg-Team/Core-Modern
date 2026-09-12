@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/normal_sphalerite/andesite",
+    "ingredient": "tfc:ore/rich_sphalerite/andesite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

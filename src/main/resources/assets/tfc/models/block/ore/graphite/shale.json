@@ -1,0 +1,10 @@
+{
+    "parent": "tfc:block/ore_column",
+    "textures": {
+        "side": "tfc:block/rock/raw/shale",
+        "overlay": "tfc:block/ore/graphite",
+        "end": "tfc:block/rock/raw/shale_top",
+        "overlay_end": "tfc:block/ore/graphite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

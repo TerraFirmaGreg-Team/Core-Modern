@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/wood/stripped_log/sequoia"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/stripped_log/sequoia"
+        },
+        "axis=y": {"model": "tfc:block/wood/stripped_log/sequoia"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

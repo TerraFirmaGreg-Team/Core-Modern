@@ -1,0 +1,15 @@
+{
+    "duration": 2000,
+    "temperature": 600,
+    "ingredients": [{"item": "minecraft:gray_dye"}],
+    "fluid_ingredient": {
+        "amount": 1000,
+        "ingredient": "minecraft:water"
+    },
+    "fluid_output": {
+        "amount": 1000,
+        "fluid": "tfc:gray_dye"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:pot"
+}

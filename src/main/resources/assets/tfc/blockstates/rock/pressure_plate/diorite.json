@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/diorite_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/diorite"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

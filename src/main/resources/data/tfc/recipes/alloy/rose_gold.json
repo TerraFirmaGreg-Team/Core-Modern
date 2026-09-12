@@ -1,0 +1,17 @@
+{
+    "result": "tfc:rose_gold",
+    "contents": [
+        {
+            "min": 0.15,
+            "max": 0.3,
+            "metal": "tfc:copper"
+        },
+        {
+            "min": 0.7,
+            "max": 0.85,
+            "metal": "tfc:gold"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:alloy"
+}

@@ -1,0 +1,10 @@
+{
+    "ingredient": "tfc:gem/diamond",
+    "asset_name": "diamond_tfc",
+    "description": {
+        "color": "#6EECD2",
+        "translate": "trim_material.tfc.diamond"
+    },
+    "item_model_index": 0.1,
+    "__comment__": "This file was automatically created by mcresources"
+}

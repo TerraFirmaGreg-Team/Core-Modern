@@ -1,0 +1,11 @@
+{
+    "input_fluid": {
+        "amount": 25,
+        "ingredient": "tfc:cyan_dye"
+    },
+    "duration": 1000,
+    "output_item": {"item": "minecraft:music_disc_otherside"},
+    "input_item": {"ingredient": {"item": "tfc:blank_disc"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

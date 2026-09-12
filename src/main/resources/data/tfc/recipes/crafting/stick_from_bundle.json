@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "minecraft:stick",
+        "count": 18
+    },
+    "ingredients": [{"item": "tfc:stick_bundle"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

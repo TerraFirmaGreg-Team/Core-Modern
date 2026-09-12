@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "minecraft:activator_rail",
+        "count": 4
+    },
+    "pattern": [
+        "SRS",
+        "SWS",
+        "SRS"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:rods/wooden"},
+        "S": {"tag": "forge:rods/wrought_iron"},
+        "W": {"item": "minecraft:redstone_torch"}
+    }
+}

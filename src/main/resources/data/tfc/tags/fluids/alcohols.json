@@ -1,0 +1,14 @@
+{
+    "values": [
+        "tfc:beer",
+        "tfc:cider",
+        "tfc:rum",
+        "tfc:sake",
+        "tfc:vodka",
+        "tfc:whiskey",
+        "tfc:corn_whiskey",
+        "tfc:rye_whiskey"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

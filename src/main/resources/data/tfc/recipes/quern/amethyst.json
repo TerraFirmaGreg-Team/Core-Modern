@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/amethyst",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/amethyst"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

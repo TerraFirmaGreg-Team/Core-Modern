@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:item/handstone_healthy",
+    "overrides": [{
+        "predicate": {"tfc:damaged": 1},
+        "model": "tfc:item/handstone_damaged"
+    }],
+    "__comment__": "This file was automatically created by mcresources"
+}

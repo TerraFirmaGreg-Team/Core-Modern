@@ -1,0 +1,7 @@
+{
+    "result": "tfc:alabaster/polished/purple_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:alabaster/polished/purple",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

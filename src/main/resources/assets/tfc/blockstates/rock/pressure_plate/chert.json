@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/chert_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/chert"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

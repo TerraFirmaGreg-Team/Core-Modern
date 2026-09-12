@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 184,
+    "ingredient": {"tag": "forge:double_ingots/tin"},
+    "heat_capacity": 14.286,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 138
+}

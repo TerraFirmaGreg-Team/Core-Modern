@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/malachite",
+        "count": 5
+    },
+    "ingredient": {"item": "tfc:ore/normal_malachite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

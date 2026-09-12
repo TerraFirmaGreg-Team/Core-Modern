@@ -1,0 +1,23 @@
+{
+    "parent": "tfc:world/hunter",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {
+        "trigger": "minecraft:player_killed_entity",
+        "conditions": {"entity": [{
+            "predicate": {"type": "tfc:octopoteuthis"},
+            "condition": "minecraft:entity_properties",
+            "entity": "this"
+        }]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": true,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "minecraft:glow_ink_sac"},
+        "description": {"translate": "tfc.advancements.world.glow_hunter.description"},
+        "title": {"translate": "tfc.advancements.world.glow_hunter.title"},
+        "announce_to_chat": true,
+        "frame": "goal"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

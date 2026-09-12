@@ -1,0 +1,13 @@
+{
+    "result": {"item": "tfc:stone/hammer/metamorphic"},
+    "pattern": [
+        "X",
+        "Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:stone/hammer_head/metamorphic"},
+        "Y": {"tag": "forge:rods/wooden"}
+    }
+}

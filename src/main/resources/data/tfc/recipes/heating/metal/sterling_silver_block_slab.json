@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/sterling_silver"
+    },
+    "ingredient": {"item": "tfc:metal/block/sterling_silver_slab"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

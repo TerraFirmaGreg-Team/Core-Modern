@@ -1,0 +1,94 @@
+{
+    "textures": {
+        "0": "tfc:block/plant/canna/canna_base",
+        "particle": "tfc:block/plant/canna/canna_base"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -45,
+                "axis": "x"
+            },
+            "from": [
+                0,
+                0,
+                8
+            ],
+            "to": [
+                16,
+                0,
+                24
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "from": [
+                0,
+                0,
+                8
+            ],
+            "to": [
+                16,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

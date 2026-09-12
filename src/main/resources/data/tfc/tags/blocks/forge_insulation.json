@@ -1,0 +1,10 @@
+{
+    "values": [
+        "#forge:stone",
+        "#forge:cobblestone",
+        "#forge:stone_bricks",
+        "#forge:smooth_stone"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

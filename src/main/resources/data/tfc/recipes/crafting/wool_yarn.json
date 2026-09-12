@@ -1,0 +1,15 @@
+{
+    "recipe": {
+        "result": {
+            "item": "tfc:wool_yarn",
+            "count": 8
+        },
+        "ingredients": [
+            {"item": "tfc:spindle"},
+            {"item": "tfc:wool"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

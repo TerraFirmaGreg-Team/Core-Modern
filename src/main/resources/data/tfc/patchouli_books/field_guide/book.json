@@ -1,0 +1,10 @@
+{
+    "show_progress": false,
+    "dont_generate_book": false,
+    "macros": {},
+    "landing_text": "tfc.field_guide.book_landing_text",
+    "subtitle": "${version}",
+    "name": "tfc.field_guide.book_name",
+    "use_resource_pack": true,
+    "__comment__": "This file was automatically created by mcresources"
+}

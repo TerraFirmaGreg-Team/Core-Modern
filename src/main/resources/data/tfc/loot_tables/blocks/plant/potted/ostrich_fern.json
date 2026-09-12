@@ -1,0 +1,24 @@
+{
+    "pools": [
+        {
+            "entries": [{
+                "name": "tfc:plant/ostrich_fern",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
+        {
+            "entries": [{
+                "name": "minecraft:flower_pot",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
+}

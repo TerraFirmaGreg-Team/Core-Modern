@@ -1,0 +1,16 @@
+{
+    "parent": "tfc:story/brass_plated_block",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {"trigger": "tfc:basin_pour"}},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "minecraft:glass"},
+        "description": {"translate": "tfc.advancements.story.basin_pour.description"},
+        "title": {"translate": "tfc.advancements.story.basin_pour.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

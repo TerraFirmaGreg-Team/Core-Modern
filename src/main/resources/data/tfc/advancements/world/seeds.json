@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/root",
+    "requirements": [["seeds"]],
+    "criteria": {"seeds": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:seeds"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:seeds/tomato"},
+        "description": {"translate": "tfc.advancements.world.seeds.description"},
+        "title": {"translate": "tfc.advancements.world.seeds.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

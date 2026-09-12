@@ -1,0 +1,4 @@
+{"variants": {
+    "stage=1": {"model": "tfc:block/plant/heather_1"},
+    "stage=0": {"model": "tfc:block/plant/heather_0"}
+}}

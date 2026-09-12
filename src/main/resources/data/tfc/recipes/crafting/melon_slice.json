@@ -1,0 +1,18 @@
+{
+    "recipe": {
+        "result": {
+            "item": "tfc:food/melon_slice",
+            "count": 4
+        },
+        "ingredients": [
+            {"tag": "tfc:knives"},
+            {
+                "ingredient": {"item": "tfc:melon"},
+                "type": "tfc:not_rotten"
+            }
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

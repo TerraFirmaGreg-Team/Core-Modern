@@ -1,0 +1,6 @@
+{
+    "result": {"item": "minecraft:blue_dye"},
+    "ingredients": [{"item": "tfc:powder/graphite"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:sticks_forest_patch",
+    "placement": [
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 50,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 70,
+            "min_forest": "normal",
+            "min_temperature": -20
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

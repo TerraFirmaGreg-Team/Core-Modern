@@ -1,0 +1,14 @@
+{
+    "result": {"item": "minecraft:bow"},
+    "pattern": [
+        " YX",
+        "Y X",
+        " YX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "forge:string"},
+        "Y": {"tag": "forge:rods/wooden"}
+    }
+}

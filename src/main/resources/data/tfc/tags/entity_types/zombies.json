@@ -1,0 +1,9 @@
+{
+    "values": [
+        "minecraft:zombie",
+        "minecraft:husk",
+        "minecraft:zombie_villager"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,6 @@
+{
+    "result": {"item": "minecraft:yellow_dye"},
+    "ingredients": [{"item": "tfc:powder/native_gold"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

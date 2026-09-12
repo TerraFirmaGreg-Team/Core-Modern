@@ -1,0 +1,23 @@
+{
+    "feature": "tfc:coral_reef",
+    "placement": [
+        {
+            "noise_offset": 1,
+            "noise_factor": 200,
+            "noise_to_count_ratio": 20,
+            "type": "minecraft:noise_based_count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 50,
+            "type": "tfc:climate",
+            "min_temperature": 12,
+            "fuzzy": true
+        },
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

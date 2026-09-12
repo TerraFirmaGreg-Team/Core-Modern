@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/tetrahedrite",
+        "count": 7
+    },
+    "ingredient": {"item": "tfc:ore/rich_tetrahedrite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

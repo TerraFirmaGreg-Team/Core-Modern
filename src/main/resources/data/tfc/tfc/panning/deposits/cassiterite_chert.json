@@ -1,0 +1,10 @@
+{
+    "model_stages": [
+        "tfc:item/pan/cassiterite/chert_full",
+        "tfc:item/pan/cassiterite/chert_half",
+        "tfc:item/pan/cassiterite/result"
+    ],
+    "ingredient": "tfc:deposit/cassiterite/chert",
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/cassiterite_chert"
+}

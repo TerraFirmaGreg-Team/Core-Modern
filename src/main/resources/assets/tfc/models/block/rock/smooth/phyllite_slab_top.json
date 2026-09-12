@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/rock/smooth/phyllite",
+        "top": "tfc:block/rock/smooth/phyllite",
+        "bottom": "tfc:block/rock/smooth/phyllite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

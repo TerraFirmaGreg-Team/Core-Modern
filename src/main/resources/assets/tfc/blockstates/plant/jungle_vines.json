@@ -1,0 +1,40 @@
+{"multipart": [
+    {
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfc:block/plant/jungle_vines"
+        },
+        "when": {"east": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "model": "tfc:block/plant/jungle_vines"
+        },
+        "when": {"north": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfc:block/plant/jungle_vines"
+        },
+        "when": {"south": "true"}
+    },
+    {
+        "apply": {
+            "x": 180,
+            "model": "tfc:block/plant/jungle_vines"
+        },
+        "when": {"up": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfc:block/plant/jungle_vines"
+        },
+        "when": {"west": "true"}
+    }
+]}

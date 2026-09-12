@@ -1,0 +1,27 @@
+{
+    "feature": "tfc:plant/dry_phragmite",
+    "placement": [
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 62},
+                "max_inclusive": {"absolute": 64},
+                "type": "uniform"
+            }
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 27.6,
+            "max_rainfall": 370,
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_forest": "sparse",
+            "min_temperature": -7.4
+        },
+        {
+            "predicate": {"type": "tfc:dry_replaceable"},
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

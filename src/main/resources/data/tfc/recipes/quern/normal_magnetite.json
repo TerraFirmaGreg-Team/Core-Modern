@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/magnetite",
+        "count": 5
+    },
+    "ingredient": {"item": "tfc:ore/normal_magnetite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

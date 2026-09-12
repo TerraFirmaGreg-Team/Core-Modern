@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "minecraft:tripwire_hook",
+        "count": 2
+    },
+    "pattern": [
+        "I",
+        "W",
+        "S"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {"tag": "forge:rods/wooden"},
+        "W": {"tag": "tfc:lumber"},
+        "I": {"tag": "forge:sheets/wrought_iron"}
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/raw/diorite",
+        "overlay": "tfc:block/ore/normal_tetrahedrite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

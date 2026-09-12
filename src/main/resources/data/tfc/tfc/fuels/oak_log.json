@@ -1,0 +1,12 @@
+{
+    "duration": 2250,
+    "ingredient": [
+        {"item": "tfc:wood/log/oak"},
+        {"item": "tfc:wood/wood/oak"},
+        {"item": "tfc:wood/stripped_wood/oak"},
+        {"item": "tfc:wood/stripped_log/oak"}
+    ],
+    "purity": 0.95,
+    "temperature": 728,
+    "__comment__": "This file was automatically created by mcresources"
+}

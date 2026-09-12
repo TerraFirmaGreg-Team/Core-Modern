@@ -1,0 +1,8 @@
+{
+    "result": {"item": "tfc:metal/double_sheet/wrought_iron"},
+    "first_input": {"tag": "forge:sheets/wrought_iron"},
+    "tier": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"tag": "forge:sheets/wrought_iron"}
+}

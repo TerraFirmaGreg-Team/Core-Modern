@@ -1,0 +1,28 @@
+{
+    "feature": "tfc:plant/pampas_grass",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {
+                        "stage": "1",
+                        "part": "lower",
+                        "age": "1"
+                    },
+                    "Name": "tfc:plant/pampas_grass"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

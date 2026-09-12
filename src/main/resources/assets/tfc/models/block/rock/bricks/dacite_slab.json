@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/bricks/dacite",
+        "top": "tfc:block/rock/bricks/dacite",
+        "bottom": "tfc:block/rock/bricks/dacite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

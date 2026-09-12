@@ -1,0 +1,14 @@
+{
+    "result": {"item": "minecraft:armor_stand"},
+    "pattern": [
+        "XXX",
+        " X ",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "minecraft:planks"},
+        "Y": {"tag": "forge:smooth_stone_slab"}
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:rock/mossy_loose/limestone",
+        "count": 3
+    },
+    "ingredients": [{"item": "tfc:rock/mossy_cobble/limestone_stairs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

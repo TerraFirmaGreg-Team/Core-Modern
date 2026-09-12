@@ -1,0 +1,8 @@
+{
+    "result_item": {"item": "tfc:powder/kaolinite"},
+    "ingredient": {"item": "tfc:kaolin_clay"},
+    "chance": 0.2,
+    "temperature": 500,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

@@ -1,0 +1,9 @@
+{
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/peach"},
+    "decay_modifier": 2.8,
+    "fruit": 0.5,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 10,
+    "hunger": 4
+}

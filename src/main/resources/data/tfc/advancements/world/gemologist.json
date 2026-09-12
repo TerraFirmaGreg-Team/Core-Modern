@@ -1,0 +1,63 @@
+{
+    "parent": "tfc:world/nugget",
+    "requirements": [
+        ["amethyst"],
+        ["diamond"],
+        ["emerald"],
+        ["lapis_lazuli"],
+        ["opal"],
+        ["pyrite"],
+        ["ruby"],
+        ["sapphire"],
+        ["topaz"]
+    ],
+    "criteria": {
+        "diamond": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/diamond"]}]}
+        },
+        "lapis_lazuli": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/lapis_lazuli"]}]}
+        },
+        "opal": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/opal"]}]}
+        },
+        "topaz": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/topaz"]}]}
+        },
+        "amethyst": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/amethyst"]}]}
+        },
+        "pyrite": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/pyrite"]}]}
+        },
+        "emerald": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/emerald"]}]}
+        },
+        "ruby": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/ruby"]}]}
+        },
+        "sapphire": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/sapphire"]}]}
+        }
+    },
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:gem/amethyst"},
+        "description": {"translate": "tfc.advancements.world.gemologist.description"},
+        "title": {"translate": "tfc.advancements.world.gemologist.title"},
+        "announce_to_chat": true,
+        "frame": "goal"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

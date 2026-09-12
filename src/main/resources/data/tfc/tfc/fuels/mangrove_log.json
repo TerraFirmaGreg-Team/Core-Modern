@@ -1,0 +1,12 @@
+{
+    "duration": 1000,
+    "ingredient": [
+        {"item": "tfc:wood/log/mangrove"},
+        {"item": "tfc:wood/wood/mangrove"},
+        {"item": "tfc:wood/stripped_wood/mangrove"},
+        {"item": "tfc:wood/stripped_log/mangrove"}
+    ],
+    "purity": 0.95,
+    "temperature": 655,
+    "__comment__": "This file was automatically created by mcresources"
+}

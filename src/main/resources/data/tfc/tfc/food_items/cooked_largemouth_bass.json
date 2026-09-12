@@ -1,0 +1,8 @@
+{
+    "saturation": 1,
+    "ingredient": {"item": "tfc:food/cooked_largemouth_bass"},
+    "decay_modifier": 2.25,
+    "protein": 2.25,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

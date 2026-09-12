@@ -1,0 +1,11 @@
+{
+    "input_fluid": {
+        "amount": 25,
+        "ingredient": "tfc:lye"
+    },
+    "duration": 1000,
+    "output_item": {"item": "tfc:windmill_blade"},
+    "input_item": {"ingredient": {"tag": "tfc:colored_windmill_blades"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

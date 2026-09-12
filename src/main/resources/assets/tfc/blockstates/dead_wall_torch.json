@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {"model": "tfc:block/dead_wall_torch"},
+        "facing=south": {
+            "y": 90,
+            "model": "tfc:block/dead_wall_torch"
+        },
+        "facing=north": {
+            "y": 270,
+            "model": "tfc:block/dead_wall_torch"
+        },
+        "facing=west": {
+            "y": 180,
+            "model": "tfc:block/dead_wall_torch"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

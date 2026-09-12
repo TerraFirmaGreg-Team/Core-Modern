@@ -1,0 +1,4 @@
+{"multipart": [{
+    "apply": [{"model": "tfc:block/plant/water_taro_0"}],
+    "when": {"part": "upper"}
+}]}

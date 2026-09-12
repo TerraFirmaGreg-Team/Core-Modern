@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/hunter",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {
+        "trigger": "tfc:hooked_entity",
+        "conditions": {"entity": {"type": "#tfc:small_fish"}}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:metal/fishing_rod/copper"},
+        "description": {"translate": "tfc.advancements.world.fishing.description"},
+        "title": {"translate": "tfc.advancements.world.fishing.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

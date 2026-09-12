@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/root",
+    "requirements": [["compost"]],
+    "criteria": {"compost": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:compost"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:compost"},
+        "description": {"translate": "tfc.advancements.world.compost.description"},
+        "title": {"translate": "tfc.advancements.world.compost.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

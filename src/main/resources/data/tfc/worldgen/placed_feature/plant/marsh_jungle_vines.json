@@ -1,0 +1,32 @@
+{
+    "feature": "tfc:plant/marsh_jungle_vines",
+    "placement": [
+        {
+            "count": 127,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 60},
+                "max_inclusive": {"absolute": 80},
+                "type": "uniform"
+            }
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "max_temperature": 500,
+            "max_rainfall": 28.2,
+            "type": "tfc:climate",
+            "min_rainfall": 15.7,
+            "min_forest": "normal",
+            "min_temperature": 200,
+            "fuzzy": true
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

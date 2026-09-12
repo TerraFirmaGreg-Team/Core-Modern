@@ -272,6 +272,7 @@ public final class ForgeCommonEventListener {
             mapping.remap(com.yision.fluidlogistics.registry.AllBlocks.FLUID_PACKAGER.get());
         if (mapping.getKey().toString().equals("create_factory_logistics:factory_fluid_gauge"))
             mapping.remap(com.simibubi.create.AllBlocks.FACTORY_GAUGE.get());
+
     }
 
     private static void remapItems(MissingMappingsEvent.Mapping<Item> mapping) {

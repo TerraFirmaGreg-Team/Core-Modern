@@ -1,0 +1,5 @@
+{
+    "parent": "block/cube_all",
+    "textures": {"all": "tfc:block/metal/block/sterling_silver"},
+    "__comment__": "This file was automatically created by mcresources"
+}

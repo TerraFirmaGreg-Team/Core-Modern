@@ -1,0 +1,8 @@
+{
+    "saturation": 1,
+    "ingredient": {"item": "tfc:food/cooked_quail"},
+    "decay_modifier": 2.25,
+    "protein": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

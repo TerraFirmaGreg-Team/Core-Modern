@@ -1,0 +1,7 @@
+{
+    "result": "tfc:alabaster/bricks/green_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:alabaster/bricks/green",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

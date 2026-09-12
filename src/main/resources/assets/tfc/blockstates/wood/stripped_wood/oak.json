@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/wood/stripped_wood/oak"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/stripped_wood/oak"
+        },
+        "axis=y": {"model": "tfc:block/wood/stripped_wood/oak"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

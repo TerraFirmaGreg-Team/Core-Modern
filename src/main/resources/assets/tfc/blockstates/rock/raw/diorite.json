@@ -1,0 +1,49 @@
+{
+    "variants": {
+        "axis=z": [
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/diorite"
+            },
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/diorite_mirrored"
+            },
+            {
+                "x": 90,
+                "y": 180,
+                "model": "tfc:block/rock/raw/diorite"
+            },
+            {
+                "x": 90,
+                "y": 180,
+                "model": "tfc:block/rock/raw/diorite_mirrored"
+            }
+        ],
+        "axis=x": [
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/diorite"
+            },
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/diorite_mirrored"
+            }
+        ],
+        "axis=y": [
+            {"model": "tfc:block/rock/raw/diorite"},
+            {"model": "tfc:block/rock/raw/diorite_mirrored"},
+            {
+                "y": 180,
+                "model": "tfc:block/rock/raw/diorite"
+            },
+            {
+                "y": 180,
+                "model": "tfc:block/rock/raw/diorite_mirrored"
+            }
+        ]
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

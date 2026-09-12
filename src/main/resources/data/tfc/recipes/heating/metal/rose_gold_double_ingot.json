@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/rose_gold"
+    },
+    "ingredient": {"item": "tfc:metal/double_ingot/rose_gold"},
+    "temperature": 960,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

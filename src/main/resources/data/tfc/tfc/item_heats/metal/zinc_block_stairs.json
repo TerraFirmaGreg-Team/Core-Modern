@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 336,
+    "ingredient": {"item": "tfc:metal/block/zinc_stairs"},
+    "heat_capacity": 3.571,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 252
+}

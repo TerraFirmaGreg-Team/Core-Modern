@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "stage=1": {"model": "tfc:block/plant/banana_trunk_1_dead"},
+        "stage=2": {"model": "tfc:block/plant/banana_trunk_2_dead"},
+        "stage=0": {"model": "tfc:block/plant/banana_trunk_0_dead"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

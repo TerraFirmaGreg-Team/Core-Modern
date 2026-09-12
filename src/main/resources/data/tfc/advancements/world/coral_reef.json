@@ -1,0 +1,23 @@
+{
+    "parent": "tfc:world/volcano",
+    "requirements": [["ocean_reef"]],
+    "criteria": {"ocean_reef": {
+        "trigger": "minecraft:location",
+        "conditions": {"player": [{
+            "predicate": {"location": {"biome": "tfc:ocean_reef"}},
+            "condition": "minecraft:entity_properties",
+            "entity": "this"
+        }]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:coral/brain_coral_fan"},
+        "description": {"translate": "tfc.advancements.world.coral_reef.description"},
+        "title": {"translate": "tfc.advancements.world.coral_reef.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

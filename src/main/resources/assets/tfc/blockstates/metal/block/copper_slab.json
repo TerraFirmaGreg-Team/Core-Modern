@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/metal/block/copper_slab"},
+        "type=double": {"model": "tfc:block/metal/block/copper"},
+        "type=top": {"model": "tfc:block/metal/block/copper_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

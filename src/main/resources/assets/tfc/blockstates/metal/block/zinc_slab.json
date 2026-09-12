@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/metal/block/zinc_slab"},
+        "type=double": {"model": "tfc:block/metal/block/zinc"},
+        "type=top": {"model": "tfc:block/metal/block/zinc_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

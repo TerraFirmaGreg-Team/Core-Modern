@@ -1,0 +1,13 @@
+{
+    "pools": [{
+        "entries": [{
+            "name": "tfc:wood/support/mangrove",
+            "type": "minecraft:item"
+        }],
+        "name": "loot_pool",
+        "rolls": 1,
+        "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
+}

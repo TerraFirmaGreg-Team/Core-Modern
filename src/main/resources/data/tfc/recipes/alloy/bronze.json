@@ -1,0 +1,17 @@
+{
+    "result": "tfc:bronze",
+    "contents": [
+        {
+            "min": 0.88,
+            "max": 0.92,
+            "metal": "tfc:copper"
+        },
+        {
+            "min": 0.08,
+            "max": 0.12,
+            "metal": "tfc:tin"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:alloy"
+}

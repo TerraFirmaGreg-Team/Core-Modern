@@ -1,0 +1,8 @@
+{
+    "saturation": 0,
+    "ingredient": {"tag": "tfc:foods/preserves"},
+    "decay_modifier": 5,
+    "fruit": 0.75,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 0
+}

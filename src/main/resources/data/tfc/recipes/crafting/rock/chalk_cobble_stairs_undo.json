@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:rock/loose/chalk",
+        "count": 3
+    },
+    "ingredients": [{"item": "tfc:rock/cobble/chalk_stairs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

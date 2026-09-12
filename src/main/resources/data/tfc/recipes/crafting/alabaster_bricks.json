@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:alabaster/bricks",
+        "count": 4
+    },
+    "pattern": [
+        "XYX",
+        "YXY",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:alabaster_brick"},
+        "Y": {"tag": "tfc:mortar"}
+    }
+}

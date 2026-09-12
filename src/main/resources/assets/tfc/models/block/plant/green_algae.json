@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/plant/template_floating",
+    "textures": {"pad": "tfc:block/plant/green_algae/green_algae"},
+    "__comment__": "This file was automatically created by mcresources"
+}

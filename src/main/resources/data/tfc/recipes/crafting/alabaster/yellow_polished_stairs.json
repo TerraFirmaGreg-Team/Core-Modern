@@ -1,0 +1,14 @@
+{
+    "result": {
+        "item": "tfc:alabaster/polished/yellow_stairs",
+        "count": 8
+    },
+    "pattern": [
+        "X  ",
+        "XX ",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:alabaster/polished/yellow"}}
+}

@@ -23,16 +23,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.utils.TFGHelpers;
 
@@ -40,9 +36,6 @@ import su.terrafirmagreg.core.utils.TFGHelpers;
  * GlassblowingOverlay class backported from TFC 1.21, which displays glassblowing progress and information on the HUD.
  */
 public class GlassblowingOverlay {
-
-    private static final TagKey<Item> TFC_GLASS_BLOWPIPES = TagKey.create(ForgeRegistries.Keys.ITEMS,
-            ResourceLocation.fromNamespaceAndPath("tfc", "glass_blowpipes"));
 
     // Change from the original: Rendering as a ForgeGui because it's better :p
     public static final IGuiOverlay OVERLAY = (gui, graphics, partialTick, width, height) -> {
@@ -52,7 +45,7 @@ public class GlassblowingOverlay {
         }
         final Player player = minecraft.player;
         if (player != null) {
-            final boolean holdingGlassBlowpipe = Helpers.isItem(player.getMainHandItem(), TFC_GLASS_BLOWPIPES) || Helpers.isItem(player.getOffhandItem(), TFC_GLASS_BLOWPIPES);
+            final boolean holdingGlassBlowpipe = Helpers.isItem(player.getMainHandItem(), TFCTags.Items.GLASS_BLOWPIPES) || Helpers.isItem(player.getOffhandItem(), TFCTags.Items.GLASS_BLOWPIPES);
             if (holdingGlassBlowpipe) {
                 render(minecraft, graphics);
             }
@@ -85,7 +78,7 @@ public class GlassblowingOverlay {
             ItemStack held = player.getMainHandItem();
             ItemStack otherItem = player.getOffhandItem();
 
-            if (!Helpers.isItem(player.getMainHandItem(), TFC_GLASS_BLOWPIPES)) {
+            if (!Helpers.isItem(player.getMainHandItem(), TFCTags.Items.GLASS_BLOWPIPES)) {
                 held = player.getOffhandItem();
                 otherItem = player.getMainHandItem();
             }

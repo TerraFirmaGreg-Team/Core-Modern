@@ -1,0 +1,20 @@
+{
+    "result": {
+        "item": "tfc:wood/clutch/blackwood",
+        "count": 2
+    },
+    "pattern": [
+        "LSL",
+        "MAR",
+        "LSL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/blackwood"},
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"item": "tfc:wood/stripped_log/blackwood"},
+        "L": {"item": "tfc:wood/lumber/blackwood"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

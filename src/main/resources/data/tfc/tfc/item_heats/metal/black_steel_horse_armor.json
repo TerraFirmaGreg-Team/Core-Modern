@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 1188,
+    "ingredient": {"item": "tfc:metal/horse_armor/black_steel"},
+    "heat_capacity": 34.286,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 891
+}

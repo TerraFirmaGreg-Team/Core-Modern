@@ -1,0 +1,15 @@
+{
+    "result": {"item": "minecraft:comparator"},
+    "pattern": [
+        " T ",
+        "TRT",
+        "SSS"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"tag": "forge:smooth_stone"},
+        "T": {"item": "minecraft:redstone_torch"}
+    }
+}

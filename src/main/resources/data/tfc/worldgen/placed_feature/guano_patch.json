@@ -1,0 +1,26 @@
+{
+    "feature": "tfc:guano_patch",
+    "placement": [
+        {
+            "chance": 15,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 10,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_temperature": -30
+        },
+        {
+            "predicate": {
+                "tag": "tfc:creeping_stone_plantable_on",
+                "type": "minecraft:matching_block_tag"
+            },
+            "type": "tfc:on_top"
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:jar/strawberry_unsealed"},
+    "ingredients": [{
+        "ingredient": {"item": "tfc:jar/strawberry"},
+        "type": "tfc:not_rotten"
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

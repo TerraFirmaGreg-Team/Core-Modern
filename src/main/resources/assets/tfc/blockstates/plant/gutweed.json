@@ -1,0 +1,15 @@
+{"multipart": [{"apply": [
+    {"model": "tfc:block/plant/gutweed"},
+    {
+        "y": 90,
+        "model": "tfc:block/plant/gutweed"
+    },
+    {
+        "y": 180,
+        "model": "tfc:block/plant/gutweed"
+    },
+    {
+        "y": 270,
+        "model": "tfc:block/plant/gutweed"
+    }
+]}]}

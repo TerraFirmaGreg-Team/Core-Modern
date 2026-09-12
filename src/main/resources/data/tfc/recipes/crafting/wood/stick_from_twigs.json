@@ -1,0 +1,6 @@
+{
+    "result": {"item": "minecraft:stick"},
+    "ingredients": [{"tag": "tfc:twigs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

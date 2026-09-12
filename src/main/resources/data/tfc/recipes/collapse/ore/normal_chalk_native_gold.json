@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/normal_native_gold/chalk",
+    "ingredient": "tfc:ore/rich_native_gold/chalk",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

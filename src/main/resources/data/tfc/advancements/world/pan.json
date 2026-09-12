@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/root",
+    "requirements": [["pan/empty"]],
+    "criteria": {"pan/empty": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:pan/empty"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:pan/empty"},
+        "description": {"translate": "tfc.advancements.world.pan.description"},
+        "title": {"translate": "tfc.advancements.world.pan.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,53 @@
+{
+    "recipe": {
+        "result": {
+            "stack": {
+                "item": "tfc:food/rye_bread_sandwich",
+                "count": 2
+            },
+            "modifiers": [{
+                "type": "tfc:meal",
+                "food": {
+                    "saturation": 1,
+                    "decay_modifier": 4.5,
+                    "water": 0.5,
+                    "hunger": 4
+                },
+                "portions": [
+                    {
+                        "ingredient": {"tag": "tfc:sandwich_bread"},
+                        "nutrient_modifier": 0.5,
+                        "water_modifier": 0.5,
+                        "saturation_modifier": 0.5
+                    },
+                    {
+                        "nutrient_modifier": 0.8,
+                        "water_modifier": 0.8,
+                        "saturation_modifier": 0.8
+                    }
+                ]
+            }]
+        },
+        "input_row": 0,
+        "pattern": [
+            "ZX ",
+            "YYY",
+            " X "
+        ],
+        "input_column": 0,
+        "type": "tfc:advanced_shaped_crafting",
+        "key": {
+            "X": {
+                "ingredient": {"item": "tfc:food/rye_bread"},
+                "type": "tfc:not_rotten"
+            },
+            "Y": {
+                "ingredient": {"tag": "tfc:foods/usable_in_sandwich"},
+                "type": "tfc:not_rotten"
+            },
+            "Z": {"tag": "tfc:knives"}
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shaped_crafting"
+}

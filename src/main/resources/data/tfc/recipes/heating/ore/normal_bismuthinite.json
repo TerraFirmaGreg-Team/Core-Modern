@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 25,
+        "fluid": "tfc:metal/bismuth"
+    },
+    "ingredient": {"item": "tfc:ore/normal_bismuthinite"},
+    "temperature": 270,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

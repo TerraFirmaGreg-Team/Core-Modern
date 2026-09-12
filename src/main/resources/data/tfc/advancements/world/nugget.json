@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/root",
+    "requirements": [["nuggets"]],
+    "criteria": {"nuggets": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:nuggets"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:ore/small_native_copper"},
+        "description": {"translate": "tfc.advancements.world.nugget.description"},
+        "title": {"translate": "tfc.advancements.world.nugget.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

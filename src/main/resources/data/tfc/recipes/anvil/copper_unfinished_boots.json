@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:metal/unfinished_boots/copper"},
+    "input": {"tag": "forge:sheets/copper"},
+    "tier": 1,
+    "rules": [
+        "bend_last",
+        "bend_second_last",
+        "shrink_third_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

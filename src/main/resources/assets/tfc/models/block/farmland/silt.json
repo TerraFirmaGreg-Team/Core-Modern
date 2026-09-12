@@ -1,0 +1,8 @@
+{
+    "parent": "block/template_farmland",
+    "textures": {
+        "top": "tfc:block/farmland/silt",
+        "dirt": "tfc:block/dirt/silt"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

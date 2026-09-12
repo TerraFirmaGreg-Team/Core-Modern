@@ -1,0 +1,5 @@
+{
+    "parent": "block/leaves",
+    "textures": {"all": "tfc:block/fruit_tree/peach_leaves"},
+    "__comment__": "This file was automatically created by mcresources"
+}

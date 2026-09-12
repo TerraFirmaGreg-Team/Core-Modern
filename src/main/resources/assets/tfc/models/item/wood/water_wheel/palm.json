@@ -1,0 +1,5 @@
+{
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/wood/water_wheel_palm"},
+    "__comment__": "This file was automatically created by mcresources"
+}

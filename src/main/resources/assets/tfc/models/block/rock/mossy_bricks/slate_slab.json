@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/mossy_bricks/slate",
+        "top": "tfc:block/rock/mossy_bricks/slate",
+        "bottom": "tfc:block/rock/mossy_bricks/slate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

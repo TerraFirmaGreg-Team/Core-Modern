@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/cobble/slate_slab"},
+        "type=double": {"model": "tfc:block/rock/cobble/slate"},
+        "type=top": {"model": "tfc:block/rock/cobble/slate_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

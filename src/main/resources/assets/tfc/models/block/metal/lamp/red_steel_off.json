@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/lamp",
+    "textures": {
+        "metal": "tfc:block/metal/smooth/red_steel",
+        "lamp": "tfc:block/lamp_off"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

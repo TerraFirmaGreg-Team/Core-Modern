@@ -1,0 +1,11 @@
+{
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/bismuth_bronze"
+    },
+    "ingredient": {"item": "tfc:metal/hoe/bismuth_bronze"},
+    "temperature": 985,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
+}

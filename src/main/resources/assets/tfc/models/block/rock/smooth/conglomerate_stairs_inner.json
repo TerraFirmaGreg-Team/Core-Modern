@@ -1,0 +1,9 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/smooth/conglomerate",
+        "top": "tfc:block/rock/smooth/conglomerate",
+        "bottom": "tfc:block/rock/smooth/conglomerate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

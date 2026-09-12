@@ -1,0 +1,10 @@
+{
+    "values": [
+        "minecraft:iron_sword",
+        "minecraft:iron_shovel",
+        "minecraft:fishing_rod",
+        "minecraft:nautilus_shell"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

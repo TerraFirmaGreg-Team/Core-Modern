@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/plant/berry_bush_0",
+    "textures": {
+        "bush": "tfc:block/berry_bush/flowering_elderberry_bush",
+        "cane": "tfc:block/berry_bush/flowering_elderberry_cane"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

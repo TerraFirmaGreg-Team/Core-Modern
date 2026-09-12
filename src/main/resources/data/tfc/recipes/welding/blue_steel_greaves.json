@@ -1,0 +1,8 @@
+{
+    "result": {"item": "tfc:metal/greaves/blue_steel"},
+    "first_input": {"item": "tfc:metal/unfinished_greaves/blue_steel"},
+    "tier": 5,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"item": "tfc:metal/sheet/blue_steel"}
+}
