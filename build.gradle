@@ -23,9 +23,6 @@ plugins {
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
-apply from: 'gradle/scripts/repositories.gradle'
-apply from: 'gradle/scripts/dependencies.gradle'
-apply from: 'gradle/scripts/spotless.gradle'
 
 base {
     version = "${mod_version}"
@@ -112,6 +109,11 @@ if (project.rootProject.file("gradle-local.properties").exists()) {
     enableCopyToInstance = false
 }
 
+apply from: 'gradle/scripts/repositories.gradle'
+apply from: 'gradle/scripts/dependencies.gradle'
+apply from: 'gradle/scripts/resources.gradle'
+apply from: 'gradle/scripts/spotless.gradle'
+
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
 
@@ -147,6 +149,8 @@ legacyForge {
             sourceSet = sourceSets.dev
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
+
+            taskBefore tasks.named("prepareServerDev")
         }
 
         data {
@@ -179,6 +183,8 @@ legacyForge {
             gameDirectory.set(file('run/gametest'))
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
             environment('TEST', 'true')
+
+            taskBefore tasks.named("prepareServerDev")
         }
 
     }
@@ -190,39 +196,6 @@ legacyForge {
     }
 }
 
-
-processResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    var replaceProperties = [
-            'mod_id'              : "${mod_id}",
-            'mod_name'            : "${mod_name}",
-            'mod_version'         : "${mod_version}",
-            'mod_description'     : "${mod_description}",
-            'mod_authors'         : "${mod_authors}",
-            'mod_credits'         : "${mod_credits}",
-            'mod_url'             : "${mod_url}",
-            'mod_logo_path'       : "${mod_logo_path}",
-
-            'minecraft_version'   : "${minecraft_version}",
-
-            'forge_version'       : "${forge_version}",
-            'forge_version_range' : "${loader_version_range}",
-            'loader_version_range': "${loader_version_range}"
-    ]
-    var filterList = [
-            'META-INF/mods.toml',
-            'pack.mcmeta'
-    ]
-
-    inputs.properties replaceProperties
-    filesMatching(filterList) { fcd ->
-        fcd.expand(replaceProperties + [project: project])
-    }
-}
-
-processDevResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
 
 tasks.withType(Jar).configureEach {
     zip64 = true
@@ -245,39 +218,6 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xlint:-removal"
     options.compilerArgs << "-Aquiet=true" // Suppress mixin notes
 
-}
-
-// Prepare server: patch Species, accept EULA, set offline mode
-tasks.register("prepareServerDev") {
-
-    def serverDir = file("run/server")
-    def propsFile = file("${serverDir}/server.properties")
-
-    outputs.file(propsFile)
-
-    doLast {
-        serverDir.mkdirs()
-
-        // Create or patch server.properties to set online-mode=false
-        if (propsFile.exists()) {
-            def content = propsFile.text
-            if (content.contains('online-mode=')) {
-                content = content.replaceAll(/online-mode=\w+/, 'online-mode=false')
-            } else {
-                content += '\nonline-mode=false'
-            }
-            propsFile.text = content
-        } else {
-            propsFile.text = 'online-mode=false\n'
-        }
-    }
-}
-
-// Runs Species patch before runServer.
-allprojects {
-    tasks.matching { it.name == "prepareServerRun" || it.name == "runGameTestServer" }.configureEach {
-        dependsOn("prepareServerDev")
-    }
 }
 
 if (enableCopyToInstance) {

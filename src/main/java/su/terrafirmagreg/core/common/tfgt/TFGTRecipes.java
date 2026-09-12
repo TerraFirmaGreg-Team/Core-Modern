@@ -8,6 +8,7 @@ import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.GTCraftingComponents;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
@@ -23,6 +24,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCraftingComponents;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 
 public class TFGTRecipes {
 
@@ -154,6 +156,28 @@ public class TFGTRecipes {
                         'B', TFGMachines.RAILGUN_ITEM_LOADER_IN[i].asStack());
             }
         }
+
+        // TODO Example recipes, replace with kubejs actual recipes
+        // Base fluid amount = X mB per minute per 10,000 blocks.
+        // E.g. 100 means 100 mB/min for a 10k block room, 10 mB/min for 1k blocks.
+        // The actual per-tick consumption is scaled by room volume in EnvironmentRecipeLogic.
+        TFGTRecipeTypes.OXYGEN_DISTRIBUTION.recipeBuilder("oxygen_distribution")
+                .perTick(true)
+                .inputFluids(FluidIngredient.of(TFGTags.Fluids.BreathableCompressedAir, 100))
+                .perTick(false)
+                .duration(200)
+                .EUt(16)
+                .save(provider);
+
+        TFGTRecipeTypes.SPACE_HEATING.recipeBuilder("space_heating")
+                .duration(200)
+                .EUt(8)
+                .save(provider);
+
+        TFGTRecipeTypes.GRAVITY_EMISSION.recipeBuilder("gravity_emission")
+                .duration(200)
+                .EUt(2)
+                .save(provider);
 
     }
 }

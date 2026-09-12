@@ -36,6 +36,7 @@ import net.dries007.tfc.common.blocks.IcePileBlock;
 import net.dries007.tfc.common.blocks.SnowPileBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.plant.KrummholzBlock;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
@@ -44,6 +45,7 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.TFCChunkGenerator;
+import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
@@ -270,12 +272,103 @@ public class OverworldClimateModel implements WorldGenClimateModel
     }
 
     @Override
+    public void onChunkLoad(WorldGenLevel level, ChunkAccess chunk, ChunkData chunkData)
+    {
+        // This code is only actually invoked during world generation. It also doesn't actually functionally work there either.
+        // I've deleted the "melt snow/ice" part of this, as it was running into potential world gen weirdness. Nothing should be
+        // placing snow or ice piles anyway, so I don't know how that was even triggering. But in any case, this should never be used.
+
+        final ChunkPos chunkPos = chunk.getPos();
+        final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        final BlockState snowState = Blocks.SNOW.defaultBlockState();
+
+        for (int x = chunkPos.getMinBlockX(); x <= chunkPos.getMaxBlockX(); x++)
+        {
+            for (int z = chunkPos.getMinBlockZ(); z <= chunkPos.getMaxBlockZ(); z++)
+            {
+                mutablePos.set(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), z);
+
+                final float noise = (float) snowPatchNoise.noise(x, z);
+                final float temperature = getTemperature(null, mutablePos, chunkData, Calendars.SERVER.getCalendarTicks(), Calendars.SERVER.getCalendarDaysInMonth());
+                final float snowTemperatureModifier = Mth.clampedMap(temperature, -10f, 2f, -1, 1);
+
+                // Handle snow
+                BlockState stateAt = level.getBlockState(mutablePos);
+                if (snowTemperatureModifier + noise < 0 && level.getBrightness(LightLayer.BLOCK, mutablePos) <= 11)
+                {
+                    // Snow
+                    if (stateAt.isAir() && snowState.canSurvive(level, mutablePos))
+                    {
+                        // Place snow
+                        level.setBlock(mutablePos, Blocks.SNOW.defaultBlockState(), 2);
+                        mutablePos.move(Direction.DOWN);
+                        level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), 2);
+                        mutablePos.move(Direction.UP);
+                    }
+                    else if (SnowPileBlock.canPlaceSnowPile(level, mutablePos, stateAt))
+                    {
+                        SnowPileBlock.placeSnowPile(level, mutablePos, stateAt, false);
+                        level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), 2);
+                    }
+                    else if (stateAt.getBlock() instanceof KrummholzBlock)
+                    {
+                        KrummholzBlock.updateFreezingInColumn(level, mutablePos, true);
+                    }
+                }
+
+
+                // Handle ice
+                mutablePos.move(Direction.DOWN);
+                stateAt = level.getBlockState(mutablePos);
+
+                if (EnvironmentHelpers.isWater(stateAt) || EnvironmentHelpers.isIce(stateAt))
+                {
+                    final float temperatureModifier, waterDepthModifier;
+                    final float threshold = (float) icePatchNoise.noise(x * 0.2f, z * 0.2f) + Mth.clamp(temperature * 0.1f, -0.2f, 0.2f);
+
+                    if (Helpers.isBlock(stateAt, Blocks.ICE) || Helpers.isBlock(stateAt, Blocks.WATER))
+                    {
+                        // Fresh water areas don't freeze over in deep water
+                        final int waterDepth = mutablePos.getY() - level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x, z);
+                        waterDepthModifier = Mth.clampedMap(waterDepth, 0, 5, 0, 1);
+
+                        // And have a fairly conservative freezing threshold
+                        temperatureModifier = Mth.clampedMap(temperature, ICE_FREEZE_TEMPERATURE, ICE_MELT_TEMPERATURE, -0.4f, 1);
+                    }
+                    else
+                    {
+                        // Oceans (or specifically, salt water), freezes at a much lower point, and also is time invariant (meaning it queries the maximum annual temperature and uses that), and also doesn't care about depth (since oceans are deep yo)
+                        final float maxAnnualTemperature = getAverageMonthlyTemperature(z, TFCChunkGenerator.SEA_LEVEL_Y, chunkData.getAverageTemp(x, z), 1);
+                        waterDepthModifier = 0;
+                        temperatureModifier = Mth.clampedMap(maxAnnualTemperature, -4f, 8f, -0.8f, 1);
+                    }
+
+                    if (waterDepthModifier + temperatureModifier < threshold && temperatureModifier < 1)
+                    {
+                        // Sea Ice, Ice, or Ice Pile
+                        if (Helpers.isBlock(stateAt, TFCBlocks.SALT_WATER.get()))
+                        {
+                            level.setBlock(mutablePos, TFCBlocks.SEA_ICE.get().defaultBlockState(), 2);
+                        }
+                        else // Fresh water
+                        {
+                            IcePileBlock.placeIcePileOrIce(level, mutablePos, stateAt, true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void onWorldLoad(ServerLevel level)
     {
         final ChunkGeneratorExtension extension = (ChunkGeneratorExtension) level.getChunkSource().getGenerator();
 
         temperatureScale = extension.settings().temperatureScale();
         climateSeed = LinearCongruentialGenerator.next(level.getSeed(), 719283741234L);
+
+        updateNoise();
     }
 
     @Override
@@ -290,6 +383,12 @@ public class OverworldClimateModel implements WorldGenClimateModel
     {
         temperatureScale = buffer.readFloat();
         climateSeed = buffer.readLong();
+    }
+
+    protected void updateNoise()
+    {
+        this.snowPatchNoise = new OpenSimplex2D(climateSeed + 72397489123L).octaves(2).spread(0.3f).scaled(-1, 1);
+        this.icePatchNoise = new OpenSimplex2D(climateSeed + 192639412341L).octaves(3).spread(0.6f);
     }
 
     /**
