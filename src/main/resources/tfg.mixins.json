@@ -167,6 +167,7 @@
         "common.gtceu.tools.ToolHeadReplaceRecipeMixin",
         "common.gtceu.tools.ToolHelperMixin",
         "common.gtceu.tools.ToolRecipeHandlerMixin",
+        "common.gtceu.tools.TreeFellingHelperMixin",
         "common.gtutilities.UtilToolRecipeHelperMixin",
         "common.hang_glider.GliderItemMixin",
         "common.immersive_aircraft.BambooHopperEntityMixin",
