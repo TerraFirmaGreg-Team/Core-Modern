@@ -21,7 +21,6 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 import su.terrafirmagreg.core.common.environment.DimEnvManager;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
-import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
 import su.terrafirmagreg.tfcambiental.capability.TemperatureCapability;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
