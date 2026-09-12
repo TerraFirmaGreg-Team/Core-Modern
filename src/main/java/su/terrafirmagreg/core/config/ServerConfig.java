@@ -72,6 +72,10 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue disabledBeneathMiningYLevel;
     public final ForgeConfigSpec.BooleanValue enableHotPlanetMiningRestrictions;
 
+    // Atmosphere system config
+    public final ForgeConfigSpec.IntValue atmosphereMaxHorizontalDimension;
+    public final ForgeConfigSpec.IntValue atmosphereRevalidationBaseTicks;
+
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("hang_glider");
 
@@ -226,6 +230,16 @@ public final class ServerConfig {
                 .comment(
                         "\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
                 .defineInRange("composterRpmLimit", 32, 1, Integer.MAX_VALUE);
+
+        builder.pop().push("atmosphere_system");
+
+        atmosphereMaxHorizontalDimension = builder
+                .comment("Maximum horizontal distance (in blocks) that environment rooms can extend from the machine.")
+                .defineInRange("maxHorizontalDimension", 128, 16, 512);
+
+        atmosphereRevalidationBaseTicks = builder
+                .comment("Base delay (in ticks) between room revalidation checks. Larger rooms get longer delays.")
+                .defineInRange("revalidationBaseTicks", 10, 1, 100);
 
         builder.pop();
     }
