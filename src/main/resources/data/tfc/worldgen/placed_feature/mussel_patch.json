@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:mussel_patch",
+    "placement": [
+        {
+            "chance": 6,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 50,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_temperature": 10
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

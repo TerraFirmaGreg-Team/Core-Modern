@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc:ceramic/unfired_hammer_head_mold"},
+    "outside_slot_required": true,
+    "pattern": [
+        "XXXXX",
+        "     ",
+        "     ",
+        "XX XX",
+        "XXXXX"
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
+}

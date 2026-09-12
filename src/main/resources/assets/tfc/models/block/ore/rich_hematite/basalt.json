@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/raw/basalt",
+        "overlay": "tfc:block/ore/rich_hematite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,31 @@
+{
+    "variants": {
+        "axis=z": [
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/dolomite"
+            },
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/dolomite_mirrored"
+            }
+        ],
+        "axis=x": [
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/dolomite"
+            },
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/dolomite_mirrored"
+            }
+        ],
+        "axis=y": [
+            {"model": "tfc:block/rock/raw/dolomite"},
+            {"model": "tfc:block/rock/raw/dolomite_mirrored"}
+        ]
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

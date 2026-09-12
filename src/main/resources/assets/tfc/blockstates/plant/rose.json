@@ -1,0 +1,30 @@
+{"multipart": [
+    {
+        "apply": [{"model": "tfc:block/plant/rose_lower_0"}],
+        "when": {
+            "stage": "0",
+            "part": "lower"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/rose_lower_1"}],
+        "when": {
+            "stage": "1",
+            "part": "lower"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/rose_upper_0"}],
+        "when": {
+            "stage": "0",
+            "part": "upper"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/rose_upper_1"}],
+        "when": {
+            "stage": "1",
+            "part": "upper"
+        }
+    }
+]}

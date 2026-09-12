@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/rock/spike/granite_base",
+    "textures": {"layer0": "tfc:block/rock/raw/granite"},
+    "__comment__": "This file was automatically created by mcresources"
+}

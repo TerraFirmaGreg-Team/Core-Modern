@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfc:farmland/silt",
+        "tfc:farmland/loam",
+        "tfc:farmland/sandy_loam",
+        "tfc:farmland/silty_loam"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

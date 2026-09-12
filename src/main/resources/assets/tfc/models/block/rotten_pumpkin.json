@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/pumpkin",
+    "textures": {
+        "side": "tfc:block/crop/rotten_pumpkin_side",
+        "end": "tfc:block/crop/rotten_pumpkin_top"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

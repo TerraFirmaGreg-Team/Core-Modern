@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 760,
+    "ingredient": {"tag": "forge:double_ingots/bronze"},
+    "heat_capacity": 5.714,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 570
+}

@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:coral_tree",
+        "tfc:coral_mushroom",
+        "tfc:coral_claw"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

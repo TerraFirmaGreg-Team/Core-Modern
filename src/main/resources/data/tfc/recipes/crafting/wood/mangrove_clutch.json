@@ -1,0 +1,20 @@
+{
+    "result": {
+        "item": "tfc:wood/clutch/mangrove",
+        "count": 2
+    },
+    "pattern": [
+        "LSL",
+        "MAR",
+        "LSL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/mangrove"},
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"item": "tfc:wood/stripped_log/mangrove"},
+        "L": {"item": "tfc:wood/lumber/mangrove"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

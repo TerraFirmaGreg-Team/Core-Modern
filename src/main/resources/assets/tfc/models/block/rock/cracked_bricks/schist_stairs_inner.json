@@ -1,0 +1,9 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/cracked_bricks/schist",
+        "top": "tfc:block/rock/cracked_bricks/schist",
+        "bottom": "tfc:block/rock/cracked_bricks/schist"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

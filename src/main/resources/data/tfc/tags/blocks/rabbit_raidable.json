@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:crop/carrot",
+        "tfc:crop/cabbage",
+        "minecraft:carrots"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,12 @@
+{
+    "result": {
+        "item": "tfc:daub",
+        "count": 2
+    },
+    "ingredients": [
+        {"item": "minecraft:clay_ball"},
+        {"tag": "tfc:mud"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

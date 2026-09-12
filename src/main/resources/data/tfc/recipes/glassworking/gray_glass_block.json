@@ -1,0 +1,11 @@
+{
+    "result": {"item": "minecraft:gray_stained_glass"},
+    "operations": [
+        "graphite",
+        "soda_ash",
+        "basin_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

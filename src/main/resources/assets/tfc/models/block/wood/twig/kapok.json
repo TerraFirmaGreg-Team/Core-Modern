@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/groundcover/twig",
+    "textures": {
+        "side": "tfc:block/wood/log/kapok",
+        "top": "tfc:block/wood/log_top/kapok"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,13 @@
+{
+    "result": {"modifiers": [
+        "tfc:copy_input",
+        "tfc:add_powder"
+    ]},
+    "ingredients": [
+        {"tag": "tfc:glass_blowpipes"},
+        {"tag": "tfc:glassworking_powders"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:advanced_shapeless_crafting",
+    "primary_ingredient": {"tag": "tfc:glass_blowpipes"}
+}

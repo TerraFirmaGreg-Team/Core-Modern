@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/bricks/diorite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/bricks/diorite_slab"},
+    "ingredient": "tfc:rock/bricks/diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "tfc:wood/jar_shelf/sycamore",
+        "count": 2
+    },
+    "pattern": [
+        "XXX",
+        "Y Y",
+        "Z Z"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/sycamore"},
+        "Y": {"item": "tfc:wood/lumber/sycamore"},
+        "Z": {"tag": "forge:rods/wooden"}
+    }
+}

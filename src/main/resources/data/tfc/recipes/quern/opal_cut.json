@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/opal",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:gem/opal"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

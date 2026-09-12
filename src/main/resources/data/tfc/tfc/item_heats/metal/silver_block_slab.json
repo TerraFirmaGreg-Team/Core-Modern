@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 769,
+    "ingredient": {"item": "tfc:metal/block/silver_slab"},
+    "heat_capacity": 1.042,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 577
+}

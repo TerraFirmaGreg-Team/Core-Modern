@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfc:metal/boots/copper",
+        "tfc:metal/boots/bronze",
+        "tfc:metal/boots/black_bronze",
+        "tfc:metal/boots/bismuth_bronze",
+        "tfc:metal/boots/wrought_iron"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

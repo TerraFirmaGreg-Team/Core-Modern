@@ -1,0 +1,11 @@
+{
+    "parent": "tfc:block/scribing_table",
+    "textures": {
+        "side": "tfc:block/wood/planks/white_cedar",
+        "top": "tfc:block/wood/scribing_table/white_cedar",
+        "particle": "tfc:block/wood/planks/white_cedar",
+        "leg": "tfc:block/wood/log/white_cedar",
+        "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

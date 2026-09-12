@@ -1,0 +1,24 @@
+{
+    "feature": "tfc:plant/elderberry_bush",
+    "placement": [
+        {
+            "max_temperature": 33,
+            "max_rainfall": 400,
+            "max_forest": "edge",
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_forest": "none",
+            "min_temperature": 10
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "chance": 22,
+            "type": "minecraft:rarity_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

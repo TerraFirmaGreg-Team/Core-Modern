@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#tfc:foods/vegetables",
+        "#tfc:foods/cooked_meats",
+        "#tfc:foods/dairy"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

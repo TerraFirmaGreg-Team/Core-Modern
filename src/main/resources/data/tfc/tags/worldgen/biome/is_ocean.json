@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfc:ocean",
+        "tfc:ocean_reef",
+        "tfc:deep_ocean",
+        "tfc:deep_ocean_trench"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

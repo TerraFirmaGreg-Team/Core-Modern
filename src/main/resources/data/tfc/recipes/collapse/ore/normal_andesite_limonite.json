@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/normal_limonite/andesite",
+    "ingredient": "tfc:ore/rich_limonite/andesite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

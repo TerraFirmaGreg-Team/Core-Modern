@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:pinecone_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 0,
+            "max_rainfall": 320,
+            "type": "tfc:climate",
+            "min_rainfall": 60,
+            "min_forest": "normal",
+            "min_temperature": -14
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

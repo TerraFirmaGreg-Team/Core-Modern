@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfc:ice_pile",
+        "tfc:sea_ice"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

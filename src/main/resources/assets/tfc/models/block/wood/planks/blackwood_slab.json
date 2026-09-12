@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/wood/planks/blackwood",
+        "top": "tfc:block/wood/planks/blackwood",
+        "bottom": "tfc:block/wood/planks/blackwood"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

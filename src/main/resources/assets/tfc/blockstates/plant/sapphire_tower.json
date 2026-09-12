@@ -1,0 +1,58 @@
+{"multipart": [
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_lower_0"}],
+        "when": {
+            "stage": "0",
+            "part": "lower"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_lower_1"}],
+        "when": {
+            "stage": "1",
+            "part": "lower"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_lower_2"}],
+        "when": {
+            "stage": "2",
+            "part": "lower"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_lower_3"}],
+        "when": {
+            "stage": "3",
+            "part": "lower"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_upper_0"}],
+        "when": {
+            "stage": "0",
+            "part": "upper"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_upper_1"}],
+        "when": {
+            "stage": "1",
+            "part": "upper"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_upper_2"}],
+        "when": {
+            "stage": "2",
+            "part": "upper"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sapphire_tower_upper_3"}],
+        "when": {
+            "stage": "3",
+            "part": "upper"
+        }
+    }
+]}

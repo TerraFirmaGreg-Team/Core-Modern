@@ -1,0 +1,24 @@
+{
+    "feature": "tfc:plant/sea_palm",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {"age": "1"},
+                    "Name": "tfc:plant/sea_palm"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

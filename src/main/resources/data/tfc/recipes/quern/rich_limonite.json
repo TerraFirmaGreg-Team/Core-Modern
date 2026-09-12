@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/limonite",
+        "count": 7
+    },
+    "ingredient": {"item": "tfc:ore/rich_limonite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

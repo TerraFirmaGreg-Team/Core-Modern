@@ -1,0 +1,9 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/rock/cracked_bricks/limestone",
+        "top": "tfc:block/rock/cracked_bricks/limestone",
+        "bottom": "tfc:block/rock/cracked_bricks/limestone"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

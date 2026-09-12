@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {
+            "y": 270,
+            "model": "tfc:block/wood/planks/aspen_tool_rack"
+        },
+        "facing=south": {"model": "tfc:block/wood/planks/aspen_tool_rack"},
+        "facing=north": {
+            "y": 180,
+            "model": "tfc:block/wood/planks/aspen_tool_rack"
+        },
+        "facing=west": {
+            "y": 90,
+            "model": "tfc:block/wood/planks/aspen_tool_rack"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

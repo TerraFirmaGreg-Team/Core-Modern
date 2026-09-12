@@ -1,0 +1,7 @@
+{
+    "result": {"item": "minecraft:heavy_weighted_pressure_plate"},
+    "pattern": ["XX"],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:ingots/wrought_iron"}}
+}

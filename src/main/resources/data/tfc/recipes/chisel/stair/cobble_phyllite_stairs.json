@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/cobble/phyllite_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/cobble/phyllite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

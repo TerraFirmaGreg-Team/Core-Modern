@@ -1,0 +1,10 @@
+{
+    "melt_temperature": 420,
+    "sheets": {"tag": "forge:sheets/zinc"},
+    "double_ingots": {"tag": "forge:double_ingots/zinc"},
+    "tier": 1,
+    "ingots": {"tag": "forge:ingots/zinc"},
+    "specific_heat_capacity": 0.01429,
+    "fluid": "tfc:metal/zinc",
+    "__comment__": "This file was automatically created by mcresources"
+}

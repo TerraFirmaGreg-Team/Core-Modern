@@ -1,0 +1,13 @@
+{
+    "result": {"item": "tfc:rock/aqueduct/andesite"},
+    "pattern": [
+        "X X",
+        "MXM"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:brick/andesite"},
+        "M": {"tag": "tfc:mortar"}
+    }
+}

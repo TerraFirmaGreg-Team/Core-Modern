@@ -1,0 +1,7 @@
+{
+    "result_item": {"item": "minecraft:white_glazed_terracotta"},
+    "ingredient": {"item": "minecraft:white_terracotta"},
+    "temperature": 1399,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

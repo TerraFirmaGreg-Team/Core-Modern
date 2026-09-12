@@ -1,0 +1,15 @@
+{
+    "result": {"item": "tfc:fire_clay"},
+    "pattern": [
+        "XYX",
+        "YZY",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:powder/kaolinite"},
+        "Y": {"item": "tfc:powder/graphite"},
+        "Z": {"item": "minecraft:clay_ball"}
+    }
+}

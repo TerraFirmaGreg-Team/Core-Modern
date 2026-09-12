@@ -1,0 +1,15 @@
+{
+    "result": {"item": "minecraft:clock"},
+    "pattern": [
+        "RXR",
+        "XYX",
+        "RXR"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:dusts/redstone"},
+        "X": {"tag": "forge:sheets/gold"},
+        "Y": {"item": "tfc:brass_mechanisms"}
+    }
+}

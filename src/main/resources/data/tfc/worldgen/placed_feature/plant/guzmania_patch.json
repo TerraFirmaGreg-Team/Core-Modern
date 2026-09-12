@@ -1,0 +1,23 @@
+{
+    "feature": "tfc:plant/guzmania_patch",
+    "placement": [
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 38,
+            "max_rainfall": 480,
+            "type": "tfc:climate",
+            "min_rainfall": 290,
+            "min_forest": "edge",
+            "min_temperature": 18.9
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/gold"
+    },
+    "ingredient": {"item": "tfc:metal/block/gold_slab"},
+    "temperature": 1060,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

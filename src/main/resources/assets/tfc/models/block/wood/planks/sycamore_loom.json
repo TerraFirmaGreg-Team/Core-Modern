@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/loom",
+    "textures": {
+        "texture": "tfc:block/wood/planks/sycamore",
+        "particle": "tfc:block/wood/planks/sycamore"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

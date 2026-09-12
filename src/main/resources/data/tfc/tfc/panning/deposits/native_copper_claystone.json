@@ -1,0 +1,10 @@
+{
+    "model_stages": [
+        "tfc:item/pan/native_copper/claystone_full",
+        "tfc:item/pan/native_copper/claystone_half",
+        "tfc:item/pan/native_copper/result"
+    ],
+    "ingredient": "tfc:deposit/native_copper/claystone",
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/native_copper_claystone"
+}

@@ -1,0 +1,5 @@
+{
+    "parent": "block/template_fence_gate_wall_open",
+    "textures": {"texture": "tfc:block/wood/planks/kapok"},
+    "__comment__": "This file was automatically created by mcresources"
+}

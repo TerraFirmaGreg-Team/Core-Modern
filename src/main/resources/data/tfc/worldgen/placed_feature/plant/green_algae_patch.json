@@ -1,0 +1,26 @@
+{
+    "feature": "tfc:plant/green_algae_patch",
+    "placement": [
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 27.6,
+            "max_rainfall": 450,
+            "type": "tfc:climate",
+            "min_rainfall": 215,
+            "min_temperature": -22.4
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 0},
+                "max_inclusive": {"absolute": 70},
+                "type": "uniform"
+            }
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

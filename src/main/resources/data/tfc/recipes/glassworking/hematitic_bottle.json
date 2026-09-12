@@ -1,0 +1,11 @@
+{
+    "result": {"item": "tfc:hematitic_glass_bottle"},
+    "operations": [
+        "blow",
+        "pinch",
+        "saw"
+    ],
+    "batch": {"item": "tfc:hematitic_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

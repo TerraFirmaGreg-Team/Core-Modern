@@ -1,0 +1,8 @@
+{
+    "result": {"item": "tfc:metal/greaves/bismuth_bronze"},
+    "first_input": {"item": "tfc:metal/unfinished_greaves/bismuth_bronze"},
+    "tier": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"item": "tfc:metal/sheet/bismuth_bronze"}
+}

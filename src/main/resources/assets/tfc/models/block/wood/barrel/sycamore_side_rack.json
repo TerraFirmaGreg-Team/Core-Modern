@@ -1,0 +1,9 @@
+{
+    "parent": "tfc:block/barrel_side_rack",
+    "textures": {
+        "particle": "tfc:block/wood/planks/sycamore",
+        "sheet": "tfc:block/wood/sheet/sycamore",
+        "planks": "tfc:block/wood/planks/sycamore"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

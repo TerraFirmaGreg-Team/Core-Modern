@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/hematite",
+        "count": 2
+    },
+    "ingredient": {"item": "tfc:ore/small_hematite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

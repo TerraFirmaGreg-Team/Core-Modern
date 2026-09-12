@@ -1,0 +1,15 @@
+{
+    "requirements": [["in_game_condition"]],
+    "criteria": {"in_game_condition": {"trigger": "minecraft:tick"}},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/hammer/wrought_iron"},
+        "description": {"translate": "tfc.advancements.story.root.description"},
+        "title": {"translate": "tfc.advancements.story.root.title"},
+        "announce_to_chat": false,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

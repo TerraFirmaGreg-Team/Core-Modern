@@ -1,0 +1,9 @@
+{
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/tomato"},
+    "decay_modifier": 3.5,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "vegetables": 1.5,
+    "hunger": 4
+}

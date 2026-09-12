@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "stage=1": {"model": "tfc:block/plant/silver_spurflower_1"},
+        "stage=2": {"model": "tfc:block/plant/silver_spurflower_2"},
+        "stage=0": {"model": "tfc:block/plant/silver_spurflower_0"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

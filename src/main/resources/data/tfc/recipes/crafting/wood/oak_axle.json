@@ -1,0 +1,13 @@
+{
+    "result": {
+        "item": "tfc:wood/axle/oak",
+        "count": 4
+    },
+    "pattern": ["WGW"],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "G": {"item": "tfc:glue"},
+        "W": {"item": "tfc:wood/stripped_log/oak"}
+    }
+}

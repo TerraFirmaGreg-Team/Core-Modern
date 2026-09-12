@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "minecraft:purple_dye",
+        "count": 2
+    },
+    "ingredient": {"tag": "tfc:makes_purple_dye"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

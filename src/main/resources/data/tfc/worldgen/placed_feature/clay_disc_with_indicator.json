@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:clay_disc_with_indicator",
+    "placement": [
+        {
+            "chance": 20,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "type": "tfc:climate",
+            "min_rainfall": 175
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

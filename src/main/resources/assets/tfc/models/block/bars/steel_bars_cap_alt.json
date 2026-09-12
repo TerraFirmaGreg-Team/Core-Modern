@@ -1,0 +1,9 @@
+{
+    "parent": "minecraft:block/iron_bars_cap_alt",
+    "textures": {
+        "edge": "tfc:block/metal/smooth/steel",
+        "particle": "tfc:block/metal/bars/steel",
+        "bars": "tfc:block/metal/bars/steel"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

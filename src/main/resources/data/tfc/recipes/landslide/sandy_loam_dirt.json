@@ -1,0 +1,11 @@
+{
+    "result": "tfc:dirt/sandy_loam",
+    "ingredient": [
+        "tfc:dirt/sandy_loam",
+        "tfc:grass/sandy_loam",
+        "tfc:grass_path/sandy_loam",
+        "tfc:farmland/sandy_loam"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
+}

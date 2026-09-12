@@ -1,0 +1,22 @@
+{
+    "result": "tfc:weak_steel",
+    "contents": [
+        {
+            "min": 0.5,
+            "max": 0.7,
+            "metal": "tfc:steel"
+        },
+        {
+            "min": 0.15,
+            "max": 0.25,
+            "metal": "tfc:nickel"
+        },
+        {
+            "min": 0.15,
+            "max": 0.25,
+            "metal": "tfc:black_bronze"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:alloy"
+}

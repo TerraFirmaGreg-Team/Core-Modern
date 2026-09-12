@@ -1,0 +1,20 @@
+{
+    "input_fluid": {
+        "amount": 1,
+        "ingredient": "minecraft:water"
+    },
+    "output_item": {"modifiers": [
+        "tfc:copy_input",
+        {
+            "temperature": -5,
+            "type": "tfc:add_heat"
+        }
+    ]},
+    "sound": "minecraft:block.fire.extinguish",
+    "input_item": {"ingredient": {
+        "min_temp": 1,
+        "type": "tfc:heatable"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant"
+}

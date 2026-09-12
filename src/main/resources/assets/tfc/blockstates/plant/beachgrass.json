@@ -1,0 +1,18 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfc:block/plant/beachgrass_shortest"},
+        "when": {"age": "0"}
+    },
+    {
+        "apply": {"model": "tfc:block/plant/beachgrass_shorter"},
+        "when": {"age": "1"}
+    },
+    {
+        "apply": {"model": "tfc:block/plant/beachgrass_short"},
+        "when": {"age": "2"}
+    },
+    {
+        "apply": {"model": "tfc:block/plant/beachgrass"},
+        "when": {"age": "3"}
+    }
+]}

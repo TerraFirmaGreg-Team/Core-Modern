@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfc:metal/shield/copper",
+        "tfc:metal/shield/bronze",
+        "tfc:metal/shield/black_bronze",
+        "tfc:metal/shield/bismuth_bronze",
+        "tfc:metal/shield/wrought_iron"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

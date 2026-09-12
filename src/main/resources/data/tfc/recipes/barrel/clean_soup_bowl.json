@@ -1,0 +1,10 @@
+{
+    "input_fluid": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
+    },
+    "output_item": {"modifiers": ["tfc:empty_bowl"]},
+    "input_item": {"ingredient": {"tag": "tfc:dynamic_bowl_items"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant"
+}

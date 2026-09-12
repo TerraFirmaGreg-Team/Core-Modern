@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
+import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -21,7 +22,6 @@ import net.minecraftforge.network.PacketDistributor;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.mixins.common.minecraft.AccessorMinecraftServer;
-import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.AccessorTFCBiomes;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.WorldgenVersionSyncPacket;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
@@ -88,7 +88,7 @@ public class WorldgenVersionEvents {
         // with a forced 1.21 worldgen override. This will still cause ugly chunk boundaries
         // but shouldn't cause NPE.
         if (WorldgenVersionData.OVERWORLD_VERSION == WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT) {
-            Collection<BiomeExtension> TFC_1_20_EXTENSIONS = AccessorTFCBiomes.tfg$getExtensionsMap().values();
+            Collection<BiomeExtension> TFC_1_20_EXTENSIONS = TFCBiomes.EXTENSIONS.values();
             for (var ext : TFC_1_20_EXTENSIONS) {
                 final TFGRiverBlendType riverBlendType = switch (ext.riverBlendType()) {
                     case NONE -> TFGRiverBlendType.NONE;

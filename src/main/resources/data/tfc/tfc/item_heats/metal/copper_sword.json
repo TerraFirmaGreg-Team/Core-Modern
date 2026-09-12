@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 864,
+    "ingredient": {"item": "tfc:metal/sword/copper"},
+    "heat_capacity": 5.714,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 648
+}

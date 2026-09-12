@@ -1,0 +1,7 @@
+{
+    "result": "tfc:wood/planks/palm_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:wood/planks/palm",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

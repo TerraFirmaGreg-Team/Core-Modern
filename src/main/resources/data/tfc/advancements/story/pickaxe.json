@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/copper_age",
+    "requirements": [["pickaxes"]],
+    "criteria": {"pickaxes": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:pickaxes"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/pickaxe/copper"},
+        "description": {"translate": "tfc.advancements.story.pickaxe.description"},
+        "title": {"translate": "tfc.advancements.story.pickaxe.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfc:green_poured_glass"},
+    "operations": [
+        "iron",
+        "table_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches_tier_2"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

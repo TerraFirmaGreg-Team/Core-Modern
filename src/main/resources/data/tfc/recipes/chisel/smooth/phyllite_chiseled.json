@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/chiseled/phyllite",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/bricks/phyllite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

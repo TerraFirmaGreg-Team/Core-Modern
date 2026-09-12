@@ -1,0 +1,9 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/raw/phyllite",
+        "top": "tfc:block/rock/raw/phyllite",
+        "bottom": "tfc:block/rock/raw/phyllite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

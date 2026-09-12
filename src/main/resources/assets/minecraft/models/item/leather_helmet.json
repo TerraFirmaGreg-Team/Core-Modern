@@ -1,0 +1,10 @@
+{
+    "parent": "forge:item/default",
+    "textures": {
+        "armor": "minecraft:item/leather_helmet",
+        "trim": "tfc:item/helmet_trim",
+        "overlay": "minecraft:item/leather_helmet_overlay"
+    },
+    "loader": "tfc:trim",
+    "__comment__": "This file was automatically created by mcresources"
+}

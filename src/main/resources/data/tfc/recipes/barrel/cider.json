@@ -1,0 +1,17 @@
+{
+    "input_fluid": {
+        "amount": 500,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 72000,
+    "output_fluid": {
+        "amount": 500,
+        "fluid": "tfc:cider"
+    },
+    "input_item": {"ingredient": {
+        "ingredient": {"tag": "tfc:foods/apples"},
+        "type": "tfc:not_rotten"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

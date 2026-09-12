@@ -1,0 +1,7 @@
+{
+    "crushing": 50,
+    "piercing": -25,
+    "slashing": 0,
+    "__comment__": "This file was automatically created by mcresources",
+    "entity": "tfc:zombies"
+}

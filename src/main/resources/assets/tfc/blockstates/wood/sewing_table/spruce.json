@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/wood/sewing_table/spruce"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/wood/sewing_table/spruce"
+        },
+        "facing=north": {"model": "tfc:block/wood/sewing_table/spruce"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/wood/sewing_table/spruce"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,12 @@
+{
+    "crushing": 0,
+    "ingredient": [
+        {"item": "minecraft:leather_chestplate"},
+        {"item": "minecraft:leather_leggings"},
+        {"item": "minecraft:leather_boots"},
+        {"item": "minecraft:leather_helmet"}
+    ],
+    "piercing": 0,
+    "slashing": 3,
+    "__comment__": "This file was automatically created by mcresources"
+}

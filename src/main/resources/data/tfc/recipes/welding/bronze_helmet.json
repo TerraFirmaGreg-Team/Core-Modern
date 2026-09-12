@@ -1,0 +1,8 @@
+{
+    "result": {"item": "tfc:metal/helmet/bronze"},
+    "first_input": {"item": "tfc:metal/unfinished_helmet/bronze"},
+    "tier": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"item": "tfc:metal/sheet/bronze"}
+}

@@ -1,0 +1,8 @@
+{
+    "result": "tfc:alabaster/bricks/lime_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:alabaster/bricks/lime_slab"},
+    "ingredient": "tfc:alabaster/bricks/lime",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

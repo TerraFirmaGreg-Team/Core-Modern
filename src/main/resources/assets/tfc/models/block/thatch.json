@@ -1,0 +1,5 @@
+{
+    "parent": "block/powder_snow",
+    "textures": {"texture": "tfc:block/thatch"},
+    "__comment__": "This file was automatically created by mcresources"
+}

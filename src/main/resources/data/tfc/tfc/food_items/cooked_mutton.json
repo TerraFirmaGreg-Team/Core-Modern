@@ -1,0 +1,8 @@
+{
+    "saturation": 2,
+    "ingredient": {"item": "tfc:food/cooked_mutton"},
+    "decay_modifier": 2.25,
+    "protein": 2.5,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

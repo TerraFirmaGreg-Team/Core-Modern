@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#minecraft:dirt",
+        "#tfc:grass",
+        "#tfc:farmland"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

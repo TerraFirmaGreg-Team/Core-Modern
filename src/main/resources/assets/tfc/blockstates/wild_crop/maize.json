@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "part=bottom,mature=true": {"model": "tfc:block/wild_crop/maize_bottom"},
+        "part=top,mature=true": {"model": "tfc:block/wild_crop/maize_top"},
+        "part=bottom,mature=false": {"model": "tfc:block/dead_crop/maize_bottom"},
+        "part=top,mature=false": {"model": "tfc:block/dead_crop/maize_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

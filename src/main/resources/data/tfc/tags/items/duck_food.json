@@ -1,0 +1,11 @@
+{
+    "values": [
+        "#tfc:foods/grains",
+        "#tfc:foods/fruits",
+        "#tfc:foods/vegetables",
+        "#tfc:seeds",
+        "#tfc:foods/breads"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

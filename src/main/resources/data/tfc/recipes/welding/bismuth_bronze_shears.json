@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:metal/shears/bismuth_bronze"},
+    "first_input": {"item": "tfc:metal/knife_blade/bismuth_bronze"},
+    "tier": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "combine_forging_bonus": true,
+    "second_input": {"item": "tfc:metal/knife_blade/bismuth_bronze"}
+}

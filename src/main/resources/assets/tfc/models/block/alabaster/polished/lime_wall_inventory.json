@@ -1,0 +1,5 @@
+{
+    "parent": "block/wall_inventory",
+    "textures": {"wall": "tfc:block/alabaster/polished/lime"},
+    "__comment__": "This file was automatically created by mcresources"
+}

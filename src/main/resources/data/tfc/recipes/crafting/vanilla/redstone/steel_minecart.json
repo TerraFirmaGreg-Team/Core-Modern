@@ -1,0 +1,13 @@
+{
+    "result": {
+        "item": "minecraft:minecart",
+        "count": 2
+    },
+    "pattern": [
+        "X X",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:sheets/steel"}}
+}

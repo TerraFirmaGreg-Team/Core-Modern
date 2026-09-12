@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/plant/banana_trunk_0",
+    "textures": {
+        "0": "tfc:block/fruit_tree/banana_branch",
+        "particle": "tfc:block/fruit_tree/banana_branch"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

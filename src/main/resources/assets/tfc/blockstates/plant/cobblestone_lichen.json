@@ -1,0 +1,44 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfc:block/plant/cobblestone_lichen3"},
+        "when": {"down": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfc:block/plant/cobblestone_lichen1"
+        },
+        "when": {"east": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "model": "tfc:block/plant/cobblestone_lichen1"
+        },
+        "when": {"north": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfc:block/plant/cobblestone_lichen2"
+        },
+        "when": {"south": "true"}
+    },
+    {
+        "apply": {
+            "x": 180,
+            "model": "tfc:block/plant/cobblestone_lichen3"
+        },
+        "when": {"up": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfc:block/plant/cobblestone_lichen2"
+        },
+        "when": {"west": "true"}
+    }
+]}

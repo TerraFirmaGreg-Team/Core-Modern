@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 320,
+    "ingredient": {"tag": "forge:ingots/unknown"},
+    "heat_capacity": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 240
+}

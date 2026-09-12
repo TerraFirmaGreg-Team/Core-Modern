@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:metal/unfinished_greaves/steel"},
+    "input": {"tag": "forge:double_sheets/steel"},
+    "tier": 4,
+    "rules": [
+        "bend_any",
+        "draw_any",
+        "hit_any"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

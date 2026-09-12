@@ -1,0 +1,31 @@
+{
+    "feature": "tfc:bamboo",
+    "placement": [
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "max_temperature": 28,
+            "max_rainfall": 500,
+            "max_forest": "edge",
+            "type": "tfc:climate",
+            "min_rainfall": 350,
+            "min_forest": "edge",
+            "min_temperature": 18,
+            "fuzzy": true
+        },
+        {
+            "noise_offset": 0.3,
+            "noise_factor": 80,
+            "noise_to_count_ratio": 160,
+            "type": "minecraft:noise_based_count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

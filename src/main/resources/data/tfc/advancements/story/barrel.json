@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/saw",
+    "requirements": [["barrels"]],
+    "criteria": {"barrels": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:barrels"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:wood/barrel/acacia"},
+        "description": {"translate": "tfc.advancements.story.barrel.description"},
+        "title": {"translate": "tfc.advancements.story.barrel.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

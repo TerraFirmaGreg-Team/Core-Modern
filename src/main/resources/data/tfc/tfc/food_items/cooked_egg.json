@@ -1,0 +1,9 @@
+{
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/cooked_egg"},
+    "decay_modifier": 4,
+    "protein": 1.5,
+    "__comment__": "This file was automatically created by mcresources",
+    "dairy": 0.25,
+    "hunger": 4
+}

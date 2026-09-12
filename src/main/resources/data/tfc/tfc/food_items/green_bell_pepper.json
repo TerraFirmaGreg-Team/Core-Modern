@@ -1,0 +1,8 @@
+{
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/green_bell_pepper"},
+    "decay_modifier": 2.7,
+    "__comment__": "This file was automatically created by mcresources",
+    "vegetables": 0.75,
+    "hunger": 4
+}

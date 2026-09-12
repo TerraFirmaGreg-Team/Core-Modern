@@ -1,0 +1,11 @@
+{
+    "result_fluid": {
+        "amount": 600,
+        "fluid": "tfc:metal/steel"
+    },
+    "ingredient": {"item": "tfc:metal/greaves/steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
+}

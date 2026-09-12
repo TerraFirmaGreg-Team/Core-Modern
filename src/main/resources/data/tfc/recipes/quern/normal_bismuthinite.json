@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/bismuthinite",
+        "count": 5
+    },
+    "ingredient": {"item": "tfc:ore/normal_bismuthinite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:food/dried_kelp",
+        "tfc:food/dried_seaweed",
+        "#minecraft:fishes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

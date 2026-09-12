@@ -1,0 +1,27 @@
+{
+    "feature": "tfc:plant/cloudberry_bush",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {
+                        "lifecycle": "healthy",
+                        "stage": "0"
+                    },
+                    "Name": "tfc:plant/cloudberry_bush"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

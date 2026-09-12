@@ -1,0 +1,26 @@
+{
+    "duration": 500,
+    "result": {
+        "item": "tfc:jar/elderberry",
+        "count": 2
+    },
+    "texture": "tfc:block/jar/elderberry",
+    "temperature": 300,
+    "ingredients": [
+        {
+            "ingredient": {"item": "tfc:food/elderberry"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "tfc:food/elderberry"},
+            "type": "tfc:not_rotten"
+        },
+        {"tag": "tfc:sweetener"}
+    ],
+    "fluid_ingredient": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:pot_jam"
+}

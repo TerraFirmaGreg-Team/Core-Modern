@@ -1,0 +1,16 @@
+{
+    "result": {"item": "minecraft:music_disc_pigstep"},
+    "ingredients": [
+        {"item": "tfc:blank_disc"},
+        {
+            "fluid_ingredient": {
+                "amount": 1000,
+                "ingredient": "minecraft:lava"
+            },
+            "type": "tfc:fluid_item"
+        },
+        {"item": "tfc:powder/native_gold"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

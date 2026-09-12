@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/rock/spike/conglomerate_base",
+    "textures": {"layer0": "tfc:block/rock/raw/conglomerate"},
+    "__comment__": "This file was automatically created by mcresources"
+}

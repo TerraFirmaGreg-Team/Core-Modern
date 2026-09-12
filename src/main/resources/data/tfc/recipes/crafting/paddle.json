@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc:paddle"},
+    "pattern": [
+        "XX",
+        "XX",
+        "Y "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "tfc:lumber"},
+        "Y": {"tag": "forge:rods/wooden"}
+    }
+}

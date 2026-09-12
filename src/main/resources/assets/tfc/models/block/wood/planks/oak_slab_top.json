@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/wood/planks/oak",
+        "top": "tfc:block/wood/planks/oak",
+        "bottom": "tfc:block/wood/planks/oak"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

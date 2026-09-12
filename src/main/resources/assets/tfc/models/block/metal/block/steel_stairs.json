@@ -1,0 +1,9 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/metal/block/steel",
+        "top": "tfc:block/metal/block/steel",
+        "bottom": "tfc:block/metal/block/steel"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

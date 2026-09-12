@@ -1,0 +1,7 @@
+{
+    "result": "tfc:wood/planks/white_cedar_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:wood/planks/white_cedar",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

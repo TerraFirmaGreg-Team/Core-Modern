@@ -1,0 +1,13 @@
+{
+    "result": {"item": "tfc:windmill_blade"},
+    "pattern": [
+        "SSS",
+        " CC"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {"tag": "tfc:lumber"},
+        "C": {"item": "tfc:wool_cloth"}
+    }
+}

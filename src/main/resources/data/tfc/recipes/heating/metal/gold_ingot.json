@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/gold"
+    },
+    "ingredient": {"item": "tfc:metal/ingot/gold"},
+    "temperature": 1060,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

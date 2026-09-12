@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {
+            "y": 180,
+            "model": "tfc:block/metal/anvil/wrought_iron"
+        },
+        "facing=south": {
+            "y": 270,
+            "model": "tfc:block/metal/anvil/wrought_iron"
+        },
+        "facing=north": {
+            "y": 90,
+            "model": "tfc:block/metal/anvil/wrought_iron"
+        },
+        "facing=west": {"model": "tfc:block/metal/anvil/wrought_iron"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

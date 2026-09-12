@@ -1,0 +1,18 @@
+{
+    "feature": "tfc:plant/ryegrass_patch",
+    "placement": [
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 38,
+            "max_rainfall": 320,
+            "type": "tfc:climate",
+            "min_rainfall": 150,
+            "min_temperature": -21.2
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

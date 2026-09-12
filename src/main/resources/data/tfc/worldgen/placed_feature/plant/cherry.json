@@ -1,0 +1,23 @@
+{
+    "feature": "tfc:plant/cherry",
+    "placement": [
+        {
+            "max_temperature": 25,
+            "max_rainfall": 350,
+            "max_forest": "normal",
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_temperature": 5
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "chance": 50,
+            "type": "minecraft:rarity_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

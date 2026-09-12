@@ -1,0 +1,12 @@
+{
+    "result": {
+        "item": "tfc:drying_bricks/silty_loam",
+        "count": 4
+    },
+    "ingredients": [
+        {"item": "tfc:mud/silty_loam"},
+        {"item": "tfc:straw"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

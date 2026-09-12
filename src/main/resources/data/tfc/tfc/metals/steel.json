@@ -1,0 +1,10 @@
+{
+    "melt_temperature": 1540,
+    "sheets": {"tag": "forge:sheets/steel"},
+    "double_ingots": {"tag": "forge:double_ingots/steel"},
+    "tier": 4,
+    "ingots": {"tag": "forge:ingots/steel"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/steel",
+    "__comment__": "This file was automatically created by mcresources"
+}

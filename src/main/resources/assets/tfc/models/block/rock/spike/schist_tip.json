@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/rock/spike_tip",
+    "textures": {
+        "texture": "tfc:block/rock/raw/schist",
+        "particle": "tfc:block/rock/raw/schist"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

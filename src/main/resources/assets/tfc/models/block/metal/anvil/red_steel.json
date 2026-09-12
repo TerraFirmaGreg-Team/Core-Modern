@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/anvil",
+    "textures": {
+        "all": "tfc:block/metal/smooth/red_steel",
+        "particle": "tfc:block/metal/smooth/red_steel"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

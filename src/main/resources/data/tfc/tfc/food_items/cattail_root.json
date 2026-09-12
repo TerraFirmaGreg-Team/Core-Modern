@@ -1,0 +1,8 @@
+{
+    "saturation": 1,
+    "ingredient": {"item": "tfc:food/cattail_root"},
+    "decay_modifier": 2.5,
+    "grain": 0.5,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 2
+}

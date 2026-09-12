@@ -1,0 +1,12 @@
+{
+    "result": {
+        "stack": {"item": "tfc:food/maize_flour"},
+        "modifiers": ["tfc:copy_food"]
+    },
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/maize_grain"},
+        "type": "tfc:not_rotten"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

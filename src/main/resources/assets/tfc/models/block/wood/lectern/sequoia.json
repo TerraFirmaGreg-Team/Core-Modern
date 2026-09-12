@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/lectern",
+    "textures": {
+        "top": "tfc:block/wood/lectern/sequoia/top",
+        "bottom": "tfc:block/wood/planks/sequoia",
+        "sides": "tfc:block/wood/lectern/sequoia/sides",
+        "particle": "tfc:block/wood/lectern/sequoia/sides",
+        "front": "tfc:block/wood/lectern/sequoia/front",
+        "base": "tfc:block/wood/lectern/sequoia/base"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

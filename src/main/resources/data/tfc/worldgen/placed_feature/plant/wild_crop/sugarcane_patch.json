@@ -1,0 +1,18 @@
+{
+    "feature": "tfc:plant/wild_crop/sugarcane_patch",
+    "placement": [
+        {
+            "chance": 80,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 38,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 160,
+            "min_temperature": 12
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

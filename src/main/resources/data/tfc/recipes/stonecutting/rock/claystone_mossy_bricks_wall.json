@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/mossy_bricks/claystone_wall",
+    "ingredient": {"item": "tfc:rock/mossy_bricks/claystone"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

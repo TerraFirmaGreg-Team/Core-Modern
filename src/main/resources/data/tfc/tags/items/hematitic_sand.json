@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:sand/yellow",
+        "tfc:sand/red",
+        "tfc:sand/pink"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

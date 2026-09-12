@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc:raw_iron_bloom"},
+    "duration": 15000,
+    "catalyst": {
+        "ingredient": {"item": "minecraft:charcoal"},
+        "count": 2
+    },
+    "fluid": {
+        "amount": 100,
+        "ingredient": "tfc:metal/cast_iron"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:bloomery"
+}

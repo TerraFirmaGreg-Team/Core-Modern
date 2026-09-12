@@ -1,0 +1,2074 @@
+{
+    "entity.duck.hurt": {
+        "sounds": [
+            "tfc:entity/duck/hurt1",
+            "tfc:entity/duck/hurt2",
+            "tfc:entity/duck/hurt3"
+        ],
+        "subtitle": "subtitles.entity.tfc.duck.hurt"
+    },
+    "entity.bear.attack": {
+        "sounds": [{
+            "name": "minecraft:entity.polar_bear.warning",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.bear.attack"
+    },
+    "entity.manatee.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.manatee.ambient"
+    },
+    "entity.deer.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.peafowl.hurt": {
+        "sounds": [
+            "tfc:entity/peafowl/hurt1",
+            "tfc:entity/peafowl/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.peafowl.hurt"
+    },
+    "entity.sabertooth.ambient": {
+        "sounds": [
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/sabertooth/say1"
+            },
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/sabertooth/say2"
+            },
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/sabertooth/say3"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.sabertooth.ambient"
+    },
+    "entity.bear.death": {
+        "sounds": ["tfc:entity/bear/death1"],
+        "subtitle": "subtitles.entity.tfc.bear.death"
+    },
+    "item.armor.equip_bismuth_bronze": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_bismuth_bronze"
+    },
+    "random.rock_slide_long_fake": {
+        "sounds": [
+            "tfc:random/rock_slide_long_fake_1",
+            "tfc:random/rock_slide_long_fake_2"
+        ],
+        "subtitle": "subtitles.generic.tfc.rock_slide_long_fake"
+    },
+    "item.armor.equip_bronze": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_bronze"
+    },
+    "block.peat.break": {
+        "sounds": [
+            "tfc:block/peat/break1",
+            "tfc:block/peat/break2",
+            {
+                "name": "tfc:block/peat/break1",
+                "pitch": 1.2
+            },
+            {
+                "name": "tfc:block/peat/break2",
+                "pitch": 0.8
+            }
+        ],
+        "subtitle": "subtitles.block.generic.break"
+    },
+    "entity.penguin.death": {
+        "sounds": ["tfc:entity/penguin/death1"],
+        "subtitle": "subtitles.entity.tfc.penguin.death"
+    },
+    "entity.alpaca.hurt": {
+        "sounds": [
+            "tfc:entity/alpaca/hurt1",
+            "tfc:entity/alpaca/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.alpaca.hurt"
+    },
+    "entity.moose.attack": {
+        "sounds": ["tfc:entity/deer/moose_charge_1"],
+        "subtitle": "subtitles.entity.tfc.moose.attack"
+    },
+    "item.firestarter.use": {
+        "sounds": [
+            "tfc:item/firestarter/use1",
+            "tfc:item/firestarter/use2",
+            "tfc:item/firestarter/use3",
+            "tfc:item/firestarter/use4",
+            "tfc:item/firestarter/use5",
+            "tfc:item/firestarter/use6",
+            "tfc:item/firestarter/use7",
+            "tfc:item/firestarter/use8",
+            "tfc:item/firestarter/use9",
+            "tfc:item/firestarter/use10"
+        ],
+        "subtitle": "subtitles.item.tfc.firestarter.use"
+    },
+    "entity.tiger.step": {
+        "sounds": [{
+            "name": "minecraft:entity.polar_bear.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.deer.ambient": {
+        "sounds": [
+            {
+                "name": "tfc:entity/deer/say1",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say2",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say3",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say4",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say5",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say6",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say7",
+                "weight": 10
+            },
+            "tfc:entity/deer/cry1",
+            "tfc:entity/deer/cry2",
+            "tfc:entity/deer/cry3",
+            "tfc:entity/deer/cry4"
+        ],
+        "subtitle": "subtitles.entity.tfc.deer.ambient"
+    },
+    "entity.rainbow_trout.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.rainbow_trout.ambient"
+    },
+    "block.wattle.daubed": {
+        "sounds": [{
+            "name": "minecraft:block.gravel.place",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.wattle.daubed"
+    },
+    "entity.ramming.impact": {
+        "sounds": [{
+            "name": "minecraft:entity.goat.ram_impact",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.ramming.impact"
+    },
+    "entity.largemouth_bass.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.largemouth_bass.ambient"
+    },
+    "entity.jellyfish.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.jellyfish.ambient"
+    },
+    "entity.penguin.ambient": {
+        "sounds": [
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/penguin/say1",
+                "weight": 5
+            },
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/penguin/say2"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.penguin.ambient"
+    },
+    "item.armor.equip_steel": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_steel"
+    },
+    "block.peat.fall": {
+        "sounds": [
+            {
+                "name": "tfc:block/peat/fall1",
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:block/peat/fall1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.entity.generic.big_fall"
+    },
+    "item.javelin.hit_ground": {
+        "sounds": [
+            {
+                "volume": 0.9,
+                "name": "item/trident/ground_impact1"
+            },
+            {
+                "volume": 0.9,
+                "name": "item/trident/ground_impact2"
+            },
+            {
+                "volume": 0.9,
+                "name": "item/trident/ground_impact3"
+            },
+            {
+                "volume": 0.9,
+                "name": "item/trident/ground_impact4"
+            }
+        ],
+        "subtitle": "subtitles.item.tfc.javelin.hit_ground"
+    },
+    "entity.dog.hurt": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.hurt",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.dog.hurt"
+    },
+    "entity.turkey.ambient": {
+        "sounds": [
+            "tfc:entity/turkey/say1",
+            "tfc:entity/turkey/say2",
+            "tfc:entity/turkey/say3",
+            "tfc:entity/turkey/gobble2"
+        ],
+        "subtitle": "subtitles.entity.tfc.turkey.ambient"
+    },
+    "entity.lake_trout.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.lake_trout.ambient"
+    },
+    "item.armor.equip_copper": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_copper"
+    },
+    "entity.lion.ambient": {
+        "sounds": [
+            {
+                "volume": 0.5,
+                "name": "tfc:entity/lion/say1",
+                "weight": 10
+            },
+            {
+                "volume": 0.5,
+                "name": "tfc:entity/lion/cry1"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.lion.ambient"
+    },
+    "entity.bongo.ambient": {
+        "sounds": [{
+            "name": "tfc:entity.deer.ambient",
+            "pitch": 1.2,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.bongo.ambient"
+    },
+    "entity.wildebeest.attack": {
+        "sounds": ["tfc:entity/deer/moose_charge_1"],
+        "subtitle": "subtitles.entity.tfc.wildebeest.attack"
+    },
+    "item.armor.equip_wrought_iron": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_wrought_iron"
+    },
+    "random.rock_smash": {
+        "sounds": [
+            "tfc:random/rock_smash_1",
+            "tfc:random/rock_smash_2",
+            "tfc:random/rock_smash_3",
+            "tfc:random/rock_smash_4",
+            "tfc:random/rock_smash_5",
+            "tfc:random/rock_smash_6",
+            "tfc:random/rock_smash_7",
+            "tfc:random/rock_smash_8"
+        ],
+        "subtitle": "subtitles.generic.tfc.rock_smash"
+    },
+    "entity.largemouth_bass.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.largemouth_bass.ambient"
+    },
+    "entity.moose.ambient": {
+        "sounds": [
+            {
+                "name": "tfc:entity/deer/say1",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say2",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say3",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say4",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say5",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say6",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/deer/say7",
+                "weight": 10
+            },
+            "tfc:entity/deer/cry1",
+            "tfc:entity/deer/cry2",
+            "tfc:entity/deer/cry3",
+            "tfc:entity/deer/cry4"
+        ],
+        "subtitle": "subtitles.entity.tfc.moose.ambient"
+    },
+    "entity.pheasant.chick.ambient": {
+        "sounds": ["tfc:entity/pheasant/chick/say1"],
+        "subtitle": "subtitles.entity.tfc.pheasant.ambient"
+    },
+    "entity.lion.attack": {
+        "sounds": [{
+            "volume": 0.7,
+            "name": "tfc:entity/lion/attack1"
+        }],
+        "subtitle": "subtitles.entity.tfc.lion.attack"
+    },
+    "entity.manatee.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.manatee.ambient"
+    },
+    "entity.lion.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.rat.step": {
+        "sounds": [{
+            "volume": 0.6,
+            "name": "minecraft:entity.silverfish.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.boar.ambient": {
+        "sounds": [{
+            "name": "minecraft:entity.pig.ambient",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.boar.ambient"
+    },
+    "entity.turkey.step": {
+        "sounds": [{
+            "name": "minecraft:entity.chicken.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.thatch.break": {
+        "sounds": [
+            "tfc:block/thatch/break1",
+            "tfc:block/thatch/break2",
+            {
+                "name": "tfc:block/thatch/break1",
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:block/thatch/break2",
+                "pitch": 0.9
+            }
+        ],
+        "subtitle": "subtitles.block.generic.break"
+    },
+    "entity.moose.death": {
+        "sounds": ["tfc:entity/deer/death1"],
+        "subtitle": "subtitles.entity.tfc.moose.death"
+    },
+    "entity.cougar.sleep": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.sleep",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.cougar.sleep"
+    },
+    "entity.boar.hurt": {
+        "sounds": [{
+            "name": "minecraft:entity.pig.death",
+            "pitch": 0.8,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.boar.hurt"
+    },
+    "entity.lion.death": {
+        "sounds": ["tfc:entity/lion/death1"],
+        "subtitle": "subtitles.entity.tfc.lion.death"
+    },
+    "entity.peafowl.death": {
+        "sounds": ["tfc:entity/peafowl/death"],
+        "subtitle": "subtitles.entity.tfc.peafowl.death"
+    },
+    "entity.tfc_wolf.hurt": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.hurt",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.tfc_wolf.hurt"
+    },
+    "entity.manatee.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.manatee.ambient"
+    },
+    "entity.caribou.ambient": {
+        "sounds": [{
+            "name": "tfc:entity.deer.ambient",
+            "pitch": 0.8,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.caribou.ambient"
+    },
+    "entity.smallmouth_bass.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.smallmouth_bass.ambient"
+    },
+    "entity.tfc_wolf.sleep": {
+        "sounds": [{
+            "volume": 0.6,
+            "name": "tfc:entity/wolf/wolf_snore_1"
+        }],
+        "subtitle": "subtitles.entity.tfc.tfc_wolf.sleep"
+    },
+    "entity.quail.hurt": {
+        "sounds": [
+            "tfc:entity/quail/hurt1",
+            "tfc:entity/quail/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.quail.hurt"
+    },
+    "block.bellows.blow": {
+        "sounds": ["tfc:block/bellows/blow1"],
+        "subtitle": "subtitles.block.tfc.bellows.blow"
+    },
+    "entity.bear.sleep": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.sleep",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.bear.sleep"
+    },
+    "block.thin.hit": {
+        "sounds": [
+            {
+                "name": "tfc:block/thin/hit1",
+                "pitch": 0.9
+            },
+            "tfc:block/thin/hit2",
+            {
+                "name": "tfc:block/thin/hit2",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.hit"
+    },
+    "entity.boar.attack": {
+        "sounds": [{
+            "name": "minecraft:entity.pig.hurt",
+            "pitch": 1.2,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.boar.attack"
+    },
+    "entity.caribou.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.cougar.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "item.javelin.throw": {
+        "sounds": [
+            "item/trident/throw1",
+            "item/trident/throw2"
+        ],
+        "subtitle": "subtitles.item.tfc.javelin.throw"
+    },
+    "entity.largemouth_bass.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.largemouth_bass.ambient"
+    },
+    "entity.bongo.hurt": {
+        "sounds": [{
+            "name": "tfc:entity.deer.hurt",
+            "pitch": 1.2,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.bongo.hurt"
+    },
+    "block.tool_rack.place": {
+        "sounds": [{
+            "name": "minecraft:entity.item_frame.add_item",
+            "pitch": 0.8,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.tool_rack.place_item"
+    },
+    "entity.grouse.ambient": {
+        "sounds": [
+            "tfc:entity/grouse/say1",
+            "tfc:entity/grouse/say2",
+            "tfc:entity/grouse/say3"
+        ],
+        "subtitle": "subtitles.entity.tfc.grouse.ambient"
+    },
+    "block.loom.weave": {
+        "sounds": [{
+            "volume": 0.25,
+            "name": "minecraft:block.wood.fall",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.loom.weave"
+    },
+    "entity.bluegill.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.bluegill.ambient"
+    },
+    "entity.tiger.attack": {
+        "sounds": [
+            "tfc:entity/sabertooth/attack1",
+            "tfc:entity/sabertooth/attack2"
+        ],
+        "subtitle": "subtitles.entity.tfc.tiger.attack"
+    },
+    "entity.deer.death": {
+        "sounds": ["tfc:entity/deer/death1"],
+        "subtitle": "subtitles.entity.tfc.deer.death"
+    },
+    "entity.tfc_wolf.attack": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.bite",
+            "pitch": 0.7,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.tfc_wolf.attack"
+    },
+    "entity.smallmouth_bass.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.smallmouth_bass.ambient"
+    },
+    "item.ceramic.break": {
+        "sounds": ["tfc:item/ceramic/break1"],
+        "subtitle": "subtitles.item.tfc.ceramic.break"
+    },
+    "entity.hyena.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.hyena.death": {
+        "sounds": ["tfc:entity/hyena/death1"],
+        "subtitle": "subtitles.entity.tfc.hyena.death"
+    },
+    "entity.peafowl.ambient": {
+        "sounds": [
+            {
+                "volume": 0.7,
+                "name": "tfc:entity/peafowl/scream1"
+            },
+            {
+                "volume": 0.8,
+                "name": "minecraft:entity.chicken.ambient",
+                "pitch": 0.8,
+                "type": "event"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.peafowl.ambient"
+    },
+    "item.jug.blow": {
+        "sounds": ["tfc:item/jug/blow1"],
+        "subtitle": "subtitles.item.tfc.jug.blow"
+    },
+    "entity.smallmouth_bass.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.smallmouth_bass.ambient"
+    },
+    "block.bloomery.crackle": {
+        "sounds": [
+            "minecraft:block/blastfurnace/blastfurnace1",
+            "minecraft:block/blastfurnace/blastfurnace2",
+            "minecraft:block/blastfurnace/blastfurnace3",
+            "minecraft:block/blastfurnace/blastfurnace4",
+            "minecraft:block/blastfurnace/blastfurnace5"
+        ],
+        "subtitle": "subtitles.block.tfc.bloomery.crackle"
+    },
+    "item.pan.use": {
+        "sounds": [{
+            "name": "minecraft:block.sand.break",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.item.tfc.pan.use"
+    },
+    "entity.pheasant.ambient": {
+        "sounds": [
+            "tfc:entity/pheasant/say1",
+            "tfc:entity/pheasant/say2"
+        ],
+        "subtitle": "subtitles.entity.tfc.pheasant.ambient"
+    },
+    "entity.sabertooth.hurt": {
+        "sounds": [
+            "tfc:entity/sabertooth/hurt1",
+            "tfc:entity/sabertooth/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.sabertooth.hurt"
+    },
+    "entity.musk_ox.step": {
+        "sounds": [{
+            "name": "minecraft:entity.sheep.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.hyena.ambient": {
+        "sounds": [
+            {
+                "name": "tfc:entity/hyena/say1",
+                "weight": 5
+            },
+            {
+                "name": "tfc:entity/hyena/say2",
+                "weight": 5
+            },
+            {
+                "name": "tfc:entity/hyena/say3",
+                "weight": 5
+            },
+            {
+                "name": "tfc:entity/hyena/long_laugh",
+                "weight": 2
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.hyena.ambient"
+    },
+    "entity.dog.sleep": {
+        "sounds": [{
+            "volume": 0.6,
+            "name": "tfc:entity/wolf/wolf_snore_1"
+        }],
+        "subtitle": "subtitles.entity.tfc.dog.sleep"
+    },
+    "entity.moose.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.barrel.close": {
+        "sounds": [{
+            "name": "minecraft:block.stone.place",
+            "pitch": 0.65,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.barrel.closed"
+    },
+    "entity.sabertooth.sleep": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.sleep",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.sabertooth.sleep"
+    },
+    "entity.peafowl.step": {
+        "sounds": [{
+            "name": "minecraft:entity.chicken.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.musk_ox.death": {
+        "sounds": ["tfc:entity/musk_ox/death1"],
+        "subtitle": "subtitles.entity.tfc.musk_ox.death"
+    },
+    "block.charcoal.fall": {
+        "sounds": [
+            {
+                "name": "tfc:block/charcoal/dig1",
+                "pitch": 0.9
+            },
+            "tfc:block/charcoal/dig1",
+            {
+                "name": "tfc:block/charcoal/dig1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.entity.generic.big_fall"
+    },
+    "block.charcoal.break": {
+        "sounds": [
+            {
+                "name": "tfc:block/charcoal/dig1",
+                "pitch": 0.9
+            },
+            "tfc:block/charcoal/dig1",
+            {
+                "name": "tfc:block/charcoal/dig1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.break"
+    },
+    "block.crop.stick_add": {
+        "sounds": ["minecraft:block/scaffold/place1"],
+        "subtitle": "subtitles.block.tfc.crop.stick_add"
+    },
+    "entity.bear.cub.ambient": {
+        "sounds": ["tfc:entity/bear/cub/say1"],
+        "subtitle": "subtitles.entity.tfc.bear.ambient"
+    },
+    "entity.yak.hurt": {
+        "sounds": [
+            "tfc:entity/yak/hurt1",
+            "tfc:entity/yak/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.yak.hurt"
+    },
+    "entity.bluegill.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.bluegill.ambient"
+    },
+    "block.quern.drag": {
+        "sounds": [
+            "tfc:block/quern/drag1",
+            "tfc:block/quern/drag2"
+        ],
+        "subtitle": "subtitles.block.tfc.quern.drag"
+    },
+    "entity.crocodile.death": {
+        "sounds": ["tfc:entity/crocodile/hiss1"],
+        "subtitle": "subtitles.entity.tfc.crocodile.death"
+    },
+    "block.wattle.dyed": {
+        "sounds": [{
+            "name": "minecraft:block.honey_block.place",
+            "pitch": 0.7,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.wattle.dyed"
+    },
+    "block.thin.step": {
+        "sounds": [
+            "tfc:block/thin/step1",
+            "tfc:block/thin/step2",
+            "tfc:block/thin/step3"
+        ],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.alpaca.step": {
+        "sounds": [{
+            "name": "minecraft:entity.sheep.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.bear.hurt": {
+        "sounds": ["tfc:entity/bear/hurt1"],
+        "subtitle": "subtitles.entity.tfc.bear.hurt"
+    },
+    "entity.cougar.death": {
+        "sounds": ["tfc:entity/cougar/death1"],
+        "subtitle": "subtitles.entity.tfc.cougar.death"
+    },
+    "entity.grouse.step": {
+        "sounds": [{
+            "name": "minecraft:entity.chicken.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "item.cool": {
+        "sounds": ["minecraft:random/fizz"],
+        "subtitle": "subtitles.item.tfc.cool"
+    },
+    "item.armor.equip_red_steel": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_red_steel"
+    },
+    "entity.crappie.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.crappie.ambient"
+    },
+    "block.charcoal.hit": {
+        "sounds": [
+            {
+                "name": "tfc:block/charcoal/step1",
+                "pitch": 0.9
+            },
+            "tfc:block/charcoal/step1",
+            {
+                "name": "tfc:block/charcoal/step1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.hit"
+    },
+    "entity.penguin.hurt": {
+        "sounds": ["tfc:entity/penguin/hurt1"],
+        "subtitle": "subtitles.entity.tfc.penguin.hurt"
+    },
+    "entity.rainbow_trout.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.rainbow_trout.ambient"
+    },
+    "entity.pheasant.death": {
+        "sounds": ["tfc:entity/pheasant/death1"],
+        "subtitle": "subtitles.entity.tfc.pheasant.death"
+    },
+    "entity.dog.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.rainbow_trout.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.rainbow_trout.ambient"
+    },
+    "item.knapping.stone": {
+        "sounds": [
+            {
+                "name": "tfc:item/knapping/stone",
+                "pitch": 0.9
+            },
+            "tfc:item/knapping/stone",
+            {
+                "name": "tfc:item/knapping/stone",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.item.tfc.knapping.rock"
+    },
+    "random.dirt_slide_short": {
+        "sounds": [
+            "tfc:random/dirt_slide_short_1",
+            "tfc:random/dirt_slide_short_2"
+        ],
+        "subtitle": "subtitles.generic.tfc.dirt_slide"
+    },
+    "entity.crappie.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.crappie.ambient"
+    },
+    "entity.pheasant.hurt": {
+        "sounds": ["tfc:entity/pheasant/hurt1"],
+        "subtitle": "subtitles.entity.tfc.pheasant.hurt"
+    },
+    "item.armor.equip_blue_steel": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_blue_steel"
+    },
+    "entity.wildebeest.hurt": {
+        "sounds": ["tfc:entity/deer/hurt1"],
+        "subtitle": "subtitles.entity.tfc.wildebeest.hurt"
+    },
+    "entity.lion.hurt": {
+        "sounds": [
+            "tfc:entity/lion/hurt1",
+            "tfc:entity/lion/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.lion.hurt"
+    },
+    "entity.boar.step": {
+        "sounds": [{
+            "name": "minecraft:entity.pig.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.quail.death": {
+        "sounds": ["tfc:entity/quail/death1"],
+        "subtitle": "subtitles.entity.tfc.quail.death"
+    },
+    "item.knapping.clay": {
+        "sounds": [
+            {
+                "name": "tfc:item/knapping/clay",
+                "pitch": 0.9
+            },
+            "tfc:item/knapping/clay",
+            {
+                "name": "tfc:item/knapping/clay",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.item.tfc.knapping.clay"
+    },
+    "entity.rat.death": {
+        "sounds": ["minecraft:mob/silverfish/kill"],
+        "subtitle": "subtitles.entity.tfc.rat.death"
+    },
+    "entity.turkey.hurt": {
+        "sounds": [
+            "tfc:entity/turkey/hurt",
+            "tfc:entity/turkey/hurt1",
+            "tfc:entity/turkey/hurt2",
+            "tfc:entity/turkey/gobble"
+        ],
+        "subtitle": "subtitles.entity.tfc.turkey.hurt"
+    },
+    "entity.rat.hurt": {
+        "sounds": [
+            "minecraft:mob/silverfish/hit1",
+            "minecraft:mob/silverfish/hit2",
+            "minecraft:mob/silverfish/hit3"
+        ],
+        "subtitle": "subtitles.entity.tfc.rat.hurt"
+    },
+    "entity.lake_trout.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.lake_trout.ambient"
+    },
+    "entity.quail.ambient": {
+        "sounds": [
+            "tfc:entity/quail/say1",
+            "tfc:entity/quail/say2",
+            "tfc:entity/quail/say3",
+            "tfc:entity/quail/say4",
+            "tfc:entity/quail/say5"
+        ],
+        "subtitle": "subtitles.entity.tfc.quail.ambient"
+    },
+    "entity.rainbow_trout.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.rainbow_trout.ambient"
+    },
+    "entity.grouse.death": {
+        "sounds": ["tfc:entity/grouse/death1"],
+        "subtitle": "subtitles.entity.tfc.grouse.death"
+    },
+    "entity.duck.death": {
+        "sounds": [
+            "tfc:entity/duck/death1",
+            "tfc:entity/duck/death2"
+        ],
+        "subtitle": "subtitles.entity.tfc.duck.death"
+    },
+    "entity.bear.step": {
+        "sounds": [{
+            "name": "minecraft:entity.polar_bear.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.crocodile.hurt": {
+        "sounds": [
+            "tfc:entity/crocodile/hiss1",
+            "tfc:entity/crocodile/hiss2"
+        ],
+        "subtitle": "subtitles.entity.tfc.crocodile.hurt"
+    },
+    "item.armor.equip_black_bronze": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_black_bronze"
+    },
+    "entity.caribou.death": {
+        "sounds": [{
+            "name": "tfc:entity.deer.death",
+            "pitch": 1.2,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.caribou.death"
+    },
+    "entity.manatee.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.manatee.ambient"
+    },
+    "entity.gazelle.death": {
+        "sounds": ["tfc:entity/gazelle/death1"],
+        "subtitle": "subtitles.entity.tfc.gazelle.death"
+    },
+    "entity.largemouth_bass.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.largemouth_bass.ambient"
+    },
+    "item.armor.equip_black_steel": {
+        "sounds": [
+            "minecraft:item/armor/equip_iron1",
+            "minecraft:item/armor/equip_iron2",
+            "minecraft:item/armor/equip_iron3",
+            "minecraft:item/armor/equip_iron4",
+            "minecraft:item/armor/equip_iron5",
+            "minecraft:item/armor/equip_iron6"
+        ],
+        "subtitle": "subtitles.item.armor.equip_black_steel"
+    },
+    "block.thatch.place": {
+        "sounds": [
+            {
+                "name": "tfc:block/thatch/place1",
+                "pitch": 0.9
+            },
+            "tfc:block/thatch/place1",
+            {
+                "name": "tfc:block/thatch/place1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.place"
+    },
+    "entity.tiger.death": {
+        "sounds": ["tfc:entity/sabertooth/death1"],
+        "subtitle": "subtitles.entity.tfc.tiger.death"
+    },
+    "entity.penguin.step": {
+        "sounds": [{
+            "name": "minecraft:entity.chicken.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.wildebeest.death": {
+        "sounds": ["tfc:entity/deer/death1"],
+        "subtitle": "subtitles.entity.tfc.moose.death"
+    },
+    "entity.yak.death": {
+        "sounds": ["tfc:entity/yak/death1"],
+        "subtitle": "subtitles.entity.tfc.yak.death"
+    },
+    "entity.crappie.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.crappie.ambient"
+    },
+    "block.thatch.fall": {
+        "sounds": ["tfc:block/thatch/fall1"],
+        "subtitle": "subtitles.entity.generic.big_fall"
+    },
+    "block.peat.hit": {
+        "sounds": [
+            {
+                "name": "tfc:block/peat/hit1",
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:block/peat/hit2",
+                "pitch": 1.1
+            },
+            "tfc:block/peat/hit2"
+        ],
+        "subtitle": "subtitles.block.generic.hit"
+    },
+    "entity.tfc_wolf.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.gazelle.ambient": {
+        "sounds": [
+            {"name": "tfc:entity/gazelle/say1"},
+            {"name": "tfc:entity/gazelle/say2"},
+            {"name": "tfc:entity/gazelle/say3"},
+            {"name": "tfc:entity/gazelle/say4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.gazelle.ambient"
+    },
+    "entity.duck.ambient": {
+        "sounds": [
+            "tfc:entity/duck/say1",
+            "tfc:entity/duck/say2",
+            "tfc:entity/duck/say3"
+        ],
+        "subtitle": "subtitles.entity.tfc.duck.ambient"
+    },
+    "entity.gazelle.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.deer.hurt": {
+        "sounds": ["tfc:entity/deer/hurt1"],
+        "subtitle": "subtitles.entity.tfc.deer.hurt"
+    },
+    "entity.bongo.death": {
+        "sounds": [{
+            "name": "tfc:entity.deer.death",
+            "pitch": 1.2,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.bongo.death"
+    },
+    "entity.lake_trout.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.lake_trout.ambient"
+    },
+    "entity.crocodile.ambient": {
+        "sounds": [
+            {
+                "volume": 0.8,
+                "name": "tfc:entity/crocodile/growl1"
+            },
+            {
+                "volume": 0.8,
+                "name": "tfc:entity/crocodile/growl2"
+            },
+            {
+                "volume": 0.8,
+                "name": "tfc:entity/crocodile/growl3"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.crocodile.ambient"
+    },
+    "entity.tiger.hurt": {
+        "sounds": [
+            "tfc:entity/sabertooth/hurt1",
+            "tfc:entity/sabertooth/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.tiger.hurt"
+    },
+    "entity.yak.ambient": {
+        "sounds": [
+            "tfc:entity/yak/low1",
+            "tfc:entity/yak/low2",
+            "tfc:entity/yak/low3",
+            "tfc:entity/yak/vocals1",
+            "tfc:entity/yak/vocals2"
+        ],
+        "subtitle": "subtitles.entity.tfc.yak.ambient"
+    },
+    "entity.duck.step": {
+        "sounds": [{
+            "name": "minecraft:entity.chicken.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.tfc_wolf.death": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.death",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.tfc_wolf.death"
+    },
+    "entity.lion.sleep": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.sleep",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.lion.sleep"
+    },
+    "item.knapping.leather": {
+        "sounds": [
+            {
+                "name": "tfc:item/knapping/leather",
+                "pitch": 0.9
+            },
+            "tfc:item/knapping/leather",
+            {
+                "name": "tfc:item/knapping/leather",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.item.tfc.knapping.leather"
+    },
+    "entity.smallmouth_bass.hurt": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.smallmouth_bass.ambient"
+    },
+    "entity.hyena.sleep": {
+        "sounds": [{
+            "volume": 0.6,
+            "name": "tfc:entity/wolf/wolf_snore_1",
+            "pitch": 1.2
+        }],
+        "subtitle": "subtitles.entity.tfc.hyena.sleep"
+    },
+    "entity.alpaca.ambient": {
+        "sounds": [
+            {
+                "name": "tfc:entity/alpaca/say1",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/alpaca/say2",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/alpaca/say3",
+                "weight": 10
+            },
+            "tfc:entity/alpaca/cry1",
+            "tfc:entity/alpaca/cry2",
+            "tfc:entity/alpaca/cry3"
+        ],
+        "subtitle": "subtitles.entity.tfc.alpaca.ambient"
+    },
+    "entity.crocodile.attack": {
+        "sounds": [
+            "tfc:entity/crocodile/attack1",
+            "tfc:entity/crocodile/attack2"
+        ],
+        "subtitle": "subtitles.entity.tfc.crocodile.attack"
+    },
+    "entity.cougar.ambient": {
+        "sounds": [
+            {
+                "volume": 0.5,
+                "name": "tfc:entity/cougar/say1",
+                "weight": 10
+            },
+            {
+                "volume": 0.5,
+                "name": "tfc:entity/cougar/say2",
+                "weight": 10
+            },
+            {
+                "volume": 0.5,
+                "name": "tfc:entity/cougar/say3",
+                "weight": 10
+            },
+            {
+                "volume": 0.5,
+                "name": "tfc:entity/cougar/cry1"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.cougar.ambient"
+    },
+    "entity.tfc_wolf.ambient": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.ambient",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.tfc_wolf.ambient"
+    },
+    "entity.jellyfish.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.jellyfish.ambient"
+    },
+    "entity.musk_ox.ambient": {
+        "sounds": [
+            {
+                "volume": 0.8,
+                "name": "tfc:entity/musk_ox/say1",
+                "weight": 5
+            },
+            {
+                "volume": 0.8,
+                "name": "tfc:entity/musk_ox/say2",
+                "weight": 5
+            },
+            {
+                "volume": 0.8,
+                "name": "tfc:entity/musk_ox/say3",
+                "weight": 5
+            },
+            "tfc:entity/musk_ox/call1"
+        ],
+        "subtitle": "subtitles.entity.tfc.musk_ox.ambient"
+    },
+    "entity.jellyfish.ambient": {
+        "sounds": [{
+            "volume": 0.9,
+            "name": "minecraft:mob/dolphin/splash1"
+        }],
+        "subtitle": "subtitles.entity.tfc.jellyfish.ambient"
+    },
+    "entity.bluegill.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.bluegill.ambient"
+    },
+    "block.thin.break": {
+        "sounds": [
+            "tfc:block/thin/break1",
+            "tfc:block/thin/break2"
+        ],
+        "subtitle": "subtitles.block.generic.break"
+    },
+    "entity.cougar.attack": {
+        "sounds": ["tfc:entity/cougar/attack1"],
+        "subtitle": "subtitles.entity.tfc.cougar.attack"
+    },
+    "entity.sabertooth.step": {
+        "sounds": [{
+            "name": "minecraft:entity.polar_bear.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.charcoal.step": {
+        "sounds": [
+            {
+                "name": "tfc:block/charcoal/step1",
+                "pitch": 0.9
+            },
+            "tfc:block/charcoal/step1",
+            {
+                "name": "tfc:block/charcoal/step1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.peat.step": {
+        "sounds": [
+            {
+                "name": "tfc:block/peat/step1",
+                "pitch": 0.9
+            },
+            "tfc:block/peat/step3",
+            {
+                "name": "tfc:block/peat/step2",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.crappie.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.crappie.ambient"
+    },
+    "block.barrel.drip": {
+        "sounds": [
+            "minecraft:block/pointed_dripstone/drip_water_cauldron1",
+            "minecraft:block/pointed_dripstone/drip_water_cauldron2",
+            "minecraft:block/pointed_dripstone/drip_water_cauldron3",
+            "minecraft:block/pointed_dripstone/drip_water_cauldron4",
+            "minecraft:block/pointed_dripstone/drip_water_cauldron5",
+            "minecraft:block/pointed_dripstone/drip_water_cauldron6",
+            "minecraft:block/pointed_dripstone/drip_water_cauldron7",
+            "minecraft:block/pointed_dripstone/drip_water_cauldron8"
+        ],
+        "subtitle": "subtitles.block.tfc.barrel.drip"
+    },
+    "item.fertilizer.use": {
+        "sounds": ["minecraft:dig/sand1"],
+        "subtitle": "subtitles.item.tfc.fertilizer.use"
+    },
+    "entity.wildebeest.ambient": {
+        "sounds": [
+            {
+                "name": "tfc:entity/deer/say1",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say2",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say3",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say5",
+                "weight": 4,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say6",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say7",
+                "weight": 10,
+                "pitch": 0.9
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.wildebeest.ambient"
+    },
+    "block.anvil.hit": {
+        "sounds": [
+            "tfc:block/anvil/hit1",
+            "tfc:block/anvil/hit2",
+            "tfc:block/anvil/hit3",
+            "tfc:block/anvil/hit4"
+        ],
+        "subtitle": "subtitles.block.tfc.anvil.hit"
+    },
+    "block.barrel.open": {
+        "sounds": [{
+            "name": "minecraft:block.stone.break",
+            "pitch": 0.9,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.barrel.opened"
+    },
+    "entity.rooster.cry": {
+        "sounds": ["tfc:entity/rooster1"],
+        "subtitle": "subtitles.entity.tfc.rooster.cry"
+    },
+    "block.thatch.step": {
+        "sounds": [
+            "tfc:block/thatch/step1",
+            "tfc:block/thatch/step2",
+            "tfc:block/thatch/step3"
+        ],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.crocodile.step": {
+        "sounds": [{
+            "name": "minecraft:entity.polar_bear.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.jellyfish.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.jellyfish.ambient"
+    },
+    "entity.yak.step": {
+        "sounds": [{
+            "name": "minecraft:entity.sheep.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.dog.ambient": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.ambient",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.dog.ambient"
+    },
+    "item.javelin.hit": {
+        "sounds": [
+            "minecraft:item/trident/pierce1",
+            "minecraft:item/trident/pierce2",
+            "minecraft:item/trident/pierce3"
+        ],
+        "subtitle": "subtitles.item.tfc.javelin.hit"
+    },
+    "random.rock_slide_short": {
+        "sounds": [
+            "tfc:random/rock_slide_short_1",
+            "tfc:random/rock_slide_short_2"
+        ],
+        "subtitle": "subtitles.generic.tfc.rock_slide_short"
+    },
+    "entity.grouse.hurt": {
+        "sounds": ["tfc:entity/grouse/hurt1"],
+        "subtitle": "subtitles.entity.tfc.grouse.hurt"
+    },
+    "entity.alpaca.death": {
+        "sounds": ["tfc:entity/alpaca/death1"],
+        "subtitle": "subtitles.entity.tfc.alpaca.death"
+    },
+    "entity.caribou.hurt": {
+        "sounds": [{
+            "name": "tfc:entity.deer.hurt",
+            "pitch": 0.8,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.caribou.hurt"
+    },
+    "block.peat.place": {
+        "sounds": [
+            "tfc:block/peat/place1",
+            "tfc:block/peat/place2",
+            "tfc:block/peat/place3"
+        ],
+        "subtitle": "subtitles.block.generic.place"
+    },
+    "entity.rat.ambient": {
+        "sounds": [
+            "minecraft:mob/silverfish/say1",
+            "minecraft:mob/silverfish/say2",
+            "minecraft:mob/silverfish/say3",
+            "minecraft:mob/silverfish/say4"
+        ],
+        "subtitle": "subtitles.entity.tfc.rat.ambient"
+    },
+    "entity.quail.step": {
+        "sounds": [{
+            "name": "minecraft:entity.chicken.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.large_vessel.open": {
+        "sounds": [{
+            "name": "minecraft:block.stone.break",
+            "pitch": 0.9,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.vessel.opened"
+    },
+    "block.thin.fall": {
+        "sounds": ["tfc:block/thin/fall1"],
+        "subtitle": "subtitles.entity.generic.big_fall"
+    },
+    "entity.wildebeest.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.thin.place": {
+        "sounds": [
+            {
+                "name": "tfc:block/thin/place1",
+                "pitch": 0.9
+            },
+            "tfc:block/thin/place1",
+            {
+                "name": "tfc:block/thin/place1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.place"
+    },
+    "entity.pheasant.step": {
+        "sounds": [{
+            "name": "minecraft:entity.chicken.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "entity.cougar.hurt": {
+        "sounds": [
+            "tfc:entity/cougar/hurt1",
+            "tfc:entity/cougar/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.cougar.hurt"
+    },
+    "entity.lake_trout.death": {
+        "sounds": [
+            {"name": "minecraft:entity/fish/hurt1"},
+            {"name": "minecraft:entity/fish/hurt2"},
+            {"name": "minecraft:entity/fish/hurt3"},
+            {"name": "minecraft:entity/fish/hurt4"}
+        ],
+        "subtitle": "subtitles.entity.tfc.lake_trout.ambient"
+    },
+    "entity.musk_ox.hurt": {
+        "sounds": [
+            "tfc:entity/musk_ox/hurt1",
+            "tfc:entity/musk_ox/hurt2"
+        ],
+        "subtitle": "subtitles.entity.tfc.musk_ox.hurt"
+    },
+    "entity.bongo.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "random.rock_slide_long": {
+        "sounds": [
+            "tfc:random/rock_slide_long_1",
+            "tfc:random/rock_slide_long_2",
+            "tfc:random/rock_slide_long_3",
+            "tfc:random/rock_slide_long_4"
+        ],
+        "subtitle": "subtitles.generic.tfc.rock_slide_long"
+    },
+    "block.scribing_table.use": {
+        "sounds": [{
+            "name": "minecraft:ui.cartography_table.take_result",
+            "pitch": 0.8,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.scribing_table.rename_item"
+    },
+    "entity.dog.attack": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.bite",
+            "pitch": 0.7,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.dog.attack"
+    },
+    "entity.hyena.hurt": {
+        "sounds": ["tfc:entity/hyena/hurt1"],
+        "subtitle": "subtitles.entity.tfc.hyena.hurt"
+    },
+    "entity.sabertooth.attack": {
+        "sounds": [
+            "tfc:entity/sabertooth/attack1",
+            "tfc:entity/sabertooth/attack2"
+        ],
+        "subtitle": "subtitles.entity.tfc.sabertooth.attack"
+    },
+    "entity.bear.ambient": {
+        "sounds": [
+            {
+                "name": "tfc:entity/bear/say1",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/bear/say2",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/bear/say3",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/bear/say4",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/bear/say5",
+                "weight": 10
+            },
+            {
+                "name": "tfc:entity/bear/say6",
+                "weight": 10
+            },
+            "tfc:entity/bear/cry1",
+            "tfc:entity/bear/cry2",
+            "tfc:entity/bear/cry3",
+            "tfc:entity/bear/cry4"
+        ],
+        "subtitle": "subtitles.entity.tfc.bear.ambient"
+    },
+    "entity.crocodile.sleep": {
+        "sounds": [{
+            "volume": 0.7,
+            "name": "minecraft:entity.fox.sleep",
+            "pitch": 0.3,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.crocodile.sleep"
+    },
+    "block.large_vessel.close": {
+        "sounds": [{
+            "name": "minecraft:block.stone.place",
+            "pitch": 0.65,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.vessel.closed"
+    },
+    "entity.tiger.ambient": {
+        "sounds": [
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/sabertooth/say1"
+            },
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/sabertooth/say2"
+            },
+            {
+                "volume": 0.6,
+                "name": "tfc:entity/sabertooth/say3"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.tiger.ambient"
+    },
+    "entity.hyena.attack": {
+        "sounds": ["tfc:entity/hyena/attack1"],
+        "subtitle": "subtitles.entity.tfc.hyena.attack"
+    },
+    "entity.bluegill.flop": {
+        "sounds": [
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop1"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop2"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop3"
+            },
+            {
+                "volume": 0.3,
+                "name": "minecraft:entity/fish/flop4"
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.bluegill.ambient"
+    },
+    "block.wattle.woven": {
+        "sounds": [{
+            "name": "minecraft:block.scaffolding.hit",
+            "pitch": 0.6,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.tfc.wattle.woven"
+    },
+    "entity.sabertooth.death": {
+        "sounds": ["tfc:entity/sabertooth/death1"],
+        "subtitle": "subtitles.entity.tfc.sabertooth.death"
+    },
+    "block.charcoal.place": {
+        "sounds": [
+            {
+                "name": "tfc:block/charcoal/dig1",
+                "pitch": 0.9
+            },
+            "tfc:block/charcoal/dig1",
+            {
+                "name": "tfc:block/charcoal/dig1",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.place"
+    },
+    "entity.turkey.death": {
+        "sounds": ["tfc:entity/turkey/death"],
+        "subtitle": "subtitles.entity.tfc.turkey.death"
+    },
+    "entity.tiger.sleep": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.sleep",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.tiger.sleep"
+    },
+    "entity.boar.death": {
+        "sounds": [{
+            "name": "minecraft:entity.pig.death",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.boar.death"
+    },
+    "entity.gazelle.hurt": {
+        "sounds": ["tfc:entity/deer/hurt1"],
+        "subtitle": "subtitles.entity.tfc.gazelle.hurt"
+    },
+    "block.thatch.hit": {
+        "sounds": [
+            {
+                "name": "tfc:block/thatch/hit1",
+                "pitch": 0.9
+            },
+            "tfc:block/thatch/hit1",
+            {"name": "tfc:block/thatch/hit2"},
+            {
+                "name": "tfc:block/thatch/hit2",
+                "pitch": 1.1
+            }
+        ],
+        "subtitle": "subtitles.block.generic.hit"
+    },
+    "entity.dog.death": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.death",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.dog.death"
+    },
+    "entity.moose.hurt": {
+        "sounds": ["tfc:entity/deer/hurt1"],
+        "subtitle": "subtitles.entity.tfc.moose.hurt"
+    }
+}

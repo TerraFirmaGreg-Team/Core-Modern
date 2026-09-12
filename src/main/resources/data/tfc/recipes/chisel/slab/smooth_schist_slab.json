@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/smooth/schist_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/smooth/schist_slab"},
+    "ingredient": "tfc:rock/smooth/schist",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

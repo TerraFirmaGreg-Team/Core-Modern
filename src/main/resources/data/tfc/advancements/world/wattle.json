@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/root",
+    "requirements": [["wattle"]],
+    "criteria": {"wattle": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:wattle"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:wattle"},
+        "description": {"translate": "tfc.advancements.world.wattle.description"},
+        "title": {"translate": "tfc.advancements.world.wattle.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

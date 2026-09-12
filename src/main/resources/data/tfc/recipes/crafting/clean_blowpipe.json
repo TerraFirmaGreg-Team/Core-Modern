@@ -1,0 +1,6 @@
+{
+    "result": {"item": "tfc:blowpipe"},
+    "ingredients": [{"item": "tfc:blowpipe_with_glass"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

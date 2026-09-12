@@ -12,7 +12,6 @@ import com.therighthon.rnr.common.recipe.BlockModRecipe;
 
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -45,7 +44,7 @@ import de.mennomax.astikorcarts.config.AstikorCartsConfig;
 import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 import de.mennomax.astikorcarts.util.CartItemStackHandler;
 
-import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 /**
@@ -78,10 +77,10 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     // Array of block tags that can be converted into base course by the plow.
     // Added `#tfg:base_course_sources` to have an easy way to add more.
     private static final List<TagKey<Block>> BASE_COURSE_SOURCE_TAGS = List.of(
-            TagKey.create(Registries.BLOCK, TFGCore.id("base_course_sources")),
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("minecraft", "dirt")),
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "mud")),
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "grass")));
+            TFGTags.Blocks.BASE_COURSE_SOURCES,
+            BlockTags.DIRT,
+            TFCTags.Blocks.MUD,
+            TFCTags.Blocks.GRASS);
 
     public ItemStackHandler inventory;
 

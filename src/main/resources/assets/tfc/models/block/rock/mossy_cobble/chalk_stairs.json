@@ -1,0 +1,9 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_cobble/chalk",
+        "top": "tfc:block/rock/mossy_cobble/chalk",
+        "bottom": "tfc:block/rock/mossy_cobble/chalk"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

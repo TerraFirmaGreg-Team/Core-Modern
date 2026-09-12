@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfc:firestarter"},
+    "pattern": [
+        " X",
+        "X "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:rods/wooden"}}
+}

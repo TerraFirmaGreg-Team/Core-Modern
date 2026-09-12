@@ -1,0 +1,7 @@
+{
+    "result_item": {"item": "tfc:ceramic/jug"},
+    "ingredient": {"item": "tfc:ceramic/unfired_jug"},
+    "temperature": 1399,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

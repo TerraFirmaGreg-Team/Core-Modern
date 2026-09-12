@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/template_cauldron_full",
+    "textures": {
+        "side": "block/cauldron_side",
+        "top": "block/cauldron_top",
+        "bottom": "block/cauldron_bottom",
+        "particle": "block/cauldron_side",
+        "inside": "block/cauldron_inner",
+        "content": "block/water_still"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

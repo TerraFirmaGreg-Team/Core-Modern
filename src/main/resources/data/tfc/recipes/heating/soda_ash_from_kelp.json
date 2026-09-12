@@ -1,0 +1,13 @@
+{
+    "result_item": {
+        "item": "tfc:powder/soda_ash",
+        "count": 3
+    },
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/dried_kelp"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 500,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

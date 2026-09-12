@@ -1,0 +1,24 @@
+{
+    "result": {
+        "item": "tfc:mud/silt",
+        "count": 7
+    },
+    "ingredients": [
+        {
+            "fluid_ingredient": {
+                "amount": 100,
+                "ingredient": "minecraft:water"
+            },
+            "type": "tfc:fluid_item"
+        },
+        {"item": "tfc:dirt/silt"},
+        {"item": "tfc:dirt/silt"},
+        {"item": "tfc:dirt/silt"},
+        {"item": "tfc:dirt/silt"},
+        {"item": "tfc:dirt/silt"},
+        {"item": "tfc:dirt/silt"},
+        {"item": "tfc:dirt/silt"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

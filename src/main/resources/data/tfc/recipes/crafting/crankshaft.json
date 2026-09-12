@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc:crankshaft"},
+    "pattern": [
+        "AM",
+        " S"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"tag": "tfc:axles"},
+        "S": {"tag": "forge:sheets/brass"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

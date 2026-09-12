@@ -1,0 +1,8 @@
+{
+    "saturation": 2,
+    "ingredient": {"item": "tfc:food/cooked_frog_legs"},
+    "decay_modifier": 1.5,
+    "protein": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/brass_mechanisms",
+    "requirements": [["gear_boxes"]],
+    "criteria": {"gear_boxes": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:gear_boxes"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:wood/gear_box/pine"},
+        "description": {"translate": "tfc.advancements.story.gear_box.description"},
+        "title": {"translate": "tfc.advancements.story.gear_box.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

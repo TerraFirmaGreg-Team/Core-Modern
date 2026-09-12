@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/bladed_axle",
+    "textures": {"wood": "tfc:block/wood/sheet/ash"},
+    "__comment__": "This file was automatically created by mcresources"
+}

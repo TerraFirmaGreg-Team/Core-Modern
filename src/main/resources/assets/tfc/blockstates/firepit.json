@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "lit=true,axis=z": {
+            "y": 90,
+            "model": "tfc:block/firepit_lit"
+        },
+        "lit=true,axis=x": {"model": "tfc:block/firepit_lit"},
+        "lit=false,axis=z": {
+            "y": 90,
+            "model": "tfc:block/firepit_unlit"
+        },
+        "lit=false,axis=x": {"model": "tfc:block/firepit_unlit"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

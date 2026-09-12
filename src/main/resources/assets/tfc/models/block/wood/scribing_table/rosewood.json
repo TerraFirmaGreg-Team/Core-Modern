@@ -1,0 +1,11 @@
+{
+    "parent": "tfc:block/scribing_table",
+    "textures": {
+        "side": "tfc:block/wood/planks/rosewood",
+        "top": "tfc:block/wood/scribing_table/rosewood",
+        "particle": "tfc:block/wood/planks/rosewood",
+        "leg": "tfc:block/wood/log/rosewood",
+        "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

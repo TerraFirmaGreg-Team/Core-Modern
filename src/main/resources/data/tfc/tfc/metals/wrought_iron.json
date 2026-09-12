@@ -1,0 +1,10 @@
+{
+    "melt_temperature": 1535,
+    "sheets": {"tag": "forge:sheets/wrought_iron"},
+    "double_ingots": {"tag": "forge:double_ingots/wrought_iron"},
+    "tier": 3,
+    "ingots": {"tag": "forge:ingots/wrought_iron"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/wrought_iron",
+    "__comment__": "This file was automatically created by mcresources"
+}

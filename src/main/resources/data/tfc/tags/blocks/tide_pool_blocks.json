@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfc:groundcover/clam",
+        "tfc:groundcover/mollusk",
+        "tfc:groundcover/mussel",
+        "tfc:groundcover/sea_urchin"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

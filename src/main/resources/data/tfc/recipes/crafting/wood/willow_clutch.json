@@ -1,0 +1,20 @@
+{
+    "result": {
+        "item": "tfc:wood/clutch/willow",
+        "count": 2
+    },
+    "pattern": [
+        "LSL",
+        "MAR",
+        "LSL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/willow"},
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"item": "tfc:wood/stripped_log/willow"},
+        "L": {"item": "tfc:wood/lumber/willow"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

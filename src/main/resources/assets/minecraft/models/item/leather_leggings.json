@@ -1,0 +1,10 @@
+{
+    "parent": "forge:item/default",
+    "textures": {
+        "armor": "minecraft:item/leather_leggings",
+        "trim": "tfc:item/greaves_trim",
+        "overlay": "minecraft:item/leather_leggings_overlay"
+    },
+    "loader": "tfc:trim",
+    "__comment__": "This file was automatically created by mcresources"
+}

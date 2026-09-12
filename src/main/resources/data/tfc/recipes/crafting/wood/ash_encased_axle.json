@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "tfc:wood/encased_axle/ash",
+        "count": 4
+    },
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/ash"},
+        "W": {"item": "tfc:wood/lumber/ash"},
+        "L": {"item": "tfc:wood/stripped_log/ash"}
+    }
+}

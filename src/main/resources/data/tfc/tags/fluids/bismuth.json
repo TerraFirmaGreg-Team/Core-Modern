@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfc:metal/bismuth",
+        "tfc:metal/flowing_bismuth"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

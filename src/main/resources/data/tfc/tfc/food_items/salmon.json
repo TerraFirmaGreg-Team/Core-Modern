@@ -1,0 +1,8 @@
+{
+    "saturation": 0,
+    "ingredient": {"item": "tfc:food/salmon"},
+    "decay_modifier": 3,
+    "protein": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

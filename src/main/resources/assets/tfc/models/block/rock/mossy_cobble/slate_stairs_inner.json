@@ -1,0 +1,9 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_cobble/slate",
+        "top": "tfc:block/rock/mossy_cobble/slate",
+        "bottom": "tfc:block/rock/mossy_cobble/slate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

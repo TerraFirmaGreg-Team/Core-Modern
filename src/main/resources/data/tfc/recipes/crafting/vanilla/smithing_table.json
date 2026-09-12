@@ -1,0 +1,14 @@
+{
+    "result": {"item": "minecraft:smithing_table"},
+    "pattern": [
+        "XX",
+        "YZ"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "minecraft:black_dye"},
+        "Y": {"tag": "tfc:workbenches"},
+        "Z": {"tag": "forge:sheets/wrought_iron"}
+    }
+}

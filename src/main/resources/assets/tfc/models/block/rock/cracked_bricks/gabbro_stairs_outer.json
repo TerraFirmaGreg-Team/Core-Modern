@@ -1,0 +1,9 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/rock/cracked_bricks/gabbro",
+        "top": "tfc:block/rock/cracked_bricks/gabbro",
+        "bottom": "tfc:block/rock/cracked_bricks/gabbro"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

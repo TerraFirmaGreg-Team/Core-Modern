@@ -1,0 +1,9 @@
+{
+    "burn_rate": 8000,
+    "fluid": "tfc:olive_oil",
+    "valid_lamps": {
+        "tag": "tfc:lamps",
+        "type": "tfc:tag"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

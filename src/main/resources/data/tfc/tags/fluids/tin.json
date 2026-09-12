@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfc:metal/tin",
+        "tfc:metal/flowing_tin"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

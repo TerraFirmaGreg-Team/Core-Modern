@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:wood/gear_box/hickory",
+        "count": 2
+    },
+    "pattern": [
+        " L ",
+        "LML",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "L": {"item": "tfc:wood/lumber/hickory"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

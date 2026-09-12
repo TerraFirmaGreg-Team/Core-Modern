@@ -1,0 +1,15 @@
+{
+    "result": {"item": "tfc:wood/water_wheel/douglas_fir"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/douglas_fir"},
+        "A": {"item": "tfc:wood/axle/douglas_fir"},
+        "L": {"item": "tfc:wood/lumber/douglas_fir"}
+    }
+}

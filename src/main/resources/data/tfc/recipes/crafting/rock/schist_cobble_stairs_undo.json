@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:rock/loose/schist",
+        "count": 3
+    },
+    "ingredients": [{"item": "tfc:rock/cobble/schist_stairs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

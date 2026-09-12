@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/brass"
+    },
+    "ingredient": {"item": "tfc:metal/rod/brass"},
+    "temperature": 930,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

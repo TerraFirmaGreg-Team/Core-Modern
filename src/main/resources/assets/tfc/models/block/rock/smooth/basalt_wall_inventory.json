@@ -1,0 +1,5 @@
+{
+    "parent": "block/wall_inventory",
+    "textures": {"wall": "tfc:block/rock/smooth/basalt"},
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:stone/hoe_head/metamorphic"},
+    "ingredient": {"tag": "tfc:metamorphic_rock"},
+    "outside_slot_required": false,
+    "pattern": [
+        "XXXXX",
+        "   XX"
+    ],
+    "knapping_type": "tfc:rock",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
+}

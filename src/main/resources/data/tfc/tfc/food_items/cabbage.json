@@ -1,0 +1,8 @@
+{
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/cabbage"},
+    "decay_modifier": 1.2,
+    "__comment__": "This file was automatically created by mcresources",
+    "vegetables": 1,
+    "hunger": 4
+}

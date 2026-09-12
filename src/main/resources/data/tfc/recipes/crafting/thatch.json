@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfc:thatch"},
+    "pattern": [
+        "XX",
+        "XX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:straw"}}
+}

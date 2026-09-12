@@ -1,0 +1,16 @@
+{
+    "recipe": {
+        "result": {
+            "item": "tfc:wood/support/rosewood",
+            "count": 8
+        },
+        "ingredients": [
+            {"tag": "tfc:rosewood_logs"},
+            {"tag": "tfc:rosewood_logs"},
+            {"tag": "tfc:saws"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

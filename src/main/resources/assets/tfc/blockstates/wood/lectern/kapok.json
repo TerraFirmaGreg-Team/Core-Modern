@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/wood/lectern/kapok"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/wood/lectern/kapok"
+        },
+        "facing=north": {"model": "tfc:block/wood/lectern/kapok"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/wood/lectern/kapok"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

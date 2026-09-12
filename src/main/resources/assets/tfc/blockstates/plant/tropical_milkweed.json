@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "stage=3": {"model": "tfc:block/plant/tropical_milkweed_3"},
+        "stage=1": {"model": "tfc:block/plant/tropical_milkweed_1"},
+        "stage=2": {"model": "tfc:block/plant/tropical_milkweed_2"},
+        "stage=0": {"model": "tfc:block/plant/tropical_milkweed_0"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/nugget",
+    "requirements": [["ore/diamond"]],
+    "criteria": {"ore/diamond": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:ore/diamond"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:ore/diamond"},
+        "description": {"translate": "tfc.advancements.world.diamond.description"},
+        "title": {"translate": "tfc.advancements.world.diamond.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

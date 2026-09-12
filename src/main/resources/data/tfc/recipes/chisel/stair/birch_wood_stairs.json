@@ -1,0 +1,7 @@
+{
+    "result": "tfc:wood/planks/birch_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:wood/planks/birch",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

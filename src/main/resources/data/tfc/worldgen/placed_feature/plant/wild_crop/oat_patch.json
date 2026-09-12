@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:plant/wild_crop/oat_patch",
+    "placement": [
+        {
+            "chance": 80,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 40,
+            "max_rainfall": 400,
+            "max_forest": "edge",
+            "type": "tfc:climate",
+            "min_rainfall": 140,
+            "min_temperature": 3
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,36 @@
+{
+    "parent": "tfc:world/root",
+    "requirements": [
+        ["high"],
+        ["low"]
+    ],
+    "criteria": {
+        "high": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"position": {"z": {"min": 20000}}}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        },
+        "low": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"position": {"z": {"max": -20000}}}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        }
+    },
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "minecraft:map"},
+        "description": {"translate": "tfc.advancements.world.globe_trotter.description"},
+        "title": {"translate": "tfc.advancements.world.globe_trotter.title"},
+        "announce_to_chat": true,
+        "frame": "challenge"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,22 @@
+{
+    "parent": "tfc:world/hunter",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {
+        "trigger": "tfc:stab_entity",
+        "conditions": {"entity": {
+            "distance": {"horizontal": {"min": 50}},
+            "type": "tfc:rabbit"
+        }}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:metal/javelin/red_steel"},
+        "description": {"translate": "tfc.advancements.world.greatest_hunter.description"},
+        "title": {"translate": "tfc.advancements.world.greatest_hunter.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,21 @@
+{
+    "recipe": {
+        "result": {
+            "item": "tfc:metal/block/nickel",
+            "count": 8
+        },
+        "pattern": [
+            " SH",
+            "SWS",
+            " S "
+        ],
+        "type": "minecraft:crafting_shaped",
+        "key": {
+            "S": {"tag": "forge:sheets/nickel"},
+            "W": {"tag": "minecraft:planks"},
+            "H": {"tag": "tfc:hammers"}
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shaped_crafting"
+}

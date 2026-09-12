@@ -1,0 +1,10 @@
+{
+    "values": [
+        "minecraft:book",
+        "minecraft:writable_book",
+        "minecraft:written_book",
+        "minecraft:enchanted_book"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

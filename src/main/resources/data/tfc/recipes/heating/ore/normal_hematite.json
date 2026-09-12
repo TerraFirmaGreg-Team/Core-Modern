@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 25,
+        "fluid": "tfc:metal/cast_iron"
+    },
+    "ingredient": {"item": "tfc:ore/normal_hematite"},
+    "temperature": 1535,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

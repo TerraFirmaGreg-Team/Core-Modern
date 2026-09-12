@@ -1,0 +1,8 @@
+{
+    "saturation": 2,
+    "ingredient": {"item": "tfc:food/carrot"},
+    "decay_modifier": 0.7,
+    "__comment__": "This file was automatically created by mcresources",
+    "vegetables": 1,
+    "hunger": 4
+}

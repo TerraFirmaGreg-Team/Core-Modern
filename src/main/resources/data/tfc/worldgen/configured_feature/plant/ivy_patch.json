@@ -1,0 +1,10 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:creeping_plant",
+    "config": {
+        "integrity": 0.7,
+        "block": "tfc:plant/ivy",
+        "radius": 4,
+        "height": 7
+    }
+}

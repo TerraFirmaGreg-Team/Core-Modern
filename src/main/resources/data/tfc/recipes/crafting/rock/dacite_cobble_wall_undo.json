@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:rock/loose/dacite",
+        "count": 4
+    },
+    "ingredients": [{"item": "tfc:rock/cobble/dacite_wall"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

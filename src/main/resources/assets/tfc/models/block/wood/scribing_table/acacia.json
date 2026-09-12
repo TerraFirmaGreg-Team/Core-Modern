@@ -1,0 +1,11 @@
+{
+    "parent": "tfc:block/scribing_table",
+    "textures": {
+        "side": "tfc:block/wood/planks/acacia",
+        "top": "tfc:block/wood/scribing_table/acacia",
+        "particle": "tfc:block/wood/planks/acacia",
+        "leg": "tfc:block/wood/log/acacia",
+        "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/diamond",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/diamond"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

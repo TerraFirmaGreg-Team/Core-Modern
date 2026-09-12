@@ -10,6 +10,7 @@ import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.lang.Lang;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.devices.BellowsBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
@@ -26,7 +27,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -45,6 +45,7 @@ import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.event.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.OreProspectorEvent;
@@ -54,11 +55,7 @@ import su.terrafirmagreg.core.config.TFGConfig;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class TFGItemTooltipHelpers {
-    private static final TagKey<Fluid> TFC_DRINKABLE = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfc", "drinkables"));
     private static final TagKey<Fluid> TFC_AGED_ALCOHOLS = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfcagedalcohol", "aged_alcohols"));
-    private static final TagKey<Fluid> TFG_COOLING_DRINK = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "cooling_drinks"));
-    private static final TagKey<Fluid> TFG_WARMING_DRINK = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "warming_drinks"));
-    private static final TagKey<Item> TFC_FIRED_VESSELS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "fired_vessels"));
 
     @SubscribeEvent
     public static void onTooltip(@NotNull ItemTooltipEvent event) {
@@ -175,21 +172,21 @@ public class TFGItemTooltipHelpers {
                     return;
                 }
 
-                if (fluid.is(TFC_DRINKABLE) && !fluid.is(TFC_AGED_ALCOHOLS)) {
+                if (fluid.is(TFCTags.Fluids.DRINKABLES) && !fluid.is(TFC_AGED_ALCOHOLS)) {
                     Drinkable drink = Drinkable.get(fluid);
                     if (drink == null)
                         return;
 
                     drink.getEffects().forEach(effect -> event.getToolTip().add(1, getTooltip(new MobEffectInstance(effect.type(), effect.duration(), effect.amplifier()))));
-                    if (fluid.is(TFG_COOLING_DRINK))
+                    if (fluid.is(TFGTags.Fluids.CoolingDrinks))
                         event.getToolTip().add(1, Component.translatable("tfg.tooltip.cooling_foods"));
-                    else if (fluid.is(TFG_WARMING_DRINK))
+                    else if (fluid.is(TFGTags.Fluids.WarmingDrinks))
                         event.getToolTip().add(1, Component.translatable("tfg.tooltip.warming_foods"));
                 }
             });
 
             // add overflow warning to vessels if needed
-            if (stack.is(TFC_FIRED_VESSELS)) {
+            if (stack.is(TFCTags.Items.FIRED_VESSELS)) {
                 VesselLike vessel = VesselLike.get(stack);
                 if (vessel != null && vessel.mode() == VesselLike.Mode.INVENTORY) {
                     int totalVolume = 0;

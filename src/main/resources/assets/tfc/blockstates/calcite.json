@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "tip=true": {"model": "tfc:block/calcite_tip"},
+        "tip=false": {"model": "tfc:block/calcite"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

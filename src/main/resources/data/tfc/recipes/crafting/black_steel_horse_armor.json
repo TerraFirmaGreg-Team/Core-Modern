@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc:metal/horse_armor/black_steel"},
+    "pattern": [
+        "YXY",
+        "ZZZ"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "minecraft:leather_horse_armor"},
+        "Y": {"item": "tfc:jute_fiber"},
+        "Z": {"tag": "forge:double_sheets/black_steel"}
+    }
+}
