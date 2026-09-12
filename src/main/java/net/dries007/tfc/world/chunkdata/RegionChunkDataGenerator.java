@@ -87,7 +87,7 @@ public record RegionChunkDataGenerator(
 		final Noise2D layerSkewZNoise = new OpenSimplex2D(seed.next()).octaves(2).scaled(-1.8f, 1.8f).spread(0.01f);
 
 		// Flora
-		final ConcurrentArea<ForestType> forestTypeLayer = new ConcurrentArea<>(TFCLayers.createOverworldForestLayer(seed, IArtist.nope()), ForestType::valueOf);
+		final ConcurrentArea<ForestType> forestTypeLayer = new ConcurrentArea<>(TFCLayers.createOverworldForestLayer(seed.next(), IArtist.nope()), ForestType::valueOf);
 		final Noise2D forestWeirdnessNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.0025f).map(x -> 1.1f * Math.abs(x)).clamped(0, 1);
 		final Noise2D forestDensityNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.0025f).scaled(-0.2f, 1.2f).clamped(0, 1);
 

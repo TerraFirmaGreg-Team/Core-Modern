@@ -4,7 +4,7 @@
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-package net.dries007.tfc.world.shores;
+package net.dries007.tfc.world.shore;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
 

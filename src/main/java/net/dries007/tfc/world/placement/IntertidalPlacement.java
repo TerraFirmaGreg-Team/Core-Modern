@@ -4,7 +4,7 @@
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-package su.terrafirmagreg.core.world.placements;
+package net.dries007.tfc.world.placement;
 
 import java.util.stream.Stream;
 
@@ -45,7 +45,7 @@ public class IntertidalPlacement extends PlacementModifier {
 
     @Override
     public PlacementModifierType<?> type() {
-        return TFGPlacements.INTERTIDAL.get();
+        return TFCPlacements.INTERTIDAL.get();
     }
 
     public boolean isValid(Noise2D highTideNoise, BlockPos pos) {

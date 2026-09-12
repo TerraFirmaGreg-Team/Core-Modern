@@ -42,10 +42,10 @@ public class ChunkBaseBlockSource
 	 * still an edge case where if we only check the primary biome's weight, at intersections between 3 non-salty biomes saltwater will
 	 * generate because the highest weight is still low. Thus, before running those checks we see if there are any nearby biomes that are salty
 	 */
-    public void useAccurateBiome(int localX, int localZ, BiomeExtension biome, double weight, boolean couldBeSalty)
-    {
-		cachedFluidStates[index(localX, localZ)] = !couldBeSalty || (!biome.isSalty() && (weight > 0.5 || biome == TFCBiomes.RIVER)) ? freshWater : saltWater;
-    }
+	public void useAccurateBiome(int localX, int localZ, BiomeExtension biome, double weight, boolean couldBeSalty, boolean forceSaltWater)
+	{
+		cachedFluidStates[index(localX, localZ)] = forceSaltWater || (couldBeSalty && (biome.isSalty() || (weight <= 0.5 && biome != TFCBiomes.RIVER))) ? saltWater : freshWater;
+	}
 
     public BlockState getBaseBlock(int blockX, int blockY, int blockZ)
     {

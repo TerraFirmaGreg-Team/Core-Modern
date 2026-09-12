@@ -4,9 +4,10 @@
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-package su.terrafirmagreg.core.world.placements;
+package net.dries007.tfc.world.placement;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.dries007.tfc.world.Codecs;
@@ -18,22 +19,23 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import su.terrafirmagreg.core.world.TFGPlacements;
 
 public class TuffRingPlacement extends CenterOrDistanceToPlacement<CenteredFeatureNoiseSampler> {
-    public static final Codec<TuffRingPlacement> PLACEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.BOOL.optionalFieldOf("center", false).forGetter(c -> c.center),
-            Codecs.UNIT_FLOAT.optionalFieldOf("distance", 0f).forGetter(c -> c.distance))
-            .apply(instance, TuffRingPlacement::new));
 
-    public TuffRingPlacement(boolean center, float distance) {
-        super(center, distance);
-    }
+	public static final Codec<TuffRingPlacement> PLACEMENT_CODEC = codec(TuffRingPlacement::new);
 
-    @Override
-    public PlacementModifierType<?> type() {
-        return TFGPlacements.TUFF_RING.get();
-    }
+	public TuffRingPlacement(boolean center, float minEasing, float maxEasing)
+	{
+		super(center, minEasing, maxEasing);
+	}
 
-    @Override
-    protected CenteredFeatureNoiseSampler createContext(Seed seed) {
-        return CenteredFeatureNoise.tuffRing(seed);
-    }
+	@Override
+	public PlacementModifierType<?> type()
+	{
+		return TFCPlacements.TUFF_RING.get();
+	}
+
+	@Override
+	protected CenteredFeatureNoiseSampler createContext(Seed seed)
+	{
+		return CenteredFeatureNoise.tuffRing(seed);
+	}
 }

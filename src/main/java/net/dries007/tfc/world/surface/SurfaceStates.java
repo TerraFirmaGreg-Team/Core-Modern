@@ -54,6 +54,15 @@ public final class SurfaceStates
 									   ? TFGBlocks_Earth.TUFF_GRAVEL.get().defaultBlockState()
                 						: TFCBlocks.SAND.get(SandBlockType.BLACK).get().defaultBlockState();
 
+
+	public static final SurfaceState LIMESTONE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState DOLOMITE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.DOLOMITE).get(Rock.BlockType.RAW).get().defaultBlockState();
+
+	public static final SurfaceState GRANITE_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.GRANITE).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
+	public static final SurfaceState DIORITE_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.DIORITE).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
+	public static final SurfaceState GRANITE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.GRANITE).get(Rock.BlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState DIORITE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.DIORITE).get(Rock.BlockType.RAW).get().defaultBlockState();
+
 	public static final SurfaceState MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96
 															  ? context.getRock().cobble().defaultBlockState()
 															  : context.getRock().gravel().defaultBlockState();
@@ -67,12 +76,28 @@ public final class SurfaceStates
 
 	public static final SurfaceState COARSE_ARIDISOL = context -> TFGBlocks_Earth.COARSE_SANDY_LOAM_DIRT.get().defaultBlockState();
 	public static final SurfaceState COARSE_MOLLISOL = context -> TFGBlocks_Earth.MOLLISOL_COARSE.get().defaultBlockState();
+	public static final SurfaceState COARSE_FLUVISOL = context -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get().defaultBlockState();
 	public static final SurfaceState DRY_MUD = context -> TFGBlocks_Earth.HARDENED_CLAY.get().defaultBlockState();
 	public static final SurfaceState SALTED_EARTH = context -> TFGBlocks_Earth.HALITE.get().defaultBlockState();
 
 	public static final SurfaceState OCEAN_MUD = context -> TFCBlocks.SOIL.get(SoilBlockType.MUD).get(SoilBlockType.Variant.SILT).get().defaultBlockState();
 
 	public static final SurfaceState RIVER_SAND = context -> context.getSeaLevelRock().sand().defaultBlockState();
+	public static final SurfaceState YELLOW_SAND = context -> TFCBlocks.SAND.get(SandBlockType.YELLOW).get().defaultBlockState();
+	public static final SurfaceState YELLOW_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.YELLOW).get(SandstoneBlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState RED_SAND = context -> TFCBlocks.SAND.get(SandBlockType.RED).get().defaultBlockState();
+	public static final SurfaceState RED_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.RED).get(SandstoneBlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState BROWN_SAND = context -> TFCBlocks.SAND.get(SandBlockType.BROWN).get().defaultBlockState();
+	public static final SurfaceState BROWN_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.BROWN).get(SandstoneBlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState WHITE_SAND = context -> TFCBlocks.SAND.get(SandBlockType.WHITE).get().defaultBlockState();
+	public static final SurfaceState WHITE_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.WHITE).get(SandstoneBlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState BLACK_SAND = context -> TFCBlocks.SAND.get(SandBlockType.BLACK).get().defaultBlockState();
+	public static final SurfaceState BLACK_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.BLACK).get(SandstoneBlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState GREEN_SAND = context -> TFCBlocks.SAND.get(SandBlockType.GREEN).get().defaultBlockState();
+	public static final SurfaceState GREEN_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.GREEN).get(SandstoneBlockType.RAW).get().defaultBlockState();
+	public static final SurfaceState PINK_SAND = context -> TFCBlocks.SAND.get(SandBlockType.PINK).get().defaultBlockState();
+	public static final SurfaceState PINK_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.PINK).get(SandstoneBlockType.RAW).get().defaultBlockState();
+
 
 	/**
 	 * Snowy surface builders - used when a SurfaceState should be replaced by snow blocks in the appropriate climate
@@ -96,6 +121,9 @@ public final class SurfaceStates
 	public static final SurfaceState TOP_GRASS_TO_GRAVEL = SoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, SurfaceStates.GRAVEL);
 	public static final SurfaceState TOP_GRASS_TO_SAND = SoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, SurfaceStates.SAND);
 	public static final SurfaceState TOP_GRASS_TO_SANDY_GRAVEL = SoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, SurfaceStates.SAND_OR_GRAVEL);
+	public static final SurfaceState ATOLL_GRASS_TO_WHITE_SAND = SoilSurfaceState.buildSiltySurfaceType(SoilBlockType.GRASS, SurfaceStates.WHITE_SAND);
+	public static final SurfaceState ATOLL_GRASS_TO_YELLOW_SAND = SoilSurfaceState.buildSiltySurfaceType(SoilBlockType.GRASS, SurfaceStates.YELLOW_SAND);
+	public static final SurfaceState ATOLL_GRASS_TO_PINK_SAND = SoilSurfaceState.buildSiltySurfaceType(SoilBlockType.GRASS, SurfaceStates.PINK_SAND);
 	public static final SurfaceState MID_DIRT_TO_GRAVEL = SoilSurfaceState.buildMidType(SoilBlockType.DIRT, SurfaceStates.GRAVEL);
 	public static final SurfaceState MID_DIRT_TO_SAND = SoilSurfaceState.buildMidType(SoilBlockType.DIRT, SurfaceStates.SAND);
 	public static final SurfaceState VOLCANIC_TOP_GRASS_TO_BASALT_GRAVEL = SoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, SurfaceStates.BASALT_SAND_AND_GRAVEL);
@@ -106,6 +134,10 @@ public final class SurfaceStates
 	public static final SurfaceState VOLCANIC_TOP_GRASS_TO_TUFF_GRAVEL = SoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, SurfaceStates.TUFF_SAND_AND_GRAVEL);
 	public static final SurfaceState VOLCANIC_MID_DIRT_TO_TUFF_GRAVEL = SoilSurfaceState.buildVolcanicMidType(SoilBlockType.DIRT, SurfaceStates.TUFF_GRAVEL);
 
+	public static final SurfaceState VOLCANIC_TOP_GRASS_TO_GRANITE_GRAVEL = SoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, SurfaceStates.GRANITE_GRAVEL);
+	public static final SurfaceState VOLCANIC_MID_DIRT_TO_GRANITE_GRAVEL = SoilSurfaceState.buildVolcanicMidType(SoilBlockType.DIRT, SurfaceStates.GRANITE_GRAVEL);
+	public static final SurfaceState VOLCANIC_TOP_GRASS_TO_DIORITE_GRAVEL = SoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, SurfaceStates.DIORITE_GRAVEL);
+	public static final SurfaceState VOLCANIC_MID_DIRT_TO_DIORITE_GRAVEL = SoilSurfaceState.buildVolcanicMidType(SoilBlockType.DIRT, SurfaceStates.DIORITE_GRAVEL);
 
 	public static final SurfaceState UNDER_GRAVEL = SoilSurfaceState.buildUnderType();
 

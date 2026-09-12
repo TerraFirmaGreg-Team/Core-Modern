@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public enum AnnotateDistanceToOcean implements RegionTask
 {
-    INSTANCE;
+	INSTANCE;
 
 	@Override
 	public void apply(RegionGenerator.Context context)

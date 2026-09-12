@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.world.placements;
+package net.dries007.tfc.world.placement;
 
 import java.util.List;
 import java.util.stream.Stream;

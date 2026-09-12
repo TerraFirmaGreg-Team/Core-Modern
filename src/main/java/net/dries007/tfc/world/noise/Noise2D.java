@@ -17,7 +17,6 @@ import net.minecraft.util.Mth;
 @FunctionalInterface
 public interface Noise2D
 {
-
 	double noise(double x, double z);
 
 	/**
@@ -137,7 +136,7 @@ public interface Noise2D
 	{
 		final double scale = (max - min) / (oldMax - oldMin);
 		final double shift = min - oldMin * scale;
-		return (x, y) -> Helpers.clamp(Noise2D.this.noise(x, y) * scale + shift , min, max);
+		return (x, y) -> Helpers.clamp(Noise2D.this.noise(x, y) * scale + shift, min, max);
 	}
 
 	default Noise2D warped(OpenSimplex2D warp)
@@ -212,6 +211,21 @@ public interface Noise2D
 	default Noise2D map(DoubleUnaryOperator mappingFunction)
 	{
 		return (x, y) -> mappingFunction.applyAsDouble(Noise2D.this.noise(x, y));
+	}
+
+	/**
+	 * Used to generate varying-height cliffs starting at various noise values
+	 *
+	 * @param start easing value where noise should begin to show up
+	 * @param end easing value where noise is at full strength
+	 * @param easingNoise noise for easing
+	 */
+	default Noise2D easeIn(double start, double end, double minScale, double maxScale, Noise2D easingNoise)
+	{
+		return (x, z) -> {
+			final double easing = easingNoise.noise(x, z);
+			return Mth.clampedMap(easing, start, end, minScale, maxScale) * Noise2D.this.noise(x, z);
+		};
 	}
 
 	/**

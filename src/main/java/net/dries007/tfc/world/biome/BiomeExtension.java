@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.world.BiomeNoiseSampler;
 import net.dries007.tfc.world.river.RiverBlendType;
 import net.dries007.tfc.world.Seed;
-import net.dries007.tfc.world.shores.ShoreBlendType;
+import net.dries007.tfc.world.shore.ShoreBlendType;
 
 /**
  * Represents all extra data TFC attaches to biomes, which is not present in the {@link Biome} class, nor is it data driven.
@@ -46,10 +46,10 @@ public class BiomeExtension
 	private final boolean hasCinderCones;
 	private final boolean hasTuffCones;
 	private final boolean hasTuyas;
+	private final boolean hasStratovolcanoes;
+	private final boolean hasAtolls;
 	@Getter
-	private final int centeredFeatureRarity;
-	@Getter
-	private final int centeredFeatureRockHeight;
+	private final float centeredFeatureFrequency;
 	@Getter
 	private final int centeredFeatureBaseHeight;
 	@Getter
@@ -69,7 +69,13 @@ public class BiomeExtension
 	@Nullable private Set<PlacedFeature> flattenedFeatureSet;
 	@Nullable private Biome prevBiome;
 
-	BiomeExtension(ResourceKey<Biome> key, @Nullable Function<Seed, BiomeNoiseSampler> noiseFactory, SurfaceBuilderFactory surfaceBuilderFactory, AquiferLookahead aquiferSurfaceHeight, BiomeBlendType biomeBlendType, RiverBlendType riverBlendType, ShoreBlendType shoreBlendType, boolean salty, boolean hasCinderCones, boolean hasTuffCones, boolean hasTuyas, int centeredFeatureRarity, int centeredFeatureRockHeight, int centeredFeatureBaseHeight, int centeredFeatureScaleHeight, boolean centeredFeatureIce, boolean spawnable, boolean rivers, boolean shore, int shoreBaseHeight, boolean sandyRiverShores)
+	BiomeExtension(ResourceKey<Biome> key, @Nullable Function<Seed, BiomeNoiseSampler> noiseFactory,
+				   SurfaceBuilderFactory surfaceBuilderFactory, AquiferLookahead aquiferSurfaceHeight,
+				   BiomeBlendType biomeBlendType, RiverBlendType riverBlendType, ShoreBlendType shoreBlendType,
+				   boolean salty, boolean hasCinderCones, boolean hasTuffCones, boolean hasTuyas, boolean hasAtolls,
+				   boolean hasStratovolcanoes, float centeredFeatureFrequency, int centeredFeatureBaseHeight,
+				   int centeredFeatureScaleHeight, boolean centeredFeatureIce, boolean spawnable, boolean rivers,
+				   boolean shore, int shoreBaseHeight, boolean sandyRiverShores)
 	{
 		this.key = key;
 		this.noiseFactory = noiseFactory;
@@ -82,8 +88,9 @@ public class BiomeExtension
 		this.hasCinderCones = hasCinderCones;
 		this.hasTuffCones = hasTuffCones;
 		this.hasTuyas = hasTuyas;
-		this.centeredFeatureRarity = centeredFeatureRarity;
-		this.centeredFeatureRockHeight = centeredFeatureRockHeight;
+		this.hasAtolls = hasAtolls;
+		this.hasStratovolcanoes = hasStratovolcanoes;
+		this.centeredFeatureFrequency = centeredFeatureFrequency;
 		this.centeredFeatureBaseHeight = centeredFeatureBaseHeight;
 		this.centeredFeatureScaleHeight = centeredFeatureScaleHeight;
 		this.centeredFeatureIce = centeredFeatureIce;
@@ -137,6 +144,16 @@ public class BiomeExtension
 	public boolean hasTuyas()
 	{
 		return hasTuyas;
+	}
+
+	public boolean hasAtolls()
+	{
+		return hasAtolls;
+	}
+
+	public boolean hasStratovolcanoes()
+	{
+		return hasStratovolcanoes;
 	}
 
 	public boolean getCenteredFeatureIce()
