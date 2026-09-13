@@ -12,17 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
-import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CalendarSleepHelper;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
-import su.terrafirmagreg.core.utils.SnowCorrection;
 
 // higher priority to inject just before TFC does with its environmental helper
 @Mixin(value = ServerLevel.class, priority = 900)
@@ -30,7 +27,7 @@ public abstract class ServerLevelMixin {
     /**
      * injects just before TFC's {@link net.dries007.tfc.mixin.ServerLevelMixin} inject, allowing for redirect of extraterrestrial weather events
      * <p>
-     *     NOTE: this works in conjunction with {@link su.terrafirmagreg.core.mixins.common.tfc.EnvironmentHelpersMixin} to override planetary weather behavior. This first triggers mars-specific weather, and {@code EnvironmentalHelpersMixin} then cancels overworld weather.
+     *     NOTE: this works in conjunction with {@link net.dries007.tfc.util.EnvironmentHelpers} to override planetary weather behavior. This first triggers mars-specific weather, and {@code EnvironmentalHelpersMixin} then cancels overworld weather.
      * </p>
      */
     @Inject(method = "tickChunk", at = @At(value = "TAIL"))
@@ -39,10 +36,6 @@ public abstract class ServerLevelMixin {
 
         if (level.dimension().equals(Planet.MARS)) {
             MarsEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
-        }
-
-        if (TFGConfig.SERVER.enableSnowCorrection.get() && chunk.getLevel().dimension().equals(Level.OVERWORLD)) {
-            SnowCorrection.onTickChunk(level, chunk);
         }
 
         // Ad Astra's ServerLevelMixin also injects at TAIL with a popPush, which pops a section
