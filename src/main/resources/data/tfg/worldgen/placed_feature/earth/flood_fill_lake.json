@@ -1,5 +1,5 @@
 {
-    "feature": "tfc:flood_fill_lake",
+    "feature": "tfg:earth/flood_fill_lake",
     "placement": [
         {
             "chance": 5,

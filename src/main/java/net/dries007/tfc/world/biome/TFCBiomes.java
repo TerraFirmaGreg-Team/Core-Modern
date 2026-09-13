@@ -139,7 +139,7 @@ public final class TFCBiomes
 		builder().heightmap(BiomeNoise::lowlands)
 			.surface(LowlandsSurfaceBuilder.INSTANCE)
 			.aquiferHeightOffset(-16)
-			.spawnable().muddy().noSandyRiverShores()
+			.spawnable().noSandyRiverShores()
 			.type(RiverBlendType.BANKED));
 	// Flat, swamp-like, lots of shallow pools below sea level.
 	public static final BiomeExtension SALT_MARSH = register("salt_marsh",
@@ -409,7 +409,7 @@ public final class TFCBiomes
 		builder().heightmap(BiomeNoise::flats)
 			.surface(FlatsSurfaceBuilder.MUDDY)
 			.aquiferHeightOffset(-24)
-			.spawnable().muddy().noSandyRiverShores()
+			.spawnable().noSandyRiverShores()
 			.type(RiverBlendType.TALL_BANKED));
 	public static final BiomeExtension SALT_FLATS = register("salt_flats",
 		builder().heightmap(BiomeNoise::saltFlats)
@@ -931,12 +931,12 @@ public final class TFCBiomes
 		builder().heightmap(seed -> BiomeNoise.hills(seed, -4, 3)
 										.add(BiomeNoise.patternedGround(seed)))
 			.surface(PatternedGroundSurfaceBuilder.INSTANCE)
-			.spawnable().muddy()
+			.spawnable()
 			.type(RiverBlendType.WIDE));
 	public static final BiomeExtension INVERTED_PATTERNED_GROUND = register("inverted_patterned_ground",
 		builder().heightmap(BiomeNoise::invertedPatternedGround)
 			.surface(PatternedGroundSurfaceBuilder.INSTANCE)
-			.spawnable().muddy()
+			.spawnable()
 			.type(RiverBlendType.WIDE));
 	public static final BiomeExtension STONE_CIRCLES = register("stone_circles",
 		builder().heightmap(seed -> BiomeNoise.hills(seed, -2, 4)

@@ -67,8 +67,6 @@ public class TFGFeatures {
     public static final RegistryObject<MappedRivuletFeature> MAPPED_RIVULET = register(
             "mapped_rivulet", MappedRivuletFeature::new, BlockStateMapConfig.CODEC);
 
-    public static final RegistryObject<FluidPlugFeature> FLUID_PLUG = register(
-            "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);
     // A copy of minecraft:lake but bigger and deeper
     public static final RegistryObject<LargeLakeFeature> LARGE_LAKE = register(
             "large_lake", LargeLakeFeature::new, LargeLakeConfig.CODEC);
