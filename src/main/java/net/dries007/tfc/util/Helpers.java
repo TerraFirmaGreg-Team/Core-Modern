@@ -1309,6 +1309,13 @@ public final class Helpers
         return (int) hash;
     }
 
+	public static int hash(long salt, int x, int z)
+	{
+		long hash = salt ^ ((long) x * PRIME_X) ^ z;
+		hash *= 0x27d4eb2d;
+		return (int) hash;
+	}
+
     public static RandomSource fork(RandomSource random)
     {
         return new XoroshiroRandomSource(random.nextLong(), random.nextLong());
@@ -1322,6 +1329,70 @@ public final class Helpers
     {
         return midpoint + amplitude * (Math.abs(4f * frequency * value + 1f - 4f * Mth.floor(frequency * value + 0.75f)) - 1f);
     }
+
+	public static double triangle(double amplitude, double midpoint, double frequency, double value) {
+		return midpoint + amplitude * (Math.abs(4.0 * frequency * value + 1.0 - 4.0 * Mth.floor(frequency * value + 0.75)) - 1.0);
+	}
+
+	// This only exists in newer versions of java lmaooooo
+	public static double clamp(double value, double min, double max)
+	{
+		return Math.max(min, Math.min(max, value));
+	}
+	public static float clamp(float value, float min, float max)
+	{
+		return Math.max(min, Math.min(max, value));
+	}
+	public static int clamp(int value, int min, int max)
+	{
+		return Math.max(min, Math.min(max, value));
+	}
+
+	/**
+	 * Returns an approximate angle in the range [0, 4] where 4 is the equivalent of 360 degrees from a vector in the form x, y
+	 */
+	public static double diamondAngle(double x, double y) {
+		if (y >= 0)
+			return (x >= 0 ? y / (x + y) : 1 - x / (-x + y));
+		else
+			return (x < 0 ? 2 - y / (-x - y) : 3 + x / (x - y));
+	}
+
+	/**
+	 * Returns a y-value on a hyperbolic curve that intersects the x and y axes at the specified locations
+	 */
+	public static double hyperbolicSection(double x, double xIntercept, double yIntercept)
+	{
+		return yIntercept * ((2 / (x / xIntercept + 1)) - 1);
+	}
+
+	/**
+	 * Returns a new random double in the range [0, 1)
+	 * @param input a double in the range [-1, 1]
+	 * @param index an index for getting multiple values from one double
+	 */
+	public static double hashDouble(double input, int index)
+	{
+		long inputBits = Double.doubleToLongBits(input);
+		long x = mix64(inputBits + index);
+		return (x >>> 11) * 0x1.0p-53;
+	}
+
+	public static long mix64(long x) {
+		x ^= x >>> 33;
+		x *= 0xff51afd7ed558ccdL;
+		x ^= x >>> 33;
+		x *= 0xc4ceb9fe1a85ec53L;
+		x ^= x >>> 33;
+		return x;
+	}
+
+	/**
+	 * @return The average annual temperature adjusted for elevation above sea level
+	 */
+	public static float adjustAverageTemperatureByElevation(int y, float averageTemperature, float seaLevel) {
+		return averageTemperature - Mth.clamp((y - seaLevel) * 0.16225f, 0, 17.822f);
+	}
 
     /**
      * @return A random integer, uniformly distributed in the range [min, max).
@@ -1643,6 +1714,7 @@ public final class Helpers
      * @see #randomBlock(TagKey, RandomSource)
      * @see #randomEntity(TagKey, RandomSource)
      */
+	@Deprecated
     public static <T> Optional<T> getRandomElement(Registry<T> registry, TagKey<T> tag, RandomSource random)
     {
         return registry.getTag(tag).flatMap(set -> set.getRandomElement(random)).map(Holder::value);
@@ -1818,4 +1890,19 @@ public final class Helpers
         @SuppressWarnings("ConstantConditions")
         private ItemProtectedAccessor() { super(null); } // Never called
     }
+
+	/**
+	 * Shuffles the contents of an array. Borrowed from {@link Collections#shuffle} but modified to work with both an array,
+	 * and with {@link RandomSource}.
+	 */
+	public static <T> void shuffleArray(T[] array, RandomSource r) {
+		for (int i = array.length; i > 1; i--)
+			swap(array, i - 1, r.nextInt(i));
+	}
+
+	private static void swap(Object[] arr, int i, int j) {
+		final Object tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
+	}
 }

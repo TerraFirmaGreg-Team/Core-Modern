@@ -1,0 +1,16 @@
+{
+    "feature": "tfg:earth/fuji_caldera",
+    "placement": [
+        {
+            "center": true,
+            "variant": "fuji",
+            "hash_max": 0.6,
+            "type": "tfc:stratovolcano"
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

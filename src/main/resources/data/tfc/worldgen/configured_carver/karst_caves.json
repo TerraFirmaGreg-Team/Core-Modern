@@ -20,7 +20,7 @@
         "horizontal_radius_multiplier": {
             "type": "uniform",
             "value": {
-                "min_inclusive": 1,
+                "min_inclusive": 1.5,
                 "max_exclusive": 3.1
             }
         },
@@ -34,7 +34,7 @@
         "vertical_radius_multiplier": {
             "type": "uniform",
             "value": {
-                "min_inclusive": 1,
+                "min_inclusive": 1.5,
                 "max_exclusive": 3.1
             }
         }

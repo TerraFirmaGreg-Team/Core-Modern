@@ -3,8 +3,6 @@ package su.terrafirmagreg.core.common.event;
 import java.nio.file.Files;
 import java.util.*;
 
-import net.dries007.tfc.world.biome.BiomeExtension;
-import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -25,9 +23,6 @@ import su.terrafirmagreg.core.mixins.common.minecraft.AccessorMinecraftServer;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.WorldgenVersionSyncPacket;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
-import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
-import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
-import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 
 public class WorldgenVersionEvents {
 
@@ -81,23 +76,6 @@ public class WorldgenVersionEvents {
                         ? WorldgenVersionData.OVERWORLD_VERSION
                         : 0;
                 data.setGeneratedVersion(level.dimension().location(), version);
-            }
-        }
-
-        // Initialize TFG-specific fields on 1.20 biome extensions so we can support old worlds
-        // with a forced 1.21 worldgen override. This will still cause ugly chunk boundaries
-        // but shouldn't cause NPE.
-        if (WorldgenVersionData.OVERWORLD_VERSION == WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT) {
-            Collection<BiomeExtension> TFC_1_20_EXTENSIONS = TFCBiomes.EXTENSIONS.values();
-            for (var ext : TFC_1_20_EXTENSIONS) {
-                final TFGRiverBlendType riverBlendType = switch (ext.riverBlendType()) {
-                    case NONE -> TFGRiverBlendType.NONE;
-                    case WIDE -> TFGRiverBlendType.WIDE;
-                    case CANYON -> TFGRiverBlendType.CANYON;
-                    case TALL_CANYON -> TFGRiverBlendType.TALL_CANYON;
-                    case CAVE -> TFGRiverBlendType.CAVE;
-                };
-                ((IBiomeExtension) ext).tfg$init(ShoreBlendType.CLASSIC, riverBlendType, 0, false, false, false, 0, 0, 0, 0, false);
             }
         }
 

@@ -35,10 +35,11 @@ public interface ChunkDataGenerator
         );
     }
 
-    /**
-     * Generate the provided chunk data
-     */
-    void generate(ChunkData data);
+	/**
+	 * Generate the provided chunk data up to {@link ChunkData.Status#PARTIAL}. Mutates {@code data} and returns it. If the chunk data
+	 * @throws IllegalStateException if called with invalid or client-side chunk data.
+	 */
+	ChunkData generate(ChunkData data);
 
     /**
      * Generate the rock at the given {@code (x, y, z)} position. Coordinates must be <strong>block coordinates</strong>, not chunk-local. {@code surfaceY} should be the view provided in {@link RockData}

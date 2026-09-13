@@ -18,11 +18,11 @@ import com.notenoughmail.tfcgenviewer.network.packets.ViewerResponsePacket;
 import com.notenoughmail.tfcgenviewer.util.ClientHandoff;
 
 import net.dries007.tfc.client.ClientHelpers;
+import net.dries007.tfc.world.Seed;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 
 @Mixin(value = ClientHandoff.class, remap = false)

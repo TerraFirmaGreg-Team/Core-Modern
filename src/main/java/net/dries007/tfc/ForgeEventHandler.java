@@ -8,6 +8,7 @@ package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
 import earth.terrarium.adastra.api.planets.Planet;
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 import net.dries007.tfc.world.region.Units;
@@ -309,7 +310,7 @@ public final class ForgeEventHandler
 			ChunkPos chunkPos = null;
 			RandomSource random = new XoroshiroRandomSource(level.getSeed());
 
-			RegionGenerator regionGen = new RegionGenerator(extension.settings(), random);
+			RegionGenerator regionGen = new RegionGenerator(extension.settings(), Seed.of(level.getSeed()));
 
 			var condition = CustomSpawnHelper.getFromConfig();
 

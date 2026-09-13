@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.notenoughmail.tfcgenviewer.screen.PreviewGenerationScreen;
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.chunkdata.RegionChunkDataGenerator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.levelgen.WorldOptions;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 
 /**
@@ -49,7 +49,7 @@ public class PreviewGenerationScreenMixin {
 
     /**
      * {@code applyUpdates(false)} pushes preview settings into Create World. When TFCGenViewer Spawn Overlay is ON, enable
-     * viewer spawn preset so {@link su.terrafirmagreg.core.mixins.common.tfc.ForgeEventHandlerMixin#onCreateWorldSpawn} honors
+     * viewer spawn preset so {@link net.dries007.tfc.ForgeEventHandler#onCreateWorldSpawn} honors
      * preview center without climate retries. When overlay is OFF, keep the Game Tab spawn preset; clear a stale viewer id.
      */
     @Inject(method = "applyUpdates(Z)V", at = @At("TAIL"), remap = false)
