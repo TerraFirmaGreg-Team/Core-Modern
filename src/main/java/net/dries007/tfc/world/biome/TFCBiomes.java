@@ -702,8 +702,8 @@ public final class TFCBiomes
 		builder().heightmap(seed -> BiomeNoise.sunkenShieldVolcano(seed, BiomeNoise.ancientHotSpots(seed)))
 			.surface(ShieldVolcanoSurfaceBuilder.DORMANT)
 			.aquiferHeightOffset(-16)
-			.salty()
-			.type(RiverBlendType.CAVE)
+			.spawnable()
+			.salty().noRivers()
 			.tuffRings(1f / 2f, -8, 24));
 
 	public static final BiomeExtension SHIELD_VOLCANO_SHORE = register("shield_volcano_shore",

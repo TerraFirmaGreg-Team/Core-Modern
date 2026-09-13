@@ -410,7 +410,7 @@ public class TFCLayers
 
 	public static boolean isOcean(int value)
 	{
-		return value == OCEAN || value == DEEP_OCEAN || value == DEEP_OCEAN_TRENCH || value == OCEAN_REEF || value == OCEAN_RIDGE || value == OCEANIC_VOLCANIC_ARC || value == OCEAN_ATOLLS || value == DEEP_OCEAN_ATOLLS;
+		return value == OCEAN || value == DEEP_OCEAN || value == DEEP_OCEAN_TRENCH || value == OCEAN_REEF || value == OCEAN_RIDGE || value == OCEANIC_VOLCANIC_ARC || value == OCEAN_ATOLLS || value == DEEP_OCEAN_ATOLLS || value == SUNKEN_SHIELD_VOLCANO;
 	}
 
 	public static boolean isMountains(int value)
