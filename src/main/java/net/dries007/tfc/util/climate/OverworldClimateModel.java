@@ -106,6 +106,7 @@ public class OverworldClimateModel implements WorldGenClimateModel
         return null;
     }
 
+	@Getter
     private long climateSeed = 0;
 	@Getter
     private float temperatureScale = 20_000f;
@@ -276,6 +277,11 @@ public class OverworldClimateModel implements WorldGenClimateModel
         temperatureScale = buffer.readFloat();
         climateSeed = buffer.readLong();
     }
+
+	protected void updateNoise()
+	{
+		// Required for KubeJS-TFC
+	}
 
     /**
      * Adjusts a series of temperature factors by elevation. Returns the sum temperature after adjustment.
