@@ -1,7 +1,9 @@
 {
     "values": [
         "#tfg:feature/ocean_plants",
-        "#tfc:feature/ocean_decorations",
+        "tfc:plant/giant_kelp_patch",
+        "tfc:plant/winged_kelp",
+        "tfc:plant/leafy_kelp",
         "#tfg:feature/shore_decorations",
         "#tfg:feature/land_plants"
     ],
