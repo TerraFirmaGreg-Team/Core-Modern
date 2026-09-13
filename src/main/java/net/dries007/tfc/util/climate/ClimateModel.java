@@ -8,6 +8,8 @@ package net.dries007.tfc.util.climate;
 
 import java.util.function.Supplier;
 
+import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +35,12 @@ public interface ClimateModel
      * Must be registered through {@link Climate#register(ResourceLocation, Supplier)}
      */
     ClimateModelType type();
+
+	default float getTemperature(LevelReader level, BlockPos pos)
+	{
+		final ICalendar calendar = Calendars.get(level);
+		return getTemperature(level, pos, calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
+	};
 
     /**
      * Get the temperature at a given position, and timestamp.

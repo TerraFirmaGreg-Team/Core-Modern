@@ -7,6 +7,7 @@
 package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
+import net.dries007.tfc.common.TFCPoiTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceKey;
@@ -85,6 +86,7 @@ import net.dries007.tfc.world.placement.TFCPlacements;
 import net.dries007.tfc.world.settings.RockSettings;
 import net.dries007.tfc.world.stateprovider.TFCStateProviders;
 
+@SuppressWarnings("removal")
 @Mod(TerraFirmaCraft.MOD_ID)
 public final class TerraFirmaCraft
 {
@@ -130,6 +132,7 @@ public final class TerraFirmaCraft
         TFCLoot.CONDITIONS.register(bus);
         TFCLoot.NUMBER_PROVIDERS.register(bus);
         TFCLoot.LOOT_FUNCTIONS.register(bus);
+		TFCPoiTypes.TYPES.register(bus);
 
         TFCBlockPredicates.BLOCK_PREDICATES.register(bus);
         TFCPlacements.PLACEMENT_MODIFIERS.register(bus);

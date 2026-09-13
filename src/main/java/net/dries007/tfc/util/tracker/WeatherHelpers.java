@@ -6,221 +6,873 @@
 
 package net.dries007.tfc.util.tracker;
 
+import java.util.*;
+
+import net.dries007.tfc.mixin.accessor.PoiSectionAccessor;
+import net.dries007.tfc.mixin.accessor.SectionStorageAccessor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.SectionPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.village.poi.PoiRecord;
+import net.minecraft.world.entity.ai.village.poi.PoiSection;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraft.world.phys.Vec2;
+import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.TFCPoiTypes;
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blocks.IcePileBlock;
+import net.dries007.tfc.common.blocks.IcicleBlock;
+import net.dries007.tfc.common.blocks.SnowPileBlock;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.ThinSpikeBlock;
+import net.dries007.tfc.common.blocks.plant.KrummholzBlock;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.climate.ClimateModel;
+import net.dries007.tfc.world.chunkdata.ChunkData;
 
 /**
- * Manager for advanced weather mechanics, that simulate local weather
- * Vanilla already handles switching rain/thunder on and off periodically
- * It then linearly interpolates between different weather events.
- *
- * Some data:
- * - Rain is for [12000, 24000] ticks on, [12000, 180000] ticks off, or 18000 on / 96000 off. P(rain) = 0.1875
- * - Thunder is for [3600, 15600] ticks on, [12000, 180000] ticks off, or 9600 on / 96000 off. P(thunder | rain) = 0.1, and P(thunder) = 0.01875
- *
- * Our model assumes that vanilla values for rain match a climate of 250mm annual rainfall - so we scale vanilla's model to rain twice as frequently - P(rain) and P(thunder | rain), and then exclude cases at < 500mm rainfall.
- *
- * We have two effects we can use to accomplish that
- * 1. Linearly scale rainfall duration compared to it's midpoint from full duration to zero. Pros: smooth interpolation. Cons: this doesn't mimic vanilla behavior at 250mm, rather it makes rain twice as common and last half as long.
- * 2. Each rainfall, assign an intensity, which only above that rainfall values will be raining. Pros: this mimics vanilla behavior w.r.t P(rain) and rain duration exactly. Cons: not smooth interpolation, rain won't appear to 'move'.
- *
- * So, we do both and average them.
- *
- * @see ServerLevel#advanceWeatherCycle()
+ * Handler for custom weather and weather effects.
  */
 public final class WeatherHelpers
 {
-    private static final int MIN_RAIN_TIME = 18000;
-    private static final int MAX_RAIN_TIME = 24000;
+	private static final Holder<PoiType> CLIMATE = TFCPoiTypes.CLIMATE.getHolder().orElseThrow();
 
-    private static final int MIN_RAIN_DELAY_TIME = 12000; // Same as vanilla
-    private static final int MAX_RAIN_DELAY_TIME = 84000; // Lowered, so average rain delay time is half vanilla
+	private static final int MIN_RAIN_TIME = 18000;
+	private static final int MAX_RAIN_TIME = 24000;
 
-    /**
-     * Called before {@link ServerLevel#advanceWeatherCycle()}
-     */
-    public static void preAdvancedWeatherCycle(ServerLevel level)
-    {
-        if (level.dimensionType().hasSkyLight() && level.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) && level.getLevelData() instanceof ServerLevelData serverLevelData)
-        {
-            // Vanilla already handles decrementing the weather clear, thunder, and rain time counters.
-            // We want to prevent the counters from reaching zero - since we want to reset them ourselves, and also know when they reset, so we can reset rain intensity, and duration values.
+	private static final int MIN_RAIN_DELAY_TIME = 12000; // Same as vanilla
+	private static final int MAX_RAIN_DELAY_TIME = 84000; // Lowered, so average rain delay time is half vanilla
 
-            int rainTime = serverLevelData.getRainTime();
-            if (serverLevelData.getClearWeatherTime() <= 0 && rainTime <= 0)
-            {
-                // Vanilla would reset the rain time this tick, so we do it first
-                // We also take this tick to record two things: the *midpoint* of the raining period, and a randomized intensity value for this rain period.
-                if (serverLevelData.isRaining())
-                {
-                    rainTime = Mth.randomBetweenInclusive(level.random, MIN_RAIN_TIME, MAX_RAIN_TIME);
+	// The number of ticks per a single snow accumulation/melt event in a single chunk. For reference, vanilla operates at
+	// (48 / randomTickSpeed), or 16 ticks. We do melting much slower, since it's statistically much less likely to be raining
+	private static final int TICKS_PER_SNOW_ACCUMULATION = 80;
+	private static final int TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION = 3;
+	private static final int TICKS_PER_SNOW_MELT = TICKS_PER_SNOW_ACCUMULATION * TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION;
 
-                    final long rainStartTick = Calendars.get(level).getTicks();
-                    final long rainEndTick = rainStartTick + rainTime;
-                    final float rainIntensity = level.random.nextFloat();
+	private static final int WIND_KMS_FACTOR = 115;
+	private static final int WIND_MS_FACTOR = 32;
 
-                    WorldTracker.get(level).setWeatherData(rainStartTick, rainEndTick, rainIntensity);
-                }
-                else
-                {
-                    rainTime = Mth.randomBetweenInclusive(level.random, MIN_RAIN_DELAY_TIME, MAX_RAIN_DELAY_TIME);
-                }
+	// For fast forwarding, the number of "fast-forward" ticks that should be simulated for a given hour of either estimated
+	// melting, or estimated snow accumulation.
+	private static final int UPDATES_PER_SNOW_MELT_SKIP = 1 + 4_000 / TICKS_PER_SNOW_MELT;
+	private static final int UPDATES_PER_SNOW_ACCUMULATION_SKIP = 1 + 4_000 / TICKS_PER_SNOW_ACCUMULATION;
 
-                serverLevelData.setRainTime(rainTime);
-            }
-        }
-    }
+	// The maximum number of single tick updates that can be scheduled to happen
+	private static final int MAX_UPDATES_PER_TICK = TFCConfig.SERVER.snowMaxAccumulationOnUpdate.get();
 
-    /**
-     * This is a mapped and documented version of {@link ServerLevel#advanceWeatherCycle()}. It's not used, just kept here for reference.
-     */
-    @SuppressWarnings("unused")
-    private static void advanceWeatherCycleVanillaImplementation(ServerLevel level, ServerLevelData serverLevelData)
-    {
-        // Called every tick
-        boolean isRaining = level.isRaining();
-        if (level.dimensionType().hasSkyLight())
-        {
-            if (level.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE))
-            {
-                int weatherClearTime = serverLevelData.getClearWeatherTime(); // Ticks that the weather will remain clear for
-                int thunderTime = serverLevelData.getThunderTime();
-                int rainTime = serverLevelData.getRainTime();
 
-                boolean isCurrentlyThundering = serverLevelData.isThundering();
-                boolean isCurrentlyRaining = serverLevelData.isRaining();
+	/**
+	 * Called before {@link ServerLevel#advanceWeatherCycle()}
+	 */
+	public static void preAdvancedWeatherCycle(ServerLevel level)
+	{
+		if (level.dimensionType().hasSkyLight() && level.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) && level.getLevelData() instanceof ServerLevelData serverLevelData)
+		{
+			// Vanilla already handles decrementing the weather clear, thunder, and rain time counters.
+			// We want to prevent the counters from reaching zero - since we want to reset them ourselves, and also know when they reset, so we can reset rain intensity, and duration values.
 
-                if (weatherClearTime > 0)
-                {
-                    // If clear, set to default values for clear weather
-                    weatherClearTime--;
-                    thunderTime = isCurrentlyThundering ? 0 : 1;
-                    rainTime = isCurrentlyRaining ? 0 : 1;
-                    isCurrentlyThundering = false;
-                    isCurrentlyRaining = false;
-                }
-                else
-                {
-                    // Not clear - there are zero ticks of weather clear time
-                    if (thunderTime > 0)
-                    {
-                        // It's currently thundering? or are these just ticks spent waiting for thunder
-                        thunderTime--; // Count down thundering ticks
-                        if (thunderTime == 0)
-                        {
-                            // When we reach zero, swap thundering and non-thundering
-                            isCurrentlyThundering = !isCurrentlyThundering;
-                        }
-                    }
-                    else if (isCurrentlyThundering)
-                    {
-                        // When it's thundering but no thunder time, we pick a random duration for it to thunder for
-                        // (thundering, 0 ticks) -> (thundering, [3600, 15600] ticks)
-                        // (thundering, >0 ticks) -> stays the same
-                        thunderTime = Mth.randomBetweenInclusive(level.random, 3600, 15600);
-                    }
-                    else
-                    {
-                        // If it's *NOT* thundering, and thunder time < 0, we pick a random LONG time
-                        // This is the time UNTIL it will start thundering again.
-                        thunderTime = Mth.randomBetweenInclusive(level.random, 12000, 180000);
-                    }
+			int rainTime = serverLevelData.getRainTime();
+			if (serverLevelData.getClearWeatherTime() <= 0 && rainTime <= 0)
+			{
+				// Vanilla would reset the rain time this tick, so we do it first
+				// We also take this tick to record two things: the *midpoint* of the raining period, and a randomized intensity value for this rain period.
+				if (serverLevelData.isRaining())
+				{
+					rainTime = Mth.randomBetweenInclusive(level.random, MIN_RAIN_TIME, MAX_RAIN_TIME);
 
-                    if (rainTime > 0)
-                    {
-                        // Does the same with rain, always counts down if there is a counter to be counted
-                        rainTime--;
-                        if (rainTime == 0)
-                        {
-                            // If we reach zero, swaps the current setup
-                            isCurrentlyRaining = !isCurrentlyRaining;
-                        }
-                    }
-                    else if (isCurrentlyRaining)
-                    {
-                        // If we're at zero and RAINING, then we need to start raining for a shorter duration
-                        rainTime = Mth.randomBetweenInclusive(level.random, 12000, 24000);
-                    }
-                    else
-                    {
-                        // If we're at zero and NOT RAINING, then we need to start a LONG timer
-                        rainTime = Mth.randomBetweenInclusive(level.random, 12000, 180000);
-                    }
-                }
+					final long rainStartTick = Calendars.get(level).getTicks();
+					final long rainEndTick = rainStartTick + rainTime;
+					final float rainIntensity = level.random.nextFloat();
 
-                // Update the data
-                serverLevelData.setThunderTime(thunderTime);
-                serverLevelData.setRainTime(rainTime);
-                serverLevelData.setClearWeatherTime(weatherClearTime);
-                serverLevelData.setThundering(isCurrentlyThundering);
-                serverLevelData.setRaining(isCurrentlyRaining);
-            }
+					WorldTracker.get(level).setWeatherData(rainStartTick, rainEndTick, rainIntensity);
+				}
+				else
+				{
+					rainTime = Mth.randomBetweenInclusive(level.random, MIN_RAIN_DELAY_TIME, MAX_RAIN_DELAY_TIME);
+				}
 
-            // Linearly interpolation
-            // o = Old
-            // Change actual thunder level by 0.01 each tick based on if we are actually thundering or not
-            level.oThunderLevel = level.thunderLevel;
-            if (serverLevelData.isThundering())
-            {
-                level.thunderLevel += 0.01F;
-            }
-            else
-            {
-                level.thunderLevel -= 0.01F;
-            }
-            level.thunderLevel = Mth.clamp(level.thunderLevel, 0.0F, 1.0F);
+				serverLevelData.setRainTime(rainTime);
+			}
+		}
+	}
 
-            // Do the same with rain
-            level.oRainLevel = level.rainLevel;
-            if (serverLevelData.isRaining())
-            {
-                level.rainLevel += 0.01F;
-            }
-            else
-            {
-                level.rainLevel -= 0.01F;
-            }
+	/**
+	 * This is a mapped and documented version of {@link ServerLevel#advanceWeatherCycle()}. It's not used, just kept here for reference.
+	 */
+	@SuppressWarnings("unused")
+	private static void advanceWeatherCycleVanillaImplementation(ServerLevel level, ServerLevelData serverLevelData)
+	{
+		// Called every tick
+		boolean isRaining = level.isRaining();
+		if (level.dimensionType().hasSkyLight())
+		{
+			if (level.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE))
+			{
+				int weatherClearTime = serverLevelData.getClearWeatherTime(); // Ticks that the weather will remain clear for
+				int thunderTime = serverLevelData.getThunderTime();
+				int rainTime = serverLevelData.getRainTime();
 
-            level.rainLevel = Mth.clamp(level.rainLevel, 0.0F, 1.0F);
+				boolean isCurrentlyThundering = serverLevelData.isThundering();
+				boolean isCurrentlyRaining = serverLevelData.isRaining();
 
-            // rainLevel and thunderLevel are now nicely clamped between [0, 1], and smoothly interpolating between values
-            // Note when accessing, getThunderLevel() returns thunderLevel * rainLevel;
-            // So if it's thundering but not raining, then it won't be doing either
-        }
+				if (weatherClearTime > 0)
+				{
+					// If clear, set to default values for clear weather
+					weatherClearTime--;
+					thunderTime = isCurrentlyThundering ? 0 : 1;
+					rainTime = isCurrentlyRaining ? 0 : 1;
+					isCurrentlyThundering = false;
+					isCurrentlyRaining = false;
+				}
+				else
+				{
+					// Not clear - there are zero ticks of weather clear time
+					if (thunderTime > 0)
+					{
+						// It's currently thundering? or are these just ticks spent waiting for thunder
+						thunderTime--; // Count down thundering ticks
+						if (thunderTime == 0)
+						{
+							// When we reach zero, swap thundering and non-thundering
+							isCurrentlyThundering = !isCurrentlyThundering;
+						}
+					}
+					else if (isCurrentlyThundering)
+					{
+						// When it's thundering but no thunder time, we pick a random duration for it to thunder for
+						// (thundering, 0 ticks) -> (thundering, [3600, 15600] ticks)
+						// (thundering, >0 ticks) -> stays the same
+						thunderTime = Mth.randomBetweenInclusive(level.random, 3600, 15600);
+					}
+					else
+					{
+						// If it's *NOT* thundering, and thunder time < 0, we pick a random LONG time
+						// This is the time UNTIL it will start thundering again.
+						thunderTime = Mth.randomBetweenInclusive(level.random, 12000, 180000);
+					}
 
-        if (level.oRainLevel != level.rainLevel)
-        {
-            level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.RAIN_LEVEL_CHANGE, level.rainLevel), level.dimension());
-        }
+					if (rainTime > 0)
+					{
+						// Does the same with rain, always counts down if there is a counter to be counted
+						rainTime--;
+						if (rainTime == 0)
+						{
+							// If we reach zero, swaps the current setup
+							isCurrentlyRaining = !isCurrentlyRaining;
+						}
+					}
+					else if (isCurrentlyRaining)
+					{
+						// If we're at zero and RAINING, then we need to start raining for a shorter duration
+						rainTime = Mth.randomBetweenInclusive(level.random, 12000, 24000);
+					}
+					else
+					{
+						// If we're at zero and NOT RAINING, then we need to start a LONG timer
+						rainTime = Mth.randomBetweenInclusive(level.random, 12000, 180000);
+					}
+				}
 
-        if (level.oThunderLevel != level.thunderLevel)
-        {
-            level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE, level.thunderLevel), level.dimension());
-        }
+				// Update the data
+				serverLevelData.setThunderTime(thunderTime);
+				serverLevelData.setRainTime(rainTime);
+				serverLevelData.setClearWeatherTime(weatherClearTime);
+				serverLevelData.setThundering(isCurrentlyThundering);
+				serverLevelData.setRaining(isCurrentlyRaining);
+			}
 
-        /* The function in use here has been replaced in order to only send the weather info to players in the correct dimension,
-         * rather than to all players on the server. This is what causes the client-side rain, as the
-         * client believes that it has started raining locally, rather than in another dimension.
-         */
-        if (isRaining != level.isRaining())
-        {
-            if (isRaining)
-            {
-                level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.STOP_RAINING, 0.0F), level.dimension());
-            }
-            else
-            {
-                level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.START_RAINING, 0.0F), level.dimension());
-            }
+			// Linearly interpolation
+			// o = Old
+			// Change actual thunder level by 0.01 each tick based on if we are actually thundering or not
+			level.oThunderLevel = level.thunderLevel;
+			if (serverLevelData.isThundering())
+			{
+				level.thunderLevel += 0.01F;
+			}
+			else
+			{
+				level.thunderLevel -= 0.01F;
+			}
+			level.thunderLevel = Mth.clamp(level.thunderLevel, 0.0F, 1.0F);
 
-            level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.RAIN_LEVEL_CHANGE, level.rainLevel), level.dimension());
-            level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE, level.thunderLevel), level.dimension());
-        }
+			// Do the same with rain
+			level.oRainLevel = level.rainLevel;
+			if (serverLevelData.isRaining())
+			{
+				level.rainLevel += 0.01F;
+			}
+			else
+			{
+				level.rainLevel -= 0.01F;
+			}
 
-    }
+			level.rainLevel = Mth.clamp(level.rainLevel, 0.0F, 1.0F);
+
+			// rainLevel and thunderLevel are now nicely clamped between [0, 1], and smoothly interpolating between values
+			// Note when accessing, getThunderLevel() returns thunderLevel * rainLevel;
+			// So if it's thundering but not raining, then it won't be doing either
+		}
+
+		if (level.oRainLevel != level.rainLevel)
+		{
+			level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.RAIN_LEVEL_CHANGE, level.rainLevel), level.dimension());
+		}
+
+		if (level.oThunderLevel != level.thunderLevel)
+		{
+			level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE, level.thunderLevel), level.dimension());
+		}
+
+		/* The function in use here has been replaced in order to only send the weather info to players in the correct dimension,
+		 * rather than to all players on the server. This is what causes the client-side rain, as the
+		 * client believes that it has started raining locally, rather than in another dimension.
+		 */
+		if (isRaining != level.isRaining())
+		{
+			if (isRaining)
+			{
+				level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.STOP_RAINING, 0.0F), level.dimension());
+			}
+			else
+			{
+				level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.START_RAINING, 0.0F), level.dimension());
+			}
+
+			level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.RAIN_LEVEL_CHANGE, level.rainLevel), level.dimension());
+			level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE, level.thunderLevel), level.dimension());
+		}
+
+	}
+
+	/**
+	 * Handles chunk ticking. This occurs on chunks that are within a radius of the player (128 blocks), which is notably smaller
+	 * than chunks that are loaded. We need this to be *accurate*, and *fast*. We handle a number of possible mechanics in order
+	 * to try and keep the effects of weather (snow, ice, and icicles), up-to-date.
+	 *
+	 * <h3>Simulation</h3>
+	 * In order to properly handle simulation of chunks that have not been random ticked in a while, we support multiple methods of
+	 * "simulating" if snow should have accumulated, or melted. By default, vanilla will do snow proportional to {@code randomTickSpeed / 48}
+	 * blocks per tick, or once every 16 ticks, per chunk. We start with a baseline of half that speed (snow every 50 ticks).
+	 * <p>
+	 * Snow melting happens slower, since it's always happening, at a rate of roughly 1 per 200 ticks.
+	 * <ul>
+	 *     <li>Over short times, such as less than 1000 ticks, we do basic "catch-up". We calculate some number of additional chunk
+	 *     ticks to run, and execute them based on historical data for rainfall/temperature.</li>
+	 *     <li>Over longer times, we do a less accurate simulation of the weather, which tries to extrapolate how much the chunk should
+	 *     be melted, or covered in snow. This then does the same "catch-up", but with a specific end-goal in mind.</li>
+	 * </ul>
+	 *
+	 * <h3>Snow Accumulation and Melting</h3>
+	 * We use the POI system for snow, in order to have an accurate and fast count of the amount of snow (or ice or icicles) in a chunk, and
+	 * we do a very basic counting of previous ticks, how many times we should have been raining (accumulating snow), or positive temperature
+	 * (melting). Note that we do melting much slower than we do accumulation, which affects how we simulate.
+	 */
+	public static void onTickChunk(ServerLevel level, ChunkAccess chunk)
+	{
+		final WorldTracker tracker = WorldTracker.get(level);
+		if (!level.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE))
+		{
+			return; // If weather is disabled, we prevent snow accumulation and melting completely
+		}
+
+		final ClimateModel model = tracker.getClimateModel();
+
+		final ChunkPos chunkPos = chunk.getPos();
+		final LevelChunk levelChunk = level.getChunk(chunkPos.x, chunkPos.z);
+		final ChunkData data = ChunkData.get(levelChunk);
+		if (data == ChunkData.EMPTY)
+			return;
+
+		final long currentTick = Calendars.SERVER.getTicks();
+		final long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
+		final long lastRandomTick = data.getLastRandomTick();
+		final long timeSinceTick = currentTick - lastRandomTick;
+
+		final BlockPos snowPlacementSurfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data, false);
+		final BlockPos climateCheckSurfacePos = getRandomSurfacePos(level, chunkPos);
+
+		final float rainfall = model.getRainfall(level, climateCheckSurfacePos);
+		final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
+
+		if (timeSinceTick > 4_000)
+		{
+			// We have not ticked this chunk in a short while, so run catch-up ticks to see if we missed anything
+			// First, we need to check for what we might've missed
+
+			// Iterates for maximum of one month of weather
+			long calendarTick = currentCalendarTick - Math.min(192_000, timeSinceTick);
+			int netChangeInSnow = 0; // >0 indicates melting, <0 indicates freezing
+
+			while (calendarTick < currentCalendarTick)
+			{
+				calendarTick += 4_000;
+				// Take the max of the two temperatures to ensure that snow will not accumulate in too-warm spots in the autumn
+				final float estimatedTemperature = Math.max(model.getTemperature(level, climateCheckSurfacePos, calendarTick, daysInMonth),
+					model.getTemperature(level, snowPlacementSurfacePos, calendarTick, daysInMonth));
+				if (estimatedTemperature > 2f)
+				{
+					netChangeInSnow = netChangeInSnow - UPDATES_PER_SNOW_MELT_SKIP;
+				}
+				else if (estimatedTemperature < -2f && isRaining(rainfall, calendarTick, level))
+				{
+					// Reduce amount of snow accumulated if near the temperature threshold
+					final float fuzz = Mth.clampedMap(estimatedTemperature, -2f, -12f, 0.5f, 1f);
+					netChangeInSnow = netChangeInSnow + (int) (UPDATES_PER_SNOW_ACCUMULATION_SKIP * fuzz);
+				}
+			}
+
+			if (netChangeInSnow > 0)
+			{
+				// Then, if we're performing a large number of updates, we want to first count the amount of snow in the chunk,
+				// and only do updates if it's between a threshold
+				netChangeInSnow = Math.min(MAX_UPDATES_PER_TICK, Math.min(256 - countExistingSnowInChunk(level, chunkPos), netChangeInSnow));
+
+				for (int i = 0; i < netChangeInSnow; i++)
+				{
+					handleSnowAccumulation(level, getSequentialSurfacePos(level, chunkPos, chunk, data, true));
+				}
+			}
+			else if (netChangeInSnow < 0)
+			{
+				// If it has been more than a month since the chunk was ticked,
+				// apply a multiplier to the melt based on how long it has been
+				final int meltFactor = (int) (Math.max(timeSinceTick / 192_000, 1));
+				netChangeInSnow = Math.min(MAX_UPDATES_PER_TICK, -netChangeInSnow * meltFactor);
+				handleSnowMelting(level, chunkPos, netChangeInSnow);
+			}
+		}
+		else if (level.random.nextInt(TICKS_PER_SNOW_ACCUMULATION) == 0)
+		{
+			// Trigger either accumulation event or snow melt
+			final float realTemperature = model.getTemperature(level, snowPlacementSurfacePos);
+			// Use the actual temperature for accumulation to avoid placing snow somewhere too warm
+			if (realTemperature < -2f && isRaining(rainfall, currentCalendarTick, level))
+			{
+				// Trigger accumulation
+				handleSnowAccumulation(level, snowPlacementSurfacePos);
+				// We delay iterating the position until we know whether snow will actually get placed
+				data.iterateSnowPos(chunk);
+			}
+			// Use the random surface pos for melting to avoid getting stuck on a block
+			else if (model.getTemperature(level, climateCheckSurfacePos) > 2f && level.random.nextInt(TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION) == 0)
+			{
+				// Trigger melting
+				handleSnowMelting(level, chunkPos, 1);
+			}
+		}
+
+		data.setLastRandomTick(chunk, currentTick);
+	}
+
+
+	// This is from the first port, no idea if it's actually any good??? - Py
+	private static boolean isRaining(float rainfall, float raintick, ServerLevel level) {
+		if ((new Random((long) (level.getSeed() + Math.floor(raintick / 6000)))).nextDouble() > 0.1875) {
+			return false;
+		}
+		return Math.random() - Mth.clampedMap(rainfall, 0f, 500f, 1, 0) > 0;
+	}
+
+	private static BlockPos getSequentialSurfacePos(ServerLevel level, ChunkPos chunkPos, ChunkAccess access, ChunkData data, boolean updateChunk)
+	{
+		final BlockPos pos = data.getNextSnowPos(chunkPos);
+		if (updateChunk)
+		{
+			data.iterateSnowPos(access);
+		}
+		return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
+	}
+
+	private static BlockPos getRandomSurfacePos(ServerLevel level, ChunkPos chunkPos)
+	{
+		final BlockPos randomPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
+		return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, randomPos);
+	}
+
+	private static int countExistingSnowInChunk(ServerLevel level, ChunkPos chunkPos)
+	{
+		int total = 0;
+
+		final SectionStorageAccessor<PoiSection> poi = getPoiManager(level);
+		for (int sectionY = level.getMaxSection() - 1; sectionY >= level.getMinSection(); sectionY--)
+		{
+			final Set<PoiRecord> objects = getPoiRecords(poi, chunkPos, sectionY);
+			if (objects != null)
+			{
+				total += objects.size();
+			}
+		}
+		return total;
+	}
+
+	/**
+	 * Snow melting, including ice and icicles, is done randomly per POI chunk section. It can do up to {@code amount} removals,
+	 * which simulates snow melting at a consistent rate (snow/tick), rather than random ticks which would be proportional to
+	 * the amount of snow in the chunk.
+	 */
+	private static void handleSnowMelting(ServerLevel level, ChunkPos chunkPos, int amount)
+	{
+		// PoiManager doesn't have the methods we need, and they look pretty slow. We just need a randomly sampled poi from this chunk, and we
+		// don't really care about section. So this is likely more efficient.
+		final SectionStorageAccessor<PoiSection> poi = getPoiManager(level);
+		for (int sectionY = level.getMinSection(); sectionY < level.getMaxSection(); sectionY++)
+		{
+			final Set<PoiRecord> entries = getPoiRecords(poi, chunkPos, sectionY);
+			if (entries != null && !entries.isEmpty())
+			{
+				// Handle two cases:
+				// - removing all (amount >= entries.size())
+				// - removing some (amount < entries.size())
+				final List<PoiRecord> copyOfEntries = new ArrayList<>(entries); // Must be a mutable view, since we swap to random sample later
+				if (amount >= copyOfEntries.size())
+				{
+					for (PoiRecord entry : copyOfEntries)
+					{
+						removeSnowAt(level, entry.getPos());
+					}
+					amount -= copyOfEntries.size();
+				}
+				else
+				{
+					final List<PoiRecord> sampleOfEntries = Helpers.uniqueRandomSample(copyOfEntries, amount, level.random);
+					for (PoiRecord entry : sampleOfEntries)
+					{
+						removeSnowAt(level, entry.getPos());
+					}
+					amount -= sampleOfEntries.size();
+				}
+
+				if (amount <= 0)
+				{
+					return;
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static SectionStorageAccessor<PoiSection> getPoiManager(ServerLevel level)
+	{
+		return (SectionStorageAccessor<PoiSection>) level.getPoiManager();
+	}
+
+	@Nullable
+	private static Set<PoiRecord> getPoiRecords(SectionStorageAccessor<PoiSection> poi, ChunkPos chunkPos, int sectionY)
+	{
+		final long sectionKey = SectionPos.asLong(chunkPos.x, sectionY, chunkPos.z);
+		final Optional<PoiSection> section = poi.invoke$getOrLoad(sectionKey);
+		return section.isPresent()
+				   ? ((PoiSectionAccessor) section.get()).accessor$byType().get(CLIMATE)
+				   : null;
+	}
+
+	private static void handleSnowAccumulation(ServerLevel level, BlockPos surfacePos)
+	{
+		// Handle up to two block tall plants if they can be piled
+		// This means we need to check three levels deep
+		BlockPos groundPos, belowGroundPos;
+
+		if (placeSnowOrSnowPile(level, surfacePos)) return;
+		if (placeSnowOrSnowPile(level, groundPos = surfacePos.below())) return;
+		if (placeSnowOrSnowPile(level, belowGroundPos = surfacePos.below(2))) return;
+
+		// Otherwise, try placing an ice pile
+		// First, since we want to handle water with a single block above, if we find no water, but we find one below, we choose that instead
+		// However, we have to also exclude ice here, since we don't intend to freeze two layers down, or under other fluids like rivers
+		BlockState groundState = level.getBlockState(groundPos);
+		if (isIce(groundState))
+		{
+			return;
+		}
+		if (groundState.getFluidState().getType() != Fluids.WATER)
+		{
+			if (groundState.getBlock() instanceof LiquidBlock)
+			{
+				return;
+			}
+			groundPos = belowGroundPos;
+			groundState = level.getBlockState(groundPos);
+		}
+
+		IcePileBlock.placeIcePileOrIce(level, groundPos, groundState, false);
+
+		// Then place icicles at a lower rate, under overhangs. The lower rate is because the search for icicles is mildly expensive of a check
+		if (level.random.nextInt(16) == 0)
+		{
+			// Place icicles under overhangs
+			final BlockPos iciclePos = findIcicleLocation(level, surfacePos);
+			if (iciclePos != null)
+			{
+				BlockPos posAbove = iciclePos.above();
+				BlockState stateAbove = level.getBlockState(posAbove);
+				if (Helpers.isBlock(stateAbove, BlockTags.ICE) || Helpers.isBlock(stateAbove, TFCTags.Blocks.NO_ICICLE_GENERATION))
+				{
+					return;
+				}
+				if (Helpers.isBlock(stateAbove, TFCBlocks.ICICLE.get()))
+				{
+					level.setBlock(posAbove, stateAbove.setValue(ThinSpikeBlock.TIP, false), 3 | 16);
+				}
+				level.setBlock(iciclePos, TFCBlocks.ICICLE.get().defaultBlockState().setValue(ThinSpikeBlock.TIP, true), 3);
+			}
+		}
+	}
+
+	/**
+	 * @return {@code true} if a snow block or snow pile was placed.
+	 */
+	private static boolean placeSnowOrSnowPile(ServerLevel level, BlockPos initialPos)
+	{
+		// First, try and find an optimal position, to smoothen out snow accumulation
+		// This will only move to the side, if we're currently at a snow location
+		final BlockPos pos = findOptimalSnowLocation(level, initialPos, level.getBlockState(initialPos));
+		final BlockState state = level.getBlockState(pos);
+
+		// If we didn't move to the side, then we still need to pass a can see sky check
+		// If we did, we might've moved under an overhang from a previously valid snow location
+		if (initialPos.equals(pos) && !level.canSeeSky(pos))
+		{
+			return false;
+		}
+		return placeSnowOrSnowPileAt(level, pos, state);
+	}
+
+	private static boolean placeSnowOrSnowPileAt(ServerLevel level, BlockPos pos, BlockState state)
+	{
+		// Then, handle possibilities
+		if (SnowPileBlock.canPlaceSnowPile(level, pos, state))
+		{
+			SnowPileBlock.placeSnowPile(level, pos, state, false);
+			return true;
+		}
+		else if (state.getBlock() instanceof KrummholzBlock)
+		{
+			KrummholzBlock.updateFreezingInColumn(level, pos, true);
+		}
+		else if (state.isAir() && Blocks.SNOW.defaultBlockState().canSurvive(level, pos))
+		{
+			// Vanilla snow placement (single layers)
+			level.setBlock(pos, Blocks.SNOW.defaultBlockState(), 3);
+			return true;
+		}
+		else
+		{
+			// Fills cauldrons with snow
+			state.getBlock().handlePrecipitation(state, level, pos, Biome.Precipitation.SNOW);
+		}
+		return false;
+	}
+
+	/**
+	 * Smoothens out snow creation, so it doesn't create as uneven piles, by moving snowfall to adjacent positions where possible.
+	 */
+	private static BlockPos findOptimalSnowLocation(ServerLevel level, BlockPos pos, BlockState state)
+	{
+		BlockPos targetPos = null;
+		int found = 0;
+		if (isSnow(state))
+		{
+			for (Direction direction : Direction.Plane.HORIZONTAL)
+			{
+				final BlockPos adjPos = pos.relative(direction);
+				final BlockState adjState = level.getBlockState(adjPos);
+				if ((adjState.isAir() || Helpers.isBlock(adjState.getBlock(), TFCTags.Blocks.CAN_BE_SNOW_PILED))
+						&& Blocks.SNOW.defaultBlockState().canSurvive(level, adjPos))
+				{
+					found++;
+					if (targetPos == null || level.random.nextInt(found) == 0)
+					{
+						targetPos = adjPos;
+					}
+				}
+			}
+			if (targetPos != null)
+			{
+				return targetPos;
+			}
+		}
+		return pos;
+	}
+
+	@Nullable
+	private static BlockPos findIcicleLocation(ServerLevel level, BlockPos pos)
+	{
+		final Direction side = Direction.Plane.HORIZONTAL.getRandomDirection(level.random);
+		BlockPos adjacentPos = pos.relative(side);
+		final int adjacentHeight = level.getHeight(Heightmap.Types.MOTION_BLOCKING, adjacentPos.getX(), adjacentPos.getZ());
+		BlockPos foundPos = null;
+
+		int found = 0;
+		for (int y = 0; y < adjacentHeight; y++)
+		{
+			final BlockState stateAt = level.getBlockState(adjacentPos);
+			final BlockPos posAbove = adjacentPos.above();
+			final BlockState stateAbove = level.getBlockState(posAbove);
+			if (stateAt.isAir() && (stateAbove.getBlock() == TFCBlocks.ICICLE.get() || stateAbove.isFaceSturdy(level, posAbove, Direction.DOWN)))
+			{
+				found++;
+				if (foundPos == null || level.random.nextInt(found) == 0)
+				{
+					foundPos = adjacentPos;
+				}
+			}
+			adjacentPos = posAbove;
+		}
+
+		if (foundPos == null)
+		{
+			return null;
+		}
+
+		// Ensure that icicles are always below a maximum length, which is determined by location (so that each not every location gets the same length).
+		// This is technically a weird heuristic (icicle -> block -> icicle) might mess it up, but not in any meaningful way that is player visible
+		final int maxLength = 1 + (Helpers.hash(7189237951231L, pos.getX(), 0, pos.getZ()) % 3);
+		if (level.getBlockState(foundPos.above(maxLength)).getBlock() == TFCBlocks.ICICLE.get())
+		{
+			return null;
+		}
+
+		return foundPos;
+	}
+
+	/**
+	 * Removes snow, ice, and icicles. For icicles, we search downwards to find the lowest icicle to melt first.
+	 */
+	private static void removeSnowAt(ServerLevel level, BlockPos pos)
+	{
+		// Snow melting - both snow and snow piles
+		BlockState state = level.getBlockState(pos);
+		if (isSnow(state))
+		{
+			// When melting snow, we melt layers at +2 from expected, while the temperature is still below zero
+			// This slowly reduces massive excess amounts of snow, if they're present, but doesn't actually start melting snow a lot when we're still below freezing.
+			SnowPileBlock.removePileOrSnow(level, pos, state);
+		}
+		else if (state.getBlock() instanceof KrummholzBlock)
+		{
+			KrummholzBlock.updateFreezingInColumn(level, pos, false);
+		}
+		else if (isIce(state))
+		{
+			IcePileBlock.removeIcePileOrIce(level, pos, state);
+		}
+		else if (state.getBlock() == TFCBlocks.ICICLE.get())
+		{
+			// Scan downwards to find the lowest icicle in the column to melt
+			final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+
+			cursor.setWithOffset(pos, Direction.DOWN);
+			BlockState belowState = level.getBlockState(cursor);
+			while (belowState.getBlock() == TFCBlocks.ICICLE.get())
+			{
+				cursor.move(Direction.DOWN);
+				belowState = level.getBlockState(cursor);
+			}
+
+			cursor.move(Direction.UP);
+			level.removeBlock(cursor, false); // Remove the icicle
+			cursor.move(Direction.UP);
+
+			// Update the block above, if it is also an icicle
+			final BlockState stateAbove = level.getBlockState(cursor);
+			if (stateAbove.getBlock() == TFCBlocks.ICICLE.get())
+			{
+				level.setBlock(cursor, stateAbove.setValue(IcicleBlock.TIP, true), Block.UPDATE_ALL);
+			}
+		}
+	}
+
+	public static boolean isSnow(BlockState state)
+	{
+		return state.getBlock() == Blocks.SNOW || state.getBlock() == TFCBlocks.SNOW_PILE.get();
+	}
+
+	public static boolean isIce(BlockState state)
+	{
+		return state.getBlock() == Blocks.ICE || state.getBlock() == TFCBlocks.ICE_PILE.get() || state.getBlock() == TFCBlocks.SEA_ICE.get();
+	}
+
+	/**
+	 * Converts wind speed to M/s
+	 */
+	public static float windMS(Vec2 wind)
+	{
+		return wind.length() * WIND_MS_FACTOR;
+	}
+
+	/**
+	 * Converts wind speed to M/tick (useful for accurately affecting entity/particle velocity)
+	 */
+	public static float windMT(Vec2 wind)
+	{
+		return wind.length() * WIND_MS_FACTOR / 20;
+	}
+
+	/**
+	 * Converts wind speed to KM/h
+	 */
+	public static float windKMH(Vec2 wind)
+	{
+		return wind.length() * WIND_KMS_FACTOR;
+	}
+
+	/**
+	 * Wraps and makes a wind angle positive, implicit that with the resulting angle, north is 0 degrees
+	 */
+	public static float wrappedPositiveAngle(float angleIn)
+	{
+		float angle = angleIn < 0
+						  ? angleIn += Mth.TWO_PI
+						  : angleIn;
+		// rotate so North is signal 0/15
+		angle += Mth.PI / 2;
+		// wrap
+		if (angle > Mth.TWO_PI)
+		{
+			angle -= Mth.TWO_PI;
+		}
+		return angle;
+	}
+
+	/**
+	 * Table for getting the wind direction as a cardinal, represented as an int
+	 * Should be used in all cases to ensure consistency between any cardinal direction representation of a wind angle
+	 */
+	public static int granularCardinalIntFromAngle(float angle)
+	{
+		angle *= Mth.RAD_TO_DEG;
+		float m = 11.25f;
+
+		// implicit north
+		int direction = 0;
+
+		if (angle <= 22.5 + m && angle >= 22.5 - m)
+		{
+			// north by northeast
+			direction = 1;
+		}
+		else if (angle <= 45 + m && angle >= 45 - m)
+		{
+			// northeast
+			direction = 2;
+		}
+		else if (angle <= 67.5 + m && angle >= 67.5 - m)
+		{
+			// east by northeast
+			direction = 3;
+		}
+		else if (angle <= 90 + m && angle >= 90 - m)
+		{
+			// east
+			direction = 4;
+		}
+		else if (angle <= 112.5 + m && angle >= 112.5 - m)
+		{
+			// east by southeast
+			direction = 5;
+		}
+		else if (angle <= 135 + m && angle >= 135 - m)
+		{
+			// southeast
+			direction = 6;
+		}
+		else if (angle <= 157.5 + m && angle >= 157.5 - m)
+		{
+			// south by southeast
+			direction = 7;
+		}
+		else if (angle <= 180 + m && angle >= 180 - m)
+		{
+			// south
+			direction = 8;
+		}
+		else if (angle <= 202.5 + m && angle >= 202.5 - m)
+		{
+			// south by southwest
+			direction = 9;
+		}
+		else if (angle <= 225 + m && angle >= 225 - m)
+		{
+			// southwest
+			direction = 10;
+		}
+		else if (angle <= 247.5 + m && angle >= 247.5 - m)
+		{
+			// west by southwest
+			direction = 11;
+		}
+		else if (angle <= 270 + m && angle >= 270 - m)
+		{
+			// west
+			direction = 12;
+		}
+		else if (angle <= 292.5 + m && angle >= 292.5 - m)
+		{
+			// west by northwest
+			direction = 13;
+		}
+		else if (angle <= 315 + m && angle >= 315 - m)
+		{
+			// northwest
+			direction = 14;
+		}
+		else if (angle <= 337.5 + m && angle >= 337.5 - m)
+		{
+			// north by northwest
+			direction = 15;
+		}
+
+		return direction;
+	}
+
+	/**
+	 * Returns the appropriate cardinal direction translation for any wind angle
+	 */
+	public static Component windGranularCardinal(Vec2 wind)
+	{
+		final float angle = wrappedPositiveAngle((float) Mth.atan2(wind.y, wind.x));
+		int direction = granularCardinalIntFromAngle(angle);
+		switch (direction)
+		{
+			case 0 -> {return Helpers.translateEnum(Direction.NORTH);}
+			case 1 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.NORTH), Component.translatable("tfc.direction.cardinal_northeast"));}
+			case 2 -> {return Component.translatable("tfc.direction.cardinal_northeast");}
+			case 3 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.EAST), Component.translatable("tfc.direction.cardinal_northeast"));}
+			case 4 -> {return Helpers.translateEnum(Direction.EAST);}
+			case 5 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.EAST), Component.translatable("tfc.direction.cardinal_southeast"));}
+			case 6 -> {return Component.translatable("tfc.direction.cardinal_southeast");}
+			case 7 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.SOUTH), Component.translatable("tfc.direction.cardinal_southeast"));}
+			case 8 -> {return Helpers.translateEnum(Direction.SOUTH);}
+			case 9 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.SOUTH), Component.translatable("tfc.direction.cardinal_southwest"));}
+			case 10 -> {return Component.translatable("tfc.direction.cardinal_southwest");}
+			case 11 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.WEST), Component.translatable("tfc.direction.cardinal_southwest"));}
+			case 12 -> {return Helpers.translateEnum(Direction.WEST);}
+			case 13 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.WEST), Component.translatable("tfc.direction.cardinal_northwest"));}
+			case 14 -> {return Component.translatable("tfc.direction.cardinal_northwest");}
+			case 15 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.NORTH), Component.translatable("tfc.direction.cardinal_northwest"));}
+		}
+		return Component.empty();
+	}
+
 }
