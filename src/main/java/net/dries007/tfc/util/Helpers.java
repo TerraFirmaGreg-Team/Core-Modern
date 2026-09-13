@@ -391,8 +391,21 @@ public final class Helpers
         final float fallDamageReduction = 5;
         final Vec3 motion = entity.getDeltaMovement();
 
+		// Modify the factor for horizontal movement depending on whether the entity is on the ground
+		// This is because the player cannot accelerate in the air as quickly on the ground to counter the deceleration, so
+		// jumping feels overly punishing
+		final float horizFactor;
+		if (entity.onGround())
+		{
+			horizFactor = factor;
+		}
+		else
+		{
+			horizFactor = 0.25f * (factor + 3);
+		}
+
         // Affect falling very slightly, and don't affect jumping
-        entity.setDeltaMovement(motion.multiply(factor, motion.y < 0 ? 1 - 0.2f * (1 - factor) : 1, factor));
+		entity.setDeltaMovement(motion.multiply(horizFactor, motion.y < 0 ? 1 - 0.2f * (1 - factor) : 1, horizFactor));
         if (entity.fallDistance > fallDamageReduction)
         {
             entity.causeFallDamage(entity.fallDistance - fallDamageReduction, 1.0f, entity.damageSources().fall());
