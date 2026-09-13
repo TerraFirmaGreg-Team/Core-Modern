@@ -1,3 +1,9 @@
+/*
+ * Licensed under the EUPL, Version 1.2.
+ * You may obtain a copy of the Licence at:
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ */
+
 package su.terrafirmagreg.core.world.feature;
 
 import com.mojang.serialization.Codec;
@@ -18,7 +24,6 @@ import net.minecraft.world.level.material.Fluid;
 
 import su.terrafirmagreg.core.common.block.CreepingWaterPlantBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
-import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
     public CreepingOceanPlantFeature(Codec<CreepingPlantConfig> codec) {
@@ -40,10 +45,9 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
                 for (int y = 0; y < height; y++) {
-                    if (x * x + z * z < radius * radius && context.random().nextFloat() < context.config().integrity()) {
+                    if ((x * x) + (z * z) < (radius * radius) && context.random().nextFloat() < context.config().integrity()) {
                         cursor.setWithOffset(pos, x, y, z);
-                        int heightAboveTide = state.is(TFGTags.Blocks.IsAnemone) ? -1 : 2;
-                        if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor) && cursor.getY() <= heightAboveTide + maxTideHeight.noise(cursor.getX(), cursor.getZ())) {
+                        if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor) && cursor.getY() <= context.config().heightAboveTide() + maxTideHeight.noise(cursor.getX(), cursor.getZ())) {
                             final BlockState newState = CreepingWaterPlantBlock.updateStateFromSides(level, cursor, state);
                             if (!newState.isAir()) {
                                 final Fluid fluidAt = level.getFluidState(cursor).getType();

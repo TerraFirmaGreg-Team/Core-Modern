@@ -3,6 +3,7 @@
     "config": {
         "integrity": 0.45,
         "block": "tfg:plant/anemone_green",
+        "tide_height": -1,
         "radius": 3,
         "height": 5
     }
