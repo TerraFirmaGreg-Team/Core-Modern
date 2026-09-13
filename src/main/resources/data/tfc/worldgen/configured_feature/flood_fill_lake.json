@@ -2,7 +2,7 @@
     "__comment__": "This file was automatically created by mcresources",
     "type": "tfc:flood_fill_lake",
     "config": {
-        "replace_fluids": [],
-        "state": "minecraft:water"
+        "replace_fluids": ["minecraft:water"],
+        "state": "tfg:fluid/muddy_water"
     }
 }

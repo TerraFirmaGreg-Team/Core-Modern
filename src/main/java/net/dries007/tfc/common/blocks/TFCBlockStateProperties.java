@@ -25,6 +25,7 @@ import net.dries007.tfc.common.blocks.wood.BranchDirection;
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.world.river.Flow;
+import su.terrafirmagreg.core.common.data.TFGFluids;
 
 /**
  * @see BlockStateProperties
@@ -38,6 +39,7 @@ public class TFCBlockStateProperties
     public static final FluidProperty ALL_WATER = FluidProperty.create("fluid", Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER));
     public static final FluidProperty WATER_AND_LAVA = FluidProperty.create("fluid", Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, Fluids.LAVA));
     public static final FluidProperty SALT_WATER = FluidProperty.create("fluid", Stream.of(Fluids.EMPTY, TFCFluids.SALT_WATER));
+	public static final FluidProperty MUDDY_WATER = FluidProperty.create("fluid", Stream.of(Fluids.EMPTY, Fluids.WATER, TFGFluids.MUDDY_WATER));
     public static final FluidProperty FRESH_WATER = FluidProperty.create("fluid", Stream.of(Fluids.EMPTY, Fluids.WATER));
 
     public static final IntegerProperty COUNT_1_3 = IntegerProperty.create("count", 1, 3);
