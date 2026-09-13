@@ -1,8 +1,8 @@
 {
     "color": {
-        "b": 170,
-        "r": 155,
-        "g": 0
+        "r": 0,
+        "b": 235,
+        "g": 180
     },
     "sort": 72,
     "key": "biome.tfg.earth/river_valley"
