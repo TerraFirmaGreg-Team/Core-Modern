@@ -9,7 +9,8 @@
         "tfg:earth/tower_karst_lake",
         "tfg:earth/subglacial_lake",
         "tfg:earth/meltwater_lake",
-        "tfg:earth/lowlands"
+        "tfg:earth/lowlands",
+        "tfg:earth/rift_lake"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

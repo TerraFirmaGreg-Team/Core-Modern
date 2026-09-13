@@ -8,7 +8,7 @@
         {"type": "minecraft:in_square"},
         {
             "distance": 0.8,
-            "type": "tfg:cinder_cone"
+            "type": "tfc:volcano"
         }
     ],
     "__comment__": "This file was automatically created by mcresources"

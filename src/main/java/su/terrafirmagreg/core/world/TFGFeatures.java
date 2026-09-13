@@ -5,6 +5,7 @@ import java.util.function.Function;
 import com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration;
 import com.mojang.serialization.Codec;
 
+import net.dries007.tfc.world.feature.BlockStateMapConfig;
 import net.dries007.tfc.world.feature.HotSpringConfig;
 import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
 import net.minecraft.core.registries.Registries;
@@ -62,6 +63,9 @@ public class TFGFeatures {
     // Modification of a TFC 1.21 feature backport
     public static final RegistryObject<CreepingUnderwaterPlantFeature> CREEPING_UNDERWATER_PLANT = register(
             "creeping_underwater_plant", CreepingUnderwaterPlantFeature::new, CreepingPlantConfig.CODEC);
+    // TFC 1.21 feature backport
+    public static final RegistryObject<MappedRivuletFeature> MAPPED_RIVULET = register(
+            "mapped_rivulet", MappedRivuletFeature::new, BlockStateMapConfig.CODEC);
 
     public static final RegistryObject<FluidPlugFeature> FLUID_PLUG = register(
             "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);

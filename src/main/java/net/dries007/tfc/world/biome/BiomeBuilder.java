@@ -41,6 +41,7 @@ public class BiomeBuilder
 	private RiverBlendType riverBlendType;
 	private ShoreBlendType shoreBlendType;
 	private boolean salty;
+	private boolean muddy;
 	private boolean hasCinderCones;
 	private boolean hasTuyas;
 	private boolean hasAtolls;
@@ -156,6 +157,12 @@ public class BiomeBuilder
 		return this;
 	}
 
+	public BiomeBuilder muddy()
+	{
+		this.muddy = true;
+		return this;
+	}
+
 	public BiomeBuilder spawnable()
 	{
 		this.spawnable = true;
@@ -242,7 +249,7 @@ public class BiomeBuilder
 		assert surfaceBuilderFactory != null : "missing surface builder";
 
 		return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType,
-			riverBlendType, shoreBlendType, salty, hasCinderCones, hasTuffRings, hasTuyas, hasAtolls,
+			riverBlendType, shoreBlendType, salty, muddy, hasCinderCones, hasTuffRings, hasTuyas, hasAtolls,
 			hasStratovolcanoes, centeredFeatureFrequency, centeredFeatureBaseHeight, centeredFeatureScaleHeight,
 			centeredFeatureIce, spawnable, rivers, shore, shoreBaseHeight, sandyRiverShores);
 	}

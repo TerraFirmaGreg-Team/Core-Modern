@@ -27,7 +27,7 @@
         {
             "min_elevation": 1,
             "max_elevation": 512,
-            "type": "tfg:intertidal"
+            "type": "tfc:intertidal"
         }
     ],
     "__comment__": "This file was automatically created by mcresources"

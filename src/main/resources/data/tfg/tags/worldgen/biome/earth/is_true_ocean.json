@@ -4,7 +4,8 @@
         "tfg:earth/ocean_reef",
         "tfg:earth/deep_ocean",
         "tfg:earth/deep_ocean_trench",
-        "tfg:earth/sunken_shield_volcano"
+        "tfg:earth/sunken_shield_volcano",
+        "tfg:earth/ocean_ridge"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

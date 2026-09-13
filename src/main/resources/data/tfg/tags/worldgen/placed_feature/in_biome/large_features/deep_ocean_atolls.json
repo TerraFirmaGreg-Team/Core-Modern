@@ -1,0 +1,13 @@
+{
+    "values": [
+        "tfg:earth/atoll_coral_mushroom",
+        "tfg:earth/atoll_coral_tree",
+        "tfg:earth/atoll_coral_claw",
+        "tfg:earth/atoll_guano",
+        "tfg:earth/forest",
+        "#tfg:feature/duff_discs",
+        "#tfg:feature/surface_flood_fill_lakes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

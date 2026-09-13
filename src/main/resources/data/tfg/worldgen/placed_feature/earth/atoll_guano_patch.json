@@ -1,0 +1,16 @@
+{
+    "feature": "tfg:earth/atoll_guano_patch",
+    "placement": [
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_easing": 0.8,
+            "min_easing": 0.5,
+            "type": "tfc:atoll"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

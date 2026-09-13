@@ -13,6 +13,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.chunkdata.RockData;
+import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 
 public class ChunkBaseBlockSource
 {
@@ -25,7 +28,9 @@ public class ChunkBaseBlockSource
     private final Sampler<BiomeExtension> biomeSampler;
     private final BlockState[] cachedFluidStates;
 
-    private final BlockState freshWater = Blocks.WATER.defaultBlockState(), saltWater = TFCBlocks.SALT_WATER.get().defaultBlockState();
+    private final BlockState freshWater = Blocks.WATER.defaultBlockState();
+	private final BlockState saltWater = TFCBlocks.SALT_WATER.get().defaultBlockState();
+	private final BlockState muddyWater = TFGBlocks.MUDDY_WATER.get().defaultBlockState();
 
     public ChunkBaseBlockSource(RockData rockData, Sampler<BiomeExtension> biomeSampler)
     {
@@ -44,7 +49,12 @@ public class ChunkBaseBlockSource
 	 */
 	public void useAccurateBiome(int localX, int localZ, BiomeExtension biome, double weight, boolean couldBeSalty, boolean forceSaltWater)
 	{
-		cachedFluidStates[index(localX, localZ)] = forceSaltWater || (couldBeSalty && (biome.isSalty() || (weight <= 0.5 && biome != TFCBiomes.RIVER))) ? saltWater : freshWater;
+		cachedFluidStates[index(localX, localZ)] = forceSaltWater
+													   || (couldBeSalty
+															   && (biome.isSalty()
+																	   || (weight <= 0.5 && biome != TFCBiomes.RIVER)))
+													   ? saltWater
+													   : (biome.isMuddy() ? muddyWater : freshWater);
 	}
 
     public BlockState getBaseBlock(int blockX, int blockY, int blockZ)
@@ -60,7 +70,14 @@ public class ChunkBaseBlockSource
             BlockState state = cachedFluidStates[index];
             if (state == null)
             {
-                state = biomeSampler.get(x, z).isSalty() ? saltWater : freshWater;
+				var sample = biomeSampler.get(x, z);
+				if (sample.isSalty())
+                	state = saltWater;
+				else if (sample.isMuddy())
+					state = muddyWater;
+				else
+					state = freshWater;
+
                 cachedFluidStates[index] = state;
             }
             return state;

@@ -43,6 +43,8 @@ public class BiomeExtension
 	private final ShoreBlendType shoreBlendType;
 	@Getter
 	private final boolean salty;
+	@Getter
+	private final boolean muddy;
 	private final boolean hasCinderCones;
 	private final boolean hasTuffCones;
 	private final boolean hasTuyas;
@@ -72,7 +74,7 @@ public class BiomeExtension
 	BiomeExtension(ResourceKey<Biome> key, @Nullable Function<Seed, BiomeNoiseSampler> noiseFactory,
 				   SurfaceBuilderFactory surfaceBuilderFactory, AquiferLookahead aquiferSurfaceHeight,
 				   BiomeBlendType biomeBlendType, RiverBlendType riverBlendType, ShoreBlendType shoreBlendType,
-				   boolean salty, boolean hasCinderCones, boolean hasTuffCones, boolean hasTuyas, boolean hasAtolls,
+				   boolean salty, boolean muddy, boolean hasCinderCones, boolean hasTuffCones, boolean hasTuyas, boolean hasAtolls,
 				   boolean hasStratovolcanoes, float centeredFeatureFrequency, int centeredFeatureBaseHeight,
 				   int centeredFeatureScaleHeight, boolean centeredFeatureIce, boolean spawnable, boolean rivers,
 				   boolean shore, int shoreBaseHeight, boolean sandyRiverShores)
@@ -85,6 +87,7 @@ public class BiomeExtension
 		this.riverBlendType = riverBlendType;
 		this.shoreBlendType = shoreBlendType;
 		this.salty = salty;
+		this.muddy = muddy;
 		this.hasCinderCones = hasCinderCones;
 		this.hasTuffCones = hasTuffCones;
 		this.hasTuyas = hasTuyas;
