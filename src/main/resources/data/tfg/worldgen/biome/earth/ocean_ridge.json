@@ -107,10 +107,10 @@
                 "maxCount": 2
             },
             {
-                "weight": 30,
-                "minCount": 2,
+                "weight": 100,
+                "minCount": 5,
                 "type": "fowlplay:gull",
-                "maxCount": 5
+                "maxCount": 8
             }
         ],
         "axolotls": [{
