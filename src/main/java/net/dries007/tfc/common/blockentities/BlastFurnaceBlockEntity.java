@@ -62,7 +62,7 @@ import net.dries007.tfc.util.calendar.ICalendarTickable;
 
 import static net.dries007.tfc.TerraFirmaCraft.*;
 
-public class BlastFurnaceBlockEntity extends TickableInventoryBlockEntity<BlastFurnaceBlockEntity.BlastFurnaceInventory> implements ICalendarTickable
+public class BlastFurnaceBlockEntity extends TickableInventoryBlockEntity<BlastFurnaceBlockEntity.BlastFurnaceInventory> implements ICalendarTickable, IHeatable
 {
     private static final Component NAME = Component.translatable(MOD_ID + ".block_entity.blast_furnace");
 
