@@ -3,8 +3,10 @@ package su.terrafirmagreg.core.common.data.items;
 import com.eerussianguy.beneath.common.items.BeneathItemTags;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
+import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.common.item.CoverPlaceBehavior;
+import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -17,10 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
 
@@ -35,6 +34,7 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.item.*;
 import su.terrafirmagreg.core.common.item.wearable.FlippersItem;
+import su.terrafirmagreg.core.common.item.wearable.LiquidFuelJetpack;
 import su.terrafirmagreg.core.common.item.wearable.SnorkelItem;
 import su.terrafirmagreg.core.common.item.wearable.SnowshoesItem;
 import su.terrafirmagreg.core.utils.ModelUtils;
@@ -225,6 +225,13 @@ public class TFGItems {
     public static final ItemEntry<Item> SILK_FIBERS = TFGCore.REGISTRATE.item("silk_fibers", Item::new)
             .properties(p -> p.stacksTo(64))
             .defaultModel()
+            .register();
+
+    public static final ItemEntry<ArmorComponentItem> LIQUID_FUEL_JETPACK = TFGCore.REGISTRATE.item("liquid_fuel_jetpack",
+            (p) -> new ArmorComponentItem(GTArmorMaterials.JETPACK, ArmorItem.Type.CHESTPLATE, p)
+                    .setArmorLogic(new LiquidFuelJetpack()))
+            .tag(Tags.Items.ARMORS_CHESTPLATES)
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {
