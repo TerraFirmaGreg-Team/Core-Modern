@@ -179,7 +179,6 @@
         "common.minecraft.AccessorServerChunkCache",
         "common.minecraft.BeardifierAccessor",
         "common.minecraft.BlockEntityTypeAccessor",
-        "common.minecraft.ChunkSerializerMixin",
         "common.minecraft.EnchantmentHelperNutrientMixin",
         "common.minecraft.EntitySnowshoesSpeedMixin",
         "common.minecraft.HeightmapMixin",
