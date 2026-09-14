@@ -1,0 +1,213 @@
+{
+    "variants": {
+        "power=0,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_0"
+        },
+        "power=2,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_1"
+        },
+        "power=3,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_2"
+        },
+        "power=4,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_2"
+        },
+        "power=5,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_3"
+        },
+        "power=7,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_4"
+        },
+        "power=6,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_4"
+        },
+        "power=0,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_0"
+        },
+        "power=9,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_6"
+        },
+        "power=2,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_1"
+        },
+        "power=11,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_7"
+        },
+        "power=8,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_5"
+        },
+        "power=15,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_10"
+        },
+        "power=15,facing=north": {"model": "tfc:block/thermometer/thermometer_10"},
+        "power=13,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_8"
+        },
+        "power=10,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_6"
+        },
+        "power=14,facing=north": {"model": "tfc:block/thermometer/thermometer_9"},
+        "power=14,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_9"
+        },
+        "power=10,facing=north": {"model": "tfc:block/thermometer/thermometer_6"},
+        "power=11,facing=north": {"model": "tfc:block/thermometer/thermometer_7"},
+        "power=13,facing=north": {"model": "tfc:block/thermometer/thermometer_8"},
+        "power=15,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_10"
+        },
+        "power=12,facing=north": {"model": "tfc:block/thermometer/thermometer_8"},
+        "power=2,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_1"
+        },
+        "power=14,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_9"
+        },
+        "power=1,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_0"
+        },
+        "power=12,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_8"
+        },
+        "power=13,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_8"
+        },
+        "power=0,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_0"
+        },
+        "power=11,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_7"
+        },
+        "power=12,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_8"
+        },
+        "power=14,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_9"
+        },
+        "power=9,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_6"
+        },
+        "power=11,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_7"
+        },
+        "power=15,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_10"
+        },
+        "power=10,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_6"
+        },
+        "power=3,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_2"
+        },
+        "power=4,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_2"
+        },
+        "power=5,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_3"
+        },
+        "power=1,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_0"
+        },
+        "power=10,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_6"
+        },
+        "power=6,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_4"
+        },
+        "power=8,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_5"
+        },
+        "power=12,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_8"
+        },
+        "power=7,facing=east": {
+            "y": 90,
+            "model": "tfc:block/thermometer/thermometer_4"
+        },
+        "power=8,facing=north": {"model": "tfc:block/thermometer/thermometer_5"},
+        "power=6,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_4"
+        },
+        "power=7,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_4"
+        },
+        "power=5,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_3"
+        },
+        "power=6,facing=north": {"model": "tfc:block/thermometer/thermometer_4"},
+        "power=8,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_5"
+        },
+        "power=3,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_2"
+        },
+        "power=4,facing=north": {"model": "tfc:block/thermometer/thermometer_2"},
+        "power=5,facing=north": {"model": "tfc:block/thermometer/thermometer_3"},
+        "power=9,facing=north": {"model": "tfc:block/thermometer/thermometer_6"},
+        "power=4,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_2"
+        },
+        "power=9,facing=south": {
+            "y": 180,
+            "model": "tfc:block/thermometer/thermometer_6"
+        },
+        "power=1,facing=north": {"model": "tfc:block/thermometer/thermometer_0"},
+        "power=0,facing=north": {"model": "tfc:block/thermometer/thermometer_0"},
+        "power=3,facing=north": {"model": "tfc:block/thermometer/thermometer_2"},
+        "power=2,facing=north": {"model": "tfc:block/thermometer/thermometer_1"},
+        "power=1,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_0"
+        },
+        "power=7,facing=north": {"model": "tfc:block/thermometer/thermometer_4"},
+        "power=13,facing=west": {
+            "y": 270,
+            "model": "tfc:block/thermometer/thermometer_8"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -46,7 +46,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.dries007.tfc.TerraFirmaCraft.MOD_ID;
 
-public class BloomeryBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements ICalendarTickable
+public class BloomeryBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements ICalendarTickable, IRecipeTimer
 {
     private static final Component NAME = Component.translatable(MOD_ID + ".block_entity.bloomery");
 
@@ -271,6 +271,18 @@ public class BloomeryBlockEntity extends TickableInventoryBlockEntity<ItemStackH
     {
         lastPlayerTick = tick;
     }
+
+	@Override
+	public int getRecipeDuration()
+	{
+		return cachedRecipe != null ? cachedRecipe.getDuration() : 0;
+	}
+
+	@Override
+	public long getRemainingTime()
+	{
+		return getRemainingTicks();
+	}
 
     private void dumpItems()
     {

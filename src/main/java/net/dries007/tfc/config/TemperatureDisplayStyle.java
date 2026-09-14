@@ -73,6 +73,15 @@ public enum TemperatureDisplayStyle
         return tooltip;
     }
 
+	/**
+	 * Format a temperature, including the whole display range possible of the temperature.
+	 */
+	@Nullable
+	public MutableComponent formatRange(float temperature)
+	{
+		return formatter.format(temperature);
+	}
+
     @FunctionalInterface
     interface Function
     {
