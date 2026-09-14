@@ -1,0 +1,20 @@
+{
+    "feature": "tfc:tide_pool",
+    "placement": [
+        {
+            "chance": 15,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "count": 40,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,65 @@
+{
+    "textures": {
+        "lit": "tfc:block/molten_lit",
+        "particle": "tfc:block/molten_lit"
+    },
+    "elements": [{
+        "from": [
+            0,
+            0,
+            0
+        ],
+        "to": [
+            16,
+            8,
+            16
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#lit"
+            },
+            "south": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#lit"
+            },
+            "north": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#lit"
+            },
+            "west": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#lit"
+            },
+            "up": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    16
+                ],
+                "texture": "#lit"
+            }
+        }
+    }]
+}

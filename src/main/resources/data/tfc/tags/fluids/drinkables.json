@@ -1,0 +1,10 @@
+{
+    "values": [
+        "#tfc:infinite_water",
+        "#tfc:alcohols",
+        "#tfc:milks",
+        "tfc:vinegar"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

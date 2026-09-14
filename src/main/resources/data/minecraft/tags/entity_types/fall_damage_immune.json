@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfc:chicken",
+        "tfc:duck",
+        "tfc:quail",
+        "tfc:ocelot"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

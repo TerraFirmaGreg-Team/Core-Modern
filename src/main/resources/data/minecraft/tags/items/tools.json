@@ -1,0 +1,14 @@
+{
+    "values": [
+        "#tfc:hammers",
+        "#tfc:javelins",
+        "#tfc:knives",
+        "#tfc:chisels",
+        "#tfc:maces",
+        "#tfc:saws",
+        "#tfc:propicks",
+        "#tfc:scythes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

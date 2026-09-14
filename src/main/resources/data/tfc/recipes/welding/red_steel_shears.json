@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:metal/shears/red_steel"},
+    "first_input": {"item": "tfc:metal/knife_blade/red_steel"},
+    "tier": 5,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "combine_forging_bonus": true,
+    "second_input": {"item": "tfc:metal/knife_blade/red_steel"}
+}

@@ -1,0 +1,22 @@
+{
+    "pools": [
+        {
+            "entries": [{
+                "name": "minecraft:scute",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        },
+        {
+            "entries": [{
+                "name": "tfc:food/turtle",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:entity"
+}

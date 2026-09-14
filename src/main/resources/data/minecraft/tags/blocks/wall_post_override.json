@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfc:torch",
+        "tfc:dead_torch"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

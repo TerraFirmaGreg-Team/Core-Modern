@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfc:cod",
+        "tfc:salmon",
+        "tfc:tropical_fish",
+        "tfc:pufferfish",
+        "tfc:bluegill"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

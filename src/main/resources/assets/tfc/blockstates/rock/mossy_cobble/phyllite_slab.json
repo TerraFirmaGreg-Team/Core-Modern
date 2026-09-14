@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/mossy_cobble/phyllite_slab"},
+        "type=double": {"model": "tfc:block/rock/mossy_cobble/phyllite"},
+        "type=top": {"model": "tfc:block/rock/mossy_cobble/phyllite_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

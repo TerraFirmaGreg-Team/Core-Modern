@@ -1,0 +1,16 @@
+{
+    "result": {
+        "item": "tfc:ceramic/unfired_ingot_mold",
+        "count": 2
+    },
+    "pattern": [
+        "XXXX",
+        "X  X",
+        "X  X",
+        "X  X",
+        "XXXX"
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
+}

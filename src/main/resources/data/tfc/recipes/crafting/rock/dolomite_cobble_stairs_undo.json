@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:rock/loose/dolomite",
+        "count": 3
+    },
+    "ingredients": [{"item": "tfc:rock/cobble/dolomite_stairs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

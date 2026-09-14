@@ -1,0 +1,8 @@
+{
+    "result": "tfc:alabaster/polished/cyan_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:alabaster/polished/cyan_slab"},
+    "ingredient": "tfc:alabaster/polished/cyan",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

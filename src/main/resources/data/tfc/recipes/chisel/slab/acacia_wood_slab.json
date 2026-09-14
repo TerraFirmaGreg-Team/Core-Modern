@@ -1,0 +1,8 @@
+{
+    "result": "tfc:wood/planks/acacia_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:wood/planks/acacia_slab"},
+    "ingredient": "tfc:wood/planks/acacia",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

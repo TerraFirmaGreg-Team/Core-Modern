@@ -1,0 +1,49 @@
+{
+    "pools": [{
+        "entries": [{
+            "children": [
+                {
+                    "name": "tfc:plant/douglas_fir_krummholz",
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:block_state_property",
+                            "block": "tfc:plant/douglas_fir_krummholz",
+                            "properties": {"tip": "true"}
+                        },
+                        {
+                            "predicate": {"tag": "tfc:axes"},
+                            "condition": "minecraft:match_tool"
+                        }
+                    ]
+                },
+                {
+                    "name": "tfc:wood/sapling/douglas_fir",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.02
+                    }]
+                },
+                {
+                    "functions": [{
+                        "function": "minecraft:set_count",
+                        "count": {
+                            "min": 1,
+                            "max": 3,
+                            "type": "minecraft:uniform"
+                        }
+                    }],
+                    "name": "minecraft:stick",
+                    "type": "minecraft:item"
+                }
+            ],
+            "type": "minecraft:alternatives"
+        }],
+        "name": "loot_pool",
+        "rolls": 1,
+        "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
+}

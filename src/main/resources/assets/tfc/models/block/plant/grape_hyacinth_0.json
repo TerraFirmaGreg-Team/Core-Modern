@@ -1,0 +1,5 @@
+{
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/plant/grape_hyacinth/grape_hyacinth_0"},
+    "__comment__": "This file was automatically created by mcresources"
+}

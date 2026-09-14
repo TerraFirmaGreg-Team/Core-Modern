@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/lectern",
+    "textures": {
+        "top": "tfc:block/wood/lectern/mangrove/top",
+        "bottom": "tfc:block/wood/planks/mangrove",
+        "sides": "tfc:block/wood/lectern/mangrove/sides",
+        "particle": "tfc:block/wood/lectern/mangrove/sides",
+        "front": "tfc:block/wood/lectern/mangrove/front",
+        "base": "tfc:block/wood/lectern/mangrove/base"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

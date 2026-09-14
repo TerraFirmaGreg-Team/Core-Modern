@@ -1,0 +1,11 @@
+{
+    "feature": "tfc:random_active_hot_spring",
+    "placement": [
+        {
+            "chance": 50,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

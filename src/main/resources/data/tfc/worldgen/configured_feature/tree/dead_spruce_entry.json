@@ -1,0 +1,32 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:forest_entry",
+    "config": {
+        "bush_log": {
+            "Properties": {
+                "axis": "y",
+                "branch_direction": "down"
+            },
+            "Name": "tfc:wood/wood/spruce"
+        },
+        "fallen_leaves": "tfc:wood/fallen_leaves/spruce",
+        "old_growth_tree": "tfc:tree/spruce_large",
+        "dead_chance": 1,
+        "groundcover": [
+            {"block": "tfc:wood/twig/spruce"},
+            {"block": "tfc:wood/fallen_leaves/spruce"}
+        ],
+        "normal_tree": "tfc:tree/spruce",
+        "krummholz": "tfc:tree/spruce_krummholz",
+        "climate": {
+            "max_temperature": -6.6,
+            "max_rainfall": 470,
+            "min_rainfall": 220,
+            "min_temperature": -17.5
+        },
+        "fallen_log": "tfc:wood/log/spruce",
+        "dead_tree": "tfc:tree/spruce_dead",
+        "bush_leaves": "tfc:wood/leaves/spruce",
+        "fallen_tree_chance": 8
+    }
+}

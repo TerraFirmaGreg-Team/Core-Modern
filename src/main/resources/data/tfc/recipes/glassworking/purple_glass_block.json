@@ -1,0 +1,11 @@
+{
+    "result": {"item": "minecraft:purple_stained_glass"},
+    "operations": [
+        "iron",
+        "copper",
+        "basin_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

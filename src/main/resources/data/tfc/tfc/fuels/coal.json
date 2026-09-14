@@ -1,0 +1,9 @@
+{
+    "duration": 2200,
+    "ingredient": [
+        {"item": "minecraft:coal"},
+        {"item": "tfc:ore/bituminous_coal"}
+    ],
+    "temperature": 1415,
+    "__comment__": "This file was automatically created by mcresources"
+}

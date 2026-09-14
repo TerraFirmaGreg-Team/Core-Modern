@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/lectern",
+    "textures": {
+        "top": "tfc:block/wood/lectern/hickory/top",
+        "bottom": "tfc:block/wood/planks/hickory",
+        "sides": "tfc:block/wood/lectern/hickory/sides",
+        "particle": "tfc:block/wood/lectern/hickory/sides",
+        "front": "tfc:block/wood/lectern/hickory/front",
+        "base": "tfc:block/wood/lectern/hickory/base"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

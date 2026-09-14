@@ -1,0 +1,12 @@
+{
+    "gui_light": "front",
+    "perspectives": {
+        "fixed": {"parent": "tfc:item/stone/javelin/igneous_intrusive_gui"},
+        "ground": {"parent": "tfc:item/stone/javelin/igneous_intrusive_gui"},
+        "gui": {"parent": "tfc:item/stone/javelin/igneous_intrusive_gui"},
+        "none": {"parent": "tfc:item/stone/javelin/igneous_intrusive_gui"}
+    },
+    "loader": "forge:separate_transforms",
+    "__comment__": "This file was automatically created by mcresources",
+    "base": {"parent": "tfc:item/stone/javelin/igneous_intrusive_throwing_base"}
+}

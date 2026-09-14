@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "part=bottom,mature=true": {"model": "tfc:block/wild_crop/jute_bottom"},
+        "part=top,mature=true": {"model": "tfc:block/wild_crop/jute_top"},
+        "part=bottom,mature=false": {"model": "tfc:block/dead_crop/jute_bottom"},
+        "part=top,mature=false": {"model": "tfc:block/dead_crop/jute_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

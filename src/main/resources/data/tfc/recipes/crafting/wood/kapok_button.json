@@ -1,0 +1,6 @@
+{
+    "result": {"item": "tfc:wood/planks/kapok_button"},
+    "ingredients": [{"item": "tfc:wood/planks/kapok"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

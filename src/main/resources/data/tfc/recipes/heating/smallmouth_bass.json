@@ -1,0 +1,13 @@
+{
+    "result_item": {
+        "stack": {"item": "tfc:food/cooked_smallmouth_bass"},
+        "modifiers": ["tfc:copy_food"]
+    },
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/smallmouth_bass"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

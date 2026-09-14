@@ -1,0 +1,9 @@
+{
+    "parent": "tfc:block/barrel",
+    "textures": {
+        "particle": "tfc:block/wood/planks/birch",
+        "sheet": "tfc:block/wood/sheet/birch",
+        "planks": "tfc:block/wood/planks/birch"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,7 @@
+{
+    "result": "tfc:wood/planks/acacia_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:wood/planks/acacia",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

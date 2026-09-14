@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 768,
+    "ingredient": {"item": "tfc:metal/block/rose_gold"},
+    "heat_capacity": 2.857,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 576
+}

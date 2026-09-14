@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/get_straw",
+    "requirements": [["logs"]],
+    "criteria": {"logs": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "minecraft:logs"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:wood/log/oak"},
+        "description": {"translate": "tfc.advancements.story.logging.description"},
+        "title": {"translate": "tfc.advancements.story.logging.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

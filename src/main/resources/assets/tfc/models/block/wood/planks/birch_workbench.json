@@ -1,0 +1,13 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "east": "tfc:block/wood/planks/birch_workbench_side",
+        "south": "tfc:block/wood/planks/birch_workbench_side",
+        "north": "tfc:block/wood/planks/birch_workbench_front",
+        "west": "tfc:block/wood/planks/birch_workbench_front",
+        "particle": "tfc:block/wood/planks/birch_workbench_front",
+        "up": "tfc:block/wood/planks/birch_workbench_top",
+        "down": "tfc:block/wood/planks/birch"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

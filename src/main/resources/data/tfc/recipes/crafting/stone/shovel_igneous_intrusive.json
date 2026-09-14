@@ -1,0 +1,13 @@
+{
+    "result": {"item": "tfc:stone/shovel/igneous_intrusive"},
+    "pattern": [
+        "X",
+        "Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:stone/shovel_head/igneous_intrusive"},
+        "Y": {"tag": "forge:rods/wooden"}
+    }
+}

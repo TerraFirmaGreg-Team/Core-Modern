@@ -1,0 +1,29 @@
+{
+    "duration": 1000,
+    "temperature": 300,
+    "item_output": [
+        {"item": "tfc:food/boiled_egg"},
+        {"item": "tfc:food/boiled_egg"},
+        {"item": "tfc:food/boiled_egg"}
+    ],
+    "ingredients": [
+        {
+            "ingredient": {"item": "minecraft:egg"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "minecraft:egg"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "minecraft:egg"},
+            "type": "tfc:not_rotten"
+        }
+    ],
+    "fluid_ingredient": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:pot"
+}

@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/cobble/conglomerate_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/cobble/conglomerate_slab"},
+    "ingredient": "tfc:rock/cobble/conglomerate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

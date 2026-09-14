@@ -1,0 +1,9 @@
+{
+    "parent": "forge:item/default",
+    "textures": {
+        "fluid": "tfc:item/bucket/wooden_bucket_overlay",
+        "base": "tfc:item/bucket/wooden_bucket_empty"
+    },
+    "loader": "tfc:contained_fluid",
+    "__comment__": "This file was automatically created by mcresources"
+}

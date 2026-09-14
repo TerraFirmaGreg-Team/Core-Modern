@@ -1,0 +1,13 @@
+{
+    "result": {
+        "item": "tfc:rock/bricks/slate_wall",
+        "count": 6
+    },
+    "pattern": [
+        "XXX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:rock/bricks/slate"}}
+}

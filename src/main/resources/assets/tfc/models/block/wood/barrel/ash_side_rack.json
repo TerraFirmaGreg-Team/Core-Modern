@@ -1,0 +1,9 @@
+{
+    "parent": "tfc:block/barrel_side_rack",
+    "textures": {
+        "particle": "tfc:block/wood/planks/ash",
+        "sheet": "tfc:block/wood/sheet/ash",
+        "planks": "tfc:block/wood/planks/ash"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

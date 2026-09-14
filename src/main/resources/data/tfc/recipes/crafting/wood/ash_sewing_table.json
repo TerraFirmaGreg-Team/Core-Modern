@@ -1,0 +1,16 @@
+{
+    "result": {"item": "tfc:wood/sewing_table/ash"},
+    "pattern": [
+        " LS",
+        "XXX",
+        "Y Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {"tag": "forge:shears"},
+        "X": {"item": "tfc:wood/planks/ash"},
+        "Y": {"item": "tfc:wood/log/ash"},
+        "L": {"tag": "forge:leather"}
+    }
+}

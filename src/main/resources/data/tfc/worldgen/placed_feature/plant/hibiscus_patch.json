@@ -1,0 +1,24 @@
+{
+    "feature": "tfc:plant/hibiscus_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 22.5,
+            "max_rainfall": 450,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 260,
+            "min_forest": "edge",
+            "min_temperature": 9.8
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

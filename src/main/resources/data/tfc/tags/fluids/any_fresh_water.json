@@ -1,0 +1,9 @@
+{
+    "values": [
+        "minecraft:water",
+        "minecraft:flowing_water",
+        "tfc:river_water"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,15 @@
+{
+    "result": {
+        "item": "tfc:metal/chain/steel",
+        "count": 16
+    },
+    "input": {"tag": "forge:ingots/steel"},
+    "tier": 4,
+    "rules": [
+        "hit_any",
+        "hit_any",
+        "draw_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

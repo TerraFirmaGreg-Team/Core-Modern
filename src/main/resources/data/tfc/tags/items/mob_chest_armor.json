@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfc:metal/chestplate/copper",
+        "tfc:metal/chestplate/bronze",
+        "tfc:metal/chestplate/black_bronze",
+        "tfc:metal/chestplate/bismuth_bronze",
+        "tfc:metal/chestplate/wrought_iron"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

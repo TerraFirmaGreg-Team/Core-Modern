@@ -1,0 +1,9 @@
+{
+    "result": "tfc:clay/silt",
+    "ingredient": [
+        "tfc:clay/silt",
+        "tfc:clay_grass/silt"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
+}

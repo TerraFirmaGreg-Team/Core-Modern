@@ -1,0 +1,5 @@
+{
+    "parent": "block/crop",
+    "textures": {"crop": "tfc:block/crop/tomato_7_bottom"},
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/blowpipe",
+    "requirements": [["glass_bottles"]],
+    "criteria": {"glass_bottles": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:glass_bottles"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:silica_glass_bottle"},
+        "description": {"translate": "tfc.advancements.story.glass_bottle.description"},
+        "title": {"translate": "tfc.advancements.story.glass_bottle.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

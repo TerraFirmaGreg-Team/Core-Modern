@@ -1,0 +1,40 @@
+{"multipart": [
+    {
+        "apply": [{"model": "tfc:block/plant/barrel_cactus_lower"}],
+        "when": {"part": "lower"}
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/barrel_cactus_upper"}],
+        "when": {"part": "upper"}
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/barrel_cactus_flower_0"}],
+        "when": {
+            "stage": "1",
+            "part": "upper"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/barrel_cactus_flower_1"}],
+        "when": {
+            "stage": "2",
+            "part": "upper",
+            "age": "0|1"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/barrel_cactus_flower_2"}],
+        "when": {
+            "stage": "2",
+            "part": "upper",
+            "age": "2|3"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/barrel_cactus_flower_3"}],
+        "when": {
+            "stage": "3",
+            "part": "upper"
+        }
+    }
+]}

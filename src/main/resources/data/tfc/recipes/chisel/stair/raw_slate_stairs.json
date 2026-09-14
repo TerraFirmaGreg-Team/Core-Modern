@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/raw/slate_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/raw/slate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

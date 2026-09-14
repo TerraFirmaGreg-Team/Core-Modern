@@ -1,0 +1,41 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfc:block/plant/moss"},
+        "when": {"down": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfc:block/plant/moss"
+        },
+        "when": {"east": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "model": "tfc:block/plant/moss"
+        },
+        "when": {"north": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfc:block/plant/moss"
+        },
+        "when": {"south": "true"}
+    },
+    {
+        "apply": {"model": "tfc:block/plant/moss_hanging"},
+        "when": {"up": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfc:block/plant/moss"
+        },
+        "when": {"west": "true"}
+    }
+]}

@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/normal_magnetite/dolomite",
+    "ingredient": "tfc:ore/rich_magnetite/dolomite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

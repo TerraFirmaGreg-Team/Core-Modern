@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "stage=3": {"model": "tfc:block/plant/blood_lily_3"},
+        "stage=1": {"model": "tfc:block/plant/blood_lily_1"},
+        "stage=2": {"model": "tfc:block/plant/blood_lily_2"},
+        "stage=0": {"model": "tfc:block/plant/blood_lily_0"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

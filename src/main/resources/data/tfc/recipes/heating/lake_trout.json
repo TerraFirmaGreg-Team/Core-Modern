@@ -1,0 +1,13 @@
+{
+    "result_item": {
+        "stack": {"item": "tfc:food/cooked_lake_trout"},
+        "modifiers": ["tfc:copy_food"]
+    },
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/lake_trout"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

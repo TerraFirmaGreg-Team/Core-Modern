@@ -1,0 +1,13 @@
+{
+    "result": {"item": "tfc:ceramic/unfired_vessel"},
+    "pattern": [
+        " XXX ",
+        "XXXXX",
+        "XXXXX",
+        "XXXXX",
+        " XXX "
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
+}

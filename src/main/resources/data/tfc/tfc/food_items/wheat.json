@@ -1,0 +1,7 @@
+{
+    "saturation": 0,
+    "ingredient": {"item": "tfc:food/wheat"},
+    "decay_modifier": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

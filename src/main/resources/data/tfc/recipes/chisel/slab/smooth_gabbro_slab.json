@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/smooth/gabbro_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/smooth/gabbro_slab"},
+    "ingredient": "tfc:rock/smooth/gabbro",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

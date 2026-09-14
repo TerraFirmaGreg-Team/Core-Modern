@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/bricks/phyllite_wall",
+    "ingredient": {"item": "tfc:rock/bricks/phyllite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

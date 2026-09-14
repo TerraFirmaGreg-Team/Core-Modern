@@ -1,0 +1,10 @@
+{
+    "melt_temperature": 1453,
+    "sheets": {"tag": "forge:sheets/nickel"},
+    "double_ingots": {"tag": "forge:double_ingots/nickel"},
+    "tier": 1,
+    "ingots": {"tag": "forge:ingots/nickel"},
+    "specific_heat_capacity": 0.00625,
+    "fluid": "tfc:metal/nickel",
+    "__comment__": "This file was automatically created by mcresources"
+}

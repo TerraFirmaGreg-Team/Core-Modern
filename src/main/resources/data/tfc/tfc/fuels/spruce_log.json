@@ -1,0 +1,12 @@
+{
+    "duration": 1500,
+    "ingredient": [
+        {"item": "tfc:wood/log/spruce"},
+        {"item": "tfc:wood/wood/spruce"},
+        {"item": "tfc:wood/stripped_wood/spruce"},
+        {"item": "tfc:wood/stripped_log/spruce"}
+    ],
+    "purity": 0.95,
+    "temperature": 608,
+    "__comment__": "This file was automatically created by mcresources"
+}

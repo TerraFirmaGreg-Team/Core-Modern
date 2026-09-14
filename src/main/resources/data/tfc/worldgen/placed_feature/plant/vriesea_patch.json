@@ -1,0 +1,23 @@
+{
+    "feature": "tfc:plant/vriesea_patch",
+    "placement": [
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 38,
+            "max_rainfall": 400,
+            "type": "tfc:climate",
+            "min_rainfall": 200,
+            "min_forest": "edge",
+            "min_temperature": 13.4
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

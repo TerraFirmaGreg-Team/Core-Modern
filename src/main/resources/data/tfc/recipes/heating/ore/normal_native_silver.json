@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 25,
+        "fluid": "tfc:metal/silver"
+    },
+    "ingredient": {"item": "tfc:ore/normal_native_silver"},
+    "temperature": 961,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

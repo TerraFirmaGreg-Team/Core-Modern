@@ -1,0 +1,9 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_bricks/gabbro",
+        "top": "tfc:block/rock/mossy_bricks/gabbro",
+        "bottom": "tfc:block/rock/mossy_bricks/gabbro"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

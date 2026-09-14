@@ -1,0 +1,10 @@
+{
+    "input_fluid": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
+    },
+    "output_item": {"item": "tfc:empty_jar"},
+    "input_item": {"ingredient": {"tag": "tfc:foods/sealed_preserves"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant"
+}

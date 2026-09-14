@@ -28,7 +28,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -59,17 +58,6 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 public class TFGBlocks_PalmTrees {
-
-    private static final TagKey<Item> TFC_ITEM_SHARP_TOOLS = TagKey.create(ForgeRegistries.Keys.ITEMS,
-            ResourceLocation.fromNamespaceAndPath("tfc", "sharp_tools"));
-    private static final TagKey<Item> FRUIT = TagKey.create(ForgeRegistries.Keys.ITEMS,
-            ResourceLocation.fromNamespaceAndPath("tfc", "foods/fruits"));
-    private static final TagKey<Block> TFC_BLOCK_SHARP_MINEABLE = TagKey.create(ForgeRegistries.Keys.BLOCKS,
-            ResourceLocation.fromNamespaceAndPath("tfc", "mineable_with_sharp_tool"));
-    private static final TagKey<Block> HIDDEN_BLOCK = TagKey.create(ForgeRegistries.Keys.BLOCKS,
-            ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
-    private static final TagKey<Item> HIDDEN_ITEM = TagKey.create(ForgeRegistries.Keys.ITEMS,
-            ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
 
     public static final Map<PalmTrees, BlockEntry<PalmHeadBlock>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<GrowingPalmHeadBlock>> GROWING_PALM_HEADS = new EnumMap<>(PalmTrees.class);
@@ -104,12 +92,12 @@ public class TFGBlocks_PalmTrees {
                             .addModel();
                 }
             })
-            .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE, HIDDEN_BLOCK)
+            .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE, TFGTags.Blocks.HIDDEN)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
                     .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LOG).get())))))
             .item(BlockItem::new)
-            .tag(HIDDEN_ITEM)
+            .tag(TFGTags.Items.HIDDEN)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/trunk_2")))
             .build()
             .register();
@@ -132,7 +120,7 @@ public class TFGBlocks_PalmTrees {
                     ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
                 }
             })
-            .tag(TFCTags.Blocks.TOUGHNESS_1, TFCTags.Blocks.LIT_BY_DROPPED_TORCH, TFC_BLOCK_SHARP_MINEABLE, BlockTags.MINEABLE_WITH_HOE, TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE,
+            .tag(TFCTags.Blocks.TOUGHNESS_1, TFCTags.Blocks.LIT_BY_DROPPED_TORCH, TFCTags.Blocks.MINEABLE_WITH_SHARP_TOOL, BlockTags.MINEABLE_WITH_HOE, TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE,
                     BlockTags.REPLACEABLE_BY_TREES)
             .loot((provider, block) -> provider.add(block, LootTable.lootTable()
                     .withPool(LootPool.lootPool()
@@ -204,7 +192,7 @@ public class TFGBlocks_PalmTrees {
                     }
                 }
             })
-            .tag(HIDDEN_BLOCK, TFGTags.Blocks.HarvesterHarvestable)
+            .tag(TFGTags.Blocks.HIDDEN, TFGTags.Blocks.HarvesterHarvestable)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
                     .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.GREEN_COCONUT)
@@ -226,7 +214,7 @@ public class TFGBlocks_PalmTrees {
                             .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                                     .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(block.clusterAge, 6)))))))
             .item(BlockItem::new)
-            .tag(HIDDEN_ITEM)
+            .tag(TFGTags.Items.HIDDEN)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/coconut_tree_cluster_7")))
             .build()
             .register();
@@ -258,9 +246,9 @@ public class TFGBlocks_PalmTrees {
                             .add(LootItem.lootTableItem(PALM_SAPLINGS.get(tree))
                                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
                                     .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
-                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE, HIDDEN_BLOCK)
+                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE, TFGTags.Blocks.HIDDEN)
                     .item(BlockItem::new)
-                    .tag(HIDDEN_ITEM)
+                    .tag(TFGTags.Items.HIDDEN)
                     .build()
                     .register());
 
@@ -283,13 +271,13 @@ public class TFGBlocks_PalmTrees {
                                     .addModel();
                         }
                     })
-                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE, HIDDEN_BLOCK)
+                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE, TFGTags.Blocks.HIDDEN)
                     .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                             .setRolls(ConstantValue.exactly(1.0F))
                             .add(LootItem.lootTableItem(PALM_SAPLINGS.get(tree))
                                     .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
                     .item(BlockItem::new)
-                    .tag(HIDDEN_ITEM)
+                    .tag(TFGTags.Items.HIDDEN)
                     .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
                             ResourceLocation.fromNamespaceAndPath("tfg", "block/palm_tree/growing_palm_head_0")))
                     .build()
@@ -324,7 +312,7 @@ public class TFGBlocks_PalmTrees {
                                     .texture("end", TFGCore.id("block/" + ctx.getName() + "_top"))))
                     .addLayer(() -> RenderType::cutoutMipped)
                     .color(() -> () -> (state, level, pos, tintIndex) -> PalmColorProvider.getPalmFoliageColor(tree, pos, tintIndex))
-                    .tag(BlockTags.LEAVES, HIDDEN_BLOCK)
+                    .tag(BlockTags.LEAVES, TFGTags.Blocks.HIDDEN)
                     .loot((prov, block) -> prov.add(block, LootTable.lootTable()
                             .withPool(LootPool.lootPool()
                                     .setRolls(ConstantValue.exactly(1.0F))
@@ -335,14 +323,14 @@ public class TFGBlocks_PalmTrees {
                                     .setRolls(ConstantValue.exactly(1.0F))
                                     .add(AlternativesEntry.alternatives(
                                             LootItem.lootTableItem(Items.STICK)
-                                                    .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFC_ITEM_SHARP_TOOLS)))
+                                                    .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFCTags.Items.SHARP_TOOLS)))
                                                     .when(LootItemRandomChanceCondition.randomChance(0.2F))
                                                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))),
                                             LootItem.lootTableItem(Items.STICK)
                                                     .when(LootItemRandomChanceCondition.randomChance(0.05F))
                                                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))))))
                     .item(BlockItem::new)
-                    .tag(HIDDEN_ITEM)
+                    .tag(TFGTags.Items.HIDDEN)
                     .tag(ItemTags.LEAVES)
                     .color(() -> () -> (stack, tintIndex) -> PalmColorProvider.getPalmFoliageColor(tree, null, tintIndex))
                     .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/" + ctx.getName())))
@@ -373,7 +361,7 @@ public class TFGBlocks_PalmTrees {
 
                 PALM_FRUITS.put(tree, TFGCore.REGISTRATE.item("food/" + name, p -> new Item(p.food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).build())))
                         .model((ctx, prov) -> prov.basicItem(TFGCore.id(ctx.getName())))
-                        .tag(TFCTags.Items.FOODS, tfgFoodProductTag, FRUIT)
+                        .tag(TFCTags.Items.FOODS, tfgFoodProductTag, TFCTags.Items.FOODS_FRUITS)
                         .register());
             }
 
@@ -403,7 +391,7 @@ public class TFGBlocks_PalmTrees {
                                 }
                             }
                         })
-                        .tag(HIDDEN_BLOCK, TFGTags.Blocks.HarvesterHarvestable)
+                        .tag(TFGTags.Blocks.HIDDEN, TFGTags.Blocks.HarvesterHarvestable)
                         .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1.0F))
                                 .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.PALM_FRUITS.get(tree))
@@ -411,7 +399,7 @@ public class TFGBlocks_PalmTrees {
                                                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(block.clusterAge, tree.getClusterAges() - 1)))
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(tree.getMinDrops(), tree.getMaxDrops())))))))
                         .item(BlockItem::new)
-                        .tag(HIDDEN_ITEM)
+                        .tag(TFGTags.Items.HIDDEN)
                         .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/" + ctx.getName() + "_" + (tree.getClusterAges() - 1))))
                         .build()
                         .register());

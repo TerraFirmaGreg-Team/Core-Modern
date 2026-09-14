@@ -1,0 +1,31 @@
+{
+    "extra_products": [{"item": "tfc:jacks"}],
+    "recipe": {
+        "recipe": {
+            "result": {
+                "nbt": "{\"Potion\": \"minecraft:water\"}",
+                "item": "minecraft:lingering_potion"
+            },
+            "ingredients": [
+                {
+                    "ingredient": {"tag": "tfc:glass_bottles"},
+                    "fluid_ingredient": {
+                        "amount": 100,
+                        "ingredient": "tfc:vinegar"
+                    },
+                    "type": "tfc:fluid_item"
+                },
+                {
+                    "ingredient": {"item": "tfc:jacks"},
+                    "min_temp": 200,
+                    "type": "tfc:heatable"
+                },
+                {"item": "tfc:powder/flux"}
+            ],
+            "type": "minecraft:crafting_shapeless"
+        },
+        "type": "tfc:no_remainder_shapeless_crafting"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:extra_products_shapeless_crafting"
+}

@@ -1,0 +1,15 @@
+{
+    "feature": "tfc:cave_column",
+    "placement": [
+        {
+            "step": "air",
+            "type": "tfc:carving_mask",
+            "min_y": {"above_bottom": 25}
+        },
+        {
+            "chance": 667,
+            "type": "minecraft:rarity_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

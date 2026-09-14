@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "stage=3": {"model": "tfc:block/plant/goldenrod_3"},
+        "stage=4": {"model": "tfc:block/plant/goldenrod_4"},
+        "stage=1": {"model": "tfc:block/plant/goldenrod_1"},
+        "stage=2": {"model": "tfc:block/plant/goldenrod_2"},
+        "stage=0": {"model": "tfc:block/plant/goldenrod_0"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

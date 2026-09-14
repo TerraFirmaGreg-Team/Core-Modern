@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#tfc:bush_plantable_on",
+        "#tfc:mud",
+        "#forge:gravel"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

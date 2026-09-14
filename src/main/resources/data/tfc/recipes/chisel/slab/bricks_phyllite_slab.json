@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/bricks/phyllite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/bricks/phyllite_slab"},
+    "ingredient": "tfc:rock/bricks/phyllite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

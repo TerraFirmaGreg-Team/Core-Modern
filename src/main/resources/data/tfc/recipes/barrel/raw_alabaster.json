@@ -1,0 +1,11 @@
+{
+    "input_fluid": {
+        "amount": 100,
+        "ingredient": "tfc:limewater"
+    },
+    "duration": 1000,
+    "output_item": {"item": "tfc:alabaster/raw"},
+    "input_item": {"ingredient": {"item": "tfc:ore/gypsum"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

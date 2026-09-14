@@ -1,0 +1,9 @@
+{
+    "saturation": 2,
+    "ingredient": {"item": "tfc:food/cooked_rice"},
+    "decay_modifier": 1,
+    "grain": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "hunger": 4
+}

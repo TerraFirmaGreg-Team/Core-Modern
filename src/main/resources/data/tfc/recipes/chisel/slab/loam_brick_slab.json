@@ -1,0 +1,8 @@
+{
+    "result": "tfc:mud_bricks/loam_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:mud_bricks/loam_slab"},
+    "ingredient": "tfc:mud_bricks/loam",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

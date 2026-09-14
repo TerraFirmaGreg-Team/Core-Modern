@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/bricks/chert_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/bricks/chert_slab"},
+    "ingredient": "tfc:rock/bricks/chert",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

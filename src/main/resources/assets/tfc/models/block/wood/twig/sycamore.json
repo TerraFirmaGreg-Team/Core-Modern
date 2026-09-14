@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/groundcover/twig",
+    "textures": {
+        "side": "tfc:block/wood/log/sycamore",
+        "top": "tfc:block/wood/log_top/sycamore"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

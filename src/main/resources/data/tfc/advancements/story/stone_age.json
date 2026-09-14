@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/find_rock",
+    "requirements": [["stone_tools"]],
+    "criteria": {"stone_tools": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:stone_tools"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:stone/axe/sedimentary"},
+        "description": {"translate": "tfc.advancements.story.stone_age.description"},
+        "title": {"translate": "tfc.advancements.story.stone_age.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

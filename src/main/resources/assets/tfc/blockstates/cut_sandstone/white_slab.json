@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/cut_sandstone/white_slab"},
+        "type=double": {"model": "tfc:block/cut_sandstone/white"},
+        "type=top": {"model": "tfc:block/cut_sandstone/white_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

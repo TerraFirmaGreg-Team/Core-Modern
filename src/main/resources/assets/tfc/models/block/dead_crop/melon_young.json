@@ -1,0 +1,5 @@
+{
+    "parent": "block/crop",
+    "textures": {"crop": "tfc:block/crop/melon_dead_young"},
+    "__comment__": "This file was automatically created by mcresources"
+}

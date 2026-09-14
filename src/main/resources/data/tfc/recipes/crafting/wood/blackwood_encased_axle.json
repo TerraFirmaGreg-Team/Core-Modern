@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "tfc:wood/encased_axle/blackwood",
+        "count": 4
+    },
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/blackwood"},
+        "W": {"item": "tfc:wood/lumber/blackwood"},
+        "L": {"item": "tfc:wood/stripped_log/blackwood"}
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/spindle",
+    "requirements": [["beds"]],
+    "criteria": {"beds": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "minecraft:beds"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "minecraft:red_bed"},
+        "description": {"translate": "tfc.advancements.world.bed.description"},
+        "title": {"translate": "tfc.advancements.world.bed.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

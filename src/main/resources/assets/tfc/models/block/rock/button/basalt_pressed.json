@@ -1,0 +1,5 @@
+{
+    "parent": "block/button_pressed",
+    "textures": {"texture": "tfc:block/rock/raw/basalt"},
+    "__comment__": "This file was automatically created by mcresources"
+}

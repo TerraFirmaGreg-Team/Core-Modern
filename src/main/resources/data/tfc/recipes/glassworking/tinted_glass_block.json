@@ -1,0 +1,10 @@
+{
+    "result": {"item": "minecraft:tinted_glass"},
+    "operations": [
+        "amethyst",
+        "basin_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches_not_tier_1"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

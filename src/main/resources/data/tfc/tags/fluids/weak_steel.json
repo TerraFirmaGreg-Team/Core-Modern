@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfc:metal/weak_steel",
+        "tfc:metal/flowing_weak_steel"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

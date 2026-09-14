@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/bricks/conglomerate",
+        "top": "tfc:block/rock/bricks/conglomerate",
+        "bottom": "tfc:block/rock/bricks/conglomerate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

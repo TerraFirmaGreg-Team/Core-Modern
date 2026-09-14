@@ -1,0 +1,20 @@
+{
+    "feature": "tfc:native_silver_deep_deposit",
+    "placement": [
+        {
+            "chance": 24,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 40},
+                "max_inclusive": {"absolute": 63},
+                "type": "uniform"
+            }
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

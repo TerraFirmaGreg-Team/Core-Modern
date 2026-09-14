@@ -1,0 +1,7 @@
+{
+    "result": {"item": "minecraft:orange_stained_glass"},
+    "operations": ["basin_pour"],
+    "batch": {"item": "tfc:hematitic_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

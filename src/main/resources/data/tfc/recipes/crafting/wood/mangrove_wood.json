@@ -1,0 +1,13 @@
+{
+    "result": {
+        "item": "tfc:wood/wood/mangrove",
+        "count": 3
+    },
+    "pattern": [
+        "XX",
+        "XX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/log/mangrove"}}
+}

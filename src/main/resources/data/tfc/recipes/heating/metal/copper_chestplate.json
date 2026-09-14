@@ -1,0 +1,11 @@
+{
+    "result_fluid": {
+        "amount": 800,
+        "fluid": "tfc:metal/copper"
+    },
+    "ingredient": {"item": "tfc:metal/chestplate/copper"},
+    "temperature": 1080,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
+}

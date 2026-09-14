@@ -1,0 +1,5 @@
+{
+    "parent": "item/handheld_rod",
+    "textures": {"layer0": "tfc:item/metal/rod/copper"},
+    "__comment__": "This file was automatically created by mcresources"
+}

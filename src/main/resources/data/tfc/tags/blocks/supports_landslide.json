@@ -1,0 +1,9 @@
+{
+    "values": [
+        "minecraft:dirt_path",
+        "#tfc:paths",
+        "#tfc:farmland"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

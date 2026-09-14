@@ -1,0 +1,10 @@
+{"multipart": [
+    {
+        "apply": [{"model": "tfc:block/plant/badderlocks_lower"}],
+        "when": {"part": "lower"}
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/badderlocks_upper"}],
+        "when": {"part": "upper"}
+    }
+]}
