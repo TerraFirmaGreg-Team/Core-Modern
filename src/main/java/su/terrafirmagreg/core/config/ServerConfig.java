@@ -4,6 +4,7 @@ import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.dries007.tfc.util.Metal;
 import net.minecraft.resources.ResourceKey;
@@ -58,7 +59,7 @@ public final class ServerConfig {
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
 
-    public final ForgeConfigSpec.IntValue mountainScalingOverride;
+    public final ForgeConfigSpec.ConfigValue<String> mountainScalingOverride;
     public final ForgeConfigSpec.BooleanValue finiteContinents;
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
@@ -141,9 +142,23 @@ public final class ServerConfig {
                         creation is stored in SavedData and used automatically. Set an entry here to force\s
                         a specific scaling regardless of what was recorded at generation time.\s
                         Changing this for an existing world can cause chunk boundary artifacts.\s
-                        Format: 0 to not override, 1 for tfc default heights, 2 for low scaling,\s
-                        3 for medium scaling, and 4 for high scaling.""")
-                .defineInRange("mountainScalingOverride", WorldgenData.MOUNTAIN_SCALING_UNSET, WorldgenData.MOUNTAIN_SCALING_UNSET, WorldgenData.MOUNTAIN_SCALING_HIGH);
+                        "None" is the most performant and will result in mountains\s
+                        similar in height to base TerraFirmaCraft, while "High" can reach around\s
+                        750 blocks tall and will have a higher performance impact.\s
+                        Valid values: """ +
+                        WorldgenData.ALL_SCALINGS.values().stream().map(WorldgenData.MountainScaling::id).collect(Collectors.joining(", ")))
+                .define("mountainScalingOverride", "unset",
+                        o -> {
+                            if (!(o instanceof String s))
+                                return false;
+                            if (s.equals("unset"))
+                                return true;
+                            if (!WorldgenData.ALL_SCALINGS.containsKey(s)) {
+                                LOGGER.warn("[TFG Config] Unknown mountain scaling ID in mountainScalingOverride: {}", s);
+                                return false;
+                            }
+                            return true;
+                        });
 
         builder.pop().push("mars_climate");
         sandAccumulateChance = builder

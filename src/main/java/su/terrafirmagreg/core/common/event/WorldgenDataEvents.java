@@ -31,7 +31,7 @@ public class WorldgenDataEvents {
     @SubscribeEvent
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
         final MinecraftServer server = event.getServer();
-        final int configOverride = TFGConfig.SERVER.mountainScalingOverride.get();
+        final WorldgenData.MountainScaling configOverride = WorldgenData.ALL_SCALINGS.get(TFGConfig.SERVER.mountainScalingOverride.get());
 
         // server.overworld() doesn't exist yet, but we need the data before initRandomState fires
         //  during ServerLevel construction.
@@ -42,16 +42,16 @@ public class WorldgenDataEvents {
         final WorldgenData data = storage.computeIfAbsent(
                 WorldgenData::new, WorldgenData::new, WorldgenData.MOUNTAIN_SCALING_ID);
 
-        if (configOverride != WorldgenData.MOUNTAIN_SCALING_UNSET) {
+        if (configOverride != null) {
             WorldgenData.MOUNTAIN_SCALING = configOverride;
         } else {
             // Empty generatedVersion means either a new world or a pre-worldgenversion world.
             // isNewWorld distinguishes the two: new worlds default to the latest version, old worlds to 0.
             final boolean isNewWorld = !Files.exists(storageAccess.getDimensionPath(Level.OVERWORLD).resolve("region"));
-            final int defaultScaling = isNewWorld ? WorldgenData.MOUNTAIN_SCALING_NEW_WORLD_DEFAULT : WorldgenData.MOUNTAIN_SCALING_TFC_DEFAULTS;
+            final var defaultScaling = isNewWorld ? WorldgenData.MOUNTAIN_SCALING_NEW_WORLD_DEFAULT : WorldgenData.MOUNTAIN_SCALING_NONE;
 
             var generated = data.getGeneratedMountainScaling();
-            WorldgenData.MOUNTAIN_SCALING = generated == WorldgenData.MOUNTAIN_SCALING_UNSET ? defaultScaling : generated;
+            WorldgenData.MOUNTAIN_SCALING = generated == null ? defaultScaling : generated;
         }
     }
 
@@ -59,22 +59,22 @@ public class WorldgenDataEvents {
     public void onServerStarted(ServerStartedEvent event) {
         final MinecraftServer server = event.getServer();
         final WorldgenData data = WorldgenData.get(server);
-        final int configOverride = TFGConfig.SERVER.mountainScalingOverride.get();
+        final var configOverride = WorldgenData.ALL_SCALINGS.get(TFGConfig.SERVER.mountainScalingOverride.get());
 
         // Handle first boot
-        if (data.getGeneratedMountainScaling() == WorldgenData.MOUNTAIN_SCALING_UNSET) {
+        if (data.getGeneratedMountainScaling() == null) {
             data.setGeneratedMountainScaling(WorldgenData.MOUNTAIN_SCALING);
         }
 
         // Collect warnings for ops about changed worldgen overrides
-        final int knownOverride = data.getKnownConfigOverrideMountainScaling();
+        final var knownOverride = data.getKnownConfigOverrideMountainScaling();
 
-        final boolean changed = configOverride != WorldgenData.MOUNTAIN_SCALING_UNSET && configOverride != knownOverride
-                || configOverride == WorldgenData.MOUNTAIN_SCALING_UNSET && knownOverride != WorldgenData.MOUNTAIN_SCALING_UNSET;
+        final boolean changed = (configOverride != null && configOverride != knownOverride)
+                || (configOverride == null && knownOverride != null);
 
         if (changed) {
-            final String from = knownOverride != WorldgenData.MOUNTAIN_SCALING_UNSET ? String.valueOf(knownOverride) : "<none>";
-            final String to = configOverride != WorldgenData.MOUNTAIN_SCALING_UNSET ? String.valueOf(configOverride) : "<none>";
+            final String from = knownOverride != null ? knownOverride.id() : "<none>";
+            final String to = configOverride != null ? configOverride.id() : "<none>";
             final String msg = "[TFG] Mountain scaling override changed from " + from + " to " + to
                     + ". If unintentional, restore your config before generating new chunks.";
 
@@ -105,7 +105,7 @@ public class WorldgenDataEvents {
 
     @SubscribeEvent
     public void onServerStopped(ServerStoppedEvent event) {
-        WorldgenData.MOUNTAIN_SCALING = WorldgenData.MOUNTAIN_SCALING_UNSET;
+        WorldgenData.MOUNTAIN_SCALING = null;
         pendingOpWarnings.clear();
         opWarningsSentThisSession.clear();
     }
