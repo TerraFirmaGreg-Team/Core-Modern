@@ -97,7 +97,7 @@ dependencies {
     modImplementation "curse.maven:roads-and-roofs-tfc-1048212:8573489"
 
     // Ad Astra
-    modImplementation("curse.maven:ad-astra-635042:6262032") { transitive = false }
+    modImplementation("curse.maven:ad-astra-635042:8833730") { transitive = false }
     modImplementation("curse.maven:botarium-704113:5486070") { transitive = false }
     modImplementation("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
     modImplementation("curse.maven:resourceful-config-714059:6231176") { transitive = false }
