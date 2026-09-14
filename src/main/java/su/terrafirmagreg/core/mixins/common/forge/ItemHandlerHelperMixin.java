@@ -13,7 +13,7 @@ import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-//* Overrides the check whether two items are equal to work with gt tools and sns sacks, this is required for create logistics. */ 
+/** Overrides the check whether two items are equal to work with gt tools and sns sacks, this is required for create logistics. */ 
 @Mixin(value = ItemHandlerHelper.class)
 public abstract class ItemHandlerHelperMixin {
     @Inject(method = "canItemStacksStack(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true, remap = false)
