@@ -4,7 +4,6 @@ import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.dries007.tfc.util.Metal;
 import net.minecraft.resources.ResourceKey;
@@ -17,6 +16,7 @@ import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.config.tools.PropickConfig;
 import su.terrafirmagreg.core.config.tools.RenderingPropickConfig;
+import su.terrafirmagreg.core.world.WorldgenData;
 
 /**
  * Server Config - Synced from server to client, can have default config settings be customized by users. - Default to
@@ -58,7 +58,7 @@ public final class ServerConfig {
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
 
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> worldgenOverrides;
+    public final ForgeConfigSpec.IntValue mountainScalingOverride;
     public final ForgeConfigSpec.BooleanValue finiteContinents;
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
@@ -132,17 +132,18 @@ public final class ServerConfig {
                         });
 
         builder.pop().push("world_generation");
-        worldgenOverrides = builder
-                .comment("""
-                        Per-dimension worldgen version overrides. Normally the version used during world\s
-                        creation is stored in SavedData and used automatically. Set an entry here to force\s
-                        a specific version regardless of what was recorded at generation time.\s
-                        Changing this for an existing world can cause chunk boundary artifacts.\s
-                        Format: list of "dimension_id=version", e.g. ["minecraft:overworld=1"]""")
-                .defineListAllowEmpty("worldgenOverrides", List.of(), o -> o instanceof String);
         finiteContinents = builder
                 .comment("Restricts the continent generation to one \"cycle\" of the climates.\nEverything outside of that area becomes ocean.")
                 .define("finite_continents", false);
+        mountainScalingOverride = builder
+                .comment("""
+                        Mountain scaling override. Normally the version used during world\s
+                        creation is stored in SavedData and used automatically. Set an entry here to force\s
+                        a specific scaling regardless of what was recorded at generation time.\s
+                        Changing this for an existing world can cause chunk boundary artifacts.\s
+                        Format: 0 to not override, 1 for tfc default heights, 2 for low scaling,\s
+                        3 for medium scaling, and 4 for high scaling.""")
+                .defineInRange("mountainScalingOverride", WorldgenData.MOUNTAIN_SCALING_UNSET, WorldgenData.MOUNTAIN_SCALING_UNSET, WorldgenData.MOUNTAIN_SCALING_HIGH);
 
         builder.pop().push("mars_climate");
         sandAccumulateChance = builder
@@ -246,27 +247,5 @@ public final class ServerConfig {
                 .defineInRange("revalidationBaseTicks", 10, 1, 100);
 
         builder.pop();
-    }
-
-    /**
-     * Parses {@link #worldgenOverrides} into a map of dimension ID to version.
-     * Throws if any entry is malformed — the validator should have caught these at config load time.
-     */
-    public Map<ResourceLocation, Integer> parsedWorldgenOverrides() {
-        Map<ResourceLocation, Integer> result = new HashMap<>();
-        for (String entry : worldgenOverrides.get()) {
-            String[] parts = entry.split("=", 2);
-            if (parts.length != 2)
-                throw new IllegalStateException("[TFG] Malformed worldgen override entry: " + entry);
-            ResourceLocation dim = ResourceLocation.tryParse(parts[0].trim());
-            if (dim == null)
-                throw new IllegalStateException("[TFG] Invalid dimension ID in worldgen override: " + parts[0].trim());
-            try {
-                result.put(dim, Integer.parseInt(parts[1].trim()));
-            } catch (NumberFormatException e) {
-                throw new IllegalStateException("[TFG] Invalid version number in worldgen override: " + parts[1].trim(), e);
-            }
-        }
-        return result;
     }
 }

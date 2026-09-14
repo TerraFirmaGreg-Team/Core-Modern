@@ -287,7 +287,6 @@
         "common.tfc.recipes.SoupPotRecipeMixin",
         "common.tfc_astikor_carts.TFCSupplyCartEntityMixin",
         "common.tfcgenviewer.ViewerRequestPacketGetBiomesMixin",
-        "common.tfcgenviewer.ViewerResponsePacketMixin",
         "common.tfchotornot.EventHandlerMixin",
         "common.tfchotornot.FluidEffectMixin",
         "common.vintageimprovements.CurvingRecipeMixin",
@@ -331,7 +330,6 @@
         "client.tfcgenviewer.ClientHandoffMixin",
         "client.tfcgenviewer.FeatureColorsClimateSpaceMixin",
         "client.tfcgenviewer.PreviewGenerationScreenMixin",
-        "client.tfcgenviewer.TfcgenViewerViewWorldCloseMixin",
         "common.ad_astra.PlanetsScreenMixin",
         "common.minecraft.FogRendererMixin",
         "common.tfchotornot.ClientEventHandlerMixin"

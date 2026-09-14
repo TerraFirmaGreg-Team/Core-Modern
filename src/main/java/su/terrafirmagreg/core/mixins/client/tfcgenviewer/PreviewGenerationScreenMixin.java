@@ -18,13 +18,7 @@ import net.minecraft.world.level.levelgen.WorldOptions;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
-import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 
-/**
- * Create-world preview does not use {@link com.notenoughmail.tfcgenviewer.network.packets.ViewerResponsePacket}; clear any
- * leftover viewer session from a previous in-world session so {@link TfgClientPreviewState#useTfgOverworldPipeline()}
- * follows config / unresolved-session inference instead of stale {@code active}.
- */
 @Mixin(value = PreviewGenerationScreen.class, remap = false)
 public class PreviewGenerationScreenMixin {
 
@@ -33,11 +27,6 @@ public class PreviewGenerationScreenMixin {
 
     @Shadow(remap = false)
     private OptionInstance<Boolean> spawnOverlay;
-
-    @Inject(method = "<init>", at = @At(value = "RETURN"), remap = false)
-    private void tfg$afterInit(CallbackInfo ci) {
-        TfgClientPreviewState.leave();
-    }
 
     /**
      * Matches {@link WorldOptions#parseSeed(String)} parsing in {@link PreviewGenerationScreen} before allocating {@link net.dries007.tfc.world.region.RegionGenerator}.
