@@ -224,8 +224,10 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
     @Override
     protected void updateCachedRecipe()
     {
-        assert level != null;
-        cachedRecipe = level.getRecipeManager().getRecipeFor(TFCRecipeTypes.POT.get(), inventory, level).orElse(null);
+		if (level != null)
+		{
+			cachedRecipe = level.getRecipeManager().getRecipeFor(TFCRecipeTypes.POT.get(), inventory, level).orElse(null);
+		}
     }
 
     public boolean isBoiling()

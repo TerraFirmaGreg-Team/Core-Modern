@@ -126,8 +126,7 @@ public class ChunkData
 
     public int[] getAquiferSurfaceHeight()
     {
-        assert aquiferSurfaceHeight != null;
-        return aquiferSurfaceHeight;
+        return aquiferSurfaceHeight == null ? new int[4 * 4] : aquiferSurfaceHeight;
     }
 
     public float getRainfall(BlockPos pos)
