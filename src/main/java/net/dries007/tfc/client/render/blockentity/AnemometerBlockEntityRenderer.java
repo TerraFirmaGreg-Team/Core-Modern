@@ -45,7 +45,7 @@ public class AnemometerBlockEntityRenderer implements BlockEntityRenderer<Anemom
         stack.mulPose(Axis.YP.rotationDegrees(0));
 
         model.setupAnim(anemometer, partialTick);
-        model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, -1, -1, -1, -1);
+        model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, 1f, 1f, 1f, 1f);
 
         stack.popPose();
     }

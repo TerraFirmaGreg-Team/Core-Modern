@@ -84,11 +84,11 @@ public class CalendarClockBlockEntityRenderer implements BlockEntityRenderer<Cal
         CalendarClockBlock.Mode mode = clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE);
         if (mode.equals(CalendarClockBlock.Mode.MONTH))
         {
-            model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_MONTH)), packedLight, packedOverlay, -1, -1, -1, -1);
+            model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_MONTH)), packedLight, packedOverlay, 1f, 1f, 1f, 1f);
         }
         else
         {
-            model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, -1, -1, -1, -1);
+            model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, 1f, 1f, 1f, 1f);
         }
 
         stack.popPose();

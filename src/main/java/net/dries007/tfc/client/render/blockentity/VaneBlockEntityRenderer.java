@@ -50,11 +50,11 @@ public class VaneBlockEntityRenderer implements BlockEntityRenderer<VaneBlockEnt
         }
         else
         {
-            model.renderBase(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, -1, -1, -1, -1);
+            model.renderBase(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, 1f, 1f, 1f, 1f);
         }
 
         model.setupAnim(vane, partialTick);
-        model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, -1, -1, -1, -1);
+        model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), packedLight, packedOverlay, 1f, 1f, 1f, 1f);
 
         stack.popPose();
     }
