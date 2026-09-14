@@ -1,0 +1,13 @@
+{
+    "input_fluid": {
+        "amount": 1,
+        "ingredient": "tfc:milk_vinegar"
+    },
+    "duration": 8000,
+    "output_fluid": {
+        "amount": 1,
+        "fluid": "tfc:curdled_milk"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

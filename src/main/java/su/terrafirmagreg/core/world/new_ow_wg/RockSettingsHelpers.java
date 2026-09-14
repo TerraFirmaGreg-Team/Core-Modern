@@ -6,15 +6,13 @@ import java.util.Map;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.settings.RockSettings;
 
-import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.RockSettingsAccessor;
-
 public final class RockSettingsHelpers {
 
     private static final Map<RockSettings, Boolean> isKarstMap = new HashMap<>();
     private static final Map<RockSettings, Boolean> isMaficMap = new HashMap<>();
 
     static {
-        var presets = RockSettingsAccessor.getPresets();
+        var presets = RockSettings.PRESETS;
 
         isKarstMap.put(presets.get(Helpers.identifier("limestone")), true);
         isKarstMap.put(presets.get(Helpers.identifier("dolomite")), true);

@@ -1,0 +1,12 @@
+{
+    "duration": 2000,
+    "ingredient": [
+        {"item": "tfc:wood/log/hickory"},
+        {"item": "tfc:wood/wood/hickory"},
+        {"item": "tfc:wood/stripped_wood/hickory"},
+        {"item": "tfc:wood/stripped_log/hickory"}
+    ],
+    "purity": 0.95,
+    "temperature": 762,
+    "__comment__": "This file was automatically created by mcresources"
+}

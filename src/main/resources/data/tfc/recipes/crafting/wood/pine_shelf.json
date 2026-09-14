@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "tfc:wood/jar_shelf/pine",
+        "count": 2
+    },
+    "pattern": [
+        "XXX",
+        "Y Y",
+        "Z Z"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/pine"},
+        "Y": {"item": "tfc:wood/lumber/pine"},
+        "Z": {"tag": "forge:rods/wooden"}
+    }
+}

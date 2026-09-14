@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:jar/raspberry_unsealed"},
+    "ingredients": [{
+        "ingredient": {"item": "tfc:jar/raspberry"},
+        "type": "tfc:not_rotten"
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

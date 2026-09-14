@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/poor_tetrahedrite/shale",
+    "ingredient": "tfc:ore/normal_tetrahedrite/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

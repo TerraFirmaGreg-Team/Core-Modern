@@ -1,0 +1,13 @@
+{
+    "result_item": {
+        "stack": {"item": "tfc:food/cooked_camelidae"},
+        "modifiers": ["tfc:copy_food"]
+    },
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/camelidae"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

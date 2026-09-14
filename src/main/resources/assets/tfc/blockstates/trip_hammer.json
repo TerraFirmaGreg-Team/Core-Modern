@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/trip_hammer"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/trip_hammer"
+        },
+        "facing=north": {"model": "tfc:block/trip_hammer"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/trip_hammer"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

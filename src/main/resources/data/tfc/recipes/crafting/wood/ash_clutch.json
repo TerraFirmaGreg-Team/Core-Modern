@@ -1,0 +1,20 @@
+{
+    "result": {
+        "item": "tfc:wood/clutch/ash",
+        "count": 2
+    },
+    "pattern": [
+        "LSL",
+        "MAR",
+        "LSL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/ash"},
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"item": "tfc:wood/stripped_log/ash"},
+        "L": {"item": "tfc:wood/lumber/ash"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

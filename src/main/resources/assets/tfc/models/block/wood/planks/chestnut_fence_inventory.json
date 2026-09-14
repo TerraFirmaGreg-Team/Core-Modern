@@ -1,0 +1,5 @@
+{
+    "parent": "block/fence_inventory",
+    "textures": {"texture": "tfc:block/wood/planks/chestnut"},
+    "__comment__": "This file was automatically created by mcresources"
+}

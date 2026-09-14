@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/weak_steel"
+    },
+    "ingredient": {"item": "tfc:metal/ingot/high_carbon_black_steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

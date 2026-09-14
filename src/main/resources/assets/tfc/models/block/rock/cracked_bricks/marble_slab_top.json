@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/rock/cracked_bricks/marble",
+        "top": "tfc:block/rock/cracked_bricks/marble",
+        "bottom": "tfc:block/rock/cracked_bricks/marble"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

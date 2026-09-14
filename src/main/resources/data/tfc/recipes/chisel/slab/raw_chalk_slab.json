@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/raw/chalk_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/raw/chalk_slab"},
+    "ingredient": "tfc:rock/raw/chalk",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

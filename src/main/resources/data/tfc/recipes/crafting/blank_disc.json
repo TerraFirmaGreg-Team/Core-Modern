@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:blank_disc"},
+    "ingredients": [
+        {"item": "tfc:soot"},
+        {"item": "minecraft:glass_pane"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

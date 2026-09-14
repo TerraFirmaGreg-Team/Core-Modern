@@ -1,0 +1,13 @@
+{
+    "result": {"item": "minecraft:leather_chestplate"},
+    "pattern": [
+        "X   X",
+        "XXXXX",
+        "XXXXX",
+        "XXXXX",
+        "XXXXX"
+    ],
+    "knapping_type": "tfc:leather",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
+}

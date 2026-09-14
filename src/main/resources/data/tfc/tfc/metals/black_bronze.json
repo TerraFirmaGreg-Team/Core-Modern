@@ -1,0 +1,10 @@
+{
+    "melt_temperature": 1070,
+    "sheets": {"tag": "forge:sheets/black_bronze"},
+    "double_ingots": {"tag": "forge:double_ingots/black_bronze"},
+    "tier": 2,
+    "ingots": {"tag": "forge:ingots/black_bronze"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/black_bronze",
+    "__comment__": "This file was automatically created by mcresources"
+}

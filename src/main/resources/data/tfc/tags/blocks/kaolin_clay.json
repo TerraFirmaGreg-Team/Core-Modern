@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfc:red_kaolin_clay",
+        "tfc:pink_kaolin_clay",
+        "tfc:white_kaolin_clay",
+        "tfc:kaolin_clay_grass"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

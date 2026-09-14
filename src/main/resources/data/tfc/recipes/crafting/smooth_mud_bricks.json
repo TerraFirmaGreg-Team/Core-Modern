@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:smooth_mud_bricks"},
+    "ingredients": [
+        {"tag": "tfc:mud_bricks"},
+        {"item": "tfc:daub"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

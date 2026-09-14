@@ -1,0 +1,18 @@
+{
+    "result": {
+        "item": "minecraft:detector_rail",
+        "count": 4
+    },
+    "pattern": [
+        "S S",
+        "SWS",
+        "SRS"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"tag": "forge:rods/wrought_iron"},
+        "W": {"tag": "minecraft:stone_pressure_plates"}
+    }
+}

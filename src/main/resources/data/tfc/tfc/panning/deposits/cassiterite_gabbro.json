@@ -1,0 +1,10 @@
+{
+    "model_stages": [
+        "tfc:item/pan/cassiterite/gabbro_full",
+        "tfc:item/pan/cassiterite/gabbro_half",
+        "tfc:item/pan/cassiterite/result"
+    ],
+    "ingredient": "tfc:deposit/cassiterite/gabbro",
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/cassiterite_gabbro"
+}

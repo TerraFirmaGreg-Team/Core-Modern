@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:wood/bladed_axle/sycamore"},
+    "ingredients": [
+        {"item": "tfc:wood/axle/sycamore"},
+        {"tag": "forge:ingots/steel"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/smooth/shale",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/raw/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

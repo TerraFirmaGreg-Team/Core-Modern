@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "part=middle": {"model": "tfc:block/rock/spike/andesite_middle"},
+        "part=tip": {"model": "tfc:block/rock/spike/andesite_tip"},
+        "part=base": {"model": "tfc:block/rock/spike/andesite_base"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/wood/scribing_table/sequoia"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/wood/scribing_table/sequoia"
+        },
+        "facing=north": {"model": "tfc:block/wood/scribing_table/sequoia"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/wood/scribing_table/sequoia"
+        }
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

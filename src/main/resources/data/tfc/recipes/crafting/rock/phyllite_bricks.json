@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:rock/bricks/phyllite",
+        "count": 4
+    },
+    "pattern": [
+        "XMX",
+        "MXM",
+        "XMX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:brick/phyllite"},
+        "M": {"tag": "tfc:mortar"}
+    }
+}

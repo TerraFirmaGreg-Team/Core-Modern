@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/cobble/conglomerate_slab",
+    "ingredient": {"item": "tfc:rock/cobble/conglomerate"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

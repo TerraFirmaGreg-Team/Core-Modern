@@ -1,0 +1,8 @@
+{
+    "distance_below_sea_level": 2,
+    "climate": {
+        "min_rainfall": 125,
+        "min_temperature": 5
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

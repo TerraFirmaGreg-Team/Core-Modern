@@ -1,0 +1,13 @@
+{
+    "input_fluid": {
+        "amount": 500,
+        "ingredient": "minecraft:water"
+    },
+    "output_fluid": {
+        "amount": 500,
+        "fluid": "tfc:limewater"
+    },
+    "input_item": {"ingredient": {"item": "tfc:powder/lime"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant"
+}

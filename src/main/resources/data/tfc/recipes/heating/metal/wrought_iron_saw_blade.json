@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/cast_iron"
+    },
+    "ingredient": {"item": "tfc:metal/saw_blade/wrought_iron"},
+    "temperature": 1535,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

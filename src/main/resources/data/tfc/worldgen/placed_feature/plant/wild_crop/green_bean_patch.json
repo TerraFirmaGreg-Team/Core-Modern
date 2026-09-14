@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:plant/wild_crop/green_bean_patch",
+    "placement": [
+        {
+            "chance": 80,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 35,
+            "max_rainfall": 410,
+            "type": "tfc:climate",
+            "min_rainfall": 150,
+            "min_forest": "normal",
+            "min_temperature": 2
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

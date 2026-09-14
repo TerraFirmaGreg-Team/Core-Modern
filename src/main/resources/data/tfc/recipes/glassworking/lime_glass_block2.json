@@ -1,0 +1,11 @@
+{
+    "result": {"item": "minecraft:lime_stained_glass"},
+    "operations": [
+        "soda_ash",
+        "iron",
+        "basin_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches_tier_2"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

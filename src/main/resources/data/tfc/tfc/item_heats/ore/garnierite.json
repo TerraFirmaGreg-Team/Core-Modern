@@ -1,0 +1,12 @@
+{
+    "welding_temperature": 1162,
+    "ingredient": [
+        {"item": "tfc:ore/small_garnierite"},
+        {"item": "tfc:ore/normal_garnierite"},
+        {"item": "tfc:ore/poor_garnierite"},
+        {"item": "tfc:ore/rich_garnierite"}
+    ],
+    "heat_capacity": 0.833,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 872
+}

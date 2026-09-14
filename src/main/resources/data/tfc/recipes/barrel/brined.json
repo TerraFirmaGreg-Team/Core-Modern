@@ -1,0 +1,28 @@
+{
+    "input_fluid": {
+        "amount": 125,
+        "ingredient": "tfc:brine"
+    },
+    "duration": 4000,
+    "output_item": {"modifiers": [
+        "tfc:copy_input",
+        {
+            "trait": "tfc:brined",
+            "type": "tfc:add_trait"
+        }
+    ]},
+    "input_item": {"ingredient": {
+        "ingredient": {
+            "ingredient": [
+                {"tag": "tfc:foods/fruits"},
+                {"tag": "tfc:foods/vegetables"},
+                {"tag": "tfc:foods/meats"}
+            ],
+            "trait": "tfc:brined",
+            "type": "tfc:lacks_trait"
+        },
+        "type": "tfc:not_rotten"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

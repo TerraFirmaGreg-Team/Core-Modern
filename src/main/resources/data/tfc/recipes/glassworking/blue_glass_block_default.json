@@ -1,0 +1,7 @@
+{
+    "result": {"item": "minecraft:blue_stained_glass"},
+    "operations": ["basin_pour"],
+    "batch": {"item": "tfc:volcanic_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

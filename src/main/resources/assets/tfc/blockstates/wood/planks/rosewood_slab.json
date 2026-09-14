@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/wood/planks/rosewood_slab"},
+        "type=double": {"model": "tfc:block/wood/planks/rosewood"},
+        "type=top": {"model": "tfc:block/wood/planks/rosewood_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

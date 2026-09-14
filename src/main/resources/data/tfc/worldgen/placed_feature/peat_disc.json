@@ -1,0 +1,20 @@
+{
+    "feature": "tfc:peat_disc",
+    "placement": [
+        {
+            "chance": 40,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "type": "tfc:climate",
+            "min_rainfall": 350,
+            "min_temperature": 12
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

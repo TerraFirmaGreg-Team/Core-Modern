@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/aqueduct/north",
+    "textures": {
+        "texture": "tfc:block/rock/bricks/diorite",
+        "particle": "tfc:block/rock/bricks/diorite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,20 @@
+{
+    "feature": "tfc:plant/morning_glory_cover",
+    "placement": [
+        {
+            "max_temperature": 10.6,
+            "max_rainfall": 230,
+            "type": "tfc:climate",
+            "min_rainfall": 160,
+            "min_forest": "normal",
+            "min_temperature": 6.6,
+            "fuzzy": true
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

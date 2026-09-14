@@ -1,0 +1,9 @@
+{
+    "ingredient": [
+        {"item": "tfc:empty_jar"},
+        {"item": "tfc:empty_jar_with_lid"}
+    ],
+    "size": "tiny",
+    "weight": "medium",
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,10 @@
+{
+    "climate": {
+        "max_temperature": 25,
+        "max_rainfall": 400,
+        "max_forest": "normal",
+        "min_rainfall": 130,
+        "min_temperature": -5
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

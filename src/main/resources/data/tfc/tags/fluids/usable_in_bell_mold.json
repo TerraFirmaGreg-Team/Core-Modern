@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:metal/bronze",
+        "tfc:metal/gold",
+        "tfc:metal/brass"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,10 @@
+{
+    "melt_temperature": 1535,
+    "sheets": {"tag": "forge:sheets/cast_iron"},
+    "double_ingots": {"tag": "forge:double_ingots/cast_iron"},
+    "tier": 1,
+    "ingots": {"tag": "forge:ingots/cast_iron"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/cast_iron",
+    "__comment__": "This file was automatically created by mcresources"
+}

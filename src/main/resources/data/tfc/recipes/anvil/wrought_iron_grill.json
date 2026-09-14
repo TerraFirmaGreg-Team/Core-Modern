@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:wrought_iron_grill"},
+    "input": {"tag": "forge:double_sheets/wrought_iron"},
+    "tier": 3,
+    "rules": [
+        "draw_any",
+        "punch_last",
+        "punch_not_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

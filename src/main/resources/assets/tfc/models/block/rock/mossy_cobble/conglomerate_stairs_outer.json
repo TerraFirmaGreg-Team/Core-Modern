@@ -1,0 +1,9 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_cobble/conglomerate",
+        "top": "tfc:block/rock/mossy_cobble/conglomerate",
+        "bottom": "tfc:block/rock/mossy_cobble/conglomerate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

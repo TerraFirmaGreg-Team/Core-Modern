@@ -1,0 +1,11 @@
+{
+    "result": {"item": "tfc:purple_poured_glass"},
+    "operations": [
+        "iron",
+        "copper",
+        "table_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

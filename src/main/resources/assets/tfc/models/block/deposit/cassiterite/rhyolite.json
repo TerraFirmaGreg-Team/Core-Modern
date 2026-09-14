@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/gravel/rhyolite",
+        "overlay": "tfc:block/deposit/cassiterite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

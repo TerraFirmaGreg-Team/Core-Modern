@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/smooth/diorite_slab",
+    "ingredient": {"item": "tfc:rock/smooth/diorite"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

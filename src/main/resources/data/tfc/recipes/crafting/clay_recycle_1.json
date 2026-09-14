@@ -1,0 +1,6 @@
+{
+    "result": {"item": "minecraft:clay_ball"},
+    "ingredients": [{"tag": "tfc:clay_recycle_1"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

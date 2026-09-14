@@ -1,0 +1,22 @@
+{
+    "multipart": [
+        {"apply": {"model": "tfc:block/rock/aqueduct/rhyolite/base"}},
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/rhyolite/north"},
+            "when": {"north": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/rhyolite/east"},
+            "when": {"east": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/rhyolite/south"},
+            "when": {"south": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/rhyolite/west"},
+            "when": {"west": "false"}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

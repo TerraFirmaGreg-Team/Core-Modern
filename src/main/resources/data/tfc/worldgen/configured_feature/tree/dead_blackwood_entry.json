@@ -1,0 +1,31 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:forest_entry",
+    "config": {
+        "bush_log": {
+            "Properties": {
+                "axis": "y",
+                "branch_direction": "down"
+            },
+            "Name": "tfc:wood/wood/blackwood"
+        },
+        "fallen_leaves": "tfc:wood/fallen_leaves/blackwood",
+        "old_growth_tree": "tfc:tree/blackwood_large",
+        "dead_chance": 1,
+        "groundcover": [
+            {"block": "tfc:wood/twig/blackwood"},
+            {"block": "tfc:wood/fallen_leaves/blackwood"}
+        ],
+        "normal_tree": "tfc:tree/blackwood",
+        "climate": {
+            "max_temperature": 38,
+            "max_rainfall": 180,
+            "min_rainfall": 35,
+            "min_temperature": 8
+        },
+        "fallen_log": "tfc:wood/log/blackwood",
+        "dead_tree": "tfc:tree/blackwood_dead",
+        "bush_leaves": "tfc:wood/leaves/blackwood",
+        "fallen_tree_chance": 8
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "pools": [
+        {
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 1,
+                        "max": 10,
+                        "type": "minecraft:uniform"
+                    }
+                }],
+                "name": "minecraft:ink_sac",
+                "type": "minecraft:item",
+                "conditions": [{"condition": "minecraft:killed_by_player"}]
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        },
+        {
+            "entries": [{
+                "name": "tfc:food/calamari",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:entity"
+}

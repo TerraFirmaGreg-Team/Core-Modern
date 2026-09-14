@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/rock/mossy_cobble/diorite",
+        "top": "tfc:block/rock/mossy_cobble/diorite",
+        "bottom": "tfc:block/rock/mossy_cobble/diorite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

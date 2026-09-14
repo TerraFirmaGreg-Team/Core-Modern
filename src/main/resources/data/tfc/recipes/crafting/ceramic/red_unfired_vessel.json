@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:ceramic/red_unfired_vessel"},
+    "ingredients": [
+        {"item": "minecraft:red_dye"},
+        {"item": "tfc:ceramic/unfired_vessel"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

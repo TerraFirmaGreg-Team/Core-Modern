@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/nickel"
+    },
+    "ingredient": {"item": "tfc:metal/rod/nickel"},
+    "temperature": 1453,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

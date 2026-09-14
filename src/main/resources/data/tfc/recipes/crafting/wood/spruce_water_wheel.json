@@ -1,0 +1,15 @@
+{
+    "result": {"item": "tfc:wood/water_wheel/spruce"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/spruce"},
+        "A": {"item": "tfc:wood/axle/spruce"},
+        "L": {"item": "tfc:wood/lumber/spruce"}
+    }
+}

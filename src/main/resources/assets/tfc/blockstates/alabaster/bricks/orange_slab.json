@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/alabaster/bricks/orange_slab"},
+        "type=double": {"model": "tfc:block/alabaster/bricks/orange"},
+        "type=top": {"model": "tfc:block/alabaster/bricks/orange_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

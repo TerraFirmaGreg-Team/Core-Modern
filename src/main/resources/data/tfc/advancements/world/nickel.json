@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:world/nugget",
+    "requirements": [["ore/small_garnierite"]],
+    "criteria": {"ore/small_garnierite": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:ore/small_garnierite"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:ore/small_garnierite"},
+        "description": {"translate": "tfc.advancements.world.nickel.description"},
+        "title": {"translate": "tfc.advancements.world.nickel.title"},
+        "announce_to_chat": true,
+        "frame": "goal"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

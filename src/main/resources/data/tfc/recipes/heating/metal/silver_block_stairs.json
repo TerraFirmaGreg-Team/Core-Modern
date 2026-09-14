@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 75,
+        "fluid": "tfc:metal/silver"
+    },
+    "ingredient": {"item": "tfc:metal/block/silver_stairs"},
+    "temperature": 961,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

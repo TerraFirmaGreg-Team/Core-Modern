@@ -1,0 +1,19 @@
+{
+    "result": {
+        "item": "minecraft:pink_concrete_powder",
+        "count": 8
+    },
+    "ingredients": [
+        {"item": "minecraft:pink_dye"},
+        {"tag": "forge:sand"},
+        {"tag": "forge:sand"},
+        {"tag": "forge:sand"},
+        {"tag": "forge:sand"},
+        {"tag": "forge:gravel"},
+        {"tag": "forge:gravel"},
+        {"tag": "forge:gravel"},
+        {"tag": "forge:gravel"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

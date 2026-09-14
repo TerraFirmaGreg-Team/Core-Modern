@@ -1,0 +1,12 @@
+{
+    "duration": 1500,
+    "ingredient": [
+        {"item": "tfc:wood/log/douglas_fir"},
+        {"item": "tfc:wood/wood/douglas_fir"},
+        {"item": "tfc:wood/stripped_wood/douglas_fir"},
+        {"item": "tfc:wood/stripped_log/douglas_fir"}
+    ],
+    "purity": 0.95,
+    "temperature": 707,
+    "__comment__": "This file was automatically created by mcresources"
+}

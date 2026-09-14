@@ -1,0 +1,23 @@
+{
+    "extra_products": [{"item": "tfc:straw"}],
+    "recipe": {
+        "recipe": {
+            "result": {
+                "stack": {"item": "tfc:food/oat_grain"},
+                "modifiers": ["tfc:copy_food"]
+            },
+            "ingredients": [
+                {
+                    "ingredient": {"item": "tfc:food/oat"},
+                    "type": "tfc:not_rotten"
+                },
+                {"tag": "tfc:knives"}
+            ],
+            "type": "tfc:advanced_shapeless_crafting",
+            "primary_ingredient": {"item": "tfc:food/oat"}
+        },
+        "type": "tfc:damage_inputs_shapeless_crafting"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:extra_products_shapeless_crafting"
+}

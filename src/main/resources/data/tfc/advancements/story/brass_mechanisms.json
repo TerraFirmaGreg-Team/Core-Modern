@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/copper_age",
+    "requirements": [["brass_mechanisms"]],
+    "criteria": {"brass_mechanisms": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:brass_mechanisms"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:brass_mechanisms"},
+        "description": {"translate": "tfc.advancements.story.brass_mechanisms.description"},
+        "title": {"translate": "tfc.advancements.story.brass_mechanisms.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,8 @@
+{
+    "saturation": 1,
+    "ingredient": {"item": "tfc:food/maize_bread"},
+    "decay_modifier": 1,
+    "grain": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

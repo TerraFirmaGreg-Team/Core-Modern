@@ -1,0 +1,21 @@
+{
+    "feature": "tfc:plant/wild_crop/yellow_bell_pepper",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {"Name": "tfc:wild_crop/yellow_bell_pepper"},
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,7 @@
+{
+    "result": "tfc:smooth_sandstone/red",
+    "mode": "smooth",
+    "ingredient": "tfc:raw_sandstone/red",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

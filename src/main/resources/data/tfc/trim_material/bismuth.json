@@ -1,0 +1,10 @@
+{
+    "ingredient": "tfc:metal/ingot/bismuth",
+    "asset_name": "bismuth_tfc",
+    "description": {
+        "color": "#8bbbc4",
+        "translate": "trim_material.tfc.bismuth"
+    },
+    "item_model_index": 1,
+    "__comment__": "This file was automatically created by mcresources"
+}

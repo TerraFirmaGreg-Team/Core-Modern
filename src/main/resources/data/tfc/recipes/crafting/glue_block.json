@@ -1,0 +1,16 @@
+{
+    "result": {"item": "minecraft:slime_block"},
+    "ingredients": [
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"},
+        {"item": "tfc:glue"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

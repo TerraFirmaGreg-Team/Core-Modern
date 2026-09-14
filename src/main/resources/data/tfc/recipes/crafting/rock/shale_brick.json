@@ -1,0 +1,12 @@
+{
+    "recipe": {
+        "result": {"item": "tfc:brick/shale"},
+        "ingredients": [
+            {"item": "tfc:rock/loose/shale"},
+            {"tag": "tfc:chisels"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

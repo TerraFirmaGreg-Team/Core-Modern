@@ -1,0 +1,12 @@
+{
+    "result": {
+        "item": "tfc:wood/trapped_chest/sycamore",
+        "count": 1
+    },
+    "ingredients": [
+        {"item": "tfc:wood/chest/sycamore"},
+        {"item": "minecraft:tripwire_hook"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,38 @@
+{"multipart": [
+    {
+        "apply": [
+            {"model": "tfc:block/plant/field_horsetail_0"},
+            {
+                "y": 90,
+                "model": "tfc:block/plant/field_horsetail_0"
+            },
+            {
+                "y": 180,
+                "model": "tfc:block/plant/field_horsetail_0"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/plant/field_horsetail_0"
+            }
+        ],
+        "when": {"stage": "0"}
+    },
+    {
+        "apply": [
+            {"model": "tfc:block/plant/field_horsetail_1"},
+            {
+                "y": 90,
+                "model": "tfc:block/plant/field_horsetail_1"
+            },
+            {
+                "y": 180,
+                "model": "tfc:block/plant/field_horsetail_1"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/plant/field_horsetail_1"
+            }
+        ],
+        "when": {"stage": "1"}
+    }
+]}

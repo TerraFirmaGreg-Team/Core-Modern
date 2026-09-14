@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/smooth/diorite_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/smooth/diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

@@ -1,0 +1,13 @@
+{
+    "result": {
+        "item": "minecraft:fire_charge",
+        "count": 3
+    },
+    "ingredients": [
+        {"item": "minecraft:gunpowder"},
+        {"item": "tfc:firestarter"},
+        {"tag": "minecraft:coals"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

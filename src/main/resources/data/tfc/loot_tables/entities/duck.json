@@ -1,0 +1,42 @@
+{
+    "pools": [
+        {
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 2,
+                        "max": {
+                            "min": 1,
+                            "max": 6,
+                            "type": "minecraft:uniform"
+                        },
+                        "type": "tfc:animal_yield"
+                    }
+                }],
+                "name": "tfc:food/duck",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        },
+        {
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 4,
+                        "max": 10,
+                        "type": "minecraft:uniform"
+                    }
+                }],
+                "name": "minecraft:feather",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:entity"
+}

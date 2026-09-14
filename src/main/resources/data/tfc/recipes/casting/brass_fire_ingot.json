@@ -1,0 +1,11 @@
+{
+    "result": {"item": "tfc:metal/ingot/brass"},
+    "break_chance": 0.01,
+    "mold": {"item": "tfc:ceramic/fire_ingot_mold"},
+    "fluid": {
+        "amount": 100,
+        "ingredient": "tfc:metal/brass"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:casting"
+}

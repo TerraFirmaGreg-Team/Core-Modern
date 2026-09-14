@@ -1,0 +1,8 @@
+{
+    "values": [
+        "#minecraft:bypasses_armor",
+        "#minecraft:bypasses_invulnerability"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

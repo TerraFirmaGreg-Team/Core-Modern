@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/cracked_bricks/granite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/cracked_bricks/granite_slab"},
+    "ingredient": "tfc:rock/cracked_bricks/granite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/smooth/quartzite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/smooth/quartzite_slab"},
+    "ingredient": "tfc:rock/smooth/quartzite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

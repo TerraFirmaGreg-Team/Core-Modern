@@ -1,0 +1,8 @@
+{
+    "result": "tfc:raw_sandstone/yellow_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:raw_sandstone/yellow_slab"},
+    "ingredient": "tfc:raw_sandstone/yellow",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

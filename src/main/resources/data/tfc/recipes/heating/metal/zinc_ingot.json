@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/zinc"
+    },
+    "ingredient": {"item": "tfc:metal/ingot/zinc"},
+    "temperature": 420,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

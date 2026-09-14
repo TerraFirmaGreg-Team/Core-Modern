@@ -1,0 +1,18 @@
+{
+    "feature": "tfc:plant/timothy_grass_patch",
+    "placement": [
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 15.3,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 289,
+            "min_temperature": -19.4
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

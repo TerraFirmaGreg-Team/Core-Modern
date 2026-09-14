@@ -1,0 +1,12 @@
+{
+    "recipe": {
+        "result": {"item": "tfc:rock/chiseled/granite"},
+        "ingredients": [
+            {"item": "tfc:rock/bricks/granite"},
+            {"tag": "tfc:chisels"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

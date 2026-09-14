@@ -1,0 +1,13 @@
+{
+    "result": {"item": "minecraft:armor_stand"},
+    "pattern": [
+        "X",
+        "Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:stick_bunch"},
+        "Y": {"tag": "forge:smooth_stone_slab"}
+    }
+}

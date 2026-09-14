@@ -1,0 +1,20 @@
+{
+    "feature": "tfc:plant/philodendron_cover",
+    "placement": [
+        {
+            "max_temperature": 27.6,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 450,
+            "min_forest": "normal",
+            "min_temperature": 17.6,
+            "fuzzy": true
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

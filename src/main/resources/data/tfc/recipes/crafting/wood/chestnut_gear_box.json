@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:wood/gear_box/chestnut",
+        "count": 2
+    },
+    "pattern": [
+        " L ",
+        "LML",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "L": {"item": "tfc:wood/lumber/chestnut"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

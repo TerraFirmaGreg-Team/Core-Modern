@@ -1,0 +1,7 @@
+{
+    "result_item": {"item": "tfc:ceramic/pink_glazed_vessel"},
+    "ingredient": {"item": "tfc:ceramic/pink_unfired_vessel"},
+    "temperature": 1399,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

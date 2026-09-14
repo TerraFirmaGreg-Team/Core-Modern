@@ -1,0 +1,14 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "state": {
+            "Properties": {
+                "lifecycle": "healthy",
+                "stage": "0"
+            },
+            "Name": "tfc:plant/bunchberry_bush"
+        },
+        "type": "minecraft:simple_state_provider"
+    }}
+}

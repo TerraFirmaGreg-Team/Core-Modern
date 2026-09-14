@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:empty_jar_with_lid"},
+    "ingredients": [
+        {"item": "tfc:empty_jar"},
+        {"item": "tfc:jar_lid"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}
