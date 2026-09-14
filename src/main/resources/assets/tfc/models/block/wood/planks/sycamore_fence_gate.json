@@ -1,0 +1,5 @@
+{
+    "parent": "block/template_fence_gate",
+    "textures": {"texture": "tfc:block/wood/planks/sycamore"},
+    "__comment__": "This file was automatically created by mcresources"
+}

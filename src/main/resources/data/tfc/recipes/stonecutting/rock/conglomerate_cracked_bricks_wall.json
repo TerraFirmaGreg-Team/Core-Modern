@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/cracked_bricks/conglomerate_wall",
+    "ingredient": {"item": "tfc:rock/cracked_bricks/conglomerate"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

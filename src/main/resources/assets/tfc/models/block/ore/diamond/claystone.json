@@ -1,0 +1,10 @@
+{
+    "parent": "tfc:block/ore_column",
+    "textures": {
+        "side": "tfc:block/rock/raw/claystone",
+        "overlay": "tfc:block/ore/diamond",
+        "end": "tfc:block/rock/raw/claystone_top",
+        "overlay_end": "tfc:block/ore/diamond"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

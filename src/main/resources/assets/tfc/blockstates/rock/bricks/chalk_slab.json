@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/bricks/chalk_slab"},
+        "type=double": {"model": "tfc:block/rock/bricks/chalk"},
+        "type=top": {"model": "tfc:block/rock/bricks/chalk_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

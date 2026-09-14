@@ -1,0 +1,23 @@
+{
+    "feature": "tfc:plant/licorice_fern_patch",
+    "placement": [
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 9.8,
+            "max_rainfall": 400,
+            "type": "tfc:climate",
+            "min_rainfall": 300,
+            "min_forest": "edge",
+            "min_temperature": 2.5
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,8 @@
+{
+    "melt_temperature": 1540,
+    "tier": 5,
+    "ingots": {"tag": "forge:ingots/weak_blue_steel"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/weak_blue_steel",
+    "__comment__": "This file was automatically created by mcresources"
+}

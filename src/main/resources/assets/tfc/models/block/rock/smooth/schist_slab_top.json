@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/rock/smooth/schist",
+        "top": "tfc:block/rock/smooth/schist",
+        "bottom": "tfc:block/rock/smooth/schist"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

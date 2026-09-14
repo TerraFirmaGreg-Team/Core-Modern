@@ -1,0 +1,16 @@
+{
+    "result": {
+        "item": "tfc:wood/planks/hickory_fence",
+        "count": 8
+    },
+    "pattern": [
+        "XYX",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/hickory"},
+        "Y": {"item": "tfc:wood/lumber/hickory"}
+    }
+}

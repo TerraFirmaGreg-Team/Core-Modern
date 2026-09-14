@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:penguin",
+        "tfc:polar_bear",
+        "tfc:caribou"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,7 @@
+{
+    "climate": {
+        "max_temperature": -14,
+        "min_rainfall": 75
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

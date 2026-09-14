@@ -1,0 +1,10 @@
+{
+    "result_item": {
+        "stack": {"item": "tfc:food/cooked_egg"},
+        "modifiers": ["tfc:copy_food"]
+    },
+    "ingredient": {"item": "minecraft:egg"},
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

@@ -1,0 +1,5 @@
+{
+    "parent": "block/template_wall_side_tall",
+    "textures": {"wall": "tfc:block/rock/mossy_bricks/dolomite"},
+    "__comment__": "This file was automatically created by mcresources"
+}

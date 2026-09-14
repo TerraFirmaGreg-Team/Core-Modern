@@ -1,0 +1,12 @@
+{
+    "gui_light": "front",
+    "perspectives": {
+        "fixed": {"parent": "tfc:item/metal/javelin/blue_steel_gui"},
+        "ground": {"parent": "tfc:item/metal/javelin/blue_steel_gui"},
+        "gui": {"parent": "tfc:item/metal/javelin/blue_steel_gui"},
+        "none": {"parent": "tfc:item/metal/javelin/blue_steel_gui"}
+    },
+    "loader": "forge:separate_transforms",
+    "__comment__": "This file was automatically created by mcresources",
+    "base": {"parent": "tfc:item/metal/javelin/blue_steel_throwing_base"}
+}

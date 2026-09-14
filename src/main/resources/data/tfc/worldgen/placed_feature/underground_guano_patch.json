@@ -1,0 +1,38 @@
+{
+    "feature": "tfc:underground_guano_patch",
+    "placement": [
+        {
+            "chance": 40,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "count": 25,
+            "type": "minecraft:count"
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": -32},
+                "max_inclusive": {"absolute": 32},
+                "type": "uniform"
+            }
+        },
+        {
+            "allowed_search_condition": {
+                "blocks": ["minecraft:air"],
+                "type": "minecraft:matching_blocks"
+            },
+            "max_steps": 12,
+            "target_condition": {"type": "minecraft:solid"},
+            "direction_of_search": "down",
+            "type": "minecraft:environment_scan"
+        },
+        {
+            "xz_spread": 0,
+            "y_spread": 1,
+            "type": "minecraft:random_offset"
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,207 @@
+{
+    "textures": {
+        "1_0": "tfc:block/fruit_tree/banana_leaves",
+        "particle": "tfc:block/fruit_tree/banana_leaves"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -2,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "from": [
+                -7,
+                -2,
+                8
+            ],
+            "to": [
+                25,
+                30,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        16,
+                        0,
+                        0
+                    ],
+                    "texture": "#1_0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#1_0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -2,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "from": [
+                -7,
+                -2,
+                8
+            ],
+            "to": [
+                25,
+                30,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        16,
+                        0,
+                        0
+                    ],
+                    "texture": "#1_0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#1_0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -2,
+                    8
+                ],
+                "angle": 45,
+                "axis": "z"
+            },
+            "from": [
+                8,
+                -2,
+                -9
+            ],
+            "to": [
+                8,
+                30,
+                23
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        16,
+                        0,
+                        0
+                    ],
+                    "texture": "#1_0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#1_0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -2,
+                    8
+                ],
+                "angle": -45,
+                "axis": "z"
+            },
+            "from": [
+                8,
+                -2,
+                -9
+            ],
+            "to": [
+                8,
+                30,
+                23
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        16,
+                        0,
+                        0
+                    ],
+                    "texture": "#1_0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#1_0"
+                }
+            }
+        }
+    ],
+    "groups": [{
+        "children": [
+            {
+                "children": [
+                    0,
+                    1
+                ],
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "name": "group"
+            },
+            {
+                "children": [
+                    2,
+                    3
+                ],
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "name": "group"
+            }
+        ],
+        "origin": [
+            8,
+            8,
+            8
+        ],
+        "name": "banana_leaves"
+    }],
+    "credit": "Made with Blockbench"
+}

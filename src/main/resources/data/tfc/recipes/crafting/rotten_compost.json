@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:rotten_compost"},
+    "ingredients": [
+        {"item": "tfc:soot"},
+        {"item": "tfc:compost"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

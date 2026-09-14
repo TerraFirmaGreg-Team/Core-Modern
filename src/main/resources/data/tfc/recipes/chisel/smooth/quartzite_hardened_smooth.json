@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/smooth/quartzite",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/hardened/quartzite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

@@ -1,0 +1,79 @@
+{
+    "multipart": [
+        {"apply": {"model": "tfc:block/bars/blue_steel_bars_post_ends"}},
+        {
+            "apply": {"model": "tfc:block/bars/blue_steel_bars_post"},
+            "when": {
+                "east": false,
+                "south": false,
+                "north": false,
+                "west": false
+            }
+        },
+        {
+            "apply": {"model": "tfc:block/bars/blue_steel_bars_cap"},
+            "when": {
+                "east": false,
+                "south": false,
+                "north": true,
+                "west": false
+            }
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/bars/blue_steel_bars_cap"
+            },
+            "when": {
+                "east": true,
+                "south": false,
+                "north": false,
+                "west": false
+            }
+        },
+        {
+            "apply": {"model": "tfc:block/bars/blue_steel_bars_cap_alt"},
+            "when": {
+                "east": false,
+                "south": true,
+                "north": false,
+                "west": false
+            }
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/bars/blue_steel_bars_cap_alt"
+            },
+            "when": {
+                "east": false,
+                "south": false,
+                "north": false,
+                "west": true
+            }
+        },
+        {
+            "apply": {"model": "tfc:block/bars/blue_steel_bars_side"},
+            "when": {"north": true}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/bars/blue_steel_bars_side"
+            },
+            "when": {"east": true}
+        },
+        {
+            "apply": {"model": "tfc:block/bars/blue_steel_bars_side_alt"},
+            "when": {"south": true}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/bars/blue_steel_bars_side_alt"
+            },
+            "when": {"west": true}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

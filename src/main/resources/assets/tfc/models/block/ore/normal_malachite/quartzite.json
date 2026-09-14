@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/raw/quartzite",
+        "overlay": "tfc:block/ore/normal_malachite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

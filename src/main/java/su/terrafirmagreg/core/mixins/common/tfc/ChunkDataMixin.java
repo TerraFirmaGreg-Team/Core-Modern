@@ -62,7 +62,7 @@ public class ChunkDataMixin implements IChunkData {
         }
 
         try {
-            ChunkData data = cap.map(c -> ((IChunkDataCapabilityAccessor) c).tfg$getData()).orElse(ChunkData.EMPTY);
+            ChunkData data = cap.map(ChunkDataCapability::getData).orElse(ChunkData.EMPTY);
 
             if (data == ChunkData.EMPTY) {
                 tfg$corruptChunkLogger(pos, "ChunkData is EMPTY for populated chunk");

@@ -1,0 +1,5 @@
+{
+    "parent": "block/fence_side",
+    "textures": {"texture": "tfc:block/wood/planks/blackwood"},
+    "__comment__": "This file was automatically created by mcresources"
+}

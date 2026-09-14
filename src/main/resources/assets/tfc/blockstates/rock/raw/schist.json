@@ -1,0 +1,31 @@
+{
+    "variants": {
+        "axis=z": [
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/schist"
+            },
+            {
+                "x": 90,
+                "model": "tfc:block/rock/raw/schist_mirrored"
+            }
+        ],
+        "axis=x": [
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/schist"
+            },
+            {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/rock/raw/schist_mirrored"
+            }
+        ],
+        "axis=y": [
+            {"model": "tfc:block/rock/raw/schist"},
+            {"model": "tfc:block/rock/raw/schist_mirrored"}
+        ]
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

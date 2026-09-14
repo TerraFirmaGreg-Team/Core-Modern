@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/lectern",
+    "textures": {
+        "top": "tfc:block/wood/lectern/birch/top",
+        "bottom": "tfc:block/wood/planks/birch",
+        "sides": "tfc:block/wood/lectern/birch/sides",
+        "particle": "tfc:block/wood/lectern/birch/sides",
+        "front": "tfc:block/wood/lectern/birch/front",
+        "base": "tfc:block/wood/lectern/birch/base"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/smooth/gabbro_wall",
+    "ingredient": {"item": "tfc:rock/smooth/gabbro"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

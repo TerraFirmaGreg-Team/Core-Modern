@@ -37,9 +37,6 @@ public class EventHandlerMixin {
 
     @Unique
     @SuppressWarnings("removal")
-    private static final TagKey<Fluid> GT_OILS = TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("tfg", "oils"));
-    @Unique
-    @SuppressWarnings("removal")
     private static final TagKey<Fluid> FIRMALIFE_OILS = TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("firmalife", "oils"));
 
     // If the fluid is inside some sort of insulating container, cancel the effect
@@ -53,7 +50,7 @@ public class EventHandlerMixin {
 
         // Oil floats on water O_O
         if (TFGCore.IS_APRIL_FIRST && EnvironmentHelpers.isRainingOrSnowing(level, player.blockPosition().above())
-                && (Helpers.isFluid(fluidStack.getFluid(), GT_OILS) || Helpers.isFluid(fluidStack.getFluid(), FIRMALIFE_OILS))) {
+                && (Helpers.isFluid(fluidStack.getFluid(), TFGTags.Fluids.GT_OILS) || Helpers.isFluid(fluidStack.getFluid(), FIRMALIFE_OILS))) {
             player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
             ci.cancel();
         }

@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/rock/spike/gneiss_base",
+    "textures": {"layer0": "tfc:block/rock/raw/gneiss"},
+    "__comment__": "This file was automatically created by mcresources"
+}

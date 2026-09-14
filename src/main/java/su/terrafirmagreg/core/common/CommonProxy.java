@@ -34,6 +34,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.entity.ai.TFGBrain;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
@@ -94,6 +95,7 @@ public class CommonProxy {
 
         AdAstraCompat.RegisterEvents();
         AE2Compat.registerEvents();
+        EnvironmentSystem.init();
     }
 
     @SubscribeEvent

@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/wood/planks/chestnut",
+        "overlay": "tfc:block/axle_casing_front"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

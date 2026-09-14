@@ -1,0 +1,13 @@
+{
+    "recipe": {
+        "result": {"item": "tfc:rock/pressure_plate/marble"},
+        "ingredients": [
+            {"tag": "tfc:chisels"},
+            {"item": "tfc:brick/marble"},
+            {"item": "tfc:brick/marble"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

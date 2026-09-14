@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/bricks/gneiss_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/bricks/gneiss",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

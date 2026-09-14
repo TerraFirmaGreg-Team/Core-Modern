@@ -1,0 +1,11 @@
+{
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/cast_iron"
+    },
+    "ingredient": {"item": "tfc:metal/mace/wrought_iron"},
+    "temperature": 1535,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
+}

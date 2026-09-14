@@ -1,0 +1,12 @@
+{
+    "result": {"item": "minecraft:iron_door"},
+    "input": {"tag": "forge:sheets/wrought_iron"},
+    "tier": 3,
+    "rules": [
+        "hit_last",
+        "draw_not_last",
+        "punch_not_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfc:stick_bundle"},
+    "pattern": [
+        "X",
+        "X"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:stick_bunch"}}
+}

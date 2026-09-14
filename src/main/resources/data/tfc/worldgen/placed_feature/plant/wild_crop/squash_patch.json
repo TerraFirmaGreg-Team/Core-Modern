@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:plant/wild_crop/squash_patch",
+    "placement": [
+        {
+            "chance": 80,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 33,
+            "max_rainfall": 390,
+            "type": "tfc:climate",
+            "min_rainfall": 90,
+            "min_forest": "normal",
+            "min_temperature": 5
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

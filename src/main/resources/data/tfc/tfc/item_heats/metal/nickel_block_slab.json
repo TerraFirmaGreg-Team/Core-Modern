@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 1162,
+    "ingredient": {"item": "tfc:metal/block/nickel_slab"},
+    "heat_capacity": 1.042,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 872
+}

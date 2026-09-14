@@ -1,0 +1,16 @@
+{
+    "result": {"item": "minecraft:lapis_block"},
+    "ingredients": [
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"},
+        {"item": "tfc:gem/lapis_lazuli"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

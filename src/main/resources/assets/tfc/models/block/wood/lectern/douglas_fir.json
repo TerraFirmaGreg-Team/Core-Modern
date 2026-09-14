@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/lectern",
+    "textures": {
+        "top": "tfc:block/wood/lectern/douglas_fir/top",
+        "bottom": "tfc:block/wood/planks/douglas_fir",
+        "sides": "tfc:block/wood/lectern/douglas_fir/sides",
+        "particle": "tfc:block/wood/lectern/douglas_fir/sides",
+        "front": "tfc:block/wood/lectern/douglas_fir/front",
+        "base": "tfc:block/wood/lectern/douglas_fir/base"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

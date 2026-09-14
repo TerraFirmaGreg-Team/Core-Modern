@@ -1,0 +1,8 @@
+{
+    "saturation": 0,
+    "ingredient": {"item": "tfc:food/bluegill"},
+    "decay_modifier": 3,
+    "protein": 0.75,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
+}

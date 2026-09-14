@@ -1,0 +1,6 @@
+{
+    "result": {"item": "tfc:wood/planks/spruce_button"},
+    "ingredients": [{"item": "tfc:wood/planks/spruce"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

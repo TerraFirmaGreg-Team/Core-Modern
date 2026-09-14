@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:aggregate",
+        "count": 8
+    },
+    "pattern": [
+        "XYX",
+        "Y Y",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "forge:sand"},
+        "Y": {"tag": "forge:gravel"}
+    }
+}

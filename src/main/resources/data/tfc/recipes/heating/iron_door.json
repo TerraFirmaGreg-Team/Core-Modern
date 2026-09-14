@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/cast_iron"
+    },
+    "ingredient": {"item": "minecraft:iron_door"},
+    "temperature": 1535,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

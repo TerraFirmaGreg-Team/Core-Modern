@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/garnierite",
+        "count": 2
+    },
+    "ingredient": {"item": "tfc:ore/small_garnierite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

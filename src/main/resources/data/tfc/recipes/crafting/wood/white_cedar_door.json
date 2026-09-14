@@ -1,0 +1,14 @@
+{
+    "result": {
+        "item": "tfc:wood/planks/white_cedar_door",
+        "count": 2
+    },
+    "pattern": [
+        "XX",
+        "XX",
+        "XX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/lumber/white_cedar"}}
+}

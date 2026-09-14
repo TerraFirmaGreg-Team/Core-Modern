@@ -1,0 +1,9 @@
+{
+    "parent": "tfc:block/ceramic/large_vessel_a_sealed",
+    "textures": {
+        "side": "tfc:block/ceramic/large_vessel/glazed/brown/side",
+        "top": "tfc:block/ceramic/large_vessel/glazed/brown/top",
+        "bottom": "tfc:block/ceramic/large_vessel/glazed/brown/bottom"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

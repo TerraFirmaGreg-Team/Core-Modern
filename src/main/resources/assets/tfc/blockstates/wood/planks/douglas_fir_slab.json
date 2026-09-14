@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/wood/planks/douglas_fir_slab"},
+        "type=double": {"model": "tfc:block/wood/planks/douglas_fir"},
+        "type=top": {"model": "tfc:block/wood/planks/douglas_fir_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

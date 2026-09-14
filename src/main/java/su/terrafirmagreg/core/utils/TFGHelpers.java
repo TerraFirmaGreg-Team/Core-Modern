@@ -26,7 +26,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
-import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityEntryAccessor;
 
 @SuppressWarnings("unused")
 public final class TFGHelpers {
@@ -42,17 +41,6 @@ public final class TFGHelpers {
         }
 
         return material;
-    }
-
-    /**
-     * Метод получает стак из списка стаков с доп проверками.
-     */
-    public static ItemStack getStackFromIngotPileTileEntityByIndex(List<?> entries, int index) {
-        try {
-            return ((IIngotPileBlockEntityEntryAccessor) (Object) entries.get(index)).getStack();
-        } catch (IndexOutOfBoundsException e) {
-            return ItemStack.EMPTY;
-        }
     }
 
     public static void sendChatMessagePortalsIsDisabled(Level level, Entity entity) {

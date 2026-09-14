@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/metal/chain/wrought_iron"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/metal/chain/wrought_iron"
+        },
+        "axis=y": {"model": "tfc:block/metal/chain/wrought_iron"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

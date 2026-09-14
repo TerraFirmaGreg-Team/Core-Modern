@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/raw/shale_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/raw/shale_slab"},
+    "ingredient": "tfc:rock/raw/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

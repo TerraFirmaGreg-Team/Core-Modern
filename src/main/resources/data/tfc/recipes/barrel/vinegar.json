@@ -1,0 +1,17 @@
+{
+    "input_fluid": {
+        "amount": 250,
+        "ingredient": {"tag": "tfc:alcohols"}
+    },
+    "duration": 8000,
+    "output_fluid": {
+        "amount": 250,
+        "fluid": "tfc:vinegar"
+    },
+    "input_item": {"ingredient": {
+        "ingredient": {"tag": "tfc:foods/fruits"},
+        "type": "tfc:not_rotten"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

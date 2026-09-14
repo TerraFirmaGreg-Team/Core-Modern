@@ -1,0 +1,5 @@
+{
+    "parent": "block/button",
+    "textures": {"texture": "tfc:block/wood/planks/ash"},
+    "__comment__": "This file was automatically created by mcresources"
+}

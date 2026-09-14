@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/chiseled/gneiss",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/bricks/gneiss",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/slime_block",
+    "textures": {
+        "texture": "tfc:block/glue_block",
+        "particle": "tfc:block/glue_block"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

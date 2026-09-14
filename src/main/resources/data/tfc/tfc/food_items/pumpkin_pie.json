@@ -1,0 +1,10 @@
+{
+    "saturation": 2,
+    "ingredient": {"item": "minecraft:pumpkin_pie"},
+    "decay_modifier": 2.5,
+    "fruit": 1.5,
+    "grain": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "hunger": 4
+}

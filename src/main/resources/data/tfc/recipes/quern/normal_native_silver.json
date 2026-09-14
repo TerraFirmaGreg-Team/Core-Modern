@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/native_silver",
+        "count": 5
+    },
+    "ingredient": {"item": "tfc:ore/normal_native_silver"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

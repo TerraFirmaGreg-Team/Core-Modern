@@ -1,0 +1,10 @@
+{
+    "model_stages": [
+        "tfc:item/pan/native_copper/gabbro_full",
+        "tfc:item/pan/native_copper/gabbro_half",
+        "tfc:item/pan/native_copper/result"
+    ],
+    "ingredient": "tfc:deposit/native_copper/gabbro",
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/native_copper_gabbro"
+}

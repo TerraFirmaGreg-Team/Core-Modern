@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/pyrite",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:gem/pyrite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

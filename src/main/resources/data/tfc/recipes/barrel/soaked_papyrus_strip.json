@@ -1,0 +1,11 @@
+{
+    "input_fluid": {
+        "amount": 200,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 8000,
+    "output_item": {"item": "tfc:soaked_papyrus_strip"},
+    "input_item": {"ingredient": {"item": "tfc:papyrus_strip"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

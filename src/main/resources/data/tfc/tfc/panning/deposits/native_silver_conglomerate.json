@@ -1,0 +1,10 @@
+{
+    "model_stages": [
+        "tfc:item/pan/native_silver/conglomerate_full",
+        "tfc:item/pan/native_silver/conglomerate_half",
+        "tfc:item/pan/native_silver/result"
+    ],
+    "ingredient": "tfc:deposit/native_silver/conglomerate",
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/native_silver_conglomerate"
+}

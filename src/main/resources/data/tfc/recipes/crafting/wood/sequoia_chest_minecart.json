@@ -1,0 +1,9 @@
+{
+    "result": {"item": "tfc:wood/chest_minecart/sequoia"},
+    "ingredients": [
+        {"item": "tfc:wood/chest/sequoia"},
+        {"item": "minecraft:minecart"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

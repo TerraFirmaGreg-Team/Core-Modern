@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:wood/gear_box/white_cedar",
+        "count": 2
+    },
+    "pattern": [
+        " L ",
+        "LML",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "L": {"item": "tfc:wood/lumber/white_cedar"},
+        "M": {"item": "tfc:brass_mechanisms"}
+    }
+}

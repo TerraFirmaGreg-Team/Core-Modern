@@ -1,0 +1,181 @@
+{
+    "textures": {
+        "cross": "tfc:block/plant/badderlocks/placeholder",
+        "particle": "tfc:block/plant/badderlocks/placeholder"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                -7.2,
+                0,
+                6
+            ],
+            "to": [
+                23.2,
+                16,
+                6
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        8,
+                        0,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                6,
+                0,
+                -7.2
+            ],
+            "to": [
+                6,
+                16,
+                23.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        8,
+                        0,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                -7.2,
+                0,
+                10
+            ],
+            "to": [
+                23.2,
+                16,
+                10
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        8,
+                        0,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                10,
+                0,
+                -7.2
+            ],
+            "to": [
+                10,
+                16,
+                23.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        8,
+                        0,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        }
+    ]
+}

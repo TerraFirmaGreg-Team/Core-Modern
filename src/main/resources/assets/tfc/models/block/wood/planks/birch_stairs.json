@@ -1,0 +1,9 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/wood/planks/birch",
+        "top": "tfc:block/wood/planks/birch",
+        "bottom": "tfc:block/wood/planks/birch"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

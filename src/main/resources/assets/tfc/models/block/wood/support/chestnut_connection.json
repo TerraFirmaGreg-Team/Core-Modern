@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/wood/support/connection",
+    "textures": {
+        "texture": "tfc:block/wood/sheet/chestnut",
+        "particle": "tfc:block/wood/sheet/chestnut"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

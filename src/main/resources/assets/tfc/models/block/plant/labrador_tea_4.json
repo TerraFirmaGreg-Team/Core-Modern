@@ -1,0 +1,5 @@
+{
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/plant/labrador_tea/labrador_tea_4"},
+    "__comment__": "This file was automatically created by mcresources"
+}

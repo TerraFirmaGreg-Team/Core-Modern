@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 75,
+        "fluid": "tfc:metal/black_steel"
+    },
+    "ingredient": {"item": "tfc:metal/block/black_steel_stairs"},
+    "temperature": 1485,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

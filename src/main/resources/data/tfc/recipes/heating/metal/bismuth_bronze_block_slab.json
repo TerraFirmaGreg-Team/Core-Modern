@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/bismuth_bronze"
+    },
+    "ingredient": {"item": "tfc:metal/block/bismuth_bronze_slab"},
+    "temperature": 985,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

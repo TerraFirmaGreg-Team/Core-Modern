@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:metal/bucket/red_steel"},
+    "input": {"tag": "forge:sheets/red_steel"},
+    "tier": 6,
+    "rules": [
+        "bend_last",
+        "bend_second_last",
+        "bend_third_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

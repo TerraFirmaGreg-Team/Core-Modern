@@ -1,0 +1,16 @@
+{
+    "parent": "tfc:story/root",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {"trigger": "tfc:present_day"}},
+    "display": {
+        "show_toast": true,
+        "hidden": true,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "minecraft:clock"},
+        "description": {"translate": "tfc.advancements.story.the_future.description"},
+        "title": {"translate": "tfc.advancements.story.the_future.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

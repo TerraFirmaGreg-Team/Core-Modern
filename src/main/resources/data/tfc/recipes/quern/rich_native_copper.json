@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/native_copper",
+        "count": 7
+    },
+    "ingredient": {"item": "tfc:ore/rich_native_copper"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

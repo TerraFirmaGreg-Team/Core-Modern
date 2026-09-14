@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/smooth/granite_slab"},
+        "type=double": {"model": "tfc:block/rock/smooth/granite"},
+        "type=top": {"model": "tfc:block/rock/smooth/granite_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

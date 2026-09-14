@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/alabaster/bricks/orange",
+        "top": "tfc:block/alabaster/bricks/orange",
+        "bottom": "tfc:block/alabaster/bricks/orange"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

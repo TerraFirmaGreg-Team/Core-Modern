@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 184,
+    "ingredient": {"item": "tfc:metal/block/tin_slab"},
+    "heat_capacity": 3.571,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 138
+}

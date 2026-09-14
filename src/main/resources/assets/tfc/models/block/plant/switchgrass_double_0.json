@@ -1,0 +1,191 @@
+{
+    "textures": {
+        "cross": "tfc:block/plant/switchgrass/switchgrass_bottom_0",
+        "particle": "tfc:block/plant/switchgrass/switchgrass_top_0",
+        "cross1": "tfc:block/plant/switchgrass/switchgrass_top_0"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                0.8,
+                0,
+                8
+            ],
+            "to": [
+                15.2,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0.8
+            ],
+            "to": [
+                8,
+                16,
+                15.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                0.8,
+                16,
+                8
+            ],
+            "to": [
+                15.2,
+                32,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross1",
+                    "tintindex": 0
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross1",
+                    "tintindex": 0
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                16,
+                0.8
+            ],
+            "to": [
+                8,
+                32,
+                15.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross1",
+                    "tintindex": 0
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross1",
+                    "tintindex": 0
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

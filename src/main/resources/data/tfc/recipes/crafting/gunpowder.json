@@ -1,0 +1,14 @@
+{
+    "result": {
+        "item": "minecraft:gunpowder",
+        "count": 4
+    },
+    "ingredients": [
+        {"item": "tfc:powder/saltpeter"},
+        {"item": "tfc:powder/saltpeter"},
+        {"item": "tfc:powder/sulfur"},
+        {"item": "tfc:powder/charcoal"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
+}

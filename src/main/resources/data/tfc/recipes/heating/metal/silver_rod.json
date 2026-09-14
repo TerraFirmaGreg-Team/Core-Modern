@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/silver"
+    },
+    "ingredient": {"item": "tfc:metal/rod/silver"},
+    "temperature": 961,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

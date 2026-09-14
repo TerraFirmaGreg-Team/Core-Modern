@@ -1,0 +1,50 @@
+{
+    "variants": {
+        "count=3": [
+            {
+                "y": 90,
+                "model": "tfc:block/rock/loose/basalt_3"
+            },
+            {"model": "tfc:block/rock/loose/basalt_3"},
+            {
+                "y": 180,
+                "model": "tfc:block/rock/loose/basalt_3"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/rock/loose/basalt_3"
+            }
+        ],
+        "count=2": [
+            {
+                "y": 90,
+                "model": "tfc:block/rock/loose/basalt_2"
+            },
+            {"model": "tfc:block/rock/loose/basalt_2"},
+            {
+                "y": 180,
+                "model": "tfc:block/rock/loose/basalt_2"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/rock/loose/basalt_2"
+            }
+        ],
+        "count=1": [
+            {
+                "y": 90,
+                "model": "tfc:block/rock/loose/basalt_1"
+            },
+            {"model": "tfc:block/rock/loose/basalt_1"},
+            {
+                "y": 180,
+                "model": "tfc:block/rock/loose/basalt_1"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/rock/loose/basalt_1"
+            }
+        ]
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

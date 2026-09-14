@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 400,
+        "fluid": "tfc:metal/red_steel"
+    },
+    "ingredient": {"item": "tfc:metal/unfinished_chestplate/red_steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

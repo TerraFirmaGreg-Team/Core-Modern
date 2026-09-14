@@ -1,0 +1,34 @@
+{
+    "duration": 500,
+    "result": {
+        "item": "tfc:jar/green_apple",
+        "count": 4
+    },
+    "texture": "tfc:block/jar/green_apple",
+    "temperature": 300,
+    "ingredients": [
+        {
+            "ingredient": {"item": "tfc:food/green_apple"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "tfc:food/green_apple"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "tfc:food/green_apple"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "tfc:food/green_apple"},
+            "type": "tfc:not_rotten"
+        },
+        {"tag": "tfc:sweetener"}
+    ],
+    "fluid_ingredient": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:pot_jam"
+}

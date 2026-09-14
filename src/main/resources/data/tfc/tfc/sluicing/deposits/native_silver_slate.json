@@ -1,0 +1,5 @@
+{
+    "ingredient": {"item": "tfc:deposit/native_silver/slate"},
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/native_silver_slate"
+}

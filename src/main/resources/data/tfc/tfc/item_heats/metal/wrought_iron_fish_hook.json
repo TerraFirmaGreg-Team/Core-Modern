@@ -1,0 +1,7 @@
+{
+    "welding_temperature": 1228,
+    "ingredient": {"item": "tfc:metal/fish_hook/wrought_iron"},
+    "heat_capacity": 5.714,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 921
+}

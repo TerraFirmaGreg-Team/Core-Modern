@@ -1,0 +1,9 @@
+{
+    "parent": "forge:item/default",
+    "textures": {
+        "fluid": "tfc:item/metal/bucket/overlay",
+        "base": "tfc:item/metal/bucket/red_steel"
+    },
+    "loader": "tfc:contained_fluid",
+    "__comment__": "This file was automatically created by mcresources"
+}
