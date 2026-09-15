@@ -20,7 +20,7 @@ public class NoiseSettingsMixin {
     @Inject(method = "height", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$height(CallbackInfoReturnable<Integer> cir) {
         if ((Object) this == OVERWORLD_NOISE_SETTINGS) {
-            cir.setReturnValue(WorldgenData.MOUNTAIN_SCALING.height());
+            cir.setReturnValue(WorldgenData.MOUNTAIN_SCALING.dimHeight());
         }
     }
 }

@@ -23,13 +23,17 @@ public class WorldgenData extends SavedData {
     public static volatile MountainScaling MOUNTAIN_SCALING = null;
 
     public static final MountainScaling MOUNTAIN_SCALING_NONE = new MountainScaling(
-            "none", 384, 384);
+            "none", 384, 384, 180, 1.0, 4, 4, 0.5,
+            1.0, false, 0.0, 0.5, 0.5);
     public static final MountainScaling MOUNTAIN_SCALING_LOW = new MountainScaling(
-            "low", 384, 384);
+            "low", 384, 384, 180, 1.0, 4, 6, 0.5,
+            1.0, true, 1.0, 1.0, 0.5);
     public static final MountainScaling MOUNTAIN_SCALING_MEDIUM = new MountainScaling(
-            "medium", 704, 704);
+            "medium", 704, 704, 200, 1.0, 6, 12, 0.7,
+            1.5, true, 3.0, 1.0, 1.0);
     public static final MountainScaling MOUNTAIN_SCALING_HIGH = new MountainScaling(
-            "high", 1024, 1024);
+            "high", 1024, 1024, 230, 1.0, 8, 16, 0.85,
+            2.0, true, 5.0, 1.0, 1.0);
     public static final MountainScaling MOUNTAIN_SCALING_NEW_WORLD_DEFAULT = MOUNTAIN_SCALING_LOW;
 
     public static final Map<String, MountainScaling> ALL_SCALINGS = new HashMap<>();
@@ -71,7 +75,7 @@ public class WorldgenData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
         if (generatedMountainScaling != null) {
             var generated = new CompoundTag();
             generated.putString(MOUNTAIN_SCALING_ID, generatedMountainScaling.id);
@@ -125,7 +129,17 @@ public class WorldgenData extends SavedData {
 
     public record MountainScaling(
             String id,
-            int height,
-            int logicalHeight) {
+            int dimHeight,
+            int dimLogicalHeight,
+            int snowLineY,
+            double volcanoHeightScale,
+            double foothillWidth,
+            int heightBlend,
+            double mountainHeightScale,
+            double mountainHorizontalScale,
+            boolean mountainErosionNoise,
+            double mountainErosionNoiseStrength,
+            double mountainPeakSharpness,
+            double mountainRidgePeakIntensity) {
     }
 }

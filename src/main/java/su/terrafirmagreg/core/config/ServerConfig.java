@@ -59,8 +59,16 @@ public final class ServerConfig {
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
 
-    public final ForgeConfigSpec.ConfigValue<String> mountainScalingOverride;
     public final ForgeConfigSpec.BooleanValue finiteContinents;
+    public final ForgeConfigSpec.ConfigValue<String> mountainScalingOverride;
+    public final ForgeConfigSpec.BooleanValue snowCaps;
+    public final ForgeConfigSpec.IntValue snowLineTransitionWidth;
+    public final ForgeConfigSpec.IntValue snowLineVariation;
+    public final ForgeConfigSpec.DoubleValue snowDrainageStrength;
+    public final ForgeConfigSpec.DoubleValue mountainMacroVariation;
+    public final ForgeConfigSpec.DoubleValue mountainMacroVariationScale;
+    public final ForgeConfigSpec.DoubleValue mountainTextureAmplitude;
+    public final ForgeConfigSpec.DoubleValue mountainTextureFrequency;
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
@@ -114,7 +122,7 @@ public final class ServerConfig {
 
         builder.pop().push("syringe_blacklist");
         SYRINGE_BLACKLIST = builder
-                .comment("Blacklist of entity IDs that cannot be sampled by the DNA syringe. Can be empty.")
+                .comment("\nBlacklist of entity IDs that cannot be sampled by the DNA syringe. Can be empty.")
                 .defineListAllowEmpty(
                         "syringeBlacklist", List.of(),
                         o -> {
@@ -134,7 +142,7 @@ public final class ServerConfig {
 
         builder.pop().push("world_generation");
         finiteContinents = builder
-                .comment("Restricts the continent generation to one \"cycle\" of the climates.\nEverything outside of that area becomes ocean.")
+                .comment("\nRestricts the continent generation to one \"cycle\" of the climates.\nEverything outside of that area becomes ocean.")
                 .define("finite_continents", false);
         mountainScalingOverride = builder
                 .comment("""
@@ -159,45 +167,80 @@ public final class ServerConfig {
                             }
                             return true;
                         });
+        snowCaps = builder
+                .comment("\nIf true, all mountains will generate snow caps regardless of the surrounding climate.")
+                .define("snowCaps", true);
+        snowLineTransitionWidth = builder
+                .comment("\nThe vertical distance (in blocks) over which snow cap coverage blends between full snow and the " +
+                        "surrounding surface, instead of cutting off sharply at snowLineY.")
+                .defineInRange("snowLineTransitionWidth", 24, 2, 128);
+        snowLineVariation = builder
+                .comment("\nHow far (in blocks) the effective snow line is allowed to wander up and down from " +
+                        "snowLineY, using smooth large-scale noise. Prevents the snow line from being a perfectly " +
+                        "flat elevation across the whole world. 0 disables the wander.")
+                .defineInRange("snowLineVariation", 24, 0, 128);
+        snowDrainageStrength = builder
+                .comment("\nHow strongly snow prefers to pool in broad couloirs (gully-like terrain) and avoid " +
+                        "exposed ridge crests/arêtes, in blocks of effective snow line shift. This is what gives " +
+                        "snow its coherent branching valley pattern instead of an even coating. 0 disables it, " +
+                        "giving a plain elevation-based snow line.")
+                .defineInRange("snowDrainageStrength", 40.0, 0.0, 150.0);
+        mountainMacroVariation = builder
+                .comment("\nAdds large scale variation to overall peak height along a mountain range, so " +
+                        "some massifs tower over their neighbors and others are noticeably lower, rather " +
+                        "than a uniform ridgeline of similar-height peaks. 0 disables this.")
+                .defineInRange("mountainMacroVariation", 1.5, 0.0, 5.0);
+        mountainMacroVariationScale = builder
+                .comment("\nControls how wide each tall/short stretch produced by macroVariation is. Lower " +
+                        "values make each section wider and more spread out, higher values pack them closer together.")
+                .defineInRange("mountainMacroVariationScale", 1.0, 0.1, 5.0);
+        mountainTextureAmplitude = builder
+                .comment("\nAmplitude of TFC's fine-grained surface texture noise applied everywhere on these " +
+                        "biomes. Distinct from erosionNoise (which only affects slopes/peaks).")
+                .defineInRange("mountainTextureNoiseAmplitude", 50.0, 0.0, 100.0);
+        mountainTextureFrequency = builder
+                .comment("\nFrequency of the surface texture noise. Lower values produce larger surface " +
+                        "undulations, higher values produce finer, rockier texture.")
+                .defineInRange("mountainTextureNoiseFrequency", 1.2, 0.05, 4.0);
 
         builder.pop().push("mars_climate");
         sandAccumulateChance = builder
-                .comment("The chance that sand piles will accumulate during a sandstorm. Lower values = faster sand pile accumulation, but also more block updates (aka lag).")
+                .comment("\nThe chance that sand piles will accumulate during a sandstorm. Lower values = faster sand pile accumulation, but also more block updates (aka lag).")
                 .defineInRange("sandAccumulateChance", 20, 1, Integer.MAX_VALUE);
 
         sandDecumulateChance = builder
-                .comment("The chance that sand piles will decumulate during a sandstoem. Lower values = faster sand dispersal, but also more block updates (aka lag).")
+                .comment("\nThe chance that sand piles will decumulate during a sandstoem. Lower values = faster sand dispersal, but also more block updates (aka lag).")
                 .defineInRange("sandDecumulateChance", 36, 1, Integer.MAX_VALUE);
 
         builder.pop().push("overworld_climate");
         enableSnowCorrection = builder
-                .comment("Enables instant snow and ice removal as chunks are loaded in and the temperature is warm enough.")
+                .comment("\nEnables instant snow and ice removal as chunks are loaded in and the temperature is warm enough.")
                 .define("enableSnowCorrection", true);
         snowMaxAccumulationOnUpdate = builder
-                .comment("The maximum amount of snow update to apply for each correction tick")
+                .comment("\nThe maximum amount of snow update to apply for each correction tick")
                 .defineInRange("snowMaxAccumulationOnUpdate", 256, 1, Integer.MAX_VALUE);
 
         builder.pop().push("tfg_food_effects");
         enableTFGFoodDebuffs = builder
-                .comment("Enables TFG food debuff effects. Allows receiving harmful effects from contaminants like Toxins, or transient nutrients like Freezing.")
+                .comment("\nEnables TFG food debuff effects. Allows receiving harmful effects from contaminants like Toxins, or transient nutrients like Freezing.")
                 .define("enableTFGFoodDebuffs", true);
         enableTFGFoodBuffs = builder
-                .comment("Enables TFG food buff effects. Allows receiving helpful effects from nutrients like Fruits, or transient nutrients like Fulfilling.")
+                .comment("\nEnables TFG food buff effects. Allows receiving helpful effects from nutrients like Fruits, or transient nutrients like Fulfilling.")
                 .define("enableTFGFoodBuffs", true);
 
         javelinLeashMaxDistance = builder
-                .comment("The maximum distance a javelin can travel from the player when leashed before it stops (in blocks). Default: 16")
+                .comment("\nThe maximum distance a javelin can travel from the player when leashed before it stops (in blocks). Default: 16")
                 .defineInRange("javelinLeashMaxDistance", 16, 1, 64);
 
         builder.pop().push("mining_restrictions");
         enableBeneathMiningRestrictions = builder
-                .comment("Enables restrictions on automatic mining machines in the Beneath.")
+                .comment("\nEnables restrictions on automatic mining machines in the Beneath.")
                 .define("enableBeneathMiningRestrictions", true);
         disabledBeneathMiningYLevel = builder
-                .comment("Below this Y level, single block gregtech miners and create contraptions cannot mine ores.")
+                .comment("\nBelow this Y level, single block gregtech miners and create contraptions cannot mine ores.")
                 .defineInRange("disabledBeneathMiningYLevel", 80, 1, Integer.MAX_VALUE);
         enableHotPlanetMiningRestrictions = builder
-                .comment("Enables restrictions on automatic mining machines on hot planets.")
+                .comment("\nEnables restrictions on automatic mining machines on hot planets.")
                 .define("enableHotPlanetMiningRestrictions", true);
 
         builder.pop().push("chameleon_spray_can");
@@ -247,18 +290,17 @@ public final class ServerConfig {
                 .comment("\nStress limit of the compost tumbler. Default: 8, min: 1, max: intMax")
                 .defineInRange("composterStressLimit", 8, 1, Integer.MAX_VALUE);
         COMPOSTER_RPM_LIMIT = builder
-                .comment(
-                        "\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
+                .comment("\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
                 .defineInRange("composterRpmLimit", 32, 1, Integer.MAX_VALUE);
 
         builder.pop().push("atmosphere_system");
 
         atmosphereMaxHorizontalDimension = builder
-                .comment("Maximum horizontal distance (in blocks) that environment rooms can extend from the machine.")
+                .comment("\nMaximum horizontal distance (in blocks) that environment rooms can extend from the machine.")
                 .defineInRange("maxHorizontalDimension", 128, 16, 512);
 
         atmosphereRevalidationBaseTicks = builder
-                .comment("Base delay (in ticks) between room revalidation checks. Larger rooms get longer delays.")
+                .comment("\nBase delay (in ticks) between room revalidation checks. Larger rooms get longer delays.")
                 .defineInRange("revalidationBaseTicks", 10, 1, 100);
 
         builder.pop();

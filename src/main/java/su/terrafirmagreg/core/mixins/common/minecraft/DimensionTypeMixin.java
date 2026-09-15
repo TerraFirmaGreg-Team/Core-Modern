@@ -22,14 +22,14 @@ public class DimensionTypeMixin {
     @Inject(method = "height", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$height(CallbackInfoReturnable<Integer> cir) {
         if (effectsLocation.getPath().equals("overworld")) {
-            cir.setReturnValue(WorldgenData.MOUNTAIN_SCALING.height());
+            cir.setReturnValue(WorldgenData.MOUNTAIN_SCALING.dimHeight());
         }
     }
 
     @Inject(method = "logicalHeight", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$logicalHeight(CallbackInfoReturnable<Integer> cir) {
         if (effectsLocation.getPath().equals("overworld")) {
-            cir.setReturnValue(WorldgenData.MOUNTAIN_SCALING.logicalHeight());
+            cir.setReturnValue(WorldgenData.MOUNTAIN_SCALING.dimLogicalHeight());
         }
     }
 }
