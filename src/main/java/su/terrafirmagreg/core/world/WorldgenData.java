@@ -23,17 +23,17 @@ public class WorldgenData extends SavedData {
     public static volatile MountainScaling MOUNTAIN_SCALING = null;
 
     public static final MountainScaling MOUNTAIN_SCALING_NONE = new MountainScaling(
-            "none");
+            "none", 384, 384);
     public static final MountainScaling MOUNTAIN_SCALING_LOW = new MountainScaling(
-            "low");
+            "low", 384, 384);
     public static final MountainScaling MOUNTAIN_SCALING_MEDIUM = new MountainScaling(
-            "medium");
+            "medium", 704, 704);
     public static final MountainScaling MOUNTAIN_SCALING_HIGH = new MountainScaling(
-            "high");
+            "high", 1024, 1024);
     public static final MountainScaling MOUNTAIN_SCALING_NEW_WORLD_DEFAULT = MOUNTAIN_SCALING_LOW;
 
     public static final Map<String, MountainScaling> ALL_SCALINGS = new HashMap<>();
-	public static final List<MountainScaling> CREATE_WORLD_SCALING_CYCLE_VALUES = new ArrayList<>();
+    public static final List<MountainScaling> CREATE_WORLD_SCALING_CYCLE_VALUES = new ArrayList<>();
 
     // Scaling written at first generation
     @Getter
@@ -49,10 +49,10 @@ public class WorldgenData extends SavedData {
         ALL_SCALINGS.put(MOUNTAIN_SCALING_MEDIUM.id, MOUNTAIN_SCALING_MEDIUM);
         ALL_SCALINGS.put(MOUNTAIN_SCALING_HIGH.id, MOUNTAIN_SCALING_HIGH);
 
-		CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_NONE);
-		CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_LOW);
-		CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_MEDIUM);
-		CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_HIGH);
+        CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_NONE);
+        CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_LOW);
+        CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_MEDIUM);
+        CREATE_WORLD_SCALING_CYCLE_VALUES.add(MOUNTAIN_SCALING_HIGH);
     }
 
     public static WorldgenData get(MinecraftServer server) {
@@ -124,6 +124,8 @@ public class WorldgenData extends SavedData {
     }
 
     public record MountainScaling(
-            String id) {
+            String id,
+            int height,
+            int logicalHeight) {
     }
 }
