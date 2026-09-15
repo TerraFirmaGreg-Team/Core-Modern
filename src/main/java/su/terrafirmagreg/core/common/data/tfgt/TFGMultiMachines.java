@@ -8,7 +8,6 @@ import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.joml.Vector3f;
 
@@ -30,9 +29,7 @@ import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
-import com.gregtechceu.gtceu.api.multiblock.error.BlockMatchingError;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
-import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
@@ -45,7 +42,6 @@ import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -1007,20 +1003,7 @@ public class TFGMultiMachines {
                     .where('S', controller(blocks(definition.getBlock())))
                     .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
                     .where('C', blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
-                    .where('R',
-                            new PatternPredicate(
-                                            state -> {
-                                                var result = state.getBlockEntity() instanceof RotorHolderPartMachine rotorHolder &&
-                                                        state.getLevel()
-                                                                .getBlockState(state.getPos()
-                                                                        .relative(rotorHolder.getFrontFacing()))
-                                                                .isAir() &&
-                                                        rotorHolder.getDefinition().getTier() >= GTValues.HV &&
-                                                        rotorHolder.getDefinition().getTier() <= GTValues.EV;
-                                                return result ? null : new BlockMatchingError(state.getPos().immutable(), PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.HV, GTValues.EV).stream().toList());
-                                            },
-                                            PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.HV, GTValues.EV).stream()
-                                                    .map(BlockInfo::fromBlock).collect(Collectors.toList()))
+                    .where('R', blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.HV, GTValues.EV).toArray(Block[]::new))
                                     .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
                                     .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
                                             VN[GTValues.HV]))

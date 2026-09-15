@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.ImmutableMap;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
+import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.api.pipenet.IPipeNode;
@@ -116,7 +117,7 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
     };
 
     @SuppressWarnings("rawtypes")
-    private static final TriPredicate<IPipeNode, IPipeNode, Direction> gtPipePredicate = (parent, child, direction) -> {
+    private static final TriPredicate<PipeBlockEntity, PipeBlockEntity, Direction> gtPipePredicate = (parent, child, direction) -> {
         if (parent == null)
             return true;
         if (!paintablePredicate.test(parent, child, direction)) {
@@ -311,9 +312,9 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
                 return true;
             }
             return false;
-        } else if (first instanceof IPipeNode pipe) {
-            var collected = BreadthFirstBlockSearch.conditionalSearch(IPipeNode.class, pipe,
-                    first.getLevel(), IPipeNode::getBlockPos,
+        } else if (first instanceof PipeBlockEntity pipe) {
+            var collected = BreadthFirstBlockSearch.conditionalSearch(PipeBlockEntity.class, pipe,
+                    first.getLevel(), PipeBlockEntity::getBlockPos,
                     gtPipePredicate, limit, limit * 6);
 
             int successfullyPainted = 0;

@@ -8,13 +8,12 @@ import java.util.function.Supplier;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.gregtechceu.gtceu.client.model.runtimegen.SurfaceRockModelGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.google.gson.JsonElement;
-import com.gregtechceu.gtceu.client.renderer.block.SurfaceRockRenderer;
+import com.gregtechceu.gtceu.client.model.runtimegen.SurfaceRockModelGenerator;
 import com.gregtechceu.gtceu.data.pack.GTDynamicResourcePack;
 import com.llamalad7.mixinextras.sugar.Local;
 
@@ -32,15 +31,15 @@ import su.terrafirmagreg.core.mixins.client.minecraft.IBlockModelGeneratorsInvok
 @ParametersAreNonnullByDefault
 @Mixin(value = SurfaceRockModelGenerator.class, remap = false)
 @OnlyIn(Dist.CLIENT)
-public abstract class SurfaceRockRendererMixin {
+public abstract class SurfaceRockModelGeneratorMixin {
 
     /**
      * Добавляет моделям пылей из GTCEu возможность поворачиваться.
      */
     @Redirect(method = "reinitModels", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/data/pack/GTDynamicResourcePack;addBlockState(Lnet/minecraft/resources/ResourceLocation;Ljava/util/function/Supplier;)V"), remap = false)
     private static void tfg$reinitModels$gtDynamicResourcePack$addBlockState(ResourceLocation loc,
-            Supplier<JsonElement> generator, @Local SurfaceRockRenderer model,
-            @Local(ordinal = 0) ResourceLocation blockId, @Local(ordinal = 1) ResourceLocation modelId) {
+            Supplier<JsonElement> generator, @Local(name = "model") SurfaceRockModelGenerator model,
+            @Local(name = "blockId") ResourceLocation blockId, @Local(name = "modelId") ResourceLocation modelId) {
 
         GTDynamicResourcePack.addBlockState(blockId, MultiVariantGenerator
                 .multiVariant(((ISurfaceRockRendererAccessor) model).getBlock(),

@@ -63,15 +63,15 @@ public class SMRGenerator2 extends TieredWorkableElectricMultiblockMachine {
         var booster_t3 = TFGHelpers.getMaterial("booster_t3");
         var polyalkylene_lubricant = TFGHelpers.getMaterial("polyalkylene_lubricant");
 
-        if (ozone != null && !ozone.isNull())
+        if (ozone != null)
             boostingTiers.put(ozone.getFluid(1), 1);
-        if (cyclohex_diperoxide != null && !cyclohex_diperoxide.isNull())
+        if (cyclohex_diperoxide != null)
             boostingTiers.put(cyclohex_diperoxide.getFluid(1), 4);
-        if (booster_t3 != null && !booster_t3.isNull())
+        if (booster_t3 != null)
             boostingTiers.put(booster_t3.getFluid(1), 8);
 
         lubricantTiers.put(GTMaterials.Lubricant.getFluid(1), 2);
-        if (polyalkylene_lubricant != null && !polyalkylene_lubricant.isNull())
+        if (polyalkylene_lubricant != null)
             lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
     }
 

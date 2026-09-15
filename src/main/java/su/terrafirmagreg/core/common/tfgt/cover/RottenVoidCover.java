@@ -2,7 +2,7 @@ package su.terrafirmagreg.core.common.tfgt.cover;
 
 import com.gregtechceu.gtceu.api.capability.ICoverable;
 import com.gregtechceu.gtceu.api.cover.CoverDefinition;
-import com.gregtechceu.gtceu.api.cover.filter.ItemFilter;
+import com.gregtechceu.gtceu.api.cover.filter.Filter;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.cover.voiding.ItemVoidingCover;
 import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
@@ -50,7 +50,7 @@ public class RottenVoidCover extends ItemVoidingCover {
         if (!(handler instanceof IItemHandlerModifiable modifiable))
             return;
 
-        ItemFilter filter = filterHandler.getFilter();
+        Filter<ItemStack> filter = filterHandler.getFilter();
 
         final long now = Calendars.get().getTicks();
         final long thresholdTicks = (long) minimumDaysRemaining * ICalendar.TICKS_IN_DAY;

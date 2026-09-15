@@ -37,8 +37,7 @@ public abstract class MinerLogicMixin {
 
     @Inject(method = "getBlocksToMine", at = @At("HEAD"), remap = false)
     private void tfg$getBlocksToMine(CallbackInfoReturnable<LinkedList<BlockPos>> cir) {
-        var level = getRLMachine().getLevel();
-        assert level != null;
+        var level = getRLMachine().self().getLevel();
 
         // True for large miners that are not on silk touch mode
         if (!hasPostProcessing()) {

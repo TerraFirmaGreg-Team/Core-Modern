@@ -4,9 +4,10 @@
  */
 package su.terrafirmagreg.core.mixins.client.gtceu;
 
-import com.gregtechceu.gtceu.client.model.runtimegen.SurfaceRockModelGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+
+import com.gregtechceu.gtceu.client.model.runtimegen.SurfaceRockModelGenerator;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
