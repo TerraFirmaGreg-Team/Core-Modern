@@ -20,12 +20,14 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.networking.events.GridSpatialEvent;
 import appeng.api.networking.spatial.ISpatialService;
+import dev.ftb.mods.ftbchunks.api.ChunkTeamData;
 import dev.ftb.mods.ftbchunks.api.ClaimedChunk;
 import dev.ftb.mods.ftbchunks.api.ClaimedChunkManager;
 import dev.ftb.mods.ftbchunks.api.FTBChunksAPI;
+import dev.ftb.mods.ftbchunks.api.FTBChunksProperties;
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.ftb.mods.ftbteams.api.Team;
-import dev.ftb.mods.ftbteams.api.TeamRank;
+import dev.ftb.mods.ftbteams.api.property.PrivacyMode;
 
 /**
  * Prevent Spatial IO events from affecting claimed chunks
@@ -93,15 +95,9 @@ public class AE2Compat {
         if (playerUUID == null) {
             return false;
         }
-
-        Team team = claimed.getTeamData().getTeam();
-
-        if (team.isPlayerTeam() && playerUUID.equals(team.getId())) {
-            return true;
-        }
-
-        TeamRank rank = team.getRankForPlayer(playerUUID);
-        return rank.isMemberOrBetter();
+        ChunkTeamData teamData = claimed.getTeamData();
+        PrivacyMode editMode = teamData.getTeam().getProperty(FTBChunksProperties.BLOCK_EDIT_MODE);
+        return editMode == PrivacyMode.PUBLIC || (editMode == PrivacyMode.ALLIES && teamData.isAlly(playerUUID)) || teamData.isTeamMember(playerUUID);
     }
 
     private static UUID getChunkOwner(ClaimedChunkManager chunkManager, ResourceKey<Level> dimension, BlockPos pos) {
