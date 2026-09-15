@@ -10,12 +10,11 @@ import java.util.BitSet;
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
+import su.terrafirmagreg.core.world.WorldgenData;
 
 public enum AnnotateBiomeAltitude implements RegionTask
 {
     INSTANCE;
-
-    public static final int WIDTH = 4;
 
 	@Override
 	public void apply(RegionGenerator.Context context)
@@ -32,12 +31,13 @@ public enum AnnotateBiomeAltitude implements RegionTask
 		final RandomSource random = context.random;
 		final BitSet explored = new BitSet(region.size());
 		final IntArrayFIFOQueue queue = new IntArrayFIFOQueue();
+		final int foothillWidth = WorldgenData.MOUNTAIN_SCALING.foothillWidth();
 
 		for (final var point : region.points())
 		{
 			if (point.land() && point.mountain())
 			{
-				point.biomeAltitude = 3 * WIDTH;
+				point.biomeAltitude = (byte) (3 * foothillWidth);
 				queue.enqueue(point.index);
 				explored.set(point.index);
 			}
@@ -61,7 +61,7 @@ public enum AnnotateBiomeAltitude implements RegionTask
 					if (point != null && point.land() && point.biomeAltitude == 0 && !explored.get(point.index))
 					{
 						// Minor non-uniformity, makes regions a bit messier
-						if (random.nextInt(13) == 0 && lastPoint.biomeAltitude != 3 * WIDTH)
+						if (random.nextInt(13) == 0 && lastPoint.biomeAltitude != 3 * foothillWidth)
 						{
 							point.biomeAltitude = lastPoint.biomeAltitude;
 							queue.enqueueFirst(point.index);
@@ -84,11 +84,11 @@ public enum AnnotateBiomeAltitude implements RegionTask
 			{
 				if (point.discreteBiomeAltitude() == 0 && point.baseLandHeight >= 4)
 				{
-					point.biomeAltitude = WIDTH;
+					point.biomeAltitude = (byte) foothillWidth;
 				}
 				if (point.discreteBiomeAltitude() == 1 && point.baseLandHeight >= 11)
 				{
-					point.biomeAltitude = 2 * WIDTH;
+					point.biomeAltitude = (byte) (2 * foothillWidth);
 				}
 			}
 		}

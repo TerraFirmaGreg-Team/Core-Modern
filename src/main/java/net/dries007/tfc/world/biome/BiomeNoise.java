@@ -7,6 +7,8 @@
 package net.dries007.tfc.world.biome;
 
 import java.util.Random;
+
+import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.util.Mth;
 
 import net.dries007.tfc.util.Helpers;
@@ -19,6 +21,9 @@ import net.dries007.tfc.world.noise.Noise3D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.noise.OpenSimplex3D;
 import net.dries007.tfc.world.region.Units;
+import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.world.WorldgenData;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
@@ -959,13 +964,29 @@ public final class BiomeNoise
 	 */
 	public static Noise2D ridgeMountains(long seed, double baseHeight, double scaleHeight, float spreadFactor, int cliffStartHeight, int cliffStartVariance)
 	{
+		var mountainScaling = WorldgenData.MOUNTAIN_SCALING;
+		if (mountainScaling == null)
+		{
+			TerraFirmaCraft.LOGGER.error("Error in BiomeNoise.ridgeMountains: MOUNTAIN_SCALING is null! Using default as fallback");
+			mountainScaling = WorldgenData.MOUNTAIN_SCALING_NEW_WORLD_DEFAULT;
+		}
+
+		final double mountainHeightScale = mountainScaling.mountainHeightScale();
+		final double mountainHorizontalScale = mountainScaling.mountainHorizontalScale();
+
 		// Basic ridge shapes following zeroes in the noise
-		final Noise2D ridges = new OpenSimplex2D(seed + 3987677L).octaves(4).spread(0.022f).map(y -> {
+		final Noise2D ridges = new OpenSimplex2D(seed + 3987677L)
+								   .octaves(4)
+								   .spread(0.022f)
+								   .map(y -> {
 			return 1 - 2.8 * y * y; // We want to drag the valleys down to the base biome level, at which point flat valley noise takes over
 		});
 
 		// Continuous paths through ridges to make them more passable. Power-scaled to round them. Steepened so that they don't apply everywhere.
-		final Noise2D passes = new OpenSimplex2D(seed + 454379L).octaves(2).spread(0.003f).map(y -> 16 * y * y);
+		final Noise2D passes = new OpenSimplex2D(seed + 454379L)
+								   .octaves(2)
+								   .spread(0.003f)
+								   .map(y -> 16 * y * y);
 
 		// We want passes to cut more deeply into terrain near ridges, and fade out in lower areas
 		// This gives the height at the bottom of the pass, as a function of the height of the ridge
@@ -975,46 +996,188 @@ public final class BiomeNoise
 		final Noise2D carvedRidges = ridges.min(passes.add(passHeight));
 
 		// Apply peaks to the tops of ridges
-		final OpenSimplex2D warp = new OpenSimplex2D(seed).octaves(3).spread(0.025f).scaled(-50f, 50f);
-		final Noise2D peaks = new OpenSimplex2D(seed + 4242L).octaves(3).spread(0.045).scaled(-0.6, 1).warped(warp).easeIn(0.4, 0.8, 0.1, 1, carvedRidges);
+		final double ridgePeakIntensity = mountainScaling.mountainRidgePeakIntensity();
+		final OpenSimplex2D warp = new OpenSimplex2D(seed)
+									   .octaves(3)
+									   .spread(0.025f)
+									   .scaled(-50f, 50f);
+		final Noise2D peaks = new OpenSimplex2D(seed + 4242L)
+								  .octaves(3)
+								  .spread(0.045)
+								  .scaled(-0.6, 1)
+								  .warped(warp)
+								  .easeIn(0.4, 0.8, 0.1, 1, carvedRidges)
+								  .map(y -> y * ridgePeakIntensity);
 
 		// Need a scale noise so peaks aren't all the same height
 		// We ease it in over ridges before we scale it
-		final Noise2D scale = new OpenSimplex2D(seed + 245L).octaves(4).spread(0.012).easeIn(0.3, 0.9, 0, 1, ridges).map(y -> 1 + 0.35 * y);
+		final Noise2D scale = new OpenSimplex2D(seed + 245L)
+								  .octaves(4)
+								  .spread(0.012)
+								  .easeIn(0.3, 0.9, 0, 1, ridges)
+								  .map(y -> 1 + 0.35 * y);
 
 		// Bases of valleys cut off below a point
 		final Noise2D flatValleys = hills(seed + 525L, (int) (baseHeight - 15), (int) (baseHeight + 15));
 
-		// Add texture everywhere
-		final Noise2D textureNoise = new OpenSimplex2D(seed + 5).octaves(6).spread(0.4).scaled(-30, 30);
+		// If the user selected the performance option, skip more of mantle mountains
+		if (mountainScaling == WorldgenData.MOUNTAIN_SCALING_NONE)
+		{
+			// Add texture everywhere
+			final Noise2D textureNoise = new OpenSimplex2D(seed + 5)
+											 .octaves(6)
+											 .spread(0.4)
+											 .scaled(-30, 30);
 
-		// Base shape of the terrain, scaled up to full size
-		final Noise2D baseNoise = carvedRidges.add(peaks).lazyProduct(scale).scaled(0, 1, SEA_LEVEL_Y + baseHeight,  SEA_LEVEL_Y + baseHeight + scaleHeight).max(flatValleys).add(textureNoise).spread(spreadFactor);
+			// Base shape of the terrain, scaled up to full size
+			final Noise2D baseNoise = carvedRidges.add(peaks)
+										  .lazyProduct(scale)
+										  .scaled(0, 1, SEA_LEVEL_Y + baseHeight,  SEA_LEVEL_Y + baseHeight + scaleHeight)
+										  .max(flatValleys)
+										  .add(textureNoise)
+										  .spread(spreadFactor);
 
-		// Cliff noise consists of noise that's been artificially clamped over half the domain, which is then selectively added above a base height level
-		// This matches up with the distinction between dirt and stone
-		final Noise2D cliffNoise = new OpenSimplex2D(seed + 2).octaves(2).spread(0.01f * spreadFactor).scaled(-25, 25).map(x -> x > 0 ? x : 0);
-		final Noise2D cliffHeightNoise = new OpenSimplex2D(seed + 3).octaves(2).spread(0.01f * spreadFactor).scaled(cliffStartHeight - cliffStartVariance, cliffStartHeight + cliffStartVariance);
+			// Cliff noise consists of noise that's been artificially clamped over half the domain, which is then selectively added above a base height level
+			// This matches up with the distinction between dirt and stone
+			final Noise2D cliffNoise = new OpenSimplex2D(seed + 2)
+										   .octaves(2)
+										   .spread(0.01f * spreadFactor)
+										   .scaled(-25, 25)
+										   .map(x -> x > 0 ? x : 0);
+			final Noise2D cliffHeightNoise = new OpenSimplex2D(seed + 3)
+												 .octaves(2)
+												 .spread(0.01f * spreadFactor)
+												 .scaled(cliffStartHeight - cliffStartVariance, cliffStartHeight + cliffStartVariance);
 
-		return (x, z) -> {
-			double height = baseNoise.noise(x, z);
-			if (height > cliffStartHeight - cliffStartVariance) // Only sample each cliff noise layer if the base noise could be influenced by it
-			{
-				final double cliffHeight = cliffHeightNoise.noise(x, z) - height;
-				if (cliffHeight < 0)
+			return (x, z) -> {
+				double height = baseNoise.noise(x, z);
+				if (height > cliffStartHeight - cliffStartVariance) // Only sample each cliff noise layer if the base noise could be influenced by it
 				{
-					final double mappedCliffHeight = Mth.clampedMap(cliffHeight, 0, -1, 0, 1);
-					height += mappedCliffHeight * cliffNoise.noise(x, z);
+					final double cliffHeight = cliffHeightNoise.noise(x, z) - height;
+					if (cliffHeight < 0)
+					{
+						final double mappedCliffHeight = Mth.clampedMap(cliffHeight, 0, -1, 0, 1);
+						height += mappedCliffHeight * cliffNoise.noise(x, z);
+					}
 				}
-			}
 
-			if (height > 260)
-			{
-				return Mth.clampedMap(height, 260, 340, 260, 300);
-			}
+				if (height > 260)
+				{
+					return Mth.clampedMap(height, 260, 340, 260, 300);
+				}
 
-			return height;
-		};
+				return height;
+			};
+		}
+		else {
+			// Add texture everywhere
+			final double textureAmp = TFGConfig.SERVER.mountainTextureAmplitude.get();
+			final double textureFreq = TFGConfig.SERVER.mountainTextureFrequency.get();
+			final Noise2D textureNoise = new OpenSimplex2D(seed + 5)
+											 .octaves(6)
+											 .spread(textureFreq)
+											 .scaled(-textureAmp, textureAmp);
+
+			// Base shape of the terrain, scaled up to full size
+			final Noise2D baseNoise = carvedRidges.add(peaks).lazyProduct(scale)
+										  .scaled(0, 1, SEA_LEVEL_Y + baseHeight, SEA_LEVEL_Y + baseHeight + scaleHeight)
+										  .max(flatValleys)
+										  .add(textureNoise)
+										  .map(y -> {
+											  if (y > SEA_LEVEL_Y) {
+												  return SEA_LEVEL_Y + (y - SEA_LEVEL_Y) * mountainHeightScale;
+											  }
+											  return y;
+										  })
+										  .spread(spreadFactor / mountainHorizontalScale);
+
+			// Cliff noise consists of noise that's been artificially clamped over half the domain, which is then selectively added above a base height level
+			// This matches up with the distinction between dirt and stone
+			final Noise2D cliffNoise = new OpenSimplex2D(seed + 2)
+										   .octaves(2)
+										   .spread((float) (0.01f * spreadFactor / mountainHorizontalScale))
+										   .scaled((float) (-25 * mountainHeightScale), (float) (25 * mountainHeightScale))
+										   .map(x -> x > 0 ? x : 0);
+
+			final double cliffCenter = SEA_LEVEL_Y + (cliffStartHeight - SEA_LEVEL_Y) * mountainHeightScale;
+			final double scaledCliffStartVariance = cliffStartVariance * mountainHeightScale;
+
+			final Noise2D cliffHeightNoise = new OpenSimplex2D(seed + 3)
+												 .octaves(2)
+												 .spread((float) (0.01f * spreadFactor / mountainHorizontalScale))
+												 .scaled(cliffCenter - scaledCliffStartVariance, cliffCenter + scaledCliffStartVariance);
+
+			final boolean erosionEnabled = mountainScaling.mountainErosionNoise();
+			final double erosionStrength = mountainScaling.mountainErosionNoiseStrength();
+			final double erosionAmplitude = 18 * mountainHeightScale * erosionStrength;
+			final double erosionFadeStart = SEA_LEVEL_Y + baseHeight + mountainHeightScale;
+			final double erosionFadeEnd = SEA_LEVEL_Y + (baseHeight + scaleHeight) * mountainHeightScale;
+
+			// High frequency jagged noise mimicking erosion
+			final Noise2D erosionNoise = new OpenSimplex2D(seed + 778231L)
+											 .octaves(5)
+											 .spread((float) (0.05f * spreadFactor / mountainHorizontalScale))
+											 .ridged()
+											 .scaled(-1, 1);
+
+			// Sharp spires added to peaks
+			final double peakSharpness = mountainScaling.mountainPeakSharpness();
+			final double spireAmplitude = 40 * mountainHeightScale * (peakSharpness / 8.0);
+			final double spireFadeStart = erosionFadeStart + 0.85 * (erosionFadeEnd - erosionFadeStart);
+			final double spireExponent = 2 + peakSharpness;
+
+			final Noise2D spireNoise = new OpenSimplex2D(seed + 991331L)
+										   .octaves(3)
+										   .spread((float) (0.09f * spreadFactor / mountainHorizontalScale))
+										   .ridged()
+										   .scaled(0, 1)
+										   .map((y -> Math.pow(y, spireExponent)));
+
+			// Macro variation
+			final double macroVariation = TFGConfig.SERVER.mountainMacroVariation.get();
+			final Noise2D macroNoise = new OpenSimplex2D(seed + 35117L)
+										   .octaves(2)
+										   .spread((float) (0.003f * TFGConfig.SERVER.mountainMacroVariationScale.get() / mountainHorizontalScale))
+										   .scaled(-1, 1);
+
+			return (x, z) -> {
+				double height = baseNoise.noise(x, z);
+
+				if (macroVariation > 0)
+				{
+					final double aboveBase = height - erosionFadeStart;
+					if (aboveBase > 0)
+					{
+						final double macroFactor = Math.max(0.15, 1 + macroVariation * macroNoise.noise(x, z));
+						height = erosionFadeStart + aboveBase * macroFactor;
+					}
+				}
+
+				if (height > cliffCenter - scaledCliffStartVariance) // Only sample each cliff noise layer if the base noise could be influenced by it
+				{
+					final double cliffHeight = cliffHeightNoise.noise(x, z) - height;
+					if (cliffHeight < 0)
+					{
+						final double mappedCliffHeight = Mth.clampedMap(cliffHeight, 0, -1, 0, 1);
+						height += mappedCliffHeight * cliffNoise.noise(x, z);
+					}
+				}
+
+				if (erosionEnabled && height > erosionFadeStart)
+				{
+					final double fade = Mth.clampedMap(height, erosionFadeStart, erosionFadeEnd, 0, 1);
+					height += erosionNoise.noise(x, z) * erosionAmplitude * fade;
+				}
+
+				if (peakSharpness > 0 && height > spireFadeStart)
+				{
+					final double fade = Mth.clampedMap(height, spireFadeStart, erosionFadeEnd, 0, 1);
+					height += spireNoise.noise(x, z) * spireAmplitude * fade;
+				}
+
+				return height;
+			};
+		}
 	}
 
 	/**

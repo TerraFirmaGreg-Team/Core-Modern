@@ -26,13 +26,13 @@ public class WorldgenData extends SavedData {
             "none", 384, 384, 180, 1.0, 4, 4, 0.5,
             1.0, false, 0.0, 0.5, 0.5);
     public static final MountainScaling MOUNTAIN_SCALING_LOW = new MountainScaling(
-            "low", 384, 384, 180, 1.0, 4, 6, 0.5,
+            "low", 384, 384, 180, 1.0, 4, 4, 0.5,
             1.0, true, 1.0, 1.0, 0.5);
     public static final MountainScaling MOUNTAIN_SCALING_MEDIUM = new MountainScaling(
-            "medium", 704, 704, 200, 1.0, 6, 12, 0.7,
+            "medium", 704, 704, 200, 1.1, 6, 4, 0.7,
             1.5, true, 3.0, 1.0, 1.0);
     public static final MountainScaling MOUNTAIN_SCALING_HIGH = new MountainScaling(
-            "high", 1024, 1024, 230, 1.0, 8, 16, 0.85,
+            "high", 1024, 1024, 230, 1.2, 8, 4, 0.85,
             2.0, true, 5.0, 1.0, 1.0);
     public static final MountainScaling MOUNTAIN_SCALING_NEW_WORLD_DEFAULT = MOUNTAIN_SCALING_LOW;
 
@@ -133,7 +133,7 @@ public class WorldgenData extends SavedData {
             int dimLogicalHeight,
             int snowLineY,
             double volcanoHeightScale,
-            double foothillWidth,
+            int foothillWidth,
             int heightBlend,
             double mountainHeightScale,
             double mountainHorizontalScale,

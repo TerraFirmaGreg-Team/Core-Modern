@@ -153,7 +153,7 @@ public final class ServerConfig {
                         "None" is the most performant and will result in mountains\s
                         similar in height to base TerraFirmaCraft, while "High" can reach around\s
                         750 blocks tall and will have a higher performance impact.\s
-                        Valid values: """ +
+                        Valid values: unset,\s""" +
                         WorldgenData.ALL_SCALINGS.values().stream().map(WorldgenData.MountainScaling::id).collect(Collectors.joining(", ")))
                 .define("mountainScalingOverride", "unset",
                         o -> {
@@ -168,7 +168,7 @@ public final class ServerConfig {
                             return true;
                         });
         snowCaps = builder
-                .comment("\nIf true, all mountains will generate snow caps regardless of the surrounding climate.")
+                .comment("\nIf true, all mountains will generate snow caps regardless of the surrounding climate. Has no effect if \"mountainScalingOverride\" is set to \"none\".")
                 .define("snowCaps", true);
         snowLineTransitionWidth = builder
                 .comment("\nThe vertical distance (in blocks) over which snow cap coverage blends between full snow and the " +
@@ -290,7 +290,8 @@ public final class ServerConfig {
                 .comment("\nStress limit of the compost tumbler. Default: 8, min: 1, max: intMax")
                 .defineInRange("composterStressLimit", 8, 1, Integer.MAX_VALUE);
         COMPOSTER_RPM_LIMIT = builder
-                .comment("\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
+                .comment(
+                        "\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
                 .defineInRange("composterRpmLimit", 32, 1, Integer.MAX_VALUE);
 
         builder.pop().push("atmosphere_system");

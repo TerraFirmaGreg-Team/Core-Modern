@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.world.layer.TFCLayers;
 import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.noise.FastNoiseLite;
+import su.terrafirmagreg.core.world.WorldgenData;
 
 public final class Region
 {
@@ -272,7 +273,7 @@ public final class Region
 		public boolean volcanic() { return (flags & FLAG_VOLCANIC) != 0; }
 		public boolean barrierIsland() { return (flags & FLAG_BARRIER_ISLAND) != 0; }
 
-		public int discreteBiomeAltitude() { return Math.floorDiv(biomeAltitude, AnnotateBiomeAltitude.WIDTH); }
+		public int discreteBiomeAltitude() { return Math.floorDiv(biomeAltitude, WorldgenData.MOUNTAIN_SCALING.foothillWidth()); }
 
 		public void setLand() { flags |= FLAG_LAND; }
 		public void setIsland() { flags |= FLAG_ISLAND; }

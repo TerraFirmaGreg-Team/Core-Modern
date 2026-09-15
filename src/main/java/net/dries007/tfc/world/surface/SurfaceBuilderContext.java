@@ -10,6 +10,9 @@ import java.util.Set;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import lombok.Setter;
+import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.world.noise.Noise2D;
+import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -26,6 +29,8 @@ import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.RockData;
 import net.dries007.tfc.world.settings.RockLayerSettings;
 import net.dries007.tfc.world.settings.RockSettings;
+import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.world.WorldgenData;
 
 public class SurfaceBuilderContext
 {
@@ -59,6 +64,12 @@ public class SurfaceBuilderContext
 	private float temperature;
 	private float rainfall;
 	private boolean salty;
+
+	// Mantle mountain stuff
+	private static final int DITHER_AMPLITUDE = 5;
+	private int mountainColumnSurfaceY = Integer.MIN_VALUE;
+	private int mountainColumnX = Integer.MIN_VALUE;
+	private int mountainColumnZ = Integer.MIN_VALUE;
 
 	public SurfaceBuilderContext(LevelAccessor level, ChunkAccess chunk, ChunkData chunkData, RandomSource random, RockLayerSettings rockLayerSettings, int seaLevel, int minY, BiomeExtension cinderConeBiome, BiomeExtension tuffRingBiome, BiomeExtension tuyaBiome, BiomeExtension atollBiome, BiomeExtension stratovolcanoBiome)
 	{
@@ -97,6 +108,9 @@ public class SurfaceBuilderContext
 		this.temperature = chunkData.getAverageTemp(x, z);
 		this.rainfall = chunkData.getRainfall(x, z);
 		this.salty = salty;
+		this.mountainColumnX = x;
+		this.mountainColumnZ = z;
+		this.mountainColumnSurfaceY = y;
 
 		// We iterate down based on the actual surface height (since our capability for overhangs is much more limited than vanilla)
 		final int oceanFloor = chunk.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x, z);
@@ -178,7 +192,41 @@ public class SurfaceBuilderContext
 
 	public float averageTemperature()
 	{
-		return temperature;
+		if (mountainColumnSurfaceY <= seaLevel)
+			return temperature;
+
+		final var mountainScaling = WorldgenData.MOUNTAIN_SCALING;
+		if (mountainScaling == null || mountainScaling == WorldgenData.MOUNTAIN_SCALING_NONE)
+			return temperature;
+
+		final int currentX = cursor.getX();
+		final int currentZ = cursor.getZ();
+
+		if (mountainColumnSurfaceY == Integer.MIN_VALUE || currentX != mountainColumnX || currentZ != mountainColumnZ)
+			return temperature;
+
+		final boolean snowCaps = TFGConfig.SERVER.snowCaps.get();
+		if (!snowCaps)
+			return temperature;
+
+		long h = 0x534E4F57L
+					 ^ ((long) currentX * 1610612741L)
+					 ^ ((long) currentZ * 805306457L);
+		h ^= (h >>> 33);
+		h *= 0xff51afd7ed558ccdL;
+		h ^= (h >>> 33);
+		h *= 0xc4ceb9fe1a85ec53L;
+		h ^= (h >>> 33);
+
+		final double hashDither = ((double) (h & 0x7FFFFFFFL) / (double) 0x7FFFFFFFL) * 2.0 - 1.0;
+		final double snowLine = mountainScaling.snowLineY() + hashDither * DITHER_AMPLITUDE;
+
+		if (mountainColumnSurfaceY >= snowLine) {
+			return -25.0f;
+		}
+		else {
+			return temperature;
+		}
 	}
 
 	public float rainfall()

@@ -192,7 +192,6 @@
         "common.minecraft.MinecraftServerPackOrderMixin",
         "common.minecraft.ModelProviderMixin",
         "common.minecraft.MushroomBlockMixin",
-        "common.minecraft.NoiseSettingsMixin",
         "common.minecraft.PoiSectionAccessor",
         "common.minecraft.PowderSnowBlockSnowshoesMixin",
         "common.minecraft.SectionStorageAccessor",

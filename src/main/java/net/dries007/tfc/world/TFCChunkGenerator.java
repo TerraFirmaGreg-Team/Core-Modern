@@ -115,6 +115,7 @@ import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
 import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 import net.dries007.tfc.world.shore.ShoreBlendType;
 import net.dries007.tfc.world.shore.ShoreNoiseSampler;
+import su.terrafirmagreg.core.world.WorldgenData;
 
 import static net.dries007.tfc.TerraFirmaCraft.*;
 
@@ -468,7 +469,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     @Override
     public int getGenDepth()
     {
-        return this.noiseSettings.value().noiseSettings().height();
+		return WorldgenData.MOUNTAIN_SCALING.dimHeight();
     }
 
     @Override
@@ -626,8 +627,10 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         final int cellWidth = noiseSettings.getCellWidth();
         final int cellHeight = noiseSettings.getCellHeight();
 
+		final int dimHeight = WorldgenData.MOUNTAIN_SCALING.dimHeight();
+
         final int minY = Math.max(noiseSettings.minY(), level.getMinBuildHeight());
-        final int maxY = Math.min(noiseSettings.minY() + noiseSettings.height(), level.getMaxBuildHeight());
+        final int maxY = Math.min(noiseSettings.minY() + dimHeight, level.getMaxBuildHeight());
 
         final int cellCountY = Math.floorDiv(maxY - minY, noiseSettings.getCellHeight());
 
