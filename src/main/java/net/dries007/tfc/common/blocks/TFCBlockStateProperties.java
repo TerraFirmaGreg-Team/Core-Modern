@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.blocks;
 
 import java.util.stream.Stream;
+
+import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -83,6 +85,7 @@ public class TFCBlockStateProperties
     public static final EnumProperty<TFCComposterBlock.CompostType> COMPOST_TYPE = EnumProperty.create("type", TFCComposterBlock.CompostType.class);
     public static final EnumProperty<BranchDirection> BRANCH_DIRECTION = EnumProperty.create("branch_direction", BranchDirection.class);
     public static final DirectionProperty FACING_NOT_DOWN = DirectionProperty.create("facing", s -> s != Direction.DOWN);
+	public static final EnumProperty<CalendarClockBlock.Mode> CLOCK_MODE = EnumProperty.create("clock_mode", CalendarClockBlock.Mode.class);
 
     public static final BooleanProperty TIP = BooleanProperty.create("tip");
     public static final BooleanProperty UPPER = BooleanProperty.create("upper");
@@ -112,12 +115,14 @@ public class TFCBlockStateProperties
     public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
     public static final BooleanProperty WATTLE_WOVEN = BooleanProperty.create("woven");
+	public static final BooleanProperty THERMOMETER_ATTACHED = BooleanProperty.create("thermometer_attached");
 
     public static final IntegerProperty PIT_KILN_STAGE = IntegerProperty.create("stage", 0, 16);
     public static final IntegerProperty HEAT_LEVEL = IntegerProperty.create("heat_level", 0, 7);
 
     public static final EnumProperty<Flow> FLOW = EnumProperty.create("flow", Flow.class);
     public static final BooleanProperty MIRROR = BooleanProperty.create("mirror");
+	public static final BooleanProperty ATTACHED_WIND_DEVICES = BooleanProperty.create("attached_wind_devices");
 
     public static final BooleanProperty FULL = BooleanProperty.create("full");
 

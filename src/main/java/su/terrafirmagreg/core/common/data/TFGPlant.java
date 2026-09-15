@@ -64,7 +64,7 @@ public enum TFGPlant implements RegistryPlant {
     QANTU(BlockType.SHRUB, 0.4f, new int[] { 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3 }),
     RAMIREZELLA(BlockType.EPIPHYTE, 1.0f),
     RAMUNDA(BlockType.STANDARD, 1.0F, new int[] { 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3 }),
-    SHAWIASH(BlockType.SHRUB, 0.9F, new int[] { 3, 3, 3, 0, 0, 1, 1, 1, 2, 2, 3, 3 }),
+    SHAWIASH(BlockType.SHRUB, 0.4F, new int[] { 3, 3, 3, 0, 0, 1, 1, 1, 2, 2, 3, 3 }),
     SILKEN_PINCUSHION_CACTUS(BlockType.CACTUSBED, 0f, new int[] { 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3 }),
     SILVER_BROMELIAD(BlockType.PERCHED_EPIPHYTE, 0.9f),
     TANK_BROMELIAD(BlockType.PERCHED_EPIPHYTE, 0.9f),

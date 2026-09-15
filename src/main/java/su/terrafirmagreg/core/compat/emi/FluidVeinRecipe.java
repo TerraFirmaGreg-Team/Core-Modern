@@ -55,6 +55,8 @@ public class FluidVeinRecipe implements EmiRecipe {
         HAS_SURFACE_INDICATOR.put(TFGCore.id("oil_spout_ocean"), 3);
         HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_surface_indicator"), 1);
         HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_ocean"), 1);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_swamp"), 1);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_volcanic"), 1);
         HAS_SURFACE_INDICATOR.put(TFGCore.id("spring_water"), 1);
     }
 
