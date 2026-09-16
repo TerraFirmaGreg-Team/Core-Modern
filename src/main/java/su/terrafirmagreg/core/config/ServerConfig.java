@@ -62,9 +62,6 @@ public final class ServerConfig {
     public final ForgeConfigSpec.BooleanValue finiteContinents;
     public final ForgeConfigSpec.ConfigValue<String> mountainScalingOverride;
     public final ForgeConfigSpec.BooleanValue snowCaps;
-    public final ForgeConfigSpec.IntValue snowLineTransitionWidth;
-    public final ForgeConfigSpec.IntValue snowLineVariation;
-    public final ForgeConfigSpec.DoubleValue snowDrainageStrength;
     public final ForgeConfigSpec.DoubleValue mountainMacroVariation;
     public final ForgeConfigSpec.DoubleValue mountainMacroVariationScale;
     public final ForgeConfigSpec.DoubleValue mountainTextureAmplitude;
@@ -170,21 +167,6 @@ public final class ServerConfig {
         snowCaps = builder
                 .comment("\nIf true, all mountains will generate snow caps regardless of the surrounding climate. Has no effect if \"mountainScalingOverride\" is set to \"none\".")
                 .define("snowCaps", true);
-        snowLineTransitionWidth = builder
-                .comment("\nThe vertical distance (in blocks) over which snow cap coverage blends between full snow and the " +
-                        "surrounding surface, instead of cutting off sharply at snowLineY.")
-                .defineInRange("snowLineTransitionWidth", 24, 2, 128);
-        snowLineVariation = builder
-                .comment("\nHow far (in blocks) the effective snow line is allowed to wander up and down from " +
-                        "snowLineY, using smooth large-scale noise. Prevents the snow line from being a perfectly " +
-                        "flat elevation across the whole world. 0 disables the wander.")
-                .defineInRange("snowLineVariation", 24, 0, 128);
-        snowDrainageStrength = builder
-                .comment("\nHow strongly snow prefers to pool in broad couloirs (gully-like terrain) and avoid " +
-                        "exposed ridge crests/arêtes, in blocks of effective snow line shift. This is what gives " +
-                        "snow its coherent branching valley pattern instead of an even coating. 0 disables it, " +
-                        "giving a plain elevation-based snow line.")
-                .defineInRange("snowDrainageStrength", 40.0, 0.0, 150.0);
         mountainMacroVariation = builder
                 .comment("\nAdds large scale variation to overall peak height along a mountain range, so " +
                         "some massifs tower over their neighbors and others are noticeably lower, rather " +

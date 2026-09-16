@@ -80,13 +80,13 @@ public enum AnnotateBiomeAltitude implements RegionTask
 		// Run another pass over the entire region, this time raising land from low -> mid
 		for (final var point : region.points())
 		{
-			if (point.land() && point.discreteBiomeAltitude() == 0 && point.baseLandHeight >= 4)
+			if (point.land())
 			{
 				if (point.discreteBiomeAltitude() == 0 && point.baseLandHeight >= 4)
 				{
 					point.biomeAltitude = (byte) foothillWidth;
 				}
-				if (point.discreteBiomeAltitude() == 1 && point.baseLandHeight >= 11)
+				else if (point.discreteBiomeAltitude() == 1 && point.baseLandHeight >= 11)
 				{
 					point.biomeAltitude = (byte) (2 * foothillWidth);
 				}

@@ -1072,7 +1072,7 @@ public final class BiomeNoise
 		else {
 			// Add texture everywhere
 			final double textureAmp = TFGConfig.SERVER.mountainTextureAmplitude.get();
-			final double textureFreq = TFGConfig.SERVER.mountainTextureFrequency.get();
+			final float textureFreq = TFGConfig.SERVER.mountainTextureFrequency.get().floatValue();
 			final Noise2D textureNoise = new OpenSimplex2D(seed + 5)
 											 .octaves(6)
 											 .spread(textureFreq)
