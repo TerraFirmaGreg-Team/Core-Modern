@@ -45,6 +45,7 @@
         "common.beneath.NetherSpikesFeatureMixin",
         "common.beneath.PortalUtilMixin",
         "common.beneath.UnposterBlockMixin",
+        "common.buildinggadgets2.ServerTickHandlerMixin",
         "common.cc_tweaked.ModRegistryMixin",
         "common.create.BasinBlockEntityMixin",
         "common.create.BasinCategoryMixin",
