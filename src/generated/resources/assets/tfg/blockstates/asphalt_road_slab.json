@@ -838,6 +838,220 @@
         "facing": "west",
         "mask": "number"
       }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_diagonal_line"
+      },
+      "when": {
+        "facing": "north|south",
+        "mask": "diagonal_line"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_diagonal_line",
+        "y": 90
+      },
+      "when": {
+        "facing": "east|west",
+        "mask": "diagonal_line"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_fullcorner"
+      },
+      "when": {
+        "facing": "north",
+        "mask": "fullcorner"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_fullcorner",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "mask": "fullcorner"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_fullcorner",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "mask": "fullcorner"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_fullcorner",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "mask": "fullcorner"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_l"
+      },
+      "when": {
+        "facing": "north",
+        "mask": "angled_edge_l"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_l",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "mask": "angled_edge_l"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_l",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "mask": "angled_edge_l"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_l",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "mask": "angled_edge_l"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_r"
+      },
+      "when": {
+        "facing": "north",
+        "mask": "angled_edge_r"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_r",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "mask": "angled_edge_r"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_r",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "mask": "angled_edge_r"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_angled_edge_r",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "mask": "angled_edge_r"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_cat"
+      },
+      "when": {
+        "facing": "north",
+        "mask": "cat"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_cat",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "mask": "cat"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_cat",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "mask": "cat"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_cat",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "mask": "cat"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_creeper"
+      },
+      "when": {
+        "facing": "north",
+        "mask": "creeper"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_creeper",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "mask": "creeper"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_creeper",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "mask": "creeper"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_creeper",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "mask": "creeper"
+      }
     }
   ]
 }

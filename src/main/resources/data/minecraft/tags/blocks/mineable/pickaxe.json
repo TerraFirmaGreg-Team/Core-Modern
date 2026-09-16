@@ -2345,7 +2345,11 @@
         "tfc:crankshaft",
         "tfc:steel_pipe",
         "tfc:steel_pump",
-        "tfc:trip_hammer"
+        "tfc:trip_hammer",
+        "tfc:anemometer",
+        "tfc:calendar_clock",
+        "tfc:vane",
+        "tfc:thermometer"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"
