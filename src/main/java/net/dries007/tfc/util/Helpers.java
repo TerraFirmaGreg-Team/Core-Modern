@@ -171,8 +171,6 @@ public final class Helpers
     private static final int PRIME_X = 501125321;
     private static final int PRIME_Y = 1136930381;
 
-    private static final boolean JEI = !BOOTSTRAP_ENVIRONMENT && ModList.get().isLoaded("jei");
-
     @Nullable private static RecipeManager CACHED_RECIPE_MANAGER = null;
 
     /**
@@ -206,11 +204,6 @@ public final class Helpers
     public static ResourceLocation resourceLocation(String domain, String path)
     {
         return new ResourceLocation(domain, path);
-    }
-
-    public static boolean isJEIEnabled()
-    {
-        return JEI;
     }
 
     @SuppressWarnings("ConstantConditions")

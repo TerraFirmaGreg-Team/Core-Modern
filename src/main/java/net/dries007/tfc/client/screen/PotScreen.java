@@ -109,10 +109,7 @@ public class PotScreen extends BlockEntityScreen<PotBlockEntity, PotContainer>
     {
         super.renderBg(graphics, partialTicks, mouseX, mouseY);
 
-        if (Helpers.isJEIEnabled())
-        {
-            graphics.blit(texture, getGuiLeft() + 77, getGuiTop() + 6, 247, 0, 9, 14);
-        }
+		graphics.blit(texture, getGuiLeft() + 77, getGuiTop() + 6, 247, 0, 9, 14);
 
         int temp = Heat.scaleTemperatureForGui(blockEntity.getTemperature());
         if (temp > 0)
