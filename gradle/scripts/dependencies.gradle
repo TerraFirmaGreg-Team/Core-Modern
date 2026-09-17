@@ -21,21 +21,17 @@ dependencies {
 
     modImplementation "dev.toma.configuration:configuration-1.20.1:3.1.0-forge"
 
-    // JEI
-    modCompileOnly "mezz.jei:jei-1.20.1-common-api:${jei_version}"
-    modCompileOnly "mezz.jei:jei-1.20.1-forge-api:${jei_version}"
-    modCompileOnly "mezz.jei:jei-1.20.1-forge:${jei_version}"
-
     // EMI
     //modCompileOnly "dev.emi:emi-forge:${emi_version}:api"
     modImplementation "dev.emi:emi-forge:${emi_version}"
+
+    modImplementation "maven.modrinth:tmrv:${tmrv_version}"
 
     // Create
     modCompileOnly "dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"
     modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
     modImplementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
-    modImplementation("maven.modrinth:createfluidlogistic:sP8O7ZIO") { transitive = false }
 
     // Create: Vintage Improvements
     modImplementation("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
@@ -97,7 +93,7 @@ dependencies {
     modImplementation "curse.maven:roads-and-roofs-tfc-1048212:8573489"
 
     // Ad Astra
-    modImplementation("curse.maven:ad-astra-635042:6262032") { transitive = false }
+    modImplementation("curse.maven:ad-astra-635042:8833730") { transitive = false }
     modImplementation("curse.maven:botarium-704113:5486070") { transitive = false }
     modImplementation("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
     modImplementation("curse.maven:resourceful-config-714059:6231176") { transitive = false }
@@ -119,9 +115,6 @@ dependencies {
     // Wan's ancient beasts
     modImplementation "curse.maven:wans-ancient-beasts-1108604:8761414"
     modImplementation "curse.maven:geckolib-388172:7553267"
-
-    // Immersive Aircraft
-    modCompileOnly "curse.maven:immersive-aircraft-666014:6742170"
 
     //Create Liquid Fuel
     modImplementation "curse.maven:create-liquid-fuel-840734:5217310"
@@ -189,4 +182,7 @@ dependencies {
     // Oculus, 13 aug 2026
     modImplementation "maven.modrinth:embeddium:0.3.31+mc1.20.1"
     modImplementation "maven.modrinth:oculus:1.20.1-1.8.0"
+    
+    // Building Gadgets, Aug 5 2025
+    modImplementation("curse.maven:building-gadgets-298187:6850495") { transitive = false }
 }

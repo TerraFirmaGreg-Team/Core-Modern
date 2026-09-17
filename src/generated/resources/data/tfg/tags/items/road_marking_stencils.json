@@ -23,6 +23,12 @@
     "tfg:asphalt_road_stencil_num_7",
     "tfg:asphalt_road_stencil_num_8",
     "tfg:asphalt_road_stencil_num_9",
-    "tfg:asphalt_road_stencil_number"
+    "tfg:asphalt_road_stencil_number",
+    "tfg:asphalt_road_stencil_diagonal_line",
+    "tfg:asphalt_road_stencil_fullcorner",
+    "tfg:asphalt_road_stencil_angled_edge_l",
+    "tfg:asphalt_road_stencil_angled_edge_r",
+    "tfg:asphalt_road_stencil_cat",
+    "tfg:asphalt_road_stencil_creeper"
   ]
 }

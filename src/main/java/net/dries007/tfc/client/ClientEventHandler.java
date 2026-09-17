@@ -78,6 +78,7 @@ import java.util.stream.Stream;
 
 import static net.dries007.tfc.common.blocks.wood.Wood.BlockType.*;
 
+@SuppressWarnings({"deprecation", "removal"})
 public final class ClientEventHandler {
     public static void init() {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -98,7 +99,6 @@ public final class ClientEventHandler {
         bus.addListener(IngameOverlays::registerOverlays);
     }
 
-    @SuppressWarnings("deprecation")
     public static void clientSetup(FMLClientSetupEvent event) {
         // Screens
         event.enqueueWork(() -> {
@@ -445,6 +445,9 @@ public final class ClientEventHandler {
         event.registerBlockEntityRenderer(TFCBlockEntities.WINDMILL.get(), WindmillBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TFCBlockEntities.CRANKSHAFT.get(), ctx -> new CrankshaftBlockEntityRenderer());
         event.registerBlockEntityRenderer(TFCBlockEntities.BELL.get(), TFCBellBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(TFCBlockEntities.VANE.get(), VaneBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(TFCBlockEntities.ANEMOMETER.get(), AnemometerBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(TFCBlockEntities.CALENDAR_CLOCK.get(), CalendarClockBlockEntityRenderer::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -518,6 +521,9 @@ public final class ClientEventHandler {
         event.registerLayerDefinition(RenderHelpers.modelIdentifier("mule"), ChestedHorseModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.modelIdentifier("donkey"), ChestedHorseModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.modelIdentifier("water_wheel"), WaterWheelModel::createBodyLayer);
+		event.registerLayerDefinition(RenderHelpers.modelIdentifier("vane"), VaneModel::createBodyLayer);
+		event.registerLayerDefinition(RenderHelpers.modelIdentifier("anemometer"), AnemometerModel::createBodyLayer);
+		event.registerLayerDefinition(RenderHelpers.modelIdentifier("calendar_clock"), CalendarClockModel::createBodyLayer);
     }
 
 

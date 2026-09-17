@@ -560,6 +560,11 @@ public final class TFCCreativeTabs
         {
             accept(out, TFCBlocks.DYED_CANDLE, color);
         }
+
+		accept(out, TFCBlocks.VANE);
+		accept(out, TFCBlocks.ANEMOMETER);
+		accept(out, TFCBlocks.CALENDAR_CLOCK);
+		accept(out, TFCBlocks.THERMOMETER);
     }
 
     private static void fillWoodTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output out)

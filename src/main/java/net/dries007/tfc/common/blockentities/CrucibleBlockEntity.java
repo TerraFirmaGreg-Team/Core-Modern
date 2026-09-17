@@ -51,7 +51,7 @@ import net.dries007.tfc.util.IntArrayBuilder;
 import net.dries007.tfc.util.Metal;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 
-public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBlockEntity.CrucibleInventory> implements ICalendarTickable
+public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBlockEntity.CrucibleInventory> implements ICalendarTickable, IHeatable
 {
     public static final int SLOTS = 10;
     public static final int SLOT_INPUT_START = 0;
