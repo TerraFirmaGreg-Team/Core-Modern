@@ -350,6 +350,7 @@
         "client.tfcgenviewer.FeatureColorsClimateSpaceMixin",
         "client.tfcgenviewer.PreviewGenerationScreenMixin",
         "client.tfcgenviewer.TfcgenViewerViewWorldCloseMixin",
+        "client.tmrv.TooManyRecipeViewersModMixin",
         "common.ad_astra.PlanetsScreenMixin",
         "common.minecraft.FogRendererMixin",
         "common.tfchotornot.ClientEventHandlerMixin"
