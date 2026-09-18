@@ -67,9 +67,8 @@ public final class EnvironmentHelpers
 		// Stops TFC from trying to melt/freeze water on other planets, so ad astra can handle it instead.
 		// Also the beneath is never going to have snow, so we can just skip it.
 		var dim = level.dimension();
-		if (Level.OVERWORLD.equals(dim) || Level.NETHER.equals(dim)) {
+		if (!Level.OVERWORLD.equals(dim))
 			return;
-		}
 
         final ChunkPos chunkPos = chunk.getPos();
         final BlockPos lcgPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
