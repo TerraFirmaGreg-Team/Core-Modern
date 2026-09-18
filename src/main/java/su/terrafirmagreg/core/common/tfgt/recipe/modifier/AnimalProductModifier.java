@@ -10,7 +10,6 @@ import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 
 import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.AABB;
 
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.PastoralEngineMachine;
 import su.terrafirmagreg.core.common.tfgt.recipe.condition.AnimalPresentCondition;
@@ -26,8 +25,6 @@ public class AnimalProductModifier {
         if (level == null)
             return ModifierFunction.NULL;
 
-        AABB box = getSearchBox(machine);
-
         // Grab condition AnimalPresentCondition from recipe
         AnimalPresentCondition condition = null;
         for (var c : recipe.conditions) {
@@ -39,21 +36,20 @@ public class AnimalProductModifier {
 
         final AnimalPresentCondition finalCondition = condition;
 
-        int readyCount = level.getEntities((Entity) null, box, entity -> {
+        if (!(machine instanceof PastoralEngineMachine pastoral))
+            return ModifierFunction.NULL;
+
+        int readyCount = 0;
+        for (Entity entity : pastoral.getCachedAnimals()) {
             if (!(entity instanceof TFCAnimalProperties animal))
-                return false;
+                continue;
             if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
-                return false;
+                continue;
             if (!animal.isReadyForAnimalProduct())
-                return false;
-
-            // If no condition count everything
-            if (finalCondition == null)
-                return true;
-
-            // Use filter on the condition so it parallels only the same animals
-            return finalCondition.matchesEntity(entity);
-        }).size();
+                continue;
+            if (finalCondition == null || finalCondition.matchesEntity(entity))
+                readyCount++;
+        }
 
         if (readyCount <= 0)
             return ModifierFunction.NULL;
@@ -67,14 +63,5 @@ public class AnimalProductModifier {
                 .outputModifier(ContentModifier.multiplier(parallel))
                 .parallels(parallel)
                 .build();
-    }
-
-    // Use for the search Box from PastoralEngineMachine
-
-    private static AABB getSearchBox(MetaMachine machine) {
-        if (machine instanceof PastoralEngineMachine pastoral) {
-            return pastoral.getFormedBoundingBox();
-        }
-        return new AABB(machine.getPos()).inflate(2.5);
     }
 }
