@@ -12,8 +12,11 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
+import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.container.Container;
@@ -23,7 +26,9 @@ import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.KoppenClimateClassification;
+import net.dries007.tfc.util.climate.OverworldClimateModel;
 
 public class ClimateScreen extends TFCContainerScreen<Container>
 {
@@ -62,9 +67,29 @@ public class ClimateScreen extends TFCContainerScreen<Container>
 
         final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
 
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_koppen_climate_classification", Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, rainfall))), 19);
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_average_temperature", style.format(averageTemp, true)), 30);
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_annual_rainfall", String.format("%.1f", rainfall)), 41);
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_current_temp", style.format(currentTemp, true)), 52);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_koppen_climate_classification", Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, rainfall))), 16);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_average_temperature", style.format(averageTemp, true)), 27);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_annual_rainfall", String.format("%.1f", rainfall)), 38);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_current_temp", style.format(currentTemp, true)), 49);
+
+        renderHemisphere(stack);
+    }
+
+    private void renderHemisphere(GuiGraphics stack)
+    {
+        final Player player = ClientHelpers.getPlayer();
+        if (player == null || player.level().dimension() != Level.OVERWORLD)
+        {
+            return;
+        }
+        if (!(Climate.model(player.level()) instanceof OverworldClimateModel model))
+        {
+            return;
+        }
+
+        final String hemisphere = OverworldClimateModel.getInNorthernHemisphere(player.getBlockZ(), model.getTemperatureScale())
+            ? "tfc.tooltip.hemisphere_northern"
+            : "tfc.tooltip.hemisphere_southern";
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_hemisphere", Component.translatable(hemisphere)), 60);
     }
 }
