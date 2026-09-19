@@ -352,6 +352,7 @@
         "client.tfcgenviewer.PreviewGenerationScreenMixin",
         "client.tfcgenviewer.TfcgenViewerViewWorldCloseMixin",
         "client.tmrv.TooManyRecipeViewersModMixin",
+        "client.tmrv.TMRVRecipeMixin",
         "common.ad_astra.PlanetsScreenMixin",
         "common.minecraft.FogRendererMixin",
         "common.tfchotornot.ClientEventHandlerMixin"
