@@ -234,6 +234,7 @@
         "common.sacks_n_such.SimpleDynamicCachedWeightMixin",
         "common.simply_stacked_dimensions.TeleportHandlerMixin",
         "common.sophisticatedbackpacks.FeedingUpgradeWrapperMixin",
+        "common.sophisticatedcore.PacketHelperMixin",
         "common.species.BewereagerMixin",
         "common.species.BirtMixin",
         "common.species.CliffHangerMixin",
