@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 @SuppressWarnings("deprecation")
-@Mixin(ConverterTrait.class)
+@Mixin(value = ConverterTrait.class, remap = false)
 public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
 
     // Allows EU <-> FE converters to automatically pull FE out of a portable energy interface

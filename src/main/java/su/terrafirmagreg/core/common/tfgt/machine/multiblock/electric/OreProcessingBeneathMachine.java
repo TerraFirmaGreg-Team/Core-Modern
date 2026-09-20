@@ -29,8 +29,6 @@ import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
 import net.minecraftforge.fluids.FluidStack;
 
 import brachy.modularui.api.drawable.Text;
@@ -270,13 +268,12 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
                 modifierPercent).withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW).asWidget()
                 .tooltip(t -> t.addLine(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier.tooltip"))));
 
-        var lastRecipe = getRecipeLogic().getLastRecipe();
+        var lastRecipe = getRecipeLogic().getLastUnrolledRecipe();
         if (getRecipeLogic().isWorking() && lastRecipe != null && lastRecipe.parallels > 1) {
-            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.parallel_info",
+            widgets.add(Text.lang("tfg.machine.ore_processing_beneath.parallel_info",
                     Component.literal(lastRecipe.parallels + "/" + MAX_PARALLELS).withStyle(ChatFormatting.AQUA))
-                    .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            Component.translatable("tfg.machine.ore_processing_beneath.parallel_info.tooltip",
-                                    MAX_PARALLELS)))));
+                    .asWidget().tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.ore_processing_beneath.parallel_info.tooltip",
+                            MAX_PARALLELS))));
 
             var tickFluids = lastRecipe.tickInputs.get(FluidRecipeCapability.CAP);
             if (tickFluids != null) {
@@ -297,10 +294,10 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
                                     .withStyle(ChatFormatting.AQUA);
                         }
 
-                        customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption",
+                        widgets.add(Text.lang("tfg.machine.ore_processing_beneath.fluid_consumption",
                                 stack.getDisplayName(), amountText)
-                                .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                        Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption.tooltip")))));
+                                .asWidget()
+                                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption.tooltip"))));
                     }
                 }
             }
