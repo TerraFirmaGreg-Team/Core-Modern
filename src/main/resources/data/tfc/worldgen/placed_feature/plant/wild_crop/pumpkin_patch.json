@@ -1,0 +1,18 @@
+{
+    "feature": "tfc:plant/wild_crop/pumpkin_patch",
+    "placement": [
+        {
+            "chance": 80,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 30,
+            "max_rainfall": 390,
+            "type": "tfc:climate",
+            "min_rainfall": 120,
+            "min_temperature": 0
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

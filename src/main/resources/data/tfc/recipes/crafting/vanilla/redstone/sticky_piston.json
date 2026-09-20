@@ -1,0 +1,13 @@
+{
+    "result": {"item": "minecraft:sticky_piston"},
+    "pattern": [
+        "X",
+        "Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:glue"},
+        "Y": {"item": "minecraft:piston"}
+    }
+}

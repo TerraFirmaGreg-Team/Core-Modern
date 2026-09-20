@@ -1,0 +1,8 @@
+{
+    "result": "tfc:cut_sandstone/white_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:cut_sandstone/white_slab"},
+    "ingredient": "tfc:cut_sandstone/white",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

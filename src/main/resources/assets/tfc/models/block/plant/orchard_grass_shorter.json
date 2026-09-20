@@ -1,0 +1,99 @@
+{
+    "textures": {
+        "cross": "tfc:block/plant/orchard_grass/placeholder",
+        "particle": "tfc:block/plant/orchard_grass/placeholder"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                0.8,
+                0,
+                8
+            ],
+            "to": [
+                15.2,
+                8,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0.8
+            ],
+            "to": [
+                8,
+                8,
+                15.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                }
+            }
+        }
+    ]
+}

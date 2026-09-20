@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/steel"
+    },
+    "ingredient": {"item": "tfc:metal/trapdoor/steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

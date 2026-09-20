@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/silver"
+    },
+    "ingredient": {"item": "tfc:metal/sheet/silver"},
+    "temperature": 961,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

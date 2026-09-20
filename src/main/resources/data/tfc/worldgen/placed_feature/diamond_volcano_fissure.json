@@ -1,0 +1,14 @@
+{
+    "feature": "tfc:diamond_volcano_fissure",
+    "placement": [
+        {
+            "center": true,
+            "type": "tfc:volcano"
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

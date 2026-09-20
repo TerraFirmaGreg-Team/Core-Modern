@@ -1,0 +1,14 @@
+{
+    "result": {"item": "minecraft:painting"},
+    "pattern": [
+        "XXX",
+        "XYX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "forge:rods/wooden"},
+        "Y": {"tag": "tfc:high_quality_cloth"}
+    }
+}

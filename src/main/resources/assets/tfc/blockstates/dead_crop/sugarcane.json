@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "mature=true,part=bottom": {"model": "tfc:block/dead_crop/sugarcane_bottom"},
+        "mature=false": {"model": "tfc:block/dead_crop/sugarcane_young"},
+        "mature=true,part=top": {"model": "tfc:block/dead_crop/sugarcane_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

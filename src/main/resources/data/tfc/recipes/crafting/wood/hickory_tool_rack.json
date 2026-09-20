@@ -1,0 +1,11 @@
+{
+    "result": {"item": "tfc:wood/planks/hickory_tool_rack"},
+    "pattern": [
+        "XXX",
+        "   ",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/lumber/hickory"}}
+}

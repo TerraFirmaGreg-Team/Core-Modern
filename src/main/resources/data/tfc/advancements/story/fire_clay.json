@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/metal_anvil",
+    "requirements": [["fire_clay"]],
+    "criteria": {"fire_clay": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:fire_clay"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:fire_clay"},
+        "description": {"translate": "tfc.advancements.story.fire_clay.description"},
+        "title": {"translate": "tfc.advancements.story.fire_clay.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

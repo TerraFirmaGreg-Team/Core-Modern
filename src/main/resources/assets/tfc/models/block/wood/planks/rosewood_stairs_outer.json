@@ -1,0 +1,9 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/wood/planks/rosewood",
+        "top": "tfc:block/wood/planks/rosewood",
+        "bottom": "tfc:block/wood/planks/rosewood"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

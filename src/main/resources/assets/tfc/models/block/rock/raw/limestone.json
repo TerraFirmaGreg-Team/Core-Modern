@@ -1,0 +1,5 @@
+{
+    "parent": "block/cube_all",
+    "textures": {"all": "tfc:block/rock/raw/limestone"},
+    "__comment__": "This file was automatically created by mcresources"
+}

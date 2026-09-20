@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/wood/stripped_wood/white_cedar"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/stripped_wood/white_cedar"
+        },
+        "axis=y": {"model": "tfc:block/wood/stripped_wood/white_cedar"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

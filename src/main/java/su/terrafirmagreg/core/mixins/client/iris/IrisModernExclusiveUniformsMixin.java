@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.irisshaders.iris.gl.uniform.UniformHolder;
 import net.irisshaders.iris.gl.uniform.UniformUpdateFrequency;
 import net.irisshaders.iris.uniforms.IrisExclusiveUniforms;
@@ -20,8 +21,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import earth.terrarium.adastra.api.planets.Planet;
-
-import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.OverworldClimateModelAccessor;
 
 /**
  * Exposes more properties (aka uniforms) to shaders.
@@ -107,7 +106,7 @@ public class IrisModernExclusiveUniformsMixin {
         var dim = level.dimension();
         if (dim == Level.OVERWORLD) {
             var climate = Climate.model(level);
-            return ((OverworldClimateModelAccessor) climate).tfg$temperatureScale();
+            return ((OverworldClimateModel) climate).getTemperatureScale();
         }
         // These need to match kubejs/startup_scripts/tfg/worldgen/register_climates.js
         else if (dim == Planet.MOON) {

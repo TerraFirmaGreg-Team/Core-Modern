@@ -1,0 +1,25 @@
+{
+    "feature": "tfc:underground_guano",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {"fluid": "empty"},
+                    "Name": "tfc:groundcover/guano"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        },
+        {"type": "tfc:underground"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -18,7 +18,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -39,23 +38,23 @@ import su.terrafirmagreg.tfcambiental.item.TFCAmbientalItems;
 import su.terrafirmagreg.tfcambiental.item.material.TemperatureAlteringMaterial;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
 
+@SuppressWarnings("removal")
 @Mod(TFCAmbiental.MOD_ID)
 public class TFCAmbiental {
     public static final String MOD_ID = "tfcambiental";
     public static final String CURIOS_ID = "curios";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final ResourceLocation HEAD_SLOT = new ResourceLocation("curios:slot/clothes_hat");
-    public static final ResourceLocation CHEST_SLOT = new ResourceLocation("curios:slot/clothes_torso");
-    public static final ResourceLocation LEGS_SLOT = new ResourceLocation("curios:slot/clothes_pants");
-    public static final ResourceLocation FEET_SLOT = new ResourceLocation("curios:slot/clothes_socks");
+    public static final ResourceLocation HEAD_SLOT = ResourceLocation.fromNamespaceAndPath("curios", "slot/clothes_hat");
+    public static final ResourceLocation CHEST_SLOT = ResourceLocation.fromNamespaceAndPath("curios", "slot/clothes_torso");
+    public static final ResourceLocation LEGS_SLOT = ResourceLocation.fromNamespaceAndPath("curios", "slot/clothes_pants");
+    public static final ResourceLocation FEET_SLOT = ResourceLocation.fromNamespaceAndPath("curios", "slot/clothes_socks");
 
-    public static final TagKey<Item> SUNBLOCKING_APPAREL = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "sunblocking_apparel"));
-    public static final TagKey<Item> HOT_INGOTS = TagKey.create(Registries.ITEM, new ResourceLocation("forge:hot_ingots"));
-    public static final TagKey<Fluid> SPRING_WATER = TagKey.create(Registries.FLUID, Helpers.identifier("spring_water"));
+    public static final TagKey<Item> SUNBLOCKING_APPAREL = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "sunblocking_apparel"));
+    public static final TagKey<Item> HOT_INGOTS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "hot_ingots"));
 
-    public static final ResourceKey<DamageType> HOT = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(TFCAmbiental.MOD_ID, "heatstroke"));
-    public static final ResourceKey<DamageType> FREEZE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(TFCAmbiental.MOD_ID, "frostbite"));
+    public static final ResourceKey<DamageType> HOT = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(TFCAmbiental.MOD_ID, "heatstroke"));
+    public static final ResourceKey<DamageType> FREEZE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(TFCAmbiental.MOD_ID, "frostbite"));
 
     public static final String VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(Helpers.identifier("tfcambiental"), () -> VERSION, VERSION::equals, VERSION::equals);

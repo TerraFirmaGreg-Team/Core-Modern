@@ -1,0 +1,12 @@
+{
+    "recipe": {
+        "result": {"item": "tfc:rock/smooth/diorite"},
+        "ingredients": [
+            {"item": "tfc:rock/raw/diorite"},
+            {"tag": "tfc:chisels"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
+}

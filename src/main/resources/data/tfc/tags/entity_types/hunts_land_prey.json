@@ -1,0 +1,10 @@
+{
+    "values": [
+        "#tfc:land_predators",
+        "minecraft:player",
+        "tfc:cat",
+        "tfc:dog"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

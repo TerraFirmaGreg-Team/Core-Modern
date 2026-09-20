@@ -1,0 +1,18 @@
+{"multipart": [{
+    "apply": [
+        {"model": "tfc:block/plant/toquilla_palm"},
+        {
+            "y": 90,
+            "model": "tfc:block/plant/toquilla_palm"
+        },
+        {
+            "y": 180,
+            "model": "tfc:block/plant/toquilla_palm"
+        },
+        {
+            "y": 270,
+            "model": "tfc:block/plant/toquilla_palm"
+        }
+    ],
+    "when": {"part": "lower"}
+}]}

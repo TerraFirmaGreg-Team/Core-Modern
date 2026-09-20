@@ -1,0 +1,12 @@
+{
+    "duration": 1500,
+    "ingredient": [
+        {"item": "tfc:wood/log/chestnut"},
+        {"item": "tfc:wood/wood/chestnut"},
+        {"item": "tfc:wood/stripped_wood/chestnut"},
+        {"item": "tfc:wood/stripped_log/chestnut"}
+    ],
+    "purity": 0.95,
+    "temperature": 651,
+    "__comment__": "This file was automatically created by mcresources"
+}

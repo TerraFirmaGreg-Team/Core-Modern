@@ -1,0 +1,15 @@
+{
+    "result": {"item": "tfc:wood/water_wheel/kapok"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/kapok"},
+        "A": {"item": "tfc:wood/axle/kapok"},
+        "L": {"item": "tfc:wood/lumber/kapok"}
+    }
+}

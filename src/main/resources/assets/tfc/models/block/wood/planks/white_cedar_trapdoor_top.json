@@ -1,0 +1,5 @@
+{
+    "parent": "block/template_orientable_trapdoor_top",
+    "textures": {"texture": "tfc:block/wood/planks/white_cedar_trapdoor"},
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,15 @@
+{
+    "result": {
+        "item": "tfc:brass_mechanisms",
+        "count": 2
+    },
+    "input": {"tag": "forge:ingots/brass"},
+    "tier": 2,
+    "rules": [
+        "punch_last",
+        "hit_second_last",
+        "punch_third_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

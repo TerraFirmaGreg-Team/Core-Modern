@@ -1,0 +1,12 @@
+{
+    "duration": 1250,
+    "ingredient": [
+        {"item": "tfc:wood/log/palm"},
+        {"item": "tfc:wood/wood/palm"},
+        {"item": "tfc:wood/stripped_wood/palm"},
+        {"item": "tfc:wood/stripped_log/palm"}
+    ],
+    "purity": 0.95,
+    "temperature": 730,
+    "__comment__": "This file was automatically created by mcresources"
+}

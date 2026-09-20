@@ -199,4 +199,99 @@ public class TFGTRecipeTypes {
                     .addRecipeUIModifier(RecipeUIModifier.textLine(Text.lang("tfg.gui.ore_processing_gas.optimal_ratio.1")))
                     .addRecipeUIModifier(RecipeUIModifier.textLine(Text.lang("tfg.gui.ore_processing_gas.optimal_ratio.2"))))
             .setSound(TFGSounds.GEOLOGIC_VULCANIZER);
+
+    // While oxygen distribution recipes are running the room is oxygenated.
+    public static final GTRecipeType OXYGEN_DISTRIBUTION = GTRecipeTypes
+            .register("oxygen_distribution", GTRecipeTypes.ELECTRIC)
+            .setMaxIOSize(0, 0, 1, 0)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.COOLING);
+
+    // While space heating recipes are running the bubble has safe temperature.
+    public static final GTRecipeType SPACE_HEATING = GTRecipeTypes
+            .register("space_heating", GTRecipeTypes.ELECTRIC)
+            //.setMaxIOSize(0, 0, 0, 0)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.COOLING);
+
+    // While gravity emission recipes are running the bubble has normal gravity.
+    public static final GTRecipeType GRAVITY_EMISSION = GTRecipeTypes
+            .register("gravity_emission", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.COOLING);
+
+    public static final GTRecipeType ME_ASSEMBLER = GTRecipeTypes
+            .register("me_assembler", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(9, 1, 3, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.ASSEMBLER)
+            .setHasResearchSlot(true)
+            .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.me_assembler.budding_hint"))
+            .setUiBuilder((recipe, widgetGroup) -> {
+                int maxWidth = (widgetGroup.getSize().width - 40) / 2;
+                int outX = maxWidth + 40 + (maxWidth - 26) / 2 + 4;
+                int outY = (widgetGroup.getSize().height - 26) / 2 + 4;
+
+                List<ItemStack> sticks = new ArrayList<>();
+                for (RecipeCondition<?> condition : recipe.conditions) {
+                    if (condition instanceof ResearchCondition research) {
+                        for (ResearchData.ResearchEntry entry : research.getData()) {
+                            sticks.add(entry.getDataItem());
+                        }
+                    }
+                }
+                if (!sticks.isEmpty()) {
+                    widgetGroup.addWidget(new SlotWidget(
+                            new CycleItemStackHandler(List.of(sticks)), 0,
+                            outX, outY + 1, false, false)
+                            .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
+                }
+
+                List<ItemStack> buddings = new ArrayList<>();
+                for (int t = 1; t <= 4; t++) {
+                    buddings.add(new ItemStack(TFGPredicates.getBuddingBlockForTier(t)));
+                }
+                widgetGroup.addWidget(new SlotWidget(
+                        new CycleItemStackHandler(List.of(buddings)), 0,
+                        outX, outY + 30, false, false)
+                        .setBackground(GuiTextures.SLOT));
+            });
+
+    public static final GTRecipeType BUDDING_CHARGE_RECIPES = GTRecipeTypes
+            .register("budding_charger", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 0, 1, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.COMPRESSOR)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.budding_charge",
+                    data.getInt("budding_charge")))
+            .setUiBuilder((recipe, widgetGroup) -> {
+                if (!recipe.data.contains("budding_max_tier"))
+                    return;
+                int tier = recipe.data.getInt("budding_max_tier");
+                Block block = TFGPredicates.getBuddingBlockForTier(tier);
+
+                List<List<ItemStack>> items = new ArrayList<>();
+                items.add(List.of(new ItemStack(block)));
+
+                widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
+                        widgetGroup.getSize().width - 50,
+                        widgetGroup.getSize().height - 32,
+                        false, false));
+            })
+            .addDataInfo(data -> {
+                if (!data.contains("budding_max_tier"))
+                    return "";
+                return LocalizationUtils.format("tfg.recipe.budding_max_tier_label");
+            })
+            .addDataInfo(data -> {
+                if (!data.contains("budding_max_tier"))
+                    return "";
+                return LocalizationUtils.format("tfg.budding_tier." + data.getInt("budding_max_tier"));
+            });
 }

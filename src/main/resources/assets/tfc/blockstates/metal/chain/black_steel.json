@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/metal/chain/black_steel"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/metal/chain/black_steel"
+        },
+        "axis=y": {"model": "tfc:block/metal/chain/black_steel"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

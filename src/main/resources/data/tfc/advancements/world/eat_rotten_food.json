@@ -1,0 +1,16 @@
+{
+    "parent": "tfc:world/seeds",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {"trigger": "tfc:eat_rotten_food"}},
+    "display": {
+        "show_toast": true,
+        "hidden": true,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "minecraft:rotten_flesh"},
+        "description": {"translate": "tfc.advancements.world.eat_rotten_food.description"},
+        "title": {"translate": "tfc.advancements.world.eat_rotten_food.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

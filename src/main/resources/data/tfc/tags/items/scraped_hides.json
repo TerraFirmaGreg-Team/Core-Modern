@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:small_scraped_hide",
+        "tfc:medium_scraped_hide",
+        "tfc:large_scraped_hide"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

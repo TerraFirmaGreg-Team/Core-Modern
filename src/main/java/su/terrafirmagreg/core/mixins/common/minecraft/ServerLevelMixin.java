@@ -10,12 +10,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CalendarSleepHelper;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
@@ -32,14 +35,20 @@ public abstract class ServerLevelMixin {
      */
     @Inject(method = "tickChunk", at = @At(value = "TAIL"))
     private void onEnvironmentTick(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
-        if (chunk.getLevel().dimension().equals(Planet.MARS)) {
-            final ServerLevel level = (ServerLevel) (Object) this;
+        final ServerLevel level = (ServerLevel) (Object) this;
+
+        if (level.dimension().equals(Planet.MARS)) {
             MarsEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
         }
+
         if (TFGConfig.SERVER.enableSnowCorrection.get() && chunk.getLevel().dimension().equals(Level.OVERWORLD)) {
-            final ServerLevel level = (ServerLevel) (Object) this;
             SnowCorrection.onTickChunk(level, chunk);
         }
+
+        // Ad Astra's ServerLevelMixin also injects at TAIL with a popPush, which pops a section
+        // it doesn't own (vanilla has already popped everything inside tickChunk by TAIL).
+        // Push a sacrificial section so Ad Astra's popPush consumes it instead of corrupting the stack.
+        level.getProfiler().push("adastra$tickChunk_compat");
     }
 
     /**
@@ -49,5 +58,10 @@ public abstract class ServerLevelMixin {
     @Inject(method = "wakeUpAllPlayers", at = @At("TAIL"))
     private void tfg$onWakeUpAllPlayers(CallbackInfo ci) {
         CalendarSleepHelper.onPlayersFinishedSleeping((ServerLevel) (Object) this);
+    }
+
+    @Inject(method = "onBlockStateChange", at = @At("HEAD"))
+    private void tfg$onBlockStateChange(BlockPos pos, BlockState oldState, BlockState newState, CallbackInfo ci) {
+        EnvironmentSystem.onBlockStateChange((ServerLevel) (Object) this, pos, oldState, newState);
     }
 }

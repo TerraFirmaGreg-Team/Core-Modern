@@ -1,0 +1,9 @@
+{
+    "parent": "tfc:block/barrel_side",
+    "textures": {
+        "particle": "tfc:block/wood/planks/pine",
+        "sheet": "tfc:block/wood/sheet/pine",
+        "planks": "tfc:block/wood/planks/pine"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,5 @@
+{
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/food/cooked_largemouth_bass"},
+    "__comment__": "This file was automatically created by mcresources"
+}

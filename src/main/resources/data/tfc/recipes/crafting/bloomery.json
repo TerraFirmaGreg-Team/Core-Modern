@@ -1,0 +1,11 @@
+{
+    "result": {"item": "tfc:bloomery"},
+    "pattern": [
+        "XXX",
+        "X X",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:double_sheets/any_bronze"}}
+}

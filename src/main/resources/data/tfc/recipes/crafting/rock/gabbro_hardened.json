@@ -1,0 +1,17 @@
+{
+    "result": {
+        "item": "tfc:rock/hardened/gabbro",
+        "count": 2
+    },
+    "pattern": [
+        "XMX",
+        "MXM",
+        "XMX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:rock/raw/gabbro"},
+        "M": {"tag": "tfc:mortar"}
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "ingredient": "tfc:gem/opal",
+    "asset_name": "opal_tfc",
+    "description": {
+        "color": "#75e7eb",
+        "translate": "trim_material.tfc.opal"
+    },
+    "item_model_index": 0.4,
+    "__comment__": "This file was automatically created by mcresources"
+}

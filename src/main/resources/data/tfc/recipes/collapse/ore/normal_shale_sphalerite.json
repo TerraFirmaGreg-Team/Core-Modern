@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/normal_sphalerite/shale",
+    "ingredient": "tfc:ore/rich_sphalerite/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

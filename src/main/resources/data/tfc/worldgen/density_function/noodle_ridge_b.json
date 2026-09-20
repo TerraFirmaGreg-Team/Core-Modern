@@ -1,0 +1,13 @@
+{
+    "input": "minecraft:y",
+    "when_in_range": {
+        "y_scale": 2.6666666666666665,
+        "noise": "minecraft:noodle_ridge_b",
+        "xz_scale": 2.6666666666666665,
+        "type": "minecraft:noise"
+    },
+    "min_inclusive": -60,
+    "max_exclusive": 320,
+    "when_out_of_range": 1,
+    "type": "minecraft:range_choice"
+}

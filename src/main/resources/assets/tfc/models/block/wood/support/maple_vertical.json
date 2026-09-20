@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/wood/support/vertical",
+    "textures": {
+        "texture": "tfc:block/wood/sheet/maple",
+        "particle": "tfc:block/wood/sheet/maple"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

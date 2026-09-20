@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/mud_bricks/silt_slab"},
+        "type=double": {"model": "tfc:block/mud_bricks/silt"},
+        "type=top": {"model": "tfc:block/mud_bricks/silt_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

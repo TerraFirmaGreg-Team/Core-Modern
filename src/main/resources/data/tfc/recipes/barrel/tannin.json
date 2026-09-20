@@ -1,0 +1,14 @@
+{
+    "input_fluid": {
+        "amount": 1000,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 8000,
+    "output_fluid": {
+        "amount": 1000,
+        "fluid": "tfc:tannin"
+    },
+    "input_item": {"ingredient": {"tag": "tfc:makes_tannin"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

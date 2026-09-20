@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfc:food/dried_kelp",
+        "tfc:food/dried_seaweed",
+        "#tfc:foods/grains"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

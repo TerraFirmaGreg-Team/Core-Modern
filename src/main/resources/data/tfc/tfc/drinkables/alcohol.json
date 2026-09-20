@@ -1,0 +1,7 @@
+{
+    "ingredient": {"tag": "tfc:alcohols"},
+    "thirst": 10,
+    "may_drink_when_full": true,
+    "__comment__": "This file was automatically created by mcresources",
+    "intoxication": 4000
+}

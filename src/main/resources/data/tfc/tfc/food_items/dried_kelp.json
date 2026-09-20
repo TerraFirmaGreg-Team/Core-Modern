@@ -1,0 +1,8 @@
+{
+    "saturation": 1,
+    "ingredient": {"item": "tfc:food/dried_kelp"},
+    "decay_modifier": 2.5,
+    "__comment__": "This file was automatically created by mcresources",
+    "vegetables": 0.5,
+    "hunger": 2
+}

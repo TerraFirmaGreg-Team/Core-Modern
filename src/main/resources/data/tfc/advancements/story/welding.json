@@ -1,0 +1,19 @@
+{
+    "parent": "tfc:story/flux",
+    "requirements": [["double_ingots"]],
+    "criteria": {"double_ingots": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "forge:double_ingots"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/double_ingot/copper"},
+        "description": {"translate": "tfc.advancements.story.welding.description"},
+        "title": {"translate": "tfc.advancements.story.welding.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

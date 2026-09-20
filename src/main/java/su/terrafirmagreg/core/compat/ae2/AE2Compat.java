@@ -20,16 +20,18 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.networking.events.GridSpatialEvent;
 import appeng.api.networking.spatial.ISpatialService;
+import dev.ftb.mods.ftbchunks.api.ChunkTeamData;
 import dev.ftb.mods.ftbchunks.api.ClaimedChunk;
 import dev.ftb.mods.ftbchunks.api.ClaimedChunkManager;
 import dev.ftb.mods.ftbchunks.api.FTBChunksAPI;
+import dev.ftb.mods.ftbchunks.api.FTBChunksProperties;
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.ftb.mods.ftbteams.api.Team;
-import dev.ftb.mods.ftbteams.api.TeamRank;
+import dev.ftb.mods.ftbteams.api.property.PrivacyMode;
 
 /**
  * Prevent Spatial IO events from affecting claimed chunks
- * Checks who owns the Spatial IO Port (who placed it),
+ * Checks who owns the Spatial IO Port (who placed it or who owns the chunk),
  *  and checks if that person is allowed to affect the claimed chunks.
  */
 public class AE2Compat {
@@ -69,26 +71,19 @@ public class AE2Compat {
         ClaimedChunkManager chunkManager = FTBChunksAPI.api().getManager();
         ResourceKey<Level> dimension = captureLevel.dimension();
 
+        UUID spatialChunkOwner = getChunkOwner(chunkManager, dimension, event.spatialIoPos);
+
         // Iterate over all affected chunks
         for (int cx = minChunkX; cx <= maxChunkX; cx++) {
             for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
                 ChunkDimPos dimPos = new ChunkDimPos(dimension, cx, cz);
 
                 ClaimedChunk claimed = chunkManager.getChunk(dimPos);
-                if (claimed != null && !canAffectClaim(claimed, spatialPortOwner)) {
+                if (claimed != null && !canAffectClaim(claimed, spatialPortOwner) && !canAffectClaim(claimed, spatialChunkOwner)) {
                     // Player is not allowed to affect this chunk, prevent transition
                     event.preventTransition();
 
-                    // Notify player if possible
-                    if (spatialPortOwner != null) {
-                        ServerPlayer serverPlayer = serverLevel.getServer().getPlayerList().getPlayer(spatialPortOwner);
-
-                        if (serverPlayer != null) {
-                            serverPlayer.displayClientMessage(Component.translatable("tfg.clientmessage.spatialioblocked.claimedchunks")
-                                    .withStyle(ChatFormatting.RED), true);
-                        }
-                    }
-
+                    notifyBlocked(serverLevel, event.spatialIoPos, spatialPortOwner);
                     return;
                 }
             }
@@ -100,14 +95,30 @@ public class AE2Compat {
         if (playerUUID == null) {
             return false;
         }
+        ChunkTeamData teamData = claimed.getTeamData();
+        PrivacyMode editMode = teamData.getTeam().getProperty(FTBChunksProperties.BLOCK_EDIT_MODE);
+        return editMode == PrivacyMode.PUBLIC || (editMode == PrivacyMode.ALLIES && teamData.isAlly(playerUUID)) || teamData.isTeamMember(playerUUID);
+    }
 
-        Team team = claimed.getTeamData().getTeam();
+    private static UUID getChunkOwner(ClaimedChunkManager chunkManager, ResourceKey<Level> dimension, BlockPos pos) {
+        ChunkDimPos chunkDimPos = new ChunkDimPos(dimension, SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
+        ClaimedChunk claimed = chunkManager.getChunk(chunkDimPos);
+        Team team = claimed == null ? null : claimed.getTeamData().getTeam();
+        return team == null ? null : team.isPlayerTeam() ? team.getId() : team.getOwner();
+    }
 
-        if (team.isPlayerTeam() && playerUUID.equals(team.getId())) {
-            return true;
+    private static void notifyBlocked(ServerLevel serverLevel, BlockPos spatialIoPos, @Nullable UUID spatialPortOwner) {
+        Component message = Component.translatable("tfg.clientmessage.spatialioblocked.claimedchunks").withStyle(ChatFormatting.RED);
+        ServerPlayer ownerPlayer = spatialPortOwner == null ? null : serverLevel.getServer().getPlayerList().getPlayer(spatialPortOwner);
+        if (ownerPlayer != null) {
+            ownerPlayer.displayClientMessage(message, true);
+            return;
         }
 
-        TeamRank rank = team.getRankForPlayer(playerUUID);
-        return rank.isMemberOrBetter();
+        for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
+            if (player.level().dimension().equals(serverLevel.dimension()) && player.distanceToSqr(spatialIoPos.getX(), spatialIoPos.getY(), spatialIoPos.getZ()) <= 256) {
+                player.displayClientMessage(message, true);
+            }
+        }
     }
 }

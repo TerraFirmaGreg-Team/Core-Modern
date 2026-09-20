@@ -1,0 +1,10 @@
+{
+    "result": {"item": "minecraft:pink_stained_glass"},
+    "operations": [
+        "gold",
+        "basin_pour"
+    ],
+    "batch": {"item": "tfc:silica_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
+}

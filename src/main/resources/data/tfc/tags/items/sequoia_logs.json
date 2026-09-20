@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfc:wood/log/sequoia",
+        "tfc:wood/wood/sequoia",
+        "tfc:wood/stripped_log/sequoia",
+        "tfc:wood/stripped_wood/sequoia"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

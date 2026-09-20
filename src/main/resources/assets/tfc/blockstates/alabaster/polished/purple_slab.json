@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/alabaster/polished/purple_slab"},
+        "type=double": {"model": "tfc:block/alabaster/polished/purple"},
+        "type=top": {"model": "tfc:block/alabaster/polished/purple_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

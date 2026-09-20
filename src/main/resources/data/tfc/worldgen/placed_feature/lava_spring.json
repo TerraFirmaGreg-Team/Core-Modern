@@ -1,0 +1,19 @@
+{
+    "feature": "tfc:lava_spring",
+    "placement": [
+        {
+            "count": 50,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": -64},
+                "max_inclusive": {"absolute": 180},
+                "type": "biased_to_bottom"
+            }
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

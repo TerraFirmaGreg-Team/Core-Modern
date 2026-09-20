@@ -1,0 +1,15 @@
+{
+    "result": {
+        "item": "tfc:jar_lid",
+        "count": 16
+    },
+    "input": {"tag": "forge:ingots/tin"},
+    "tier": 1,
+    "rules": [
+        "hit_last",
+        "hit_second_last",
+        "punch_third_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

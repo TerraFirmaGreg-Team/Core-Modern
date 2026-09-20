@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/muddy_roots/loam"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/muddy_roots/loam"
+        },
+        "axis=y": {"model": "tfc:block/muddy_roots/loam"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

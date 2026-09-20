@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/wild_crop/crop",
+    "textures": {"crop": "tfc:block/crop/cabbage_wild"},
+    "__comment__": "This file was automatically created by mcresources"
+}

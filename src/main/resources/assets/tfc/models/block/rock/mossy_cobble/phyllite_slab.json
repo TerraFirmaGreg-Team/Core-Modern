@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/mossy_cobble/phyllite",
+        "top": "tfc:block/rock/mossy_cobble/phyllite",
+        "bottom": "tfc:block/rock/mossy_cobble/phyllite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

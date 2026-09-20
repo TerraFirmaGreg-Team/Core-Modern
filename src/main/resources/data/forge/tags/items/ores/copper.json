@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#tfc:ores/copper/poor",
+        "#tfc:ores/copper/normal",
+        "#tfc:ores/copper/rich"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,118 @@
+{
+    "parent": "tfc:world/root",
+    "requirements": [
+        ["acacia"],
+        ["ash"],
+        ["aspen"],
+        ["birch"],
+        ["blackwood"],
+        ["chestnut"],
+        ["douglas_fir"],
+        ["hickory"],
+        ["kapok"],
+        ["mangrove"],
+        ["maple"],
+        ["oak"],
+        ["palm"],
+        ["pine"],
+        ["rosewood"],
+        ["sequoia"],
+        ["spruce"],
+        ["sycamore"],
+        ["white_cedar"],
+        ["willow"]
+    ],
+    "criteria": {
+        "rosewood": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/rosewood"]}]}
+        },
+        "pine": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/pine"]}]}
+        },
+        "sequoia": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/sequoia"]}]}
+        },
+        "birch": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/birch"]}]}
+        },
+        "palm": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/palm"]}]}
+        },
+        "douglas_fir": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/douglas_fir"]}]}
+        },
+        "kapok": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/kapok"]}]}
+        },
+        "sycamore": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/sycamore"]}]}
+        },
+        "aspen": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/aspen"]}]}
+        },
+        "mangrove": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/mangrove"]}]}
+        },
+        "chestnut": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/chestnut"]}]}
+        },
+        "white_cedar": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/white_cedar"]}]}
+        },
+        "willow": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/willow"]}]}
+        },
+        "blackwood": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/blackwood"]}]}
+        },
+        "ash": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/ash"]}]}
+        },
+        "hickory": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/hickory"]}]}
+        },
+        "maple": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/maple"]}]}
+        },
+        "oak": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/oak"]}]}
+        },
+        "acacia": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/acacia"]}]}
+        },
+        "spruce": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:wood/sapling/spruce"]}]}
+        }
+    },
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:wood/sapling/pine"},
+        "description": {"translate": "tfc.advancements.world.saplings.description"},
+        "title": {"translate": "tfc.advancements.world.saplings.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

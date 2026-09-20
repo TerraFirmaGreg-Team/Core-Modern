@@ -1,0 +1,4 @@
+{"multipart": [{
+    "apply": [{"model": "tfc:block/plant/arrowhead_0"}],
+    "when": {"part": "upper"}
+}]}

@@ -1,0 +1,10 @@
+{
+    "result_fluid": {
+        "amount": 25,
+        "fluid": "tfc:metal/bronze"
+    },
+    "ingredient": {"item": "tfc:metal/bars/bronze"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
+}

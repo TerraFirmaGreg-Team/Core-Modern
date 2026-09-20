@@ -1,0 +1,16 @@
+{
+    "result": {
+        "item": "tfc:wood/planks/pine_fence_gate",
+        "count": 2
+    },
+    "pattern": [
+        "YXY",
+        "YXY"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/pine"},
+        "Y": {"item": "tfc:wood/lumber/pine"}
+    }
+}

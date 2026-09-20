@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc:refined_iron_bloom"},
+    "input": {"item": "tfc:raw_iron_bloom"},
+    "tier": 2,
+    "rules": [
+        "hit_last",
+        "hit_second_last",
+        "hit_third_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
+}

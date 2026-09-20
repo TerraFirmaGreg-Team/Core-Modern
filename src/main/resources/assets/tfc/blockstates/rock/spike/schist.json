@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "part=middle": {"model": "tfc:block/rock/spike/schist_middle"},
+        "part=tip": {"model": "tfc:block/rock/spike/schist_tip"},
+        "part=base": {"model": "tfc:block/rock/spike/schist_base"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

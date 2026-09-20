@@ -48,6 +48,8 @@ import brachy.modularui.value.sync.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
@@ -128,18 +130,15 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
         return BOOSTERS;
     }
 
-    // Steam output boost depending of the water
+    // Steam output boost depending on the water
     private static final Map<TagKey<Fluid>, Float> WATER_STEAM_MULTIPLIERS = new LinkedHashMap<>();
     static {
         WATER_STEAM_MULTIPLIERS.put(
-                TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "water_boiler_t2")),
+                TFGTags.Fluids.WATER_BOILER_T2,
                 1.5f);
         // WATER_STEAM_MULTIPLIERS.put(TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "water_boiler_t3")), 2.0f);
     }
 
-    private static final TagKey<Fluid> WATER_BOILER = TagKey.create(
-            Registries.FLUID,
-            ResourceLocation.fromNamespaceAndPath("tfg", "water_boiler"));
     public static final int TICKS_PER_STEAM_GENERATION = 5;
 
     @Getter
@@ -255,7 +254,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
         }
 
         // Fallback
-        List<FluidIngredient> drainWater = new ArrayList<>(List.of(FluidIngredient.of(WATER_BOILER, maxDrain)));
+        List<FluidIngredient> drainWater = new ArrayList<>(List.of(FluidIngredient.of(TFGTags.Fluids.WATER_BOILER, maxDrain)));
         for (IRecipeHandler<?> tank : inputTanks) {
             drainWater = (List<FluidIngredient>) tank.handleRecipe(IO.IN, null, drainWater, false);
             if (drainWater == null || drainWater.isEmpty())

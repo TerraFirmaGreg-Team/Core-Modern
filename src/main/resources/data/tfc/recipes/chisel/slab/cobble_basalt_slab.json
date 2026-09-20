@@ -1,0 +1,8 @@
+{
+    "result": "tfc:rock/cobble/basalt_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/cobble/basalt_slab"},
+    "ingredient": "tfc:rock/cobble/basalt",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}

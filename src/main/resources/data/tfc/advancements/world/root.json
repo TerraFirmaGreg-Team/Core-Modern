@@ -1,0 +1,15 @@
+{
+    "requirements": [["in_game_condition"]],
+    "criteria": {"in_game_condition": {"trigger": "minecraft:tick"}},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:plant/morning_glory"},
+        "description": {"translate": "tfc.advancements.world.root.description"},
+        "title": {"translate": "tfc.advancements.world.root.title"},
+        "announce_to_chat": false,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

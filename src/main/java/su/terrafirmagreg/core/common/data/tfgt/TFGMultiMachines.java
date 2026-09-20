@@ -39,6 +39,7 @@ import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
+import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
@@ -67,9 +68,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.value.sync.BooleanSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
+import appeng.core.definitions.AEBlocks;
 import earth.terrarium.adastra.common.registry.ModBlocks;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
@@ -211,8 +214,7 @@ public class TFGMultiMachines {
                     .where(' ', Predicates.any())
                     .where('A', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(10)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
-                            .or(Predicates.autoAbilities(true, false, false))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                            .or(Predicates.autoAbilities(true, false, false)))
                     .where('B', Predicates.blockTag(FLTags.Blocks.ALL_IRON_GREENHOUSE)
                             .or(Predicates.blockTag(FLTags.Blocks.STAINLESS_STEEL_GREENHOUSE)))
                     .where('G', blocks(FLBlocks.LARGE_PLANTER.get()))
@@ -574,8 +576,7 @@ public class TFGMultiMachines {
                     .where('F', blocks(TFGBlocks.CULTIVATION_MONITOR.get()))
                     .where('G', blocks(TFGBlocks_Casings.EGH_CASING.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
-                            .or(Predicates.autoAbilities(true, false, true))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                            .or(Predicates.autoAbilities(true, false, true)))
                     .where('H', blocks(TFGBlocks_Casings.EGH_PLANTER.get()))
                     .where('I', blocks(GTBlocks.PLASTCRETE.get()))
                     .build())
@@ -610,8 +611,7 @@ public class TFGMultiMachines {
                     .where(' ', Predicates.any())
                     .where('A', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()).setMinGlobalLimited(20)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
-                            .or(Predicates.autoAbilities(true, false, true))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                            .or(Predicates.autoAbilities(true, false, true)))
                     .where('B', Predicates.blockTag(TFGTags.Blocks.StainlessSteelGreenhouseCasings))
                     .where('C', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
                     .where('E', blocks(GTBlocks.CASING_PTFE_INERT.get()))
@@ -639,10 +639,10 @@ public class TFGMultiMachines {
                     .slice(" F ", "CXC", " E ", " E ", " E ")
                     .where('X', controller(blocks(definition.getBlock())))
                     .where('C', Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION))
-                    .where('F', blocks(GTBlocks.FIREBOX_BRONZE.get())
-                            .or(abilities(PartAbility.STEAM).setExactLimit(1)))
-                    .where('E', abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(2)
-                            .or(abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
+                    .where('F', Predicates.blocks(GTBlocks.FIREBOX_BRONZE.get())
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                    .where('E', Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(2)
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(1))
                             .or(Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
@@ -680,9 +680,9 @@ public class TFGMultiMachines {
 							.or(blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
 							.or(blocks(GTBlocks.CASING_TUNGSTENSTEEL_PIPE.get())))
                     .where('B', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
-                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
-                            .or(abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
-                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .build())
@@ -709,8 +709,8 @@ public class TFGMultiMachines {
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(6)
-                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
-                            .or(abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
                     .where('F', blocks(GTBlocks.FIREBOX_BRONZE.get())
                             .or(abilities(PartAbility.STEAM).setExactLimit(1)))
                     .build())
@@ -739,9 +739,9 @@ public class TFGMultiMachines {
                     .where('A', blocks(GTBlocks.BRONZE_HULL.get()))
                     .where('F', Predicates.frames(GTMaterials.Steel))
                     .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(7)
-                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
-                            .or(abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
-                            .or(abilities(PartAbility.STEAM).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .build())
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
@@ -764,9 +764,9 @@ public class TFGMultiMachines {
                     .where('A', blocks(GTBlocks.STEEL_HULL.get()))
                     .where('G', blocks(AllBlocks.METAL_GIRDER.get()))
                     .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(12)
-                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
-                            .or(abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
-                            .or(abilities(PartAbility.STEAM).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .build())
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
@@ -1125,11 +1125,242 @@ public class TFGMultiMachines {
                     .where('C', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
                     .where('D', blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                     .where('#', Predicates.air())
-                    .where(' ', Predicates.any())
                     .where('F', Predicates.frames(GTMaterials.Bronze))
                     .where('G', blocks(GTBlocks.FIREBOX_BRONZE.get()))
                     .where('H', abilities(PartAbility.MUFFLER).setExactLimit(1))
                     .build())
+            .register();
+
+    // I made this beautiful and well-designed multiblock that looks aesthetically perfect especially for Tom
+    public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE
+            .multiblock("oxygen_distributor", OxygenDistributorMultiblock::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
+            .recipeModifier(OxygenDistributorMultiblock::recipeModifier, true)
+            .appearanceBlock(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_aluminium_plated_steel"),
+                    GTCEu.id("block/machines/laser_engraver"))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("AAA", "APA", " A ")
+                    .slice("AAA", "PPP", "APA")
+                    .slice("AXA", "APA", " A ")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('A', Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get())
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('P', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .build())
+            .register();
+
+    public static final MultiblockMachineDefinition HIGGS_EMITTER = REGISTRATE
+            .multiblock("higgs_emitter",
+                    HiggsEmitterMultiblock::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.GRAVITY_EMISSION)
+            .recipeModifier(HiggsEmitterMultiblock::recipeModifier, true)
+            .appearanceBlock(TFGBlocks_Casings.IRON_DESH_CASING)
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_iron_desh"),
+                    GTCEu.id("block/machines/laser_engraver"))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("  F  ", "  F  ", "FFFFF", "  F  ", "  F  ")
+                    .slice("  F  ", " III ", "FIGIF", " III ", "  F  ")
+                    .slice("FFFFF", "FIGIF", "FGGGF", "FIGIF", "FFFFF")
+                    .slice("  F  ", " III ", "FIGIF", " III ", "  F  ")
+                    .slice("  F  ", "  F  ", "FFXFF", "  F  ", "  F  ")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('F', Predicates.frames(GTMaterials.get("desh")))
+                    .where('I', Predicates.blocks(TFGBlocks_Casings.IRON_DESH_CASING.get())
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('G', Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .build())
+            .register();
+    public static final MultiblockMachineDefinition HEAT_PUMP = REGISTRATE
+            .multiblock("heat_pump", HeatPumpMultiblock::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.SPACE_HEATING)
+            .recipeModifier(HeatPumpMultiblock::recipeModifier, true)
+            .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
+            .workableCasingModel(
+                    GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                    GTCEu.id("block/machines/laser_engraver"))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("SSS", "SPS", " S ")
+                    .slice("   ", " P ", "   ")
+                    .slice("SSS", "SPS", "SSS")
+                    .slice("SXS", "SPS", " S ")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('S', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('P', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .build())
+            .register();
+
+    public static final MultiblockMachineDefinition ME_ASSEMBLER = REGISTRATE
+            .multiblock("me_assembler", MEAssemblerMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.ME_ASSEMBLER)
+            .alwaysTryModifyRecipe(true)
+            .recipeModifiers(MEAssemblerMachine::buddingModifier)
+            .appearanceBlock(TFGBlocks_Casings.PTFE_BLACK_CASING)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.me_assembler_1"),
+                    Component.translatable("tfg.tooltip.machine.me_assembler_2"),
+                    Component.translatable("tfg.tooltip.machine.me_assembler_3"),
+                    Component.translatable("tfg.tooltip.machine.me_assembler_4"),
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"),
+                    Component.translatable("tfg.tooltip.machine.subtick"))
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_ptfe_black"),
+                    GTCEu.id("block/machines/laser_engraver"))
+            .pattern(definition -> {
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                        .slice("  TTTTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
+                        .slice("AAACCCAAA", "ICGFDDGCI", "ICGD  GCI", "ICGD  GCI", "AAACCCAAA")
+                        .slice("ACCCCCCCA", "ICGDB GCI", "ICG Q GCI", "ICG B GCI", "ACCCCCCCA")
+                        .slice("AAACCCAAA", "ICGD  GCI", "ICG   GCI", "ICG   GCI", "AAACCCAAA")
+                        .slice("  TTTTT  ", "TTT X TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
+                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                        .where('A', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get()))
+                        .where('B', Predicates.frames(GTMaterials.StainlessSteel))
+                        .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
+                        .where('I', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                                .or(Predicates.abilities(PartAbility.IMPORT_ITEMS)))
+                        .where('T', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                                .or(Predicates.autoAbilities(true, false, false))
+                                .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(3))
+                                .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(Predicates.abilities(TFGPartAbility.ME_REDSTONE_PORT).setMaxGlobalLimited(1))
+                                .or(abilities(PartAbility.INPUT_ENERGY)
+                                        .setMinGlobalLimited(1)
+                                        .setMaxGlobalLimited(1)
+                                        .setPreviewCount(1)))
+                        .where('G', Predicates.blocks(AEBlocks.QUARTZ_VIBRANT_GLASS.block()))
+                        .where('H', dataHatchPredicate() == null ?
+                                Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())  : dataHatchPredicate())
+                        .where('Q', TFGPredicates.buddingBlocks())
+                        .where('D', Predicates.any()
+                                .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
+                        .where('F', Predicates.any()
+                                .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
+                        .where(' ', Predicates.any())
+                        .build();
+            })
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                        .aisle("  TTnTT  ", "TTr X TTT", "TCT   TCT", "TTT   TTT", "  TTmTT  ")
+                        .aisle("AAACCCAAA", "ICGD  GCA", "ICG   GCA", "ICG  DGCA", "AAACCCAAA")
+                        .aisle("ACCCCCCCA", "ICGDB GCA", "ICG q GCA", "ICG BDGCA", "ACCCCCCCA")
+                        .aisle("AAACCCAAA", "ICGFDDGCA", "ICG  DGCA", "ICGDDFGCA", "AAACCCAAA")
+                        .aisle("  TTpTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TToTT  ")
+                        .where('X', definition, Direction.NORTH)
+                        .where('A', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                        .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
+                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
+                        .where('G', AEBlocks.QUARTZ_VIBRANT_GLASS.block())
+                        .where('H', GTResearchMachines.BASIC_DATA_ACCESS_HATCH, Direction.SOUTH)
+                        .where('I', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.WEST)
+                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                        .where('m', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
+                        .where('n', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
+                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.NORTH)
+                        .where('o', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.SOUTH)
+                        .where('p', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
+                        .where(' ', Blocks.AIR);
+
+                var emptyCopy = builder.shallowCopy()
+                        .where('D', Blocks.AIR)
+                        .where('F', Blocks.AIR)
+                        .where('q', AEBlocks.QUARTZ_BLOCK.block());
+                shapeInfos.add(emptyCopy.build());
+
+                var spatialCopy = builder.shallowCopy()
+                        .where('D', AEBlocks.SPATIAL_PYLON.block())
+                        .where('F', AEBlocks.SPATIAL_IO_PORT.block())
+                        .where('q', AEBlocks.FLAWLESS_BUDDING_QUARTZ.block());
+                shapeInfos.add(spatialCopy.build());
+
+                return shapeInfos;
+            })
+            .register();
+
+    public static final MultiblockMachineDefinition BUDDING_CHARGER = REGISTRATE
+            .multiblock("budding_charge", BuddingChargerMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.BUDDING_CHARGE_RECIPES)
+            .alwaysTryModifyRecipe(true)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK ,GTRecipeModifiers.BATCH_MODE)
+            .appearanceBlock(TFGBlocks_Casings.PTFE_BLACK_CASING)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.budding_charge_1"),
+                    Component.translatable("tfg.tooltip.machine.budding_charge_2"),
+                    Component.translatable("tfg.tooltip.machine.budding_charge_3"),
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"),
+                    Component.translatable("tfg.tooltip.machine.subtick"))
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_ptfe_black"),
+                    TFGCore.id("block/machines/wireless_charger"))
+            .pattern(definition -> {
+                return FactoryBlockPattern.start()
+                        .aisle("TTTTT", "     ", "     ", "     ")
+                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
+                        .aisle("TCCCT", " DB  ", "  Q  ", "     ")
+                        .aisle("TCCCT", " D   ", "     ", "     ")
+                        .aisle("TTXTT", "     ", "     ", "     ")
+                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                        .where('B', Predicates.frames(GTMaterials.StainlessSteel))
+                        .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
+                        .where('T', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                                .or(Predicates.autoAbilities(true, false, false))
+                                .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(2))
+                                .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
+                                .or(Predicates.abilities(TFGPartAbility.ME_REDSTONE_PORT).setMaxGlobalLimited(1))
+                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                        .where('Q', TFGPredicates.buddingBlocks())
+                        .where('D', Predicates.any()
+                                .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
+                        .where('F', Predicates.any()
+                                .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
+                        .where(' ', Predicates.any())
+                        .build();
+            })
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                        .aisle("mTXTv", "     ", "     ", "     ")
+                        .aisle("TCCCT", " D   ", "     ", "     ")
+                        .aisle("oCCCr", " DB  ", "  Q  ", "     ")
+                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
+                        .aisle("TTiTT", "     ", "     ", "     ")
+                        .where('X', definition, Direction.NORTH)
+                        .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
+                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
+                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                        .where('Q', AEBlocks.FLAWED_BUDDING_QUARTZ.block())
+                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.EAST)
+                        .where('m', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.NORTH)
+                        .where('v', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.NORTH)
+                        .where('i', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
+                        .where('o', GTMachines.MAINTENANCE_HATCH, Direction.WEST)
+                        .where(' ', Blocks.AIR);
+
+                var emptyCopy = builder.shallowCopy()
+                        .where('D', Blocks.AIR)
+                        .where('F', Blocks.AIR);
+                shapeInfos.add(emptyCopy.build());
+
+                var spatialCopy = builder.shallowCopy()
+                        .where('D', AEBlocks.SPATIAL_PYLON.block())
+                        .where('F', AEBlocks.SPATIAL_IO_PORT.block());
+                shapeInfos.add(spatialCopy.build());
+
+                return shapeInfos;
+            })
             .register();
 
     // spotless:on

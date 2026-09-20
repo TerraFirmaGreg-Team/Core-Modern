@@ -43,9 +43,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryLogisticsMonitorMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.TFGMachineInstanceFactories;
 import su.terrafirmagreg.core.common.tfgt.machine.electric.*;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SingleItemstackBus;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.*;
 
 @SuppressWarnings("unused")
 public class TFGMachines {
@@ -349,5 +347,16 @@ public class TFGMachines {
                 tiers);
 
     }
+
+    public static final MachineDefinition ME_ASSEMBLER_REDSTONE_PORT = REGISTRATE
+            .machine("me_assembler_redstone_port", MEAssemblerRedstonePort::new)
+            .rotationState(RotationState.ALL)
+            .tier(GTValues.HV)
+            .abilities(TFGPartAbility.ME_REDSTONE_PORT)
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_ptfe_black"),
+                    TFGCore.id("block/machines/redstone_port"))
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .register();
 
 }

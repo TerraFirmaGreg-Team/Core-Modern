@@ -1,0 +1,35 @@
+{
+    "feature": "tfc:plant/arundo",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 19.6,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 150,
+            "min_temperature": 2.5
+        },
+        {
+            "type": "tfc:near_fluid",
+            "radius": 6,
+            "fluids": [
+                "tfc:salt_water",
+                "minecraft:water",
+                "tfc:spring_water"
+            ]
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

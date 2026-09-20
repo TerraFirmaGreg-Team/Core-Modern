@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/cobble/dolomite_slab"},
+        "type=double": {"model": "tfc:block/rock/cobble/dolomite"},
+        "type=top": {"model": "tfc:block/rock/cobble/dolomite_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,12 @@
+{
+    "values": [
+        "#tfc:rock/raw",
+        "#tfc:rock/ores",
+        "minecraft:stone",
+        "minecraft:andesite",
+        "minecraft:granite",
+        "minecraft:diorite"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

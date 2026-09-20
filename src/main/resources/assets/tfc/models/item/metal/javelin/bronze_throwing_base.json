@@ -1,0 +1,5 @@
+{
+    "parent": "item/trident_throwing",
+    "textures": {"particle": "tfc:item/metal/javelin/bronze"},
+    "__comment__": "This file was automatically created by mcresources"
+}

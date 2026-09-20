@@ -1,0 +1,9 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/raw/granite",
+        "top": "tfc:block/rock/raw/granite",
+        "bottom": "tfc:block/rock/raw/granite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

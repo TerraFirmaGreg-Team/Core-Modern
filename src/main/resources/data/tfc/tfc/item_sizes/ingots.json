@@ -1,0 +1,10 @@
+{
+    "ingredient": {
+        "subtracted": {"item": "minecraft:brick"},
+        "type": "forge:difference",
+        "base": {"tag": "forge:ingots"}
+    },
+    "size": "large",
+    "weight": "medium",
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,11 @@
+{
+    "result": {"item": "tfc:metal/saw_blade/black_bronze"},
+    "break_chance": 1,
+    "mold": {"item": "tfc:ceramic/saw_blade_mold"},
+    "fluid": {
+        "amount": 100,
+        "ingredient": "tfc:metal/black_bronze"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:casting"
+}

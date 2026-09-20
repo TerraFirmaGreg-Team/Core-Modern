@@ -1,0 +1,11 @@
+{
+    "input_fluid": {
+        "amount": 200,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 8000,
+    "output_item": {"item": "tfc:jute_fiber"},
+    "input_item": {"ingredient": {"item": "tfc:jute"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
+}

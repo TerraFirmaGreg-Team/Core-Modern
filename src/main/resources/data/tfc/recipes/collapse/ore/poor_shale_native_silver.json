@@ -1,0 +1,6 @@
+{
+    "result": "tfc:ore/poor_native_silver/shale",
+    "ingredient": "tfc:ore/normal_native_silver/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
+}

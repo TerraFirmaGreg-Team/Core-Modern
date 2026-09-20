@@ -1,0 +1,16 @@
+{
+    "result": {"item": "tfc:wood/sewing_table/sequoia"},
+    "pattern": [
+        " LS",
+        "XXX",
+        "Y Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {"tag": "forge:shears"},
+        "X": {"item": "tfc:wood/planks/sequoia"},
+        "Y": {"item": "tfc:wood/log/sequoia"},
+        "L": {"tag": "forge:leather"}
+    }
+}

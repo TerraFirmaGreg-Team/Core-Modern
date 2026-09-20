@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/cobble/quartzite_slab",
+    "ingredient": {"item": "tfc:rock/cobble/quartzite"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
+}

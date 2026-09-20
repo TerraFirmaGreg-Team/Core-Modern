@@ -1,0 +1,9 @@
+{
+    "result": {
+        "item": "tfc:powder/lapis_lazuli",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/lapis_lazuli"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
+}

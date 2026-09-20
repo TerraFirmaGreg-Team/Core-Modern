@@ -1,0 +1,7 @@
+{
+    "result": "tfc:rock/bricks/chert_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/bricks/chert",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
+}
