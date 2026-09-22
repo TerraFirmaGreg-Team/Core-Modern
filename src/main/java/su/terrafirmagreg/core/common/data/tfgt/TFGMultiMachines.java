@@ -65,10 +65,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import appeng.core.definitions.AEBlocks;
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.value.sync.BooleanSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
-import appeng.core.definitions.AEBlocks;
 import earth.terrarium.adastra.common.registry.ModBlocks;
 
 import su.terrafirmagreg.core.TFGCore;

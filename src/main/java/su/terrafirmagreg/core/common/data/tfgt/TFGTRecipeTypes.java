@@ -13,23 +13,24 @@ import com.gregtechceu.gtceu.common.recipe.gui.GTRecipeUIModifiers;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.drawable.progress.ProgressDrawable;
+import com.gregtechceu.gtceu.utils.ResearchManager;
 import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
-@SuppressWarnings("deprecation")
 public class TFGTRecipeTypes {
 
     public static void init() {
     }
 
-    public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register(TFGCore.id("greenhouse"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
             .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.UP, PROGRESS_BAR_EGH)))
             .setSound(GTSoundEntries.MINER);
 
-    public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register(TFGCore.id("bioreactor"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 6, 6)
             .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.UP, PROGRESS_BAR_DNA))
@@ -42,7 +43,7 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
-            .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("growth_chamber"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(18, 6, 3, 3)
             .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.RIGHT, PROGRESS_BAR_PETRI))
@@ -54,7 +55,7 @@ public class TFGTRecipeTypes {
                     }))
             .setSound(GTSoundEntries.CHEMICAL);
 
-    public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
+    public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register(TFGCore.id("food_oven"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(2, 2, 1, 1)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
@@ -62,7 +63,7 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.FURNACE);
 
     public static final GTRecipeType FOOD_PROCESSOR_RECIPES = GTRecipeTypes
-            .register("food_processor", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("food_processor"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(9, 2, 3, 1)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
@@ -75,7 +76,7 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.MIXER);
 
     public static final GTRecipeType AQUEOUS_ACCUMULATOR_RECIPES = GTRecipeTypes
-            .register("aqueous_accumulator", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("aqueous_accumulator"), GTRecipeTypes.ELECTRIC)
             .setMaxIOSize(1, 0, 0, 1)
             .setEUIO(IO.IN)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR)
@@ -84,7 +85,7 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType GAS_PRESSURIZER_RECIPES = GTRecipeTypes
-            .register("gas_pressurizer", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("gas_pressurizer"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(3, 1, 3, 1)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_COMPRESS)
@@ -92,32 +93,32 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.COMPRESSOR);
 
     public static final GTRecipeType NUCLEAR_TURBINE = GTRecipeTypes
-            .register("nuclear_turbine", GTRecipeTypes.GENERATOR)
+            .register(TFGCore.id("nuclear_turbine"), GTRecipeTypes.GENERATOR)
             .setMaxIOSize(0, 0, 1, 1)
             .setSound(GTSoundEntries.TURBINE)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
 
     public final static GTRecipeType EVAPORATION_TOWER = GTRecipeTypes
-            .register("evaporation_tower", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("evaporation_tower"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 12)
             .setEUIO(IO.IN)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
 
     public final static GTRecipeType COOLING_TOWER = GTRecipeTypes
-            .register("cooling_tower", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("cooling_tower"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(2, 2, 2, 2)
             .setSound(GTSoundEntries.TURBINE)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
 
     public final static GTRecipeType HEAT_EXCHANGER = GTRecipeTypes
-            .register("heat_exchanger", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("heat_exchanger"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 3, 3)
             .setSound(GTSoundEntries.TURBINE)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
 
     public final static GTRecipeType OSTRUM_LINEAR_ACCELERATOR = GTRecipeTypes
-            .register("ostrum_linear_accelerator", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("ostrum_linear_accelerator"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 9, 6, 6)
             .setMaxSize(IO.IN, HeatRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, HeatRecipeCapability.CAP, 1)
@@ -128,7 +129,7 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType SMR_GENERATOR = GTRecipeTypes
-            .register("smr_generator", GTRecipeTypes.GENERATOR)
+            .register(TFGCore.id("smr_generator"), GTRecipeTypes.GENERATOR)
             .setEUIO(IO.OUT)
             .setMaxIOSize(0, 0, 1, 1)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR)
@@ -136,7 +137,7 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.TURBINE);
 
     public static final GTRecipeType NUCLEAR_FUEL_FACTORY = GTRecipeTypes
-            .register("nuclear_fuel_factory", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("nuclear_fuel_factory"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 3, 1, 2)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
@@ -149,28 +150,28 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.CUT);
 
     public static final GTRecipeType HYDROPONICS_FACILITY_RECIPES = GTRecipeTypes
-            .register("hydroponics_facility", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("hydroponics_facility"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
             .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.UP, PROGRESS_BAR_EGH)))
             .setSound(GTSoundEntries.MINER);
 
     public static final GTRecipeType PISCICULTURE_FISHERY_RECIPES = GTRecipeTypes
-            .register("pisciculture_fishery", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("pisciculture_fishery"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
             .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.RIGHT, PROGRESS_BAR_FISH)))
             .setSound(GTSoundEntries.CHEMICAL);
 
     public static final GTRecipeType STEAM_BLOOMERY = GTRecipeTypes
-            .register("steam_bloomery", GTRecipeTypes.STEAM)
+            .register(TFGCore.id("steam_bloomery"), GTRecipeTypes.STEAM)
             .setMaxIOSize(2, 1, 0, 0)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
                     .setItemSlotsOverlay(IO.IN, 0, 1, GTGuiTextures.FURNACE_OVERLAY_1))
             .setSound(GTSoundEntries.FIRE);
 
     public static final GTRecipeType PRECISION_FABRICATOR_RECIPES = GTRecipeTypes
-            .register("high_temperature_precision_fabricator", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("high_temperature_precision_fabricator"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 1, 3, 0)
             .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.DOWN, PROGRESS_BAR_BOULE))
                     .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.HEATING_OVERLAY_1)
@@ -179,20 +180,20 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.ARC);
 
     public static final GTRecipeType SUPER_BOILER = GTRecipeTypes
-            .register("super_boiler", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("super_boiler"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 1, 1)
             .setSound(GTSoundEntries.FURNACE)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_BOILER_FUEL_STEEL));
 
     public static final GTRecipeType PASTORAL_ENGINE_RECIPES = GTRecipeTypes
-            .register("pastoral_engine", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("pastoral_engine"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 1, 0, 1)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
             .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType ORE_PROCESSING_GAS = GTRecipeTypes
-            .register("ore_processing_gas", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("ore_processing_gas"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 9, 2, 0)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
@@ -202,35 +203,36 @@ public class TFGTRecipeTypes {
 
     // While oxygen distribution recipes are running the room is oxygenated.
     public static final GTRecipeType OXYGEN_DISTRIBUTION = GTRecipeTypes
-            .register("oxygen_distribution", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("oxygen_distribution"), GTRecipeTypes.ELECTRIC)
             .setMaxIOSize(0, 0, 1, 0)
             .setEUIO(IO.IN)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR))
             .setSound(GTSoundEntries.COOLING);
 
     // While space heating recipes are running the bubble has safe temperature.
     public static final GTRecipeType SPACE_HEATING = GTRecipeTypes
-            .register("space_heating", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("space_heating"), GTRecipeTypes.ELECTRIC)
             //.setMaxIOSize(0, 0, 0, 0)
             .setEUIO(IO.IN)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.DOWN_TO_UP)
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20,
+                    ProgressDrawable.Direction.UP, GTGuiTextures.PROGRESS_BAR_BOILER_HEAT)))
             .setSound(GTSoundEntries.COOLING);
 
     // While gravity emission recipes are running the bubble has normal gravity.
     public static final GTRecipeType GRAVITY_EMISSION = GTRecipeTypes
-            .register("gravity_emission", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("gravity_emission"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR))
             .setSound(GTSoundEntries.COOLING);
 
     public static final GTRecipeType ME_ASSEMBLER = GTRecipeTypes
-            .register("me_assembler", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("me_assembler"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(9, 1, 3, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.ASSEMBLER)
             .setHasResearchSlot(true)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
             .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.me_assembler.budding_hint"))
             .setUiBuilder((recipe, widgetGroup) -> {
                 int maxWidth = (widgetGroup.getSize().width - 40) / 2;
@@ -263,11 +265,11 @@ public class TFGTRecipeTypes {
             });
 
     public static final GTRecipeType BUDDING_CHARGE_RECIPES = GTRecipeTypes
-            .register("budding_charger", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("budding_charger"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 0, 1, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.COMPRESSOR)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.budding_charge",
                     data.getInt("budding_charge")))
             .setUiBuilder((recipe, widgetGroup) -> {
