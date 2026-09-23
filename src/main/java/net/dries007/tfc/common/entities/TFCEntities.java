@@ -9,6 +9,7 @@ package net.dries007.tfc.common.entities;
 import java.util.Locale;
 import java.util.Map;
 
+import net.dries007.tfc.common.entities.predator.TFCWolf;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -140,7 +141,7 @@ public class TFCEntities
     public static final RegistryObject<EntityType<FelinePredator>> SABERTOOTH = register("sabertooth", EntityType.Builder.of(FelinePredator::createSabertooth, MobCategory.CREATURE).sized(1.1F, 1.3F).clientTrackingRange(10));
     public static final RegistryObject<EntityType<FelinePredator>> TIGER = register("tiger", EntityType.Builder.of(FelinePredator::createTiger, MobCategory.CREATURE).sized(1.1F, 1.3F).clientTrackingRange(10));
     public static final RegistryObject<EntityType<AmphibiousPredator>> CROCODILE = register("crocodile", EntityType.Builder.of(AmphibiousPredator::createCrocodile, MobCategory.CREATURE).sized(1.8F, 0.8F).clientTrackingRange(10));
-    public static final RegistryObject<EntityType<PackPredator>> WOLF = register("wolf", EntityType.Builder.of(PackPredator::createWolf, MobCategory.CREATURE).sized(0.65F, 0.9F).clientTrackingRange(10));
+    public static final RegistryObject<EntityType<TFCWolf>> WOLF = register("wolf", EntityType.Builder.of(PackPredator::createWolf, MobCategory.CREATURE).sized(0.65F, 0.9F).clientTrackingRange(10));
     public static final RegistryObject<EntityType<PackPredator>> HYENA = register("hyena", EntityType.Builder.of(PackPredator::createHyena, MobCategory.CREATURE).sized(0.65F, 0.9F).clientTrackingRange(10));
     public static final RegistryObject<EntityType<PackPredator>> DIREWOLF = register("direwolf", EntityType.Builder.of(PackPredator::createDirewolf, MobCategory.CREATURE).sized(1.0F, 1.2F).clientTrackingRange(10));
 

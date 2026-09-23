@@ -69,7 +69,7 @@ import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfRenderer;
+import net.dries007.tfc.client.render.entity.TFCWolfRenderer;
 
 import java.util.Objects;
 import java.util.function.Predicate;
