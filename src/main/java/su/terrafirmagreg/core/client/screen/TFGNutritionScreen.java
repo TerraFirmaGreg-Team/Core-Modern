@@ -32,6 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -177,7 +178,12 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {
             playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
-            Minecraft.getInstance().setScreen(new InventoryScreen(playerInventory.player));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.gameMode != null && mc.gameMode.isServerControlledInventory() && mc.player != null) {
+                mc.setScreen(new CreativeModeInventoryScreen(playerInventory.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()));
+            } else {
+                mc.setScreen(new InventoryScreen(playerInventory.player));
+            }
             PacketHandler.send(PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab.INVENTORY));
         }));
         addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.CALENDAR));

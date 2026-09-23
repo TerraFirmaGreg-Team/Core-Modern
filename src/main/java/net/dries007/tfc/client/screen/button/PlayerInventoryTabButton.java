@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.Objects;
@@ -67,7 +68,7 @@ public class PlayerInventoryTabButton extends Button
     public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean detached, Tab tab)
     {
         this(guiLeft, guiTop, active, detached, tab, button ->
-                PacketHandler.send(net.minecraftforge.network.PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(tab))
+                PacketHandler.send(PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(tab))
         );
     }
 

@@ -16,6 +16,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
@@ -94,7 +95,6 @@ import net.dries007.tfc.network.PlaceBlockSpecialPacket;
 import net.dries007.tfc.network.RequestClimateModelPacket;
 import net.dries007.tfc.network.SprintKeyPacket;
 import net.dries007.tfc.network.StackFoodPacket;
-import net.dries007.tfc.network.SwitchInventoryTabPacket;
 import net.dries007.tfc.util.Fertilizer;
 import net.dries007.tfc.util.Fuel;
 import net.dries007.tfc.util.Helpers;
@@ -375,7 +375,7 @@ public class ClientForgeEventHandler
     public static void onInitGuiPost(ScreenEvent.Init.Post event)
     {
         Player player = Minecraft.getInstance().player;
-        if (event.getScreen() instanceof InventoryScreen screen && player != null && !player.isCreative())
+        if (event.getScreen() instanceof InventoryScreen screen && player != null)
         {
             int guiLeft = screen.getGuiLeft();
             int guiTop = screen.getGuiTop();
@@ -385,6 +385,17 @@ public class ClientForgeEventHandler
             event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.NUTRITION).setRecipeBookCallback(screen));
             event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.CLIMATE).setRecipeBookCallback(screen));
             PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.BOOK).setRecipeBookCallback(screen)));
+        }
+        else if (event.getScreen() instanceof CreativeModeInventoryScreen screen && player != null)
+        {
+            int guiLeft = screen.getGuiLeft() + (195 - 176);
+            int guiTop = screen.getGuiTop();
+
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, true, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {}));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.CALENDAR));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.NUTRITION));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.CLIMATE));
+            PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.BOOK)));
         }
     }
 
