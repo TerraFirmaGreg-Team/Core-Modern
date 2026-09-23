@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.tfgt;
+package su.terrafirmagreg.core.common.tfgt.ui;
 
 import brachy.modularui.drawable.UITexture;
 

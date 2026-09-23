@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
-import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 
 /**
  * Recipe condition that requires oxygen adjacency using ad_astra's OxygenApi.

@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
-import static su.terrafirmagreg.core.common.tfgt.TFGUITextures.*;
+import static su.terrafirmagreg.core.common.tfgt.ui.TFGUITextures.*;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;

@@ -4,12 +4,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
-import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
-import com.lowdragmc.lowdraglib.utils.BlockInfo;
+import com.gregtechceu.gtceu.api.multiblock.predicates.PredicateBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 
 import net.minecraft.world.level.block.Block;
 
 import appeng.core.definitions.AEBlocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TFGPredicates {
 
@@ -40,19 +41,19 @@ public class TFGPredicates {
         return AEBlocks.QUARTZ_BLOCK.block();
     }
 
+    public static boolean isBudding(BlockState state) {
+        var block = state.getBlock();
+        return buddingTiers.containsKey(block);
+    }
+
     public static BasePredicate buddingBlocks() {
-        return new B(blockWorldState -> {
-            var state = blockWorldState.getBlockState();
-            for (var entry : getBuddingTiers().entrySet()) {
-                if (state.is(entry.getKey())) {
-                    blockWorldState.getMatchContext().set("BuddingTier", entry.getValue());
-                    blockWorldState.getMatchContext().set("BuddingPos", blockWorldState.getPos());
-                    return true;
-                }
-            }
-            return false;
-        }, () -> getBuddingTiers().keySet().stream()
-                .map(b -> BlockInfo.fromBlockState(b.defaultBlockState()))
-                .toArray(BlockInfo[]::new));
+        return new PredicateBuilder("budding")
+                .predicate(ctx -> {
+                    var state = ctx.state();
+                    return getBuddingTiers().entrySet().stream().anyMatch(v -> state.is(v.getKey()));
+                })
+                .candidates(getBuddingTiers().keySet().stream()
+                        .map(b -> BlockInfo.fromBlockState(b.defaultBlockState())))
+                .build();
     }
 }

@@ -1,61 +1,48 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
-import java.util.List;
+import java.awt.*;
 
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
-import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
-import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
-import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widget.ParentWidget;
+import brachy.modularui.widgets.ButtonWidget;
+import brachy.modularui.widgets.layout.Flow;
+
 import su.terrafirmagreg.core.common.tfgt.machine.electric.HeatPumpMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.electric.IHeatPumpHost;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.EnvironmentRecipeLogic;
 
 /**
  * GT multiblock wrapper for HeatPumpMachine.
  */
-public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implements IHeatPumpHost, IMachineLife {
-
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            HeatPumpMultiblock.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
+public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implements IHeatPumpHost {
 
     private final HeatPumpMachine machine;
 
-    @Persisted
-    @DescSynced
+    @SaveField
     private boolean showTraceButton;
 
-    public HeatPumpMultiblock(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public HeatPumpMultiblock(BlockEntityCreationInfo info) {
+        super(info, new EnvironmentRecipeLogic());
+        recipeLogic.setRegressWhenWaiting(false);
         this.machine = new HeatPumpMachine(this);
     }
 
@@ -64,19 +51,9 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     //////////////////////////////////////
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new EnvironmentRecipeLogic(this);
-    }
-
-    @Override
     public boolean beforeWorking(@Nullable GTRecipe recipe) {
         machine.beforeWorking(recipe);
         return super.beforeWorking(recipe);
-    }
-
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
     }
 
     public boolean isWorking() {
@@ -84,69 +61,63 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     }
 
     @Override
-    public @NotNull Widget createUIWidget() {
-        int width = 180;
-        int height = 90;
-        var group = new WidgetGroup(0, 0, width, height);
-        group.setBackground(ResourceBorderTexture.BORDERED_BACKGROUND);
+    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
+        super.buildMainUI(mainWidget, guiData, syncManager, settings);
 
-        group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
-                .setMaxWidthLimit(width - 8));
+        var col = Flow.col().coverChildren();
 
-        var traceButton = new ButtonWidget(41 - 23, height - 19, 18, 18,
-                new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture("💨")),
-                cd -> {
-                    if (!cd.isRemote) {
+        addStatusText(col, syncManager);
+
+        col.child(new ButtonWidget<>()
+                .overlay(Text.str("💨"))
+                .size(18, 18)
+                .onUpdateListener(w -> w.setEnabled(showTraceButton))
+                .onMousePressed((ctx, i) -> {
+                    if (!isRemote()) {
                         machine.requestFrontBreachTrace();
+                        return true;
                     }
-                }) {
-            @Override
-            public void updateScreen() {
-                super.updateScreen();
-                setVisible(showTraceButton());
-            }
-        };
-        traceButton.setHoverTooltips(Component.translatable("tfg.machine.oxygen_distributor.find_leak"));
-        group.addWidget(traceButton);
+                    return false;
+                })
+                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.find_leak"))));
 
-        return group;
+        mainWidget.child(col);
+
     }
 
-    private void addStatusText(List<Component> textList) {
+    private void addStatusText(ParentWidget<?> widget, PanelSyncManager syncManager) {
         if (machine.isBlocked()) {
-            textList.add(Component.translatable("tfg.machine.heat_pump.status.blocked")
-                    .withStyle(ChatFormatting.RED));
+            widget.child(Text.lang("tfg.machine.heat_pump.status.blocked")
+                    .withStyle(ChatFormatting.RED).asWidget());
             return;
         }
 
         if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+            widget.child(Text.lang("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN).asWidget());
         } else if (getEnergyInputPerSec() < machine.computeEnergyCostPerTick()) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy")
-                    .withStyle(ChatFormatting.RED));
-        } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
-            for (Component reason : recipeLogic.getFailureReasons()) {
-                textList.add(reason.copy().withStyle(ChatFormatting.RED));
-            }
+            widget.child(Text.lang("tfg.machine.oxygen_distributor.status.no_energy")
+                    .withStyle(ChatFormatting.RED).asWidget());
+        } else if (recipeLogic.isIdle() && recipeLogic.getBestFailureRecipe() != null) {
+            widget.child(Text.of(recipeLogic.getBestFailureReason().copy().withStyle(ChatFormatting.RED)).asWidget());
         } else {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
+            widget.child(Text.lang("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY).asWidget());
         }
 
         switch (machine.getFrontScan().status()) {
-            case SEALED, SAVED_DATA -> textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.sealed")
-                    .withStyle(ChatFormatting.AQUA));
-            case ESCAPED_DIMENSION, ESCAPED_BUILD_HEIGHT, ESCAPED_UNLOADED -> textList
-                    .add(Component.translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.YELLOW));
-            case BLOCK_LIMIT -> textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.scan_limit")
-                    .withStyle(ChatFormatting.YELLOW));
-            case NULL -> textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.scanning")
-                    .withStyle(ChatFormatting.YELLOW));
+            case SEALED, SAVED_DATA -> widget.child(Text.lang("tfg.machine.oxygen_distributor.status.sealed")
+                    .withStyle(ChatFormatting.AQUA).asWidget());
+            case ESCAPED_DIMENSION, ESCAPED_BUILD_HEIGHT, ESCAPED_UNLOADED -> widget
+                    .child(Text.lang("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.YELLOW).asWidget());
+            case BLOCK_LIMIT -> widget.child(Text.lang("tfg.machine.oxygen_distributor.status.scan_limit")
+                    .withStyle(ChatFormatting.YELLOW).asWidget());
+            case NULL -> widget.child(Text.lang("tfg.machine.oxygen_distributor.status.scanning")
+                    .withStyle(ChatFormatting.YELLOW).asWidget());
         }
 
-        textList.add(Component.translatable("tfg.machine.oxygen_distributor.size",
-                FormattingUtil.formatNumbers(machine.getFrontInteriorSize())).withStyle(ChatFormatting.AQUA));
-        textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
-                String.format("%,.0f", machine.computeEnergyCostPerTick())).withStyle(ChatFormatting.AQUA));
+        widget.child(Text.lang("tfg.machine.oxygen_distributor.size",
+                FormattingUtil.formatNumbers(machine.getFrontInteriorSize())).withStyle(ChatFormatting.AQUA).asWidget());
+        widget.child(Text.lang("tfg.machine.oxygen_distributor.energy",
+                String.format("%,.0f", machine.computeEnergyCostPerTick())).withStyle(ChatFormatting.AQUA).asWidget());
     }
 
     //////////////////////////////////////
@@ -154,37 +125,27 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     //////////////////////////////////////
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        TFGCore.LOGGER.debug("[heatpump-multi] onLoad, pos={}", getPos());
-    }
-
-    @Override
     public void onUnload() {
         super.onUnload();
-        TFGCore.LOGGER.debug("[heatpump-multi] onUnload, pos={}", getPos());
         machine.onUnload();
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        TFGCore.LOGGER.debug("[heatpump-multi] onStructureFormed, pos={}", getPos());
-        if (getLevel() instanceof ServerLevel serverLevel) {
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
+        if (getLevel() instanceof ServerLevel serverLevel && DEFAULT_STRUCTURE.equals(substructureName)) {
             machine.onLoad(serverLevel);
         }
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
-        TFGCore.LOGGER.debug("[heatpump-multi] onStructureInvalid, pos={}", getPos());
-        machine.onRemoved();
+    public void invalidateStructure(String name) {
+        if (DEFAULT_STRUCTURE.equals(name))
+            machine.onRemoved();
     }
 
     @Override
-    public void onMachineRemoved() {
-        TFGCore.LOGGER.debug("[heatpump-multi] onMachineRemoved, pos={}", getPos());
+    public void onMachineDestroyed() {
         machine.onRemoved();
     }
 
@@ -194,8 +155,7 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
 
     @Override
     public long getEnergyInputPerSec() {
-        var energy = getEnergyContainer();
-        return energy != null ? Math.max(0, energy.getInputPerSec()) : 0;
+        return Math.max(0, getEnergyContainer().getInputPerSec());
     }
 
     @Override

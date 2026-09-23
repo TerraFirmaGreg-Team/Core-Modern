@@ -3,24 +3,25 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.IntSyncValue;
+import brachy.modularui.value.sync.PanelSyncManager;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
@@ -28,34 +29,29 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.MEAssemblerRed
 
 public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            BuddingChargerMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
     private static final int MAX_TIER = 4;
     private static final int CHARGE_PER_TIER = 100;
 
-    @Persisted
-    @DescSynced
+    @SaveField
     @Getter
     private int buddingTier = 0;
 
-    @Persisted
-    @DescSynced
+    @SaveField
     @Getter
     private int chargeProgress = 0;
 
     @Nullable
     private BlockPos buddingPos = null;
 
-    @Persisted
+    @SaveField
     private String lastChargeRecipe = "";
 
     private final List<MEAssemblerRedstonePort> redstonePorts = new ArrayList<>();
 
     private final ConditionalSubscriptionHandler buddingCheckSubscription;
 
-    public BuddingChargerMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public BuddingChargerMachine(BlockEntityCreationInfo info) {
+        super(info);
         this.buddingCheckSubscription = new ConditionalSubscriptionHandler(
                 this, this::tickBuddingCheck, this::isFormed);
     }
@@ -72,24 +68,25 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
+    public void formStructure(String substructureName) {
+        super.formStructure(substructureName);
 
-    @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        this.buddingTier = 0;
-        this.buddingPos = null;
-        redstonePorts.clear();
-        var ctx = getMultiblockState().getMatchContext();
-        if (ctx.get("BuddingTier") instanceof Integer tier) {
-            this.buddingTier = tier;
+        var cache = patternStates.get(substructureName).getCache();
+        BlockPos buddingBlockPos = null;
+        Block buddingBlock = null;
+
+        for (var entry: cache.long2ObjectEntrySet()) {
+            if (TFGPredicates.isBudding(entry.getValue().getBlockState())) {
+                buddingBlock = entry.getValue().getBlockState().getBlock();
+                buddingBlockPos = BlockPos.of(entry.getLongKey());
+                break;
+            }
         }
-        if (ctx.get("BuddingPos") instanceof BlockPos pos) {
-            this.buddingPos = pos.immutable();
-        }
-        for (IMultiPart part : getParts()) {
+
+        buddingTier = TFGPredicates.getTierForBlock(buddingBlock);
+        buddingPos = buddingBlockPos;
+
+        for (MultiblockPartMachine part : getParts()) {
             if (part instanceof MEAssemblerRedstonePort port) {
                 redstonePorts.add(port);
             }
@@ -99,8 +96,8 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
         for (var port : redstonePorts)
             port.trySetSignal(0);
         redstonePorts.clear();
@@ -125,6 +122,9 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
     public boolean beforeWorking(@Nullable GTRecipe recipe) {
         if (!super.beforeWorking(recipe))
             return false;
+        if (recipe == null)
+            return true;
+
         refreshBuddingTier();
         if (buddingTier < 0) {
             RecipeLogic.putFailureReason(this, recipe,
@@ -132,9 +132,6 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
                             .withStyle(ChatFormatting.RED));
             return false;
         }
-
-        if (recipe == null)
-            return true;
 
         int maxTier = recipe.data.contains("budding_max_tier")
                 ? recipe.data.getInt("budding_max_tier")
@@ -198,25 +195,23 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
-        super.addDisplayText(textList);
-        if (!isFormed())
-            return;
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        var widgets = super.getWidgetsForDisplay(syncManager);
 
-        if (buddingTier < 0) {
-            textList.add(Component.translatable("tfg.machine.budding_missing")
-                    .withStyle(ChatFormatting.RED));
-            return;
-        }
+        IntSyncValue buddingTierValue = new IntSyncValue(this::getBuddingTier);
+        IntSyncValue chargeProgressValue = new IntSyncValue(() -> chargeProgress * 100 / CHARGE_PER_TIER);
+        syncManager.syncValue("buddingTier", buddingTierValue);
+        syncManager.syncValue("chargeProgress", chargeProgressValue);
 
-        if (buddingTier >= MAX_TIER) {
-            textList.add(Component.translatable("tfg.machine.budding_charger.max")
-                    .withStyle(ChatFormatting.GREEN));
-            return;
-        }
+        widgets.add(Text.lang("tfg.machine.budding_missing").withStyle(ChatFormatting.RED).asWidget()
+                .setEnabledIf(w -> buddingTierValue.getIntValue() < 0));
 
-        int percent = chargeProgress * 100 / CHARGE_PER_TIER;
-        textList.add(Component.translatable("tfg.machine.budding_charger.progress",
-                Component.literal(percent + "%").withStyle(ChatFormatting.AQUA)));
+        widgets.add(Text.lang("tfg.machine.budding_charger.max").withStyle(ChatFormatting.GRAY).asWidget()
+                .setEnabledIf(w -> buddingTierValue.getIntValue() >= MAX_TIER));
+
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.budding_charger.progress",
+                Component.literal(chargeProgressValue.getIntValue() + "%").withStyle(ChatFormatting.AQUA))).asWidget());
+
+        return widgets;
     }
 }

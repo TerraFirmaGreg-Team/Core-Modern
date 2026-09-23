@@ -2,27 +2,24 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IDropSaveMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -30,28 +27,27 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.IntSyncValue;
+import brachy.modularui.value.sync.PanelSyncManager;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.MEAssemblerRedstonePort;
 
-public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implements IDropSaveMachine {
-
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            MEAssemblerMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
     private static final int HEALTH_MIN = 100;
     private static final int HEALTH_MAX = 500;
 
     private static final double[] BUDDING_SPEED_BONUS = { 0.0, 8.0, 32.0, 128.0, 512.0 };
 
-    @Persisted
-    @DescSynced
+    @SaveField
     @Getter
     private int buddingTier = 0;
 
-    @Persisted
-    @DescSynced
+    @SaveField
     @Getter
     private int buddingHealth = 0;
 
@@ -61,8 +57,8 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
     private final List<MEAssemblerRedstonePort> redstonePorts = new ArrayList<>();
     private final ConditionalSubscriptionHandler buddingCheckSubscription;
 
-    public MEAssemblerMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public MEAssemblerMachine(BlockEntityCreationInfo info) {
+        super(info);
         this.buddingCheckSubscription = new ConditionalSubscriptionHandler(
                 this, this::tickBuddingCheck, this::isFormed);
     }
@@ -81,19 +77,25 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        this.buddingTier = 0;
-        this.buddingPos = null;
-        redstonePorts.clear();
-        var ctx = getMultiblockState().getMatchContext();
-        if (ctx.get("BuddingTier") instanceof Integer tier) {
-            this.buddingTier = tier;
+    public void formStructure(String substructureName) {
+        super.formStructure(substructureName);
+
+        var cache = patternStates.get(substructureName).getCache();
+        BlockPos buddingBlockPos = null;
+        Block buddingBlock = null;
+
+        for (var entry: cache.long2ObjectEntrySet()) {
+            if (TFGPredicates.isBudding(entry.getValue().getBlockState())) {
+                buddingBlock = entry.getValue().getBlockState().getBlock();
+                buddingBlockPos = BlockPos.of(entry.getLongKey());
+                break;
+            }
         }
-        if (ctx.get("BuddingPos") instanceof BlockPos pos) {
-            this.buddingPos = pos.immutable();
-        }
-        for (IMultiPart part : getParts()) {
+
+        buddingTier = TFGPredicates.getTierForBlock(buddingBlock);
+        buddingPos = buddingBlockPos;
+
+        for (MultiblockPartMachine part : getParts()) {
             if (part instanceof MEAssemblerRedstonePort port) {
                 redstonePorts.add(port);
             }
@@ -109,12 +111,12 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
     }
 
     @Override
-    public void saveToItem(@NotNull CompoundTag tag) {
+    public void saveToItem(CompoundTag tag, boolean clone) {
         tag.putInt("buddingHealth", buddingHealth);
     }
 
     @Override
-    public void loadFromItem(@NotNull CompoundTag tag) {
+    public void loadFromItem(CompoundTag tag) {
         buddingHealth = tag.getInt("buddingHealth");
     }
 
@@ -124,7 +126,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
             return false;
         refreshBuddingTier();
         if (buddingTier < 0) {
-            RecipeLogic.putFailureReason(this, recipe,
+            RecipeLogic.putFailureReason(this, Objects.requireNonNull(recipe),
                     Component.translatable("tfg.machine.budding_missing")
                             .withStyle(ChatFormatting.RED));
             return false;
@@ -134,12 +136,13 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
-        for (var port : redstonePorts)
-            port.trySetSignal(0);
-        redstonePorts.clear();
-        buddingCheckSubscription.updateSubscription();
+    public void invalidateStructure(String name) {
+        if (DEFAULT_STRUCTURE.equals(name)) {
+            for (var port : redstonePorts)
+                port.trySetSignal(0);
+            redstonePorts.clear();
+            buddingCheckSubscription.updateSubscription();
+        }
     }
 
     private void updateRedstone() {
@@ -147,11 +150,6 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
         for (var port : redstonePorts) {
             port.trySetSignal(signal);
         }
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 
     private void rollHealth() {
@@ -198,52 +196,37 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
     }
 
     @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
-        super.addDisplayText(textList);
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        var widgets = super.getWidgetsForDisplay(syncManager);
 
         if (!isFormed())
-            return;
+            return widgets;
 
-        if (buddingTier < 0) {
-            textList.add(Component.translatable("tfg.machine.budding_missing")
-                    .withStyle(ChatFormatting.RED));
-            return;
-        }
+        IntSyncValue buddingTierValue = new IntSyncValue(this::getBuddingTier);
+        IntSyncValue speedBonus = new IntSyncValue(() -> (int) (BUDDING_SPEED_BONUS[buddingTier] * 100));
+        syncManager.syncValue("buddingTier", buddingTierValue);
+        syncManager.syncValue("speedBonus", speedBonus);
 
-        ChatFormatting color = switch (buddingTier) {
-            case 0 -> ChatFormatting.GRAY;
-            case 1, 2 -> ChatFormatting.YELLOW;
-            default -> ChatFormatting.GREEN;
-        };
-        // Debug Tool for Balance - Also Informations that could be shared but could lead to exploit
-        /*
-        var last = getRecipeLogic().getLastRecipe();
-        if (last != null) {
-            int dur = last.data.contains("nominal_duration")
-                    ? last.data.getInt("nominal_duration")
-                    : last.duration;
-            long work = (long) dur * Math.max(1, last.batchParallels);
-        
-            textList.add(Component.literal("work: " + work));
-            textList.add(Component.literal("eut: " + RecipeHelper.getRealEUt(last).getTotalEU()));
-            textList.add(Component.literal("dur: " + last.duration));
-            textList.add(Component.literal("nominal: " + dur));
-            textList.add(Component.literal("batch: " + last.batchParallels));
-            textList.add(Component.literal("units: " + Math.max(1, (int) (work / 500))));
-            textList.add(Component.literal("hp: " + buddingHealth));
-        }
-        */
-        int speedBonus = (int) (BUDDING_SPEED_BONUS[buddingTier] * 100);
+        widgets.add(Text.lang("tfg.machine.budding_missing").withStyle(ChatFormatting.RED).asWidget()
+                .setEnabledIf(w -> buddingTierValue.getIntValue() < 0));
 
-        textList.add(Component.translatable("tfg.machine.me_assembler.budding_tier",
-                Component.literal(speedBonus + "%").withStyle(color)));
+        widgets.add(Text.dynamic(() -> {
+            ChatFormatting color = switch (buddingTierValue.getIntValue()) {
+                case 0 -> ChatFormatting.GRAY;
+                case 1, 2 -> ChatFormatting.YELLOW;
+                default -> ChatFormatting.GREEN;
+            };
+            return Component.translatable("tfg.machine.me_assembler.budding_tier",
+                    Component.literal(speedBonus.getIntValue() + "%").withStyle(color));
+        }).asWidget());
 
+        return widgets;
     }
 
     // Fully custom Modifier function so you can't speed up through OC, Batchmode is always on because of the insane bonus
     // speed you can get and the speed bonus through the Budding
-    public static @NotNull ModifierFunction buddingModifier(@NotNull MetaMachine machine,
-            @NotNull GTRecipe recipe) {
+    public static ModifierFunction buddingModifier(MetaMachine machine,
+                                                   GTRecipe recipe) {
 
         if (!(machine instanceof MEAssemblerMachine meMachine)) {
             return RecipeModifier.nullWrongType(MEAssemblerMachine.class, machine);

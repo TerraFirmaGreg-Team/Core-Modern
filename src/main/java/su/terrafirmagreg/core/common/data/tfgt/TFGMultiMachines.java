@@ -39,7 +39,6 @@ import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
-import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
@@ -65,10 +64,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import appeng.core.definitions.AEBlocks;
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.value.sync.BooleanSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
-import appeng.core.definitions.AEBlocks;
 import earth.terrarium.adastra.common.registry.ModBlocks;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -130,7 +129,7 @@ public class TFGMultiMachines {
                         .sliceRepeatable(1, 3, "#####", "#M#M#", "#R R#", "#M#M#", "#####")
                         .slice("#####", "#CHC#", "#R R#", "#CHC#", "#####")
                         .sliceRepeatable(1, 3, "#####", "#C#C#", "#R R#", "#C#C#", "#####")
-                        .where('y', controller(blocks(definition.get())))
+                        .where('y', controller(definition))
                         .where(' ', Predicates.air())
                         .where('#', Predicates.any())
                         .where('F', Predicates.frames(GTMaterials.Aluminium))
@@ -173,7 +172,7 @@ public class TFGMultiMachines {
                                 .or(abilities(PartAbility.INPUT_ENERGY)
                                         .or(blocks(inputBuses))))
                         .where('C', Predicates.frames(GTMaterials.Aluminium))
-                        .where('D', controller(blocks(def.get())))
+                        .where('D', controller(def))
                         .where('E', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                         .where('F', blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
                         .where('G', blocks(GTBlocks.YELLOW_STRIPES_BLOCK_A.get())
@@ -210,7 +209,7 @@ public class TFGMultiMachines {
                     .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
                     .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
                     .slice("AAIAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
-                    .where('I', controller(blocks(definition.get())))
+                    .where('I', controller(definition))
                     .where(' ', Predicates.any())
                     .where('A', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(10)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
@@ -257,7 +256,7 @@ public class TFGMultiMachines {
                     .where('I', blocks(GTBlocks.LAMPS.get(DyeColor.PURPLE).get()))
                     .where('J', blocks(TFGBlocks_Casings.BIOCULTURE_ROTOR_PRIMARY.get()))
                     .where('K', blocks(TFGBlocks_Casings.BIOCULTURE_ROTOR_SECONDARY.get()))
-                    .where('L', controller(blocks(definition.get())))
+                    .where('L', controller(definition))
                     .build())
             .register();
 
@@ -279,7 +278,7 @@ public class TFGMultiMachines {
                     .slice("A   A", "A   A", "CCCCC", "CDYDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
                     .where('*', Predicates.air())
                     .where(' ', Predicates.any())
-                    .where('Y', controller(blocks(definition.get())))
+                    .where('Y', controller(definition))
                     .where('A', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
                     .where('B', Predicates.frames(GTMaterials.StainlessSteel))
                     .where('C', blocks(GTBlocks.CASING_STEEL_TURBINE.get()).setMinGlobalLimited(50)
@@ -381,7 +380,7 @@ public class TFGMultiMachines {
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                             .or(Predicates.autoAbilities(true, false, false)))
-                    .where('C', controller(blocks(definition.getBlock())))
+                    .where('C', controller(definition))
                     .where('D', blocks(titanium_concrete.get())
                             .or(Predicates.blockTag(TFGTags.Blocks.TitaniumConcrete)))
                     .where('E', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
@@ -443,7 +442,7 @@ public class TFGMultiMachines {
                     .where('F', blocks(TFGBlocks_Casings.ULTRAVIOLET_CASING.get()))
                     .where('D', blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
                     .where('B', blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("megacells", "mega_crafting_unit"))))
-                    .where('O', controller(blocks(definition.get())))
+                    .where('O', controller(definition))
                     .build())
             .register();
 
@@ -463,7 +462,7 @@ public class TFGMultiMachines {
                         .slice("AAAAAAAAA", "BBBBBBBAA", "BB###BBAA", "BBBBBBBAA", "AAAAAAAAA")
                         .slice("         ", " BCCCB   ", " C###C   ", " BCCCB   ", "         ")
                         .slice("         ", " BBBBB   ", " BHHHB   ", " BBBBB   ", "         ")
-                        .where('X', controller(blocks(definition.get())))
+                        .where('X', controller(definition))
                         .where('A', blocks(TFGBlocks_Casings.MARS_CASING.get())
                                 .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
                         .where('B', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
@@ -498,7 +497,7 @@ public class TFGMultiMachines {
                     .slice("AAA", "ABA", "ABA", "AAA")
                     .slice("AEA", "BDB", "BDB", "AEA")
                     .slice("AAA", "AXA", "ABA", "AAA")
-                    .where('X', controller(blocks(definition.get())))
+                    .where('X', controller(definition))
                     .where('A', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
                     .where('B', blocks(TFGBlocks_Casings.DESH_PTFE_CASING.get()).setMinGlobalLimited(1)
                             .or(abilities((TFGPartAbility.SMR_FLUID_INPUT)))
@@ -527,7 +526,7 @@ public class TFGMultiMachines {
                     .slice("XXX", "XXX", "XXX")
                     .slice("XXX", "XCX", "XXX")
                     .slice("XXX", "XSX", "XXX")
-                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('S', controller(definition))
                     .where('X', blocks(TFGBlocks_Casings.MACHINE_CASING_POWER_CASING.get()).setMinGlobalLimited(12)
                             .or(ActiveTransformerMachine.getHatchPredicates()))
                     .where('C', blocks(TFGBlocks_Casings.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
@@ -570,7 +569,7 @@ public class TFGMultiMachines {
                     .where(' ', Predicates.any())
                     .where('A', blocks(TFGBlocks_Casings.EGH_CASING.get()))
                     .where('B', Predicates.blockTag(TFGTags.Blocks.StainlessSteelGreenhouseCasings))
-                    .where('C', controller(blocks(definition.getBlock())))
+                    .where('C', controller(definition))
                     .where('D', blocks(TFGBlocks_Casings.GROW_LIGHT.get()))
                     .where('E', blocks(GTBlocks.FILTER_CASING.get()))
                     .where('F', blocks(TFGBlocks.CULTIVATION_MONITOR.get()))
@@ -618,7 +617,7 @@ public class TFGMultiMachines {
                     .where('F', Predicates.fluidTag(TagKey.create(Registries.FLUID, TFGCore.id( "pisciculture_fishery_fluids"))))
                     .where('G', Predicates.blockTag(TagKey.create(Registries.BLOCK, TFGCore.id( "gtceu_concrete_blocks"))))
                     .where('I', blocks(TFGBlocks_Casings.PISCICULTURE_CORE.get()))
-                    .where('J', controller(blocks(definition.getBlock())))
+                    .where('J', controller(definition))
                     .build())
             .register();
 
@@ -637,7 +636,7 @@ public class TFGMultiMachines {
                     .slice(" F ", " C ", " E ", " E ", " E ")
                     .slice("FCF", "C#C", "E#E", "E#E", "E#E")
                     .slice(" F ", "CXC", " E ", " E ", " E ")
-                    .where('X', controller(blocks(definition.getBlock())))
+                    .where('X', controller(definition))
                     .where('C', Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION))
                     .where('F', Predicates.blocks(GTBlocks.FIREBOX_BRONZE.get())
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
@@ -669,7 +668,7 @@ public class TFGMultiMachines {
                     .slice("FXXXF", "BPGPB", "BBBBB")
                     .slice("FXXXF", "B#P#B", "BBBBB")
                     .slice(" FFF ", "BBSBB", " BBB ")
-                    .where('S', controller(blocks(definition.get())))
+                    .where('S', controller(definition))
                     .where('F', blocks(GTBlocks.FIREBOX_STEEL.get())
                             .or(abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('X', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
@@ -705,7 +704,7 @@ public class TFGMultiMachines {
                     .slice("FFF", "XXX", "   ")
                     .slice("FFF", "X#X", "XXX")
                     .slice("FFF", "XSX", "   ")
-                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('S', controller(definition))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(6)
@@ -733,7 +732,7 @@ public class TFGMultiMachines {
                     .slice("XXX", "FXF", "   ")
                     .slice("XXX", "A#A", "FAF")
                     .slice("XXX", "FSF", "   ")
-                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('S', controller(definition))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .where('A', blocks(GTBlocks.BRONZE_HULL.get()))
@@ -759,7 +758,7 @@ public class TFGMultiMachines {
                     .slice("XXX", "G G", "G G", "XXX")
                     .slice("XAX", " A ", " A ", "XAX")
                     .slice("XSX", "G G", "G G", "XXX")
-                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('S', controller(definition))
                     .where(' ', Predicates.any())
                     .where('A', blocks(GTBlocks.STEEL_HULL.get()))
                     .where('G', blocks(AllBlocks.METAL_GIRDER.get()))
@@ -829,7 +828,7 @@ public class TFGMultiMachines {
                     .slice("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
                     .slice("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
                     .slice("##BBB##", "##CYC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
-                    .where('Y', controller(blocks(definition.getBlock())))
+                    .where('Y', controller(definition))
                     .where('#', Predicates.any())
                     .where('A', Predicates.air())
                     .where('B', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
@@ -857,7 +856,7 @@ public class TFGMultiMachines {
                     .slice("ACABB", "ACABA", "AAAAA", "     ")
                     .slice("CDCBB", "C#C#B", "AFFFB", " AAAB")
                     .slice("AXABB", "AEABA", "AAAAA", "     ")
-                    .where('X', controller(blocks(definition.getBlock())))
+                    .where('X', controller(definition))
                     .where('A', blocks(TFGBlocks_Casings.STERLING_SILVER_CASING.get()).setMinGlobalLimited(15)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false))
@@ -1000,7 +999,7 @@ public class TFGMultiMachines {
                     .slice("CCCC", "CHHC", "CCCC")
                     .slice("CHHC", "RGGR", "CHHC")
                     .slice("CCCC", "CSHC", "CCCC")
-                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('S', controller(definition))
                     .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
                     .where('C', blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
                     .where('R', blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.HV, GTValues.EV).toArray(Block[]::new))
@@ -1038,7 +1037,7 @@ public class TFGMultiMachines {
                     .slice("AAA", "FXF")
                     .slice("AAA", "XBX")
                     .slice("AAA", "FSF")
-                    .where('S', controller(blocks(definition.get())))
+                    .where('S', controller(definition))
                     .where('X', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(1)
                             .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setMaxGlobalLimited(1).setPreviewCount(1))
                             .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
@@ -1074,7 +1073,7 @@ public class TFGMultiMachines {
                     .slice("BFFFBEEEB", "DAAAEHHGA", "AAAAEHHGA", "AAAACEEEC")
                     .slice("BFFFBEEEB", "DAAAEGGGA", "AAAAEGSGA", "AAAACEEEC")
                     .slice("BBBBBBBBB", "DDDDCAAAC", "AAAACAAAC", "AAAACCCCC")
-                    .where('S', controller(blocks(definition.get())))
+                    .where('S', controller(definition))
                     .where('A', Predicates.any())
                     .where('B', blocks(GTBlocks.STEEL_HULL.get()))
 					.where('C', Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
@@ -1114,7 +1113,7 @@ public class TFGMultiMachines {
                     .slice("ADDDA", "CFGFC", "CFGFC", "CFGFC", "CFGFC", "AFGFA", "AAHAA")
                     .slice("AAAAA", "BAFAB", "B#F#B", "B#F#B", "B#F#B", "B#F#B", "AAAAA")
                     .slice(" AAA ", " AXA ", "     ", "     ", "     ", "     ", " AAA ")
-                    .where('X', controller(blocks(definition.get())))
+                    .where('X', controller(definition))
                     .where('A', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(6)
                             .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(2).setPreviewCount(2))
                             .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
@@ -1145,7 +1144,7 @@ public class TFGMultiMachines {
                     .slice("AAA", "APA", " A ")
                     .slice("AAA", "PPP", "APA")
                     .slice("AXA", "APA", " A ")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('X', Predicates.controller(definition))
                     .where('A', Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get())
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
@@ -1170,7 +1169,7 @@ public class TFGMultiMachines {
                     .slice("FFFFF", "FIGIF", "FGGGF", "FIGIF", "FFFFF")
                     .slice("  F  ", " III ", "FIGIF", " III ", "  F  ")
                     .slice("  F  ", "  F  ", "FFXFF", "  F  ", "  F  ")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('X', Predicates.controller(definition))
                     .where('F', Predicates.frames(GTMaterials.get("desh")))
                     .where('I', Predicates.blocks(TFGBlocks_Casings.IRON_DESH_CASING.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
@@ -1192,7 +1191,7 @@ public class TFGMultiMachines {
                     .slice("   ", " P ", "   ")
                     .slice("SSS", "SPS", "SSS")
                     .slice("SXS", "SPS", " S ")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('X', controller(definition))
                     .where('S', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
@@ -1224,7 +1223,7 @@ public class TFGMultiMachines {
                         .slice("ACCCCCCCA", "ICGDB GCI", "ICG Q GCI", "ICG B GCI", "ACCCCCCCA")
                         .slice("AAACCCAAA", "ICGD  GCI", "ICG   GCI", "ICG   GCI", "AAACCCAAA")
                         .slice("  TTTTT  ", "TTT X TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
-                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                        .where('X', Predicates.controller(definition))
                         .where('A', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get()))
                         .where('B', Predicates.frames(GTMaterials.StainlessSteel))
                         .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
@@ -1241,51 +1240,13 @@ public class TFGMultiMachines {
                                         .setPreviewCount(1)))
                         .where('G', Predicates.blocks(AEBlocks.QUARTZ_VIBRANT_GLASS.block()))
                         .where('H', dataHatchPredicate() == null ?
-                                Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())  : dataHatchPredicate())
-                        .where('Q', TFGPredicates.buddingBlocks())
+                                Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())  : Objects.requireNonNull(dataHatchPredicate()))
+                        .where('Q', MultiPredicate.ofSingle(TFGPredicates.buddingBlocks()))
                         .where('D', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
                         .where('F', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
-                        .where(' ', Predicates.any())
                         .build();
-            })
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("  TTnTT  ", "TTr X TTT", "TCT   TCT", "TTT   TTT", "  TTmTT  ")
-                        .aisle("AAACCCAAA", "ICGD  GCA", "ICG   GCA", "ICG  DGCA", "AAACCCAAA")
-                        .aisle("ACCCCCCCA", "ICGDB GCA", "ICG q GCA", "ICG BDGCA", "ACCCCCCCA")
-                        .aisle("AAACCCAAA", "ICGFDDGCA", "ICG  DGCA", "ICGDDFGCA", "AAACCCAAA")
-                        .aisle("  TTpTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TToTT  ")
-                        .where('X', definition, Direction.NORTH)
-                        .where('A', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
-                        .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
-                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
-                        .where('G', AEBlocks.QUARTZ_VIBRANT_GLASS.block())
-                        .where('H', GTResearchMachines.BASIC_DATA_ACCESS_HATCH, Direction.SOUTH)
-                        .where('I', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.WEST)
-                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
-                        .where('m', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
-                        .where('n', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
-                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.NORTH)
-                        .where('o', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('p', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where(' ', Blocks.AIR);
-
-                var emptyCopy = builder.shallowCopy()
-                        .where('D', Blocks.AIR)
-                        .where('F', Blocks.AIR)
-                        .where('q', AEBlocks.QUARTZ_BLOCK.block());
-                shapeInfos.add(emptyCopy.build());
-
-                var spatialCopy = builder.shallowCopy()
-                        .where('D', AEBlocks.SPATIAL_PYLON.block())
-                        .where('F', AEBlocks.SPATIAL_IO_PORT.block())
-                        .where('q', AEBlocks.FLAWLESS_BUDDING_QUARTZ.block());
-                shapeInfos.add(spatialCopy.build());
-
-                return shapeInfos;
             })
             .register();
 
@@ -1306,13 +1267,13 @@ public class TFGMultiMachines {
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),
                     TFGCore.id("block/machines/wireless_charger"))
             .pattern(definition -> {
-                return FactoryBlockPattern.start()
-                        .aisle("TTTTT", "     ", "     ", "     ")
-                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
-                        .aisle("TCCCT", " DB  ", "  Q  ", "     ")
-                        .aisle("TCCCT", " D   ", "     ", "     ")
-                        .aisle("TTXTT", "     ", "     ", "     ")
-                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                        .slice("TTTTT", "     ", "     ", "     ")
+                        .slice("TCCCT", " FDD ", " D   ", " D   ")
+                        .slice("TCCCT", " DB  ", "  Q  ", "     ")
+                        .slice("TCCCT", " D   ", "     ", "     ")
+                        .slice("TTXTT", "     ", "     ", "     ")
+                        .where('X', Predicates.controller(definition))
                         .where('B', Predicates.frames(GTMaterials.StainlessSteel))
                         .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
                         .where('T', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
@@ -1321,45 +1282,12 @@ public class TFGMultiMachines {
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
                                 .or(Predicates.abilities(TFGPartAbility.ME_REDSTONE_PORT).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
-                        .where('Q', TFGPredicates.buddingBlocks())
+                        .where('Q', MultiPredicate.ofSingle(TFGPredicates.buddingBlocks()))
                         .where('D', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
                         .where('F', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
-                        .where(' ', Predicates.any())
                         .build();
-            })
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("mTXTv", "     ", "     ", "     ")
-                        .aisle("TCCCT", " D   ", "     ", "     ")
-                        .aisle("oCCCr", " DB  ", "  Q  ", "     ")
-                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
-                        .aisle("TTiTT", "     ", "     ", "     ")
-                        .where('X', definition, Direction.NORTH)
-                        .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
-                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
-                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
-                        .where('Q', AEBlocks.FLAWED_BUDDING_QUARTZ.block())
-                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.EAST)
-                        .where('m', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.NORTH)
-                        .where('v', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.NORTH)
-                        .where('i', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('o', GTMachines.MAINTENANCE_HATCH, Direction.WEST)
-                        .where(' ', Blocks.AIR);
-
-                var emptyCopy = builder.shallowCopy()
-                        .where('D', Blocks.AIR)
-                        .where('F', Blocks.AIR);
-                shapeInfos.add(emptyCopy.build());
-
-                var spatialCopy = builder.shallowCopy()
-                        .where('D', AEBlocks.SPATIAL_PYLON.block())
-                        .where('F', AEBlocks.SPATIAL_IO_PORT.block());
-                shapeInfos.add(spatialCopy.build());
-
-                return shapeInfos;
             })
             .register();
 
