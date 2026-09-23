@@ -17,6 +17,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
+/** 
+ * Makes it so that if we're getting the capability of a keg part that's not the core (located at zeroPos) then return the capabilities of the core instead. 
+ * This makes it so that each keg block allows input/output with any part.
+ */
 @Mixin(value = BigBarrelBlockEntity.class, remap = false)
 public abstract class BigBarrelBlockEntityMixin extends TFCBlockEntity {
     protected BigBarrelBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {

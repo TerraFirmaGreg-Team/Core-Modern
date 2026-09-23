@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**  Give every keg part its own block entity so they can accept input/output like the core part. see BigBarrelBlockEntityMixin */
 @Mixin(value = BigBarrelBlock.class, remap = false)
 public abstract class BigBarrelBlockMixin implements EntityBlock {
     @Override
