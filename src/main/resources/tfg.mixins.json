@@ -96,6 +96,8 @@
         "common.fallingtrees.StandardTreeMixin",
         "common.firmaciv.BlockEventHandlerMixin",
         "common.firmalife.ApplianceBlockEntityMixin",
+        "common.firmalife.BigBarrelBlockEntityMixin",
+        "common.firmalife.BigBarrelBlockMixin",
         "common.firmalife.ClimateStationOxygenatedMixin",
         "common.firmalife.CompostTumblerBlockEntityMixin",
         "common.firmalife.CompostTumblerBlockMixin",
