@@ -11,12 +11,15 @@ import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.Month;
+import net.dries007.tfc.util.calendar.Season;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
@@ -135,8 +138,21 @@ public class PlayerInventoryTabButton extends Button
                 case CALENDAR ->
                 {
                     final Component title = Component.translatable("tfc.screen.calendar");
-                    final Component hoverText = Calendars.CLIENT.getCalendarTimeAndDate();
-                    graphics.renderComponentTooltip(font, List.of(title, hoverText), mouseX, mouseY);
+                    String seasonIcon = "";
+                    final Component timeAndDate = Component.literal("⌛ ").append(Calendars.CLIENT.getCalendarTimeAndDate());
+
+                    final Month month = Calendars.CLIENT.getCalendarMonthOfYear();
+                    final Component monthToSeason = Component.translatable(month.getTranslationKey(Month.Style.SEASON));
+
+                    switch (month.getSeason()) {
+                        case WINTER -> seasonIcon = "☃ ";
+                        case SPRING -> seasonIcon = "♧ ";
+                        case SUMMER -> seasonIcon = "☀ ";
+                        case FALL -> seasonIcon = "\uD83C\uDF42 ";
+                    }
+
+                    final Component season = Component.literal(seasonIcon).append(monthToSeason);
+                    graphics.renderComponentTooltip(font, List.of(title, season, timeAndDate), mouseX, mouseY);
                 }
                 case NUTRITION ->
                 {
@@ -165,10 +181,28 @@ public class PlayerInventoryTabButton extends Button
                 }
                 case CLIMATE ->
                 {
-                    final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
+                    final TemperatureDisplayStyle tempStyle = TFCConfig.CLIENT.climateTooltipStyle.get();
                     final Component title = Component.translatable("tfc.screen.climate");
-                    final Component hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
-                    graphics.renderComponentTooltip(font, List.of(title, hoverText), mouseX, mouseY);
+                    final float getAvgTemp = ClimateRenderCache.INSTANCE.getAverageTemperature();
+                    final float getAvgRain = ClimateRenderCache.INSTANCE.getRainfall();
+                    String tempIcon;
+                    String rainIcon;
+
+                    if (getAvgTemp >= 10) {
+                        tempIcon = "\uD83D\uDD25 ";
+                    } else {
+                        tempIcon = "❄ ";
+                    }
+
+                    if (getAvgRain >= 200) {
+                        rainIcon = "☔ ";
+                    } else {
+                        rainIcon = "\uD83C\uDF35 ";
+                    }
+
+                    final Component avgTemp = Component.literal(tempIcon).append(Objects.requireNonNull(tempStyle.formatRange(getAvgTemp)));
+                    final Component avgRain = Component.literal(rainIcon).append(String.format("%.0f", getAvgRain) + "mm");
+                    graphics.renderComponentTooltip(font, List.of(title, avgRain, avgTemp), mouseX, mouseY);
                 }
                 case BOOK ->
                 {
