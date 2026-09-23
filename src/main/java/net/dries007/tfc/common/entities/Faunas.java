@@ -17,6 +17,7 @@ import net.dries007.tfc.common.entities.livestock.horse.TFCMule;
 import net.dries007.tfc.common.entities.predator.AmphibiousPredator;
 import net.dries007.tfc.common.entities.predator.FelinePredator;
 
+import net.dries007.tfc.common.entities.predator.TFCWolf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
@@ -63,7 +64,7 @@ public class Faunas
     public static final FaunaType<FelinePredator> SABERTOOTH = registerAnimal(TFCEntities.SABERTOOTH);
     public static final FaunaType<FelinePredator> TIGER = registerAnimal(TFCEntities.TIGER);
     public static final FaunaType<AmphibiousPredator> CROCODILE = registerAmphibiousPredator(TFCEntities.CROCODILE);
-    public static final FaunaType<PackPredator> WOLF = registerAnimal(TFCEntities.WOLF);
+    public static final FaunaType<TFCWolf> WOLF = registerAnimal(TFCEntities.WOLF);
     public static final FaunaType<PackPredator> HYENA = registerAnimal(TFCEntities.HYENA);
     public static final FaunaType<PackPredator> DIREWOLF = registerAnimal(TFCEntities.DIREWOLF);
     public static final FaunaType<TFCSquid> SQUID = registerFish(TFCEntities.SQUID);
