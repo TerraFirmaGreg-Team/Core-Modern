@@ -12,14 +12,12 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.Month;
-import net.dries007.tfc.util.calendar.Season;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
@@ -206,8 +204,9 @@ public class PlayerInventoryTabButton extends Button
                 }
                 case BOOK ->
                 {
-                    final Component hoverText = Component.translatable("tfc.tab.field_guide");
-                    graphics.renderTooltip(font, hoverText, mouseX, mouseY);
+                    final Component title = Component.translatable("tfg.field_guide.name");
+                    final Component hoverText = Component.translatable("tfg.field_guide.read_me");
+                    graphics.renderComponentTooltip(font, List.of(title, hoverText), mouseX, mouseY);
                 }
             }
         }

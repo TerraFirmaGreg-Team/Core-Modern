@@ -7,7 +7,6 @@
 package net.dries007.tfc.mixin.client.compat.patchouli;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -71,15 +70,6 @@ public abstract class GuiBookMixin extends Screen
                 addRenderableWidget(new PlayerInventoryTabButton(bookLeft, bookTop, false, true, PlayerInventoryTabButton.Tab.CLIMATE));
                 addRenderableWidget(new PlayerInventoryTabButton(bookLeft, bookTop, true, true, PlayerInventoryTabButton.Tab.BOOK, button -> {}));
             }
-        }
-    }
-
-    @Inject(method = "render", at = @At("HEAD"))
-    public void injectRenderConsistentBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci)
-    {
-        if (book != null && (book.id.equals(PatchouliIntegration.BOOK_ID) || book.id.equals(Helpers.resourceLocation("tfg", "field_guide"))))
-        {
-            renderBackground(graphics);
         }
     }
 }

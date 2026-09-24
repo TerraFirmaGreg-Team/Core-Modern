@@ -1,10 +1,16 @@
 {
     "show_progress": false,
+    "pause_game": true,
     "dont_generate_book": false,
-    "macros": {},
+    "macros": {
+        "$(tfg)": "$(bold)$(#ff0fb7)TerraFirma$(#595959)Greg$()",
+        "$(tfg_short)": "$(bold)$(#ff0fb7)TF$(#595959)G$()",
+        "$(emi)": "$(d)E$(a)M$(b)I$()"
+    },
     "landing_text": "tfc.field_guide.book_landing_text",
     "creative_tab": "tfg:tfg",
-    "subtitle": "${version}",
-    "name": "tfc.field_guide.book_name",
+    "subtitle": "2.0.0",
+    "name": "tfg.field_guide.name",
+    "model": "tfg:field_guide",
     "use_resource_pack": true
 }
