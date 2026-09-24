@@ -1,14 +1,14 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import net.dries007.tfc.common.entities.livestock.DairyAnimal;
 import net.dries007.tfc.common.entities.livestock.ProducingMammal;
@@ -20,7 +20,9 @@ import net.dries007.tfc.util.events.AnimalProductEvent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -29,27 +31,30 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.*;
+import brachy.modularui.widgets.ListWidget;
+import brachy.modularui.widgets.dynamic.DynamicWidget;
+import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import lombok.Getter;
+import lombok.Setter;
+
 import su.terrafirmagreg.core.common.entity.TFGWoolEggProducingAnimal;
 import su.terrafirmagreg.core.common.tfgt.recipe.condition.AnimalPresentCondition;
 
 public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            PastoralEngineMachine.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Persisted
+    @SaveField
+    @Getter
+    @Setter
     private int harvestCounter = 0;
 
     private static final int HARVESTS_PER_USE = 2; // Number of time it harvests before it ages the animal
 
-    public PastoralEngineMachine(IMachineBlockEntity holder) {
-        super(holder);
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
+    public PastoralEngineMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override
@@ -154,10 +159,10 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
     public AABB getFormedBoundingBox() {
         if (!isFormed()) {
-            return new AABB(getPos()).inflate(2.5);
+            return new AABB(getBlockPos()).inflate(2.5);
         }
 
-        BlockPos pos = getPos();
+        BlockPos pos = getBlockPos();
         Direction front = getFrontFacing();
         Direction right = front.getClockWise(); // north to east
 
@@ -181,23 +186,25 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
-
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        var widgets = super.getWidgetsForDisplay(syncManager);
         if (!isFormed())
-            return;
+            return widgets;
 
-        // Infos aniamls — server only
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            AABB box = getFormedBoundingBox();
+        IntSyncValue harvestCounterValue = new IntSyncValue(this::getHarvestCounter, this::setHarvestCounter);
+        syncManager.syncValue("harvestCounter", harvestCounterValue);
 
-            List<Entity> allAnimals = serverLevel.getEntities(
-                    (Entity) null, box,
+        int totalAnimals;
+        int readyAnimals;
+        int oldAnimals;
+
+        if (!isRemote()) {
+            List<Entity> allAnimals = getLevel().getEntities(
+                    (Entity) null, getFormedBoundingBox(),
                     entity -> entity instanceof TFCAnimalProperties);
 
-            int total = allAnimals.size();
-            int ready = 0;
             int old = 0;
+            int ready = 0;
 
             for (Entity e : allAnimals) {
                 if (e instanceof TFCAnimalProperties animal) {
@@ -213,86 +220,103 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                 }
             }
 
-            textList.add(Component.translatable("tfg.machine.pastoral_engine.animals_total", total)
-                    .withStyle(ChatFormatting.WHITE));
-            textList.add(Component.translatable("tfg.machine.pastoral_engine.animals_ready", ready)
-                    .withStyle(ready > 0 ? ChatFormatting.GREEN : ChatFormatting.GRAY));
-            textList.add(Component.translatable("tfg.machine.pastoral_engine.animals_old", old)
-                    .withStyle(old > 0 ? ChatFormatting.RED : ChatFormatting.GRAY));
-
-            // Cooldown par type
-            boolean hasAnimalOnCooldown = allAnimals.stream()
-                    .anyMatch(e -> {
-                        if (!(e instanceof TFCAnimalProperties animal) ||
-                                animal.getAgeType() == TFCAnimalProperties.Age.OLD) {
-                            return false;
-                        }
-                        if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
-                            return !woolAnimal.hasWool();
-                        }
-                        return !animal.isReadyForAnimalProduct();
-
-                    });
-
-            if (hasAnimalOnCooldown) {
-                textList.add(Component.translatable("tfg.machine.pastoral_engine.next_harvest_title")
-                        .withStyle(ChatFormatting.YELLOW));
-
-                allAnimals.stream()
-                        .filter(e -> {
-                            if (!(e instanceof TFCAnimalProperties animal) ||
-                                    (animal.getAgeType() == TFCAnimalProperties.Age.ADULT) ||
-                                    (animal instanceof TFGWoolEggProducingAnimal woolAnimal) && (!woolAnimal.hasWool()) ||
-                                    (animal instanceof ProducingMammal producer) &&
-                                            !(animal.isReadyForAnimalProduct() || producer.getProducedTick() > 0)) {
-                                return true;
-                            }
-                            return false;
-                        })
-                        .collect(java.util.stream.Collectors.groupingBy(
-                                e -> ForgeRegistries.ENTITY_TYPES.getKey(e.getType()),
-                                java.util.stream.Collectors.minBy(
-                                        java.util.Comparator.comparingLong(e -> {
-                                            if (e instanceof TFGWoolEggProducingAnimal woolAnimal) {
-                                                return woolAnimal.getWoolCooldown();
-                                            }
-                                            return ((TFCAnimalProperties) e).getProductsCooldown();
-                                        }))))
-                        .forEach((entityTypeId, optAnimal) -> optAnimal.ifPresent(e -> {
-
-                            long minCooldown;
-                            if (e instanceof TFGWoolEggProducingAnimal woolAnimal) {
-                                minCooldown = woolAnimal.getWoolCooldown();
-                            } else {
-                                minCooldown = ((TFCAnimalProperties) e).getProductsCooldown();
-                            }
-
-                            long totalHours = minCooldown / ICalendar.TICKS_IN_HOUR;
-                            long days = totalHours / ICalendar.HOURS_IN_DAY;
-                            long hours = totalHours % ICalendar.HOURS_IN_DAY;
-
-                            String path = entityTypeId == null ? "unknown" : entityTypeId.getPath();
-                            String formattedName = Arrays.stream(path.split("_"))
-                                    .map(w -> Character.toUpperCase(w.charAt(0)) + w.substring(1))
-                                    .collect(java.util.stream.Collectors.joining(" "));
-
-                            if (days > 0) {
-                                textList.add(Component.translatable(
-                                        "tfg.machine.pastoral_engine.next_harvest_days",
-                                        formattedName, days, hours)
-                                        .withStyle(ChatFormatting.YELLOW));
-                            } else {
-                                textList.add(Component.translatable(
-                                        "tfg.machine.pastoral_engine.next_harvest_hours",
-                                        formattedName, hours)
-                                        .withStyle(ChatFormatting.YELLOW));
-                            }
-                        }));
-            }
+            totalAnimals = allAnimals.size();
+            oldAnimals = old;
+            readyAnimals = ready;
+        } else {
+            totalAnimals = 0;
+            readyAnimals = 0;
+            oldAnimals = 0;
         }
+
+        IntSyncValue totalAnimalsValue = new IntSyncValue(() -> totalAnimals);
+        IntSyncValue readyAnimalsValue = new IntSyncValue(() -> readyAnimals);
+        IntSyncValue oldAnimalsValue = new IntSyncValue(() -> oldAnimals);
+
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.pastoral_engine.animals_total", totalAnimalsValue.getIntValue())
+                .withStyle(ChatFormatting.WHITE)).asWidget());
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.pastoral_engine.animals_ready", readyAnimalsValue.getIntValue())
+                .withStyle(readyAnimalsValue.getIntValue() > 0 ? ChatFormatting.GREEN : ChatFormatting.GRAY)).asWidget());
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.pastoral_engine.animals_old", oldAnimalsValue.getIntValue())
+                .withStyle(oldAnimalsValue.getIntValue() > 0 ? ChatFormatting.RED : ChatFormatting.GRAY)).asWidget());
+
+        Object2LongMap<ResourceLocation> idToCooldownMap = new Object2LongArrayMap<>();
+
+        if (!isRemote()) {
+            List<Entity> allAnimals = getLevel().getEntities(
+                    (Entity) null, getFormedBoundingBox(),
+                    entity -> entity instanceof TFCAnimalProperties);
+
+            var animalsOnCooldown = allAnimals.stream().filter(PastoralEngineMachine::isEntityValid)
+                    .sorted(Comparator.comparingLong(PastoralEngineMachine::getCooldown)).toList();
+
+            for (var entity : animalsOnCooldown) {
+                idToCooldownMap.put(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType())), getCooldown(entity));
+            }
+
+        }
+
+        GenericMapSyncHandler<ResourceLocation, Long> mapHandler = new GenericMapSyncHandler<>(() -> idToCooldownMap, null,
+                FriendlyByteBuf::readResourceLocation, FriendlyByteBuf::readLong, FriendlyByteBuf::writeResourceLocation, FriendlyByteBuf::writeLong,
+                null, null, null);
+
+        syncManager.syncValue("entityCooldownMap", mapHandler);
+
+        DynamicLinkedSyncHandler<GenericMapSyncHandler<ResourceLocation, Long>> widgetSyncHandler = new DynamicLinkedSyncHandler<>(mapHandler)
+                .widgetProvider((psm, map) -> {
+                    if (map.getValue().isEmpty()) {
+                        return Text.lang("tfg.machine.pastoral_engine.next_harvest_title")
+                                .withStyle(ChatFormatting.YELLOW).asWidget();
+                    }
+
+                    ListWidget<IWidget, ?> listWidget = new ListWidget<>().coverChildren();
+
+                    for (var entry : map.getValue().entrySet()) {
+                        long totalHours = entry.getValue() / ICalendar.TICKS_IN_HOUR;
+                        long days = totalHours / ICalendar.HOURS_IN_DAY;
+                        long hours = totalHours % ICalendar.HOURS_IN_DAY;
+
+                        String path = entry.getKey().getPath();
+                        String formattedName = Arrays.stream(path.split("_"))
+                                .map(w -> Character.toUpperCase(w.charAt(0)) + w.substring(1))
+                                .collect(Collectors.joining(" "));
+
+                        if (days > 0) {
+                            listWidget.child(Text.lang(
+                                    "tfg.machine.pastoral_engine.next_harvest_days",
+                                    formattedName, days, hours)
+                                    .withStyle(ChatFormatting.YELLOW).asWidget());
+                        } else {
+                            listWidget.child(Text.lang(
+                                    "tfg.machine.pastoral_engine.next_harvest_hours",
+                                    formattedName, hours)
+                                    .withStyle(ChatFormatting.YELLOW).asWidget());
+                        }
+                    }
+                    return listWidget;
+                });
+
+        widgets.add(new DynamicWidget<>().syncHandler(widgetSyncHandler));
+
         // Always visible (client + server)
-        textList.add(Component.translatable("tfg.machine.pastoral_engine.next_use",
-                harvestCounter, HARVESTS_PER_USE)
-                .withStyle(ChatFormatting.AQUA));
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.pastoral_engine.next_use",
+                harvestCounterValue.getIntValue(), HARVESTS_PER_USE).withStyle(ChatFormatting.AQUA)).asWidget());
+        return widgets;
+    }
+
+    private static boolean isEntityValid(Entity e) {
+        return !(e instanceof TFCAnimalProperties animal) ||
+                (animal.getAgeType() == TFCAnimalProperties.Age.ADULT) ||
+                (animal instanceof TFGWoolEggProducingAnimal woolAnimal) && (!woolAnimal.hasWool()) ||
+                (animal instanceof ProducingMammal producer) &&
+                        !(animal.isReadyForAnimalProduct() || producer.getProducedTick() > 0);
+    }
+
+    private static long getCooldown(Entity e) {
+        if (e instanceof TFGWoolEggProducingAnimal woolAnimal) {
+            return woolAnimal.getWoolCooldown();
+        }
+        assert e instanceof TFCAnimalProperties;
+        return ((TFCAnimalProperties) e).getProductsCooldown();
     }
 }

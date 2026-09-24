@@ -301,11 +301,11 @@ public class DebugRecipeDump {
             var contents = gtRecipe.inputs.get(ItemRecipeCapability.CAP);
             if (contents != null) {
                 for (var content : contents) {
-                    if (content.content instanceof SizedIngredient si) {
+                    if (content.content() instanceof SizedIngredient si) {
                         for (var stack : si.getItems())
                             if (matchItems.contains(stack.getItem()))
                                 return true;
-                    } else if (content.content instanceof Ingredient ing) {
+                    } else if (content.content() instanceof Ingredient ing) {
                         for (var stack : ing.getItems())
                             if (matchItems.contains(stack.getItem()))
                                 return true;
@@ -327,7 +327,7 @@ public class DebugRecipeDump {
                 var contents = map.get(FluidRecipeCapability.CAP);
                 if (contents != null)
                     for (var c : contents)
-                        if (c.content instanceof FluidIngredient fi)
+                        if (c.content() instanceof FluidIngredient fi)
                             for (var stack : fi.getStacks())
                                 if (matchFluids.contains(stack.getFluid()))
                                     return true;
@@ -790,13 +790,13 @@ public class DebugRecipeDump {
             return;
         jw.name(field).beginArray();
         for (var c : contents) {
-            String chance = c.isChanced() ? " (" + String.format("%.0f%%", 100f * c.chance / c.maxChance) + ")" : "";
+            String chance = c.isChanced() ? " (" + String.format("%.0f%%", 100f * c.chance() / c.maxChance()) + ")" : "";
             if (slotArrays)
                 jw.beginArray();
-            if (c.content instanceof SizedIngredient si) {
+            if (c.content() instanceof SizedIngredient si) {
                 for (var stack : si.getItems())
                     jw.value(stack.getCount() + " " + ForgeRegistries.ITEMS.getKey(stack.getItem()) + chance);
-            } else if (c.content instanceof Ingredient ing) {
+            } else if (c.content() instanceof Ingredient ing) {
                 for (var stack : ing.getItems())
                     jw.value(ForgeRegistries.ITEMS.getKey(stack.getItem()) + chance);
             }
@@ -811,10 +811,10 @@ public class DebugRecipeDump {
             return;
         jw.name(field).beginArray();
         for (var c : contents) {
-            String chance = c.isChanced() ? " (" + String.format("%.0f%%", 100f * c.chance / c.maxChance) + ")" : "";
+            String chance = c.isChanced() ? " (" + String.format("%.0f%%", 100f * c.chance() / c.maxChance()) + ")" : "";
             if (slotArrays)
                 jw.beginArray();
-            if (c.content instanceof FluidIngredient fi) {
+            if (c.content() instanceof FluidIngredient fi) {
                 for (var stack : fi.getStacks())
                     jw.value(stack.getAmount() + "mB " + ForgeRegistries.FLUIDS.getKey(stack.getFluid()) + chance);
             }

@@ -114,7 +114,7 @@ public class GrowingPlantRenderMixin {
     private static void tfg$recipeBlockCache(GTRecipe recipe, CallbackInfoReturnable<Optional<Block>> cir) {
         var inputGrapes = recipe.getInputContents(ItemRecipeCapability.CAP)
                 .stream()
-                .map(Content::getContent)
+                .map(Content::content)
                 .map(ItemRecipeCapability.CAP::of)
                 .map(Ingredient::getItems)
                 .flatMap(Arrays::stream)

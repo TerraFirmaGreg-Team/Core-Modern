@@ -1,403 +1,251 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
-import static su.terrafirmagreg.core.common.container.ProgressBars.*;
+import static su.terrafirmagreg.core.common.tfgt.ui.TFGUITextures.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import com.gregtechceu.gtceu.api.GTCEuAPI;
-import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
-import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
-import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
-import com.gregtechceu.gtceu.api.recipe.ResearchData;
+import com.gregtechceu.gtceu.api.recipe.gui.ProgressBarTextureSet;
+import com.gregtechceu.gtceu.api.recipe.gui.RecipeUIModifier;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
-import com.gregtechceu.gtceu.common.recipe.condition.AdjacentFluidCondition;
-import com.gregtechceu.gtceu.common.recipe.condition.ResearchCondition;
-import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidEntryList;
-import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
-import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
-import com.gregtechceu.gtceu.integration.xei.handlers.item.CycleItemStackHandler;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
+import com.gregtechceu.gtceu.common.recipe.gui.GTRecipeUIModifiers;
 import com.gregtechceu.gtceu.utils.ResearchManager;
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Fluid;
-
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.drawable.progress.ProgressDrawable;
 import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
-import su.terrafirmagreg.core.api.pattern.TFGPredicates;
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGSounds;
+import su.terrafirmagreg.core.common.tfgt.ui.TFGReipeUIModifiers;
 
-@SuppressWarnings("deprecation")
 public class TFGTRecipeTypes {
 
     public static void init() {
     }
 
-    public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register(TFGCore.id("greenhouse"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
-            .setSound(GTSoundEntries.MINER)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                var size = widgetGroup.getSize();
-                widgetGroup.setSize(size.width, size.height + 5);
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.UP, PROGRESS_BAR_EGH)))
+            .setSound(GTSoundEntries.MINER);
 
-                // Dimension widget that's in a better spot.
-                // Disabled for now since I cant figure out how to remove the old one.
-                //                for (RecipeCondition condition : recipe.conditions) {
-                //                    if (condition.getTooltips() == null) continue;
-                //                    if (condition instanceof DimensionCondition dimCondition) {
-                //                        int width = recipe.recipeType.getRecipeUI().getJEISize().width - 44;
-                //                        int baseHeight = recipe.recipeType.getRecipeUI().getJEISize().height - 32;
-                //                        int yPos = baseHeight - 5;
-                //                        widgetGroup.addWidget(dimCondition
-                //                                .setupDimensionMarkers(width, yPos - 5)
-                //                                .setBackgroundTexture(IGuiTexture.EMPTY));
-                //                    }
-                //                }
-            });
-
-    public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register(TFGCore.id("bioreactor"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 6, 6)
-            .setProgressBar(PROGRESS_BAR_DNA, FillDirection.LEFT_TO_RIGHT)
-            .setSound(GTSoundEntries.BATH)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                var text = recipe.data.getString("action");
-                if (!text.isEmpty()) {
-                    widgetGroup.addWidget(new LabelWidget(widgetGroup.getSize().width - 50,
-                            widgetGroup.getSize().height - 30, Component.translatable(text))
-                            .setTextColor(-1)
-                            .setDropShadow(true));
-                }
-            });
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.UP, PROGRESS_BAR_DNA))
+                    .addRecipeUIModifier((recipe, widget) -> {
+                        var text = recipe.data.getString("action");
+                        if (!text.isEmpty()) {
+                            widget.textComponents.child(Text.str(text).asWidget());
+                        }
+                    }))
+            .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
-            .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("growth_chamber"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(18, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_PETRI, FillDirection.LEFT_TO_RIGHT)
-            .setSound(GTSoundEntries.CHEMICAL)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                var text = recipe.data.getString("action");
-                if (!text.isEmpty()) {
-                    widgetGroup.addWidget(new LabelWidget(widgetGroup.getSize().width - 50,
-                            widgetGroup.getSize().height - 30, Component.translatable(text))
-                            .setTextColor(-1)
-                            .setDropShadow(true));
-                }
-            });
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.RIGHT, PROGRESS_BAR_PETRI))
+                    .addRecipeUIModifier((recipe, widget) -> {
+                        var text = recipe.data.getString("action");
+                        if (!text.isEmpty()) {
+                            widget.textComponents.child(Text.str(text).asWidget());
+                        }
+                    }))
+            .setSound(GTSoundEntries.CHEMICAL);
 
-    public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
+    public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register(TFGCore.id("food_oven"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(2, 2, 1, 1)
-            .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .setItemSlotOverlay(IO.IN, 0, GTGuiTextures.FURNACE_OVERLAY_1))
             .setSound(GTSoundEntries.FURNACE);
 
     public static final GTRecipeType FOOD_PROCESSOR_RECIPES = GTRecipeTypes
-            .register("food_processor", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("food_processor"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(9, 2, 3, 1)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-            .setSound(GTSoundEntries.MIXER)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                var text = recipe.data.getString("action");
-                if (!text.isEmpty()) {
-                    widgetGroup.addWidget(new LabelWidget(widgetGroup.getSize().width - 50,
-                            widgetGroup.getSize().height - 30, Component.translatable(text))
-                            .setTextColor(-1)
-                            .setDropShadow(true));
-                }
-            });
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .addRecipeUIModifier((recipe, widget) -> {
+                        var text = recipe.data.getString("action");
+                        if (!text.isEmpty()) {
+                            widget.textComponents.child(Text.str(text).asWidget());
+                        }
+                    }))
+            .setSound(GTSoundEntries.MIXER);
 
     public static final GTRecipeType AQUEOUS_ACCUMULATOR_RECIPES = GTRecipeTypes
-            .register("aqueous_accumulator", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("aqueous_accumulator"), GTRecipeTypes.ELECTRIC)
             .setMaxIOSize(1, 0, 0, 1)
             .setEUIO(IO.IN)
-            .setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.LEFT_TO_RIGHT)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR)
+                    .setItemSlotOverlay(IO.IN, 0, GTGuiTextures.INT_CIRCUIT_OVERLAY))
             .setMaxTooltips(4)
-            .setSound(GTSoundEntries.BATH)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                // Copied and pasted from the rock breaker
-                HolderSet<Fluid> fluid = null;
-                for (RecipeCondition condition : recipe.conditions) {
-                    if (condition instanceof AdjacentFluidCondition adjacentFluid) {
-                        fluid = adjacentFluid.getOrInitFluids(recipe).get(0);
-                        break;
-                    }
-                }
-                if (fluid == null) {
-                    return;
-                }
-
-                List<FluidEntryList> slots = Collections.singletonList(FluidHolderSetList.of(fluid, 1000, null));
-                widgetGroup.addWidget(new TankWidget(new CycleFluidEntryHandler(slots),
-                        widgetGroup.getSize().width - 50, widgetGroup.getSize().height - 35,
-                        false, false)
-                        .setBackground(GuiTextures.FLUID_SLOT).setShowAmount(false));
-            });
+            .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType GAS_PRESSURIZER_RECIPES = GTRecipeTypes
-            .register("gas_pressurizer", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("gas_pressurizer"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(3, 1, 3, 1)
-            .setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, FillDirection.LEFT_TO_RIGHT)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_COMPRESS)
+                    .setItemSlotOverlay(IO.IN, 2, GTGuiTextures.INT_CIRCUIT_OVERLAY))
             .setSound(GTSoundEntries.COMPRESSOR);
 
     public static final GTRecipeType NUCLEAR_TURBINE = GTRecipeTypes
-            .register("nuclear_turbine", GTRecipeTypes.GENERATOR)
+            .register(TFGCore.id("nuclear_turbine"), GTRecipeTypes.GENERATOR)
             .setMaxIOSize(0, 0, 1, 1)
             .setSound(GTSoundEntries.TURBINE)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
 
     public final static GTRecipeType EVAPORATION_TOWER = GTRecipeTypes
-            .register("evaporation_tower", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("evaporation_tower"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 12)
             .setEUIO(IO.IN)
             .setSound(GTSoundEntries.CHEMICAL)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, FillDirection.LEFT_TO_RIGHT);
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
 
     public final static GTRecipeType COOLING_TOWER = GTRecipeTypes
-            .register("cooling_tower", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("cooling_tower"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(2, 2, 2, 2)
             .setSound(GTSoundEntries.TURBINE)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
 
     public final static GTRecipeType HEAT_EXCHANGER = GTRecipeTypes
-            .register("heat_exchanger", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("heat_exchanger"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 3, 3)
             .setSound(GTSoundEntries.TURBINE)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
 
     public final static GTRecipeType OSTRUM_LINEAR_ACCELERATOR = GTRecipeTypes
-            .register("ostrum_linear_accelerator", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("ostrum_linear_accelerator"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 9, 6, 6)
             .setMaxSize(IO.IN, HeatRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, HeatRecipeCapability.CAP, 1)
-            .setSlotOverlay(false, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSlotOverlay(false, true, GuiTextures.ATOMIC_OVERLAY_2)
-            .setSound(GTSoundEntries.BATH)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, FillDirection.LEFT_TO_RIGHT)
-            .addDataInfo(data -> LocalizationUtils.format("tfg.nuclear.skip"));
+            .UI(builder -> builder
+                    .setProgressBar(GTGuiTextures.PROGRESS_CRACKING)
+                    .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.ATOMIC_OVERLAY_1)
+                    .addRecipeUIModifier(RecipeUIModifier.textLine(Text.lang("tfg.nuclear.skip"))))
+            .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType SMR_GENERATOR = GTRecipeTypes
-            .register("smr_generator", GTRecipeTypes.GENERATOR)
+            .register(TFGCore.id("smr_generator"), GTRecipeTypes.GENERATOR)
             .setEUIO(IO.OUT)
             .setMaxIOSize(0, 0, 1, 1)
-            .setSlotOverlay(false, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSound(GTSoundEntries.TURBINE)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR)
+                    .setFluidSlotOverlay(IO.IN, 0, GTGuiTextures.ATOMIC_OVERLAY_1))
+            .setSound(GTSoundEntries.TURBINE);
 
     public static final GTRecipeType NUCLEAR_FUEL_FACTORY = GTRecipeTypes
-            .register("nuclear_fuel_factory", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("nuclear_fuel_factory"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 3, 1, 2)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-            .setSlotOverlay(false, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSound(GTSoundEntries.CUT)
-            .addDataInfo(data -> {
-                String heatText1 = data.getString("avgHeat1");
-                String heatText2 = data.getString("avgHeat2");
-                if (!heatText1.isEmpty()) {
-                    return LocalizationUtils.format(
-                            "tfg.nuclear.average_heat.text", heatText1, heatText2);
-                }
-                return "";
-            })
-            .addDataInfo(data -> "");
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.ATOMIC_OVERLAY_1)
+                    .addRecipeUIModifier((recipe, widget) -> {
+                        String heatText1 = recipe.data.getString("avgHeat1");
+                        String heatText2 = recipe.data.getString("avgHeat2");
+                        widget.textComponents.childIf(!heatText1.isEmpty(), () -> Text.lang("tfg.nuclear.average_heat.text", heatText1, heatText2).asWidget());
+                    }))
+            .setSound(GTSoundEntries.CUT);
 
     public static final GTRecipeType HYDROPONICS_FACILITY_RECIPES = GTRecipeTypes
-            .register("hydroponics_facility", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("hydroponics_facility"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
-            .setSound(GTSoundEntries.MINER)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                var size = widgetGroup.getSize();
-                widgetGroup.setSize(size.width, size.height + 5);
-            });
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.UP, PROGRESS_BAR_EGH)))
+            .setSound(GTSoundEntries.MINER);
 
     public static final GTRecipeType PISCICULTURE_FISHERY_RECIPES = GTRecipeTypes
-            .register("pisciculture_fishery", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("pisciculture_fishery"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_FISH, FillDirection.LEFT_TO_RIGHT)
-            .setSound(GTSoundEntries.CHEMICAL)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                var size = widgetGroup.getSize();
-                widgetGroup.setSize(size.width, size.height + 5);
-            });
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.RIGHT, PROGRESS_BAR_FISH)))
+            .setSound(GTSoundEntries.CHEMICAL);
 
     public static final GTRecipeType STEAM_BLOOMERY = GTRecipeTypes
-            .register("steam_bloomery", GTRecipeTypes.STEAM)
+            .register(TFGCore.id("steam_bloomery"), GTRecipeTypes.STEAM)
             .setMaxIOSize(2, 1, 0, 0)
-            .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
-            .setSound(GTSoundEntries.FIRE)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT);
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .setItemSlotsOverlay(IO.IN, 0, 1, GTGuiTextures.FURNACE_OVERLAY_1))
+            .setSound(GTSoundEntries.FIRE);
 
     public static final GTRecipeType PRECISION_FABRICATOR_RECIPES = GTRecipeTypes
-            .register("high_temperature_precision_fabricator", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("high_temperature_precision_fabricator"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 1, 3, 0)
-            .setSlotOverlay(false, true, GuiTextures.HEATING_OVERLAY_1)
-            .setSlotOverlay(false, true, GuiTextures.FURNACE_OVERLAY_2)
-            .setSound(GTSoundEntries.ARC)
-            .setProgressBar(PROGRESS_BAR_BOULE, FillDirection.UP_TO_DOWN)
-            .addDataInfo(data -> {
-                int temp = data.getInt("ebf_temp");
-                return LocalizationUtils.format("gtceu.recipe.temperature", FormattingUtil.formatTemperature(temp));
-            })
-            .addDataInfo(data -> {
-                int temp = data.getInt("ebf_temp");
-                ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
-
-                if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
-                    return LocalizationUtils.format("gtceu.recipe.coil.tier",
-                            I18n.get(requiredCoil.getMaterial().getUnlocalizedName()));
-                }
-                return "";
-            })
-            .setUiBuilder((recipe, widgetGroup) -> {
-                int temp = recipe.data.getInt("ebf_temp");
-                List<List<ItemStack>> items = new ArrayList<>();
-                items.add(GTCEuAPI.HEATING_COILS.entrySet().stream()
-                        .filter(coil -> coil.getKey().getCoilTemperature() >= temp)
-                        .map(coil -> new ItemStack(coil.getValue().get())).toList());
-                widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
-                        widgetGroup.getSize().width - 25, widgetGroup.getSize().height - 32, false, false));
-            });
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.DOWN, PROGRESS_BAR_BOULE))
+                    .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.HEATING_OVERLAY_1)
+                    .setItemSlotOverlay(IO.OUT, 0, GTGuiTextures.FURNACE_OVERLAY_2)
+                    .addRecipeUIModifier(GTRecipeUIModifiers.TEMP_COIL_INFO))
+            .setSound(GTSoundEntries.ARC);
 
     public static final GTRecipeType SUPER_BOILER = GTRecipeTypes
-            .register("super_boiler", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("super_boiler"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 1, 1)
             .setSound(GTSoundEntries.FURNACE)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_FUEL.get(true), FillDirection.DOWN_TO_UP);
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_BOILER_FUEL_STEEL));
 
     public static final GTRecipeType PASTORAL_ENGINE_RECIPES = GTRecipeTypes
-            .register("pastoral_engine", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("pastoral_engine"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 1, 0, 1)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
             .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType ORE_PROCESSING_GAS = GTRecipeTypes
-            .register("ore_processing_gas", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("ore_processing_gas"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 9, 2, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-            .setSound(TFGSounds.GEOLOGIC_VULCANIZER)
-            .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.1"))
-            .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.2"));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .addRecipeUIModifier(RecipeUIModifier.textLine(Text.lang("tfg.gui.ore_processing_gas.optimal_ratio.1")))
+                    .addRecipeUIModifier(RecipeUIModifier.textLine(Text.lang("tfg.gui.ore_processing_gas.optimal_ratio.2"))))
+            .setSound(TFGSounds.GEOLOGIC_VULCANIZER);
 
     // While oxygen distribution recipes are running the room is oxygenated.
     public static final GTRecipeType OXYGEN_DISTRIBUTION = GTRecipeTypes
-            .register("oxygen_distribution", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("oxygen_distribution"), GTRecipeTypes.ELECTRIC)
             .setMaxIOSize(0, 0, 1, 0)
             .setEUIO(IO.IN)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR))
             .setSound(GTSoundEntries.COOLING);
 
     // While space heating recipes are running the bubble has safe temperature.
     public static final GTRecipeType SPACE_HEATING = GTRecipeTypes
-            .register("space_heating", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("space_heating"), GTRecipeTypes.ELECTRIC)
             //.setMaxIOSize(0, 0, 0, 0)
             .setEUIO(IO.IN)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.DOWN_TO_UP)
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20,
+                    ProgressDrawable.Direction.UP, GTGuiTextures.PROGRESS_BAR_BOILER_HEAT)))
             .setSound(GTSoundEntries.COOLING);
 
     // While gravity emission recipes are running the bubble has normal gravity.
     public static final GTRecipeType GRAVITY_EMISSION = GTRecipeTypes
-            .register("gravity_emission", GTRecipeTypes.ELECTRIC)
+            .register(TFGCore.id("gravity_emission"), GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR))
             .setSound(GTSoundEntries.COOLING);
 
     public static final GTRecipeType ME_ASSEMBLER = GTRecipeTypes
-            .register("me_assembler", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("me_assembler"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(9, 1, 3, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.ASSEMBLER)
             .setHasResearchSlot(true)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
-            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.me_assembler.budding_hint"))
-            .setUiBuilder((recipe, widgetGroup) -> {
-                int maxWidth = (widgetGroup.getSize().width - 40) / 2;
-                int outX = maxWidth + 40 + (maxWidth - 26) / 2 + 4;
-                int outY = (widgetGroup.getSize().height - 26) / 2 + 4;
-
-                List<ItemStack> sticks = new ArrayList<>();
-                for (RecipeCondition<?> condition : recipe.conditions) {
-                    if (condition instanceof ResearchCondition research) {
-                        for (ResearchData.ResearchEntry entry : research.getData()) {
-                            sticks.add(entry.getDataItem());
-                        }
-                    }
-                }
-                if (!sticks.isEmpty()) {
-                    widgetGroup.addWidget(new SlotWidget(
-                            new CycleItemStackHandler(List.of(sticks)), 0,
-                            outX, outY + 1, false, false)
-                            .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
-                }
-
-                List<ItemStack> buddings = new ArrayList<>();
-                for (int t = 1; t <= 4; t++) {
-                    buddings.add(new ItemStack(TFGPredicates.getBuddingBlockForTier(t)));
-                }
-                widgetGroup.addWidget(new SlotWidget(
-                        new CycleItemStackHandler(List.of(buddings)), 0,
-                        outX, outY + 30, false, false)
-                        .setBackground(GuiTextures.SLOT));
-            });
+            .UI(builder -> builder
+                    .setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER)
+                    .addRecipeUIModifier(((recipe, widget) -> widget.textComponents.child(
+                            Text.lang("tfg.recipe.me_assembler.budding_hint").asWidget())))
+                    .addRecipeUIModifier(TFGReipeUIModifiers.ME_ASSEMBLER));
 
     public static final GTRecipeType BUDDING_CHARGE_RECIPES = GTRecipeTypes
-            .register("budding_charger", GTRecipeTypes.MULTIBLOCK)
+            .register(TFGCore.id("budding_charger"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 0, 1, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.COMPRESSOR)
-            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.budding_charge",
-                    data.getInt("budding_charge")))
-            .setUiBuilder((recipe, widgetGroup) -> {
-                if (!recipe.data.contains("budding_max_tier"))
-                    return;
-                int tier = recipe.data.getInt("budding_max_tier");
-                Block block = TFGPredicates.getBuddingBlockForTier(tier);
-
-                List<List<ItemStack>> items = new ArrayList<>();
-                items.add(List.of(new ItemStack(block)));
-
-                widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
-                        widgetGroup.getSize().width - 50,
-                        widgetGroup.getSize().height - 32,
-                        false, false));
-            })
-            .addDataInfo(data -> {
-                if (!data.contains("budding_max_tier"))
-                    return "";
-                return LocalizationUtils.format("tfg.recipe.budding_max_tier_label");
-            })
-            .addDataInfo(data -> {
-                if (!data.contains("budding_max_tier"))
-                    return "";
-                return LocalizationUtils.format("tfg.budding_tier." + data.getInt("budding_max_tier"));
-            });
+            .UI(builder -> builder
+                    .setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .addRecipeUIModifier((recipe, widget) -> widget.textComponents.child(Text.lang("tfg.recipe.budding_charge", recipe.data.getInt("budding_charge")).asWidget()))
+                    .addRecipeUIModifier(TFGReipeUIModifiers.BUDDING_CHARGER));
 }

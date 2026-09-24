@@ -42,8 +42,8 @@ dependencies {
     modImplementation("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
-    modImplementation("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
-    modImplementation("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
+    modImplementation ("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
+    modCompileOnly ("brachy.modularui:modularui-mc1.20.1:${mui_version}")
 
     // KJS
     modImplementation "maven.modrinth:rhino:2001.2.2-build.18+forge"
@@ -182,7 +182,7 @@ dependencies {
     // Oculus, 13 aug 2026
     modImplementation "maven.modrinth:embeddium:0.3.31+mc1.20.1"
     modImplementation "maven.modrinth:oculus:1.20.1-1.8.0"
-    
+
     // Building Gadgets, Aug 5 2025
     modImplementation("curse.maven:building-gadgets-298187:6850495") { transitive = false }
 }

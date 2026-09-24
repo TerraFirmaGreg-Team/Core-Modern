@@ -8,21 +8,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
-import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,18 +29,19 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
+
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.NetworkSenderConfigEntry;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 
 public class InterplanetaryItemLauncherMachine extends WorkableElectricMultiblockMachine
-        implements ILogisticsNetworkSender, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            InterplanetaryItemLauncherMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
+        implements ILogisticsNetworkSender {
 
     protected TickableSubscription tickSubscription;
 
@@ -55,19 +50,14 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     private final List<RailgunItemBusMachine> itemInputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
 
-    private RailgunAmmoLoaderMachine ammoLoaderPart;
+    private ItemBusPartMachine ammoLoaderPart;
 
-    public InterplanetaryItemLauncherMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public InterplanetaryItemLauncherMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     public InterplanetaryItemLauncherMachine getMachine() {
         return this;
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 
     @Override
@@ -94,19 +84,19 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public void onMachineRemoved() {
+    public void onMachineDestroyed() {
         if (!isRemote())
             getLogisticsNetwork().destroyPart(this);
     }
 
     @Override
     public boolean isMachineInvalid() {
-        return !isFormed() || isInValid();
+        return !isFormed() || isRemoved();
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         // Collect multiblock parts
         List<IEnergyContainer> energyHatches = new ArrayList<>();
         itemInputs.clear();
@@ -116,16 +106,15 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 energyHatches.add(energyHatch.energyContainer);
             }
 
-            if (part instanceof RailgunAmmoLoaderMachine ammo) {
+            if (part instanceof ItemBusPartMachine ammo) {
                 ammoLoaderPart = ammo;
             }
 
             if (part instanceof RailgunItemBusMachine bus) {
                 itemInputs.add(bus);
                 bus.getInventory()
-                        .addChangedListener(() -> lastActiveTime[IntCircuitBehaviour
-                                .getCircuitConfiguration(bus.getCircuitInventory().getStackInSlot(0))] = Objects
-                                        .requireNonNull(getLevel()).getGameTime());
+                        .addChangedListener(() -> lastActiveTime[bus.getCircuitSlot().getCurrentCircuit()] = Objects
+                                .requireNonNull(getLevel()).getGameTime());
             }
         }
 
@@ -134,8 +123,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(@NotNull String substructureName) {
+        super.invalidateStructure(substructureName);
         energyInputs = null;
         ammoLoaderPart = null;
         itemInputs.clear();
@@ -173,8 +162,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             if (ammoLoaderPart.getInventory().isEmpty())
                 break;
             var withCircuit = itemInputs.stream()
-                    .filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(
-                            c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory()
+                    .filter((c) -> c.getCircuitSlot().getCurrentCircuit() == config.getSenderDistinctInventory()
                             && c.isWorkingEnabled() && !c.getInventory().isEmpty())
                     .toList();
             if (withCircuit.isEmpty() || config.getReceiverPartID() == null)
@@ -195,8 +183,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
         List<ItemStack> itemsToExtract = new ArrayList<>();
         var itemBuses = itemInputs.stream()
-                .filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(
-                        c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory()
+                .filter((c) -> c.getCircuitSlot().getCurrentCircuit() == config.getSenderDistinctInventory()
                         && c.isWorkingEnabled() && !c.getInventory().isEmpty())
                 .toList();
         if (itemBuses.isEmpty())
@@ -214,7 +201,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         } else if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.REDSTONE_SIGNAL) {
             boolean hasAnySignal = false;
             for (var bus : itemBuses) {
-                if (Objects.requireNonNull(getLevel()).hasNeighborSignal(bus.getPos())) {
+                if (Objects.requireNonNull(getLevel()).hasNeighborSignal(bus.getBlockPos())) {
                     hasAnySignal = true;
                     break;
                 }
@@ -280,19 +267,15 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
-        MultiblockDisplayText.builder(textList, isFormed())
-                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addWorkingStatusLine();
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
 
         if (energyInputs != null) {
-            textList.add(Component.literal("Power stored: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyStored()))));
-            textList.add(Component.literal("Power capacity: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyCapacity()))));
+            widgets.add(Text.str("Power stored: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyStored()))).asWidget());
+            widgets.add(Text.str("Power capacity: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyCapacity()))).asWidget());
         }
 
-        for (var part : this.getParts()) {
-            part.addMultiText(textList);
-        }
+        return widgets;
     }
 
     private boolean tryExtractFromCircuitInventory(List<ItemStack> toExtract, int circuit, boolean simulated) {
@@ -301,7 +284,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             remainingItems.add(v.copy());
         }
         var itemBuses = itemInputs.stream().filter(
-                (c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == circuit
+                (c) -> c.getCircuitSlot().getCurrentCircuit() == circuit
                         && c.isWorkingEnabled())
                 .toList();
         for (RailgunItemBusMachine bus : itemBuses) {
@@ -331,7 +314,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     private void launchEffects() {
         if (getLevel() instanceof ServerLevel serverLevel) {
-            BlockPos basePos = this.getPos();
+            BlockPos basePos = this.getBlockPos();
             BlockState state = this.getBlockState();
             Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
 

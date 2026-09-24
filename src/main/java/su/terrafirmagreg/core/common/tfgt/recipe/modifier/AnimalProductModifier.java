@@ -75,6 +75,6 @@ public class AnimalProductModifier {
         if (machine instanceof PastoralEngineMachine pastoral) {
             return pastoral.getFormedBoundingBox();
         }
-        return new AABB(machine.getPos()).inflate(2.5);
+        return new AABB(machine.getBlockPos()).inflate(2.5);
     }
 }

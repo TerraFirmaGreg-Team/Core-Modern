@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.gregtechceu.gtceu.api.machine.steam.SteamBoilerMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 
 import net.minecraft.tags.FluidTags;
+import net.minecraftforge.fluids.FluidStack;
 
 @Mixin(value = SteamBoilerMachine.class, remap = false)
 public abstract class SteamBoilerMachineMixin {
@@ -18,9 +18,9 @@ public abstract class SteamBoilerMachineMixin {
     /**
      * Allow TFC river water in steam boilers
      */
-    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableFluidTank;setFilter(Ljava/util/function/Predicate;)Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableFluidTank;"), remap = false)
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/machine/trait/notifiable/NotifiableFluidTank;setFilter(Ljava/util/function/Predicate;)Lcom/gregtechceu/gtceu/api/machine/trait/notifiable/NotifiableFluidTank;"), remap = false)
     private NotifiableFluidTank tfg$init$notifiableFluidTank$setFilter(NotifiableFluidTank instance,
-            Predicate<FluidStack> fluidStackPredicate) {
+            Predicate<FluidStack> filter) {
         return instance.setFilter(fluidStack -> fluidStack.getFluid().is(FluidTags.WATER));
     }
 }

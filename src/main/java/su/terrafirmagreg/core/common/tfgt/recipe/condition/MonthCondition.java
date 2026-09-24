@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
@@ -102,7 +102,7 @@ public class MonthCondition extends RecipeCondition<MonthCondition> {
      */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
-        var machine = recipeLogic.machine.self();
+        var machine = recipeLogic.getMachine();
         var level = machine.getLevel();
         if (!(level instanceof ServerLevel serverLevel))
             return false;
