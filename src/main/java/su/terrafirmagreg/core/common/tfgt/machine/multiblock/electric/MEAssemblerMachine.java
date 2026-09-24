@@ -84,7 +84,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
         BlockPos buddingBlockPos = null;
         Block buddingBlock = null;
 
-        for (var entry: cache.long2ObjectEntrySet()) {
+        for (var entry : cache.long2ObjectEntrySet()) {
             if (TFGPredicates.isBudding(entry.getValue().getBlockState())) {
                 buddingBlock = entry.getValue().getBlockState().getBlock();
                 buddingBlockPos = BlockPos.of(entry.getLongKey());
@@ -226,7 +226,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     // Fully custom Modifier function so you can't speed up through OC, Batchmode is always on because of the insane bonus
     // speed you can get and the speed bonus through the Budding
     public static ModifierFunction buddingModifier(MetaMachine machine,
-                                                   GTRecipe recipe) {
+            GTRecipe recipe) {
 
         if (!(machine instanceof MEAssemblerMachine meMachine)) {
             return RecipeModifier.nullWrongType(MEAssemblerMachine.class, machine);

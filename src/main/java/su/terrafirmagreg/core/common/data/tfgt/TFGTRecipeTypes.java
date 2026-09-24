@@ -10,14 +10,15 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 import com.gregtechceu.gtceu.common.recipe.gui.GTRecipeUIModifiers;
+import com.gregtechceu.gtceu.utils.ResearchManager;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.drawable.progress.ProgressDrawable;
-import com.gregtechceu.gtceu.utils.ResearchManager;
 import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGSounds;
+import su.terrafirmagreg.core.common.tfgt.ui.TFGReipeUIModifiers;
 
 public class TFGTRecipeTypes {
 
@@ -232,68 +233,19 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.ASSEMBLER)
             .setHasResearchSlot(true)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
-            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.me_assembler.budding_hint"))
-            .setUiBuilder((recipe, widgetGroup) -> {
-                int maxWidth = (widgetGroup.getSize().width - 40) / 2;
-                int outX = maxWidth + 40 + (maxWidth - 26) / 2 + 4;
-                int outY = (widgetGroup.getSize().height - 26) / 2 + 4;
-
-                List<ItemStack> sticks = new ArrayList<>();
-                for (RecipeCondition<?> condition : recipe.conditions) {
-                    if (condition instanceof ResearchCondition research) {
-                        for (ResearchData.ResearchEntry entry : research.getData()) {
-                            sticks.add(entry.getDataItem());
-                        }
-                    }
-                }
-                if (!sticks.isEmpty()) {
-                    widgetGroup.addWidget(new SlotWidget(
-                            new CycleItemStackHandler(List.of(sticks)), 0,
-                            outX, outY + 1, false, false)
-                            .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
-                }
-
-                List<ItemStack> buddings = new ArrayList<>();
-                for (int t = 1; t <= 4; t++) {
-                    buddings.add(new ItemStack(TFGPredicates.getBuddingBlockForTier(t)));
-                }
-                widgetGroup.addWidget(new SlotWidget(
-                        new CycleItemStackHandler(List.of(buddings)), 0,
-                        outX, outY + 30, false, false)
-                        .setBackground(GuiTextures.SLOT));
-            });
+            .UI(builder -> builder
+                    .setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER)
+                    .addRecipeUIModifier(((recipe, widget) -> widget.textComponents.child(
+                            Text.lang("tfg.recipe.me_assembler.budding_hint").asWidget())))
+                    .addRecipeUIModifier(TFGReipeUIModifiers.ME_ASSEMBLER));
 
     public static final GTRecipeType BUDDING_CHARGE_RECIPES = GTRecipeTypes
             .register(TFGCore.id("budding_charger"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 0, 1, 0)
             .setSound(GTSoundEntries.COMPRESSOR)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.budding_charge",
-                    data.getInt("budding_charge")))
-            .setUiBuilder((recipe, widgetGroup) -> {
-                if (!recipe.data.contains("budding_max_tier"))
-                    return;
-                int tier = recipe.data.getInt("budding_max_tier");
-                Block block = TFGPredicates.getBuddingBlockForTier(tier);
-
-                List<List<ItemStack>> items = new ArrayList<>();
-                items.add(List.of(new ItemStack(block)));
-
-                widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
-                        widgetGroup.getSize().width - 50,
-                        widgetGroup.getSize().height - 32,
-                        false, false));
-            })
-            .addDataInfo(data -> {
-                if (!data.contains("budding_max_tier"))
-                    return "";
-                return LocalizationUtils.format("tfg.recipe.budding_max_tier_label");
-            })
-            .addDataInfo(data -> {
-                if (!data.contains("budding_max_tier"))
-                    return "";
-                return LocalizationUtils.format("tfg.budding_tier." + data.getInt("budding_max_tier"));
-            });
+            .UI(builder -> builder
+                    .setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .addRecipeUIModifier((recipe, widget) -> widget.textComponents.child(Text.lang("tfg.recipe.budding_charge", recipe.data.getInt("budding_charge")).asWidget()))
+                    .addRecipeUIModifier(TFGReipeUIModifiers.BUDDING_CHARGER));
 }

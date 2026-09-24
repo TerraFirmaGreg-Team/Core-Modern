@@ -3,12 +3,12 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
@@ -75,7 +75,7 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
         BlockPos buddingBlockPos = null;
         Block buddingBlock = null;
 
-        for (var entry: cache.long2ObjectEntrySet()) {
+        for (var entry : cache.long2ObjectEntrySet()) {
             if (TFGPredicates.isBudding(entry.getValue().getBlockState())) {
                 buddingBlock = entry.getValue().getBlockState().getBlock();
                 buddingBlockPos = BlockPos.of(entry.getLongKey());

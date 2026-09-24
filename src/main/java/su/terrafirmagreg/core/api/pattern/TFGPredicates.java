@@ -8,9 +8,9 @@ import com.gregtechceu.gtceu.api.multiblock.predicates.PredicateBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import appeng.core.definitions.AEBlocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class TFGPredicates {
 
