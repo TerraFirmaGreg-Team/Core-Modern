@@ -271,7 +271,6 @@
         "common.tfc.QuernBlockEntityMixin",
         "common.tfc.QuernBlockMixin",
         "common.tfc.TFCFallingBlockEntityMixin",
-        "common.tfc.entities.TFCWolfMixin",
         "common.tfc.entities.ThrownJavelinMixin",
         "common.tfc.food.FoodDataDecodeMixin",
         "common.tfc.food.FoodDataEncodeMixin",
