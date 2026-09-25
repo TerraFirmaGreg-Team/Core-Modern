@@ -29,6 +29,7 @@ import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.dries007.tfc.compat.jei.category.*;
 import net.dries007.tfc.util.LampFuel;
 import net.dries007.tfc.util.Metal;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -51,7 +52,6 @@ import net.dries007.tfc.client.screen.CrucibleScreen;
 import net.dries007.tfc.client.screen.FirepitScreen;
 import net.dries007.tfc.client.screen.GrillScreen;
 import net.dries007.tfc.client.screen.KnappingScreen;
-import net.dries007.tfc.client.screen.NutritionScreen;
 import net.dries007.tfc.client.screen.PotScreen;
 import net.dries007.tfc.client.screen.SewingTableScreen;
 import net.dries007.tfc.common.TFCTags;
@@ -95,6 +95,7 @@ import net.dries007.tfc.compat.jei.transfer.PotTransferInfo;
 import net.dries007.tfc.compat.jei.transfer.WeldingRecipeTransferInfo;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.KnappingType;
+import su.terrafirmagreg.core.client.screen.TFGNutritionScreen;
 
 @JeiPlugin
 public final class JEIIntegration implements IModPlugin
@@ -294,9 +295,10 @@ public final class JEIIntegration implements IModPlugin
 
         // Fix inventory tab button overlap
         registry.addGuiContainerHandler(InventoryScreen.class, new TFCInventoryGuiHandler<>());
+        registry.addGuiContainerHandler(CreativeModeInventoryScreen.class, new TFCInventoryGuiHandler<>());
         registry.addGuiContainerHandler(CalendarScreen.class, new TFCInventoryGuiHandler<>());
         registry.addGuiContainerHandler(ClimateScreen.class, new TFCInventoryGuiHandler<>());
-        registry.addGuiContainerHandler(NutritionScreen.class, new TFCInventoryGuiHandler<>());
+        registry.addGuiContainerHandler(TFGNutritionScreen.class, new TFCInventoryGuiHandler<>());
     }
 
     @Override
