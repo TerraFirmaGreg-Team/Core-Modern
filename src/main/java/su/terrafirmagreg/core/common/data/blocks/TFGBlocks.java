@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.Collections;
 import java.util.function.Supplier;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -21,6 +22,7 @@ import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
@@ -280,15 +282,42 @@ public final class TFGBlocks {
 
     public static final BlockEntry<GasBurnerBlock> GAS_BURNER = TFGCore.REGISTRATE.block("gas_burner",
             p -> new GasBurnerBlock(ExtendedProperties.of(p)
-                    .sound(SoundType.STONE)
-                    .strength(3)
-                    .mapColor(MapColor.QUARTZ)
+                    .sound(SoundType.LANTERN)
+                    .strength(5, 10)
+                    .mapColor(MapColor.COLOR_BLACK)
                     .noOcclusion()
                     .blockEntity(TFGBlockEntities.GAS_BURNER)
+                    .lightLevel(state -> state.getValue(GasBurnerBlock.LIT) ? 12 : 0)
                     .serverTicks(GasBurnerBlockEntity::serverTick)))
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                for (int level = 0; level <= Collections.max(GasBurnerBlock.LEVEL.getPossibleValues()); level++) {
+
+                    for (boolean lit : GasBurnerBlock.LIT.getPossibleValues()) {
+
+                        String litString = lit ? "lit" : "unlit";
+                        var model = prov.models().withExistingParent(ctx.getName() + "/gas_burner_" + level + "_" + litString, TFGCore.id("block/gas_burner_parent"))
+                                .texture("flame", TFGCore.id("block/gas_burner/gas_burner_" + litString))
+                                .texture("indicator", TFGCore.id("block/gas_burner/level_indicator_" + level));
+
+                        for (Direction dir : Direction.Plane.HORIZONTAL) {
+                            builder.partialState()
+                                    .with(GasBurnerBlock.LEVEL, level)
+                                    .with(GasBurnerBlock.LIT, lit)
+                                    .with(GasBurnerBlock.FACING, dir.getOpposite())
+                                    .modelForState()
+                                    .modelFile(model)
+                                    .rotationY((int) dir.toYRot())
+                                    .addModel();
+                        }
+                    }
+                }
+            })
+
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/" + ctx.getName() + "/gas_burner_0_unlit")))
+            .build()
             .register();
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {

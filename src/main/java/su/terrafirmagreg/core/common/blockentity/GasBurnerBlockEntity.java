@@ -48,8 +48,8 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     public static final int SLOT_FLUID_CONTAINER_OUT = 1;
     public static final int SLOTS = 2;
     public static final int CAPACITY = 4000;
-    public static final int BURN_TICKS_PER_CYCLE = 100;
-    public static final int MB_PER_CYCLE = 3;
+    public static final int BURN_TICKS_PER_CYCLE = 10;
+    public static final int MB_PER_CYCLE = 100;
 
     private static final Component NAME = Component.translatable(TFGCore.MOD_ID + ".block_entity.gas_burner");
 
@@ -61,11 +61,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             burner.updateFluidIOSlots();
         }
 
-        boolean isRaining = level.isRainingAt(pos.above()) || level.isRainingAt(pos.above(2));
         if (state.getValue(GasBurnerBlock.HEAT) > 0) {
-            if (isRaining && level.random.nextFloat() < 0.15F) {
-                Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
-            }
             int heatLevel = Mth.clamp((int) (burner.temperature / Heat.maxVisibleTemperature() * 6) + 1, 1, 7);
             if (heatLevel != state.getValue(GasBurnerBlock.HEAT)) {
                 level.setBlockAndUpdate(pos, state.setValue(GasBurnerBlock.HEAT, heatLevel));
@@ -85,7 +81,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
         }
 
         if (burner.temperature > 0 || burner.burnTemperature > 0) {
-            float target = HeatCapability.targetDeviceTemp(burner.burnTemperature, 0, isRaining);
+            float target = HeatCapability.targetDeviceTemp(burner.burnTemperature, 0, false);
             burner.temperature = HeatCapability.adjustTempTowards(burner.temperature, target, 10.0f, 1.0f);
 
             HeatCapability.provideHeatTo(level, pos.above(), burner.temperature);
@@ -219,7 +215,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             return true;
         }
         if (consumeFuel()) {
-            level.setBlockAndUpdate(worldPosition, state.setValue(GasBurnerBlock.HEAT, 2));
+            level.setBlockAndUpdate(worldPosition, state.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true));
             return true;
         }
         return false;
@@ -265,7 +261,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
 
     public void extinguish(BlockState state) {
         assert level != null;
-        level.setBlockAndUpdate(worldPosition, state.setValue(GasBurnerBlock.HEAT, 0));
+        level.setBlockAndUpdate(worldPosition, state.setValue(GasBurnerBlock.HEAT, 0).setValue(GasBurnerBlock.LIT, false));
         burnTicks = 0;
         burnTemperature = 0;
         markForSync();
