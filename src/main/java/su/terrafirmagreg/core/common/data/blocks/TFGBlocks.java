@@ -39,6 +39,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -271,6 +273,19 @@ public final class TFGBlocks {
 
     public static final BlockEntry<Block> QUARTZ_CRUCIBLE = TFGCore.REGISTRATE.block("quartz_crucible", Block::new)
             .properties(p -> p.sound(SoundType.STONE).strength(3).mapColor(MapColor.QUARTZ).noOcclusion())
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<GasBurnerBlock> GAS_BURNER = TFGCore.REGISTRATE.block("gas_burner",
+            p -> new GasBurnerBlock(ExtendedProperties.of(p)
+                    .sound(SoundType.STONE)
+                    .strength(3)
+                    .mapColor(MapColor.QUARTZ)
+                    .noOcclusion()
+                    .blockEntity(TFGBlockEntities.GAS_BURNER)
+                    .serverTicks(GasBurnerBlockEntity::serverTick)))
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
