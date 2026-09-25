@@ -142,7 +142,7 @@ public final class TFGTags {
         public static final TagKey<Block> STRUT = createBlockTag("strut");
 
         public static final TagKey<Block> FALLING_CONCUSSIVE = createBlockTag("falling_concussive");
-
+        public static final TagKey<Block> HORNFELS = createBlockTag("hornfels");
         public static final TagKey<Block> UNPOSTER_GROWABLE = createBlockTag("unposter_growable");
 
         // Environment system tags

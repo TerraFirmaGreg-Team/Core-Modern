@@ -7,7 +7,9 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
-@Mixin(targets = "dev.emi.emi.jemi.JemiUtil", remap = false)
+import dev.emi.emi.jemi.JemiUtil;
+
+@Mixin(value = JemiUtil.class, remap = false)
 public class JemiUtilMixin {
 
     @ModifyReturnValue(method = "getHandledMods", at = @At("RETURN"), remap = false)
