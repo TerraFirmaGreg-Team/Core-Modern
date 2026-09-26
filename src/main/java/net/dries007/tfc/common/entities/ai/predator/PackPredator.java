@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.entities.ai.predator;
 
 import com.mojang.serialization.Dynamic;
+import net.dries007.tfc.common.entities.misc.IWolf;
+import net.dries007.tfc.common.entities.predator.TFCWolf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -45,9 +47,9 @@ import net.dries007.tfc.util.calendar.ICalendar;
 
 public class PackPredator extends Predator implements Temptable
 {
-    public static PackPredator createWolf(EntityType<? extends Predator> type, Level level)
+    public static TFCWolf createWolf(EntityType<? extends Predator> type, Level level)
     {
-        return new PackPredator(type, level, false, TFCSounds.TFC_WOLF, true);
+        return new TFCWolf(type, level, false, TFCSounds.TFC_WOLF, true);
     }
     public static PackPredator createHyena(EntityType<? extends Predator> type, Level level)
     {
@@ -64,7 +66,7 @@ public class PackPredator extends Predator implements Temptable
     private boolean howled;
     private long nextFeedTime = Long.MIN_VALUE;
 
-    private final boolean tamable;
+    protected final boolean tamable;
 
     public PackPredator(EntityType<? extends Predator> type, Level level, boolean diurnal, TFCSounds.EntitySound sounds, boolean tamable)
     {
@@ -227,6 +229,9 @@ public class PackPredator extends Predator implements Temptable
                         if (dog != null && level() instanceof ServerLevelAccessor server)
                         {
                             dog.finalizeSpawn(server, level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.CONVERSION, null, null);
+							if (this instanceof IWolf wolf) {
+								dog.setVariant(wolf.getVariant());
+							}
                             dog.setGender(isMale() ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE);
                             if (!wasBaby)
                             {

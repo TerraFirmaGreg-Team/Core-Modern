@@ -11,6 +11,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
+
+import net.dries007.tfc.common.blockentities.*;
+import net.dries007.tfc.common.blocks.devices.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -50,49 +53,12 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
-import net.dries007.tfc.common.blockentities.BellowsBlockEntity;
-import net.dries007.tfc.common.blockentities.BlastFurnaceBlockEntity;
-import net.dries007.tfc.common.blockentities.BloomeryBlockEntity;
-import net.dries007.tfc.common.blockentities.BurningLogPileBlockEntity;
-import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
-import net.dries007.tfc.common.blockentities.CrucibleBlockEntity;
-import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
-import net.dries007.tfc.common.blockentities.GlassBasinBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.HandWheelBlockEntity;
-import net.dries007.tfc.common.blockentities.HotPouredGlassBlockEntity;
-import net.dries007.tfc.common.blockentities.NestBoxBlockEntity;
-import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
-import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
-import net.dries007.tfc.common.blockentities.QuernBlockEntity;
-import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.rotation.PumpBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.TripHammerBlockEntity;
 import net.dries007.tfc.common.blocks.crop.Crop;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
 import net.dries007.tfc.common.blocks.crop.TFCPumpkinBlock;
-import net.dries007.tfc.common.blocks.devices.BarrelRackBlock;
-import net.dries007.tfc.common.blocks.devices.BellowsBlock;
-import net.dries007.tfc.common.blocks.devices.BlastFurnaceBlock;
-import net.dries007.tfc.common.blocks.devices.BloomeryBlock;
-import net.dries007.tfc.common.blocks.devices.BurningLogPileBlock;
-import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
-import net.dries007.tfc.common.blocks.devices.CrucibleBlock;
-import net.dries007.tfc.common.blocks.devices.DoubleIngotPileBlock;
-import net.dries007.tfc.common.blocks.devices.FirepitBlock;
-import net.dries007.tfc.common.blocks.devices.GrillBlock;
-import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
-import net.dries007.tfc.common.blocks.devices.JackOLanternBlock;
-import net.dries007.tfc.common.blocks.devices.LogPileBlock;
-import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
-import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
-import net.dries007.tfc.common.blocks.devices.PlacedItemBlock;
-import net.dries007.tfc.common.blocks.devices.PotBlock;
-import net.dries007.tfc.common.blocks.devices.PowderkegBlock;
-import net.dries007.tfc.common.blocks.devices.QuernBlock;
-import net.dries007.tfc.common.blocks.devices.ScrapingBlock;
-import net.dries007.tfc.common.blocks.devices.SheetPileBlock;
-import net.dries007.tfc.common.blocks.devices.TFCComposterBlock;
 import net.dries007.tfc.common.blocks.plant.KrummholzBlock;
 import net.dries007.tfc.common.blocks.rotation.CrankshaftBlock;
 import net.dries007.tfc.common.blocks.rotation.FluidPumpBlock;
@@ -438,6 +404,11 @@ public final class TFCBlocks
     public static final RegistryObject<Block> TRIP_HAMMER = register("trip_hammer", () -> new TripHammerBlock(ExtendedProperties.of().sound(SoundType.METAL).strength(3f).noOcclusion().pushReaction(PushReaction.DESTROY).blockEntity(TFCBlockEntities.TRIP_HAMMER).serverTicks(TripHammerBlockEntity::serverTick)));
     public static final RegistryObject<Block> STEEL_PIPE = register("steel_pipe", () -> new FluidPipeBlock(ExtendedProperties.of().strength(5f).sound(SoundType.METAL)));
     public static final RegistryObject<Block> STEEL_PUMP = register("steel_pump", () -> new FluidPumpBlock(ExtendedProperties.of().strength(5f).sound(SoundType.METAL).blockEntity(TFCBlockEntities.PUMP).serverTicks(PumpBlockEntity::serverTick).forceSolidOn()));
+
+	public static final RegistryObject<Block> VANE = register("vane", () -> new VaneBlock(ExtendedProperties.of(MapColor.METAL).strength(3).sound(SoundType.METAL).blockEntity(TFCBlockEntities.VANE).requiresCorrectToolForDrops().<VaneBlockEntity>ticks(VaneBlockEntity::serverTick, VaneBlockEntity::clientTick)));
+	public static final RegistryObject<Block> ANEMOMETER = register("anemometer", () -> new AnemometerBlock(ExtendedProperties.of(MapColor.METAL).strength(3).sound(SoundType.METAL).blockEntity(TFCBlockEntities.ANEMOMETER).requiresCorrectToolForDrops().<AnemometerBlockEntity>ticks(AnemometerBlockEntity::serverTick, AnemometerBlockEntity::clientTick)));
+	public static final RegistryObject<Block> CALENDAR_CLOCK = register("calendar_clock", () -> new CalendarClockBlock(ExtendedProperties.of(MapColor.METAL).strength(3).sound(SoundType.METAL).blockEntity(TFCBlockEntities.CALENDAR_CLOCK).requiresCorrectToolForDrops().<CalendarClockBlockEntity>ticks(CalendarClockBlockEntity::serverTick, CalendarClockBlockEntity::clientTick)));
+	public static final RegistryObject<Block> THERMOMETER = register("thermometer", () -> new ThermometerBlock(ExtendedProperties.of(MapColor.METAL).strength(3).sound(SoundType.METAL).blockEntity(TFCBlockEntities.THERMOMETER).requiresCorrectToolForDrops().<ThermometerBlockEntity>serverTicks(ThermometerBlockEntity::serverTick)));
 
     public static final Map<DyeColor, RegistryObject<Block>> DYED_CANDLE_CAKES = Helpers.mapOfKeys(DyeColor.class, color ->
         registerNoItem("candle_cake/" + color.getName(), () -> new TFCCandleCakeBlock(ExtendedProperties.of(MapColor.SAND).randomTicks().noOcclusion().strength(0.5F).sound(SoundType.WOOL).lightLevel(litBlockEmission(3)).blockEntity(TFCBlockEntities.TICK_COUNTER)))

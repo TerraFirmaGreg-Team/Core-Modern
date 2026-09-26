@@ -47,6 +47,7 @@ import net.minecraftforge.common.Tags;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
 import su.terrafirmagreg.core.common.data.TFGPlant;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 @SuppressWarnings("unused")
@@ -114,7 +115,7 @@ public class TFGBlocks_Earth {
                     .explosionResistance(2)
                     .requiresCorrectToolForDrops()
                     .pushReaction(PushReaction.IGNORE))
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL, TFGTags.Blocks.HORNFELS)
             .simpleItem()
             .register();
 
@@ -126,7 +127,7 @@ public class TFGBlocks_Earth {
                     .explosionResistance(2)
                     .requiresCorrectToolForDrops()
                     .pushReaction(PushReaction.IGNORE))
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL, TFGTags.Blocks.HORNFELS)
             .simpleItem()
             .register();
 
@@ -138,7 +139,7 @@ public class TFGBlocks_Earth {
                     .explosionResistance(2)
                     .requiresCorrectToolForDrops()
                     .pushReaction(PushReaction.IGNORE))
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL, TFGTags.Blocks.HORNFELS)
             .simpleItem()
             .register();
 

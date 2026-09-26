@@ -52,7 +52,7 @@ import net.dries007.tfc.util.Metal;
 
 public final class PatchouliIntegration
 {
-    public static final ResourceLocation BOOK_ID = Helpers.identifier("field_guide");
+    public static final ResourceLocation BOOK_ID = ResourceLocation.fromNamespaceAndPath("tfg", "field_guide");
     public static final ResourceLocation TEXTURE = Helpers.identifier("textures/gui/book/icons.png");
 
     private static final Logger LOGGER = LogUtils.getLogger();

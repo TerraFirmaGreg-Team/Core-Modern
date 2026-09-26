@@ -25,7 +25,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 @OnlyIn(Dist.CLIENT)
 @Mixin(value = QuestScreen.class, remap = false)
 public abstract class QuestScreenMixin {
-    private static final String GUIDE_RL = "tfc:field_guide";
+    private static final String GUIDE_RL = "tfg:field_guide";
 
     @Inject(method = "handleClick", at = @At(value = "HEAD"), cancellable = true)
     private void catchTfcFieldGuidePaths(String scheme, String path, CallbackInfoReturnable<Boolean> cir) {

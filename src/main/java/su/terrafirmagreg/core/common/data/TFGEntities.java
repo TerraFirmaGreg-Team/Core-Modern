@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.data;
 
 import com.tterrag.registrate.util.entry.EntityEntry;
 
+import net.dries007.tfc.client.model.entity.TFCWolfModel;
 import net.minecraft.client.model.CamelModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -35,7 +36,6 @@ import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSea
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongooseModel;
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongooseRenderer;
-import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFGWolfModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
@@ -210,7 +210,7 @@ public class TFGEntities {
         event.registerLayerDefinition(TFCJerboaModel.LAYER_LOCATION, TFCJerboaModel::createBodyLayer);
         event.registerLayerDefinition(TFCLemmingModel.LAYER_LOCATION, TFCLemmingModel::createBodyLayer);
         event.registerLayerDefinition(TFCMongooseModel.LAYER_LOCATION, TFCMongooseModel::createBodyLayer);
-        event.registerLayerDefinition(TFGWolfModel.LAYER_LOCATION, TFGWolfModel::createBodyLayer);
+        event.registerLayerDefinition(TFCWolfModel.LAYER_LOCATION, TFCWolfModel::createBodyLayer);
         event.registerLayerDefinition(TFGFoxModel.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(CubeDeformation.NONE), 48, 32));
         event.registerLayerDefinition(TFGFoxCollarLayer.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(new CubeDeformation(0.01f)), 48, 32));
         event.registerLayerDefinition(TFGSlimeModel.LAYER_LOCATION, TFGSlimeModel::createInnerBodyLayer);

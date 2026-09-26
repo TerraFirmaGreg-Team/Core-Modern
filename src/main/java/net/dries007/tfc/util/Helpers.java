@@ -72,6 +72,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -89,6 +90,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
@@ -169,8 +171,6 @@ public final class Helpers
     private static final int PRIME_X = 501125321;
     private static final int PRIME_Y = 1136930381;
 
-    private static final boolean JEI = !BOOTSTRAP_ENVIRONMENT && ModList.get().isLoaded("jei");
-
     @Nullable private static RecipeManager CACHED_RECIPE_MANAGER = null;
 
     /**
@@ -204,11 +204,6 @@ public final class Helpers
     public static ResourceLocation resourceLocation(String domain, String path)
     {
         return new ResourceLocation(domain, path);
-    }
-
-    public static boolean isJEIEnabled()
-    {
-        return JEI;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -1398,6 +1393,15 @@ public final class Helpers
         return (num + div - 1) / div;
     }
 
+	public static long ceilDiv(long x, long y) {
+		final long q = x / y;
+		// if the signs are the same and modulo not zero, round up
+		if ((x ^ y) >= 0 && (q * y != x)) {
+			return q + 1;
+		}
+		return q;
+	}
+
     public static void openScreen(ServerPlayer player, MenuProvider containerSupplier)
     {
         NetworkHooks.openScreen(player, containerSupplier);
@@ -1466,6 +1470,33 @@ public final class Helpers
         }
         return perfectMatchDet(matrices, size);
     }
+
+	@Nullable
+	public static BlockState getSupportedDirectionalStateForPlacement(Block block, BlockPlaceContext context, boolean horizontal)
+	{
+		BlockState blockstate = block.defaultBlockState();
+		final LevelReader levelreader = context.getLevel();
+		final BlockPos blockpos = context.getClickedPos();
+
+		final Direction[] looking = context.getNearestLookingDirections();
+
+		for (Direction direction : looking)
+		{
+			// if it can not be placed on the vertical axis, and we're checking a vertical axis
+			if (horizontal && direction.getAxis().isVertical())
+			{
+				continue;
+			}
+			Direction direction1 = direction.getOpposite();
+			blockstate = blockstate.setValue(horizontal ? BlockStateProperties.HORIZONTAL_FACING : BlockStateProperties.FACING, direction1);
+			if (blockstate.canSurvive(levelreader, blockpos))
+			{
+				return blockstate;
+			}
+		}
+
+		return null;
+	}
 
     /**
      * Adds a tooltip based on an inventory, listing out the items inside.
