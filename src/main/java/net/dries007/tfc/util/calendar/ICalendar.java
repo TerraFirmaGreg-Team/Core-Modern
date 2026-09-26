@@ -27,6 +27,13 @@ public interface ICalendar
     /* This needs to be a float, otherwise there are ~62 minutes per hour */
     float TICKS_IN_MINUTE = TICKS_IN_HOUR / 60f;
 
+	/**
+	 * Use if you're specifically trying to measure calendar ticks in a day, not player ticks.
+	 * Most use cases want player ticks instead.
+	 */
+	int CALENDAR_TICKS_IN_HOUR = 1000;
+	int CALENDAR_TICKS_IN_DAY = CALENDAR_TICKS_IN_HOUR * HOURS_IN_DAY;
+
     /* Delta Calculation Methods */
 
     static long getCalendarTicksInMonth(int daysInMonth)
@@ -82,6 +89,16 @@ public interface ICalendar
     {
         return 1 + (int) ((time / TICKS_IN_DAY) % daysInMonth);
     }
+
+	static float getFractionOfHour(long calendarTick)
+	{
+		return (float) (calendarTick % CALENDAR_TICKS_IN_HOUR) / CALENDAR_TICKS_IN_HOUR;
+	}
+
+	static float getFractionOfDay(long calendarTick)
+	{
+		return (float) (calendarTick % CALENDAR_TICKS_IN_DAY) / CALENDAR_TICKS_IN_DAY;
+	}
 
     static float getFractionOfMonth(long time, long daysInMonth)
     {
@@ -251,7 +268,26 @@ public interface ICalendar
         return ICalendar.getDayOfMonth(getCalendarTicks(), getCalendarDaysInMonth());
     }
 
-    /**
+	/**
+	 * @return The progress through the current day from the calendar time. A value between {@code [0, 1]} where {@code 0} indicates midnight,
+	 * and {@code 0.5} indicates noon.
+	 */
+	default float getCalendarFractionOfHour()
+	{
+		return ICalendar.getFractionOfHour(getCalendarTicks());
+	}
+
+	/**
+	 * @return The progress through the current day from the calendar time. A value between {@code [0, 1]} where {@code 0} indicates midnight,
+	 * and {@code 0.5} indicates noon.
+	 */
+	default float getCalendarFractionOfDay()
+	{
+		return ICalendar.getFractionOfDay(getCalendarTicks());
+	}
+
+
+	/**
      * Returns the progress through the month from a calendar time (i.e. 0 - 1)
      */
     default float getCalendarFractionOfMonth()

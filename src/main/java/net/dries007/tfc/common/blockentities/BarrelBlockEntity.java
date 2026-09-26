@@ -69,7 +69,7 @@ import net.dries007.tfc.util.calendar.CalendarTransaction;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 
-public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback
+public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback, IRecipeTimer
 {
     public static final int SLOT_FLUID_CONTAINER_IN = 0;
     public static final int SLOT_FLUID_CONTAINER_OUT = 1;
@@ -371,6 +371,22 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     {
         lastUpdateTick = tick;
     }
+
+	@Override
+	public int getRecipeDuration()
+	{
+		if (level == null)
+			return 0;
+
+		@Nullable SealedBarrelRecipe recipe = level.getRecipeManager().getRecipeFor(TFCRecipeTypes.BARREL_SEALED.get(), inventory, level).orElse(null);
+		return recipe != null ? recipe.getDuration() : 0;
+	}
+
+	@Override
+	public long getRemainingTime()
+	{
+		return getRemainingTicks();
+	}
 
     @Override
     public void ejectInventory()

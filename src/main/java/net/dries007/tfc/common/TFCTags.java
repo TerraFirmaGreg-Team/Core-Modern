@@ -120,6 +120,8 @@ public class TFCTags
 		public static final TagKey<Block> JAR_SHELVES = create("jar_shelves");
 		public static final TagKey<Block> BOOKSHELVES = create("bookshelves");
 		public static final TagKey<Block> CROPS = create("crops");
+		public static final TagKey<Block> THERMOMETER_READABLE = create("thermometer_readable");
+		public static final TagKey<Block> CLOCK_READABLE = create("clock_readable");
 
 		private static TagKey<Block> create(String id)
         {

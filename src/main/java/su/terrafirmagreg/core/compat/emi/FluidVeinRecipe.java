@@ -36,7 +36,6 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.worldgen.ClimateWeightModifier;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidRegistry;
-import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 
 public class FluidVeinRecipe implements EmiRecipe {
 
@@ -56,6 +55,8 @@ public class FluidVeinRecipe implements EmiRecipe {
         HAS_SURFACE_INDICATOR.put(TFGCore.id("oil_spout_ocean"), 3);
         HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_surface_indicator"), 1);
         HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_ocean"), 1);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_swamp"), 1);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_volcanic"), 1);
         HAS_SURFACE_INDICATOR.put(TFGCore.id("spring_water"), 1);
     }
 
@@ -74,8 +75,6 @@ public class FluidVeinRecipe implements EmiRecipe {
     private final HolderSet<Biome> biomeHolder;
     @Nullable
     private final List<ClimateWeightModifier> climateWeight;
-
-    private boolean onLegacyWorldgen;
 
     public FluidVeinRecipe(Map.Entry<ResourceLocation, BedrockFluidDefinition> entry) {
 
@@ -96,8 +95,6 @@ public class FluidVeinRecipe implements EmiRecipe {
         weight = def.getWeight();
         biomeHolder = biomeWeight.biomes.get();
         climateWeight = matchClimateDefinition();
-
-        onLegacyWorldgen = WorldgenVersionData.OVERWORLD_VERSION != WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
     }
 
     private List<ClimateWeightModifier> matchClimateDefinition() {

@@ -26,6 +26,7 @@ import net.dries007.tfc.world.BiomeNoiseSampler;
 import net.dries007.tfc.world.river.RiverBlendType;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.shore.ShoreBlendType;
+import su.terrafirmagreg.core.world.WorldgenData;
 
 /**
  * Represents all extra data TFC attaches to biomes, which is not present in the {@link Biome} class, nor is it data driven.
@@ -50,9 +51,7 @@ public class BiomeExtension
 	private final boolean hasAtolls;
 	@Getter
 	private final float centeredFeatureFrequency;
-	@Getter
 	private final int centeredFeatureBaseHeight;
-	@Getter
 	private final int centeredFeatureScaleHeight;
 	private final boolean centeredFeatureIce;
 	@Getter
@@ -156,6 +155,22 @@ public class BiomeExtension
 		return hasStratovolcanoes;
 	}
 
+	public int getCenteredFeatureBaseHeight()
+	{
+		if (!isVolcanoBiome())
+			return centeredFeatureBaseHeight;
+
+		return (int) Math.round(centeredFeatureBaseHeight * WorldgenData.MOUNTAIN_SCALING.volcanoHeightScale());
+	}
+
+	public int getCenteredFeatureScaleHeight()
+	{
+		if (!isVolcanoBiome())
+			return centeredFeatureScaleHeight;
+
+		return (int) Math.round(centeredFeatureScaleHeight * WorldgenData.MOUNTAIN_SCALING.volcanoHeightScale());
+	}
+
 	public boolean getCenteredFeatureIce()
 	{
 		return centeredFeatureIce;
@@ -199,5 +214,14 @@ public class BiomeExtension
 	{
 		getFlattenedFeatures(biome);
 		return Objects.requireNonNull(flattenedFeatureSet);
+	}
+
+	private boolean isVolcanoBiome()
+	{
+		return hasCinderCones()
+				   || hasTuffRings()
+				   || hasTuyas()
+				   || hasStratovolcanoes()
+				   || hasAtolls();
 	}
 }

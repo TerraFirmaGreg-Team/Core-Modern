@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.mixins.common.ad_astra;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -40,29 +39,17 @@ public abstract class EnvironmentEffectsMixin {
         return false;
     }
 
-    // This was supposed to just be a mixin into tickBlock, but due to a bug in ad astra, that's never called
-    // unless you're on a temperate planet with no oxygen
-    // See: https://github.com/terrarium-earth/Ad-Astra/pull/734
-
-    @Inject(method = "tickHot", at = @At("TAIL"), remap = false)
-    private static void tfg$tickHot(ServerLevel level, BlockPos pos, BlockState state, CallbackInfo ci) {
-        tfg$tickBlockBugWorkaround(level, pos, state);
-    }
-
-    @Inject(method = "tickCold", at = @At("TAIL"), remap = false)
-    private static void tfg$tickCold(ServerLevel level, BlockPos pos, BlockState state, CallbackInfo ci) {
-        tfg$tickBlockBugWorkaround(level, pos, state);
-    }
-
     // Bloomery and Blast furnace can't be extinguished after being started (outside of like, breaking them),
     // so they get their own mixins
 
-    @Unique
-    private static void tfg$tickBlockBugWorkaround(ServerLevel level, BlockPos pos, BlockState state) {
+    @Inject(method = "tickBlock", at = @At("HEAD"), remap = false, cancellable = true)
+    private static void tfg$tickBlock(ServerLevel level, BlockPos pos, BlockState state, CallbackInfo ci) {
         // Add our own tag for things that do have one of the below tags (such as leaves, saplings) but which we
         // want to be excluded from being destroyed (such as mars saplings)
-        if (state.is(TFGTags.Blocks.DoNotDestroyInSpace))
+        if (state.is(TFGTags.Blocks.DoNotDestroyInSpace)) {
+            ci.cancel();
             return;
+        }
 
         // Cheap early exit before doing expensive hasOxygenOnAnySide.
         Block block = state.getBlock();
@@ -78,14 +65,19 @@ public abstract class EnvironmentEffectsMixin {
                 || block instanceof OvenBottomBlock
                 || block instanceof CharcoalForgeBlock
                 || block instanceof JackOLanternBlock
-                || block instanceof LampBlock))
+                || block instanceof LampBlock)) {
+            ci.cancel();
             return;
+        }
 
-        if (hasOxygenOnAnySide(level, pos))
+        if (hasOxygenOnAnySide(level, pos)) {
+            ci.cancel();
             return;
+        }
 
         if (state.is(ModBlockTags.DESTROYED_IN_SPACE)) {
             level.destroyBlock(pos, true);
+            return;
         }
         if (block instanceof TFCTorchBlock) {
             Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
@@ -144,5 +136,7 @@ public abstract class EnvironmentEffectsMixin {
                 level.setBlockAndUpdate(pos, state.setValue(LampBlock.LIT, false));
             }
         }
+
+        ci.cancel();
     }
 }

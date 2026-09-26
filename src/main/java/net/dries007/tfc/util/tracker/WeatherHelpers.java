@@ -6,6 +6,9 @@
 
 package net.dries007.tfc.util.tracker;
 
+import net.dries007.tfc.util.Helpers;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import java.util.*;
 
 import net.dries007.tfc.mixin.accessor.PoiSectionAccessor;
@@ -50,6 +53,7 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.world.chunkdata.ChunkData;
+import net.minecraft.world.phys.Vec2;
 
 /**
  * Handler for custom weather and weather effects.
@@ -64,7 +68,10 @@ public final class WeatherHelpers
 	private static final int MIN_RAIN_DELAY_TIME = 12000; // Same as vanilla
 	private static final int MAX_RAIN_DELAY_TIME = 84000; // Lowered, so average rain delay time is half vanilla
 
-	// The number of ticks per a single snow accumulation/melt event in a single chunk. For reference, vanilla operates at
+	private static final int WIND_KMS_FACTOR = 115;
+	private static final int WIND_MS_FACTOR = 32;
+
+    // The number of ticks per a single snow accumulation/melt event in a single chunk. For reference, vanilla operates at
 	// (48 / randomTickSpeed), or 16 ticks. We do melting much slower, since it's statistically much less likely to be raining
 	private static final int TICKS_PER_SNOW_ACCUMULATION = 80;
 	private static final int TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION = 3;
@@ -262,8 +269,168 @@ public final class WeatherHelpers
 			level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.RAIN_LEVEL_CHANGE, level.rainLevel), level.dimension());
 			level.getServer().getPlayerList().broadcastAll(new ClientboundGameEventPacket(ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE, level.thunderLevel), level.dimension());
 		}
+    }
 
+	/**
+	 * Converts wind speed to M/s
+	 */
+	public static float windMS(Vec2 wind)
+	{
+		return wind.length() * WIND_MS_FACTOR;
 	}
+
+	/**
+	 * Converts wind speed to M/tick (useful for accurately affecting entity/particle velocity)
+	 */
+	public static float windMT(Vec2 wind)
+	{
+		return wind.length() * WIND_MS_FACTOR / 20;
+	}
+
+	/**
+	 * Converts wind speed to KM/h
+	 */
+	public static float windKMH(Vec2 wind)
+	{
+		return wind.length() * WIND_KMS_FACTOR;
+	}
+
+	/**
+	 * Wraps and makes a wind angle positive, implicit that with the resulting angle, north is 0 degrees
+	 */
+	public static float wrappedPositiveAngle(float angleIn)
+	{
+		float angle = angleIn < 0
+						  ? angleIn += Mth.TWO_PI
+						  : angleIn;
+		// rotate so North is signal 0/15
+		angle += Mth.PI / 2;
+		// wrap
+		if (angle > Mth.TWO_PI)
+		{
+			angle -= Mth.TWO_PI;
+		}
+		return angle;
+	}
+
+	/**
+	 * Table for getting the wind direction as a cardinal, represented as an int
+	 * Should be used in all cases to ensure consistency between any cardinal direction representation of a wind angle
+	 */
+	public static int granularCardinalIntFromAngle(float angle)
+	{
+		angle *= Mth.RAD_TO_DEG;
+		float m = 11.25f;
+
+		// implicit north
+		int direction = 0;
+
+		if (angle <= 22.5 + m && angle >= 22.5 - m)
+		{
+			// north by northeast
+			direction = 1;
+		}
+		else if (angle <= 45 + m && angle >= 45 - m)
+		{
+			// northeast
+			direction = 2;
+		}
+		else if (angle <= 67.5 + m && angle >= 67.5 - m)
+		{
+			// east by northeast
+			direction = 3;
+		}
+		else if (angle <= 90 + m && angle >= 90 - m)
+		{
+			// east
+			direction = 4;
+		}
+		else if (angle <= 112.5 + m && angle >= 112.5 - m)
+		{
+			// east by southeast
+			direction = 5;
+		}
+		else if (angle <= 135 + m && angle >= 135 - m)
+		{
+			// southeast
+			direction = 6;
+		}
+		else if (angle <= 157.5 + m && angle >= 157.5 - m)
+		{
+			// south by southeast
+			direction = 7;
+		}
+		else if (angle <= 180 + m && angle >= 180 - m)
+		{
+			// south
+			direction = 8;
+		}
+		else if (angle <= 202.5 + m && angle >= 202.5 - m)
+		{
+			// south by southwest
+			direction = 9;
+		}
+		else if (angle <= 225 + m && angle >= 225 - m)
+		{
+			// southwest
+			direction = 10;
+		}
+		else if (angle <= 247.5 + m && angle >= 247.5 - m)
+		{
+			// west by southwest
+			direction = 11;
+		}
+		else if (angle <= 270 + m && angle >= 270 - m)
+		{
+			// west
+			direction = 12;
+		}
+		else if (angle <= 292.5 + m && angle >= 292.5 - m)
+		{
+			// west by northwest
+			direction = 13;
+		}
+		else if (angle <= 315 + m && angle >= 315 - m)
+		{
+			// northwest
+			direction = 14;
+		}
+		else if (angle <= 337.5 + m && angle >= 337.5 - m)
+		{
+			// north by northwest
+			direction = 15;
+		}
+
+	return direction;
+	}
+
+	/**
+	 * Returns the appropriate cardinal direction translation for any wind angle
+	 */
+	public static Component windGranularCardinal(Vec2 wind)
+	{
+		final float angle = wrappedPositiveAngle((float) Mth.atan2(wind.y, wind.x));
+		int direction = granularCardinalIntFromAngle(angle);
+		switch (direction)
+		{
+			case 0 -> {return Helpers.translateEnum(Direction.NORTH);}
+			case 1 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.NORTH), Component.translatable("tfc.direction.cardinal_northeast"));}
+			case 2 -> {return Component.translatable("tfc.direction.cardinal_northeast");}
+			case 3 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.EAST), Component.translatable("tfc.direction.cardinal_northeast"));}
+			case 4 -> {return Helpers.translateEnum(Direction.EAST);}
+			case 5 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.EAST), Component.translatable("tfc.direction.cardinal_southeast"));}
+			case 6 -> {return Component.translatable("tfc.direction.cardinal_southeast");}
+			case 7 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.SOUTH), Component.translatable("tfc.direction.cardinal_southeast"));}
+			case 8 -> {return Helpers.translateEnum(Direction.SOUTH);}
+			case 9 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.SOUTH), Component.translatable("tfc.direction.cardinal_southwest"));}
+			case 10 -> {return Component.translatable("tfc.direction.cardinal_southwest");}
+			case 11 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.WEST), Component.translatable("tfc.direction.cardinal_southwest"));}
+			case 12 -> {return Helpers.translateEnum(Direction.WEST);}
+			case 13 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.WEST), Component.translatable("tfc.direction.cardinal_northwest"));}
+			case 14 -> {return Component.translatable("tfc.direction.cardinal_northwest");}
+			case 15 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.NORTH), Component.translatable("tfc.direction.cardinal_northwest"));}
+		}
+		return Component.empty();}
 
 	/**
 	 * Handles chunk ticking. This occurs on chunks that are within a radius of the player (128 blocks), which is notably smaller
@@ -874,5 +1041,4 @@ public final class WeatherHelpers
 		}
 		return Component.empty();
 	}
-
 }

@@ -29,7 +29,13 @@ public enum AsphaltRoadMarkingMask implements StringRepresentable {
     NUM_7("num_7"),
     NUM_8("num_8"),
     NUM_9("num_9"),
-    NUMBER("number");
+    NUMBER("number"),
+    DIAGONAL_LINE("diagonal_line", 2),
+    FULLCORNER("fullcorner"),
+    ANGLED_EDGE_L("angled_edge_l"),
+    ANGLED_EDGE_R("angled_edge_r"),
+    CAT("cat"),
+    CREEPER("creeper");
 
     private final String name;
     private final int dirs;

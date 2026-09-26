@@ -11,6 +11,7 @@ import java.util.function.ToIntFunction;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import net.dries007.tfc.world.noise.MountainBlendKernel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 
@@ -22,8 +23,6 @@ import net.dries007.tfc.world.noise.Kernel;
  */
 public final class ChunkBiomeSampler
 {
-    public static final Kernel KERNEL_9x9 = Kernel.create((x, z) -> 0.0211640211641D * (1 - 0.03125D * (z * z + x * x)), 4);
-
     /**
      * @param pos           The target chunk pos.
      * @param biomeSampler  A sampler for biomes, in block coordinates.
@@ -43,7 +42,7 @@ public final class ChunkBiomeSampler
                 // x, z = 0, 0 is the -1, -1 chunk relative to chunkX, chunkZ
                 final Object2DoubleMap<T> chunkBiomeWeight = new Object2DoubleOpenHashMap<>();
                 chunkBiomeWeightArray[x | (z << 2)] = chunkBiomeWeight;
-                sampleBiomesAtPositionWithKernel(chunkBiomeWeight, biomeSampler, KERNEL_9x9, 4, chunkX, chunkZ, x - 1, z - 1);
+                sampleBiomesAtPositionWithKernel(chunkBiomeWeight, biomeSampler, MountainBlendKernel.KERNEL, 4, chunkX, chunkZ, x - 1, z - 1);
             }
         }
 
@@ -59,7 +58,7 @@ public final class ChunkBiomeSampler
                 final Object2DoubleMap<T> quartBiomeWeight = new Object2DoubleOpenHashMap<>();
                 chunkBiomeWeight.clear();
 
-                sampleBiomesAtPositionWithKernel(quartBiomeWeight, biomeSampler, KERNEL_9x9, 2, chunkX, chunkZ, x - 1, z - 1);
+                sampleBiomesAtPositionWithKernel(quartBiomeWeight, biomeSampler, MountainBlendKernel.KERNEL, 2, chunkX, chunkZ, x - 1, z - 1);
 
                 // Calculate contribution from the four corners of the 16x16 grid. First, calculate the current grid cell coordinates.
                 final int x1 = chunkX + ((x - 1) << 2); // Block coordinates

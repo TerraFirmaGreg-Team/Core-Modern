@@ -13,6 +13,7 @@ import net.dries007.tfc.client.particle.*;
 import net.dries007.tfc.client.render.blockentity.*;
 import net.dries007.tfc.client.render.entity.*;
 import net.dries007.tfc.client.screen.*;
+import su.terrafirmagreg.core.client.screen.TFGNutritionScreen;
 import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -69,7 +70,7 @@ import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfRenderer;
+import net.dries007.tfc.client.render.entity.TFCWolfRenderer;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -78,6 +79,7 @@ import java.util.stream.Stream;
 
 import static net.dries007.tfc.common.blocks.wood.Wood.BlockType.*;
 
+@SuppressWarnings({"deprecation", "removal"})
 public final class ClientEventHandler {
     public static void init() {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -98,15 +100,14 @@ public final class ClientEventHandler {
         bus.addListener(IngameOverlays::registerOverlays);
     }
 
-    @SuppressWarnings("deprecation")
     public static void clientSetup(FMLClientSetupEvent event) {
         // Screens
         event.enqueueWork(() -> {
 
             // Not thread-safe
             MenuScreens.register(TFCContainerTypes.CALENDAR.get(), CalendarScreen::new);
-            MenuScreens.register(TFCContainerTypes.NUTRITION.get(), NutritionScreen::new);
             MenuScreens.register(TFCContainerTypes.CLIMATE.get(), ClimateScreen::new);
+            MenuScreens.register(TFCContainerTypes.NUTRITION.get(), TFGNutritionScreen::new);
             MenuScreens.register(TFCContainerTypes.SALAD.get(), SaladScreen::new);
             MenuScreens.register(TFCContainerTypes.WORKBENCH.get(), CraftingScreen::new);
 
@@ -445,6 +446,9 @@ public final class ClientEventHandler {
         event.registerBlockEntityRenderer(TFCBlockEntities.WINDMILL.get(), WindmillBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TFCBlockEntities.CRANKSHAFT.get(), ctx -> new CrankshaftBlockEntityRenderer());
         event.registerBlockEntityRenderer(TFCBlockEntities.BELL.get(), TFCBellBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(TFCBlockEntities.VANE.get(), VaneBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(TFCBlockEntities.ANEMOMETER.get(), AnemometerBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(TFCBlockEntities.CALENDAR_CLOCK.get(), CalendarClockBlockEntityRenderer::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -518,6 +522,9 @@ public final class ClientEventHandler {
         event.registerLayerDefinition(RenderHelpers.modelIdentifier("mule"), ChestedHorseModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.modelIdentifier("donkey"), ChestedHorseModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.modelIdentifier("water_wheel"), WaterWheelModel::createBodyLayer);
+		event.registerLayerDefinition(RenderHelpers.modelIdentifier("vane"), VaneModel::createBodyLayer);
+		event.registerLayerDefinition(RenderHelpers.modelIdentifier("anemometer"), AnemometerModel::createBodyLayer);
+		event.registerLayerDefinition(RenderHelpers.modelIdentifier("calendar_clock"), CalendarClockModel::createBodyLayer);
     }
 
 

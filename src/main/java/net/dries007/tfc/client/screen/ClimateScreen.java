@@ -8,12 +8,16 @@ package net.dries007.tfc.client.screen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
+import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.container.Container;
@@ -23,7 +27,9 @@ import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.KoppenClimateClassification;
+import net.dries007.tfc.util.climate.OverworldClimateModel;
 
 public class ClimateScreen extends TFCContainerScreen<Container>
 {
@@ -39,15 +45,20 @@ public class ClimateScreen extends TFCContainerScreen<Container>
     {
         super.init();
 
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 4, 20, 22, 128, 0, 1, 3, 0, 0, button -> {
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {
             playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
-            Minecraft.getInstance().setScreen(new InventoryScreen(playerInventory.player));
-            PacketHandler.send(PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(SwitchInventoryTabPacket.Type.INVENTORY));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.gameMode != null && mc.gameMode.isServerControlledInventory() && mc.player != null) {
+                mc.setScreen(new CreativeModeInventoryScreen(playerInventory.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()));
+            } else {
+                mc.setScreen(new InventoryScreen(playerInventory.player));
+            }
+            PacketHandler.send(PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab.INVENTORY));
         }));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 27, 20, 22, 128, 0, 1, 3, 32, 0, SwitchInventoryTabPacket.Type.CALENDAR));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 50, 20, 22, 128, 0, 1, 3, 64, 0, SwitchInventoryTabPacket.Type.NUTRITION));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176 - 3, 73, 20 + 3, 22, 128 + 20, 0, 1, 3, 96, 0, button -> {}));
-        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Type.BOOK)));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.CALENDAR));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.NUTRITION));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, true, false, PlayerInventoryTabButton.Tab.CLIMATE, button -> {}));
+        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.BOOK)));
     }
 
     @Override
@@ -62,9 +73,29 @@ public class ClimateScreen extends TFCContainerScreen<Container>
 
         final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
 
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_koppen_climate_classification", Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, rainfall))), 19);
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_average_temperature", style.format(averageTemp, true)), 30);
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_annual_rainfall", String.format("%.1f", rainfall)), 41);
-        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_current_temp", style.format(currentTemp, true)), 52);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_koppen_climate_classification", Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, rainfall))), 16);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_average_temperature", style.format(averageTemp, true)), 27);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_annual_rainfall", String.format("%.1f", rainfall)), 38);
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_current_temp", style.format(currentTemp, true)), 49);
+
+        renderHemisphere(stack);
+    }
+
+    private void renderHemisphere(GuiGraphics stack)
+    {
+        final Player player = ClientHelpers.getPlayer();
+        if (player == null || player.level().dimension() != Level.OVERWORLD)
+        {
+            return;
+        }
+        if (!(Climate.model(player.level()) instanceof OverworldClimateModel model))
+        {
+            return;
+        }
+
+        final String hemisphere = OverworldClimateModel.getInNorthernHemisphere(player.getBlockZ(), model.getTemperatureScale())
+            ? "tfc.tooltip.hemisphere_northern"
+            : "tfc.tooltip.hemisphere_southern";
+        drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_hemisphere", Component.translatable(hemisphere)), 60);
     }
 }

@@ -20,7 +20,6 @@ public class TFGCommands {
         DebugSpaceSuitCommand.register(debug);
         DebugQuarktechCommand.register(debug);
         DebugRecipeDump.register(debug);
-        DebugWorldgenVersions.register(debug);
 
         LiteralArgumentBuilder<CommandSourceStack> tfg = literal("tfg").then(debug);
         ModifyNutrients.register(tfg);
