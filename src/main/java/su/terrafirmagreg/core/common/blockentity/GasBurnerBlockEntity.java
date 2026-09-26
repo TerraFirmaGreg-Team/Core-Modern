@@ -1,9 +1,9 @@
 package su.terrafirmagreg.core.common.blockentity;
 
+import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blockentities.TickableInventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.capabilities.FluidTankCallback;
@@ -15,12 +15,13 @@ import net.dries007.tfc.common.fluids.SimpleFluid;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.IntArrayBuilder;
-import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -42,8 +43,9 @@ import lombok.Getter;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.GasBurnerBlock;
 import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
+import su.terrafirmagreg.core.common.data.TFGSounds;
 
-public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements ICalendarTickable, FluidTankCallback, MenuProvider {
+public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements FluidTankCallback, MenuProvider {
     public static final int SLOT_FLUID_CONTAINER_IN = 0;
     public static final int SLOT_FLUID_CONTAINER_OUT = 1;
     public static final int SLOTS = 2;
@@ -55,7 +57,6 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, GasBurnerBlockEntity burner) {
         burner.checkForLastTickSync();
-        burner.checkForCalendarUpdate();
 
         if (level.getGameTime() % 5 == 0) {
             burner.updateFluidIOSlots();
@@ -144,24 +145,6 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
         fluidCapability.invalidate();
     }
 
-    @Override
-    public void onCalendarUpdate(long ticks) {
-        assert level != null;
-        final BlockState state = level.getBlockState(worldPosition);
-    }
-
-    @Override
-    @Deprecated
-    public long getLastCalendarUpdateTick() {
-        return lastPlayerTick;
-    }
-
-    @Override
-    @Deprecated
-    public void setLastCalendarUpdateTick(long tick) {
-        lastPlayerTick = tick;
-    }
-
     public void onFirstCreation() {
         burnTicks = 0;
         burnTemperature = 0;
@@ -215,7 +198,9 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             return true;
         }
         if (consumeFuel()) {
+            RandomSource rand = level.random;
             level.setBlockAndUpdate(worldPosition, state.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true));
+            level.playSound(null, worldPosition, TFGSounds.FIRE_WHOOSH.getMainEvent(), SoundSource.BLOCKS, 2, 1 + rand.nextFloat());
             return true;
         }
         return false;
@@ -262,6 +247,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     public void extinguish(BlockState state) {
         assert level != null;
         level.setBlockAndUpdate(worldPosition, state.setValue(GasBurnerBlock.HEAT, 0).setValue(GasBurnerBlock.LIT, false));
+        level.playSound(null, worldPosition, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.2f, 2);
         burnTicks = 0;
         burnTemperature = 0;
         markForSync();

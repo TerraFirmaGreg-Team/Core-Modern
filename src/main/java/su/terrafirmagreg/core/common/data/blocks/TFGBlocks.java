@@ -291,7 +291,7 @@ public final class TFGBlocks {
                     .serverTicks(GasBurnerBlockEntity::serverTick)))
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
-                for (int level = 0; level <= Collections.max(GasBurnerBlock.LEVEL.getPossibleValues()); level++) {
+                for (int level = 0; level <= Collections.max(GasBurnerBlock.SET_LEVEL.getPossibleValues()); level++) {
 
                     for (boolean lit : GasBurnerBlock.LIT.getPossibleValues()) {
 
@@ -302,7 +302,7 @@ public final class TFGBlocks {
 
                         for (Direction dir : Direction.Plane.HORIZONTAL) {
                             builder.partialState()
-                                    .with(GasBurnerBlock.LEVEL, level)
+                                    .with(GasBurnerBlock.SET_LEVEL, level)
                                     .with(GasBurnerBlock.LIT, lit)
                                     .with(GasBurnerBlock.FACING, dir.getOpposite())
                                     .modelForState()

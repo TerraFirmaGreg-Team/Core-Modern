@@ -1,332 +1,332 @@
 {
   "variants": {
-    "facing=east,level=0,lit=false": {
+    "facing=east,lit=false,set_level=0": {
       "model": "tfg:block/gas_burner/gas_burner_0_unlit",
       "y": 90
     },
-    "facing=east,level=0,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_0_lit",
-      "y": 90
-    },
-    "facing=east,level=1,lit=false": {
+    "facing=east,lit=false,set_level=1": {
       "model": "tfg:block/gas_burner/gas_burner_1_unlit",
       "y": 90
     },
-    "facing=east,level=1,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_1_lit",
-      "y": 90
-    },
-    "facing=east,level=10,lit=false": {
+    "facing=east,lit=false,set_level=10": {
       "model": "tfg:block/gas_burner/gas_burner_10_unlit",
       "y": 90
     },
-    "facing=east,level=10,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_10_lit",
-      "y": 90
-    },
-    "facing=east,level=2,lit=false": {
+    "facing=east,lit=false,set_level=2": {
       "model": "tfg:block/gas_burner/gas_burner_2_unlit",
       "y": 90
     },
-    "facing=east,level=2,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_2_lit",
-      "y": 90
-    },
-    "facing=east,level=3,lit=false": {
+    "facing=east,lit=false,set_level=3": {
       "model": "tfg:block/gas_burner/gas_burner_3_unlit",
       "y": 90
     },
-    "facing=east,level=3,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_3_lit",
-      "y": 90
-    },
-    "facing=east,level=4,lit=false": {
+    "facing=east,lit=false,set_level=4": {
       "model": "tfg:block/gas_burner/gas_burner_4_unlit",
       "y": 90
     },
-    "facing=east,level=4,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_4_lit",
-      "y": 90
-    },
-    "facing=east,level=5,lit=false": {
+    "facing=east,lit=false,set_level=5": {
       "model": "tfg:block/gas_burner/gas_burner_5_unlit",
       "y": 90
     },
-    "facing=east,level=5,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_5_lit",
-      "y": 90
-    },
-    "facing=east,level=6,lit=false": {
+    "facing=east,lit=false,set_level=6": {
       "model": "tfg:block/gas_burner/gas_burner_6_unlit",
       "y": 90
     },
-    "facing=east,level=6,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_6_lit",
-      "y": 90
-    },
-    "facing=east,level=7,lit=false": {
+    "facing=east,lit=false,set_level=7": {
       "model": "tfg:block/gas_burner/gas_burner_7_unlit",
       "y": 90
     },
-    "facing=east,level=7,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_7_lit",
-      "y": 90
-    },
-    "facing=east,level=8,lit=false": {
+    "facing=east,lit=false,set_level=8": {
       "model": "tfg:block/gas_burner/gas_burner_8_unlit",
       "y": 90
     },
-    "facing=east,level=8,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_8_lit",
-      "y": 90
-    },
-    "facing=east,level=9,lit=false": {
+    "facing=east,lit=false,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_unlit",
       "y": 90
     },
-    "facing=east,level=9,lit=true": {
+    "facing=east,lit=true,set_level=0": {
+      "model": "tfg:block/gas_burner/gas_burner_0_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=1": {
+      "model": "tfg:block/gas_burner/gas_burner_1_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=10": {
+      "model": "tfg:block/gas_burner/gas_burner_10_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=2": {
+      "model": "tfg:block/gas_burner/gas_burner_2_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=3": {
+      "model": "tfg:block/gas_burner/gas_burner_3_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=4": {
+      "model": "tfg:block/gas_burner/gas_burner_4_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=5": {
+      "model": "tfg:block/gas_burner/gas_burner_5_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=6": {
+      "model": "tfg:block/gas_burner/gas_burner_6_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=7": {
+      "model": "tfg:block/gas_burner/gas_burner_7_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=8": {
+      "model": "tfg:block/gas_burner/gas_burner_8_lit",
+      "y": 90
+    },
+    "facing=east,lit=true,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_lit",
       "y": 90
     },
-    "facing=north,level=0,lit=false": {
+    "facing=north,lit=false,set_level=0": {
       "model": "tfg:block/gas_burner/gas_burner_0_unlit"
     },
-    "facing=north,level=0,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_0_lit"
-    },
-    "facing=north,level=1,lit=false": {
+    "facing=north,lit=false,set_level=1": {
       "model": "tfg:block/gas_burner/gas_burner_1_unlit"
     },
-    "facing=north,level=1,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_1_lit"
-    },
-    "facing=north,level=10,lit=false": {
+    "facing=north,lit=false,set_level=10": {
       "model": "tfg:block/gas_burner/gas_burner_10_unlit"
     },
-    "facing=north,level=10,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_10_lit"
-    },
-    "facing=north,level=2,lit=false": {
+    "facing=north,lit=false,set_level=2": {
       "model": "tfg:block/gas_burner/gas_burner_2_unlit"
     },
-    "facing=north,level=2,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_2_lit"
-    },
-    "facing=north,level=3,lit=false": {
+    "facing=north,lit=false,set_level=3": {
       "model": "tfg:block/gas_burner/gas_burner_3_unlit"
     },
-    "facing=north,level=3,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_3_lit"
-    },
-    "facing=north,level=4,lit=false": {
+    "facing=north,lit=false,set_level=4": {
       "model": "tfg:block/gas_burner/gas_burner_4_unlit"
     },
-    "facing=north,level=4,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_4_lit"
-    },
-    "facing=north,level=5,lit=false": {
+    "facing=north,lit=false,set_level=5": {
       "model": "tfg:block/gas_burner/gas_burner_5_unlit"
     },
-    "facing=north,level=5,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_5_lit"
-    },
-    "facing=north,level=6,lit=false": {
+    "facing=north,lit=false,set_level=6": {
       "model": "tfg:block/gas_burner/gas_burner_6_unlit"
     },
-    "facing=north,level=6,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_6_lit"
-    },
-    "facing=north,level=7,lit=false": {
+    "facing=north,lit=false,set_level=7": {
       "model": "tfg:block/gas_burner/gas_burner_7_unlit"
     },
-    "facing=north,level=7,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_7_lit"
-    },
-    "facing=north,level=8,lit=false": {
+    "facing=north,lit=false,set_level=8": {
       "model": "tfg:block/gas_burner/gas_burner_8_unlit"
     },
-    "facing=north,level=8,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_8_lit"
-    },
-    "facing=north,level=9,lit=false": {
+    "facing=north,lit=false,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_unlit"
     },
-    "facing=north,level=9,lit=true": {
+    "facing=north,lit=true,set_level=0": {
+      "model": "tfg:block/gas_burner/gas_burner_0_lit"
+    },
+    "facing=north,lit=true,set_level=1": {
+      "model": "tfg:block/gas_burner/gas_burner_1_lit"
+    },
+    "facing=north,lit=true,set_level=10": {
+      "model": "tfg:block/gas_burner/gas_burner_10_lit"
+    },
+    "facing=north,lit=true,set_level=2": {
+      "model": "tfg:block/gas_burner/gas_burner_2_lit"
+    },
+    "facing=north,lit=true,set_level=3": {
+      "model": "tfg:block/gas_burner/gas_burner_3_lit"
+    },
+    "facing=north,lit=true,set_level=4": {
+      "model": "tfg:block/gas_burner/gas_burner_4_lit"
+    },
+    "facing=north,lit=true,set_level=5": {
+      "model": "tfg:block/gas_burner/gas_burner_5_lit"
+    },
+    "facing=north,lit=true,set_level=6": {
+      "model": "tfg:block/gas_burner/gas_burner_6_lit"
+    },
+    "facing=north,lit=true,set_level=7": {
+      "model": "tfg:block/gas_burner/gas_burner_7_lit"
+    },
+    "facing=north,lit=true,set_level=8": {
+      "model": "tfg:block/gas_burner/gas_burner_8_lit"
+    },
+    "facing=north,lit=true,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_lit"
     },
-    "facing=south,level=0,lit=false": {
+    "facing=south,lit=false,set_level=0": {
       "model": "tfg:block/gas_burner/gas_burner_0_unlit",
       "y": 180
     },
-    "facing=south,level=0,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_0_lit",
-      "y": 180
-    },
-    "facing=south,level=1,lit=false": {
+    "facing=south,lit=false,set_level=1": {
       "model": "tfg:block/gas_burner/gas_burner_1_unlit",
       "y": 180
     },
-    "facing=south,level=1,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_1_lit",
-      "y": 180
-    },
-    "facing=south,level=10,lit=false": {
+    "facing=south,lit=false,set_level=10": {
       "model": "tfg:block/gas_burner/gas_burner_10_unlit",
       "y": 180
     },
-    "facing=south,level=10,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_10_lit",
-      "y": 180
-    },
-    "facing=south,level=2,lit=false": {
+    "facing=south,lit=false,set_level=2": {
       "model": "tfg:block/gas_burner/gas_burner_2_unlit",
       "y": 180
     },
-    "facing=south,level=2,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_2_lit",
-      "y": 180
-    },
-    "facing=south,level=3,lit=false": {
+    "facing=south,lit=false,set_level=3": {
       "model": "tfg:block/gas_burner/gas_burner_3_unlit",
       "y": 180
     },
-    "facing=south,level=3,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_3_lit",
-      "y": 180
-    },
-    "facing=south,level=4,lit=false": {
+    "facing=south,lit=false,set_level=4": {
       "model": "tfg:block/gas_burner/gas_burner_4_unlit",
       "y": 180
     },
-    "facing=south,level=4,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_4_lit",
-      "y": 180
-    },
-    "facing=south,level=5,lit=false": {
+    "facing=south,lit=false,set_level=5": {
       "model": "tfg:block/gas_burner/gas_burner_5_unlit",
       "y": 180
     },
-    "facing=south,level=5,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_5_lit",
-      "y": 180
-    },
-    "facing=south,level=6,lit=false": {
+    "facing=south,lit=false,set_level=6": {
       "model": "tfg:block/gas_burner/gas_burner_6_unlit",
       "y": 180
     },
-    "facing=south,level=6,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_6_lit",
-      "y": 180
-    },
-    "facing=south,level=7,lit=false": {
+    "facing=south,lit=false,set_level=7": {
       "model": "tfg:block/gas_burner/gas_burner_7_unlit",
       "y": 180
     },
-    "facing=south,level=7,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_7_lit",
-      "y": 180
-    },
-    "facing=south,level=8,lit=false": {
+    "facing=south,lit=false,set_level=8": {
       "model": "tfg:block/gas_burner/gas_burner_8_unlit",
       "y": 180
     },
-    "facing=south,level=8,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_8_lit",
-      "y": 180
-    },
-    "facing=south,level=9,lit=false": {
+    "facing=south,lit=false,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_unlit",
       "y": 180
     },
-    "facing=south,level=9,lit=true": {
+    "facing=south,lit=true,set_level=0": {
+      "model": "tfg:block/gas_burner/gas_burner_0_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=1": {
+      "model": "tfg:block/gas_burner/gas_burner_1_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=10": {
+      "model": "tfg:block/gas_burner/gas_burner_10_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=2": {
+      "model": "tfg:block/gas_burner/gas_burner_2_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=3": {
+      "model": "tfg:block/gas_burner/gas_burner_3_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=4": {
+      "model": "tfg:block/gas_burner/gas_burner_4_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=5": {
+      "model": "tfg:block/gas_burner/gas_burner_5_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=6": {
+      "model": "tfg:block/gas_burner/gas_burner_6_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=7": {
+      "model": "tfg:block/gas_burner/gas_burner_7_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=8": {
+      "model": "tfg:block/gas_burner/gas_burner_8_lit",
+      "y": 180
+    },
+    "facing=south,lit=true,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_lit",
       "y": 180
     },
-    "facing=west,level=0,lit=false": {
+    "facing=west,lit=false,set_level=0": {
       "model": "tfg:block/gas_burner/gas_burner_0_unlit",
       "y": 270
     },
-    "facing=west,level=0,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_0_lit",
-      "y": 270
-    },
-    "facing=west,level=1,lit=false": {
+    "facing=west,lit=false,set_level=1": {
       "model": "tfg:block/gas_burner/gas_burner_1_unlit",
       "y": 270
     },
-    "facing=west,level=1,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_1_lit",
-      "y": 270
-    },
-    "facing=west,level=10,lit=false": {
+    "facing=west,lit=false,set_level=10": {
       "model": "tfg:block/gas_burner/gas_burner_10_unlit",
       "y": 270
     },
-    "facing=west,level=10,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_10_lit",
-      "y": 270
-    },
-    "facing=west,level=2,lit=false": {
+    "facing=west,lit=false,set_level=2": {
       "model": "tfg:block/gas_burner/gas_burner_2_unlit",
       "y": 270
     },
-    "facing=west,level=2,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_2_lit",
-      "y": 270
-    },
-    "facing=west,level=3,lit=false": {
+    "facing=west,lit=false,set_level=3": {
       "model": "tfg:block/gas_burner/gas_burner_3_unlit",
       "y": 270
     },
-    "facing=west,level=3,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_3_lit",
-      "y": 270
-    },
-    "facing=west,level=4,lit=false": {
+    "facing=west,lit=false,set_level=4": {
       "model": "tfg:block/gas_burner/gas_burner_4_unlit",
       "y": 270
     },
-    "facing=west,level=4,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_4_lit",
-      "y": 270
-    },
-    "facing=west,level=5,lit=false": {
+    "facing=west,lit=false,set_level=5": {
       "model": "tfg:block/gas_burner/gas_burner_5_unlit",
       "y": 270
     },
-    "facing=west,level=5,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_5_lit",
-      "y": 270
-    },
-    "facing=west,level=6,lit=false": {
+    "facing=west,lit=false,set_level=6": {
       "model": "tfg:block/gas_burner/gas_burner_6_unlit",
       "y": 270
     },
-    "facing=west,level=6,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_6_lit",
-      "y": 270
-    },
-    "facing=west,level=7,lit=false": {
+    "facing=west,lit=false,set_level=7": {
       "model": "tfg:block/gas_burner/gas_burner_7_unlit",
       "y": 270
     },
-    "facing=west,level=7,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_7_lit",
-      "y": 270
-    },
-    "facing=west,level=8,lit=false": {
+    "facing=west,lit=false,set_level=8": {
       "model": "tfg:block/gas_burner/gas_burner_8_unlit",
       "y": 270
     },
-    "facing=west,level=8,lit=true": {
-      "model": "tfg:block/gas_burner/gas_burner_8_lit",
-      "y": 270
-    },
-    "facing=west,level=9,lit=false": {
+    "facing=west,lit=false,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_unlit",
       "y": 270
     },
-    "facing=west,level=9,lit=true": {
+    "facing=west,lit=true,set_level=0": {
+      "model": "tfg:block/gas_burner/gas_burner_0_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=1": {
+      "model": "tfg:block/gas_burner/gas_burner_1_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=10": {
+      "model": "tfg:block/gas_burner/gas_burner_10_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=2": {
+      "model": "tfg:block/gas_burner/gas_burner_2_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=3": {
+      "model": "tfg:block/gas_burner/gas_burner_3_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=4": {
+      "model": "tfg:block/gas_burner/gas_burner_4_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=5": {
+      "model": "tfg:block/gas_burner/gas_burner_5_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=6": {
+      "model": "tfg:block/gas_burner/gas_burner_6_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=7": {
+      "model": "tfg:block/gas_burner/gas_burner_7_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=8": {
+      "model": "tfg:block/gas_burner/gas_burner_8_lit",
+      "y": 270
+    },
+    "facing=west,lit=true,set_level=9": {
       "model": "tfg:block/gas_burner/gas_burner_9_lit",
       "y": 270
     }

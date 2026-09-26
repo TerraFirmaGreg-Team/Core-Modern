@@ -46,7 +46,7 @@ public class GasBurnerBlock extends DeviceBlock {
     public static final IntegerProperty HEAT = TFCBlockStateProperties.HEAT_LEVEL;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 10);
+    public static final IntegerProperty SET_LEVEL = IntegerProperty.create("set_level", 0, 10);
 
     protected static final VoxelShape SHAPE = Shapes.or(Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D), Block.box(1.0D, 9.0D, 1.0D, 15.0D, 16.0D, 15.0D));
 
@@ -55,7 +55,7 @@ public class GasBurnerBlock extends DeviceBlock {
         registerDefaultState(getStateDefinition().any()
                 .setValue(HEAT, 0)
                 .setValue(LIT, false)
-                .setValue(LEVEL, 0)
+                .setValue(SET_LEVEL, 0)
                 .setValue(FACING, Direction.NORTH));
     }
 
@@ -67,17 +67,17 @@ public class GasBurnerBlock extends DeviceBlock {
         double y = pos.getY() + 0.875D;
         double z = pos.getZ() + 0.5D;
 
+        float[] offsets = Helpers.square(rand, 0.5f);
+        double spawnX = x + offsets[0];
+        double spawnY = pos.getY() + 1.0D;
+        double spawnZ = z + offsets[1];
+
         if (rand.nextInt(10) == 0) {
             level.playLocalSound(x, y, z, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.5F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.6F, false);
         }
-        for (int i = 0; i < 1 + rand.nextInt(2); i++) {
-            level.addAlwaysVisibleParticle(ParticleTypes.LARGE_SMOKE, x + Helpers.triangle(rand), y + rand.nextDouble(), z + Helpers.triangle(rand), 0, 0.07D, 0);
-        }
-        for (int i = 0; i < rand.nextInt(3); i++) {
-            level.addParticle(ParticleTypes.SMOKE, x + Helpers.triangle(rand), y + rand.nextDouble(), z + Helpers.triangle(rand), 0, 0.005D, 0);
-        }
-        if (rand.nextInt(8) == 1) {
-            level.addParticle(ParticleTypes.LAVA, x + Helpers.triangle(rand), y + rand.nextDouble(), z + Helpers.triangle(rand), 0, 0.005D, 0);
+        for (int i = 0; i < rand.nextInt(2); i++) {
+            level.addParticle(ParticleTypes.SMOKE, spawnX, y + (rand.nextDouble() / 2), spawnZ, 0, 0.005D, 0);
+            level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, spawnX, spawnY + (rand.nextFloat() / 10), spawnZ, 0, 0, 0);
         }
     }
 
@@ -91,7 +91,7 @@ public class GasBurnerBlock extends DeviceBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder.add(HEAT, LIT, FACING, LEVEL));
+        super.createBlockStateDefinition(builder.add(HEAT, LIT, FACING, SET_LEVEL));
     }
 
     @Nullable
