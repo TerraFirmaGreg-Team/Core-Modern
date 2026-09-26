@@ -13,6 +13,7 @@ import net.dries007.tfc.client.particle.*;
 import net.dries007.tfc.client.render.blockentity.*;
 import net.dries007.tfc.client.render.entity.*;
 import net.dries007.tfc.client.screen.*;
+import su.terrafirmagreg.core.client.screen.TFGNutritionScreen;
 import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -69,7 +70,7 @@ import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfRenderer;
+import net.dries007.tfc.client.render.entity.TFCWolfRenderer;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -105,8 +106,8 @@ public final class ClientEventHandler {
 
             // Not thread-safe
             MenuScreens.register(TFCContainerTypes.CALENDAR.get(), CalendarScreen::new);
-            MenuScreens.register(TFCContainerTypes.NUTRITION.get(), NutritionScreen::new);
             MenuScreens.register(TFCContainerTypes.CLIMATE.get(), ClimateScreen::new);
+            MenuScreens.register(TFCContainerTypes.NUTRITION.get(), TFGNutritionScreen::new);
             MenuScreens.register(TFCContainerTypes.SALAD.get(), SaladScreen::new);
             MenuScreens.register(TFCContainerTypes.WORKBENCH.get(), CraftingScreen::new);
 

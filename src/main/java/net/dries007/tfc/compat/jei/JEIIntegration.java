@@ -26,6 +26,10 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
+import net.dries007.tfc.compat.jei.category.*;
+import net.dries007.tfc.util.LampFuel;
+import net.dries007.tfc.util.Metal;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -48,7 +52,6 @@ import net.dries007.tfc.client.screen.CrucibleScreen;
 import net.dries007.tfc.client.screen.FirepitScreen;
 import net.dries007.tfc.client.screen.GrillScreen;
 import net.dries007.tfc.client.screen.KnappingScreen;
-import net.dries007.tfc.client.screen.NutritionScreen;
 import net.dries007.tfc.client.screen.PotScreen;
 import net.dries007.tfc.client.screen.SewingTableScreen;
 import net.dries007.tfc.common.TFCTags;
@@ -82,26 +85,6 @@ import net.dries007.tfc.common.recipes.TFCRecipeSerializers;
 import net.dries007.tfc.common.recipes.TFCRecipeTypes;
 import net.dries007.tfc.common.recipes.WeldingRecipe;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
-import net.dries007.tfc.compat.jei.category.AlloyRecipeCategory;
-import net.dries007.tfc.compat.jei.category.AnvilRecipeCategory;
-import net.dries007.tfc.compat.jei.category.BlastFurnaceRecipeCategory;
-import net.dries007.tfc.compat.jei.category.BloomeryRecipeCategory;
-import net.dries007.tfc.compat.jei.category.CastingRecipeCategory;
-import net.dries007.tfc.compat.jei.category.ChiselRecipeCategory;
-import net.dries007.tfc.compat.jei.category.GlassworkingRecipeCategory;
-import net.dries007.tfc.compat.jei.category.HeatingRecipeCategory;
-import net.dries007.tfc.compat.jei.category.InstantBarrelRecipeCategory;
-import net.dries007.tfc.compat.jei.category.InstantFluidBarrelRecipeCategory;
-import net.dries007.tfc.compat.jei.category.JamPotRecipeCategory;
-import net.dries007.tfc.compat.jei.category.KnappingRecipeCategory;
-import net.dries007.tfc.compat.jei.category.LoomRecipeCategory;
-import net.dries007.tfc.compat.jei.category.QuernRecipeCategory;
-import net.dries007.tfc.compat.jei.category.ScrapingRecipeCategory;
-import net.dries007.tfc.compat.jei.category.SealedBarrelRecipeCategory;
-import net.dries007.tfc.compat.jei.category.SewingRecipeCategory;
-import net.dries007.tfc.compat.jei.category.SimplePotRecipeCategory;
-import net.dries007.tfc.compat.jei.category.SoupPotRecipeCategory;
-import net.dries007.tfc.compat.jei.category.WeldingRecipeCategory;
 import net.dries007.tfc.compat.jei.extension.AdvancedShapelessExtension;
 import net.dries007.tfc.compat.jei.extension.ExtraProductsExtension;
 import net.dries007.tfc.compat.jei.transfer.AnvilRecipeTransferHandler;
@@ -112,6 +95,7 @@ import net.dries007.tfc.compat.jei.transfer.PotTransferInfo;
 import net.dries007.tfc.compat.jei.transfer.WeldingRecipeTransferInfo;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.KnappingType;
+import su.terrafirmagreg.core.client.screen.TFGNutritionScreen;
 
 @JeiPlugin
 public final class JEIIntegration implements IModPlugin
@@ -138,6 +122,7 @@ public final class JEIIntegration implements IModPlugin
     public static final RecipeType<GlassworkingRecipe> GLASSWORKING = type("glassworking", GlassworkingRecipe.class);
     public static final RecipeType<BlastFurnaceRecipe> BLAST_FURNACE = type("blast_furnace", BlastFurnaceRecipe.class);
     public static final RecipeType<SewingRecipe> SEWING = type("sewing", SewingRecipe.class);
+    public static final RecipeType<LampFuel> LAMP_FUEL = RecipeType.create(TerraFirmaCraft.MOD_ID, "lamp_fuel", LampFuel.class);
 
     private static final Map<ResourceLocation, RecipeType<KnappingRecipe>> KNAPPING_TYPES = new HashMap<>();
 
@@ -201,7 +186,8 @@ public final class JEIIntegration implements IModPlugin
             new ChiselRecipeCategory(CHISEL, gui),
             new GlassworkingRecipeCategory(GLASSWORKING, gui),
             new BlastFurnaceRecipeCategory(BLAST_FURNACE, gui),
-            new SewingRecipeCategory(SEWING, gui)
+            new SewingRecipeCategory(SEWING, gui),
+            new LampFuelRecipeCategory(LAMP_FUEL, gui)
         );
 
         for (KnappingType knappingType : KnappingType.MANAGER.getValues())
@@ -233,6 +219,7 @@ public final class JEIIntegration implements IModPlugin
         registry.addRecipes(GLASSWORKING, recipes(TFCRecipeTypes.GLASSWORKING.get()));
         registry.addRecipes(BLAST_FURNACE, recipes(TFCRecipeTypes.BLAST_FURNACE.get()));
         registry.addRecipes(SEWING, recipes(TFCRecipeTypes.SEWING.get()));
+        registry.addRecipes(LAMP_FUEL, LampFuel.MANAGER.getValues().stream().toList());
 
         KNAPPING_TYPES.forEach((id, type) -> registry.addRecipes(type, recipes(TFCRecipeTypes.KNAPPING.get(), r -> r.getKnappingType().getId().toString().replace("_knapping", "").equals(id.toString()))));
     }
@@ -274,6 +261,15 @@ public final class JEIIntegration implements IModPlugin
         addRecipeCatalyst(registry, Wood.BlockType.BARREL, INSTANT_BARREL);
         addRecipeCatalyst(registry, Wood.BlockType.BARREL, INSTANT_FLUID_BARREL);
 
+        for (var metalEntry : TFCBlocks.METALS.values())
+        {
+            var lamp = metalEntry.get(Metal.BlockType.LAMP);
+            if (lamp != null)
+            {
+                registry.addRecipeCatalyst(new ItemStack(lamp.get()), LAMP_FUEL);
+            }
+        }
+
         for (KnappingType knappingType : KnappingType.MANAGER.getValues())
         {
             final RecipeType<KnappingRecipe> recipeType = getKnappingType(knappingType);
@@ -299,9 +295,10 @@ public final class JEIIntegration implements IModPlugin
 
         // Fix inventory tab button overlap
         registry.addGuiContainerHandler(InventoryScreen.class, new TFCInventoryGuiHandler<>());
+        registry.addGuiContainerHandler(CreativeModeInventoryScreen.class, new TFCInventoryGuiHandler<>());
         registry.addGuiContainerHandler(CalendarScreen.class, new TFCInventoryGuiHandler<>());
         registry.addGuiContainerHandler(ClimateScreen.class, new TFCInventoryGuiHandler<>());
-        registry.addGuiContainerHandler(NutritionScreen.class, new TFCInventoryGuiHandler<>());
+        registry.addGuiContainerHandler(TFGNutritionScreen.class, new TFCInventoryGuiHandler<>());
     }
 
     @Override

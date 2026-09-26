@@ -27,9 +27,10 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.livestock.TFCAnimal;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.common.entities.misc.IWolf;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfVariant;
 
-public class Dog extends TamableMammal
+public class Dog extends TamableMammal implements IWolf
 {
 	private static final EntityDataAccessor<Integer> DATA_VARIANT;
 

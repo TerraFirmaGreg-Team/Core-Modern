@@ -46,8 +46,10 @@ public abstract class EnvironmentEffectsMixin {
     private static void tfg$tickBlock(ServerLevel level, BlockPos pos, BlockState state, CallbackInfo ci) {
         // Add our own tag for things that do have one of the below tags (such as leaves, saplings) but which we
         // want to be excluded from being destroyed (such as mars saplings)
-        if (state.is(TFGTags.Blocks.DoNotDestroyInSpace))
+        if (state.is(TFGTags.Blocks.DoNotDestroyInSpace)) {
             ci.cancel();
+            return;
+        }
 
         // Cheap early exit before doing expensive hasOxygenOnAnySide.
         Block block = state.getBlock();
@@ -63,14 +65,19 @@ public abstract class EnvironmentEffectsMixin {
                 || block instanceof OvenBottomBlock
                 || block instanceof CharcoalForgeBlock
                 || block instanceof JackOLanternBlock
-                || block instanceof LampBlock))
+                || block instanceof LampBlock)) {
             ci.cancel();
+            return;
+        }
 
-        if (hasOxygenOnAnySide(level, pos))
+        if (hasOxygenOnAnySide(level, pos)) {
             ci.cancel();
+            return;
+        }
 
         if (state.is(ModBlockTags.DESTROYED_IN_SPACE)) {
             level.destroyBlock(pos, true);
+            return;
         }
         if (block instanceof TFCTorchBlock) {
             Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
