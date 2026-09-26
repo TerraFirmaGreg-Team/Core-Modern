@@ -6,45 +6,33 @@
 
 package net.dries007.tfc.network;
 
+import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.container.TFCContainerProviders;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
-import net.dries007.tfc.util.Helpers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import org.jetbrains.annotations.Nullable;
 
-public record SwitchInventoryTabPacket(Type type)
-{
-    SwitchInventoryTabPacket(FriendlyByteBuf buffer)
-    {
-        this(Type.VALUES[buffer.readByte()]);
+public record SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab tab) {
+
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeEnum(this.tab);
     }
 
-    void encode(FriendlyByteBuf buffer)
-    {
-        buffer.writeByte(type.ordinal());
+    public static SwitchInventoryTabPacket decode(FriendlyByteBuf buf) {
+        return new SwitchInventoryTabPacket(buf.readEnum(PlayerInventoryTabButton.Tab.class));
     }
 
-    void handle(@Nullable ServerPlayer player)
-    {
-        if (player != null)
-        {
+    public void handle(ServerPlayer player) {
+        if (player != null) {
             player.doCloseContainer();
-            switch (type)
-            {
+
+            switch (this.tab) {
                 case INVENTORY -> player.containerMenu = player.inventoryMenu;
-                case CALENDAR -> Helpers.openScreen(player, TFCContainerProviders.CALENDAR);
-                case NUTRITION -> Helpers.openScreen(player, TFCContainerProviders.NUTRITION);
-                case CLIMATE -> Helpers.openScreen(player, TFCContainerProviders.CLIMATE);
+                case CALENDAR -> player.openMenu(TFCContainerProviders.CALENDAR);
+                case NUTRITION -> player.openMenu(TFCContainerProviders.NUTRITION);
+                case CLIMATE -> player.openMenu(TFCContainerProviders.CLIMATE);
                 case BOOK -> PatchouliIntegration.openGui(player);
             }
         }
-    }
-
-    public enum Type
-    {
-        INVENTORY, CALENDAR, NUTRITION, CLIMATE, BOOK;
-
-        private static final Type[] VALUES = values();
     }
 }

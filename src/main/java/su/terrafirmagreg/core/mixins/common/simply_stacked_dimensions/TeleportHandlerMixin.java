@@ -18,6 +18,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
+
 @Mixin(value = TeleportHandler.class)
 public abstract class TeleportHandlerMixin {
 
@@ -51,7 +53,7 @@ public abstract class TeleportHandlerMixin {
     @Unique
     private static void tfg$clearRock(ServerLevel level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        if (state.is(TFCTags.Blocks.CAN_COLLAPSE)) {
+        if (state.is(TFCTags.Blocks.CAN_COLLAPSE) || state.is(TFGTags.Blocks.HORNFELS)) {
             level.setBlockAndUpdate(pos, m_air);
         } else if (state.is(TFCTags.Blocks.CAN_LANDSLIDE)) {
             level.setBlockAndUpdate(pos, m_air);

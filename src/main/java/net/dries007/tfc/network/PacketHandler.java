@@ -77,7 +77,7 @@ public final class PacketHandler
         registerDataManager(Support.Packet.class, Support.MANAGER);
 
         // Client -> Server
-        register(SwitchInventoryTabPacket.class, SwitchInventoryTabPacket::encode, SwitchInventoryTabPacket::new, SwitchInventoryTabPacket::handle);
+        register(SwitchInventoryTabPacket.class, SwitchInventoryTabPacket::encode, SwitchInventoryTabPacket::decode, SwitchInventoryTabPacket::handle);
         register(PlaceBlockSpecialPacket.class, PlaceBlockSpecialPacket::new, PlaceBlockSpecialPacket::handle);
         register(CycleChiselModePacket.class, CycleChiselModePacket::new, CycleChiselModePacket::handle);
         register(ScreenButtonPacket.class, ScreenButtonPacket::encode, ScreenButtonPacket::new, ScreenButtonPacket::handle);

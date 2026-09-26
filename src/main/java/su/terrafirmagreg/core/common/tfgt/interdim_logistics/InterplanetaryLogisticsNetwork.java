@@ -30,10 +30,10 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
     static {
         DIMENSION_DISTANCES.put("minecraft:overworld", 0);
         DIMENSION_DISTANCES.put("ad_astra:earth_orbit", 0);
-        DIMENSION_DISTANCES.put("ad_astra:moon", 60);
-        DIMENSION_DISTANCES.put("ad_astra:moon_orbit", 60);
-        DIMENSION_DISTANCES.put("ad_astra:mars", 120);
-        DIMENSION_DISTANCES.put("ad_astra:mars_orbit", 120);
+        DIMENSION_DISTANCES.put("ad_astra:moon", 0);
+        DIMENSION_DISTANCES.put("ad_astra:moon_orbit", 0);
+        DIMENSION_DISTANCES.put("ad_astra:mars", 0);
+        DIMENSION_DISTANCES.put("ad_astra:mars_orbit", 0);
     }
 
     public final Map<DimensionalBlockPos, NetworkPart> parts = new HashMap<>();

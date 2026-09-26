@@ -28,7 +28,7 @@ public enum ForgingBonus
     EXPERTLY_FORGED(TFCConfig.SERVER.anvilExpertForgedThreshold::get),
     PERFECTLY_FORGED(TFCConfig.SERVER.anvilPerfectlyForgedThreshold::get);
 
-    private static final String KEY = "tfc:forging_bonus";
+    public static final String KEY = "tfc:forging_bonus";
     private static final ForgingBonus[] VALUES = values();
 
     public static ForgingBonus valueOf(int i)

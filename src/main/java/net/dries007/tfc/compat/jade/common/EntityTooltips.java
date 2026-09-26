@@ -7,6 +7,7 @@
 package net.dries007.tfc.compat.jade.common;
 
 import net.dries007.tfc.common.entities.livestock.pet.Dog;
+import net.dries007.tfc.common.entities.predator.TFCWolf;
 import net.dries007.tfc.common.entities.prey.TFCFox;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -43,14 +44,13 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.wanmine.wab.entity.Charger;
 import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
-import org.spongepowered.asm.mixin.Unique;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
 import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
 import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
 import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSeal;
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
-import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
+import net.dries007.tfc.common.entities.misc.IWolf;
 import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamel;
 import su.terrafirmagreg.core.common.entity.camels.TFCDromedaryCamel;
@@ -95,7 +95,7 @@ public final class EntityTooltips
 		registry.register("axolotl", TFG_AXOLOTL, Axolotl.class);
 		registry.register("charger", TFG_CHARGER, Charger.class);
 		registry.register("snatcher", TFG_SNATCHER, Snatcher.class);
-		registry.register("wolf", TFG_WOLF, PackPredator.class);
+		registry.register("wolf", TFG_WOLF, TFCWolf.class);
 		registry.register("dog", TFG_DOG, Dog.class);
 		registry.register("leopard_seal", TFC_1_21, TFCLeopardSeal.class);
 		registry.register("bison", TFC_1_21, TFCBison.class);
@@ -279,16 +279,16 @@ public final class EntityTooltips
     };
 
 	private static final EntityTooltip TFG_WOLF = (level, entity, tooltip) -> {
-		if (entity instanceof TFCWolfInterface wolf && entity instanceof PackPredator predator) {
+		if (entity instanceof IWolf wolf && entity instanceof PackPredator predator) {
 			if (predator.isTamable()) {
-				tooltip.accept(Helpers.translateEnum(wolf.tfg$getVariant(), "TFCWolfVariant"));
+				tooltip.accept(Helpers.translateEnum(wolf.getVariant(), "TFCWolfVariant"));
 			}
 		}
 	};
 
 	private static final EntityTooltip TFG_DOG = (level, entity, tooltip) -> {
-		if (entity instanceof TFCWolfInterface dog) {
-			tooltip.accept(Helpers.translateEnum(dog.tfg$getVariant(), "TFCWolfVariant"));
+		if (entity instanceof IWolf dog) {
+			tooltip.accept(Helpers.translateEnum(dog.getVariant(), "TFCWolfVariant"));
 		}
 	};
 

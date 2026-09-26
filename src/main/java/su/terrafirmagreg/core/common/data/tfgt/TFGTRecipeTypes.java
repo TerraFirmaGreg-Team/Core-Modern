@@ -246,6 +246,5 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.COMPRESSOR)
             .UI(builder -> builder
                     .setProgressBar(GTGuiTextures.PROGRESS_ARROW)
-                    .addRecipeUIModifier((recipe, widget) -> widget.textComponents.child(Text.lang("tfg.recipe.budding_charge", recipe.data.getInt("budding_charge")).asWidget()))
                     .addRecipeUIModifier(TFGReipeUIModifiers.BUDDING_CHARGER));
 }

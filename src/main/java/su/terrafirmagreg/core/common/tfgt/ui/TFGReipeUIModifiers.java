@@ -30,6 +30,9 @@ public class TFGReipeUIModifiers {
         if (!recipe.data.contains("budding_max_tier"))
             return;
         int tier = recipe.data.getInt("budding_max_tier");
+        int charge = recipe.data.getInt("budding_charge");
+
+        widget.textComponents.child(Text.lang("tfg.recipe.budding_charge", charge).asWidget());
 
         Flow row = Flow.row();
         row.child(Text.lang("tfg.recipe.budding_max_tier_label",

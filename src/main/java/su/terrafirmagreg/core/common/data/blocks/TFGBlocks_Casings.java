@@ -102,7 +102,7 @@ public class TFGBlocks_Casings {
 
     public static final BlockEntry<ActiveParticleBlock> PISCICULTURE_CORE = TFGCore.REGISTRATE
             .block("pisciculture_core", p -> new ActiveParticleBlock(p.sound(SoundType.COPPER).strength(5f, 6f).mapColor(MapColor.GRASS).noOcclusion(),
-                    Block.box(0, 12, 0, 16, 16, 16),
+                    Block.box(0, 0, 0, 16, 16, 16),
                     null,
                     null,
                     List.of(new GTActiveParticleBuilder.ParticleSetBuilder()

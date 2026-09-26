@@ -209,8 +209,17 @@ public final class TFGMaterialHandler {
             dustSmall.setIgnored(polycaprolactam);
             dustTiny.setIgnored(polycaprolactam);
             block.setIgnored(polycaprolactam);
-
         }
+
+        final Supplier<Item> vanadiumSteelAnvil = () -> Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(TFGCore.id("vanadium_steel_anvil"))).asItem();
+        anvil.setIgnored(VanadiumSteel, vanadiumSteelAnvil::get);
+        final Supplier<Item> stainlessSteelAnvil = () -> Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(TFGCore.id("stainless_steel_anvil"))).asItem();
+        anvil.setIgnored(StainlessSteel, stainlessSteelAnvil::get);
+        final Supplier<Item> tungstenAnvil = () -> Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(TFGCore.id("tungsten_anvil"))).asItem();
+        anvil.setIgnored(Tungsten, tungstenAnvil::get);
+
+        final Supplier<Item> steelDrillHead = () -> Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(TFGCore.id("steel_drill_head"))).asItem();
+        toolHeadDrill.setIgnored(Steel, steelDrillHead::get);
 
         // Tool-only metals
 
