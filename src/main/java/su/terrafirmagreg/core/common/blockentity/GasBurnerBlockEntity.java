@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.blockentity;
 
-import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -58,6 +58,16 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     public static void serverTick(Level level, BlockPos pos, BlockState state, GasBurnerBlockEntity burner) {
         burner.checkForLastTickSync();
 
+        if (burner.stateDelayTicks > 0) {
+            burner.stateDelayTicks--;
+            if (burner.stateDelayTicks == 0 && burner.pendingState != null) {
+                burner.ignite(level, pos, burner.pendingState);
+                burner.markForSync();
+                burner.pendingState = null;
+                burner.stateDelayTicks = -1;
+            }
+        }
+
         if (level.getGameTime() % 5 == 0) {
             burner.updateFluidIOSlots();
         }
@@ -90,6 +100,8 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
         }
     }
 
+    public int stateDelayTicks = -1;
+    private BlockState pendingState = null;
     protected final InventoryFluidTank tank;
     private final LazyOptional<IFluidHandler> fluidCapability;
 
@@ -187,23 +199,39 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
         return slot == SLOT_FLUID_CONTAINER_IN && Helpers.mightHaveCapability(stack, Capabilities.FLUID_ITEM);
     }
 
-    /**
-     * Attempts to light the burner.
-     * @param state The current block state.
-     * @return {@code true} if the burner was lit.
-     */
     public boolean light(BlockState state) {
         assert level != null;
         if (burnTicks > 0) {
             return true;
         }
         if (consumeFuel()) {
-            RandomSource rand = level.random;
-            level.setBlockAndUpdate(worldPosition, state.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true));
-            level.playSound(null, worldPosition, TFGSounds.FIRE_WHOOSH.getMainEvent(), SoundSource.BLOCKS, 2, 1 + rand.nextFloat());
+            BlockState targetState = state.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true);
+            this.ignite(level, worldPosition, targetState);
             return true;
         }
         return false;
+    }
+
+    public boolean autoLight(BlockState state) {
+        assert level != null;
+        if (burnTicks > 0) {
+            return true;
+        }
+        if (consumeFuel()) {
+            level.playSound(null, worldPosition, TFGSounds.FIRE_CLICK_CLICK.getMainEvent(), SoundSource.BLOCKS, 2, 0.8f);
+            this.pendingState = state.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true);
+            this.stateDelayTicks = 15;
+            this.setChanged();
+
+            return true;
+        }
+        return false;
+    }
+
+    private void ignite(Level targetLevel, BlockPos targetPos, BlockState targetState) {
+        RandomSource rand = targetLevel.random;
+        targetLevel.playSound(null, targetPos, TFGSounds.FIRE_WHOOSH.getMainEvent(), SoundSource.BLOCKS, 2, 1 + rand.nextFloat());
+        targetLevel.setBlockAndUpdate(targetPos, targetState);
     }
 
     private void updateFluidIOSlots() {

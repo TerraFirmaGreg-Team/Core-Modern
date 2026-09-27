@@ -127,7 +127,7 @@ public class GasBurnerBlock extends DeviceBlock {
             if (player instanceof ServerPlayer serverPlayer) {
                 Helpers.openScreen(serverPlayer, burner, pos);
             }
-            return InteractionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(level.isClientSide());
         }
         return InteractionResult.PASS;
     }
