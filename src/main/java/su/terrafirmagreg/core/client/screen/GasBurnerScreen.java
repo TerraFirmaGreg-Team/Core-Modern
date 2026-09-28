@@ -31,6 +31,11 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
     @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTicks, mouseX, mouseY);
+        int maxTemp = Heat.scaleTemperatureForGui(blockEntity.getMaxTemperature());
+        if (maxTemp > 0) {
+            graphics.blit(texture, leftPos + 8, topPos + 76 - Math.min(51, maxTemp), 176, 0, 15, 5);
+        }
+
         int temp = Heat.scaleTemperatureForGui(blockEntity.getTemperature());
         if (temp > 0) {
             graphics.blit(texture, leftPos + 8, topPos + 76 - Math.min(51, temp), 176, 0, 15, 5);
@@ -52,7 +57,13 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
     @Override
     protected void renderTooltip(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
         super.renderTooltip(graphics, mouseX, mouseY);
-        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + 8, topPos + 76 - 51, 15, 51)) {
+        int maxTemp = Heat.scaleTemperatureForGui(blockEntity.getMaxTemperature());
+        if (maxTemp > 0 && RenderHelpers.isInside(mouseX, mouseY, leftPos + 8, topPos + 76 - Math.min(51, maxTemp), 15, 5)) {
+            final var text = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(blockEntity.getMaxTemperature());
+            if (text != null) {
+                graphics.renderTooltip(font, text, mouseX, mouseY);
+            }
+        } else if (RenderHelpers.isInside(mouseX, mouseY, leftPos + 8, topPos + 76 - 51, 15, 51)) {
             final var text = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(blockEntity.getTemperature());
             if (text != null) {
                 graphics.renderTooltip(font, text, mouseX, mouseY);

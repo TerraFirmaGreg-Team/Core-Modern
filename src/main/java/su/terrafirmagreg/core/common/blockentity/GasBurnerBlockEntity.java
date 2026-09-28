@@ -51,7 +51,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     public static final int SLOTS = 2;
     public static final int CAPACITY = 4000;
     public static final int BURN_TICKS_PER_CYCLE = 10;
-    public static final int MB_PER_CYCLE = 100;
+    public static final int MB_PER_CYCLE = 10;
 
     private static final Component NAME = Component.translatable(TFGCore.MOD_ID + ".block_entity.gas_burner");
     private boolean isProcessingTankChange = false;
@@ -63,8 +63,10 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
         if (burner.stateDelayTicks > 0) {
             burner.stateDelayTicks--;
             if (burner.stateDelayTicks == 0 && burner.pendingState != null) {
-                burner.ignite(level, pos, burner.pendingState);
-                level.setBlockAndUpdate(pos, burner.pendingState);
+                BlockState currentState = level.getBlockState(pos);
+                BlockState targetState = currentState.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true);
+                burner.ignite(level, pos, targetState);
+                level.setBlockAndUpdate(pos, targetState);
 
                 burner.markForSync();
                 burner.pendingState = null;
@@ -96,8 +98,13 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
         }
 
         if (burner.temperature > 0 || burner.burnTemperature > 0) {
+            float maxTemp = burner.getMaxTemperature();
+            if (burner.burnTicks > 0) {
+                burner.burnTemperature = maxTemp;
+            }
             float target = HeatCapability.targetDeviceTemp(burner.burnTemperature, 0, false);
-            burner.temperature = HeatCapability.adjustTempTowards(burner.temperature, target, 10.0f, 1.0f);
+            target = Math.min(target, maxTemp);
+            burner.temperature = HeatCapability.adjustTempTowards(burner.temperature, target, 5.0f, 2.0f);
 
             HeatCapability.provideHeatTo(level, pos.above(), burner.temperature);
             burner.markForSync();
@@ -295,12 +302,30 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
         }
         FluidStack drained = tank.drain(new FluidStack(oliveOil, MB_PER_CYCLE), IFluidHandler.FluidAction.EXECUTE);
         if (!drained.isEmpty() && drained.getAmount() >= MB_PER_CYCLE) {
-            burnTemperature = 1000;
+            burnTemperature = getMaxTemperature();
             burnTicks = BURN_TICKS_PER_CYCLE;
             markForSync();
             return true;
         }
         return false;
+    }
+
+    public float getMaxTemperature() {
+        if (level != null) {
+            return getMaxTemperature(level.getBlockState(worldPosition));
+        }
+        return getMaxTemperature(getBlockState());
+    }
+
+    public static float getMaxTemperature(BlockState state) {
+        if (state != null && state.hasProperty(GasBurnerBlock.SET_LEVEL)) {
+            int setLevel = state.getValue(GasBurnerBlock.SET_LEVEL);
+            Heat[] values = Heat.values();
+            if (setLevel >= 0 && setLevel < values.length) {
+                return values[setLevel].getMax();
+            }
+        }
+        return Heat.BRILLIANT_WHITE.getMax();
     }
 
     public void extinguish(BlockState state) {

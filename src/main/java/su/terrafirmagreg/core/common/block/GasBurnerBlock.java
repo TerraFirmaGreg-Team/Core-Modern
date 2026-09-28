@@ -105,8 +105,15 @@ public class GasBurnerBlock extends DeviceBlock {
             Direction facing = context.getHorizontalDirection().getOpposite();
             Level level = context.getLevel();
             BlockPos pos = context.getClickedPos();
-            int redstone = getInputSignal(level, pos, facing);
-            int setLevel = Mth.clamp(redstone - 5, 0, 10);
+
+            int maxTempSignal = 0;
+            for (Direction dir : Direction.values()) {
+                int signal = getInputSignal(level, pos, dir);
+                if (signal >= 3 && signal <= 15 && signal > maxTempSignal) {
+                    maxTempSignal = signal;
+                }
+            }
+            int setLevel = (maxTempSignal >= 3) ? Mth.clamp(maxTempSignal - 3, 0, 10) : 0;
             return state.setValue(FACING, facing).setValue(SET_LEVEL, setLevel);
         }
         return null;
@@ -119,47 +126,65 @@ public class GasBurnerBlock extends DeviceBlock {
         updateBurnerRedstoneAndState(level, pos, state);
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, level, pos, oldState, isMoving);
+        if (!state.is(oldState.getBlock())) {
+            updateBurnerRedstoneAndState(level, pos, state);
+        }
+    }
+
     public static void updateBurnerRedstoneAndState(Level level, BlockPos pos, BlockState state) {
         if (level.isClientSide)
             return;
 
-        Direction facing = state.getValue(FACING);
-        int redstone = getInputSignal(level, pos, facing);
-        int setLevel = Mth.clamp(redstone - 5, 0, 10);
+        int maxSignal = 0;
+        int maxTempSignal = 0;
+        boolean hasIgniteSignal = false;
+
+        for (Direction dir : Direction.values()) {
+            int signal = getInputSignal(level, pos, dir);
+            if (signal > maxSignal) {
+                maxSignal = signal;
+            }
+            if (signal >= 3 && signal <= 14 && signal > maxTempSignal) {
+                maxTempSignal = signal;
+            }
+            if (signal == 15) {
+                hasIgniteSignal = true;
+                maxTempSignal = signal;
+            }
+        }
 
         BlockState newState = state;
+        int setLevel = (maxTempSignal >= 3) ? Mth.clamp(maxTempSignal - 3, 0, 10) : 0;
+
         if (state.getValue(SET_LEVEL) != setLevel) {
             newState = state.setValue(SET_LEVEL, setLevel);
-            level.setBlock(pos, newState, 2);
+            level.setBlock(pos, newState, Block.UPDATE_ALL);
         }
 
         GasBurnerBlockEntity burner = level.getBlockEntity(pos, TFGBlockEntities.GAS_BURNER.get()).orElse(null);
         if (burner != null) {
-            boolean hasRedstoneSignal = hasOtherSignal(level, pos, facing);
-
-            if (hasRedstoneSignal) {
+            if (hasIgniteSignal) {
+                burner.isRedstoneIgnited = true;
                 if (!newState.getValue(LIT) && burner.stateDelayTicks <= 0 && burner.burnTicks <= 0) {
-                    burner.isRedstoneIgnited = true;
                     burner.autoLight(newState);
                 }
-            } else {
+            } else if (maxSignal == 0) {
                 if (burner.isRedstoneIgnited) {
+                    burner.isRedstoneIgnited = false;
                     if (newState.getValue(LIT) || burner.stateDelayTicks > 0) {
-                        burner.isRedstoneIgnited = false;
                         burner.extinguish(newState);
                     }
                 }
+            } else {
+                if (newState.getValue(LIT) || burner.stateDelayTicks > 0) {
+                    burner.isRedstoneIgnited = true;
+                }
             }
         }
-    }
-
-    public static boolean hasOtherSignal(Level level, BlockPos pos, Direction facing) {
-        for (Direction direction : Direction.values()) {
-            if (direction != facing && getInputSignal(level, pos, direction) > 0) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static int getInputSignal(Level level, BlockPos pos, Direction direction) {
