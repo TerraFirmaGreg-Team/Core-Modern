@@ -79,6 +79,14 @@ public final class FluidHelpers
 		|| fluidType == TFGFluids.MARS_WATER.type().get());
     }
 
+	public static double getWaterLikeFluidHeight(Entity entity)
+	{
+		return Math.max(Math.max(Math.max(entity.getFluidTypeHeight(TFCFluids.SALT_WATER.type().get()),
+			entity.getFluidTypeHeight(TFCFluids.SPRING_WATER.type().get())),
+			entity.getFluidTypeHeight(TFGFluids.MUDDY_WATER.type().get())),
+			entity.getFluidTypeHeight(TFGFluids.MARS_WATER.type().get()));
+	}
+
     /**
      * @see #isInWaterLikeFluid(Entity)
      */
