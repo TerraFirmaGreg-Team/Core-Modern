@@ -15,6 +15,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,6 +27,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -100,9 +103,89 @@ public class GasBurnerBlock extends DeviceBlock {
         BlockState state = super.getStateForPlacement(context);
         if (state != null) {
             Direction facing = context.getHorizontalDirection().getOpposite();
-            return state.setValue(FACING, facing);
+            Level level = context.getLevel();
+            BlockPos pos = context.getClickedPos();
+            int redstone = getInputSignal(level, pos, facing);
+            int setLevel = Mth.clamp(redstone - 5, 0, 10);
+            return state.setValue(FACING, facing).setValue(SET_LEVEL, setLevel);
         }
         return null;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        updateBurnerRedstoneAndState(level, pos, state);
+    }
+
+    public static void updateBurnerRedstoneAndState(Level level, BlockPos pos, BlockState state) {
+        if (level.isClientSide)
+            return;
+
+        Direction facing = state.getValue(FACING);
+        int redstone = getInputSignal(level, pos, facing);
+        int setLevel = Mth.clamp(redstone - 5, 0, 10);
+
+        BlockState newState = state;
+        if (state.getValue(SET_LEVEL) != setLevel) {
+            newState = state.setValue(SET_LEVEL, setLevel);
+            level.setBlock(pos, newState, 2);
+        }
+
+        GasBurnerBlockEntity burner = level.getBlockEntity(pos, TFGBlockEntities.GAS_BURNER.get()).orElse(null);
+        if (burner != null) {
+            boolean hasRedstoneSignal = hasOtherSignal(level, pos, facing);
+
+            if (hasRedstoneSignal) {
+                if (!newState.getValue(LIT) && burner.stateDelayTicks <= 0 && burner.burnTicks <= 0) {
+                    burner.isRedstoneIgnited = true;
+                    burner.autoLight(newState);
+                }
+            } else {
+                if (burner.isRedstoneIgnited) {
+                    if (newState.getValue(LIT) || burner.stateDelayTicks > 0) {
+                        burner.isRedstoneIgnited = false;
+                        burner.extinguish(newState);
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean hasOtherSignal(Level level, BlockPos pos, Direction facing) {
+        for (Direction direction : Direction.values()) {
+            if (direction != facing && getInputSignal(level, pos, direction) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int getInputSignal(Level level, BlockPos pos, Direction direction) {
+        BlockPos neighborPos = pos.relative(direction);
+        int signal = level.getSignal(neighborPos, direction);
+        if (signal >= 15) {
+            return signal;
+        }
+        BlockState neighborState = level.getBlockState(neighborPos);
+        return Math.max(signal, neighborState.is(Blocks.REDSTONE_WIRE) ? neighborState.getValue(RedStoneWireBlock.POWER) : 0);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        GasBurnerBlockEntity burner = level.getBlockEntity(pos, TFGBlockEntities.GAS_BURNER.get()).orElse(null);
+        if (burner != null) {
+            return burner.getFuelLevel();
+        }
+        return 0;
     }
 
     @Override

@@ -54,6 +54,8 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     public static final int MB_PER_CYCLE = 100;
 
     private static final Component NAME = Component.translatable(TFGCore.MOD_ID + ".block_entity.gas_burner");
+    private boolean isProcessingTankChange = false;
+    public boolean isRedstoneIgnited = false;
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, GasBurnerBlockEntity burner) {
         burner.checkForLastTickSync();
@@ -62,6 +64,8 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             burner.stateDelayTicks--;
             if (burner.stateDelayTicks == 0 && burner.pendingState != null) {
                 burner.ignite(level, pos, burner.pendingState);
+                level.setBlockAndUpdate(pos, burner.pendingState);
+
                 burner.markForSync();
                 burner.pendingState = null;
                 burner.stateDelayTicks = -1;
@@ -103,14 +107,14 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     public int stateDelayTicks = -1;
     private BlockState pendingState = null;
     protected final InventoryFluidTank tank;
-    private final LazyOptional<IFluidHandler> fluidCapability;
+    public final LazyOptional<IFluidHandler> fluidCapability;
 
     @Getter
     protected final ContainerData syncableData;
     @Getter
-    private float temperature;
-    private int burnTicks;
-    private float burnTemperature;
+    public float temperature;
+    public int burnTicks;
+    public float burnTemperature;
     private long lastPlayerTick;
 
     public GasBurnerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -128,18 +132,42 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
 
     @Override
     public void fluidTankChanged() {
-        if (level != null && !level.isClientSide) {
-            BlockState state = level.getBlockState(worldPosition);
-            if (state.hasProperty(GasBurnerBlock.HEAT) && state.getValue(GasBurnerBlock.HEAT) > 0) {
-                Fluid oliveOil = TFCFluids.SIMPLE_FLUIDS.get(SimpleFluid.OLIVE_OIL).getSource();
-                if (tank.isEmpty() || tank.getFluidAmount() < MB_PER_CYCLE || !tank.getFluid().getFluid().isSame(oliveOil)) {
-                    if (burnTicks <= 0) {
-                        extinguish(state);
-                    }
+        if (level == null || level.isClientSide) {
+            markForSync();
+            return;
+        }
+
+        if (isProcessingTankChange)
+            return;
+
+        BlockState state = level.getBlockState(worldPosition);
+
+        if (state.hasProperty(GasBurnerBlock.HEAT) && state.getValue(GasBurnerBlock.HEAT) > 0) {
+            Fluid oliveOil = TFCFluids.SIMPLE_FLUIDS.get(SimpleFluid.OLIVE_OIL).getSource();
+            if (tank.isEmpty() || tank.getFluidAmount() < MB_PER_CYCLE || !tank.getFluid().getFluid().isSame(oliveOil)) {
+                if (burnTicks <= 0 && state.getValue(GasBurnerBlock.LIT)) {
+                    extinguish(state);
+                    state = level.getBlockState(worldPosition);
                 }
             }
         }
+        try {
+            isProcessingTankChange = true;
+            GasBurnerBlock.updateBurnerRedstoneAndState(level, worldPosition, state);
+        } finally {
+            isProcessingTankChange = false;
+        }
+
+        level.updateNeighbourForOutputSignal(worldPosition, state.getBlock());
         markForSync();
+    }
+
+    public int getFuelLevel() {
+        if (tank.isEmpty() || tank.getCapacity() <= 0) {
+            return 0;
+        }
+        float fraction = (float) tank.getFluidAmount() / (float) tank.getCapacity();
+        return Mth.floor(fraction * 14.0F) + (tank.getFluidAmount() > 0 ? 1 : 0);
     }
 
     @NotNull
@@ -205,17 +233,22 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             return true;
         }
         if (consumeFuel()) {
+            this.isRedstoneIgnited = false;
+            this.stateDelayTicks = 0;
+
             BlockState targetState = state.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true);
             this.ignite(level, worldPosition, targetState);
+
+            level.setBlockAndUpdate(worldPosition, targetState);
             return true;
         }
         return false;
     }
 
-    public boolean autoLight(BlockState state) {
+    public void autoLight(BlockState state) {
         assert level != null;
         if (burnTicks > 0) {
-            return true;
+            return;
         }
         if (consumeFuel()) {
             level.playSound(null, worldPosition, TFGSounds.FIRE_CLICK_CLICK.getMainEvent(), SoundSource.BLOCKS, 2, 0.8f);
@@ -223,9 +256,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             this.stateDelayTicks = 15;
             this.setChanged();
 
-            return true;
         }
-        return false;
     }
 
     private void ignite(Level targetLevel, BlockPos targetPos, BlockState targetState) {
