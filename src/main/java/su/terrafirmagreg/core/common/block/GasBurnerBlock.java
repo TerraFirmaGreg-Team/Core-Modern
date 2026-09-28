@@ -14,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -41,6 +40,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.TFGSounds;
 
 public class GasBurnerBlock extends DeviceBlock {
     public static final IntegerProperty HEAT = TFCBlockStateProperties.HEAT_LEVEL;
@@ -72,8 +72,8 @@ public class GasBurnerBlock extends DeviceBlock {
         double spawnY = pos.getY() + 1.0D;
         double spawnZ = z + offsets[1];
 
-        if (rand.nextInt(10) == 0) {
-            level.playLocalSound(x, y, z, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.5F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.6F, false);
+        if (rand.nextInt(8) == 0) {
+            level.playLocalSound(x, y, z, TFGSounds.BURNER.getMainEvent(), SoundSource.BLOCKS, rand.nextFloat() * 0.5f, rand.nextFloat() * 0.7F + 0.1F, false);
         }
         for (int i = 0; i < rand.nextInt(2); i++) {
             level.addParticle(ParticleTypes.SMOKE, spawnX, y + (rand.nextDouble() / 2), spawnZ, 0, 0.005D, 0);
