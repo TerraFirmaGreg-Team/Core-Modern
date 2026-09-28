@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blockentities;
 
+import net.dries007.tfc.common.recipes.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +22,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -31,9 +31,6 @@ import net.dries007.tfc.common.capabilities.*;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.container.PotContainer;
 import net.dries007.tfc.common.fluids.FluidHelpers;
-import net.dries007.tfc.common.recipes.PotRecipe;
-import net.dries007.tfc.common.recipes.RecipeHelpers;
-import net.dries007.tfc.common.recipes.TFCRecipeTypes;
 import net.dries007.tfc.common.recipes.inventory.EmptyInventory;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
@@ -55,7 +52,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
     @Nullable private PotRecipe cachedRecipe;
     private int boilingTicks, preBoilingTicks;
 
-    public PotBlockEntity(BlockPos pos, BlockState state)
+	public PotBlockEntity(BlockPos pos, BlockState state)
     {
         super(TFCBlockEntities.POT.get(), pos, state, PotInventory::new, NAME);
 
@@ -148,6 +145,15 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
                 RecipeHelpers.clearCraftingInput();
 
                 // Clear inputs
+				assert cachedRecipe != null : "cachedRecipe should not be null when handleCooking completes a recipe";
+
+
+				// Makes pot recipes consume only the required fluid amount and preserve remainder,
+				// Unless the recipe produces a fluid output or is a jam/soup recipe.
+				FluidStack savedInputFluid = inventory.tank.getFluid().copy();
+				int requiredAmount = cachedRecipe.getFluidIngredient().amount();
+				boolean isSoupOrJam = cachedRecipe instanceof SoupPotRecipe || cachedRecipe instanceof JamPotRecipe;
+
                 inventory.tank.setFluid(FluidStack.EMPTY);
                 for (int slot = SLOT_EXTRA_INPUT_START; slot <= SLOT_EXTRA_INPUT_END; slot++)
                 {
@@ -156,6 +162,29 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
                 }
 
                 output.onFinish(inventory); // Let the output handle filling into the empty pot
+
+				// After output.onFinish() is called, check if it added fluid.
+				// If not, restore the remainder from our saved state.
+				// Soup and Jam recipes always void remainder.
+				if (!isSoupOrJam) {
+					PotBlockEntity.PotInventory inventory = (PotBlockEntity.PotInventory) this.getCapability(
+						net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER).orElseThrow(() -> new IllegalStateException("Pot should have inventory"));
+
+					FluidStack currentFluid = inventory.getFluidInTank(0);
+
+					// No output fluid, restore remainder from saved input.
+					if (currentFluid.isEmpty()) {
+						if (!savedInputFluid.isEmpty()) {
+							int remainingAmount = Math.max(0, savedInputFluid.getAmount() - requiredAmount);
+
+							if (remainingAmount > 0) {
+								FluidStack remainingFluid = new FluidStack(savedInputFluid.getFluid(), remainingAmount);
+								inventory.getFluidHandler().fill(remainingFluid, IFluidHandler.FluidAction.EXECUTE);
+							}
+						}
+					}
+				}
+
                 if (!output.isEmpty()) // Then, if we still have contents, save the output
                 {
                     this.output = output;

@@ -270,7 +270,6 @@
         "common.tfc.IDelegateIngredientAccessor",
         "common.tfc.NotRottenIngredientMixin",
         "common.tfc.OverworldClimateModelMixin",
-        "common.tfc.PotBlockEntityMixin",
         "common.tfc.QuernBlockEntityMixin",
         "common.tfc.QuernBlockMixin",
         "common.tfc.TFCFallingBlockEntityMixin",
