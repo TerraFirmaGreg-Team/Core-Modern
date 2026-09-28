@@ -293,17 +293,17 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         return PotContainer.create(this, playerInv, windowID);
     }
 
-    public static class PotInventory implements EmptyInventory, DelegateItemHandler, DelegateFluidHandler, INBTSerializable<CompoundTag>
+    public static class PotInventory implements EmptyInventory, DelegateItemHandler, DelegateFluidHandler, INBTSerializable<CompoundTag>, FluidTankCallback
     {
         private final PotBlockEntity pot;
         private final ItemStackHandler inventory;
-        private final FluidTank tank;
+        private final InventoryFluidTank tank;
 
         public PotInventory(InventoryBlockEntity<PotInventory> entity)
         {
             this.pot = (PotBlockEntity) entity;
             this.inventory = new InventoryItemHandler(entity, 9);
-            this.tank = new FluidTank(FluidHelpers.BUCKET_VOLUME, fluid -> Helpers.isFluid(fluid.getFluid(), TFCTags.Fluids.USABLE_IN_POT));
+            this.tank = new InventoryFluidTank(FluidHelpers.BUCKET_VOLUME, this::canInsertFluid, this);
         }
 
         @NotNull
@@ -312,6 +312,22 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         {
             return pot.hasRecipeStarted() && slot >= SLOT_EXTRA_INPUT_START ? ItemStack.EMPTY : inventory.extractItem(slot, amount, simulate);
         }
+
+		@Override
+		public void fluidTankChanged()
+		{
+			// Fluid may be inserted or extracted via capability (i.e. pipes), so we need to update the recipe and sync to client
+			if (pot.getLevel() != null && !pot.getLevel().isClientSide)
+			{
+				pot.setAndUpdateSlots(-1);
+			}
+		}
+
+		@Override
+		public int fill(FluidStack resource, FluidAction action)
+		{
+			return pot.hasRecipeStarted() ? 0 : getFluidHandler().fill(resource, action);
+		}
 
         @Override
         public @NotNull FluidStack drain(int maxDrain, FluidAction action)
@@ -346,5 +362,11 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
             inventory.deserializeNBT(nbt.getCompound("inventory"));
             tank.readFromNBT(nbt.getCompound("tank"));
         }
+
+
+		private boolean canInsertFluid(FluidStack fluid)
+		{
+			return pot.output == null && Helpers.isFluid(fluid.getFluid(), TFCTags.Fluids.USABLE_IN_POT);
+		}
     }
 }
