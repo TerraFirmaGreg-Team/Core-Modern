@@ -7,7 +7,6 @@ import net.dries007.tfc.client.screen.BlockEntityScreen;
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.dries007.tfc.config.TFCConfig;
-import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Tooltips;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -16,14 +15,44 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, GasBurnerBlockContainer> {
-    private static final ResourceLocation FORGE = Helpers.identifier("textures/gui/charcoal_forge.png");
+    private static final ResourceLocation BURNER = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/gas_burner.png");
+
+    private final int tempScaleX = 25;
+    private final int tempScaleY = 76;
+    private final int tempScaleHeight = 51;
+
+    private final int currentTempBarU = 176;
+    private final int currentTempBarV = 0;
+    private final int currentTempBarWidth = 15;
+    private final int currentTempBarHeight = 5;
+
+    private final int maxTempBarU = currentTempBarU;
+    private final int maxTempBarV = currentTempBarV + currentTempBarHeight;
+    private final int maxTempBarWidth = currentTempBarWidth;
+    private final int maxTempBarHeight = currentTempBarHeight;
+
+    private final int flameX = 63;
+    private final int flameY = 22;
+    private final int flameU = currentTempBarU;
+    private final int flameV = maxTempBarV + maxTempBarHeight;
+    private final int flameWidth = 21;
+    private final int flameHeight = 32;
+
+    private final int tankX = 108;
+    private final int tankY = 26;
+    private final int tankHeight = 50;
+    private final int tankWidth = 16;
+    private final int tankOverlayU = currentTempBarU;
+    private final int tankOverlayV = flameV + flameHeight;
 
     public GasBurnerScreen(GasBurnerBlockContainer container, Inventory playerInventory, Component name) {
-        super(container, playerInventory, name, FORGE);
+        super(container, playerInventory, name, BURNER);
         inventoryLabelY += 20;
         imageHeight += 20;
     }
@@ -31,46 +60,71 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
     @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTicks, mouseX, mouseY);
+
+        // Max Temperature Indicator.
         int maxTemp = Heat.scaleTemperatureForGui(blockEntity.getMaxTemperature());
         if (maxTemp > 0) {
-            graphics.blit(texture, leftPos + 8, topPos + 76 - Math.min(51, maxTemp), 176, 0, 15, 5);
+            graphics.fill(leftPos + tempScaleX + 3, topPos + tempScaleY - tempScaleHeight, leftPos + tempScaleX + maxTempBarWidth - 3, topPos + tempScaleY - Math.min(tempScaleHeight, maxTemp),
+                    0xD53A274A);
+            graphics.blit(texture, leftPos + tempScaleX, topPos + tempScaleY - Math.min(tempScaleHeight, maxTemp) - 3, maxTempBarU, maxTempBarV, maxTempBarWidth, maxTempBarHeight);
         }
 
+        // Temperature Indicator.
         int temp = Heat.scaleTemperatureForGui(blockEntity.getTemperature());
         if (temp > 0) {
-            graphics.blit(texture, leftPos + 8, topPos + 76 - Math.min(51, temp), 176, 0, 15, 5);
+            graphics.blit(texture, leftPos + tempScaleX, topPos + tempScaleY - Math.min(tempScaleHeight, temp), currentTempBarU, currentTempBarV, currentTempBarWidth, currentTempBarHeight);
         }
 
+        // Fluid Tank.
         blockEntity.getCapability(Capabilities.FLUID).ifPresent(fluidHandler -> {
             FluidStack fluidStack = fluidHandler.getFluidInTank(0);
             if (!fluidStack.isEmpty()) {
                 final TextureAtlasSprite sprite = RenderHelpers.getAndBindFluidSprite(fluidStack);
-                final int fillHeight = (int) Math.ceil((float) 50 * fluidStack.getAmount() / (float) GasBurnerBlockEntity.CAPACITY);
+                final int fillHeight = (int) Math.ceil((float) tankHeight * fluidStack.getAmount() / (float) GasBurnerBlockEntity.CAPACITY);
 
-                RenderHelpers.fillAreaWithSprite(graphics, sprite, leftPos + 152, topPos + 70 - fillHeight, 16, fillHeight, 16, 16);
+                RenderHelpers.fillAreaWithSprite(graphics, sprite, leftPos + tankX, topPos + tankY + tankHeight - fillHeight, tankWidth, fillHeight, 16, 16);
 
                 resetToBackgroundSprite();
             }
         });
+        graphics.blit(texture, leftPos + tankX - 1, topPos + tempScaleY - tempScaleHeight, tankOverlayU, tankOverlayV, tankWidth + 2, tankHeight + 2);
+
+        // Flame Progress Bar
+        int burnTicks = blockEntity.getBurnTicks();
+        int burnTime = GasBurnerBlockEntity.BURN_TICKS_PER_CYCLE;
+        if (burnTicks > 0) {
+            float smoothBurnTicks = burnTicks - partialTicks;
+            float burnPercentage = smoothBurnTicks / (float) burnTime;
+            int remainingHeight = Math.round(flameHeight * burnPercentage);
+
+            if (remainingHeight > 0) {
+                int burnOffset = flameHeight - remainingHeight;
+                graphics.blit(texture, leftPos + flameX, topPos + flameY + burnOffset, flameU, flameV + burnOffset, flameWidth, remainingHeight);
+            }
+        }
     }
 
     @Override
     protected void renderTooltip(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
         super.renderTooltip(graphics, mouseX, mouseY);
         int maxTemp = Heat.scaleTemperatureForGui(blockEntity.getMaxTemperature());
-        if (maxTemp > 0 && RenderHelpers.isInside(mouseX, mouseY, leftPos + 8, topPos + 76 - Math.min(51, maxTemp), 15, 5)) {
+
+        // Max Temperature Indicator Tooltip.
+        if (maxTemp > 0 && RenderHelpers.isInside(mouseX, mouseY, leftPos + tempScaleX, topPos + tempScaleY - Math.min(tempScaleHeight, maxTemp) - 3, currentTempBarWidth, maxTempBarHeight)) {
             final var text = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(blockEntity.getMaxTemperature());
             if (text != null) {
                 graphics.renderTooltip(font, text, mouseX, mouseY);
             }
-        } else if (RenderHelpers.isInside(mouseX, mouseY, leftPos + 8, topPos + 76 - 51, 15, 51)) {
+            // Temperature Indicator Tooltip.
+        } else if (RenderHelpers.isInside(mouseX, mouseY, leftPos + tempScaleX, topPos + tempScaleY - tempScaleHeight, currentTempBarWidth, tempScaleHeight)) {
             final var text = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(blockEntity.getTemperature());
             if (text != null) {
                 graphics.renderTooltip(font, text, mouseX, mouseY);
             }
         }
 
-        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + 152, topPos + 20, 16, 50)) {
+        // Fluid Tooltip.
+        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + tankX, topPos + tankHeight - tankY, tankWidth, tankHeight)) {
             blockEntity.getCapability(Capabilities.FLUID).ifPresent(fluidHandler -> {
                 FluidStack fluid = fluidHandler.getFluidInTank(0);
                 if (!fluid.isEmpty()) {

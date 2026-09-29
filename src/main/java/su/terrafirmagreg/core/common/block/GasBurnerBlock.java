@@ -111,6 +111,8 @@ public class GasBurnerBlock extends DeviceBlock {
                 int signal = getInputSignal(level, pos, dir);
                 if (signal >= 3 && signal <= 15 && signal > maxTempSignal) {
                     maxTempSignal = signal;
+                } else {
+                    maxTempSignal = 15;
                 }
             }
             int setLevel = (maxTempSignal >= 3) ? Mth.clamp(maxTempSignal - 3, 0, 10) : 0;
@@ -140,25 +142,31 @@ public class GasBurnerBlock extends DeviceBlock {
             return;
 
         int maxSignal = 0;
-        int maxTempSignal = 0;
+        int maxTempSignal = 15;
         boolean hasIgniteSignal = false;
+        boolean foundValidSignal = false;
 
         for (Direction dir : Direction.values()) {
             int signal = getInputSignal(level, pos, dir);
             if (signal > maxSignal) {
                 maxSignal = signal;
             }
-            if (signal >= 3 && signal <= 14 && signal > maxTempSignal) {
-                maxTempSignal = signal;
-            }
             if (signal == 15) {
                 hasIgniteSignal = true;
-                maxTempSignal = signal;
+            }
+
+            if (signal >= 1 && signal <= 15) {
+                if (!foundValidSignal) {
+                    maxTempSignal = signal;
+                    foundValidSignal = true;
+                } else if (signal > maxTempSignal) {
+                    maxTempSignal = signal;
+                }
             }
         }
 
         BlockState newState = state;
-        int setLevel = (maxTempSignal >= 3) ? Mth.clamp(maxTempSignal - 3, 0, 10) : 0;
+        int setLevel = Mth.clamp(maxTempSignal - 3, 0, 10);
 
         if (state.getValue(SET_LEVEL) != setLevel) {
             newState = state.setValue(SET_LEVEL, setLevel);

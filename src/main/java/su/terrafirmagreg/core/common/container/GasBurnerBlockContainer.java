@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 
+@SuppressWarnings("UnnecessaryLocalVariable")
 public class GasBurnerBlockContainer extends BlockEntityContainer<GasBurnerBlockEntity> {
     public static GasBurnerBlockContainer create(GasBurnerBlockEntity burner, Inventory playerInventory, int windowId) {
         return new GasBurnerBlockContainer(burner, windowId).init(playerInventory, 20);
@@ -32,9 +33,14 @@ public class GasBurnerBlockContainer extends BlockEntityContainer<GasBurnerBlock
 
     @Override
     protected void addContainerSlots() {
+        int SlotInX = 135;
+        int SlotInY = 26;
+        int SlotOutX = SlotInX;
+        int SlotOutY = SlotInY + 34;
+
         blockEntity.getCapability(Capabilities.ITEM).ifPresent(handler -> {
-            addSlot(new CallbackSlot(blockEntity, handler, GasBurnerBlockEntity.SLOT_FLUID_CONTAINER_IN, 35, 20));
-            addSlot(new CallbackSlot(blockEntity, handler, GasBurnerBlockEntity.SLOT_FLUID_CONTAINER_OUT, 35, 54));
+            addSlot(new CallbackSlot(blockEntity, handler, GasBurnerBlockEntity.SLOT_FLUID_CONTAINER_IN, SlotInX, SlotInY));
+            addSlot(new CallbackSlot(blockEntity, handler, GasBurnerBlockEntity.SLOT_FLUID_CONTAINER_OUT, SlotOutX, SlotOutY));
         });
     }
 }

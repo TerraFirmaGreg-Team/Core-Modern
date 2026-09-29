@@ -120,6 +120,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     protected final ContainerData syncableData;
     @Getter
     public float temperature;
+    @Getter
     public int burnTicks;
     public float burnTemperature;
     private long lastPlayerTick;
