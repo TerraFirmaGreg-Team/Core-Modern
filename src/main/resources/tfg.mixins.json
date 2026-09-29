@@ -212,6 +212,8 @@
         "common.minecraft.entities.MobMixin",
         "common.minecraft.entities.MonsterMixin",
         "common.minecraft.entities.PathfinderMobMixin",
+        "common.minecraft.entities.PiglinAiMixin",
+        "common.minecraft.entities.PiglinBruteAiMixin",
         "common.minecraft.entities.PiglinBruteMixin",
         "common.minecraft.entities.SlimeMixin",
         "common.minecraft.entities.SmallFireballMixin",
