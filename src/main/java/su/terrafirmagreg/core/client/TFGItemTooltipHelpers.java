@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
@@ -40,6 +42,8 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
+import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
+import su.terrafirmagreg.core.common.block.GasBurnerBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
@@ -52,6 +56,7 @@ import su.terrafirmagreg.core.common.event.OreProspectorEvent;
 import su.terrafirmagreg.core.common.event.WeakOreProspectorEventHelper;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+@SuppressWarnings("NoTranslation")
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class TFGItemTooltipHelpers {
@@ -138,6 +143,17 @@ public class TFGItemTooltipHelpers {
                     .append(Component.literal(": ")
                             .append(Component.translatable("tfc.tooltip.time_delta_days", daysToGrow)
                                     .withStyle(ChatFormatting.ITALIC, dynamicColor))));
+        }
+
+        if (block instanceof GasBurnerBlock) {
+            Player player = event.getEntity();
+            if (player != null) {
+                if (Screen.hasShiftDown()) {
+                    tooltip.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.gas_burner.flavor_text")));
+                } else {
+                    tooltip.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
+                }
+            }
         }
     }
 

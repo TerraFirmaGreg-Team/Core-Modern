@@ -276,4 +276,5 @@ public class GasBurnerBlock extends DeviceBlock {
     public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
         return false;
     }
+    
 }

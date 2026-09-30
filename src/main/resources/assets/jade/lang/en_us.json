@@ -20,6 +20,7 @@
     "config.jade.plugin_tfc.surfer": "",
     "config.jade.plugin_tfg.tier_locked_block_info": "",
     "config.jade.plugin_tfc.anemometer": "",
+    "config.jade.plugin_tfg.gas_burner_info": "",
     "config.jade.plugin_tfc.axolotl": "",
     "config.jade.plugin_tfc.vane": ""
 }
