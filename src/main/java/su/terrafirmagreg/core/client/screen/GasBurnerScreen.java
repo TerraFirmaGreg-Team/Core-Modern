@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.client.screen;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.client.RenderHelpers;
@@ -11,6 +13,7 @@ import net.dries007.tfc.util.Tooltips;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
@@ -91,7 +94,7 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
 
         // Flame Progress Bar
         int burnTicks = blockEntity.getBurnTicks();
-        int burnTime = GasBurnerBlockEntity.BURN_TICKS_PER_CYCLE;
+        int burnTime = blockEntity.getMaxBurnTicks() > 0 ? blockEntity.getMaxBurnTicks() : 1000;
         if (burnTicks > 0) {
             float smoothBurnTicks = burnTicks - partialTicks;
             float burnPercentage = smoothBurnTicks / (float) burnTime;
@@ -124,13 +127,33 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
         }
 
         // Fluid Tooltip.
-        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + tankX, topPos + tankHeight - tankY, tankWidth, tankHeight)) {
+        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + tankX, topPos + tankY, tankWidth, tankHeight)) {
             blockEntity.getCapability(Capabilities.FLUID).ifPresent(fluidHandler -> {
                 FluidStack fluid = fluidHandler.getFluidInTank(0);
                 if (!fluid.isEmpty()) {
                     graphics.renderTooltip(font, Tooltips.fluidUnitsAndCapacityOf(fluid, GasBurnerBlockEntity.CAPACITY), mouseX, mouseY);
                 }
             });
+        }
+
+        // Timer Tooltip.
+        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + flameX, topPos + flameY, flameWidth, flameHeight)) {
+            if (blockEntity.getBurnTicks() > 0) {
+                float remainingSeconds = (float) blockEntity.getBurnTicks() / 20;
+                MutableComponent timerIcon = ((int) remainingSeconds % 2 != 0) ? Component.literal("⏳ ") : Component.literal("⌛ ");
+                Component timerText = timerIcon.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
+                float temp = blockEntity.burnTemperature;
+                MutableComponent formattedTemp = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(temp);
+                if (formattedTemp == null) {
+                    formattedTemp = TFCConfig.CLIENT.heatTooltipStyle.get().formatRange(temp);
+                }
+                if (formattedTemp != null) {
+                    Component tempText = Component.literal("\uD83D\uDD25 ").append(formattedTemp);
+                    graphics.renderComponentTooltip(font, List.of(timerText, tempText), mouseX, mouseY);
+                } else {
+                    graphics.renderComponentTooltip(font, List.of(timerText), mouseX, mouseY);
+                }
+            }
         }
     }
 }

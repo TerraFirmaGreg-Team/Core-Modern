@@ -23,7 +23,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -45,6 +44,7 @@ import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
+@SuppressWarnings("deprecation")
 public class GasBurnerBlock extends DeviceBlock {
     public static final IntegerProperty HEAT = TFCBlockStateProperties.HEAT_LEVEL;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -62,6 +62,7 @@ public class GasBurnerBlock extends DeviceBlock {
                 .setValue(FACING, Direction.NORTH));
     }
 
+    // Handles particles and sounds.
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
         if (state.getValue(HEAT) == 0)
@@ -84,9 +85,10 @@ public class GasBurnerBlock extends DeviceBlock {
         }
     }
 
+    // Burns players if they step on a lit burner.
     @Override
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
-        if (!entity.fireImmune() && entity instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity) entity) && level.getBlockState(pos).getValue(HEAT) > 0) {
+        if (!entity.fireImmune() && entity instanceof LivingEntity && level.getBlockState(pos).getValue(HEAT) > 0) {
             entity.hurt(entity.damageSources().hotFloor(), 1f);
         }
         super.stepOn(level, pos, state, entity);
@@ -122,14 +124,18 @@ public class GasBurnerBlock extends DeviceBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
         updateBurnerRedstoneAndState(level, pos, state);
     }
 
+    // Need to set the collision shape to a full block to support grills and pots.
     @Override
-    @SuppressWarnings("deprecation")
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return Shapes.block();
+    }
+
+    @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
         if (!state.is(oldState.getBlock())) {
@@ -137,6 +143,15 @@ public class GasBurnerBlock extends DeviceBlock {
         }
     }
 
+    /**
+     * Handles redstone signal and state updates for neighbor changes, place events, and fuel consumption.
+     * - When redstone level is 15, the burner will ignite.
+     * - When all redstone levels are 0, the burner will extinguish.
+     * - Redstone levels are between 3 and 14, will set the max temp limit.
+     * - Redstone level 0 and 15 will set max temp to highest limit for ignition with or without limit setting.
+     * Also works with flags in GasBurnerBlockEntity so that manual ignition and extinguishing can override redstone.
+     * Although, it mostly gets overridden on block updates.
+     */
     public static void updateBurnerRedstoneAndState(Level level, BlockPos pos, BlockState state) {
         if (level.isClientSide)
             return;
@@ -206,13 +221,14 @@ public class GasBurnerBlock extends DeviceBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
+    /**
+     * Reports fuel tank level when using a comparator.
+     */
     @Override
-    @SuppressWarnings("deprecation")
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         GasBurnerBlockEntity burner = level.getBlockEntity(pos, TFGBlockEntities.GAS_BURNER.get()).orElse(null);
         if (burner != null) {
@@ -222,13 +238,11 @@ public class GasBurnerBlock extends DeviceBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         var heldItem = player.getItemInHand(hand);
         if (!heldItem.isEmpty() && heldItem.getItem() instanceof ArmItem) {
@@ -248,16 +262,17 @@ public class GasBurnerBlock extends DeviceBlock {
         return InteractionResult.PASS;
     }
 
+    /**
+     * Can spread fires only to blocks next to itself.
+     */
     @Override
-    @SuppressWarnings("deprecation")
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
         if (state.getValue(HEAT) > 0) {
-            Helpers.fireSpreaderTick(level, pos.above(), rand, 3);
+            Helpers.fireSpreaderTick(level, pos.above(), rand, 1);
         }
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
         return false;
     }
