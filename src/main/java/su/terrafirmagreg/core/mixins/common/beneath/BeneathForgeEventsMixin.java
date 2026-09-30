@@ -61,8 +61,8 @@ public class BeneathForgeEventsMixin {
             } else {
                 var existingItem = entity.getItemBySlot(slot);
                 if (!existingItem.is(SNSItems.QUIVER.get())
-						&& !existingItem.is(AllItems.GOGGLES.get())
-						&& !existingItem.is(Items.SPYGLASS)) {
+                        && !existingItem.is(AllItems.GOGGLES.get())
+                        && !existingItem.is(Items.SPYGLASS)) {
                     entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
                 }
             }
