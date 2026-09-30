@@ -142,7 +142,7 @@ public class GasBurnerFuelEmiRecipe implements EmiRecipe {
         widgets.add(new TextWidget(burnAmount.getVisualOrderText(), textX, burnTextY, 0xFFFFFF, true) {
             @Override
             public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-                return List.of(ClientTooltipComponent.create(Component.translatable("tfg.emi.fuel_burning.days", daysPerTank, burnerCapacity).getVisualOrderText()));
+                return List.of(ClientTooltipComponent.create(Component.translatable("tfg.tooltip.fuel_burning.days", daysPerTank, burnerCapacity).getVisualOrderText()));
             }
         });
 
