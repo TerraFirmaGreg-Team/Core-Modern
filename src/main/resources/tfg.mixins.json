@@ -99,6 +99,7 @@
         "common.firmalife.ClimateStationOxygenatedMixin",
         "common.firmalife.CompostTumblerBlockEntityMixin",
         "common.firmalife.CompostTumblerBlockMixin",
+        "common.firmalife.FLInteractionManagerMixin",
         "common.firmalife.HydroponicPlanterBlockEntityMixin",
         "common.firmalife.LargePlanterBlockEntityOxygenMixin",
         "common.firmalife.MixinFoodShelfBlockEntity",
