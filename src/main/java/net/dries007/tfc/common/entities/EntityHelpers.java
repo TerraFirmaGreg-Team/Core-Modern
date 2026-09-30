@@ -8,6 +8,8 @@ package net.dries007.tfc.common.entities;
 
 import java.util.List;
 import java.util.Optional;
+
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -130,9 +132,10 @@ public final class EntityHelpers
     {
         if (random.nextFloat() < 0.05f) // baby chance
         {
-            return Calendars.get(entity.level()).getTotalDays() + random.nextInt(10);
+            return Calendars.get(entity.level()).getTotalDays() - ((long) random.nextInt(Math.max(1, Math.min(10, daysToAdult))) * ICalendar.TICKS_IN_DAY);
         }
-        int lifeTimeDays = daysToAdult + random.nextInt(daysToAdult);
+
+        int lifeTimeDays = daysToAdult + random.nextInt(Math.max(1, daysToAdult));
         return Calendars.get(entity.level()).getTotalDays() - lifeTimeDays;
     }
 

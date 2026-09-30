@@ -166,11 +166,11 @@ public interface BlockTemperatureProvider {
     static Optional<TempModifier> handleFirePit(Player player, BlockEntity entity) {
         if (entity instanceof FirepitBlockEntity pit) {
             float temp = pit.getTemperature();
-            float change = temp / 100f;
+            float change = temp / 50f;
             if (hasProtection(player)) {
                 change = change * 0.3f;
             }
-            return TempModifier.defined(Math.min(6f, change), 0);
+            return TempModifier.defined(Math.min(12f, change), 0);
         }
         return TempModifier.none();
     }

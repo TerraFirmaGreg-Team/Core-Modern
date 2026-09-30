@@ -6,40 +6,70 @@
 
 package net.dries007.tfc.mixin.client.compat.patchouli;
 
-import net.minecraft.client.gui.components.events.ContainerEventHandler;
-import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.network.PacketDistributor;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vazkii.patchouli.client.book.gui.GuiBook;
+import vazkii.patchouli.common.book.Book;
 
-/**
- * See <a href="https://github.com/VazkiiMods/Patchouli/issues/696">Patchouli#696</a>
- * <p>
- * Unfortunately, when Patchy fixed this issue, they also bumped to a Forge version requirement of >47.2. This means for us, we can't depend on that version without introducing a hard dep on that (and no NeoForge compat possible, since we rely on earlier versions there due to another issue)
- * This mixin has to exist for the edge case of someone using an out-of-date patchouli version on old Forge versions, and we don't want the bugged behavior to appear (for example, in a development environment).
- * <p>
- * This target is set to require = 0, so it should fail without issue on new Patchy versions, as the target method was removed (and replaced with exactly what this mixin is doing).
- */
+import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
+import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
+import net.dries007.tfc.network.PacketHandler;
+import net.dries007.tfc.network.SwitchInventoryTabPacket;
+import net.dries007.tfc.util.Helpers;
+
 @Mixin(GuiBook.class)
-public abstract class GuiBookMixin implements ContainerEventHandler
+public abstract class GuiBookMixin extends Screen
 {
-    @Inject(method = "mouseClickedScaled", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;mouseClicked(DDI)Z"), cancellable = true, require = 0)
-    private void preventFocusForPatchyBookButtons(double mouseX, double mouseY, int mouseButton, CallbackInfoReturnable<Boolean> cir)
+    @Shadow(remap = false)
+    public int bookLeft;
+
+    @Shadow(remap = false)
+    public int bookTop;
+
+    @Final
+    @Shadow(remap = false)
+    public Book book;
+
+    protected GuiBookMixin(Component title)
     {
-        for (GuiEventListener listener : this.children())
+        super(title);
+    }
+
+    @Inject(method = "init", at = @At("TAIL"))
+    public void injectTabButtons(CallbackInfo ci)
+    {
+        if (book != null && (book.id.equals(PatchouliIntegration.BOOK_ID) || book.id.equals(Helpers.resourceLocation("tfg", "field_guide"))))
         {
-            if (listener.mouseClicked(mouseX, mouseY, mouseButton))
+            final Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null)
             {
-                if (mouseButton == 0)
-                {
-                    this.setDragging(true);
-                }
-                cir.setReturnValue(true);
-                return;
+                final Inventory playerInventory = mc.player.getInventory();
+
+                addRenderableWidget(new PlayerInventoryTabButton(bookLeft, bookTop, false, true, PlayerInventoryTabButton.Tab.INVENTORY, button -> {
+                    playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
+                    if (mc.gameMode != null && mc.gameMode.isServerControlledInventory() && mc.player != null) {
+                        mc.setScreen(new CreativeModeInventoryScreen(playerInventory.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()));
+                    } else {
+                        mc.setScreen(new InventoryScreen(playerInventory.player));
+                    }
+                    PacketHandler.send(PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab.INVENTORY));
+                }));
+                addRenderableWidget(new PlayerInventoryTabButton(bookLeft, bookTop, false, true, PlayerInventoryTabButton.Tab.CALENDAR));
+                addRenderableWidget(new PlayerInventoryTabButton(bookLeft, bookTop, false, true, PlayerInventoryTabButton.Tab.NUTRITION));
+                addRenderableWidget(new PlayerInventoryTabButton(bookLeft, bookTop, false, true, PlayerInventoryTabButton.Tab.CLIMATE));
+                addRenderableWidget(new PlayerInventoryTabButton(bookLeft, bookTop, true, true, PlayerInventoryTabButton.Tab.BOOK, button -> {}));
             }
         }
-        cir.setReturnValue(false);
     }
 }
