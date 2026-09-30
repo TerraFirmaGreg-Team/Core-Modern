@@ -1,11 +1,11 @@
-package su.terrafirmagreg.core.mixins.common.create;
+package su.terrafirmagreg.core.mixins.common.vintageimprovements;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.simibubi.create.compat.jei.category.BasinCategory;
+import com.negodya1.vintageimprovements.compat.jei.category.VacuumizingCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
@@ -20,8 +20,8 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
  * Mixin to swap Blaze Burner and Blaze Cake catalyst renders for the gas burner.
  * Charcoal forge is also valid, but it cannot be rendered as an item.
  */
-@Mixin(value = BasinCategory.class)
-public abstract class BasinCategoryMixin {
+@Mixin(value = VacuumizingCategory.class)
+public abstract class VacuumizingCategoryMixin {
 
     @Inject(method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;getRequiredHeat()Lcom/simibubi/create/content/processing/recipe/HeatCondition;"), cancellable = true, remap = false)
     public void tfg$setRecipe(IRecipeLayoutBuilder builder, BasinRecipe recipe, IFocusGroup focuses, CallbackInfo ci) {
@@ -35,5 +35,4 @@ public abstract class BasinCategoryMixin {
 
         ci.cancel();
     }
-
 }

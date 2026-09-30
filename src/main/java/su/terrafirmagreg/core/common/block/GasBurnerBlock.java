@@ -12,7 +12,6 @@ import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -260,16 +259,6 @@ public class GasBurnerBlock extends DeviceBlock {
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
         return InteractionResult.PASS;
-    }
-
-    /**
-     * Can spread fires only to blocks next to itself.
-     */
-    @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
-        if (state.getValue(HEAT) > 0) {
-            Helpers.fireSpreaderTick(level, pos.above(), rand, 1);
-        }
     }
 
     @Override
