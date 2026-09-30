@@ -27,7 +27,8 @@ public class IngameOverlaysMixin {
         return player.getCapability(TemperatureCapability.CAPABILITY).map(TemperatureCapability::getTemperature).orElseThrow();
     }
 
-    @Inject(method = "renderTemperature", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"))
+    // avoid needing to reference mojang obfuscated method, instead inject at end of renderTemperature which is functionally the same thing
+    @Inject(method = "renderTemperature", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V", ordinal = 2))
     private static void renderTemperature(ForgeGui gui, GuiGraphics graphics, float partialTicks, int width, int height, CallbackInfo ci) {
         float averageTemp = ClimateRenderCache.INSTANCE.getAverageTemperature();
         float currentTemp = ClimateRenderCache.INSTANCE.getTemperature();

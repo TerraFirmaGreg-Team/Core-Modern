@@ -23,13 +23,13 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     private static final String AAAPARTICLES_GAME_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinGameRenderer";
     private static final String AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinItemInHandRenderer";
 
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return switch (mixinClassName) {
-            case "su.terrafirmagreg.core.mixins.client.ihearttfc.IngameOverlaysMixin" -> isModLoaded("ihearttfc");
-            default -> true;
-        };
-    }
+    //    @Override
+    //    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+    //        return switch (mixinClassName) {
+    //            case "su.terrafirmagreg.core.mixins.client.ihearttfc.IngameOverlaysMixin" -> isModLoaded("ihearttfc");
+    //            default -> true;
+    //        };
+    //    }
 
     /**
      * acceptTargets fires once after all configs have been collected but before any have been applied,
@@ -104,6 +104,7 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     // No-op event handlers that need implementation for an IMixinConfigPlugin
 
     // spotless:off
+    @Override public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {return true;}
     @Override public void onLoad(String mixinPackage) {}
     @Override public String getRefMapperConfig() {return null;}
     @Override public List<String> getMixins() {return null;}

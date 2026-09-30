@@ -187,5 +187,5 @@ dependencies {
     modImplementation("curse.maven:building-gadgets-298187:6850495") { transitive = false }
 
     // I <3 TFC
-    modCompileOnly "curse.maven:ihearttfc-1118578:5901425"
+    modImplementation "curse.maven:ihearttfc-1118578:5901425"
 }
