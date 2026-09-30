@@ -109,9 +109,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
 
     /** Called by the wrapper's beforeWorking. Re-searches the recipe so energy reacts to region size. */
     public void beforeWorking(@Nullable GTRecipe recipe) {
-        if (host.getRecipeLogic() != null) {
-            host.getRecipeLogic().markLastRecipeDirty();
-        }
+        host.getRecipeLogic().markLastRecipeDirty();
     }
 
     //////////////////////////////////////
@@ -283,7 +281,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     // IEnvironmentMachine / IBlockSensitiveMachine
     @Override
     public BlockPos getPos() {
-        return host.self().getPos();
+        return host.self().getBlockPos();
     }
 
     @Override

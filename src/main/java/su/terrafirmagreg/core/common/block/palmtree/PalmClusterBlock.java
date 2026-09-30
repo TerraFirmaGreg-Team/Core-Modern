@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.block.palmtree;
 
-import static com.lowdragmc.lowdraglib.LDLib.random;
-
 import java.util.*;
 
 import org.jetbrains.annotations.Nullable;
@@ -235,7 +233,7 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
             int age = state.getValue(this.clusterAge);
             age++;
 
-            if (dormant && random.nextFloat() < 0.25f) {
+            if (dormant && serverLevel.random.nextFloat() < 0.25f) {
                 serverLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                 spawnFallingPalmBlock(serverLevel, pos, TFGBlocks_PalmTrees.PALM_HUSK.get(), 1);
             }

@@ -2,51 +2,41 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.server.level.ServerLevel;
 
-import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widget.ParentWidget;
+
 import su.terrafirmagreg.core.common.tfgt.machine.electric.IOxygenDistributorHost;
 import su.terrafirmagreg.core.common.tfgt.machine.electric.OxygenDistributorMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.EnvironmentRecipeLogic;
 
 /**
  * GT multiblock wrapper for {@link OxygenDistributorMachine}.
- * Handles GT registration, lifecycle hooks, and LDLib field sync.
+ * Handles GT registration, lifecycle hooks.
  * All machine logic lives in {@link OxygenDistributorMachine}.
  */
-public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachine implements IOxygenDistributorHost, IMachineLife {
+public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachine implements IOxygenDistributorHost {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            OxygenDistributorMultiblock.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private boolean showTraceButton;
 
     private final OxygenDistributorMachine machine;
 
-    public OxygenDistributorMultiblock(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public OxygenDistributorMultiblock(BlockEntityCreationInfo info) {
+        super(info, new EnvironmentRecipeLogic());
+        recipeLogic.setRegressWhenWaiting(false);
         this.machine = new OxygenDistributorMachine(this);
     }
 
@@ -55,26 +45,14 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     //////////////////////////////////////
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new EnvironmentRecipeLogic(this);
-    }
-
-    @Override
     public boolean beforeWorking(@Nullable GTRecipe recipe) {
         machine.beforeWorking(recipe);
         return super.beforeWorking(recipe);
     }
 
     @Override
-    public boolean regressWhenWaiting() {
-        return false;
-    }
-
-    @Override
-    public @NotNull Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, OxygenDistributorMachine.UI_WIDTH, OxygenDistributorMachine.UI_HEIGHT);
-        machine.addSharedWidgets(group);
-        return group;
+    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
+        machine.addSharedWidgets(mainWidget, guiData, syncManager, settings);
     }
 
     //////////////////////////////////////
@@ -82,37 +60,27 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     //////////////////////////////////////
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        TFGCore.LOGGER.info("[oxy-multiblock] onLoad, pos={}", getPos());
-    }
-
-    @Override
     public void onUnload() {
         super.onUnload();
-        TFGCore.LOGGER.info("[oxy-multiblock] onUnload, pos={}", getPos());
         machine.onUnload();
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        TFGCore.LOGGER.info("[oxy-multiblock] onStructureFormed, pos={}", getPos());
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            machine.onLoad(serverLevel);
+    public void formStructure(String substructureName) {
+        if (substructureName.equals(DEFAULT_STRUCTURE) && getLevel() instanceof ServerLevel sLvl) {
+            machine.onLoad(sLvl);
         }
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
-        TFGCore.LOGGER.info("[oxy-multiblock] onStructureInvalid, pos={}", getPos());
-        machine.onRemoved();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
+        if (substructureName.equals(DEFAULT_STRUCTURE))
+            machine.onRemoved();
     }
 
     @Override
-    public void onMachineRemoved() {
-        TFGCore.LOGGER.info("[oxy-multiblock] onMachineRemoved, pos={}", getPos());
+    public void onMachineDestroyed() {
         machine.onRemoved();
     }
 
@@ -122,8 +90,7 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
 
     @Override
     public long getEnergyInputPerSec() {
-        var energy = getEnergyContainer();
-        return energy != null ? Math.max(0, energy.getInputPerSec()) : 0;
+        return Math.max(0, getEnergyContainer().getInputPerSec());
     }
 
     @Override

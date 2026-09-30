@@ -3,7 +3,7 @@ package su.terrafirmagreg.core.mixins.common.create;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import com.gregtechceu.gtceu.api.fluids.forge.GTFluidImpl;
+import com.gregtechceu.gtceu.api.fluids.GTFluid;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
 
@@ -20,7 +20,7 @@ public class FluidDrainingBehaviourMixin {
     @ModifyReturnValue(method = "getDrainableFluid", at = @At("RETURN"), remap = false)
     private FluidStack tfg$getDrainableFluid(FluidStack original) {
         if (original.getFluid() instanceof FlowingFluid flowingFluid
-                && flowingFluid.getFlowing() instanceof GTFluidImpl
+                && flowingFluid.getFlowing() instanceof GTFluid
                 && flowingFluid.getBucket() instanceof BucketItem bucket) {
 
             return new FluidStack(bucket.getFluid(), original.getAmount());

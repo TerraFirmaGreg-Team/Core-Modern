@@ -139,7 +139,7 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
         }
 
         default InterplanetaryLogisticsNetwork getLogisticsNetwork() {
-            return InterplanetaryLogisticsNetwork.get((ServerLevel) getMachine().getHolder().level());
+            return InterplanetaryLogisticsNetwork.get((ServerLevel) getMachine().getLevel());
         }
 
         MetaMachine getMachine();
@@ -170,7 +170,7 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
 
     public record DimensionalBlockPos(String dimension, BlockPos pos) {
         public DimensionalBlockPos(MetaMachine machine) {
-            this(Objects.requireNonNull(machine.getLevel()).dimension().location().toString(), machine.getPos());
+            this(Objects.requireNonNull(machine.getLevel()).dimension().location().toString(), machine.getBlockPos());
         }
 
         public DimensionalBlockPos(CompoundTag tag) {

@@ -6,13 +6,9 @@ import javax.annotation.Nullable;
 
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
-import com.lowdragmc.lowdraglib.gui.widget.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -26,6 +22,15 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.DoubleSyncValue;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widget.ParentWidget;
+import brachy.modularui.widgets.ButtonWidget;
+import brachy.modularui.widgets.ProgressWidget;
+import brachy.modularui.widgets.layout.Flow;
 import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 import earth.terrarium.adastra.common.blocks.properties.SlidingDoorPartProperty;
 import earth.terrarium.adastra.common.items.armor.SpaceSuitItem;
@@ -37,9 +42,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
 import su.terrafirmagreg.core.common.environment.*;
 import su.terrafirmagreg.core.common.environment.RoomScan.Status;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.EnvironmentRecipeLogic;
 
 /**
  * Oxygen Distributor machine logic. Maintains a sealed room with breathable atmosphere via flood fill.
@@ -120,7 +125,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         int baseCost = 0;
         var fluidInputs = recipe.getTickInputContents(FluidRecipeCapability.CAP);
         if (!fluidInputs.isEmpty()) {
-            baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
+            baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).content()).getAmount();
         }
         // baseCost mB/min per 10k blocks -> mB/tick for actual volume
         envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * EnclosedRoomEnergyCurve.BASE_VOLUME));
@@ -150,50 +155,55 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     // ************* GUI ************** //
     //////////////////////////////////////
 
-    public static final int UI_WIDTH = 164 + 10;
-    public static final int UI_HEIGHT = 78;
-    public static final int UI_RIGHT_COL_X = UI_WIDTH - 40;
-
     /** Adds the shared widgets (status, find leak, fill suit, progress bar) to an existing group. */
-    public void addSharedWidgets(WidgetGroup group) {
-        // Status text
-        group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
-                .setMaxWidthLimit(UI_RIGHT_COL_X - 4));
+    public void addSharedWidgets(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
 
-        // "Find Leak" button, only visible when room is unsealed with an escape point
-        var traceButton = new ButtonWidget(41 - 23, UI_HEIGHT - 19, 18, 18,
-                new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture("💨")), cd -> {
-                    if (!cd.isRemote) {
+        DoubleSyncValue progressSync = new DoubleSyncValue(host.getRecipeLogic()::getProgressPercent);
+        syncManager.syncValue("progressValue", progressSync);
+
+        var col = Flow.col().coverChildren();
+
+        addStatusText(col, syncManager);
+
+        var buttonRow = Flow.row().coverChildren().childPadding(3);
+
+        buttonRow.child(new ButtonWidget<>()
+                .size(18, 18)
+                .overlay(Text.str("💨"))
+                .onUpdateListener(w -> w.setEnabled(host.showTraceButton()))
+                .onMousePressed((ctx, i) -> {
+                    if (!host.isRemote()) {
                         requestBreachTrace();
+                        return true;
                     }
-                }) {
-            @Override
-            public void updateScreen() {
-                super.updateScreen();
-                setVisible(host.showTraceButton());
-            }
-        };
-        traceButton.setHoverTooltips(Component.translatable("tfg.machine.oxygen_distributor.find_leak"));
-        group.addWidget(traceButton);
+                    return false;
+                })
+                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.find_leak"))));
 
-        // "Fill Suit" button
-        ButtonWidget fillButton = new ButtonWidget(41 + 5, UI_HEIGHT - 19, 18, 18,
-                new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture("⛽")), null);
-        fillButton.setOnPressCallback(cd -> {
-            if (!cd.isRemote) {
-                fillSpaceSuit(fillButton.getGui().entityPlayer);
-            }
-        });
-        fillButton.setHoverTooltips(Component.translatable("tfg.machine.oxygen_distributor.fill_suit"));
-        group.addWidget(fillButton);
+        buttonRow.child(new ButtonWidget<>()
+                .size(18, 18)
+                .overlay(Text.str("⛽"))
+                .onMousePressed((ctx, i) -> {
+                    if (!host.isRemote()) {
+                        fillSpaceSuit(guiData.getPlayer());
+                        return true;
+                    }
+                    return false;
+                })
+                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.fill_suit"))));
 
-        // Progress bar
-        group.addWidget(new ProgressWidget(host.getRecipeLogic()::getProgressPercent,
-                UI_RIGHT_COL_X, UI_HEIGHT - 19 - 20 - 8, 20, 20,
-                host.getRecipeType().getRecipeUI().getProgressBarTexture()));
+        col.child(buttonRow);
+
+        col.child(new ProgressWidget()
+                .widthRel(0.8f).height(20)
+                .value(progressSync));
+
+        mainWidget.child(col);
+
     }
 
-    private void addStatusText(List<Component> textList) {
+    private void addStatusText(ParentWidget<?> mainWidget, PanelSyncManager syncManager) {
+
         RoomScan scan = getRoomScan();
         boolean elevated = !scan.isSealed();
 
@@ -211,34 +221,33 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             statusText = Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
         }
 
-        textList.add(Component.translatable("tfg.machine.oxygen_distributor.status").append(statusText));
+        mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.status").append(statusText).asWidget());
 
         if (scan.isSealed() && scan.interiorSize() > 0) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.size",
-                    FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA));
+            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.size",
+                    FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA).asWidget());
         }
 
         String consumptionText = getFluidConsumptionDisplay();
         if (consumptionText != null) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.consumption", consumptionText)
-                    .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
+            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.consumption", consumptionText)
+                    .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA).asWidget());
         }
-        textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
+        mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.energy",
                 String.format("%,.0f", computeEnergyCostPerTick()))
-                .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
+                .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA).asWidget());
 
         if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN).asWidget());
         } else if (host.getEnergyInputPerSec() < computeEnergyCostPerTick()) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy")
-                    .withStyle(ChatFormatting.RED));
-        } else if (host.getRecipeLogic() != null && host.getRecipeLogic().isIdle()
-                && !host.getRecipeLogic().getFailureReasons().isEmpty()) {
-            for (Component reason : host.getRecipeLogic().getFailureReasons()) {
-                textList.add(reason.copy().withStyle(ChatFormatting.RED));
-            }
+            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.status.no_energy")
+                    .withStyle(ChatFormatting.RED).asWidget());
         } else {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
+            if (host.getRecipeLogic().isIdle() && host.getRecipeLogic().getBestFailureReason() != null) {
+                mainWidget.child(Text.of(host.getRecipeLogic().getBestFailureReason().copy().withStyle(ChatFormatting.RED)).asWidget());
+            } else {
+                mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY).asWidget());
+            }
         }
     }
 
@@ -557,7 +566,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     // IEnvironmentMachine / IBlockSensitiveMachine
     @Override
     public BlockPos getPos() {
-        return host.self().getPos();
+        return host.self().getBlockPos();
     }
 
     @Override

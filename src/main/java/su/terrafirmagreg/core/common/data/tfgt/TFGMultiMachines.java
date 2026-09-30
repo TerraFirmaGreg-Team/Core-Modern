@@ -1,11 +1,9 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.MOLYBDENUM_DISILICIDE_COIL_BLOCK;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.ALL_FIREBOXES;
-import static fi.dea.mc.deafission.common.data.FissionMachines.HeatPortEv;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.*;
@@ -18,26 +16,21 @@ import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.block.IMachineBlock;
+import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
-import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
-import com.gregtechceu.gtceu.api.pattern.predicates.SimplePredicate;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
@@ -46,19 +39,15 @@ import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
-import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.utils.BlockInfo;
 import com.simibubi.create.AllBlocks;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.rock.Rock;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -76,11 +65,10 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import appeng.core.definitions.AEBlocks;
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.IntSyncValue;
 import earth.terrarium.adastra.common.registry.ModBlocks;
-import fi.dea.mc.deafission.common.data.FissionGtRecipeTypes;
-import fi.dea.mc.deafission.common.data.FissionTags;
-import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
-import fi.dea.mc.deafission.common.data.machine.hb.HbMachine;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
@@ -94,6 +82,7 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachin
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.ISPOutputRecipeLogic;
 import su.terrafirmagreg.core.common.tfgt.recipe.modifier.AnimalProductModifier;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
@@ -128,32 +117,32 @@ public class TFGMultiMachines {
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     TFGCore.id("block/machines/interplanetary_item_launcher"))
             .pattern(definition -> {
-                IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_IN)
-                        .map(MachineDefinition::get).toArray(IMachineBlock[]::new);
-                return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
-                        .aisle("F###F", "#SSS#", "#SSS#", "#ESE#", "F###F")
-                        .aisle("FsssF", "sSCSs", "sCCCs", "sSCSs", "FsysF")
-                        .aisle("F###F", "#LCL#", "#R R#", "#LCL#", "F###F")
-                        .aisle("FFFFF", "FLCLF", "FR RF", "FLCLF", "FFFFF")
-                        .aisle("#####", "#L#L#", "#R R#", "#L#L#", "#####").setRepeatable(3)
-                        .aisle("#####", "#CHC#", "#R R#", "#CHC#", "#####")
-                        .aisle("#####", "#M#M#", "#R R#", "#M#M#", "#####").setRepeatable(3)
-                        .aisle("#####", "#CHC#", "#R R#", "#CHC#", "#####")
-                        .aisle("#####", "#C#C#", "#R R#", "#C#C#", "#####").setRepeatable(2)
-                        .where('y', Predicates.controller(Predicates.blocks(definition.get())))
+                MetaMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_IN)
+                        .map(MachineDefinition::get).toArray(MetaMachineBlock[]::new);
+                return MultiblockPatternBuilder.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
+                        .slice("F###F", "#SSS#", "#SSS#", "#ESE#", "F###F")
+                        .slice("FsssF", "sSCSs", "sCCCs", "sSCSs", "FsysF")
+                        .slice("F###F", "#LCL#", "#R R#", "#LCL#", "F###F")
+                        .slice("FFFFF", "FLCLF", "FR RF", "FLCLF", "FFFFF")
+                        .sliceRepeatable(1, 3,"#####", "#L#L#", "#R R#", "#L#L#", "#####")
+                        .slice("#####", "#CHC#", "#R R#", "#CHC#", "#####")
+                        .sliceRepeatable(1, 3, "#####", "#M#M#", "#R R#", "#M#M#", "#####")
+                        .slice("#####", "#CHC#", "#R R#", "#CHC#", "#####")
+                        .sliceRepeatable(1, 3, "#####", "#C#C#", "#R R#", "#C#C#", "#####")
+                        .where('y', controller(definition))
                         .where(' ', Predicates.air())
                         .where('#', Predicates.any())
                         .where('F', Predicates.frames(GTMaterials.Aluminium))
                         .where('H', Predicates.frames(GTMaterials.HSLASteel))
-                        .where('S', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
-                        .where('C', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
-                        .where('E', Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(2))
-                        .where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
-                                .or(Predicates.blocks(inputBuses).setMinGlobalLimited(1))
-                                .or(Predicates.blocks(TFGMachines.RAILGUN_AMMO_LOADER.get()).setExactLimit(1)))
-                        .where('L', Predicates.blocks(TFGBlocks_Casings.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
-                        .where('M', Predicates.blocks(TFGBlocks_Casings.SUPERCONDUCTOR_COIL_SMALL_BLOCK.get()))
-                        .where('R', Predicates.blocks(TFGBlocks_Casings.ELECTROMAGNETIC_ACCELERATOR_BLOCK.get()))
+                        .where('S', blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
+                        .where('C', blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
+                        .where('E', abilities(PartAbility.INPUT_ENERGY).setExactLimit(2))
+                        .where('s', blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
+                                .or(blocks(inputBuses).setMinGlobalLimited(1))
+                                .or(blocks(TFGMachines.RAILGUN_AMMO_LOADER.get()).setExactLimit(1)))
+                        .where('L', blocks(TFGBlocks_Casings.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
+                        .where('M', blocks(TFGBlocks_Casings.SUPERCONDUCTOR_COIL_SMALL_BLOCK.get()))
+                        .where('R', blocks(TFGBlocks_Casings.ELECTROMAGNETIC_ACCELERATOR_BLOCK.get()))
                         .build();
             }).register();
 
@@ -168,27 +157,27 @@ public class TFGMultiMachines {
                     TFGCore.id( "block/casings/machine_casing_aluminium_plated_steel"),
                     TFGCore.id("block/machines/interplanetary_item_receiver"))
             .pattern(def -> {
-                IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT)
-                        .map(MachineDefinition::get).toArray(IMachineBlock[]::new);
-                return FactoryBlockPattern.start()
-                        .aisle("B     B", "BB   BB", " B   B ", "  CCC  ", "       ")
-                        .aisle("       ", "B     B", "BBbbbBB", " CEFEC ", "  GGG  ")
-                        .aisle("       ", "       ", " b   b ", "CF   FC", " G   G ")
-                        .aisle("       ", "       ", " b   b ", "CE   EC", " G   G ")
-                        .aisle("       ", "       ", " b   b ", "CF   FC", " G   G ")
-                        .aisle("       ", "B     B", "BBbDbBB", " CEFEC ", "  GGG  ")
-                        .aisle("B     B", "BB   BB", " B   B ", "  CCC  ", "       ")
-                        .where("B", Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
-                        .where("b", Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get())
-                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY)
-                                        .or(Predicates.blocks(inputBuses))))
-                        .where("C", Predicates.frames(GTMaterials.Aluminium))
-                        .where("D", Predicates.controller(Predicates.blocks(def.get())))
-                        .where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                        .where('F', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
-                        .where("G", Predicates.blocks(GTBlocks.YELLOW_STRIPES_BLOCK_A.get())
-                                .or(Predicates.blocks(GTBlocks.YELLOW_STRIPES_BLOCK_B.get())))
-                        .where(" ", Predicates.any())
+                MetaMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT)
+                        .map(MachineDefinition::get).toArray(MetaMachineBlock[]::new);
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                        .slice("B     B", "BB   BB", " B   B ", "  CCC  ", "       ")
+                        .slice("       ", "B     B", "BBbbbBB", " CEFEC ", "  GGG  ")
+                        .slice("       ", "       ", " b   b ", "CF   FC", " G   G ")
+                        .slice("       ", "       ", " b   b ", "CE   EC", " G   G ")
+                        .slice("       ", "       ", " b   b ", "CF   FC", " G   G ")
+                        .slice("       ", "B     B", "BBbDbBB", " CEFEC ", "  GGG  ")
+                        .slice("B     B", "BB   BB", " B   B ", "  CCC  ", "       ")
+                        .where('B', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
+                        .where('b', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get())
+                                .or(abilities(PartAbility.INPUT_ENERGY)
+                                        .or(blocks(inputBuses))))
+                        .where('C', Predicates.frames(GTMaterials.Aluminium))
+                        .where('D', controller(def))
+                        .where('E', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                        .where('F', blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
+                        .where('G', blocks(GTBlocks.YELLOW_STRIPES_BLOCK_A.get())
+                                .or(blocks(GTBlocks.YELLOW_STRIPES_BLOCK_B.get())))
+                        .where(' ', Predicates.any())
                         .build();
             })
             .register();
@@ -212,63 +201,33 @@ public class TFGMultiMachines {
                             new Vector3f(-1f, 1.4f, -4f), new Vector3f(1f, 1.4f, -4f),
                             new Vector3f(-1f, 1.4f, -5f), new Vector3f(1f, 1.4f, -5f)
                     )))))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
-                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
-                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
-                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
-                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
-                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
-                    .aisle("AAIAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
-                    .where("I", Predicates.controller(Predicates.blocks(definition.get())))
-                    .where(" ", Predicates.any())
-                    .where('A', Predicates.blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(10)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("AAAAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
+                    .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .slice("AAIAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
+                    .where('I', controller(definition))
+                    .where(' ', Predicates.any())
+                    .where('A', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(10)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false)))
-                    .where("B", Predicates.blockTag(FLTags.Blocks.ALL_IRON_GREENHOUSE)
+                    .where('B', Predicates.blockTag(FLTags.Blocks.ALL_IRON_GREENHOUSE)
                             .or(Predicates.blockTag(FLTags.Blocks.STAINLESS_STEEL_GREENHOUSE)))
-                    .where("G", Predicates.blocks(FLBlocks.LARGE_PLANTER.get()))
-                    .where("F", Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION)
+                    .where('G', blocks(FLBlocks.LARGE_PLANTER.get()))
+                    .where('F', Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION)
                             .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, TFGCore.id( "iron_greenhouse_casings"))))
-                            .or(Predicates.blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.IRON).get(Greenhouse.BlockType.TRAPDOOR).get()))
-                            .or(Predicates.blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.RUSTED_IRON).get(Greenhouse.BlockType.TRAPDOOR).get()))
-                            .or(Predicates.blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.STAINLESS_STEEL).get(Greenhouse.BlockType.TRAPDOOR).get())))
-                    .where("H", Predicates.blocks(TFGBlocks_Casings.GROW_LIGHT.get()))
+                            .or(blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.IRON).get(Greenhouse.BlockType.TRAPDOOR).get()))
+                            .or(blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.RUSTED_IRON).get(Greenhouse.BlockType.TRAPDOOR).get()))
+                            .or(blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.STAINLESS_STEEL).get(Greenhouse.BlockType.TRAPDOOR).get())))
+                    .where('H', blocks(TFGBlocks_Casings.GROW_LIGHT.get()))
                     .build())
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("eAIAe", "BBBBB", "BBBBB", "BBBBB", "WDDDE")
-                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WBBBE")
-                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WDDDE")
-                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WBBBE")
-                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WDDDE")
-                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WBBBE")
-                        .aisle("itmfx", "BBBBB", "BBBBB", "BBBBB", "WDDDE")
-                        .where('I', definition.get(), Direction.NORTH)
-                        .where('A', GTBlocks.STEEL_HULL.getDefaultState())
-                        .where('B', TFGBlocks_Casings.IRON_GREENHOUSE_CASINGS[1])
-                        .where('C', TFGBlocks_Casings.IRON_GREENHOUSE_CASINGS[2])
-                        .where('D', TFGBlocks_Casings.IRON_GREENHOUSE_CASINGS[3])
-                        .where('F', Blocks.BRICKS)
-                        .where(' ', Blocks.AIR)
-                        .where('E', orientedBlockState("firmalife", "iron_greenhouse_panel_roof", Direction.EAST))
-                        .where('W', orientedBlockState("firmalife", "iron_greenhouse_panel_roof", Direction.WEST))
-                        .where('G', FLBlocks.LARGE_PLANTER.get())
-                        .where('H', orientedBlockState("tfg", "grow_light", Direction.NORTH))
-                        .where('i', GTMachines.ITEM_IMPORT_BUS[GTValues.ULV], Direction.SOUTH)
-                        .where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.MV], Direction.SOUTH)
-                        .where('f', GTMachines.FLUID_IMPORT_HATCH[GTValues.ULV], Direction.SOUTH)
-                        .where('x', GTMachines.FLUID_EXPORT_HATCH[GTValues.ULV], Direction.SOUTH)
-                        .where('e', GTMachines.ENERGY_INPUT_HATCH[GTValues.LV], Direction.SOUTH)
-                        .where('m', GTMachines.MAINTENANCE_HATCH, Direction.SOUTH);
-                shapeInfo.add(builder.build());
-                return shapeInfo;
-            })
             .register();
 
     public static final MultiblockMachineDefinition BIOREACTOR = REGISTRATE
-            .multiblock("bioreactor", BioreactorMachine::new)
+            .multiblock("bioreactor", (info) -> new WorkableElectricMultiblockMachine(info, new ISPOutputRecipeLogic()))
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.BIOREACTOR_RECIPES)
@@ -276,28 +235,28 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_bioculture"),
                     TFGCore.id("block/machines/bioreactor"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
-                    .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
-                    .aisle("#GGGABBBC", "BBBBDHHHD", "E J DHHHD", "E J BBBBF", "E J E K E", "E   E   E", "E   BBBBC", "BBBBB####")
-                    .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
-                    .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FLF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
-                    .where(" ", Predicates.air())
-                    .where("#", Predicates.any())
-                    .where("A", Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
-                    .where("B", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get()))
-                    .where("C", Predicates.blocks(GTBlocks.CASING_EXTREME_ENGINE_INTAKE.get()))
-                    .where("D", Predicates.blocks(TFGBlocks_Casings.ULTRAVIOLET_CASING.get()))
-                    .where("E", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
-                    .where("F", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get())
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
+                    .slice("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
+                    .slice("#GGGABBBC", "BBBBDHHHD", "E J DHHHD", "E J BBBBF", "E J E K E", "E   E   E", "E   BBBBC", "BBBBB####")
+                    .slice("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
+                    .slice("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FLF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
+                    .where(' ', Predicates.air())
+                    .where('#', Predicates.any())
+                    .where('A', blocks(GTBlocks.CASING_PTFE_INERT.get()))
+                    .where('B', blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get()))
+                    .where('C', blocks(GTBlocks.CASING_EXTREME_ENGINE_INTAKE.get()))
+                    .where('D', blocks(TFGBlocks_Casings.ULTRAVIOLET_CASING.get()))
+                    .where('E', blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
+                    .where('F', blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false)))
-                    .where("G", Predicates.blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
-                    .where("H", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
-                    .where("I", Predicates.blocks(GTBlocks.LAMPS.get(DyeColor.PURPLE).get()))
-                    .where("J", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_ROTOR_PRIMARY.get()))
-                    .where("K", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_ROTOR_SECONDARY.get()))
-                    .where("L", Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('G', blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+                    .where('H', blocks(GTBlocks.FILTER_CASING.get()))
+                    .where('I', blocks(GTBlocks.LAMPS.get(DyeColor.PURPLE).get()))
+                    .where('J', blocks(TFGBlocks_Casings.BIOCULTURE_ROTOR_PRIMARY.get()))
+                    .where('K', blocks(TFGBlocks_Casings.BIOCULTURE_ROTOR_SECONDARY.get()))
+                    .where('L', controller(definition))
                     .build())
             .register();
 
@@ -311,26 +270,26 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"),
                     GTCEu.id("block/multiblock/generator/large_steam_turbine"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("A   A", "A   A", "CCCCC", "CDCDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
-                    .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
-                    .aisle("     ", "     ", "CCGCC", "CFHFC", "CFHFC", "CAFAC", "BAFAB", " A A ", " A A ", " A A ", " A A ")
-                    .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
-                    .aisle("A   A", "A   A", "CCCCC", "CDYDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
-                    .where("*", Predicates.air())
-                    .where(" ", Predicates.any())
-                    .where('Y', Predicates.controller(Predicates.blocks(definition.get())))
-                    .where("A", Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
-                    .where("B", Predicates.frames(GTMaterials.StainlessSteel))
-                    .where("C", Predicates.blocks(GTBlocks.CASING_STEEL_TURBINE.get()).setMinGlobalLimited(50)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("A   A", "A   A", "CCCCC", "CDCDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
+                    .slice("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
+                    .slice("     ", "     ", "CCGCC", "CFHFC", "CFHFC", "CAFAC", "BAFAB", " A A ", " A A ", " A A ", " A A ")
+                    .slice("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
+                    .slice("A   A", "A   A", "CCCCC", "CDYDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
+                    .where('*', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .where('Y', controller(definition))
+                    .where('A', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
+                    .where('B', Predicates.frames(GTMaterials.StainlessSteel))
+                    .where('C', blocks(GTBlocks.CASING_STEEL_TURBINE.get()).setMinGlobalLimited(50)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false))
-                            .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
-                    .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ad_astra", "vent"))))
-                    .where("E", Predicates.blocks(GTBlocks.COIL_CUPRONICKEL.get()))
-                    .where("F", Predicates.blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
-                    .where("G", Predicates.blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new)))
-                    .where("H", Predicates.blocks(GTBlocks.CASING_TITANIUM_GEARBOX.get()))
+                            .or(abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
+                    .where('D', blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ad_astra", "vent"))))
+                    .where('E', blocks(GTBlocks.COIL_CUPRONICKEL.get()))
+                    .where('F', blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+                    .where('G', blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new)))
+                    .where('H', blocks(GTBlocks.CASING_TITANIUM_GEARBOX.get()))
                     .build())
             .register();
 
@@ -345,65 +304,33 @@ public class TFGMultiMachines {
                     TFGCore.id("block/casings/machine_casing_stainless_evaporation"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> {
-                TraceabilityPredicate exportPredicate = Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).or(Predicates.blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
-                exportPredicate.setMaxLayerLimited(1);
+                MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X).or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
+                exportPredicate = exportPredicate.setMaxLayerLimited(1);
 
-                TraceabilityPredicate maint = Predicates.autoAbilities(true, false, false).setMaxGlobalLimited(1);
-                return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
-                        .aisle("YSY", "YYY", "YYY")
-                        .aisle("ZZZ", "Z#Z", "ZZZ")
-                        .aisle("XXX", "X#X", "XXX").setRepeatable(0, 10)
-                        .aisle("XXX", "XXX", "XXX")
-                        .where('S', Predicates.controller(Predicates.blocks(definition.getBlock())))
-                        .where("Y", Predicates.blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
-                                .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
-                                .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                MultiPredicate maint = Predicates.autoAbilities(true, false, false).setMaxGlobalLimited(1);
+                return MultiblockPatternBuilder.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
+                        .slice("YSY", "YYY", "YYY")
+                        .slice("ZZZ", "Z#Z", "ZZZ")
+                        .sliceRepeatable(0, 10, "XXX", "X#X", "XXX")
+                        .slice("XXX", "XXX", "XXX")
+                        .where('S', controller(definition))
+                        .where('Y', blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
+                                .or(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                         .setMaxGlobalLimited(2))
-                                .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
+                                .or(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
                                 .or(maint))
-                        .where("Z", Predicates.blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
+                        .where('Z', blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
                                 .or(exportPredicate)
                                 .or(maint))
-                        .where('X', Predicates.blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
+                        .where('X', blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
                                 .or(exportPredicate))
                         .where('#', Predicates.air())
                         .build();
             })
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .where('C', definition, Direction.NORTH)
-                        .where('S', TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
-                        .where('X', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
-                        .where('I', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.NORTH)
-                        .where('E', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('M', GTMachines.MAINTENANCE_HATCH, Direction.SOUTH)
-                        .where('#', Blocks.AIR.defaultBlockState())
-                        .where('F', GTMachines.FLUID_EXPORT_HATCH[GTValues.HV], Direction.SOUTH);
-                List<String> front = new ArrayList<>(15);
-                front.add("XCI");
-                front.add("SSS");
-                List<String> middle = new ArrayList<>(15);
-                middle.add("SSS");
-                middle.add("SSS");
-                List<String> back = new ArrayList<>(15);
-                back.add("MES");
-                back.add("SFS");
-                for (int i = 1; i <= 11; ++i) {
-                    front.add("SSS");
-                    middle.add(1, "S#S");
-                    back.add("SFS");
-                    var copy = builder.shallowCopy()
-                            .aisle(front.toArray(String[]::new))
-                            .aisle(middle.toArray(String[]::new))
-                            .aisle(back.toArray(String[]::new));
-                    shapeInfos.add(copy.build());
-                }
-                return shapeInfos;
-            })
             .allowExtendedFacing(false)
-            .partSorter(Comparator.comparingInt(p -> p.self().getPos().getY()))
+            .partSorter(Comparator.comparingInt(p -> p.getBlockPos().getY()))
             .register();
 
     private static final Supplier<Block> titanium_concrete = () -> ForgeRegistries.BLOCKS
@@ -422,102 +349,51 @@ public class TFGMultiMachines {
             .recipeModifier(GTRecipeModifiers.OC_PERFECT_SUBTICK)
             .appearanceBlock(TFGBlocks_Casings.OSTRUM_CARBON_CASING)
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_ostrum_carbon"), GTCEu.id("block/multiblock/gcym/large_mixer"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                    .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                    .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                    .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
-                    .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDDDDDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
-                    .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F        D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
-                    .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEE   D*", "**D F  F       F    D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
-                    .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
-                    .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
-                    .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
-                    .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
-                    .aisle("A      DBBBBBBBD      A", "A      DKKKKKKKD      A", "BEE    DK  H  KD    EEB", "D  EEEEDK  H  KDEEEE  D", "D  F   KKKKHKKKK   F  D", "*D GGGGGGGGGGGGGGGGG D*", "*D         G         D*", "**D        G        D**", "**D        G        D**", "**D                 D**", "***D               D***", "***D   H H L H H   D***", "***D              D****", "****D             D****", "****D             D****", "****DJJJJJJJJJJJJJD****", "****D             D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
-                    .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
-                    .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
-                    .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
-                    .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
-                    .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEEF  D*", "**D F  F       F  F D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
-                    .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F    F   D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
-                    .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
-                    .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
-                    .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                    .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                    .aisle("********A  A  A********", "********A  A  A********", "********BBBCBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                    .where("*", Predicates.any())
-                    .where(" ", Predicates.air())
-                    .where("A", Predicates.frames(GTMaterials.TungstenSteel))
-                    .where("B", Predicates.blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()).setMinGlobalLimited(50)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .slice("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .slice("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .slice("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
+                    .slice("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDDDDDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
+                    .slice("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F        D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
+                    .slice("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEE   D*", "**D F  F       F    D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
+                    .slice("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
+                    .slice("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
+                    .slice("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
+                    .slice("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                    .slice("A      DBBBBBBBD      A", "A      DKKKKKKKD      A", "BEE    DK  H  KD    EEB", "D  EEEEDK  H  KDEEEE  D", "D  F   KKKKHKKKK   F  D", "*D GGGGGGGGGGGGGGGGG D*", "*D         G         D*", "**D        G        D**", "**D        G        D**", "**D                 D**", "***D               D***", "***D   H H L H H   D***", "***D              D****", "****D             D****", "****D             D****", "****DJJJJJJJJJJJJJD****", "****D             D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                    .slice("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                    .slice("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
+                    .slice("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
+                    .slice("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
+                    .slice("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEEF  D*", "**D F  F       F  F D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
+                    .slice("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F    F   D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
+                    .slice("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
+                    .slice("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
+                    .slice("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .slice("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .slice("********A  A  A********", "********A  A  A********", "********BBBCBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .where('*', Predicates.any())
+                    .where(' ', Predicates.air())
+                    .where('A', Predicates.frames(GTMaterials.TungstenSteel))
+                    .where('B', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                             .or(Predicates.autoAbilities(true, false, false)))
-                    .where("C", Predicates.controller(Predicates.blocks(definition.getBlock())))
-                    .where("D", Predicates.blocks(titanium_concrete.get())
+                    .where('C', controller(definition))
+                    .where('D', blocks(titanium_concrete.get())
                             .or(Predicates.blockTag(TFGTags.Blocks.TitaniumConcrete)))
-                    .where("E", Predicates.blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
-                    .where("F", Predicates.frames(GTMaterials.WatertightSteel))
-                    .where("G", Predicates.blocks(TFGBlocks_Casings.HEAT_PIPE_CASING.get()))
-                    .where("H", Predicates.blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
-                    .where("I", Predicates.frames(GTMaterials.StainlessSteel))
-                    .where("J", Predicates.blocks(steel_catwalk.get()))
-                    .where("K", Predicates.blocks(GCYMBlocks.CASING_CORROSION_PROOF.get()))
-                    .where("L", Predicates.blocks(titanium_exhaust.get()))
-                    .where("M", Predicates.air()
-                            .or(Predicates.blocks(ModBlocks.VENT.get())))
+                    .where('E', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
+                    .where('F', Predicates.frames(GTMaterials.WatertightSteel))
+                    .where('G', blocks(TFGBlocks_Casings.HEAT_PIPE_CASING.get()))
+                    .where('H', blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+                    .where('I', Predicates.frames(GTMaterials.StainlessSteel))
+                    .where('J', blocks(steel_catwalk.get()))
+                    .where('K', blocks(GCYMBlocks.CASING_CORROSION_PROOF.get()))
+                    .where('L', blocks(titanium_exhaust.get()))
+                    .where('M', Predicates.air()
+                            .or(blocks(ModBlocks.VENT.get())))
                     .build())
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("********A  A  A********", "********A  A  A********", "********BBBCBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                        .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                        .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                        .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
-                        .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
-                        .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F    F   D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
-                        .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEEF  D*", "**D F  F       F  F D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
-                        .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
-                        .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
-                        .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
-                        .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
-                        .aisle("A      DBBBBBBBD      A", "A      DKKKKKKKD      A", "BEE    DK  H  KD    EEB", "D  EEEEDK  H  KDEEEE  D", "D  F   KKKKHKKKK   F  D", "*D GGGGGGGGGGGGGGGGG D*", "*D         G         D*", "**D        G        D**", "**D        G        D**", "**D                 D**", "***D               D***", "***D   H H L H H   D***", "***D              D****", "****D             D****", "****D             D****", "****DJJJJJJJJJJJJJD****", "****D             D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
-                        .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
-                        .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
-                        .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
-                        .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
-                        .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEE   D*", "**D F  F       F    D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
-                        .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F        D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
-                        .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDDDDDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
-                        .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
-                        .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                        .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                        .aisle("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                        .where('*', Blocks.AIR.defaultBlockState())
-                        .where(' ', Blocks.AIR.defaultBlockState())
-                        .where('A', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.TungstenSteel))
-                        .where('B', TFGBlocks_Casings.OSTRUM_CARBON_CASING.get())
-                        .where('C', definition, Direction.NORTH)
-                        .where('D', titanium_concrete.get())
-                        .where('E', TFGBlocks_Casings.OSTRUM_CARBON_CASING.get())
-                        .where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.WatertightSteel))
-                        .where('G', TFGBlocks_Casings.HEAT_PIPE_CASING.get())
-                        .where('H', GTBlocks.CASING_TITANIUM_PIPE.get())
-                        .where('I', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
-                        .where('J', steel_catwalk.get())
-                        .where('K', GCYMBlocks.CASING_CORROSION_PROOF.get())
-                        .where('L', titanium_exhaust.get());
-
-                var airCopy = builder.shallowCopy()
-                        .where('M', Blocks.AIR.defaultBlockState());
-                shapeInfos.add(airCopy.build());
-
-                var ventCopy = builder.shallowCopy()
-                        .where('M', ModBlocks.VENT.get());
-                shapeInfos.add(ventCopy.build());
-
-                return shapeInfos;
-            })
             .register();
 
     public static final MultiblockMachineDefinition GROWTH_CHAMBER = REGISTRATE
@@ -531,45 +407,46 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.growth_chamber"))
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
                     TFGCore.id("block/machines/growth_chamber"))
-            .pattern(definition -> FactoryBlockPattern
+            .pattern(definition -> MultiblockPatternBuilder
                     .start(RelativeDirection.LEFT, RelativeDirection.FRONT, RelativeDirection.DOWN)
-                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             ANA             ", "             NBN             ", "             AAA             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ").setRepeatable(1, 5)
-                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             HLH             ", "             HHH             ", "           HHAAAHH           ", "           LHAAAHL           ", "           HHAAAHH           ", "             HHH             ", "             HLH             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
-                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             AAA             ", "           K AAA K           ", "             AAA             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
-                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             MMM             ", "           K MAM K           ", "             MMM             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "              O              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
-                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             AAA             ", "           K AAA K           ", "             AAA             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "              A              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
-                    .aisle("          AAAAAAAAA          ", "       AAAACCCCCCCAAAA       ", "      AACCCFDFDFDFCCCAA      ", "    AAACDFDFDFDFDFDFDCAAA    ", "   AACCDDFDFDFDFDFDFDDCCAA   ", "   ACCDFDFDCCCCCCCDFDFDCCA   ", "  AAFDCDFCCAAAAAAACCFDCDCAA  ", " AACDFDCCAAAIIJIIAAACCDFDCAA ", " ACDDDFCAAIIIIJIIIIAACFDDDCA ", " ACFFFCAAIIIIIJIIIIIAACFFFCA ", "AACDDDCAIIIIIIJIIIIIIACDDDCAA", "ACFFFCAAIIIIJJKJJIIIIAACFFFCA", "ACDDDCAIIIIJ  A  JIIIIACDDDCA", "ACFFFCAIIIIJ AAA JIIIIACFFFCA", "ACDDDCAJJJJKAAAAAKJJJJACDDDCA", "ACFFFCAIIIIJ AAA JIIIIACFFFCA", "ACDDDCAIIIIJ  A  JIIIIACDDDCA", "ACFFFCAAIIIIJJKJJIIIIAACFFFCA", "AACDDDCAIIIIIIJIIIIIIACDDDCAA", " ACFFFCAAIIIIIJIIIIIAACFFFCA ", " ACDDDFCAAIIIIJIIIIAACFDDDCA ", " AACDFDCCAAAIIJIIAAACCDFDCAA ", "  AACDCDFCCAAAAAAACCFDCDCAA  ", "   ACCDFDFDCCCCCCCDFDFDCCA   ", "   AACCDDFDFDFDFDFDFDDCCAA   ", "    AAACDFDFDFDFDFDFDCAAA    ", "      AACCCFDFDFDFCCCAA      ", "       AAAACCCCCCCAAAA       ", "          AAAAAAAAA          ")
-                    .aisle("                             ", "           DDDDDDD           ", "        DDD       DDD        ", "       D             D       ", "     DD               DD     ", "    DC     CCCCCCC     CD    ", "    D C  CC       CC  C D    ", "   D   CC           CC   D   ", "  D    C             C    D  ", "  D   C               C   D  ", "  D   C               C   D  ", " D   C        K        C   D ", " D   C                 C   D ", " D   C                 C   D ", " D   C     K     K     C   D ", " D   C                 C   D ", " D   C                 C   D ", " D   C        K        C   D ", "  D   C               C   D  ", "  D   C               C   D  ", "  D    C             C    D  ", "   D   CC           CC   D   ", "    D C  CC       CC  C D    ", "    DC     CCCCCCC     CD    ", "     DD               DD     ", "       D             D       ", "        DDD       DDD        ", "           DDDDDDD           ", "                             ")
-                    .aisle("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CCCCCCC E E CD    ", "    D C ECC       CCE C D    ", "   D E CC           CC E D   ", "  D   EC             CE   D  ", "  DEEEC               CEEED  ", "  D   C               C   D  ", " DEEEC        K        CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C     K     K     C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC        K        CEEED ", "  D   C               C   D  ", "  DEEEC               CEEED  ", "  D   EC             CE   D  ", "   D E CC           CC E D   ", "    D C ECC       CCE C D    ", "    DC E E CCCCCCC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
-                    .aisle("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CGCCCGC E E CD    ", "    D C ECC   H   CCE C D    ", "   D E CC     H     CC E D   ", "  D   EC      H      CE   D  ", "  DEEEC       H       CEEED  ", "  D   C       H       C   D  ", " DEEEC        H        CEEED ", " D   G                 G   D ", " DEEEC                 CEEED ", " D   CHHHHHH     HHHHHHC   D ", " DEEEC                 CEEED ", " D   G                 G   D ", " DEEEC        H        CEEED ", "  D   C       H       C   D  ", "  DEEEC       H       CEEED  ", "  D   EC      H      CE   D  ", "   D E CC     H     CC E D   ", "    D C ECC   H   CCE C D    ", "    DC E E CGCCCGC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
-                    .aisle("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CCCCCCC E E CD    ", "    D C ECC       CCE C D    ", "   D E CC           CC E D   ", "  D   EC             CE   D  ", "  DEEEC               CEEED  ", "  D   C               C   D  ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", "  D   C               C   D  ", "  DEEEC               CEEED  ", "  D   EC             CE   D  ", "   D E CC           CC E D   ", "    D C ECC       CCE C D    ", "    DC E E CCCCCCC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
-                    .aisle("           AAAAAAA           ", "        AAACCCCCCCAAA        ", "       ACCCAAAAAAACCCA       ", "     AACAAAAAAAAAAAAACAA     ", "    ACCAAAAAAAAAAAAAAACCA    ", "   ACAAAAAACCCCCCCAAAAAACA   ", "   ACAAAACC       CCAAAACA   ", "  ACAAAAC           CAAAACA  ", " ACAAAAC             CAAAACA ", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", " ACAAAAC             CAAAACA ", "  ACAAAAC           CAAAACA  ", "   ACAAAACC       CCAAAACA   ", "   ACAAAAAACCCCCCCAAAAAACA   ", "    ACCAAAAAAAAAAAAAAACCA    ", "     AACAAAAAAAAAAAAACAA     ", "       ACCCAAAAAAACCCA       ", "        AAACCCCCCCAAA        ", "           AAAAAAA           ")
-                    .where("C", Predicates.blocks(GTBlocks.PLASTCRETE.get()))
-                    .where("E", Predicates.blocks(TFGBlocks.SAMPLE_RACK.get()))
-                    .where("G", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
-                    .where("I", Predicates.blocks(GTBlocks.CLEANROOM_GLASS.get()))
-                    .where("J", Predicates.frames(GTMaterials.HastelloyC276))
-                    .where("K", Predicates.blocks(TFGBlocks_Casings.STERILIZING_PIPE_CASING.get()))
-                    .where("L", Predicates.blocks(TFGBlocks.GROWTH_MONITOR.get()))
-                    .where("M", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get())
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
-                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1))
+                    .sliceRepeatable(1, 5, "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             ANA             ", "             NBN             ", "             AAA             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .slice("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             HLH             ", "             HHH             ", "           HHAAAHH           ", "           LHAAAHL           ", "           HHAAAHH           ", "             HHH             ", "             HLH             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .slice("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             AAA             ", "           K AAA K           ", "             AAA             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .slice("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             MMM             ", "           K MAM K           ", "             MMM             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "              O              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .slice("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             AAA             ", "           K AAA K           ", "             AAA             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "              A              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .slice("          AAAAAAAAA          ", "       AAAACCCCCCCAAAA       ", "      AACCCFDFDFDFCCCAA      ", "    AAACDFDFDFDFDFDFDCAAA    ", "   AACCDDFDFDFDFDFDFDDCCAA   ", "   ACCDFDFDCCCCCCCDFDFDCCA   ", "  AAFDCDFCCAAAAAAACCFDCDCAA  ", " AACDFDCCAAAIIJIIAAACCDFDCAA ", " ACDDDFCAAIIIIJIIIIAACFDDDCA ", " ACFFFCAAIIIIIJIIIIIAACFFFCA ", "AACDDDCAIIIIIIJIIIIIIACDDDCAA", "ACFFFCAAIIIIJJKJJIIIIAACFFFCA", "ACDDDCAIIIIJ  A  JIIIIACDDDCA", "ACFFFCAIIIIJ AAA JIIIIACFFFCA", "ACDDDCAJJJJKAAAAAKJJJJACDDDCA", "ACFFFCAIIIIJ AAA JIIIIACFFFCA", "ACDDDCAIIIIJ  A  JIIIIACDDDCA", "ACFFFCAAIIIIJJKJJIIIIAACFFFCA", "AACDDDCAIIIIIIJIIIIIIACDDDCAA", " ACFFFCAAIIIIIJIIIIIAACFFFCA ", " ACDDDFCAAIIIIJIIIIAACFDDDCA ", " AACDFDCCAAAIIJIIAAACCDFDCAA ", "  AACDCDFCCAAAAAAACCFDCDCAA  ", "   ACCDFDFDCCCCCCCDFDFDCCA   ", "   AACCDDFDFDFDFDFDFDDCCAA   ", "    AAACDFDFDFDFDFDFDCAAA    ", "      AACCCFDFDFDFCCCAA      ", "       AAAACCCCCCCAAAA       ", "          AAAAAAAAA          ")
+                    .slice("                             ", "           DDDDDDD           ", "        DDD       DDD        ", "       D             D       ", "     DD               DD     ", "    DC     CCCCCCC     CD    ", "    D C  CC       CC  C D    ", "   D   CC           CC   D   ", "  D    C             C    D  ", "  D   C               C   D  ", "  D   C               C   D  ", " D   C        K        C   D ", " D   C                 C   D ", " D   C                 C   D ", " D   C     K     K     C   D ", " D   C                 C   D ", " D   C                 C   D ", " D   C        K        C   D ", "  D   C               C   D  ", "  D   C               C   D  ", "  D    C             C    D  ", "   D   CC           CC   D   ", "    D C  CC       CC  C D    ", "    DC     CCCCCCC     CD    ", "     DD               DD     ", "       D             D       ", "        DDD       DDD        ", "           DDDDDDD           ", "                             ")
+                    .slice("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CCCCCCC E E CD    ", "    D C ECC       CCE C D    ", "   D E CC           CC E D   ", "  D   EC             CE   D  ", "  DEEEC               CEEED  ", "  D   C               C   D  ", " DEEEC        K        CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C     K     K     C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC        K        CEEED ", "  D   C               C   D  ", "  DEEEC               CEEED  ", "  D   EC             CE   D  ", "   D E CC           CC E D   ", "    D C ECC       CCE C D    ", "    DC E E CCCCCCC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
+                    .slice("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CGCCCGC E E CD    ", "    D C ECC   H   CCE C D    ", "   D E CC     H     CC E D   ", "  D   EC      H      CE   D  ", "  DEEEC       H       CEEED  ", "  D   C       H       C   D  ", " DEEEC        H        CEEED ", " D   G                 G   D ", " DEEEC                 CEEED ", " D   CHHHHHH     HHHHHHC   D ", " DEEEC                 CEEED ", " D   G                 G   D ", " DEEEC        H        CEEED ", "  D   C       H       C   D  ", "  DEEEC       H       CEEED  ", "  D   EC      H      CE   D  ", "   D E CC     H     CC E D   ", "    D C ECC   H   CCE C D    ", "    DC E E CGCCCGC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
+                    .slice("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CCCCCCC E E CD    ", "    D C ECC       CCE C D    ", "   D E CC           CC E D   ", "  D   EC             CE   D  ", "  DEEEC               CEEED  ", "  D   C               C   D  ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", "  D   C               C   D  ", "  DEEEC               CEEED  ", "  D   EC             CE   D  ", "   D E CC           CC E D   ", "    D C ECC       CCE C D    ", "    DC E E CCCCCCC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
+                    .slice("           AAAAAAA           ", "        AAACCCCCCCAAA        ", "       ACCCAAAAAAACCCA       ", "     AACAAAAAAAAAAAAACAA     ", "    ACCAAAAAAAAAAAAAAACCA    ", "   ACAAAAAACCCCCCCAAAAAACA   ", "   ACAAAACC       CCAAAACA   ", "  ACAAAAC           CAAAACA  ", " ACAAAAC             CAAAACA ", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", " ACAAAAC             CAAAACA ", "  ACAAAAC           CAAAACA  ", "   ACAAAACC       CCAAAACA   ", "   ACAAAAAACCCCCCCAAAAAACA   ", "    ACCAAAAAAAAAAAAAAACCA    ", "     AACAAAAAAAAAAAAACAA     ", "       ACCCAAAAAAACCCA       ", "        AAACCCCCCCAAA        ", "           AAAAAAA           ")
+                    .where('C', blocks(GTBlocks.PLASTCRETE.get()))
+                    .where('E', blocks(TFGBlocks.SAMPLE_RACK.get()))
+                    .where('G', blocks(GTBlocks.FILTER_CASING.get()))
+                    .where('I', blocks(GTBlocks.CLEANROOM_GLASS.get()))
+                    .where('J', Predicates.frames(GTMaterials.HastelloyC276))
+                    .where('K', blocks(TFGBlocks_Casings.STERILIZING_PIPE_CASING.get()))
+                    .where('L', blocks(TFGBlocks.GROWTH_MONITOR.get()))
+                    .where('M', blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get())
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(abilities(PartAbility.EXPORT_FLUIDS))
+                            .or(abilities(PartAbility.EXPORT_ITEMS))
+                            .or(abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1))
                             .or(abilities(PartAbility.PARALLEL_HATCH).setMaxGlobalLimited(1)))
-                    .where("N", Predicates.blocks(TFGMachines.SINGLE_ITEMSTACK_BUS.get()))
-                    .where(" ", Predicates.any())
-                    .where("H", Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
-                    .where("A", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get()))
-                    .where("F", Predicates.blocks(TFGBlocks_Casings.IRON_DESH_CASING.get()))
-                    .where("F", Predicates.blocks(TFGBlocks_Casings.ULTRAVIOLET_CASING.get()))
-                    .where("D", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
-                    .where("B", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("megacells", "mega_crafting_unit"))))
-                    .where("O", Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('N', blocks(TFGMachines.SINGLE_ITEMSTACK_BUS.get()))
+                    .where(' ', Predicates.any())
+                    .where('H', blocks(GTBlocks.CASING_PTFE_INERT.get()))
+                    .where('A', blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get()))
+                    .where('F', blocks(TFGBlocks_Casings.IRON_DESH_CASING.get()))
+                    .where('F', blocks(TFGBlocks_Casings.ULTRAVIOLET_CASING.get()))
+                    .where('D', blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
+                    .where('B', blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("megacells", "mega_crafting_unit"))))
+                    .where('O', controller(definition))
                     .build())
             .register();
 
+    /* TODO once fission ported to 8.0
     public static final MultiblockMachineDefinition OSTRUM_LINEAR_ACCELERATOR = REGISTRATE
             .multiblock("ostrum_linear_accelerator", CustomAuxExchangerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -578,60 +455,36 @@ public class TFGMultiMachines {
             .workableCasingModel(TFGCore.id( "block/casings/machine_casing_mars"),
                     GTCEu.id("block/machines/thermal_centrifuge"))
             .pattern(definition -> {
-                return FactoryBlockPattern.start(RelativeDirection.LEFT, RelativeDirection.BACK, RelativeDirection.UP)
-                        .aisle("A     AFA", "BEBEBEAAA", "AAAAAAAAA", "BAAAAAAAA", "AAAAAAAAA")
-                        .aisle("A     AXA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA")
-                        .aisle("A     AFA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA").setRepeatable(0,4)
-                        .aisle("AAAAAAAAA", "BBBBBBBAA", "BB###BBAA", "BBBBBBBAA", "AAAAAAAAA")
-                        .aisle("         ", " BCCCB   ", " C###C   ", " BCCCB   ", "         ")
-                        .aisle("         ", " BBBBB   ", " BHHHB   ", " BBBBB   ", "         ")
-                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
-                        .where('A', Predicates.blocks(TFGBlocks_Casings.MARS_CASING.get())
+                return MultiblockPatternBuilder.start(RelativeDirection.LEFT, RelativeDirection.BACK, RelativeDirection.UP)
+                        .slice("A     AFA", "BEBEBEAAA", "AAAAAAAAA", "BAAAAAAAA", "AAAAAAAAA")
+                        .slice("A     AXA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA")
+                        .sliceRepeatable(0, 4, "A     AFA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA")
+                        .slice("AAAAAAAAA", "BBBBBBBAA", "BB###BBAA", "BBBBBBBAA", "AAAAAAAAA")
+                        .slice("         ", " BCCCB   ", " C###C   ", " BCCCB   ", "         ")
+                        .slice("         ", " BBBBB   ", " BHHHB   ", " BBBBB   ", "         ")
+                        .where('X', controller(definition))
+                        .where('A', blocks(TFGBlocks_Casings.MARS_CASING.get())
                                 .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
-                        .where('B', Predicates.blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
-                        .where('C', Predicates.blocks(TFGBlocks_Casings.VACUUM_ENGINE_INTAKE.get()))
-                        .where('D', Predicates.blocks(GCYMBlocks.HEAT_VENT.get()))
-                        .where('E', Predicates.blocks(TFGBlocks_Casings.MARS_CASING.get())
+                        .where('B', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
+                        .where('C', blocks(TFGBlocks_Casings.VACUUM_ENGINE_INTAKE.get()))
+                        .where('D', blocks(GCYMBlocks.HEAT_VENT.get()))
+                        .where('E', blocks(TFGBlocks_Casings.MARS_CASING.get())
                                 .or(abilities(PartAbility.IMPORT_FLUIDS))
                                 .or(abilities(PartAbility.IMPORT_ITEMS))
                                 .or(abilities(PartAbility.EXPORT_ITEMS))
                                 .or(abilities(PartAbility.EXPORT_FLUIDS)))
-                        .where('F', Predicates.blocks(TFGBlocks_Casings.MARS_CASING.get())
+                        .where('F', blocks(TFGBlocks_Casings.MARS_CASING.get())
                                 .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
-                        .where('H', Predicates.blocks(TFGBlocks_Casings.MARS_CASING.get())
+                        .where('H', blocks(TFGBlocks_Casings.MARS_CASING.get())
                                 .or(abilities(PartAbility.EXPORT_ITEMS))
                                 .or(abilities(PartAbility.EXPORT_FLUIDS)))
-                        .where('K', Predicates.blocks(TFGBlocks_Casings.MARS_CASING.get())
-                                .or(Predicates.abilities(FisssionGtPartAbilities.USE_HEAT)))
+                        .where('K', blocks(TFGBlocks_Casings.MARS_CASING.get())
+                                .or(abilities(FisssionGtPartAbilities.USE_HEAT)))
                         .where('#', Predicates.air())
                         .where(' ', Predicates.any())
                         .build();
-            })/*
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                    .aisle("KKAAAAAAA", "AAAAAAAAA", "AAAAAAAAA", "         ", "         " )
-                    .aisle("BAAAAAAAA", "B       D", "BBBBBBBAA", " BCCCB   ", " BBBBB   " )
-                    .aisle("AAAAAAAAA", "Z       D", "BB   BBAA", " C   C   ", " BIAHB   " )
-                    .aisle("BEBEBEAAA", "BEBFBEA#D", "BBBBBBBAA", " BCCCB   ", " BBBBB   " )
-                    .aisle("A     AMA", "A     AXA", "AAAAAAAAA", "         ", "         " )
-                        .where('X', definition, Direction.SOUTH)
-                        .where('A', TFGBlocks.MARS_CASING.get())
-                        .where('B', Predicates.blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
-                        .where('C', Predicates.blocks(TFGBlocks_Casings.VACUUM_ENGINE_INTAKE.get()))
-                        .where('D', Predicates.blocks(GCYMBlocks.HEAT_VENT.get()))
-                        .where('E', GTMachines.FLUID_IMPORT_HATCH[GTValues.EV], Direction.SOUTH)
-                        .where('F', GTMachines.ITEM_IMPORT_BUS[GTValues.EV], Direction.SOUTH)
-                        .where('H', GTMachines.ITEM_EXPORT_BUS[GTValues.EV], Direction.UP)
-                        .where('I', GTMachines.FLUID_EXPORT_HATCH[GTValues.EV], Direction.UP)
-                        .where('M', GTMachines.AUTO_MAINTENANCE_HATCH, Direction.SOUTH)
-                        .where('K', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.NORTH)
-                        .where('Z', FissionMachines.HeatInputHatchEv, Direction.WEST)
-                        .where(' ', Blocks.AIR);
-                shapeInfo.add(builder.build());
-                return shapeInfo;
-            })*/
-            .register();
+            })
+            .register();*/
 
     public static final MultiblockMachineDefinition SMR_GENERATOR = REGISTRATE
             .multiblock("smr_generator", (holder) -> new SMRGenerator2(holder, GTValues.EV))
@@ -640,19 +493,19 @@ public class TFGMultiMachines {
             .recipeModifier(SMRGenerator2::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.DESH_PTFE_CASING)
             .workableCasingModel(TFGCore.id( "block/casings/machine_casing_desh_ptfe"), TFGCore.id("block/machines/smr"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "ABA", "ABA", "AAA")
-                    .aisle("AEA", "BDB", "BDB", "AEA")
-                    .aisle("AAA", "AXA", "ABA", "AAA")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
-                    .where("A", Predicates.blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
-                    .where("B", Predicates.blocks(TFGBlocks_Casings.DESH_PTFE_CASING.get()).setMinGlobalLimited(1)
-                            .or(Predicates.abilities((TFGPartAbility.SMR_FLUID_INPUT)))
-                            .or(Predicates.abilities((PartAbility.EXPORT_FLUIDS)))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("AAA", "ABA", "ABA", "AAA")
+                    .slice("AEA", "BDB", "BDB", "AEA")
+                    .slice("AAA", "AXA", "ABA", "AAA")
+                    .where('X', controller(definition))
+                    .where('A', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
+                    .where('B', blocks(TFGBlocks_Casings.DESH_PTFE_CASING.get()).setMinGlobalLimited(1)
+                            .or(abilities((TFGPartAbility.SMR_FLUID_INPUT)))
+                            .or(abilities((PartAbility.EXPORT_FLUIDS)))
                             .or(Predicates.autoAbilities(true, false, false))
-                            .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
-                    .where("D", Predicates.blocks(TFGBlocks_Casings.HEAT_PIPE_CASING.get()))
-                    .where("E", Predicates.blocks(MOLYBDENUM_DISILICIDE_COIL_BLOCK.get()))
+                            .or(abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
+                    .where('D', blocks(TFGBlocks_Casings.HEAT_PIPE_CASING.get()))
+                    .where('E', blocks(MOLYBDENUM_DISILICIDE_COIL_BLOCK.get()))
                     .build())
             .register();
 
@@ -669,11 +522,11 @@ public class TFGMultiMachines {
                      components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
                             .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
                                     .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
-            .pattern((definition) -> FactoryBlockPattern.start()
-                    .aisle("XXX", "XXX", "XXX")
-                    .aisle("XXX", "XCX", "XXX")
-                    .aisle("XXX", "XSX", "XXX")
-                    .where('S', controller(blocks(definition.getBlock())))
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("XXX", "XXX", "XXX")
+                    .slice("XXX", "XCX", "XXX")
+                    .slice("XXX", "XSX", "XXX")
+                    .where('S', controller(definition))
                     .where('X', blocks(TFGBlocks_Casings.MACHINE_CASING_POWER_CASING.get()).setMinGlobalLimited(12)
                             .or(ActiveTransformerMachine.getHatchPredicates()))
                     .where('C', blocks(TFGBlocks_Casings.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
@@ -704,27 +557,27 @@ public class TFGMultiMachines {
                             new Vector3f(-1, 6, -5), new Vector3f(-1,6,-6),new Vector3f(-1,6,-7),new Vector3f(-1,6,-8),new Vector3f(-1,6,-9),new Vector3f(-1,6,-10),
                             new Vector3f(1, 6, -5), new Vector3f(1,6,-6),new Vector3f(1,6,-7),new Vector3f(1,6,-8),new Vector3f(1,6,-9),new Vector3f(1,6,-10)
                     )))))
-            .pattern((definition) -> FactoryBlockPattern.start()
-                    .aisle("AGGGA", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", " BBB ")
-                    .aisle("AHIHA", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ").setRepeatable(2)
-                    .aisle("EHIHE", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ").setRepeatable(2)
-                    .aisle("AHIHA", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ").setRepeatable(2)
-                    .aisle("AAAAA", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", " BBB ").setRepeatable(2)
-                    .aisle(" AAA ", " B B ", " B B ", " B B ", " B B ", " B B ", " BFB ", " B B ", " B B ", " BBB ")
-                    .aisle(" EEE ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " BBB ")
-                    .aisle(" AAA ", " BCB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ")
-                    .where(" ", Predicates.any())
-                    .where("A", Predicates.blocks(TFGBlocks_Casings.EGH_CASING.get()))
-                    .where("B", Predicates.blockTag(TFGTags.Blocks.StainlessSteelGreenhouseCasings))
-                    .where("C", controller(blocks(definition.getBlock())))
-                    .where("D", Predicates.blocks(TFGBlocks_Casings.GROW_LIGHT.get()))
-                    .where("E", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
-                    .where("F", Predicates.blocks(TFGBlocks.CULTIVATION_MONITOR.get()))
-                    .where("G", Predicates.blocks(TFGBlocks_Casings.EGH_CASING.get())
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("AGGGA", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", " BBB ")
+                    .sliceRepeatable(1, 2, "AHIHA", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ")
+                    .sliceRepeatable(1, 2, "EHIHE", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ")
+                    .sliceRepeatable(1, 2, "AHIHA", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ")
+                    .sliceRepeatable(1, 2, "AAAAA", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", " BBB ")
+                    .slice(" AAA ", " B B ", " B B ", " B B ", " B B ", " B B ", " BFB ", " B B ", " B B ", " BBB ")
+                    .slice(" EEE ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " BBB ")
+                    .slice(" AAA ", " BCB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ")
+                    .where(' ', Predicates.any())
+                    .where('A', blocks(TFGBlocks_Casings.EGH_CASING.get()))
+                    .where('B', Predicates.blockTag(TFGTags.Blocks.StainlessSteelGreenhouseCasings))
+                    .where('C', controller(definition))
+                    .where('D', blocks(TFGBlocks_Casings.GROW_LIGHT.get()))
+                    .where('E', blocks(GTBlocks.FILTER_CASING.get()))
+                    .where('F', blocks(TFGBlocks.CULTIVATION_MONITOR.get()))
+                    .where('G', blocks(TFGBlocks_Casings.EGH_CASING.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, true)))
-                    .where("H", Predicates.blocks(TFGBlocks_Casings.EGH_PLANTER.get()))
-                    .where("I", Predicates.blocks(GTBlocks.PLASTCRETE.get()))
+                    .where('H', blocks(TFGBlocks_Casings.EGH_PLANTER.get()))
+                    .where('I', blocks(GTBlocks.PLASTCRETE.get()))
                     .build())
             .register();
 
@@ -740,65 +593,32 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id( "block/casings/machine_casing_aluminium_plated_steel"),
                     TFGCore.id("block/machines/pisciculture_fishery"))
-            .pattern((definition) -> FactoryBlockPattern.start()
-                    .aisle("    AAAAA    ", "    BBBBB    ", "    BBBBB    ", "    CCCCC    ")
-                    .aisle("   ACCECCA   ", "   CFFFFFC   ", "   CFFFFFC   ", "   CFFFFFC   ")
-                    .aisle("  ACGCECGCA  ", "  BFFFFFFFB  ", "  BFFFFFFFB  ", "  CFFFFFFFC  ")
-                    .aisle(" ACCGCECGCCA ", " CFFFFFFFFFC ", " CFFFFFFFFFC ", " CFFFFFFFFFC ")
-                    .aisle("ACGGGCECGGGCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
-                    .aisle("ACCCCCECCCCCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
-                    .aisle("AEEEEEIEEEEEA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
-                    .aisle("ACCCCCECCCCCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
-                    .aisle("ACGGGCECGGGCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
-                    .aisle(" ACCGCECGCCA ", " CFFFFFFFFFC ", " CFFFFFFFFFC ", " CFFFFFFFFFC ")
-                    .aisle("  ACGCECGCA  ", "  BFFFFFFFB  ", "  BFFFFFFFB  ", "  CFFFFFFFC  ")
-                    .aisle("   ACCECCA   ", "   CFFFFFC   ", "   CFFFFFC   ", "   CFFFFFC   ")
-                    .aisle("    AAAAA    ", "    BBBBB    ", "    BBBBB    ", "    CCJCC    ")
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("    AAAAA    ", "    BBBBB    ", "    BBBBB    ", "    CCCCC    ")
+                    .slice("   ACCECCA   ", "   CFFFFFC   ", "   CFFFFFC   ", "   CFFFFFC   ")
+                    .slice("  ACGCECGCA  ", "  BFFFFFFFB  ", "  BFFFFFFFB  ", "  CFFFFFFFC  ")
+                    .slice(" ACCGCECGCCA ", " CFFFFFFFFFC ", " CFFFFFFFFFC ", " CFFFFFFFFFC ")
+                    .slice("ACGGGCECGGGCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .slice("ACCCCCECCCCCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .slice("AEEEEEIEEEEEA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .slice("ACCCCCECCCCCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .slice("ACGGGCECGGGCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .slice(" ACCGCECGCCA ", " CFFFFFFFFFC ", " CFFFFFFFFFC ", " CFFFFFFFFFC ")
+                    .slice("  ACGCECGCA  ", "  BFFFFFFFB  ", "  BFFFFFFFB  ", "  CFFFFFFFC  ")
+                    .slice("   ACCECCA   ", "   CFFFFFC   ", "   CFFFFFC   ", "   CFFFFFC   ")
+                    .slice("    AAAAA    ", "    BBBBB    ", "    BBBBB    ", "    CCJCC    ")
                     .where(' ', Predicates.any())
-                    .where('A', Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()).setMinGlobalLimited(20)
+                    .where('A', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()).setMinGlobalLimited(20)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, true)))
                     .where('B', Predicates.blockTag(TFGTags.Blocks.StainlessSteelGreenhouseCasings))
-                    .where('C', Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
-                    .where('E', Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
+                    .where('C', blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
+                    .where('E', blocks(GTBlocks.CASING_PTFE_INERT.get()))
                     .where('F', Predicates.fluidTag(TagKey.create(Registries.FLUID, TFGCore.id( "pisciculture_fishery_fluids"))))
                     .where('G', Predicates.blockTag(TagKey.create(Registries.BLOCK, TFGCore.id( "gtceu_concrete_blocks"))))
-                    .where('I', Predicates.blocks(TFGBlocks_Casings.PISCICULTURE_CORE.get()))
-                    .where('J', controller(blocks(definition.getBlock())))
+                    .where('I', blocks(TFGBlocks_Casings.PISCICULTURE_CORE.get()))
+                    .where('J', controller(definition))
                     .build())
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("    CCLMC    ", "    FFFFF    ", "    FFFFF    ", "    CCJCC    ")
-                        .aisle("   CCCGCCC   ", "   CHHHHHC   ", "   CHHHHHC   ", "   CHHHHHC   ")
-                        .aisle("  CCICGCICC  ", "  FHHHHHHHF  ", "  FHHHHHHHF  ", "  CHHHHHHHC  ")
-                        .aisle(" CCCICGCICCC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ")
-                        .aisle("CCIIICGCIIICC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
-                        .aisle("CCCCCCGCCCCCC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
-                        .aisle("CGGGGGNGGGGGC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
-                        .aisle("CCCCCCGCCCCCC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
-                        .aisle("CCIIICGCIIICC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
-                        .aisle(" CCCICGCICCC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ")
-                        .aisle("  CCICGCICC  ", "  FHHHHHHHF  ", "  FHHHHHHHF  ", "  CHHHHHHHC  ")
-                        .aisle("   CCCGCCC   ", "   CHHHHHC   ", "   CHHHHHC   ", "   CHHHHHC   ")
-                        .aisle("    ABCDE    ", "    FFFFF    ", "    FFFFF    ", "    CCCCC    ")
-                        .where(' ', Blocks.AIR)
-                        .where('A', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.SOUTH)
-                        .where('B', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.SOUTH)
-                        .where('C', TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
-                        .where('D', GTMachines.FLUID_EXPORT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('E', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('F', TFGBlocks_Casings.STAINLESS_GREENHOUSE_CASINGS[0].get())
-                        .where('G', GTBlocks.CASING_PTFE_INERT.get())
-                        .where('H', Blocks.WATER)
-                        .where('I', GTBlocks.LIGHT_CONCRETE.get())
-                        .where('J', definition.get(), Direction.NORTH)
-                        .where('L', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
-                        .where('M', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.NORTH)
-                        .where('N', TFGBlocks_Casings.PISCICULTURE_CORE.get());
-                shapeInfo.add(builder.build());
-                return shapeInfo;
-            })
             .register();
 
     public static final MultiblockMachineDefinition STEAM_BLOOMERY = REGISTRATE
@@ -812,11 +632,11 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     TFGCore.id( "block/machines/steam_bloomery"))
-            .pattern((definition) -> FactoryBlockPattern.start()
-                    .aisle(" F ", " C ", " E ", " E ", " E ")
-                    .aisle("FCF", "C#C", "E#E", "E#E", "E#E")
-                    .aisle(" F ", "CXC", " E ", " E ", " E ")
-                    .where('X', controller(blocks(definition.getBlock())))
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice(" F ", " C ", " E ", " E ", " E ")
+                    .slice("FCF", "C#C", "E#E", "E#E", "E#E")
+                    .slice(" F ", "CXC", " E ", " E ", " E ")
+                    .where('X', controller(definition))
                     .where('C', Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION))
                     .where('F', Predicates.blocks(GTBlocks.FIREBOX_BRONZE.get())
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
@@ -825,17 +645,6 @@ public class TFGMultiMachines {
                             .or(Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
-                    .build())
-            .shapeInfo(controller -> MultiblockShapeInfo.builder()
-                    .aisle(" i ", "CXC", " O ", " I ", " C ")
-                    .aisle("FCF", "C#C", "C#C", "C#C", "C#C")
-                    .aisle(" F ", " C ", " C ", " C ", " C ")
-                    .where('X', controller, Direction.NORTH)
-                    .where('C', TFCBlocks.ROCK_BLOCKS.get(Rock.RHYOLITE).get(Rock.BlockType.BRICKS).get())
-                    .where('F', GTBlocks.FIREBOX_BRONZE.get())
-                    .where('i', GTMachines.STEAM_HATCH, Direction.NORTH)
-                    .where('O', GTMachines.STEAM_EXPORT_BUS, Direction.NORTH)
-                    .where('I', GTMachines.STEAM_IMPORT_BUS, Direction.NORTH)
                     .build())
             .register();
 
@@ -853,15 +662,15 @@ public class TFGMultiMachines {
                         .build();
             }, true)
             .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle(" FFF ", "BBBBB", " BBB ")
-                    .aisle("FXXXF", "B#P#B", "BBBBB")
-                    .aisle("FXXXF", "BPGPB", "BBBBB")
-                    .aisle("FXXXF", "B#P#B", "BBBBB")
-                    .aisle(" FFF ", "BBSBB", " BBB ")
-                    .where('S', controller(blocks(definition.get())))
-                    .where('F', Predicates.blocks(GTBlocks.FIREBOX_STEEL.get())
-                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice(" FFF ", "BBBBB", " BBB ")
+                    .slice("FXXXF", "B#P#B", "BBBBB")
+                    .slice("FXXXF", "BPGPB", "BBBBB")
+                    .slice("FXXXF", "B#P#B", "BBBBB")
+                    .slice(" FFF ", "BBSBB", " BBB ")
+                    .where('S', controller(definition))
+                    .where('F', blocks(GTBlocks.FIREBOX_STEEL.get())
+                            .or(abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('X', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
                     .where('P', blocks(GTBlocks.CASING_BRONZE_PIPE.get())
@@ -891,18 +700,18 @@ public class TFGMultiMachines {
             .recipeType(GTRecipeTypes.ALLOY_SMELTER_RECIPES)
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("FFF", "XXX", "   ")
-                    .aisle("FFF", "X#X", "XXX")
-                    .aisle("FFF", "XSX", "   ")
-                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("FFF", "XXX", "   ")
+                    .slice("FFF", "X#X", "XXX")
+                    .slice("FFF", "XSX", "   ")
+                    .where('S', controller(definition))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(6)
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
                     .where('F', blocks(GTBlocks.FIREBOX_BRONZE.get())
-                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                            .or(abilities(PartAbility.STEAM).setExactLimit(1)))
                     .build())
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(
@@ -919,11 +728,11 @@ public class TFGMultiMachines {
             .recipeType(GTRecipeTypes.COMPRESSOR_RECIPES)
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("XXX", "FXF", "   ")
-                    .aisle("XXX", "A#A", "FAF")
-                    .aisle("XXX", "FSF", "   ")
-                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("XXX", "FXF", "   ")
+                    .slice("XXX", "A#A", "FAF")
+                    .slice("XXX", "FSF", "   ")
+                    .where('S', controller(definition))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .where('A', blocks(GTBlocks.BRONZE_HULL.get()))
@@ -945,11 +754,11 @@ public class TFGMultiMachines {
             .recipeType(GTRecipeTypes.FORGE_HAMMER_RECIPES)
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("XXX", "G G", "G G", "XXX")
-                    .aisle("XAX", " A ", " A ", "XAX")
-                    .aisle("XSX", "G G", "G G", "XXX")
-                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("XXX", "G G", "G G", "XXX")
+                    .slice("XAX", " A ", " A ", "XAX")
+                    .slice("XSX", "G G", "G G", "XXX")
+                    .where('S', controller(definition))
                     .where(' ', Predicates.any())
                     .where('A', blocks(GTBlocks.STEEL_HULL.get()))
                     .where('G', blocks(AllBlocks.METAL_GIRDER.get()))
@@ -969,27 +778,27 @@ public class TFGMultiMachines {
             .appearanceBlock(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING)
             .recipeType(TFGTRecipeTypes.HEAT_EXCHANGER)
             .recipeModifiers(GTRecipeModifiers.OC_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("       ","BBBBBBB","BCCCCCB","BBBBBBB","       ")
-                    .aisle("AAAAAAA","A#####A","LDDDDDL","A#####A","AAAAAAA")
-                    .aisle("AFFFFFA","L#####L","LEEEEEL","L#####L","AFFFFFA")
-                    .aisle("AAAAAAA","A#####A","LDDDDDL","A#####A","AAAAAAA")
-                    .aisle("       ","BBBXBBB","BCCCCCB","BBBMBBB","       ")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
-                    .where('A', Predicates.blocks(GCYMBlocks.CASING_ATOMIC.get()))
-                    .where('B', Predicates.blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
-                    .where('C', Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where('D', Predicates.blocks(GTBlocks.FIREBOX_TITANIUM.get()))
-                    .where('E', Predicates.blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
-                    .where('F', Predicates.blocks(GTBlocks.CASING_ENGINE_INTAKE.get()))
-                    .where('L', Predicates.blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X, PartAbility.IMPORT_FLUIDS_9X)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("       ","BBBBBBB","BCCCCCB","BBBBBBB","       ")
+                    .slice("AAAAAAA","A#####A","LDDDDDL","A#####A","AAAAAAA")
+                    .slice("AFFFFFA","L#####L","LEEEEEL","L#####L","AFFFFFA")
+                    .slice("AAAAAAA","A#####A","LDDDDDL","A#####A","AAAAAAA")
+                    .slice("       ","BBBXBBB","BCCCCCB","BBBMBBB","       ")
+                    .where('X', controller(definition))
+                    .where('A', blocks(GCYMBlocks.CASING_ATOMIC.get()))
+                    .where('B', blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                    .where('C', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
+                    .where('D', blocks(GTBlocks.FIREBOX_TITANIUM.get()))
+                    .where('E', blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+                    .where('F', blocks(GTBlocks.CASING_ENGINE_INTAKE.get()))
+                    .where('L', blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())
+                            .or(abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X, PartAbility.IMPORT_FLUIDS_9X)
                                     .setMaxGlobalLimited(4).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X, PartAbility.EXPORT_FLUIDS_4X, PartAbility.EXPORT_FLUIDS_9X)
+                            .or(abilities(PartAbility.EXPORT_FLUIDS_1X, PartAbility.EXPORT_FLUIDS_4X, PartAbility.EXPORT_FLUIDS_9X)
                                     .setMaxGlobalLimited(4).setPreviewCount(1)))
-                    .where('M', Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)
-                            .or(Predicates.blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())))
+                    .where('M', abilities(PartAbility.MAINTENANCE).setExactLimit(1)
+                            .or(blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .build())
@@ -998,6 +807,7 @@ public class TFGMultiMachines {
                     GTCEu.id("gtceu:block/machines/fluid_heater"))
             .register();
 
+    /* TODO once fission ported to 8.0
     public static final MultiblockMachineDefinition HEAT_BATTERY_MK_1 = REGISTRATE
             .multiblock("heat_battery_mk1", HbMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -1010,31 +820,31 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id( "block/casings/machine_casing_mars"),
                     TFGCore.id("block/machines/bioreactor"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
-                    .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
-                    .aisle("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
-                    .aisle("BBFFFBB", "CAFFFAC", "DAAGAAD", "DAAGAAD", "DAAGAAD", "CAFFFAC", "BBFFFBB")
-                    .aisle("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
-                    .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
-                    .aisle("##BBB##", "##CYC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
-                    .where("Y", Predicates.controller(blocks(definition.getBlock())))
-                    .where("#", Predicates.any())
-                    .where("A", Predicates.air())
-                    .where("B", Predicates.blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
-                    .where("C", Predicates.blocks(TFGBlocks_Casings.MARS_CASING.get())
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X, PartAbility.IMPORT_FLUIDS_9X)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
+                    .slice("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
+                    .slice("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
+                    .slice("BBFFFBB", "CAFFFAC", "DAAGAAD", "DAAGAAD", "DAAGAAD", "CAFFFAC", "BBFFFBB")
+                    .slice("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
+                    .slice("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
+                    .slice("##BBB##", "##CYC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
+                    .where('Y', controller(definition))
+                    .where('#', Predicates.any())
+                    .where('A', Predicates.air())
+                    .where('B', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
+                    .where('C', blocks(TFGBlocks_Casings.MARS_CASING.get())
+                            .or(abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X, PartAbility.IMPORT_FLUIDS_9X)
                                     .setMaxGlobalLimited(6).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X, PartAbility.EXPORT_FLUIDS_4X, PartAbility.EXPORT_FLUIDS_9X)
+                            .or(abilities(PartAbility.EXPORT_FLUIDS_1X, PartAbility.EXPORT_FLUIDS_4X, PartAbility.EXPORT_FLUIDS_9X)
                                     .setMaxGlobalLimited(6).setPreviewCount(1)))
-                    .where("D", Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get())
-                            .or(Predicates.blocks(HeatPortEv.get()).setMaxGlobalLimited(1).setPreviewCount(1)))
-                    .where("F", Predicates.blocks(TFGBlocks_Casings.HEAT_PIPE_CASING.get()))
-                    .where("G", Predicates.blockTag(FissionTags.COMPONENT_HB)
+                    .where('D', blocks(GTBlocks.CASING_LAMINATED_GLASS.get())
+                            .or(blocks(HeatPortEv.get()).setMaxGlobalLimited(1).setPreviewCount(1)))
+                    .where('F', blocks(TFGBlocks_Casings.HEAT_PIPE_CASING.get()))
+                    .where('G', Predicates.blockTag(FissionTags.COMPONENT_HB)
                             .or(Predicates.air()))
                     .build())
             .register();
-
+     */
     public static final MultiblockMachineDefinition PRECISION_FABRICATOR = REGISTRATE
             .multiblock("high_temp_precision_fabricator", CoilWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -1042,35 +852,45 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.PRECISION_FABRICATOR_RECIPES)
             .recipeModifiers(GTRecipeModifiers::ebfOverclock, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.STERLING_SILVER_CASING)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("ACABB", "ACABA", "AAAAA", "     ")
-                    .aisle("CDCBB", "C#C#B", "AFFFB", " AAAB")
-                    .aisle("AXABB", "AEABA", "AAAAA", "     ")
-                    .where("X", Predicates.controller(blocks(definition.getBlock())))
-                    .where("A", Predicates.blocks(TFGBlocks_Casings.STERLING_SILVER_CASING.get()).setMinGlobalLimited(15)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("ACABB", "ACABA", "AAAAA", "     ")
+                    .slice("CDCBB", "C#C#B", "AFFFB", " AAAB")
+                    .slice("AXABB", "AEABA", "AAAAA", "     ")
+                    .where('X', controller(definition))
+                    .where('A', blocks(TFGBlocks_Casings.STERLING_SILVER_CASING.get()).setMinGlobalLimited(15)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
-                    .where("B", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("C", Predicates.heatingCoils())
-                    .where("D", Predicates.blocks(TFGBlocks.QUARTZ_CRUCIBLE.get()))
-                    .where("E", Predicates.blocks(GTBlocks.CASING_TEMPERED_GLASS.get()))
-                    .where("F", Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
-                    .where("#", Predicates.air())
-                    .where(" ", Predicates.any())
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                    .where('B', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('C', Predicates.heatingCoils())
+                    .where('D', blocks(TFGBlocks.QUARTZ_CRUCIBLE.get()))
+                    .where('E', blocks(GTBlocks.CASING_TEMPERED_GLASS.get()))
+                    .where('F', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
                     .build())
             .model(GTMachineModels.createWorkableCasingMachineModel(
                             TFGCore.id("block/casings/sterling_silver_casing"),
                             GTCEu.id("block/multiblock/gcym/large_chemical_bath"))
                     .andThen(b -> b.addDynamicRenderer(BouleRender::makeRender))
             )
-            .additionalDisplay((controller, components) -> {
-                if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
-                    components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
-                            Component.translatable(FormattingUtil.formatNumbers(coilMachine.getCoilType().getCoilTemperature() +
-                                            100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) + "K")
-                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
-                }
+            .additionalDisplay((controller, syncManager) -> {
+                if (!(controller instanceof CoilWorkableElectricMultiblockMachine coilMachine))
+                    return Collections.emptyList();
+                BooleanSyncValue isFormed = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
+                        () -> new BooleanSyncValue(controller::isFormed));
+                IntSyncValue coilTemperature = syncManager.getOrCreateSyncHandler("coilTemperature", IntSyncValue.class,
+                        () -> new IntSyncValue(() -> coilMachine.getCoilType().getCoilTemperature()));
+                IntSyncValue machineTier = syncManager.getOrCreateSyncHandler("machineTier", IntSyncValue.class,
+                        () -> new IntSyncValue(coilMachine::getTier));
+
+                return Collections.singletonList(Text
+                        .dynamic(() -> Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
+                                Component.literal(
+                                                FormattingUtil.formatNumbers(coilTemperature.getIntValue() +
+                                                        100L * Math.max(0, machineTier.getIntValue() - GTValues.MV)) + "K")
+                                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))))
+                        .asWidget().setEnabledIf(w -> isFormed.getBoolValue()));
             })
             .register();
 
@@ -1084,11 +904,11 @@ public class TFGMultiMachines {
             .recipeModifier(TFGLargeBoilerMachine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
             .partAppearance((controller, part, side) ->
-                    controller.self().getPos().below().getY() == part.self().getPos().getY() ?
+                    controller.getBlockPos().below().getY() == part.getBlockPos().getY() ?
                             GTBlocks.FIREBOX_BRONZE.get().defaultBlockState() :
                             GTBlocks.CASING_BRONZE_BRICKS.get().defaultBlockState())
             .pattern((definition) -> {
-                TraceabilityPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.BRONZE_FIREBOX).get())
+                MultiPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.BRONZE_FIREBOX).get())
                         .setMinGlobalLimited(3)
                         .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setPreviewCount(1))
                         .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
@@ -1096,11 +916,11 @@ public class TFGMultiMachines {
                 if (ConfigHolder.INSTANCE.machines.enableMaintenance) {
                     fireboxPred = fireboxPred.or(abilities(PartAbility.MAINTENANCE).setExactLimit(1));
                 }
-                return FactoryBlockPattern.start()
-                        .aisle("XXX", "CCC", "CCC", "CCC")
-                        .aisle("XXX", "CPC", "CPC", "CCC")
-                        .aisle("XXX", "CSC", "CCC", "CCC")
-                        .where('S', controller(blocks(definition.getBlock())))
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                        .slice("XXX", "CCC", "CCC", "CCC")
+                        .slice("XXX", "CPC", "CPC", "CCC")
+                        .slice("XXX", "CSC", "CCC", "CCC")
+                        .where('S', controller(definition))
                         .where('P', blocks(GTBlocks.CASING_BRONZE_PIPE.get()))
                         .where('X', fireboxPred)
                         .where('C', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(20)
@@ -1116,7 +936,7 @@ public class TFGMultiMachines {
                                     BoilerFireboxType.BRONZE_FIREBOX, GTBlocks.CASING_BRONZE_BRICKS))))
             .tooltips(
                     Component.translatable("tfg.multiblock.large_boiler.max_temperature", 480, 480),
-                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 1 / 20),
+                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
             .register();
@@ -1131,11 +951,11 @@ public class TFGMultiMachines {
             .recipeModifier(TFGLargeBoilerMachine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
             .partAppearance((controller, part, side) ->
-                    controller.self().getPos().below().getY() == part.self().getPos().getY() ?
+                    controller.getBlockPos().below().getY() == part.getBlockPos().getY() ?
                             GTBlocks.FIREBOX_STEEL.get().defaultBlockState() :
                             GTBlocks.CASING_STEEL_SOLID.get().defaultBlockState())
             .pattern((definition) -> {
-                TraceabilityPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.STEEL_FIREBOX).get())
+                MultiPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.STEEL_FIREBOX).get())
                         .setMinGlobalLimited(3)
                         .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setPreviewCount(1))
                         .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
@@ -1143,11 +963,11 @@ public class TFGMultiMachines {
                 if (ConfigHolder.INSTANCE.machines.enableMaintenance) {
                     fireboxPred = fireboxPred.or(abilities(PartAbility.MAINTENANCE).setExactLimit(1));
                 }
-                return FactoryBlockPattern.start()
-                        .aisle("XXX", "CCC", "CCC", "CCC")
-                        .aisle("XXX", "CPC", "CPC", "CCC")
-                        .aisle("XXX", "CSC", "CCC", "CCC")
-                        .where('S', controller(blocks(definition.getBlock())))
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                        .slice("XXX", "CCC", "CCC", "CCC")
+                        .slice("XXX", "CPC", "CPC", "CCC")
+                        .slice("XXX", "CSC", "CCC", "CCC")
+                        .where('S', controller(definition))
                         .where('P', blocks(GTBlocks.CASING_STEEL_PIPE.get()))
                         .where('X', fireboxPred)
                         .where('C', blocks(GTBlocks.CASING_STEEL_SOLID.get()).setMinGlobalLimited(20)
@@ -1163,7 +983,7 @@ public class TFGMultiMachines {
                                     BoilerFireboxType.STEEL_FIREBOX, GTBlocks.CASING_STEEL_SOLID))))
             .tooltips(
                     Component.translatable("tfg.multiblock.large_boiler.max_temperature", 1280, 1280),
-                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 1280 / 1 / 20),
+                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 1280 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
             .register();
@@ -1175,32 +995,20 @@ public class TFGMultiMachines {
             .generator(true)
             .recipeModifier(LargeSteamTurbine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("CCCC", "CHHC", "CCCC")
-                    .aisle("CHHC", "RGGR", "CHHC")
-                    .aisle("CCCC", "CSHC", "CCCC")
-                    .where('S', Predicates.controller(Predicates.blocks(definition.getBlock())))
-                    .where('G', Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
-                    .where('C', Predicates.blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
-                    .where('R',
-                            new TraceabilityPredicate(
-                                    new SimplePredicate(
-                                            state -> MetaMachine.getMachine(state.getWorld(),
-                                                    state.getPos()) instanceof IRotorHolderMachine rotorHolder &&
-                                                    state.getWorld()
-                                                            .getBlockState(state.getPos()
-                                                                    .relative(rotorHolder.self().getFrontFacing()))
-                                                            .isAir() &&
-                                                    rotorHolder.self().getDefinition().getTier() >= GTValues.HV &&
-                                                    rotorHolder.self().getDefinition().getTier() <= GTValues.EV,
-                                            () -> PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.HV, GTValues.EV).stream()
-                                                    .map(BlockInfo::fromBlock).toArray(BlockInfo[]::new)))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("CCCC", "CHHC", "CCCC")
+                    .slice("CHHC", "RGGR", "CHHC")
+                    .slice("CCCC", "CSHC", "CCCC")
+                    .where('S', controller(definition))
+                    .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where('C', blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
+                    .where('R', blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.HV, GTValues.EV).toArray(Block[]::new))
                                     .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
                                     .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
                                             VN[GTValues.HV]))
                                     .setExactLimit(1)
-                                    .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY)).setExactLimit(1))
-                    .where('H', Predicates.blocks(GTBlocks.CASING_STEEL_TURBINE.get())
+                                    .or(abilities(PartAbility.OUTPUT_ENERGY)).setExactLimit(1))
+                    .where('H', blocks(GTBlocks.CASING_STEEL_TURBINE.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes(), false, false, true, true, true, true))
                             .or(Predicates.autoAbilities(true, false, false))) // needsMuffler = false
                     .build())
@@ -1225,11 +1033,11 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.gas_well_1"),
                     Component.translatable("tfg.tooltip.machine.gas_well_2",
                             GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "FXF")
-                    .aisle("AAA", "XBX")
-                    .aisle("AAA", "FSF")
-                    .where('S', controller(blocks(definition.get())))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("AAA", "FXF")
+                    .slice("AAA", "XBX")
+                    .slice("AAA", "FSF")
+                    .where('S', controller(definition))
                     .where('X', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(1)
                             .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setMaxGlobalLimited(1).setPreviewCount(1))
                             .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
@@ -1256,29 +1064,29 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     TFGCore.id("block/machines/pisciculture_fishery"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("BBBBBBBBB", "DDDDDDDDD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFBBBBB", "DAAACEEEC", "AAAACEEEC", "AAAACCCCC")
-                    .aisle("BFFFBEEEB", "DAAAEHHGA", "AAAAEHHGA", "AAAACEEEC")
-                    .aisle("BFFFBEEEB", "DAAAEGGGA", "AAAAEGSGA", "AAAACEEEC")
-                    .aisle("BBBBBBBBB", "DDDDCAAAC", "AAAACAAAC", "AAAACCCCC")
-                    .where('S', controller(blocks(definition.get())))
-                    .where("A", Predicates.any())
-                    .where("B", Predicates.blocks(GTBlocks.STEEL_HULL.get()))
-					.where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
-                    .where("D", Predicates.blockTag(Tags.Blocks.FENCES)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("BBBBBBBBB", "DDDDDDDDD", "AAAAAAAAA", "AAAAAAAAA")
+                    .slice("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
+                    .slice("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
+                    .slice("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
+                    .slice("BFFFBBBBB", "DAAACEEEC", "AAAACEEEC", "AAAACCCCC")
+                    .slice("BFFFBEEEB", "DAAAEHHGA", "AAAAEHHGA", "AAAACEEEC")
+                    .slice("BFFFBEEEB", "DAAAEGGGA", "AAAAEGSGA", "AAAACEEEC")
+                    .slice("BBBBBBBBB", "DDDDCAAAC", "AAAACAAAC", "AAAACCCCC")
+                    .where('S', controller(definition))
+                    .where('A', Predicates.any())
+                    .where('B', blocks(GTBlocks.STEEL_HULL.get()))
+					.where('C', Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
+                    .where('D', Predicates.blockTag(Tags.Blocks.FENCES)
                             .or(Predicates.blockTag(Tags.Blocks.FENCE_GATES))
 							.or(Predicates.blockTag(BlockTags.WALLS)))
-                    .where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("F", Predicates.blockTag(BlockTags.DIRT)
+                    .where('E', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('F', Predicates.blockTag(BlockTags.DIRT)
                             .or(Predicates.blockTag(TFCTags.Blocks.GRASS)))
-                    .where("G", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
+                    .where('G', blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false)))
-                    .where("H", Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where('H', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
                     .build())
             .register();
 
@@ -1299,34 +1107,32 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTCEu.id("block/machines/electromagnetic_separator"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAAA", "BCCCB", "BCCCB", "BCCCB", "BCCCB", "BACAB", "AAAAA")
-                    .aisle("ADDDA", "C#F#C", "C#F#C", "C#F#C", "C#F#C", "A#F#A", "AAAAA")
-                    .aisle("ADDDA", "CFGFC", "CFGFC", "CFGFC", "CFGFC", "AFGFA", "AAHAA")
-                    .aisle("AAAAA", "BAFAB", "B#F#B", "B#F#B", "B#F#B", "B#F#B", "AAAAA")
-                    .aisle(" AAA ", " AXA ", "     ", "     ", "     ", "     ", " AAA ")
-                    .where("X", Predicates.controller(Predicates.blocks(definition.get())))
-                    .where("A", Predicates.blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(6)
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(2).setPreviewCount(2))
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("AAAAA", "BCCCB", "BCCCB", "BCCCB", "BCCCB", "BACAB", "AAAAA")
+                    .slice("ADDDA", "C#F#C", "C#F#C", "C#F#C", "C#F#C", "A#F#A", "AAAAA")
+                    .slice("ADDDA", "CFGFC", "CFGFC", "CFGFC", "CFGFC", "AFGFA", "AAHAA")
+                    .slice("AAAAA", "BAFAB", "B#F#B", "B#F#B", "B#F#B", "B#F#B", "AAAAA")
+                    .slice(" AAA ", " AXA ", "     ", "     ", "     ", "     ", " AAA ")
+                    .where('X', controller(definition))
+                    .where('A', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(6)
+                            .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(2).setPreviewCount(2))
+                            .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
                             .or(Predicates.autoAbilities(true, false, false))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
-                    .where("B", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("C", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
-                    .where("D", Predicates.blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
-                    .where("#", Predicates.air())
-                    .where(" ", Predicates.any())
-                    .where("F", Predicates.frames(GTMaterials.Bronze))
-                    .where("G", Predicates.blocks(GTBlocks.FIREBOX_BRONZE.get()))
-                    .where("H", Predicates.abilities(PartAbility.MUFFLER).setExactLimit(1))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                    .where('B', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('C', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
+                    .where('D', blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
+                    .where('#', Predicates.air())
+                    .where('F', Predicates.frames(GTMaterials.Bronze))
+                    .where('G', blocks(GTBlocks.FIREBOX_BRONZE.get()))
+                    .where('H', abilities(PartAbility.MUFFLER).setExactLimit(1))
                     .build())
             .register();
 
     // I made this beautiful and well-designed multiblock that looks aesthetically perfect especially for Tom
     public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE
-            .multiblock("oxygen_distributor",
-                    holder -> new OxygenDistributorMultiblock(holder))
+            .multiblock("oxygen_distributor", OxygenDistributorMultiblock::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .recipeModifier(OxygenDistributorMultiblock::recipeModifier, true)
@@ -1334,17 +1140,16 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_aluminium_plated_steel"),
                     GTCEu.id("block/machines/laser_engraver"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "APA", " A ")
-                    .aisle("AAA", "PPP", "APA")
-                    .aisle("AXA", "APA", " A ")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("AAA", "APA", " A ")
+                    .slice("AAA", "PPP", "APA")
+                    .slice("AXA", "APA", " A ")
+                    .where('X', Predicates.controller(definition))
                     .where('A', Predicates.blocks(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get())
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('P', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
-                    .where(" ", Predicates.any())
                     .build())
             .register();
 
@@ -1358,19 +1163,18 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_iron_desh"),
                     GTCEu.id("block/machines/laser_engraver"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("  F  ", "  F  ", "FFFFF", "  F  ", "  F  ")
-                    .aisle("  F  ", " III ", "FIGIF", " III ", "  F  ")
-                    .aisle("FFFFF", "FIGIF", "FGGGF", "FIGIF", "FFFFF")
-                    .aisle("  F  ", " III ", "FIGIF", " III ", "  F  ")
-                    .aisle("  F  ", "  F  ", "FFXFF", "  F  ", "  F  ")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("  F  ", "  F  ", "FFFFF", "  F  ", "  F  ")
+                    .slice("  F  ", " III ", "FIGIF", " III ", "  F  ")
+                    .slice("FFFFF", "FIGIF", "FGGGF", "FIGIF", "FFFFF")
+                    .slice("  F  ", " III ", "FIGIF", " III ", "  F  ")
+                    .slice("  F  ", "  F  ", "FFXFF", "  F  ", "  F  ")
+                    .where('X', Predicates.controller(definition))
                     .where('F', Predicates.frames(GTMaterials.get("desh")))
                     .where('I', Predicates.blocks(TFGBlocks_Casings.IRON_DESH_CASING.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('G', Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
-                    .where(" ", Predicates.any())
                     .build())
             .register();
     public static final MultiblockMachineDefinition HEAT_PUMP = REGISTRATE
@@ -1382,17 +1186,16 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     GTCEu.id("block/machines/laser_engraver"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("SSS", "SPS", " S ")
-                    .aisle("   ", " P ", "   ")
-                    .aisle("SSS", "SPS", "SSS")
-                    .aisle("SXS", "SPS", " S ")
-                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("SSS", "SPS", " S ")
+                    .slice("   ", " P ", "   ")
+                    .slice("SSS", "SPS", "SSS")
+                    .slice("SXS", "SPS", " S ")
+                    .where('X', controller(definition))
                     .where('S', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('P', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
-                    .where(" ", Predicates.any())
                     .build())
             .register();
 
@@ -1414,17 +1217,13 @@ public class TFGMultiMachines {
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),
                     GTCEu.id("block/machines/laser_engraver"))
             .pattern(definition -> {
-                TraceabilityPredicate energyPredicate = abilities(PartAbility.INPUT_ENERGY)
-                        .setMinGlobalLimited(1)
-                        .setMaxGlobalLimited(1)
-                        .setPreviewCount(1);
-                return FactoryBlockPattern.start()
-                        .aisle("  TTTTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
-                        .aisle("AAACCCAAA", "ICGFDDGCI", "ICGD  GCI", "ICGD  GCI", "AAACCCAAA")
-                        .aisle("ACCCCCCCA", "ICGDB GCI", "ICG Q GCI", "ICG B GCI", "ACCCCCCCA")
-                        .aisle("AAACCCAAA", "ICGD  GCI", "ICG   GCI", "ICG   GCI", "AAACCCAAA")
-                        .aisle("  TTTTT  ", "TTT X TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
-                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                        .slice("  TTTTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
+                        .slice("AAACCCAAA", "ICGFDDGCI", "ICGD  GCI", "ICGD  GCI", "AAACCCAAA")
+                        .slice("ACCCCCCCA", "ICGDB GCI", "ICG Q GCI", "ICG B GCI", "ACCCCCCCA")
+                        .slice("AAACCCAAA", "ICGD  GCI", "ICG   GCI", "ICG   GCI", "AAACCCAAA")
+                        .slice("  TTTTT  ", "TTT X TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
+                        .where('X', Predicates.controller(definition))
                         .where('A', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get()))
                         .where('B', Predicates.frames(GTMaterials.StainlessSteel))
                         .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
@@ -1435,54 +1234,19 @@ public class TFGMultiMachines {
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(3))
                                 .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(TFGPartAbility.ME_REDSTONE_PORT).setMaxGlobalLimited(1))
-                                .or(energyPredicate))
+                                .or(abilities(PartAbility.INPUT_ENERGY)
+                                        .setMinGlobalLimited(1)
+                                        .setMaxGlobalLimited(1)
+                                        .setPreviewCount(1)))
                         .where('G', Predicates.blocks(AEBlocks.QUARTZ_VIBRANT_GLASS.block()))
-                        .where('H', dataHatchPredicate(
-                                Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())))
-                        .where('Q', TFGPredicates.buddingBlocks())
+                        .where('H', dataHatchPredicate() == null ?
+                                Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())  : Objects.requireNonNull(dataHatchPredicate()))
+                        .where('Q', MultiPredicate.ofSingle(TFGPredicates.buddingBlocks()))
                         .where('D', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
                         .where('F', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
-                        .where(' ', Predicates.any())
                         .build();
-            })
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("  TTnTT  ", "TTr X TTT", "TCT   TCT", "TTT   TTT", "  TTmTT  ")
-                        .aisle("AAACCCAAA", "ICGD  GCA", "ICG   GCA", "ICG  DGCA", "AAACCCAAA")
-                        .aisle("ACCCCCCCA", "ICGDB GCA", "ICG q GCA", "ICG BDGCA", "ACCCCCCCA")
-                        .aisle("AAACCCAAA", "ICGFDDGCA", "ICG  DGCA", "ICGDDFGCA", "AAACCCAAA")
-                        .aisle("  TTpTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TToTT  ")
-                        .where('X', definition, Direction.NORTH)
-                        .where('A', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
-                        .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
-                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
-                        .where('G', AEBlocks.QUARTZ_VIBRANT_GLASS.block())
-                        .where('H', GTResearchMachines.BASIC_DATA_ACCESS_HATCH, Direction.SOUTH)
-                        .where('I', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.WEST)
-                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
-                        .where('m', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
-                        .where('n', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
-                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.NORTH)
-                        .where('o', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('p', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where(' ', Blocks.AIR);
-
-                var emptyCopy = builder.shallowCopy()
-                        .where('D', Blocks.AIR)
-                        .where('F', Blocks.AIR)
-                        .where('q', AEBlocks.QUARTZ_BLOCK.block());
-                shapeInfos.add(emptyCopy.build());
-
-                var spatialCopy = builder.shallowCopy()
-                        .where('D', AEBlocks.SPATIAL_PYLON.block())
-                        .where('F', AEBlocks.SPATIAL_IO_PORT.block())
-                        .where('q', AEBlocks.FLAWLESS_BUDDING_QUARTZ.block());
-                shapeInfos.add(spatialCopy.build());
-
-                return shapeInfos;
             })
             .register();
 
@@ -1503,13 +1267,13 @@ public class TFGMultiMachines {
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),
                     TFGCore.id("block/machines/wireless_charger"))
             .pattern(definition -> {
-                return FactoryBlockPattern.start()
-                        .aisle("TTTTT", "     ", "     ", "     ")
-                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
-                        .aisle("TCCCT", " DB  ", "  Q  ", "     ")
-                        .aisle("TCCCT", " D   ", "     ", "     ")
-                        .aisle("TTXTT", "     ", "     ", "     ")
-                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                        .slice("TTTTT", "     ", "     ", "     ")
+                        .slice("TCCCT", " FDD ", " D   ", " D   ")
+                        .slice("TCCCT", " DB  ", "  Q  ", "     ")
+                        .slice("TCCCT", " D   ", "     ", "     ")
+                        .slice("TTXTT", "     ", "     ", "     ")
+                        .where('X', Predicates.controller(definition))
                         .where('B', Predicates.frames(GTMaterials.StainlessSteel))
                         .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
                         .where('T', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
@@ -1518,45 +1282,12 @@ public class TFGMultiMachines {
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
                                 .or(Predicates.abilities(TFGPartAbility.ME_REDSTONE_PORT).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
-                        .where('Q', TFGPredicates.buddingBlocks())
+                        .where('Q', MultiPredicate.ofSingle(TFGPredicates.buddingBlocks()))
                         .where('D', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
                         .where('F', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
-                        .where(' ', Predicates.any())
                         .build();
-            })
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("mTXTv", "     ", "     ", "     ")
-                        .aisle("TCCCT", " D   ", "     ", "     ")
-                        .aisle("oCCCr", " DB  ", "  Q  ", "     ")
-                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
-                        .aisle("TTiTT", "     ", "     ", "     ")
-                        .where('X', definition, Direction.NORTH)
-                        .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
-                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
-                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
-                        .where('Q', AEBlocks.FLAWED_BUDDING_QUARTZ.block())
-                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.EAST)
-                        .where('m', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.NORTH)
-                        .where('v', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.NORTH)
-                        .where('i', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('o', GTMachines.MAINTENANCE_HATCH, Direction.WEST)
-                        .where(' ', Blocks.AIR);
-
-                var emptyCopy = builder.shallowCopy()
-                        .where('D', Blocks.AIR)
-                        .where('F', Blocks.AIR);
-                shapeInfos.add(emptyCopy.build());
-
-                var spatialCopy = builder.shallowCopy()
-                        .where('D', AEBlocks.SPATIAL_PYLON.block())
-                        .where('F', AEBlocks.SPATIAL_IO_PORT.block());
-                shapeInfos.add(spatialCopy.build());
-
-                return shapeInfos;
             })
             .register();
 

@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IWorkableMultiController;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.client.renderer.block.FluidBlockRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
@@ -36,13 +35,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
-public class BouleRender extends DynamicRender<IWorkableMultiController, BouleRender> {
+public class BouleRender extends DynamicRender<WorkableMultiblockMachine, BouleRender> {
     public static DynamicRender<?, ?> makeRender() {
         return new BouleRender();
     }
 
     public static final Codec<BouleRender> CODEC = Codec.unit(BouleRender::new);
-    public static final DynamicRenderType<IWorkableMultiController, BouleRender> TYPE = new DynamicRenderType<>(BouleRender.CODEC);
+    public static final DynamicRenderType<WorkableMultiblockMachine, BouleRender> TYPE = new DynamicRenderType<>(BouleRender.CODEC);
 
     private final FluidBlockRenderer fluidBlockRenderer;
     private ItemRenderer itemRenderer;
@@ -57,7 +56,7 @@ public class BouleRender extends DynamicRender<IWorkableMultiController, BouleRe
     }
 
     @Override
-    public @NotNull DynamicRenderType<IWorkableMultiController, BouleRender> getType() {
+    public @NotNull DynamicRenderType<WorkableMultiblockMachine, BouleRender> getType() {
         return TYPE;
     }
 
@@ -67,7 +66,7 @@ public class BouleRender extends DynamicRender<IWorkableMultiController, BouleRe
     }
 
     @Override
-    public void render(IWorkableMultiController machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(WorkableMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (!ConfigHolder.INSTANCE.client.renderer.renderFluids)
             return;
         if (!machine.isFormed())
@@ -81,8 +80,7 @@ public class BouleRender extends DynamicRender<IWorkableMultiController, BouleRe
             return;
         }
 
-        final MultiblockControllerMachine machineSelf = machine.self();
-        if (machineSelf.getOffsetTimer() % 20 == 0 || recipe.id != cachedRecipe) {
+        if (machine.getOffsetTimer() % 20 == 0 || recipe.id != cachedRecipe) {
             cachedRecipe = recipe.id;
 
             if (machine.isActive()) {
@@ -92,8 +90,8 @@ public class BouleRender extends DynamicRender<IWorkableMultiController, BouleRe
             }
         }
 
-        BlockPos pos = machineSelf.getPos();
-        BlockPos center = pos.relative(machineSelf.getFrontFacing().getOpposite());
+        BlockPos pos = machine.getBlockPos();
+        BlockPos center = pos.relative(machine.getFrontFacing().getOpposite());
         center = center.subtract(pos);
 
         double progress = recipeLogic.getProgressPercent();
@@ -105,12 +103,12 @@ public class BouleRender extends DynamicRender<IWorkableMultiController, BouleRe
 
             poseStack.pushPose();
 
-            var pose = poseStack.last().pose();
+            var pose = poseStack;
             double translate = Math.max(progress, 0.05);
             poseStack.translate(0, -translate, 0);
 
             fluidBlockRenderer.drawPlane(Direction.UP, Collections.singletonList(center), pose, consumer, cachedFluid,
-                    RenderUtil.FluidTextureType.STILL, packedOverlay, machineSelf.getPos());
+                    RenderUtil.FluidTextureType.STILL, packedOverlay, machine.getBlockPos(), machine.getLevel());
 
             poseStack.popPose();
         }
@@ -119,16 +117,16 @@ public class BouleRender extends DynamicRender<IWorkableMultiController, BouleRe
         var contents = new ObjectArrayList<Content>();
         contents.addAll(recipe.getInputContents(ItemRecipeCapability.CAP));
         var ingredients = contents.stream()
-                .map(Content::getContent)
+                .map(Content::content)
                 .map(ItemRecipeCapability.CAP::of)
                 .map(Ingredient::getItems)
                 .flatMap(Arrays::stream).toList();
         var rod = ingredients.stream().filter(i -> i.is(TFGTags.Items.PrecisionFabricatorHolderRods)).findFirst();
         var dipped = ingredients.stream().filter(i -> i.is(TFGTags.Items.PrecisionFabricatorDippedItems)).findFirst();
-        var output = ItemRecipeCapability.CAP.of(recipe.getOutputContents(ItemRecipeCapability.CAP).get(0).getContent()).getItems()[0];
+        var output = ItemRecipeCapability.CAP.of(recipe.getOutputContents(ItemRecipeCapability.CAP).get(0).content()).getItems()[0];
 
         // Rotate the pose stack to match the direction that the machine is facing
-        float facingYRot = machineSelf.getFrontFacing().toYRot();
+        float facingYRot = machine.getFrontFacing().toYRot();
         float rotationOffset = 180f - facingYRot;
         poseStack.pushPose();
         poseStack.translate(0.5f, 0, 0.5f);
