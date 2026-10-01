@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.blockentity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.TickableInventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.capabilities.FluidTankCallback;
@@ -48,7 +49,7 @@ import su.terrafirmagreg.core.common.data.TFGSounds;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.config.TFGConfig;
 
-public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements FluidTankCallback, MenuProvider {
+public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements FluidTankCallback, MenuProvider, IHeatable {
     public static final int SLOT_FLUID_CONTAINER_IN = 0;
     public static final int SLOT_FLUID_CONTAINER_OUT = 1;
     public static final int SLOTS = 2;
