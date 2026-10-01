@@ -53,7 +53,7 @@ public class GasBurnerBlock extends DeviceBlock {
     protected static final VoxelShape SHAPE = Shapes.or(Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D), Block.box(1.0D, 9.0D, 1.0D, 15.0D, 16.0D, 15.0D));
 
     public GasBurnerBlock(ExtendedProperties properties) {
-        super(properties, InventoryRemoveBehavior.DROP);
+        super(properties, InventoryRemoveBehavior.SAVE);
         registerDefaultState(getStateDefinition().any()
                 .setValue(HEAT, 0)
                 .setValue(LIT, false)

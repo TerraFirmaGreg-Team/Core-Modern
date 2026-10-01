@@ -20,7 +20,6 @@ import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +27,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -42,8 +40,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
-import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
-import su.terrafirmagreg.core.common.block.GasBurnerBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
@@ -143,17 +139,6 @@ public class TFGItemTooltipHelpers {
                     .append(Component.literal(": ")
                             .append(Component.translatable("tfc.tooltip.time_delta_days", daysToGrow)
                                     .withStyle(ChatFormatting.ITALIC, dynamicColor))));
-        }
-
-        if (block instanceof GasBurnerBlock) {
-            Player player = event.getEntity();
-            if (player != null) {
-                if (Screen.hasShiftDown()) {
-                    tooltip.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.gas_burner.flavor_text")));
-                } else {
-                    tooltip.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
-                }
-            }
         }
     }
 

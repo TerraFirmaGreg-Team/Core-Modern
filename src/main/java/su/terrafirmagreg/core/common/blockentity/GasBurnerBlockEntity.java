@@ -153,12 +153,19 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     /**
      * Checks if the input fluid is valid for the burner.
      */
-    private boolean isFluidValid(FluidStack stack) {
+    public boolean isFluidValid(FluidStack stack) {
         if (stack.isEmpty()) {
             return false;
         }
         if (level != null) {
             return GasBurnerFuelRecipe.getRecipe(level, stack).isPresent();
+        }
+        return isValidFluid(stack);
+    }
+
+    public static boolean isValidFluid(FluidStack stack) {
+        if (stack.isEmpty()) {
+            return false;
         }
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server != null) {
