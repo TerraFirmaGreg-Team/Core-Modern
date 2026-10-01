@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import com.eerussianguy.beneath.common.blocks.BeneathBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
@@ -45,18 +46,31 @@ public abstract class AnimatedBlazeBurnerMixin extends AnimatedKinetics {
             heatState = 3;
         }
 
-        boolean blockCycle = (System.currentTimeMillis() / 1000) % 2 == 0;
+        int cycle = (int) ((System.currentTimeMillis() / 1000) % 3);
 
-        if (blockCycle) {
-            blockElement(TFCBlocks.CHARCOAL_FORGE.get().defaultBlockState().setValue(CharcoalForgeBlock.HEAT, heatState))
-                    .atLocal(0, 1.65, 0)
-                    .scale(scale)
-                    .render(graphics);
-        } else {
-            blockElement(TFGBlocks.GAS_BURNER.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, heatState).setValue(GasBurnerBlock.LIT, true))
-                    .atLocal(0, 1.65, 0)
-                    .scale(scale)
-                    .render(graphics);
+        switch (cycle) {
+            case 1:
+                for (int xOff = -1; xOff <= 1; xOff++) {
+                    for (int zOff = -1; zOff <= 1; zOff++) {
+                        blockElement(BeneathBlocks.HELLFORGE.get().defaultBlockState().setValue(CharcoalForgeBlock.HEAT, heatState))
+                                .atLocal(xOff, 1.65, zOff)
+                                .scale(scale)
+                                .render(graphics);
+                    }
+                }
+                break;
+            case 2:
+                blockElement(TFGBlocks.GAS_BURNER.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, heatState).setValue(GasBurnerBlock.LIT, true))
+                        .atLocal(0, 1.65, 0)
+                        .scale(scale)
+                        .render(graphics);
+                break;
+            default:
+                blockElement(TFCBlocks.CHARCOAL_FORGE.get().defaultBlockState().setValue(CharcoalForgeBlock.HEAT, heatState))
+                        .atLocal(0, 1.65, 0)
+                        .scale(scale)
+                        .render(graphics);
+                break;
         }
 
         matrixStack.popPose();
