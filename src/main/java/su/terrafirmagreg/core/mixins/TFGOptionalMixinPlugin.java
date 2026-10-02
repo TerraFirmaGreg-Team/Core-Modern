@@ -1,13 +1,14 @@
 package su.terrafirmagreg.core.mixins;
 
-import net.minecraftforge.fml.loading.FMLLoader;
+import java.util.List;
+import java.util.Set;
+
 import org.objectweb.asm.tree.ClassNode;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import java.util.List;
-import java.util.Set;
+import net.minecraftforge.fml.loading.FMLLoader;
 
 public class TFGOptionalMixinPlugin implements IMixinConfigPlugin {
 
