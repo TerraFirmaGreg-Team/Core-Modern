@@ -172,7 +172,7 @@
         "common.gtceu.tools.ToolRecipeHandlerMixin",
         "common.gtceu.tools.TreeFellingHelperMixin",
         "common.gtutilities.UtilToolRecipeHelperMixin",
-        "common.hang_glider.GliderItemMixin",
+        "common.hangglider.GliderItemMixin",
         "common.kubejs.MiscForgeHelperMixin",
         "common.kubejs_tfc.AqueductBlockBuilderMixin",
         "common.kubejs_tfc.BuildFoodItemDataMixin",
