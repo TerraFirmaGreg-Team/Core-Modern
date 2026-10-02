@@ -36,7 +36,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.MissingMappingsEvent;
 
 import team.terrafirmagreg.jellies.common.data.JelliesItems;
@@ -51,8 +50,6 @@ import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.perf.SupportCache;
-import su.terrafirmagreg.core.network.TFGNetworkHandler;
-import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
 import su.terrafirmagreg.core.world.BedrockFluidSpoutLoader;
@@ -90,24 +87,6 @@ public final class ForgeCommonEventListener {
             if (stack.getItem() == TFGItems.SNIFFER_EGG.get() || stack.getItem() == TFGItems.WRAPTOR_EGG.get()) {
                 event.addCapability(LargeEggCapability.KEY, new LargeEggHandler(stack));
             }
-        }
-    }
-
-    /**
-     * Send the blaze burner liquid fuel map to send to the client and populate emi.
-     */
-    @SubscribeEvent
-    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            //Send the blaze burner liquid fuel map to send to the client and populate emi.
-            TFGNetworkHandler.INSTANCE.send(
-                    PacketDistributor.PLAYER.with(() -> player),
-                    new FuelSyncPacket(FuelSyncPacket.capturedJsonData));
-
-            //Checks if the player is in a custom dimension spawn,
-            // and puts them at that pos when they first join
-            GlobalPos spawnPos = CustomSpawnSaveHandler.getSpawnPos(Objects.requireNonNull(player.getServer()).overworld());
-            CustomSpawnHelper.tryFirstJoinTeleport(player, spawnPos);
         }
     }
 
