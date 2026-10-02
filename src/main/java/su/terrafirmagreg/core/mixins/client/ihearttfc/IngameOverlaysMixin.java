@@ -17,12 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.tfcambiental.capability.TemperatureCapability;
 
-@Mixin(value = IngameOverlays.class, remap = false)
+@Mixin(IngameOverlays.class)
 public class IngameOverlaysMixin {
     @Unique
     private static final ResourceLocation TEXTURE_TFG = TFGCore.id("textures/gui/icons/temperature_indicators.png");
 
-    @ModifyExpressionValue(method = "renderTemperature", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/client/ClimateRenderCache;getTemperature()F", ordinal = 0))
+    @ModifyExpressionValue(method = "renderTemperature", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/client/ClimateRenderCache;getTemperature()F", ordinal = 0), remap = false)
     private static float tfg$replaceCurrentTempWithPlayerTemp(float currentTemp, @Local(name = "player") Player player) {
         return player.getCapability(TemperatureCapability.CAPABILITY).map(TemperatureCapability::getTemperature).orElseThrow();
     }

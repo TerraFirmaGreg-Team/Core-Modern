@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins;
 
-import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -22,14 +21,6 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     private static final String AAAPARTICLES_MIXIN_JSON = "aaa_particles.mixins.json";
     private static final String AAAPARTICLES_GAME_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinGameRenderer";
     private static final String AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinItemInHandRenderer";
-
-    //    @Override
-    //    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-    //        return switch (mixinClassName) {
-    //            case "su.terrafirmagreg.core.mixins.client.ihearttfc.IngameOverlaysMixin" -> isModLoaded("ihearttfc");
-    //            default -> true;
-    //        };
-    //    }
 
     /**
      * acceptTargets fires once after all configs have been collected but before any have been applied,
@@ -111,8 +102,4 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     @Override public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
     @Override public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
     // spotless:on
-
-    private static boolean isModLoaded(String modid) {
-        return LoadingModList.get().getModFileById(modid) != null;
-    }
 }
