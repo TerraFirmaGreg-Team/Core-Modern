@@ -13,7 +13,9 @@ import snownee.jade.api.config.IPluginConfig;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.GasBurnerBlock;
 import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 
+@SuppressWarnings("NoTranslation")
 public class GasBurnerProvider implements IBlockComponentProvider {
 
     public static final GasBurnerProvider INSTANCE = new GasBurnerProvider();
@@ -57,6 +59,11 @@ public class GasBurnerProvider implements IBlockComponentProvider {
                     Component tempText = Component.literal("\uD83D\uDD25 ").append(formattedTemp);
                     tooltip.add(tempText);
                 }
+            }
+
+            // Oxygenated Display.
+            if (!EnvironmentSystem.hasOxygen(accessor.getLevel(), accessor.getPosition())) {
+                tooltip.add(Component.translatable("tfg.tooltip.firmalife_greenhouse.oxygen_required"));
             }
         }
     }

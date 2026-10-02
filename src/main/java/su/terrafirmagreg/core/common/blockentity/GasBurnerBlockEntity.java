@@ -46,6 +46,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.GasBurnerBlock;
 import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
 import su.terrafirmagreg.core.common.data.TFGSounds;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.config.TFGConfig;
 
@@ -304,12 +305,12 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             return;
         }
         if (consumeFuel()) {
-            level.playSound(null, worldPosition, TFGSounds.FIRE_CLICK_CLICK.getMainEvent(), SoundSource.BLOCKS, 2, 0.8f);
             this.pendingState = state.setValue(GasBurnerBlock.HEAT, 2).setValue(GasBurnerBlock.LIT, true);
             this.stateDelayTicks = 15;
             this.setChanged();
 
         }
+        level.playSound(null, worldPosition, TFGSounds.FIRE_CLICK_CLICK.getMainEvent(), SoundSource.BLOCKS, 2, 0.8f);
     }
 
     /**
@@ -342,6 +343,9 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
      */
     private boolean consumeFuel() {
         if (tank.isEmpty() || level == null) {
+            return false;
+        }
+        if (!EnvironmentSystem.hasOxygen(level, worldPosition)) {
             return false;
         }
         FluidStack current = tank.getFluid();
