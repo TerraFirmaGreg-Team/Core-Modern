@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.Collections;
 import java.util.function.Supplier;
 
+import com.eerussianguy.firmalife.common.FLTags;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -13,6 +15,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -21,6 +24,7 @@ import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
@@ -31,7 +35,11 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.DeferredRegister;
@@ -39,7 +47,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.item.GasBurnerBlockItem;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings({ "unused" })
@@ -274,6 +285,55 @@ public final class TFGBlocks {
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<GasBurnerBlock> GAS_BURNER = TFGCore.REGISTRATE.block("gas_burner",
+            p -> new GasBurnerBlock(ExtendedProperties.of(p)
+                    .sound(SoundType.LANTERN)
+                    .strength(5, 10)
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .noOcclusion()
+                    .blockEntity(TFGBlockEntities.GAS_BURNER)
+                    .lightLevel(state -> state.getValue(GasBurnerBlock.LIT) ? 12 : 0)
+                    .serverTicks(GasBurnerBlockEntity::serverTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                for (int level = 0; level <= Collections.max(GasBurnerBlock.SET_LEVEL.getPossibleValues()); level++) {
+
+                    for (boolean lit : GasBurnerBlock.LIT.getPossibleValues()) {
+
+                        String litString = lit ? "lit" : "unlit";
+                        var model = prov.models().withExistingParent(ctx.getName() + "/gas_burner_" + level + "_" + litString, TFGCore.id("block/gas_burner_parent"))
+                                .texture("flame", TFGCore.id("block/gas_burner/gas_burner_" + litString))
+                                .texture("indicator", TFGCore.id("block/gas_burner/level_indicator_" + level));
+
+                        for (Direction dir : Direction.Plane.HORIZONTAL) {
+                            builder.partialState()
+                                    .with(GasBurnerBlock.SET_LEVEL, level)
+                                    .with(GasBurnerBlock.LIT, lit)
+                                    .with(GasBurnerBlock.FACING, dir.getOpposite())
+                                    .modelForState()
+                                    .modelFile(model)
+                                    .rotationY((int) dir.toYRot())
+                                    .addModel();
+                        }
+                    }
+                }
+            })
+
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
+            .loot((lt, block) -> lt.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .name("loot_pool")
+                            .setRolls(ConstantValue.exactly(1))
+                            .add(LootItem.lootTableItem(block)
+                                    .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                    .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                            .copy("", "BlockEntityTag", CopyNbtFunction.MergeStrategy.REPLACE)))
+                            .when(ExplosionCondition.survivesExplosion()))))
+            .item(GasBurnerBlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/" + ctx.getName() + "/gas_burner_0_unlit")))
+            .build()
             .register();
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {

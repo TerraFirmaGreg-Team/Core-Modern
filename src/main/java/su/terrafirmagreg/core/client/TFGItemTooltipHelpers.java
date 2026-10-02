@@ -52,6 +52,7 @@ import su.terrafirmagreg.core.common.event.OreProspectorEvent;
 import su.terrafirmagreg.core.common.event.WeakOreProspectorEventHelper;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+@SuppressWarnings("NoTranslation")
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class TFGItemTooltipHelpers {

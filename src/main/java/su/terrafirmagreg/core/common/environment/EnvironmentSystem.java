@@ -34,6 +34,7 @@ import su.terrafirmagreg.core.client.EnvironmentClientCache;
  * Global class with static state managing environment systems across all dimensions.
  * Handles event registration and provides the main API for environment queries.
  */
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class EnvironmentSystem {
 
@@ -63,8 +64,7 @@ public final class EnvironmentSystem {
     }
 
     /**
-     * Checks if a position has oxygen (server-side only).
-     * For client-side queries (tooltips), use {@link EnvironmentClientCache#get(BlockPos)}.
+     * Checks if a position has oxygen (server-side, or client-side via cache).
      *
      * @param level The level to check in
      * @param pos The position to check
@@ -72,7 +72,7 @@ public final class EnvironmentSystem {
      */
     public static boolean hasOxygen(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
-            return false; // Use su.terrafirmagreg.core.client.EnvironmentClientCache instead
+            return EnvironmentClientCache.hasOxygen(pos);
         }
 
         DimEnvManager manager = managers.get(level.dimension());
@@ -84,7 +84,7 @@ public final class EnvironmentSystem {
     }
 
     /**
-     * Checks if a position has safe temperature (server-side only).
+     * Checks if a position has safe temperature (server-side, or client-side cache).
      *
      * @param level The level to check in
      * @param pos The position to check
@@ -92,7 +92,7 @@ public final class EnvironmentSystem {
      */
     public static boolean hasTemperature(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
-            return false;
+            return EnvironmentClientCache.hasNormalTemperature(pos);
         }
 
         DimEnvManager manager = managers.get(level.dimension());
@@ -108,7 +108,7 @@ public final class EnvironmentSystem {
      *
      * @param level The level to check in
      * @param pos The position to check
-     * @return true if the position has safe temperature
+     * @return target temperature, if any.
      */
     public static Optional<Float> getTargetTemperature(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
@@ -124,13 +124,13 @@ public final class EnvironmentSystem {
     }
 
     /**
-     * Checks if a position has safe pressure (server-side only).
+     * Checks if a position has safe pressure (server-side, or client-side cache).
      * True if inside a sealed, active pressure room shielding from dangerous ambient pressure
      * (e.g. Europa ocean floor).
      */
     public static boolean hasSafePressure(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
-            return false;
+            return EnvironmentClientCache.hasNormalPressure(pos);
         }
 
         DimEnvManager manager = managers.get(level.dimension());
@@ -153,7 +153,7 @@ public final class EnvironmentSystem {
     }
 
     /**
-     * Checks if a position has normal gravity (server-side only).
+     * Checks if a position has normal gravity (server-side, or client-side cache).
      * True if the dimension naturally has Earth-like gravity, or the position
      * is inside an active gravity machine's bubble.
      *
@@ -163,7 +163,7 @@ public final class EnvironmentSystem {
      */
     public static boolean hasNormalGravity(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
-            return false;
+            return EnvironmentClientCache.hasNormalGravity(pos);
         }
 
         DimEnvManager manager = managers.get(level.dimension());

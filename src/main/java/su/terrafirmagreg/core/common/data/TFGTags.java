@@ -99,6 +99,8 @@ public final class TFGTags {
         public static final TagKey<Item> ROPE_LADDERS = createItemTag("rope_ladders");
         public static final TagKey<Item> CRAFTING_STATIONS = createItemTag("crafting_stations");
 
+        public static final TagKey<Item> TROWEL_BLACKLIST = createItemTag("trowel_blacklist");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }

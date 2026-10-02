@@ -120,6 +120,11 @@ public class TFGBlockEntities {
                     TFGBlocks_Create.TITANIUM_COMBUSTION_ENGINE)
             .register();
 
+    public static final BlockEntityEntry<GasBurnerBlockEntity> GAS_BURNER = TFGCore.REGISTRATE
+            .blockEntity("gas_burner", GasBurnerBlockEntity::new)
+            .validBlock(TFGBlocks.GAS_BURNER)
+            .register();
+
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
 
     public static void addValidBEBlock(Supplier<?> type, Block block) {
