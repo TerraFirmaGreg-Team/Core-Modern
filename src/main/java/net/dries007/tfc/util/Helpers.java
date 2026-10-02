@@ -1685,6 +1685,7 @@ public final class Helpers
      * @see #randomBlock(TagKey, RandomSource)
      * @see #randomEntity(TagKey, RandomSource)
      */
+    @Deprecated
     public static <T> Optional<T> getRandomElement(Registry<T> registry, TagKey<T> tag, RandomSource random)
     {
         return registry.getTag(tag).flatMap(set -> set.getRandomElement(random)).map(Holder::value);
