@@ -35,6 +35,7 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
@@ -56,6 +57,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory ARTISAN_TABLE = new EmiRecipeCategory(TFGCore.id("artisan_table"),
             EmiStack.of(TFGBlocks.ARTISAN_TABLE.get()));
+
+    public static final EmiRecipeCategory GAS_BURNER = new EmiRecipeCategory(TFGCore.id("gas_burner_fuel"),
+            EmiStack.of(TFGBlocks.GAS_BURNER.get()));
 
     public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(TFGCore.id("large_boiler_booster"),
             EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
@@ -152,6 +156,13 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ARTISAN_TABLE, EmiStack.of(TFGBlocks.ARTISAN_TABLE.get().asItem()));
         for (ArtisanRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.ARTISAN.get()).stream().toList()) {
             emiRegistry.addRecipe(new ArtisanTableEmiRecipe(recipe));
+        }
+
+        //Gas Burner
+        emiRegistry.addCategory(GAS_BURNER);
+        emiRegistry.addWorkstation(GAS_BURNER, EmiStack.of(TFGBlocks.GAS_BURNER.get().asItem()));
+        for (GasBurnerFuelRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.GAS_BURNER_FUEL.get()).stream().toList()) {
+            emiRegistry.addRecipe(new GasBurnerFuelEmiRecipe(recipe));
         }
 
         // Item Repair

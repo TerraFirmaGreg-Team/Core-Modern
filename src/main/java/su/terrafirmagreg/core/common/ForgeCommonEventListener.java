@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.GTCEu;
 
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -23,7 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -39,9 +42,11 @@ import net.minecraftforge.registries.MissingMappingsEvent;
 import team.terrafirmagreg.jellies.common.data.JelliesItems;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
 import su.terrafirmagreg.core.common.data.TFGCommands;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
@@ -58,6 +63,24 @@ public final class ForgeCommonEventListener {
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
         TFGCommands.register(event.getDispatcher());
+    }
+
+    @SubscribeEvent
+    public static void onFireStart(StartFireEvent event) {
+        Level level = event.getLevel();
+        BlockPos pos = event.getPos();
+        BlockState state = event.getState();
+        if (state.is(TFGBlocks.GAS_BURNER.get())) {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity instanceof GasBurnerBlockEntity burner && burner.light(state)) {
+                event.setCanceled(true);
+            }
+        } else if (level.getBlockState(pos.below()).is(TFGBlocks.GAS_BURNER.get())) {
+            BlockEntity entity = level.getBlockEntity(pos.below());
+            if (entity instanceof GasBurnerBlockEntity burner && burner.light(level.getBlockState(pos.below()))) {
+                event.setCanceled(true);
+            }
+        }
     }
 
     @SubscribeEvent

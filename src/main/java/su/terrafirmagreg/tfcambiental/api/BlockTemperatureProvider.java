@@ -54,6 +54,7 @@ import net.minecraftforge.registries.RegistryObject;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import su.terrafirmagreg.core.common.block.ParticleEmitterDecorationBlock;
+import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
@@ -105,6 +106,7 @@ public interface BlockTemperatureProvider {
             BlockEntity blockEntity = player.level().getBlockEntity(pos);
             if (blockEntity != null) {
                 addScaled(storage, handleCharcoalForge(player, blockEntity), distanceMultiplier);
+                addScaled(storage, handleGasBurner(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleFirePit(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handlePot(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleGrill(player, blockEntity), distanceMultiplier);
@@ -159,6 +161,18 @@ public interface BlockTemperatureProvider {
                 change = change * 0.3f;
             }
             return TempModifier.defined(change, 0);
+        }
+        return TempModifier.none();
+    }
+
+    static Optional<TempModifier> handleGasBurner(Player player, BlockEntity entity) {
+        if (entity instanceof GasBurnerBlockEntity gasBurner) {
+            float temp = gasBurner.getTemperature();
+            float change = temp / 100f;
+            if (hasProtection(player)) {
+                change = change * 0.3f;
+            }
+            return TempModifier.defined(Math.min(6f, change), 0);
         }
         return TempModifier.none();
     }

@@ -1373,6 +1373,17 @@ public final class Helpers
         return (random.nextDouble() - random.nextDouble()) * delta;
     }
 
+    /**
+     * @return A random float, in a square distribution at the center of [-sideLength/2, sideLength/2]
+     */
+    public static float[] square(RandomSource random, float sideLength) {
+        float halfSide = sideLength / 2.0f;
+        float x = (random.nextFloat() * sideLength) - halfSide;
+        float y = (random.nextFloat() * sideLength) - halfSide;
+
+        return new float[]{x, y};
+    }
+
     public static float easeInOutCubic(float x)
     {
         return x < 0.5f ? 4 * x * x * x : 1 - cube(-2 * x + 2) / 2;
