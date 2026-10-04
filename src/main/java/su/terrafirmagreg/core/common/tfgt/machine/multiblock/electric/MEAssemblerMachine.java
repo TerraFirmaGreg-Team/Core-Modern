@@ -173,7 +173,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
                     ? recipe.data.getInt("nominal_duration")
                     : recipe.duration;
             long work = (long) dur * Math.max(1, recipe.batchParallels);
-            executions = Math.max(1, (int) (work / 100));
+            executions = Math.max(1, (int) (work / 300));
         }
 
         buddingHealth -= executions;
