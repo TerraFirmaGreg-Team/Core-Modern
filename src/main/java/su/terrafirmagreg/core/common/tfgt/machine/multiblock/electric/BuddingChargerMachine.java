@@ -143,8 +143,8 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
         if (buddingTier != maxTier - 1) {
             RecipeLogic.putFailureReason(this, recipe,
                     Component.translatable(buddingTier < maxTier - 1
-                                    ? "tfg.machine.budding_charger.tier_too_low"
-                                    : "tfg.machine.budding_charger.tier_too_high")
+                            ? "tfg.machine.budding_charger.tier_too_low"
+                            : "tfg.machine.budding_charger.tier_too_high")
                             .withStyle(ChatFormatting.RED));
             return false;
         }
