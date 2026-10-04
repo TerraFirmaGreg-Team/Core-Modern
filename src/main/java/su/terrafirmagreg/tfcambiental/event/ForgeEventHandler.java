@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -22,6 +23,24 @@ public class ForgeEventHandler {
             capability.setPlayer(player);
             event.addCapability(TemperatureCapability.KEY, capability);
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (!event.isWasDeath()) {
+            return;
+        }
+
+        float coolThreshold = TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue();
+        float hotThreshold = TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue();
+
+        // carry over temperature after death
+        Player original = event.getOriginal();
+        original.reviveCaps();
+        original.getCapability(TemperatureCapability.CAPABILITY).ifPresent(temperatureCapability -> event.getEntity()
+                .getCapability(TemperatureCapability.CAPABILITY)
+                .ifPresent(respawned -> respawned.setTemperature(Mth.clamp(temperatureCapability.getTemperature(), coolThreshold, hotThreshold))));
+        original.invalidateCaps();
     }
 
     @SubscribeEvent
