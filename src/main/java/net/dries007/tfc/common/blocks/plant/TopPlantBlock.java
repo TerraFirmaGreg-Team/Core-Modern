@@ -66,8 +66,13 @@ public class TopPlantBlock extends GrowingPlantHeadBlock implements IForgeBlockE
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
+		if (!context.canPlace())
+		{
+			return null;
+		}
+
         BlockState state = super.getStateForPlacement(context);
-        return state == null ? null : state.setValue(AGE, Mth.nextInt(context.getLevel().getRandom(), 10, 18));
+        return state == null || !state.hasProperty(AGE) ? state : state.setValue(AGE, Mth.nextInt(context.getLevel().getRandom(), 10, 18));
     }
 
     @Override

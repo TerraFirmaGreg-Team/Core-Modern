@@ -92,6 +92,7 @@ mixin {
     jar.from refMap
     config "tfc.mixins.json"
     config "${mod_id}.mixins.json"
+    config "${mod_id}.optional.mixins.json"
 }
 
 // gradle-local.properties should have the following:
@@ -208,7 +209,11 @@ tasks.withType(Jar).configureEach {
             "Implementation-Version"  : "${mod_version}",
             "Implementation-Vendor"   : "${mod_authors}",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs"            : "${mod_id}.mixins.json,tfc.mixins.json"
+            "MixinConfigs"            : [
+                    "${mod_id}.mixins.json",
+                    "${mod_id}.optional.mixins.json",
+                    "tfc.mixins.json"
+            ].join(",")
     ])
 }
 

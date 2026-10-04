@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "",
+                  "target": "BlockEntityTag"
+                }
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "tfg:gas_burner"
+        }
+      ],
+      "name": "loot_pool",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tfg:blocks/gas_burner"
+}

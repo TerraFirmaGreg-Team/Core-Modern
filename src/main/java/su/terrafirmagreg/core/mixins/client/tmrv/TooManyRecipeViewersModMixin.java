@@ -19,7 +19,7 @@ import su.terrafirmagreg.core.TFGCore;
  * resource handling during player logout events.
  * Prevents crashing when logging out within the first few seconds of world load.
  */
-@Mixin(targets = "dev.nolij.toomanyrecipeviewers.TooManyRecipeViewersMod", remap = false)
+@Mixin(value = dev.nolij.toomanyrecipeviewers.TooManyRecipeViewersMod.class, remap = false)
 public class TooManyRecipeViewersModMixin {
 
     @Inject(method = "onLoggingOut", at = @At("HEAD"), cancellable = true, remap = false)

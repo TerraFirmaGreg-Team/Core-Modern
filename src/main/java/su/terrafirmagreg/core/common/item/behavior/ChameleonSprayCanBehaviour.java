@@ -146,12 +146,12 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
 
         if (first != null && handleSpecialBlockEntities(first, selectedColor, maxBlocksToRecolor, context)) {
             changesMade = true;
-        } else if (first == null || !(first instanceof SignBlockEntity || first instanceof IColorableBlockEntity || first instanceof IPipeNode || first instanceof IPaintable))
+        }
 
-            if (changesMade) {
-                GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-                return InteractionResult.SUCCESS;
-            }
+        if (changesMade) {
+            GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
 
         return InteractionResult.PASS;
     }
