@@ -171,8 +171,6 @@ public final class Helpers
     private static final int PRIME_X = 501125321;
     private static final int PRIME_Y = 1136930381;
 
-    private static final boolean JEI = !BOOTSTRAP_ENVIRONMENT && ModList.get().isLoaded("jei");
-
     @Nullable private static RecipeManager CACHED_RECIPE_MANAGER = null;
 
     /**
@@ -206,11 +204,6 @@ public final class Helpers
     public static ResourceLocation resourceLocation(String domain, String path)
     {
         return new ResourceLocation(domain, path);
-    }
-
-    public static boolean isJEIEnabled()
-    {
-        return JEI;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -1380,6 +1373,17 @@ public final class Helpers
         return (random.nextDouble() - random.nextDouble()) * delta;
     }
 
+    /**
+     * @return A random float, in a square distribution at the center of [-sideLength/2, sideLength/2]
+     */
+    public static float[] square(RandomSource random, float sideLength) {
+        float halfSide = sideLength / 2.0f;
+        float x = (random.nextFloat() * sideLength) - halfSide;
+        float y = (random.nextFloat() * sideLength) - halfSide;
+
+        return new float[]{x, y};
+    }
+
     public static float easeInOutCubic(float x)
     {
         return x < 0.5f ? 4 * x * x * x : 1 - cube(-2 * x + 2) / 2;
@@ -1681,6 +1685,7 @@ public final class Helpers
      * @see #randomBlock(TagKey, RandomSource)
      * @see #randomEntity(TagKey, RandomSource)
      */
+    @Deprecated
     public static <T> Optional<T> getRandomElement(Registry<T> registry, TagKey<T> tag, RandomSource random)
     {
         return registry.getTag(tag).flatMap(set -> set.getRandomElement(random)).map(Holder::value);

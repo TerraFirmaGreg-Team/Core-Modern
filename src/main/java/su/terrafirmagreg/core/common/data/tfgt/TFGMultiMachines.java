@@ -72,7 +72,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import appeng.core.definitions.AEBlocks;
@@ -304,7 +303,8 @@ public class TFGMultiMachines {
 
     public static final MultiblockMachineDefinition NUCLEAR_TURBINE = REGISTRATE
             .multiblock("nuclear_turbine", (holder) -> new NuclearLargeTurbineMachine(holder, GTValues.EV))
-            .rotationState(RotationState.NON_Y_AXIS)
+			.rotationState(RotationState.NON_Y_AXIS)
+			.allowExtendedFacing(false)
             .recipeType(TFGTRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(NuclearLargeTurbineMachine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
@@ -1257,21 +1257,18 @@ public class TFGMultiMachines {
                     GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     TFGCore.id("block/machines/pisciculture_fishery"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("BBBBBBBBB", "DDDDDDDDD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
-                    .aisle("BFFFBBBBB", "DAAACEEEC", "AAAACEEEC", "AAAACCCCC")
-                    .aisle("BFFFBEEEB", "DAAAEHHGA", "AAAAEHHGA", "AAAACEEEC")
-                    .aisle("BFFFBEEEB", "DAAAEGGGA", "AAAAEGSGA", "AAAACEEEC")
-                    .aisle("BBBBBBBBB", "DDDDCAAAC", "AAAACAAAC", "AAAACCCCC")
+                    .aisle("BBBBBBBBB", "AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFFFFFB", "AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFFFFFB", "AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFFFFFB", "AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFBBBBB", "AAAACEEEC", "AAAACEEEC", "AAAACCCCC")
+                    .aisle("BFFFBEEEB", "AAAAEHHGA", "AAAAEHHGA", "AAAACEEEC")
+                    .aisle("BFFFBEEEB", "AAAAEGGGA", "AAAAEGSGA", "AAAACEEEC")
+                    .aisle("BBBBBBBBB", "AAAACAAAC", "AAAACAAAC", "AAAACCCCC")
                     .where('S', controller(blocks(definition.get())))
                     .where("A", Predicates.any())
                     .where("B", Predicates.blocks(GTBlocks.STEEL_HULL.get()))
 					.where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
-                    .where("D", Predicates.blockTag(Tags.Blocks.FENCES)
-                            .or(Predicates.blockTag(Tags.Blocks.FENCE_GATES))
-							.or(Predicates.blockTag(BlockTags.WALLS)))
                     .where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where("F", Predicates.blockTag(BlockTags.DIRT)
                             .or(Predicates.blockTag(TFCTags.Blocks.GRASS)))

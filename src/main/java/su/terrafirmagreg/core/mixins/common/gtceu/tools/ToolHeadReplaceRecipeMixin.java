@@ -12,7 +12,12 @@ import com.gregtechceu.gtceu.api.recipe.ToolHeadReplaceRecipe;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
 import com.llamalad7.mixinextras.sugar.Local;
 
+import net.dries007.tfc.common.capabilities.forge.ForgingBonus;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 @Mixin(value = ToolHeadReplaceRecipe.class, remap = false)
@@ -28,6 +33,26 @@ public class ToolHeadReplaceRecipeMixin {
             return;
         if (GTMaterialItems.TOOL_ITEMS.get(toolHead.material(), output[tool.getElectricTier()]) == null) {
             cir.setReturnValue(false);
+        }
+    }
+
+    // Copies forging bonuses from tool heads onto power tools
+    @Inject(method = "assemble(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;", at = @At(value = "RETURN", ordinal = 4), remap = false)
+    private void tfg$assemble(CraftingContainer inv, RegistryAccess registryAccess, CallbackInfoReturnable<ItemStack> cir,
+            @Local(name = "first") ItemStack first, @Local(name = "second") ItemStack second, @Local(name = "realTool") ItemStack realTool) {
+
+        if (cir.getReturnValue() == null)
+            return;
+
+        // The method already figured out which item is the real tool, so the other item must be the head
+        final ItemStack toolHeadItem = first == realTool ? second : first;
+
+        // Then just get the tool head's NBT and apply it to the power tool
+        final CompoundTag tag = toolHeadItem.getTag();
+
+        if (tag != null && tag.contains(ForgingBonus.KEY, Tag.TAG_INT)) {
+            int bonus = tag.getInt(ForgingBonus.KEY);
+            cir.getReturnValue().getOrCreateTag().putInt(ForgingBonus.KEY, bonus);
         }
     }
 }

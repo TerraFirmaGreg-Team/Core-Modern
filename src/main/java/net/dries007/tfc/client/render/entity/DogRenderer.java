@@ -15,13 +15,10 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.client.model.entity.DogCollarLayer;
 import net.dries007.tfc.client.model.entity.DogModel;
 import net.dries007.tfc.common.entities.livestock.pet.Dog;
-import net.dries007.tfc.util.Helpers;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfVariant;
 
 import java.util.Map;
@@ -59,7 +56,7 @@ public class DogRenderer extends MobRenderer<Dog, DogModel>
 
 	@Override
 	public ResourceLocation getTextureLocation(Dog entity) {
-		TFCWolfVariant variant = ((TFCWolfInterface) entity).tfg$getVariant();
+		TFCWolfVariant variant = entity.getVariant();
 		return LOCATION_BY_VARIANT.get(variant);
 	}
 }

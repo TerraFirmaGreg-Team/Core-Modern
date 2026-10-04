@@ -226,6 +226,8 @@ import net.dries007.tfc.util.tracker.WorldTrackerCapability;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
+import su.terrafirmagreg.core.common.block.GasBurnerBlock;
+import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
 
@@ -908,6 +910,11 @@ public final class ForgeEventHandler
         else if (blockEntity instanceof BlastFurnaceBlockEntity furnace && furnace.getTemperature() > 0f)
         {
             furnace.extinguish(state);
+            event.setCanceled(true);
+        }
+        else if (blockEntity instanceof GasBurnerBlockEntity burner && state.getValue(GasBurnerBlock.LIT))
+        {
+            burner.extinguish(state);
             event.setCanceled(true);
         }
         else if (blockEntity instanceof CrucibleBlockEntity crucible)

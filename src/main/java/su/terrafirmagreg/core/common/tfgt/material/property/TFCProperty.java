@@ -60,10 +60,7 @@ public final class TFCProperty implements IMaterialProperty {
     }
 
     public void setTier(int tier) {
-        this.tier = 0;
-
-        if (tier < 7 && tier > 0)
-            this.tier = tier;
+        this.tier = Math.max(tier, 0);
     }
 
     public void setPercentOfMaterial(int percentOfMaterial) {
