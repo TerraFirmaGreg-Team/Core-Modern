@@ -48,6 +48,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             InterplanetaryItemLauncherMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
+    private static final long LAUNCH_ENERGY = 16 * GTValues.V[GTValues.HV];
+
     protected TickableSubscription tickSubscription;
 
     private @Nullable EnergyContainerList energyInputs;
@@ -189,6 +191,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
         if (energyInputs == null || !isFormed || !isWorkingEnabled())
             return false;
+        if (energyInputs.getEnergyStored() < LAUNCH_ENERGY)
+            return false;
         var destination = getLogisticsNetwork().getNetworkMachine(config.getReceiverPartID());
         if (!(destination instanceof ILogisticsNetworkReceiver receiver))
             return false;
@@ -264,7 +268,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 || itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty))
             return false;
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
-        energyInputs.removeEnergy(16 * GTValues.V[GTValues.HV]);
+        energyInputs.removeEnergy(LAUNCH_ENERGY);
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
         if (extracted)
             receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20 * travelTime);
