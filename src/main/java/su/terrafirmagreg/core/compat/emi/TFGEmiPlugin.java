@@ -6,9 +6,6 @@ import java.util.Set;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllTags;
 
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
@@ -32,7 +29,6 @@ import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.TFGRegistries;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
-import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.item.wearable.LiquidFuelJetpack;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
@@ -122,6 +118,7 @@ public class TFGEmiPlugin implements EmiPlugin {
 
         for (var fuel : Minecraft.getInstance().level.registryAccess().registryOrThrow(TFGRegistries.FUEL_TYPE)) {
             emiRegistry.addRecipe(new CombustionEngineRecipe(fuel));
+            LiquidFuelJetpack.registerFuel(fuel);
         }
 
         //Block Interactions

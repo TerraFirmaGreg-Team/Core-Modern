@@ -1,16 +1,11 @@
 package su.terrafirmagreg.core.common.item.wearable;
 
-import java.util.Map;
-
-import com.forsteri.createliquidfuel.util.Triplet;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.common.item.armor.PowerlessJetpack;
-import com.mojang.datafixers.util.Pair;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+
+import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 
 public class LiquidFuelJetpack extends PowerlessJetpack {
     @Override
@@ -33,7 +28,7 @@ public class LiquidFuelJetpack extends PowerlessJetpack {
         super.drainEnergy(stack, amount * 2);
     }
 
-    public static void registerFuel(Map.Entry<Fluid, Pair<ResourceLocation, Triplet<Integer, Boolean, Integer>>> fuel) {
-        FUELS.putIfAbsent(FluidRecipeCapability.CAP.of(new FluidStack(fuel.getKey(), 1)), 1);
+    public static void registerFuel(FuelType fuel) {
+        FUELS.putIfAbsent(FluidRecipeCapability.CAP.of(fuel.fluid()), 1);
     }
 }
