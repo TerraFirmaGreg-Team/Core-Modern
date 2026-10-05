@@ -3,6 +3,8 @@ package su.terrafirmagreg.core.compat.emi;
 import java.util.Arrays;
 import java.util.Set;
 
+import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.util.Plantable;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
@@ -62,6 +64,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory FLUID_VEIN_INFO = new EmiRecipeCategory(TFGCore.id("fluid_vein_info"),
             EmiStack.of(GTItems.PROSPECTOR_HV));
+
+    public static final EmiRecipeCategory GREENHOUSE_PLANTABLE = new EmiRecipeCategory(TFGCore.id("greenhouse_plantable"),
+            EmiStack.of(FLBlocks.LARGE_PLANTER.get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -166,6 +171,13 @@ public class TFGEmiPlugin implements EmiPlugin {
             // return onLegacyWorldgen() ? legacyVein : !legacyVein;
             return onLegacyWorldgen() == legacyVein;
         }).forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+
+        //Greenhouse Plantable
+        emiRegistry.addCategory(GREENHOUSE_PLANTABLE);
+        emiRegistry.addWorkstation(GREENHOUSE_PLANTABLE, EmiStack.of(FLBlocks.LARGE_PLANTER.get()));
+        for (Plantable plantable : Plantable.MANAGER.getValues()) {
+            emiRegistry.addRecipe(new GreenhousePlantableEmiRecipe(plantable));
+        }
     }
 
     private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
