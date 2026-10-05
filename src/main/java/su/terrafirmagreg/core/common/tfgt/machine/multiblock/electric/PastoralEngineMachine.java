@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -29,6 +30,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import lombok.Getter;
+
 import su.terrafirmagreg.core.common.entity.TFGWoolEggProducingAnimal;
 import su.terrafirmagreg.core.common.tfgt.recipe.condition.AnimalPresentCondition;
 
@@ -41,10 +44,17 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     @Persisted
     private int harvestCounter = 0;
 
+    @Getter
+    private List<Entity> cachedAnimals = List.of();
+
+    private final ConditionalSubscriptionHandler animalScanSubscription;
+
     private static final int HARVESTS_PER_USE = 2; // Number of time it harvests before it ages the animal
 
     public PastoralEngineMachine(IMachineBlockEntity holder) {
         super(holder);
+        this.animalScanSubscription = new ConditionalSubscriptionHandler(
+                this, this::tickAnimalScan, this::isFormed);
     }
 
     @Override
@@ -56,6 +66,34 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     public void afterWorking() {
         super.afterWorking();
         onRecipeFinished();
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        animalScanSubscription.initialize(getLevel());
+    }
+
+    @Override
+    public void onStructureFormed() {
+        super.onStructureFormed();
+        animalScanSubscription.updateSubscription();
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        cachedAnimals = List.of();
+        animalScanSubscription.updateSubscription();
+    }
+
+    private void tickAnimalScan() {
+        if (getOffsetTimer() % 20 != 0)
+            return;
+        if (!(getLevel() instanceof ServerLevel serverLevel))
+            return;
+        cachedAnimals = serverLevel.getEntities((Entity) null, getFormedBoundingBox(),
+                e -> e instanceof TFCAnimalProperties);
     }
 
     private void onRecipeFinished() {
@@ -108,19 +146,9 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                     animal.setProductsCooldown();
                 }
 
-                /*
-                TFGCore.LOGGER.info("[Pastoral] Cooldown appliqué sur {} — cooldown restant: {}",
-                        animal.getEntity().getType().getDescriptionId(),
-                        animal.getProductsCooldown());
-                 */
                 if (applyUse) {
                     animal.addUses(event.getUses()); // Age the animal
                 }
-            } else {
-                /*
-                TFGCore.LOGGER.info("[Pastoral] Event annulé pour {}",
-                        animal.getEntity().getType().getDescriptionId());
-                 */
             }
         }
     }
@@ -191,9 +219,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
         if (getLevel() instanceof ServerLevel serverLevel) {
             AABB box = getFormedBoundingBox();
 
-            List<Entity> allAnimals = serverLevel.getEntities(
-                    (Entity) null, box,
-                    entity -> entity instanceof TFCAnimalProperties);
+            List<Entity> allAnimals = cachedAnimals;
 
             int total = allAnimals.size();
             int ready = 0;

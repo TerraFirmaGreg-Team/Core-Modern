@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/gas_burner_parent",
+  "textures": {
+    "flame": "tfg:block/gas_burner/gas_burner_lit",
+    "indicator": "tfg:block/gas_burner/level_indicator_7"
+  }
+}

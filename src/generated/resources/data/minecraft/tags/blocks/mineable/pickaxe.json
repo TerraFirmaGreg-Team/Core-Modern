@@ -2,6 +2,7 @@
   "values": [
     "tfg:artisan_table",
     "tfg:quartz_crucible",
+    "tfg:gas_burner",
     "tfg:halite",
     "tfg:carbonate_hornfels",
     "tfg:pelitic_hornfels",

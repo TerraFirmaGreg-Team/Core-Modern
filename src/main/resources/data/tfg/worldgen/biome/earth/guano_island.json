@@ -104,12 +104,7 @@
             "type": "fowlplay:gull",
             "maxCount": 8
         }],
-        "axolotls": [{
-            "weight": 100,
-            "minCount": 1,
-            "type": "jellies:phosphorum",
-            "maxCount": 2
-        }],
+        "axolotls": [],
         "creature": [
             {
                 "weight": 1,

@@ -200,9 +200,9 @@ public interface EnvironmentalTemperatureProvider {
         }
         if (TFCAmbientalConfig.COMMON.indoorCheckTickModifier.get() > 0) {
             float temp = getEnvironmentTemperatureWithTimeOfDay(player);
-            float avg = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
+            float coolThreshold = TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue();
 
-            if (temp < avg - 1) {
+            if (temp < coolThreshold) {
                 final int[] enclosureSize = { 0 };
                 player.getCapability(TemperatureCapability.CAPABILITY).ifPresent(temperatureCapability -> {
                     if (player.tickCount % TFCAmbientalConfig.COMMON.indoorCheckTickModifier.get() == 0) {
@@ -213,7 +213,7 @@ public interface EnvironmentalTemperatureProvider {
                 });
 
                 if (enclosureSize[0] > 0) {
-                    return TempModifier.defined(Mth.abs(avg - 1 - temp) * Mth.lerp(enclosureSize[0] / 1000f, 0.8f, 0.2f), 0f, true);
+                    return TempModifier.defined(Mth.abs(coolThreshold - temp) * Mth.lerp(enclosureSize[0] / 1000f, 0.8f, 0.2f), 0f, true);
                 }
             }
         }

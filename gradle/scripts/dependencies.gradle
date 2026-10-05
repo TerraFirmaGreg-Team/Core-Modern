@@ -72,7 +72,7 @@ dependencies {
 
     // AE2
     modImplementation "curse.maven:guideme-1173950:7013686"
-    modImplementation jarJar("appeng:appliedenergistics2-forge:$ae2_version")
+    modImplementation "curse.maven:ae2-uelm-1624366:${ae2_version}"
     modImplementation "curse.maven:applied-energistics-2-wireless-terminals-459929:7014805"
 
     // ComputerCraft
@@ -115,9 +115,6 @@ dependencies {
     // Wan's ancient beasts
     modImplementation "curse.maven:wans-ancient-beasts-1108604:8761414"
     modImplementation "curse.maven:geckolib-388172:7553267"
-
-    //Create Liquid Fuel
-    modImplementation "curse.maven:create-liquid-fuel-840734:5217310"
 
     //Dea's Fission Vazde, deafission-1.20.1-0.16.0.jar, Feb 16, 2026
     modImplementation "curse.maven:deafission-1354541:7633771"
@@ -182,7 +179,10 @@ dependencies {
     // Oculus, 13 aug 2026
     modImplementation "maven.modrinth:embeddium:0.3.31+mc1.20.1"
     modImplementation "maven.modrinth:oculus:1.20.1-1.8.0"
-    
+
     // Building Gadgets, Aug 5 2025
     modImplementation("curse.maven:building-gadgets-298187:6850495") { transitive = false }
+
+    // I <3 TFC
+    modCompileOnly "curse.maven:ihearttfc-1118578:5901425"
 }
