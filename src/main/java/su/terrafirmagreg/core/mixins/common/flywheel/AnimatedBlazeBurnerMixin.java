@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import com.eerussianguy.beneath.common.blocks.BeneathBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
@@ -15,6 +16,9 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.minecraft.client.gui.GuiGraphics;
 
+import su.terrafirmagreg.core.common.block.GasBurnerBlock;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+
 @Mixin(value = AnimatedBlazeBurner.class, remap = false)
 public abstract class AnimatedBlazeBurnerMixin extends AnimatedKinetics {
 
@@ -22,8 +26,8 @@ public abstract class AnimatedBlazeBurnerMixin extends AnimatedKinetics {
     private BlazeBurnerBlock.HeatLevel heatLevel;
 
     /**
-     * @author Exception
-     * @reason Рендерить блок угольной печи вместо блейзовой печи Create.
+     * @author Exception & Redeix
+     * @reason Render a forge & gas burner instead of the Create blaze burner.
      */
     @Overwrite
     public void draw(@NotNull GuiGraphics graphics, int xOffset, int yOffset) {
@@ -35,18 +39,39 @@ public abstract class AnimatedBlazeBurnerMixin extends AnimatedKinetics {
 
         int scale = 23;
 
-        int forgeHeatLevel = 0;
+        int heatState = 0;
         if (heatLevel == BlazeBurnerBlock.HeatLevel.SEETHING) {
-            forgeHeatLevel = 7;
+            heatState = 6;
         } else if (heatLevel == BlazeBurnerBlock.HeatLevel.KINDLED) {
-            forgeHeatLevel = 3;
+            heatState = 3;
         }
 
-        blockElement(
-                TFCBlocks.CHARCOAL_FORGE.get().defaultBlockState().setValue(CharcoalForgeBlock.HEAT, forgeHeatLevel))
-                .atLocal(0, 1.65, 0)
-                .scale(scale)
-                .render(graphics);
+        int cycle = (int) ((System.currentTimeMillis() / 1000) % 3);
+
+        switch (cycle) {
+            case 1:
+                for (int xOff = -1; xOff <= 1; xOff++) {
+                    for (int zOff = -1; zOff <= 1; zOff++) {
+                        blockElement(BeneathBlocks.HELLFORGE.get().defaultBlockState().setValue(CharcoalForgeBlock.HEAT, heatState))
+                                .atLocal(xOff, 1.65, zOff)
+                                .scale(scale)
+                                .render(graphics);
+                    }
+                }
+                break;
+            case 2:
+                blockElement(TFGBlocks.GAS_BURNER.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, heatState).setValue(GasBurnerBlock.LIT, true))
+                        .atLocal(0, 1.65, 0)
+                        .scale(scale)
+                        .render(graphics);
+                break;
+            default:
+                blockElement(TFCBlocks.CHARCOAL_FORGE.get().defaultBlockState().setValue(CharcoalForgeBlock.HEAT, heatState))
+                        .atLocal(0, 1.65, 0)
+                        .scale(scale)
+                        .render(graphics);
+                break;
+        }
 
         matrixStack.popPose();
     }

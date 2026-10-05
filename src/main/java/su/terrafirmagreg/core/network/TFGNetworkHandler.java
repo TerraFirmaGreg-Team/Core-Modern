@@ -62,12 +62,6 @@ public class TFGNetworkHandler {
                 OreHighlightVeinPacket::handle);
         INSTANCE.registerMessage(
                 id(),
-                FuelSyncPacket.class,
-                FuelSyncPacket::encode,
-                FuelSyncPacket::decode,
-                FuelSyncPacket::handle);
-        INSTANCE.registerMessage(
-                id(),
                 ExtendedNutrientsPacket.class,
                 ExtendedNutrientsPacket::encode,
                 ExtendedNutrientsPacket::decode,

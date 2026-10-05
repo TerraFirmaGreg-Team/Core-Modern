@@ -36,6 +36,11 @@ public final class TFGSounds {
     // GT Machine Sounds
     public static final SoundEntry GEOLOGIC_VULCANIZER = TFGCore.REGISTRATE.sound(TFGCore.id("geologic_vulcanizer")).build();
 
+    // SFX
+    public static final SoundEntry FIRE_CLICK_CLICK = TFGCore.REGISTRATE.sound(TFGCore.id("fire_click_click")).build();
+    public static final SoundEntry FIRE_WHOOSH = TFGCore.REGISTRATE.sound(TFGCore.id("fire_whoosh")).build();
+    public static final SoundEntry BURNER = TFGCore.REGISTRATE.sound(TFGCore.id("burner")).addVariant(TFGCore.id("burner_1")).addVariant(TFGCore.id("burner_2")).build();
+
     public static void init() {
     }
 }

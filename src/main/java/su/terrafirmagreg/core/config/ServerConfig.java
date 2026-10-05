@@ -55,6 +55,10 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue COMPOSTER_STRESS_LIMIT;
     public final ForgeConfigSpec.IntValue COMPOSTER_RPM_LIMIT;
 
+    public final ForgeConfigSpec.IntValue gasBurnerCapacity;
+    public final ForgeConfigSpec.DoubleValue gasBurnerHeatDelta;
+    public final ForgeConfigSpec.DoubleValue gasBurnerCoolDelta;
+
     public final ForgeConfigSpec.IntValue HARVEST_BASKET_RANGE;
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
@@ -275,6 +279,17 @@ public final class ServerConfig {
                 .comment(
                         "\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
                 .defineInRange("composterRpmLimit", 32, 1, Integer.MAX_VALUE);
+
+        builder.pop().push("gas_burner");
+        gasBurnerCapacity = builder
+                .comment("\nFluid capacity of the gas burner in mB. Default: 4000, min: 1000, max: 100000")
+                .defineInRange("gasBurnerCapacity", 4000, 1000, 100000);
+        gasBurnerHeatDelta = builder
+                .comment("\nHow quickly the gas burner raises in temperature. Default: 4.0, min: 0.1, max: intMax")
+                .defineInRange("gasBurnerHeatDelta", 4.0, 0.1, Integer.MAX_VALUE);
+        gasBurnerCoolDelta = builder
+                .comment("\nHow quickly the gas burner lowers in temperature. Default: 2.0, min: 0.1, max: intMax")
+                .defineInRange("gasBurnerCoolDelta", 2.0, 0.1, Integer.MAX_VALUE);
 
         builder.pop().push("atmosphere_system");
 

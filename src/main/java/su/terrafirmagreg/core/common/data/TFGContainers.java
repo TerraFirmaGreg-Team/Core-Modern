@@ -20,8 +20,10 @@ import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.ArtisanTableBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.container.ArtisanTableContainer;
+import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
 import su.terrafirmagreg.core.common.container.LargeNestBoxContainer;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowContainer;
 
@@ -43,6 +45,10 @@ public class TFGContainers {
     public static final RegistryObject<MenuType<ArtisanTableContainer>> ARTISAN_TABLE = TFGContainers
             .<ArtisanTableBlockEntity, ArtisanTableContainer>registerBlockEntityContainer("artisan_table",
                     TFGBlockEntities.ARTISAN_TABLE, ArtisanTableContainer::create);
+
+    public static final RegistryObject<MenuType<GasBurnerBlockContainer>> GAS_BURNER = TFGContainers
+            .<GasBurnerBlockEntity, GasBurnerBlockContainer>registerBlockEntityContainer("gas_burner",
+                    TFGBlockEntities.GAS_BURNER, GasBurnerBlockContainer::create);
 
     public static <T extends InventoryBlockEntity<?>, C extends BlockEntityContainer<T>> RegistryObject<MenuType<C>> registerBlockEntityContainer(
             String name, Supplier<BlockEntityType<T>> type, BlockEntityContainer.Factory<T, C> factory) {
