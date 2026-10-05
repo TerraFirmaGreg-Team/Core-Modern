@@ -61,7 +61,7 @@ public class ThermometerBlockEntity extends TickableBlockEntity
             if (newPower != state.getValue(BlockStateProperties.POWER))
             {
                 level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWER, newPower));
-                level.updateNeighborsAt(pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite()), state.getBlock());
+                level.updateNeighborsAt(pos, state.getBlock());
             }
         }
     }

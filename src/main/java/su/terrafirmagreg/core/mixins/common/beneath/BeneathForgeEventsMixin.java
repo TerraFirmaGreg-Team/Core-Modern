@@ -13,6 +13,7 @@ import com.eerussianguy.beneath.common.blocks.HellforgeSideBlock;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.simibubi.create.AllItems;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
@@ -37,6 +38,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import mod.traister101.sns.common.items.SNSItems;
+
 @Mixin(value = ForgeEvents.class)
 public class BeneathForgeEventsMixin {
 
@@ -48,13 +51,20 @@ public class BeneathForgeEventsMixin {
 
         if (entity instanceof Piglin) {
             if (slot == EquipmentSlot.MAINHAND) {
-                if (entity.getRandom().nextFloat() < 0.4f) {
-                    entity.setItemSlot(slot, new ItemStack(Items.CROSSBOW));
-                } else {
-                    entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
+                if (!entity.getItemBySlot(slot).is(Items.CROSSBOW)) {
+                    if (entity.getRandom().nextFloat() < 0.4f) {
+                        entity.setItemSlot(slot, new ItemStack(Items.CROSSBOW));
+                    } else {
+                        entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
+                    }
                 }
             } else {
-                entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
+                var existingItem = entity.getItemBySlot(slot);
+                if (!existingItem.is(SNSItems.QUIVER.get())
+                        && !existingItem.is(AllItems.GOGGLES.get())
+                        && !existingItem.is(Items.SPYGLASS)) {
+                    entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
+                }
             }
         } else if (entity instanceof PiglinBrute brute) {
             if (slot == EquipmentSlot.MAINHAND) {

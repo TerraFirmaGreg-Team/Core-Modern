@@ -55,8 +55,11 @@ public class ThermometerBlock extends DeviceBlock
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        super.onRemove(state, level, pos, newState, isMoving);
-        level.updateNeighborsAt(pos.relative(state.getValue(FACING).getOpposite()), this); // needed for strong power update
+        if (!state.is(newState.getBlock()))
+        {
+            super.onRemove(state, level, pos, newState, isMoving);
+            level.updateNeighborsAt(pos, this);
+        }
     }
 
     @Nullable
@@ -87,7 +90,7 @@ public class ThermometerBlock extends DeviceBlock
         {
             thermometer.needsInstantUpdate();
         }
-        level.updateNeighborsAt(pos.relative(state.getValue(FACING).getOpposite()), this);
+        level.updateNeighborsAt(pos, this);
     }
 
     @Override
@@ -125,23 +128,29 @@ public class ThermometerBlock extends DeviceBlock
     }
 
     @Override
-	public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
+    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
     {
-        if (blockState.getValue(FACING) == side && !blockState.getValue(ATTACHED))
-        {
-            return getSignal(blockState, blockAccess, pos, side);
-        }
-        return 0;
+        return this.getSignal(blockState, blockAccess, pos, side);
     }
 
     @Override
-	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
+    public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
     {
-        if (Helpers.isBlock(blockState, TFCBlocks.THERMOMETER.get()))
+        if (!Helpers.isBlock(blockState, TFCBlocks.THERMOMETER.get()))
         {
-            return blockState.getValue(POWER);
+            return 0;
         }
-        return 0;
+
+        if (blockState.getValue(ATTACHED))
+        {
+            Direction attachedFace = blockState.getValue(FACING);
+            if (side == attachedFace)
+            {
+                return 0;
+            }
+        }
+
+        return blockState.getValue(POWER);
     }
 
     @Override

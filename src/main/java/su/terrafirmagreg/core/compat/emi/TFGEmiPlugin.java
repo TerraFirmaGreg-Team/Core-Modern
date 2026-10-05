@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.compat.emi;
 import java.util.Arrays;
 import java.util.Set;
 
-import com.forsteri.createliquidfuel.core.BurnerStomachHandler;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
@@ -17,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
@@ -38,6 +36,7 @@ import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.item.wearable.LiquidFuelJetpack;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
@@ -48,9 +47,6 @@ public class TFGEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory ORE_VEIN_INFO = new EmiRecipeCategory(TFGCore.id("ore_vein_info"),
             EmiStack.of(GTItems.PROSPECTOR_LV));
 
-    public static final EmiRecipeCategory BLAZE_BURNER = new EmiRecipeCategory(TFGCore.id("blaze_burner"),
-            EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
-
     public static final EmiRecipeCategory COMBUSTION_ENGINE = new EmiRecipeCategory(TFGCore.id("combustion_engine"),
             EmiStack.of(TFGBlocks_Create.STEEL_COMBUSTION_ENGINE.asItem()));
 
@@ -59,6 +55,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory ARTISAN_TABLE = new EmiRecipeCategory(TFGCore.id("artisan_table"),
             EmiStack.of(TFGBlocks.ARTISAN_TABLE.get()));
+
+    public static final EmiRecipeCategory GAS_BURNER = new EmiRecipeCategory(TFGCore.id("gas_burner_fuel"),
+            EmiStack.of(TFGBlocks.GAS_BURNER.get()));
 
     public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(TFGCore.id("large_boiler_booster"),
             EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
@@ -114,23 +113,6 @@ public class TFGEmiPlugin implements EmiPlugin {
                 null, null, 50, null,
                 null));
 
-        //Blaze Burner
-        emiRegistry.addCategory(BLAZE_BURNER);
-        emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
-        emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(TFGItems.LIQUID_FUEL_JETPACK));
-        for (var liquid_fuel : BurnerStomachHandler.LIQUID_BURNER_FUEL_MAP.entrySet()) {
-            emiRegistry.addRecipe(new LiquidBlazeBurnerRecipe(liquid_fuel));
-            // Don't like doing this here but at least it's at a point where all the fuels have been registered
-            if (liquid_fuel.getKey() != GTMaterials.Steam.getFluid())
-                LiquidFuelJetpack.registerFuel(liquid_fuel);
-        }
-        for (var normal_fuel : ForgeRegistries.ITEMS.tags().getTag(AllTags.AllItemTags.BLAZE_BURNER_FUEL_REGULAR.tag).stream().toList()) {
-            emiRegistry.addRecipe(new SolidBlazeBurnerRecipe(normal_fuel, false));
-        }
-        for (var super_fuel : ForgeRegistries.ITEMS.tags().getTag(AllTags.AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag).stream().toList()) {
-            emiRegistry.addRecipe(new SolidBlazeBurnerRecipe(super_fuel, true));
-        }
-
         // Combustion Engine
         emiRegistry.addCategory(COMBUSTION_ENGINE);
         emiRegistry.addWorkstation(COMBUSTION_ENGINE, EmiStack.of(TFGBlocks_Create.STEEL_COMBUSTION_ENGINE.asItem()));
@@ -159,6 +141,13 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ARTISAN_TABLE, EmiStack.of(TFGBlocks.ARTISAN_TABLE.get().asItem()));
         for (ArtisanRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.ARTISAN.get()).stream().toList()) {
             emiRegistry.addRecipe(new ArtisanTableEmiRecipe(recipe));
+        }
+
+        //Gas Burner
+        emiRegistry.addCategory(GAS_BURNER);
+        emiRegistry.addWorkstation(GAS_BURNER, EmiStack.of(TFGBlocks.GAS_BURNER.get().asItem()));
+        for (GasBurnerFuelRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.GAS_BURNER_FUEL.get()).stream().toList()) {
+            emiRegistry.addRecipe(new GasBurnerFuelEmiRecipe(recipe));
         }
 
         // Item Repair

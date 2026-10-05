@@ -108,20 +108,7 @@
                 "maxCount": 4
             }
         ],
-        "axolotls": [
-            {
-                "weight": 30,
-                "minCount": 2,
-                "type": "jellies:herbal",
-                "maxCount": 4
-            },
-            {
-                "weight": 30,
-                "minCount": 2,
-                "type": "jellies:phosphorum",
-                "maxCount": 4
-            }
-        ],
+        "axolotls": [],
         "creature": [
             {
                 "weight": 20,

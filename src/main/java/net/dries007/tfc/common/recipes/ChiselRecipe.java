@@ -9,6 +9,7 @@ package net.dries007.tfc.common.recipes;
 import java.util.Locale;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
+import net.dries007.tfc.common.capabilities.player.PlayerDataCapability;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -53,7 +54,14 @@ public class ChiselRecipe extends SimpleBlockRecipe
         if (Helpers.isItem(held, TFCTags.Items.CHISELS) && Helpers.isItem(player.getOffhandItem(), TFCTags.Items.HAMMERS))
         {
             final BlockPos pos = hit.getBlockPos();
-            final Mode mode = PlayerData.get(player).getChiselMode();
+
+			// The player data capability is invalidated when a player dies, but this can still be queried i.e. from the block highlight
+			final @Nullable Mode mode = player.getCapability(PlayerDataCapability.CAPABILITY).map(PlayerData::getChiselMode).orElse(null);
+			if (mode == null)
+			{
+				return Either.right(InteractionResult.PASS);
+			}
+
             final ChiselRecipe recipe = ChiselRecipe.getRecipe(state, held, mode);
             if (recipe == null)
             {

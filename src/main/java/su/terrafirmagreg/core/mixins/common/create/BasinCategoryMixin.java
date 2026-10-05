@@ -10,19 +10,16 @@ import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.capabilities.heat.Heat;
-import net.dries007.tfc.config.TFCConfig;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.ItemStack;
-
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+
+/**
+ * Mixin to swap Blaze Burner and Blaze Cake catalyst renders for the gas burner.
+ * Charcoal forge is also valid, but it cannot be rendered as an item.
+ */
 @Mixin(value = BasinCategory.class)
 public abstract class BasinCategoryMixin {
 
@@ -32,30 +29,11 @@ public abstract class BasinCategoryMixin {
 
         if (!requiredHeat.testBlazeBurner(BlazeBurnerBlock.HeatLevel.NONE)) {
             builder
-                    .addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81)
-                    .addItemStack(new ItemStack(TFCBlocks.FIREPIT.get()));
+                    .addSlot(RecipeIngredientRole.CATALYST, 153, 81)
+                    .addItemStack(TFGBlocks.GAS_BURNER.asStack());
         }
 
         ci.cancel();
-    }
-
-    @Inject(method = "draw(Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/gui/ingredient/IRecipeSlotsView;Lnet/minecraft/client/gui/GuiGraphics;DD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)I"), cancellable = true)
-    private void tfg$draw(BasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX,
-            double mouseY, CallbackInfo ci) {
-        HeatCondition requiredHeat = recipe.getRequiredHeat();
-
-        if (requiredHeat != HeatCondition.NONE) {
-            int heat = requiredHeat == HeatCondition.HEATED ? 7 : 10;
-            MutableComponent color = TFCConfig.CLIENT.heatTooltipStyle.get()
-                    .formatColored(Heat.values()[heat].getMin());
-
-            if (color != null) {
-                graphics.drawString(Minecraft.getInstance().font, color, 9,
-                        86, requiredHeat.getColor(), false);
-            }
-
-            ci.cancel();
-        }
     }
 
 }

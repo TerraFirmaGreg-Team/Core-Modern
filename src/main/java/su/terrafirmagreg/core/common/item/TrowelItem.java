@@ -23,8 +23,10 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
 
 /**
@@ -102,7 +104,7 @@ public class TrowelItem extends Item {
         List<ItemStack> blockItems = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             ItemStack hotbarStack = player.getInventory().getItem(i);
-            if (hotbarStack.getItem() instanceof BlockItem) {
+            if (hotbarStack.getItem() instanceof BlockItem && !hotbarStack.is(TFGTags.Items.TROWEL_BLACKLIST)) {
                 blockItems.add(hotbarStack);
             }
         }
@@ -116,7 +118,8 @@ public class TrowelItem extends Item {
         ItemStack randomStack = blockItems.get(new Random().nextInt(blockItems.size()));
         BlockItem blockItem = (BlockItem) randomStack.getItem();
         // Gets context like waterlogged, rotated, etc.
-        BlockPlaceContext placeContext = new BlockPlaceContext(context);
+        BlockHitResult hitResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside());
+        BlockPlaceContext placeContext = new BlockPlaceContext(context.getLevel(), context.getPlayer(), context.getHand(), randomStack, hitResult);
         // Places block--respecting placement logic.
         BlockPos placePos = context.getClickedPos().relative(context.getClickedFace());
         BlockState newState = blockItem.getBlock().getStateForPlacement(placeContext);
