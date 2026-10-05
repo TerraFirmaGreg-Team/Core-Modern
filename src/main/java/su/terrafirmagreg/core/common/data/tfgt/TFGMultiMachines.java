@@ -1393,10 +1393,10 @@ public class TFGMultiMachines {
                     TFGCore.id("block/casings/machine_casing_pressure_dark"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("SSS", "SPS", "SSS")
+                    .aisle("SSS", "SVS", "SSS")
                     .aisle("   ", " P ", "   ")
                     .aisle("SSS", "SPS", "SSS")
-                    .aisle("SXS", "VPV", "SSS")
+                    .aisle("SXS", "VVV", "SSS")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('S', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
