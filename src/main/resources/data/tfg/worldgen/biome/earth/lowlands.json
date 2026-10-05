@@ -142,10 +142,7 @@
                 "maxCount": 4
             }
         ],
-        "axolotls": [
-
-
-        ],
+        "axolotls": [],
         "water_ambient": [
             {
                 "weight": 10,

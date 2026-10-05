@@ -134,11 +134,7 @@
                 "maxCount": 4
             }
         ],
-        "axolotls": [
-
-
-
-        ],
+        "axolotls": [],
         "creature": [
             {
                 "weight": 20,
