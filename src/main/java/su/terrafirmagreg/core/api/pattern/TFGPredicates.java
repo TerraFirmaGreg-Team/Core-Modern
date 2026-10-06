@@ -9,6 +9,7 @@ import com.lowdragmc.lowdraglib.utils.BlockInfo;
 import net.minecraft.world.level.block.Block;
 
 import appeng.core.definitions.AEBlocks;
+import earth.terrarium.adastra.common.registry.ModBlocks;
 
 public class TFGPredicates {
 
@@ -53,5 +54,15 @@ public class TFGPredicates {
         }, () -> getBuddingTiers().keySet().stream()
                 .map(b -> BlockInfo.fromBlockState(b.defaultBlockState()))
                 .toArray(BlockInfo[]::new));
+    }
+
+    public static TraceabilityPredicate heatPumpExhaust() {
+        return new TraceabilityPredicate(blockWorldState -> {
+            if (!blockWorldState.getBlockState().is(ModBlocks.VENT.get())) {
+                return false;
+            }
+            blockWorldState.getMatchContext().set("HeatPumpExhaustPos", blockWorldState.getPos());
+            return true;
+        }, () -> new BlockInfo[] { BlockInfo.fromBlockState(ModBlocks.VENT.get().defaultBlockState()) });
     }
 }

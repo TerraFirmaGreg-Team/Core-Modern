@@ -53,6 +53,8 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     /** Radius (blocks) of the proximity-based exhaust heat field behind the machine. */
     static final int EXHAUST_RADIUS = 12;
 
+    private BlockPos exhaustPos;
+
     private static final int TRACE_MAX_BLOCKS = 1_000_000;
     private static final int TRACE_COOLDOWN_TICKS = 100;
     private long lastTraceRequestTick = 0;
@@ -125,10 +127,15 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
 
         BlockPos pos = getPos();
         BlockPos frontStart = pos.above(1).relative(host.self().getFrontFacing());
-        BlockPos backStart = pos.above(1).relative(host.self().getFrontFacing().getOpposite(), 3);
 
         RoomScan frontScan = FloodFill.fill(reader, frontStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
-        RoomScan backScan = FloodFill.fill(reader, backStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
+        RoomScan backScan = RoomScan.empty();
+        if (exhaustPos != null) {
+            backScan = FloodFill.fill(reader, exhaustPos, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
+            newExhaustAnchor = exhaustPos;
+        } else {
+            TFGCore.LOGGER.error("[heatpump] no exhaust resolved, pos={}", getPos());
+        }
 
         // The exhaust can only escape if the back does not form a sealed room.
         boolean blocked = backScan.isSealed();
@@ -136,7 +143,6 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         newFrontScan = frontScan;
         newBackScan = backScan;
         newBlocked = blocked;
-        newExhaustAnchor = backStart;
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
         TFGCore.LOGGER.debug("[heatpump] validateAsync DONE, pos={}, elapsedMs={}, frontStatus={}, frontSize={}, backStatus={}, blocked={}",
@@ -246,10 +252,11 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     // ****** Machine Lifecycle ******* //
     //////////////////////////////////////
 
-    public void onLoad(ServerLevel serverLevel) {
-        TFGCore.LOGGER.debug("[heatpump] onLoad, pos={}", getPos());
+    public void onLoad(ServerLevel serverLevel, @Nullable BlockPos exhaustPos) {
+        TFGCore.LOGGER.debug("[heatpump] onLoad, pos={}, exhaustPos={}", getPos(), exhaustPos);
         level = serverLevel;
         manager = EnvironmentSystem.getManager(level);
+        this.exhaustPos = exhaustPos;
         provider = manager.getOrCreateTempProvider(getPos());
         provider.attach(this);
         requestValidation();

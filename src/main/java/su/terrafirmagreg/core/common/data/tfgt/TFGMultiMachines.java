@@ -1392,17 +1392,17 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_pressure_dark"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("SSS", "SVS", "SSS")
-                    .aisle("   ", " P ", "   ")
+            .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.BACK)
+                    .aisle("SXS", "VVV", " S ")
                     .aisle("SSS", "SPS", "SSS")
-                    .aisle("SXS", "VVV", "SSS")
+                    .aisleRepeatable(1, 8, "   ", " P ", "   ")
+                    .aisle("SSS", "SVS", " S ")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('S', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('P', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
-				    .where('V', Predicates.blocks(ModBlocks.VENT.get()))
+				    .where('V', TFGPredicates.heatPumpExhaust())
                     .where(" ", Predicates.any())
                     .build())
             .register();

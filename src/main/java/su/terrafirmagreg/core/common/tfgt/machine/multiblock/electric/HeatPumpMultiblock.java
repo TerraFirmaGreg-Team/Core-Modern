@@ -27,6 +27,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
@@ -49,6 +50,9 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     }
 
     private final HeatPumpMachine machine;
+
+    @Nullable
+    private BlockPos exhaustPos;
 
     @Persisted
     @DescSynced
@@ -170,8 +174,13 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     public void onStructureFormed() {
         super.onStructureFormed();
         TFGCore.LOGGER.debug("[heatpump-multi] onStructureFormed, pos={}", getPos());
+        this.exhaustPos = null;
+        var ctx = getMultiblockState().getMatchContext();
+        if (ctx.get("HeatPumpExhaustPos") instanceof BlockPos pos) {
+            this.exhaustPos = pos.immutable();
+        }
         if (getLevel() instanceof ServerLevel serverLevel) {
-            machine.onLoad(serverLevel);
+            machine.onLoad(serverLevel, exhaustPos);
         }
     }
 
