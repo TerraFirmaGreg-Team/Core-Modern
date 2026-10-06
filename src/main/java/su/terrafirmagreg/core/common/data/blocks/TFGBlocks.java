@@ -224,14 +224,14 @@ public final class TFGBlocks {
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .initialProperties(() -> Blocks.WATER)
             .properties(p -> p.mapColor(MapColor.NONE).noLootTable().noCollission())
-			.color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xe8e8d8))
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xe8e8d8))
             .register();
 
     public static final BlockEntry<LiquidBlock> GEYSER_SLURRY = TFGCore.REGISTRATE.block("fluid/geyser_slurry", p -> new LiquidBlock(TFGFluids.GEYSER_SLURRY.source(), p))
             .initialProperties(() -> Blocks.WATER)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable())
-			.color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xa3c0cc))
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xa3c0cc))
             .register();
 
     ///// Misc blocks
