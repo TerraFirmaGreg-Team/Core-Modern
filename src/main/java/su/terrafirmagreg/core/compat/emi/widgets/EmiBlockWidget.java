@@ -154,12 +154,12 @@ public class EmiBlockWidget extends Widget {
         poseStack.scale(scale, -scale, scale);
         poseStack.translate(-0.5, -0.5, -0.5);
 
-        MultiBufferSource bufferSource = graphics.bufferSource();
-
-        RenderType renderType = RenderType.solid();
-        if (this.blockState.getRenderShape() == RenderShape.MODEL) {
-            renderType = ItemBlockRenderTypes.getChunkRenderType(this.blockState);
+        RenderType renderType = ItemBlockRenderTypes.getRenderType(this.blockState, false);
+        if (this.blockState.getRenderShape() != RenderShape.MODEL) {
+            renderType = RenderType.solid();
         }
+
+        MultiBufferSource.BufferSource bufferSource = graphics.bufferSource();
 
         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(
                 this.blockState,
@@ -169,6 +169,8 @@ public class EmiBlockWidget extends Widget {
                 OverlayTexture.NO_OVERLAY,
                 ModelData.EMPTY,
                 renderType);
+
+        bufferSource.endBatch(renderType);
 
         poseStack.popPose();
     }
