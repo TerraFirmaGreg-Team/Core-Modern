@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.world.chunkdata;
 
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,8 @@ public class RockData
 {
     private final @Nullable ChunkDataGenerator generator;
     private int @Nullable [] surfaceHeight;
+
+	@Getter
     private @Nullable ChunkRockDataCache cache;
 
     public RockData(@Nullable ChunkDataGenerator generator)
