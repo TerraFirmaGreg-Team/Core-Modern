@@ -74,12 +74,7 @@
                 "maxCount": 5
             }
         ],
-        "axolotls": [{
-            "weight": 100,
-            "minCount": 2,
-            "type": "jellies:rock",
-            "maxCount": 4
-        }],
+        "axolotls": [],
         "creature": [
             {
                 "weight": 1,
