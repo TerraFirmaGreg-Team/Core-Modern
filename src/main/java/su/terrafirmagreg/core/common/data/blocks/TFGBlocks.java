@@ -61,6 +61,7 @@ public final class TFGBlocks {
     public static void init() {
         TFGBlocks_Earth.init();
         TFGBlocks_Mars.init();
+		TFGBlocks_Venus.init();
         TFGBlocks_Casings.init();
         TFGBlocks_Buds.init();
         TFGBlocks_Wood.init();
