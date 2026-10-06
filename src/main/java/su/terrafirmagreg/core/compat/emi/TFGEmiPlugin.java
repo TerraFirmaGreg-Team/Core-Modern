@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Items;
@@ -174,8 +175,8 @@ public class TFGEmiPlugin implements EmiPlugin {
 
         //Greenhouse Plantable
         emiRegistry.addCategory(GREENHOUSE_PLANTABLE);
-        emiRegistry.addWorkstation(GREENHOUSE_PLANTABLE, EmiStack.of(FLBlocks.LARGE_PLANTER.get()));
         for (Plantable plantable : Plantable.MANAGER.getValues()) {
+            emiRegistry.addWorkstation(GREENHOUSE_PLANTABLE, EmiStack.of(GreenhousePlantableEmiRecipe.resolvePlanterBlock(plantable.getPlanterType())));
             emiRegistry.addRecipe(new GreenhousePlantableEmiRecipe(plantable));
         }
     }
@@ -202,6 +203,24 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
         SlotWidget widget = new SlotWidget(stack, offsetX, offsetY);
+        holder.add(widget);
+    }
+
+    /**
+     * Creates a blank item widget that does not render anything.
+     * Useful when you want to be able to hover over another element to view an item tooltip.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     */
+    public static void createBlankItemWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY) {
+        SlotWidget widget = new SlotWidget(stack, offsetX, offsetY) {
+            @Override
+            public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+            }
+        };
+        widget.drawBack(false);
         holder.add(widget);
     }
 
