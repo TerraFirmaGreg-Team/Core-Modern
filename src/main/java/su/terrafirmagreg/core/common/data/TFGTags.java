@@ -101,8 +101,8 @@ public final class TFGTags {
 
         public static final TagKey<Item> TROWEL_BLACKLIST = createItemTag("trowel_blacklist");
 
-		public static final TagKey<Item> FLUORAPATITE_SAND = createItemTag("fluorapatite_sand");
-		public static final TagKey<Item> FLUORAPATITE_SANDSTONE = createItemTag("fluorapatite_sandstone");
+        public static final TagKey<Item> FLUORAPATITE_SAND = createItemTag("fluorapatite_sand");
+        public static final TagKey<Item> FLUORAPATITE_SANDSTONE = createItemTag("fluorapatite_sandstone");
 
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
