@@ -35,7 +35,7 @@ import su.terrafirmagreg.core.compat.emi.widgets.EmiBlockWidget;
 @SuppressWarnings({ "UnnecessaryLocalVariable", "NoTranslation" })
 public class GreenhousePlantableEmiRecipe implements EmiRecipe {
 
-    private static final int WIDTH = 190;
+    private static final int WIDTH = 200;
     private static final int HEIGHT = 50;
 
     @Getter
