@@ -16,7 +16,7 @@
     "tfg.machine.oxygen_distributor.fill_suit": "Refill suit oxygen",
     "tfg.machine.higgs_emitter.radius": "Radius: %s",
     "tfg.machine.oxygen_distributor.status.sealed": "Sealed",
-    "tfg.machine.oxygen_distributor.consumption": "Consuming %s mB/t",
+    "tfg.machine.oxygen_distributor.consumption": "Consuming %s",
     "tfg.machine.oxygen_distributor.status": "Status: ",
     "tfg.machine.heat_pump.status.blocked": "Exhaust trapped - heat pump must back onto open space",
     "block.tfg.heat_pump": "Heat Pump"
