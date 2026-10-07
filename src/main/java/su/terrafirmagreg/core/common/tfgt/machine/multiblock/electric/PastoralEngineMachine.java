@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
@@ -51,16 +52,51 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     @Setter
     private int harvestCounter = 0;
 
+    @Getter
+    private List<Entity> cachedAnimals = List.of();
+
+    private final ConditionalSubscriptionHandler animalScanSubscription;
+
     private static final int HARVESTS_PER_USE = 2; // Number of time it harvests before it ages the animal
 
     public PastoralEngineMachine(BlockEntityCreationInfo info) {
         super(info);
+        this.animalScanSubscription = new ConditionalSubscriptionHandler(
+                this, this::tickAnimalScan, this::isFormed);
     }
 
     @Override
     public void afterWorking() {
         super.afterWorking();
         onRecipeFinished();
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        animalScanSubscription.initialize(getLevel());
+    }
+
+    @Override
+    public void formStructure(String substructureName) {
+        super.formStructure(substructureName);
+        animalScanSubscription.updateSubscription();
+    }
+
+    @Override
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
+        cachedAnimals = List.of();
+        animalScanSubscription.updateSubscription();
+    }
+
+    private void tickAnimalScan() {
+        if (getOffsetTimer() % 20 != 0)
+            return;
+        if (!(getLevel() instanceof ServerLevel serverLevel))
+            return;
+        cachedAnimals = serverLevel.getEntities((Entity) null, getFormedBoundingBox(),
+                e -> e instanceof TFCAnimalProperties);
     }
 
     private void onRecipeFinished() {
@@ -113,19 +149,9 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                     animal.setProductsCooldown();
                 }
 
-                /*
-                TFGCore.LOGGER.info("[Pastoral] Cooldown appliqué sur {} — cooldown restant: {}",
-                        animal.getEntity().getType().getDescriptionId(),
-                        animal.getProductsCooldown());
-                 */
                 if (applyUse) {
                     animal.addUses(event.getUses()); // Age the animal
                 }
-            } else {
-                /*
-                TFGCore.LOGGER.info("[Pastoral] Event annulé pour {}",
-                        animal.getEntity().getType().getDescriptionId());
-                 */
             }
         }
     }
@@ -199,9 +225,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
         int oldAnimals;
 
         if (!isRemote()) {
-            List<Entity> allAnimals = getLevel().getEntities(
-                    (Entity) null, getFormedBoundingBox(),
-                    entity -> entity instanceof TFCAnimalProperties);
+            List<Entity> allAnimals = cachedAnimals;
 
             int old = 0;
             int ready = 0;

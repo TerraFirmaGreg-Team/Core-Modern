@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.GTCEu;
 
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -23,7 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -33,21 +36,20 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.MissingMappingsEvent;
 
 import team.terrafirmagreg.jellies.common.data.JelliesItems;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
 import su.terrafirmagreg.core.common.data.TFGCommands;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.perf.SupportCache;
-import su.terrafirmagreg.core.network.TFGNetworkHandler;
-import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
 import su.terrafirmagreg.core.world.BedrockFluidSpoutLoader;
@@ -61,30 +63,30 @@ public final class ForgeCommonEventListener {
     }
 
     @SubscribeEvent
+    public static void onFireStart(StartFireEvent event) {
+        Level level = event.getLevel();
+        BlockPos pos = event.getPos();
+        BlockState state = event.getState();
+        if (state.is(TFGBlocks.GAS_BURNER.get())) {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity instanceof GasBurnerBlockEntity burner && burner.light(state)) {
+                event.setCanceled(true);
+            }
+        } else if (level.getBlockState(pos.below()).is(TFGBlocks.GAS_BURNER.get())) {
+            BlockEntity entity = level.getBlockEntity(pos.below());
+            if (entity instanceof GasBurnerBlockEntity burner && burner.light(level.getBlockState(pos.below()))) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
         ItemStack stack = event.getObject();
         if (!stack.isEmpty()) {
             if (stack.getItem() == TFGItems.SNIFFER_EGG.get() || stack.getItem() == TFGItems.WRAPTOR_EGG.get()) {
                 event.addCapability(LargeEggCapability.KEY, new LargeEggHandler(stack));
             }
-        }
-    }
-
-    /**
-     * Send the blaze burner liquid fuel map to send to the client and populate emi.
-     */
-    @SubscribeEvent
-    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            //Send the blaze burner liquid fuel map to send to the client and populate emi.
-            TFGNetworkHandler.INSTANCE.send(
-                    PacketDistributor.PLAYER.with(() -> player),
-                    new FuelSyncPacket(FuelSyncPacket.capturedJsonData));
-
-            //Checks if the player is in a custom dimension spawn,
-            // and puts them at that pos when they first join
-            GlobalPos spawnPos = CustomSpawnSaveHandler.getSpawnPos(Objects.requireNonNull(player.getServer()).overworld());
-            CustomSpawnHelper.tryFirstJoinTeleport(player, spawnPos);
         }
     }
 

@@ -38,8 +38,8 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.MEAssemblerRed
 
 public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
-    private static final int HEALTH_MIN = 100;
-    private static final int HEALTH_MAX = 500;
+    private static final int HEALTH_MIN = 200;
+    private static final int HEALTH_MAX = 800;
 
     private static final double[] BUDDING_SPEED_BONUS = { 0.0, 8.0, 32.0, 128.0, 512.0 };
 
@@ -171,7 +171,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
                     ? recipe.data.getInt("nominal_duration")
                     : recipe.duration;
             long work = (long) dur * Math.max(1, recipe.batchParallels);
-            executions = Math.max(1, (int) (work / 100));
+            executions = Math.max(1, (int) (work / 500));
         }
 
         buddingHealth -= executions;

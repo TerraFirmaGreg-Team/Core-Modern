@@ -44,6 +44,41 @@
     ],
     "subtitle": "tfg.subtitle.bison_walk"
   },
+  "burner": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:burner"
+      },
+      {
+        "type": "file",
+        "name": "tfg:burner_1"
+      },
+      {
+        "type": "file",
+        "name": "tfg:burner_2"
+      }
+    ],
+    "subtitle": "tfg.subtitle.burner"
+  },
+  "fire_click_click": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:fire_click_click"
+      }
+    ],
+    "subtitle": "tfg.subtitle.fire_click_click"
+  },
+  "fire_whoosh": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:fire_whoosh"
+      }
+    ],
+    "subtitle": "tfg.subtitle.fire_whoosh"
+  },
   "geologic_vulcanizer": {
     "sounds": [
       {

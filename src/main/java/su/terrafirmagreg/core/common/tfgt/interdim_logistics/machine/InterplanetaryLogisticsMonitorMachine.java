@@ -174,13 +174,13 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             DimensionalBlockPos receiver = config.getReceiverPartID();
             if (receiver != null) {
                 for (var rPart : uiParts) {
-                    if (rPart.getPartId().equals(receiver)) {
+                    if (rPart.isReceiverPart() && rPart.getPartId().equals(receiver)) {
                         destinationSelector.setValue(rPart.getUiLabel());
                     }
                 }
             }
     
-            destinationSelector.setOnChanged((v) -> uiParts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst()
+            destinationSelector.setOnChanged((v) -> uiParts.stream().filter(p -> p.isReceiverPart() && Objects.equals(p.getUiLabel(), v)).findFirst()
                     .ifPresent(s -> config.setReceiverPartID(s.getPartId())));
     
             group.addWidget(destinationSelector);
