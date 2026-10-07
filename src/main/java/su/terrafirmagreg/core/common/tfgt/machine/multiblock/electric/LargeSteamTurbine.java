@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.TieredWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
@@ -119,6 +120,23 @@ public class LargeSteamTurbine extends TieredWorkableElectricMultiblockMachine {
         return -1;
     }
 
+    private boolean isIntakesObstructed() {
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                // Skip the controller block itself
+                if (i == 0 && j == 0)
+                    continue;
+                var blockPos = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(),
+                        isFlipped(),
+                        i, j, 1);
+                var blockState = this.getLevel().getBlockState(blockPos);
+                if (!blockState.isAir())
+                    return true;
+            }
+        }
+        return false;
+    }
+
     //////////////////////////////////////
     // ****** Recipe Logic *******//
     //////////////////////////////////////
@@ -138,9 +156,9 @@ public class LargeSteamTurbine extends TieredWorkableElectricMultiblockMachine {
         if (!(machine instanceof LargeSteamTurbine turbineMachine)) {
             return RecipeModifier.nullWrongType(LargeSteamTurbine.class, machine);
         }
-        //if (turbineMachine.isIntakesObstructed()) {
-        //    return ModifierFunction.NULL;
-        //}
+        if (turbineMachine.isIntakesObstructed()) {
+            return ModifierFunction.NULL;
+        }
         var rotorHolder = turbineMachine.getRotorHolder();
         if (rotorHolder == null)
             return ModifierFunction.NULL;

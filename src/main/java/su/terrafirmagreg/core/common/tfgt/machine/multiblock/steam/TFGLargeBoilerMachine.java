@@ -501,30 +501,36 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
         widgets.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.large_boiler.steam_output",
                 steamGeneratedSync.getValue() / TICKS_PER_STEAM_GENERATION)).asWidget());
 
-        if (boosterFluidSync.getValue() == null) {
-            widgets.add(Text.lang("tfg.multiblock.large_boiler.booster_none")
-                    .withStyle(ChatFormatting.GRAY).asWidget());
-        } else {
-            widgets.add(Text.lang("tfg.multiblock.large_boiler.booster_active",
-                    Component.translatable(boosterFluidSync.getValue().translationKey()).withStyle(ChatFormatting.GREEN),
-                    Component.literal("+" + boosterFluidSync.getValue().temperatureBonus()).withStyle(ChatFormatting.GREEN)).asWidget());
-        }
+        widgets.add(Text.dynamic(() -> {
+            if (boosterFluidSync.getValue() == null) {
+                return Text.lang("tfg.multiblock.large_boiler.booster_none")
+                        .withStyle(ChatFormatting.GRAY);
+            } else {
+                return Text.lang("tfg.multiblock.large_boiler.booster_active",
+                        Component.translatable(boosterFluidSync.getValue().translationKey()).withStyle(ChatFormatting.GREEN),
+                        Component.literal("+" + boosterFluidSync.getValue().temperatureBonus()).withStyle(ChatFormatting.GREEN));
+            }
+        }).asWidget());
 
-        if (waterInUseSync.getStringValue() != null) {
-            String tagPath = ResourceLocation.parse(waterInUseSync.getStringValue()).getPath();
-            widgets.add(Text.lang("tfg.multiblock.large_boiler.water_boosted",
-                    Component.translatable("fluid.tag.tfg." + tagPath).withStyle(ChatFormatting.AQUA),
-                    Component.literal("x" + lastWaterMultiplierSync.getStringValue()).withStyle(ChatFormatting.AQUA)).asWidget());
-        } else {
-            widgets.add(Text.lang("tfg.multiblock.large_boiler.water_normal",
-                    Component.translatable("tfg.multiblock.large_boiler.standard").withStyle(ChatFormatting.GRAY)).asWidget());
-        }
+        widgets.add(Text.dynamic(() -> {
+            if (waterInUseSync.getStringValue() != null) {
+                String tagPath = ResourceLocation.parse(waterInUseSync.getStringValue()).getPath();
+                return Text.lang("tfg.multiblock.large_boiler.water_boosted",
+                        Component.translatable("fluid.tag.tfg." + tagPath).withStyle(ChatFormatting.AQUA),
+                        Component.literal("x" + lastWaterMultiplierSync.getStringValue()).withStyle(ChatFormatting.AQUA));
+            } else {
+                return Text.lang("tfg.multiblock.large_boiler.water_normal",
+                        Component.translatable("tfg.multiblock.large_boiler.standard").withStyle(ChatFormatting.GRAY));
+            }
+        }).asWidget());
 
-        int efficiencyPercent = (int) Math.round(100 - ((1.0 - getTemperatureMultiplier(currentTempSync.getIntValue())) * 100));
-        widgets.add(Text.lang("tfg.multiblock.large_boiler.fuel_efficiency",
-                ChatFormatting.YELLOW.toString() + efficiencyPercent + "%").asWidget());
+        widgets.add(Text.dynamic(() -> {
+            int efficiencyPercent = (int) Math.round(100 - ((1.0 - getTemperatureMultiplier(currentTempSync.getIntValue())) * 100));
+            return Text.lang("tfg.multiblock.large_boiler.fuel_efficiency",
+                    ChatFormatting.YELLOW.toString() + efficiencyPercent + "%");
+        }).asWidget());
 
-        widgets.add(Text.lang("gtceu.multiblock.large_boiler.throttle", ChatFormatting.AQUA.toString() + getThrottle() + "%").asWidget()
+        widgets.add(Text.dynamic(() -> Text.lang("gtceu.multiblock.large_boiler.throttle", ChatFormatting.AQUA.toString() + getThrottle() + "%")).asWidget()
                 .tooltip(t -> t.add(Text.lang("gtceu.multiblock.large_boiler.throttle.tooltip"))));
 
         widgets.add(LargeBoilerMachine.createIntInputWithButtons(throttleSync));
