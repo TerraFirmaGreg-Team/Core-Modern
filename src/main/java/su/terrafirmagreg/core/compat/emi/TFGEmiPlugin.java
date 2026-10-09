@@ -3,12 +3,15 @@ package su.terrafirmagreg.core.compat.emi;
 import java.util.Arrays;
 import java.util.Set;
 
+import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.util.Plantable;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
 
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Items;
@@ -63,6 +66,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory FLUID_VEIN_INFO = new EmiRecipeCategory(TFGCore.id("fluid_vein_info"),
             EmiStack.of(GTItems.PROSPECTOR_HV));
+
+    public static final EmiRecipeCategory GREENHOUSE_PLANTABLE = new EmiRecipeCategory(TFGCore.id("greenhouse_plantable"),
+            EmiStack.of(FLBlocks.LARGE_PLANTER.get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -168,6 +174,13 @@ public class TFGEmiPlugin implements EmiPlugin {
             // return onLegacyWorldgen() ? legacyVein : !legacyVein;
             return onLegacyWorldgen() == legacyVein;
         }).forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+
+        //Greenhouse Plantable
+        emiRegistry.addCategory(GREENHOUSE_PLANTABLE);
+        for (Plantable plantable : Plantable.MANAGER.getValues()) {
+            emiRegistry.addWorkstation(GREENHOUSE_PLANTABLE, EmiStack.of(GreenhousePlantableEmiRecipe.resolvePlanterBlock(plantable.getPlanterType())));
+            emiRegistry.addRecipe(new GreenhousePlantableEmiRecipe(plantable));
+        }
     }
 
     private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
@@ -192,6 +205,24 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
         SlotWidget widget = new SlotWidget(stack, offsetX, offsetY);
+        holder.add(widget);
+    }
+
+    /**
+     * Creates a blank item widget that does not render anything.
+     * Useful when you want to be able to hover over another element to view an item tooltip.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     */
+    public static void createBlankItemWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY) {
+        SlotWidget widget = new SlotWidget(stack, offsetX, offsetY) {
+            @Override
+            public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+            }
+        };
+        widget.drawBack(false);
         holder.add(widget);
     }
 

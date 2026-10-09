@@ -106,7 +106,7 @@ public class TemperatureProvider {
         if (attachedMachine != null && !attachedMachine.isWorking()) {
             return false;
         }
-        return frontScan.isSealed() && frontScan.containsInterior(pos);
+        return frontScan.isSealed() && frontScan.containsEnvelope(pos);
     }
 
     /**
@@ -119,7 +119,7 @@ public class TemperatureProvider {
             return Optional.empty();
         }
 
-        if (frontScan.isSealed() && frontScan.containsInterior(pos)) {
+        if (frontScan.isSealed() && frontScan.containsEnvelope(pos)) {
             return Optional.of(FRONT_TARGET_TEMP);
         }
 
