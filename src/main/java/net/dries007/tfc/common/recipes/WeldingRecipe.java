@@ -7,6 +7,7 @@
 package net.dries007.tfc.common.recipes;
 
 import com.google.gson.JsonObject;
+import lombok.Getter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -22,10 +23,15 @@ import net.dries007.tfc.common.recipes.inventory.EmptyInventory;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.util.JsonHelpers;
 
+@SuppressWarnings("unused")
 public class WeldingRecipe implements ISimpleRecipe<WeldingRecipe.Inventory>
 {
     private final ResourceLocation id;
-    private final Ingredient firstInput, secondInput;
+    @Getter
+    private final Ingredient firstInput;
+    @Getter
+    private final Ingredient secondInput;
+    @Getter
     private final int tier;
     private final ItemStackProvider output;
     private final boolean combineForgingBonus;
@@ -46,11 +52,6 @@ public class WeldingRecipe implements ISimpleRecipe<WeldingRecipe.Inventory>
     public boolean isCorrectTier(int anvilTier)
     {
         return anvilTier >= tier;
-    }
-
-    public int getTier()
-    {
-        return tier;
     }
 
     /**
@@ -106,16 +107,6 @@ public class WeldingRecipe implements ISimpleRecipe<WeldingRecipe.Inventory>
     public RecipeType<?> getType()
     {
         return TFCRecipeTypes.WELDING.get();
-    }
-
-    public Ingredient getFirstInput()
-    {
-        return firstInput;
-    }
-
-    public Ingredient getSecondInput()
-    {
-        return secondInput;
     }
 
     public boolean shouldCombineForgingBonus()

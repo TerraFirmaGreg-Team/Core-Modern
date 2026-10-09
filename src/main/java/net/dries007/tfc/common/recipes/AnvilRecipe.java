@@ -11,6 +11,7 @@ import java.util.List;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import lombok.Getter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +32,8 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.JsonHelpers;
 
+
+@SuppressWarnings("unused")
 public class AnvilRecipe implements ISimpleRecipe<AnvilRecipe.Inventory>
 {
     public static boolean hasAny(Level level, Inventory inventory)
@@ -61,8 +64,11 @@ public class AnvilRecipe implements ISimpleRecipe<AnvilRecipe.Inventory>
     }
 
     private final ResourceLocation id;
+    @Getter
     private final Ingredient input;
+    @Getter
     private final int minTier;
+    @Getter
     private final ForgeRule[] rules;
     private final boolean applyForgingBonus;
     private final ItemStackProvider output;
@@ -93,11 +99,6 @@ public class AnvilRecipe implements ISimpleRecipe<AnvilRecipe.Inventory>
         return forging != null && forging.matches(rules) && isWorkMatched(forging.getWork(), computeTarget(inventory));
     }
 
-    public ForgeRule[] getRules()
-    {
-        return rules;
-    }
-
     public boolean shouldApplyForgingBonus()
     {
         return applyForgingBonus;
@@ -109,11 +110,6 @@ public class AnvilRecipe implements ISimpleRecipe<AnvilRecipe.Inventory>
     public boolean isCorrectTier(int anvilTier)
     {
         return anvilTier >= minTier;
-    }
-
-    public int getMinTier()
-    {
-        return minTier;
     }
 
     @Override
@@ -144,11 +140,6 @@ public class AnvilRecipe implements ISimpleRecipe<AnvilRecipe.Inventory>
     public RecipeType<?> getType()
     {
         return TFCRecipeTypes.ANVIL.get();
-    }
-
-    public Ingredient getInput()
-    {
-        return input;
     }
 
     public int computeTarget(Inventory inventory)
