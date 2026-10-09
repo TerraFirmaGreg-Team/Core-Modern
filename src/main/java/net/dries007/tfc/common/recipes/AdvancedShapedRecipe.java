@@ -60,6 +60,12 @@ public class AdvancedShapedRecipe extends ShapedRecipe
     }
 
     @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inventory)
+    {
+        return RecipeHelpers.getRemainingItems(this, inventory);
+    }
+
+    @Override
     public boolean isSpecial()
     {
         return providerResult.dependsOnInput();

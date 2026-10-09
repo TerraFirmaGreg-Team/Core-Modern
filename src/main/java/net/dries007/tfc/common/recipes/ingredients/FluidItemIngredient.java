@@ -34,6 +34,11 @@ public class FluidItemIngredient extends DelegateIngredient
         this.fluid = fluid;
     }
 
+    public FluidStackIngredient getFluidIngredient()
+    {
+        return this.fluid;
+    }
+
     @Override
     public boolean test(@Nullable ItemStack stack)
     {
@@ -57,27 +62,26 @@ public class FluidItemIngredient extends DelegateIngredient
     protected ItemStack[] getDefaultItems()
     {
         return fluid.ingredient()
-            .all()
-            .flatMap(fluid -> Helpers.allItems(TFCTags.Items.FLUID_ITEM_INGREDIENT_EMPTY_CONTAINERS)
-                .map(item -> {
-                    final ItemStack stack = new ItemStack(item);
-                    final IFluidHandlerItem fluidHandler = Helpers.getCapability(stack, Capabilities.FLUID_ITEM);
-                    if (fluidHandler != null)
-                    {
-                        // Attempt to fill with the current fluid
-                        fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
+                .all()
+                .flatMap(fluid -> Helpers.allItems(TFCTags.Items.FLUID_ITEM_INGREDIENT_EMPTY_CONTAINERS)
+                        .flatMap(item -> {
+                            final ItemStack stack = new ItemStack(item);
+                            final IFluidHandlerItem fluidHandler = Helpers.getCapability(stack, Capabilities.FLUID_ITEM);
+                            if (fluidHandler != null)
+                            {
+                                // Attempt to fill with the current fluid
+                                fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
 
-                        // Then attempt to drain, and ensure the content matches the filled fluid, and is of amount > the required amount.
-                        final FluidStack content = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-                        if (content.getFluid() == fluid && content.getAmount() >= this.fluid.amount())
-                        {
-                            return fluidHandler.getContainer();
-                        }
-                    }
-                    return null;
-                }))
-            .filter(Objects::nonNull)
-            .toArray(ItemStack[]::new);
+                                // Then attempt to drain, and ensure the content matches the filled fluid, and is of amount > the required amount.
+                                final FluidStack content = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+                                if (content.getFluid() == fluid && content.getAmount() >= this.fluid.amount())
+                                {
+                                    return Stream.of(fluidHandler.getContainer());
+                                }
+                            }
+                            return Stream.empty();
+                        }))
+                .toArray(ItemStack[]::new);
     }
 
     @Override
