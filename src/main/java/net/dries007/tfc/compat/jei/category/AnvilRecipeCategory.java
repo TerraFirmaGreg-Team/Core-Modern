@@ -8,6 +8,7 @@ package net.dries007.tfc.compat.jei.category;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -133,6 +134,8 @@ public class AnvilRecipeCategory extends BaseRecipeCategory<AnvilRecipe>
     public static List<ItemStack> getAnvilItemsForTier(int targetTier)
     {
         List<ItemStack> anvils = new ArrayList<>();
+
+        // Rock Anvils
         if (targetTier <= 0)
         {
             var tags = ForgeRegistries.BLOCKS.tags();
@@ -145,8 +148,27 @@ public class AnvilRecipeCategory extends BaseRecipeCategory<AnvilRecipe>
             }
         }
 
+        // TFG Anvils.
+        // I tried doing this with chemical helpers, and it just didn't work.
+        if (targetTier >= 7) {
+            if (targetTier == 7) {
+                var anvil = Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(TFGCore.id("vanadium_steel_anvil"))).asItem();
+                anvils.add(new ItemStack(anvil));
+            }
+            else if (targetTier == 8) {
+                var anvil = Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(TFGCore.id("stainless_steel_anvil"))).asItem();
+                anvils.add(new ItemStack(anvil));
+            }
+            else {
+                var anvil = Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(TFGCore.id("tungsten_anvil"))).asItem();
+                anvils.add(new ItemStack(anvil));
+            }
+            return anvils;
+        }
+
         Metal.Tier metalTier = Metal.Tier.valueOf(targetTier);
 
+        // Base Metal Anvils.
         for (Metal.Default defaultMetal : Metal.Default.values())
         {
             if (defaultMetal.metalTier() == metalTier && Metal.BlockType.ANVIL.has(defaultMetal))
