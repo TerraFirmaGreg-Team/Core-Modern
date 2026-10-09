@@ -7,11 +7,11 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.*;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -26,8 +26,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
 
-    public GreenhouseMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public GreenhouseMachine(BlockEntityCreationInfo info) {
+        super(info, new GreenhouseRecipeLogic());
     }
 
     @Override
@@ -35,14 +35,9 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
         return (GreenhouseRecipeLogic) super.getRecipeLogic();
     }
 
-    @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new GreenhouseRecipeLogic(this);
-    }
-
     public static class GreenhouseRecipeLogic extends RecipeLogic {
-        public GreenhouseRecipeLogic(IRecipeLogicMachine machine) {
-            super(machine);
+        public GreenhouseRecipeLogic() {
+            super();
         }
 
         @Override
@@ -58,7 +53,7 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
             inputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
 
             for (IRecipeHandler<?> handler : inputHandlers) {
-                if (handler instanceof com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler stackHandler) {
+                if (handler instanceof NotifiableItemStackHandler stackHandler) {
                     for (int i = 0; i < stackHandler.getSlots(); i++) {
                         ItemStack stack = stackHandler.getStackInSlot(i);
                         IFood food = FoodCapability.get(stack);
@@ -84,7 +79,7 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
             // Regenerate item outputs so tfc crops have correct attributes
             List<Content> modifiedItemOutputs = new ArrayList<>();
             for (Content content : recipe.getOutputContents(ItemRecipeCapability.CAP)) {
-                Object obj = content.content;
+                Object obj = content.content();
                 if (obj instanceof SizedIngredient sized) {
                     ItemStack[] matches = sized.getInner().getItems();
                     ItemStack template = matches.length > 0 ? matches[0].copy() : ItemStack.EMPTY;
@@ -95,7 +90,7 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
                         modifiedItemOutputs.add(
                                 new Content(
                                         SizedIngredient.create(Ingredient.of(regenerated), sized.getAmount()),
-                                        content.chance, content.maxChance, content.tierChanceBoost));
+                                        content.chance(), content.maxChance()));
                     } else {
                         modifiedItemOutputs.add(content);
                     }

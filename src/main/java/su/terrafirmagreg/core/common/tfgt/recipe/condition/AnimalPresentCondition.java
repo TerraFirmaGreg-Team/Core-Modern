@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
@@ -107,8 +107,9 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe,
             @NotNull RecipeLogic recipeLogic) {
-        var machine = recipeLogic.machine.self();
-        if (!(machine.getLevel() instanceof ServerLevel))
+        var machine = recipeLogic.getMachine();
+        var level = machine.getLevel();
+        if (!(level instanceof ServerLevel))
             return false;
         if (!(machine instanceof PastoralEngineMachine pastoral))
             return false;

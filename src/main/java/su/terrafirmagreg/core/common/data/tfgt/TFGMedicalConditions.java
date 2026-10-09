@@ -2,20 +2,22 @@ package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.gregtechceu.gtceu.api.data.medicalcondition.MedicalCondition;
 import com.gregtechceu.gtceu.api.data.medicalcondition.Symptom;
+import com.gregtechceu.gtceu.common.data.GTMedicalConditions;
 
 import net.minecraft.world.effect.MobEffects;
 
+import su.terrafirmagreg.core.TFGCore;
+
 public class TFGMedicalConditions {
 
-    public static final Symptom GLOWING = new Symptom("symptom.tfg.glowing", 5, 1, MobEffects.GLOWING);
+    public static final Symptom GLOWING = Symptom.ofEffect("symptom.tfg.glowing", 5, 1.f, 1.f, MobEffects.GLOWING);
 
-    public static final MedicalCondition RADIOACTIVE = new MedicalCondition("radioactive", 0x00ff00, 2000,
+    public static final MedicalCondition RADIOACTIVE = GTMedicalConditions.register(TFGCore.id("radioactive"), 0x00ff00, 2000,
             MedicalCondition.IdleProgressionType.NONE, 0, true,
             new Symptom.ConfiguredSymptom(Symptom.DEATH),
-            new Symptom.ConfiguredSymptom(Symptom.HEALTH_DEBUFF, 0.75f),
-            new Symptom.ConfiguredSymptom(Symptom.MINING_FATIGUE, 0.4f),
-            new Symptom.ConfiguredSymptom(Symptom.SLOWNESS, 0.4f),
-            new Symptom.ConfiguredSymptom(Symptom.WEAKNESS, 0.2f),
-            new Symptom.ConfiguredSymptom(GLOWING, 0.05f));
-
+            new Symptom.ConfiguredSymptom(Symptom.HEALTH_DEBUFF),
+            new Symptom.ConfiguredSymptom(Symptom.MINING_FATIGUE),
+            new Symptom.ConfiguredSymptom(Symptom.SLOWNESS),
+            new Symptom.ConfiguredSymptom(Symptom.WEAKNESS),
+            new Symptom.ConfiguredSymptom(GLOWING));
 }
