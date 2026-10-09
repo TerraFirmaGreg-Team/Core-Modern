@@ -384,25 +384,43 @@ public final class RecipeHelpers
         final FluidItemIngredient fluidIngredient = findFluidIngredient(ingredient);
         if (fluidIngredient != null)
         {
+            final FluidStackIngredient filter = fluidIngredient.getFluidIngredient();
+            final int amount = filter.amount();
             final ItemStack copy = stack.copyWithCount(1);
             final IFluidHandlerItem handler = Helpers.getCapability(copy, Capabilities.FLUID_ITEM);
             if (handler != null)
             {
-                final FluidStackIngredient filter = fluidIngredient.getFluidIngredient();
-
-                FluidStack drainedSim = handler.drain(filter.amount(), IFluidHandler.FluidAction.SIMULATE);
-                if (drainedSim.isEmpty() || !filter.test(drainedSim))
+                // Attempt to drain exact required amount.
+                final FluidStack drainedSim = handler.drain(amount, IFluidHandler.FluidAction.SIMULATE);
+                if (!drainedSim.isEmpty() && filter.test(drainedSim) && drainedSim.getAmount() == amount)
                 {
-                    drainedSim = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-                    if (!drainedSim.isEmpty() && filter.test(drainedSim)) drainedSim.setAmount(filter.amount());
+                    handler.drain(drainedSim, IFluidHandler.FluidAction.EXECUTE);
+                    return handler.getContainer();
                 }
 
-                if (!drainedSim.isEmpty() && filter.test(drainedSim)) {
-                    handler.drain(drainedSim, IFluidHandler.FluidAction.EXECUTE);
-                } else {
-                    handler.drain(filter.amount(), IFluidHandler.FluidAction.EXECUTE);
+                // For containers that don't support partial draining.
+                final FluidStack contained = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+                if (!contained.isEmpty() && filter.test(contained))
+                {
+                    if (amount <= FluidHelpers.BUCKET_VOLUME)
+                    {
+                        handler.drain(contained.getAmount(), IFluidHandler.FluidAction.EXECUTE);
+                        final ItemStack container = handler.getContainer();
+                        if (!container.isEmpty() && !ItemStack.isSameItemSameTags(container, stack))
+                        {
+                            return container;
+                        }
+                        if (stack.hasCraftingRemainingItem())
+                        {
+                            return stack.getCraftingRemainingItem();
+                        }
+                        return container;
+                    }
                 }
-                return handler.getContainer();
+            }
+            else if (stack.hasCraftingRemainingItem() && amount <= FluidHelpers.BUCKET_VOLUME)
+            {
+                return stack.getCraftingRemainingItem();
             }
         }
 
