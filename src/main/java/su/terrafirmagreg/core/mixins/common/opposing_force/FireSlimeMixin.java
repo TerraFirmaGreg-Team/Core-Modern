@@ -26,6 +26,6 @@ public class FireSlimeMixin extends SummonableMonster {
         cir.setReturnValue(Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0f)
                 .add(Attributes.MOVEMENT_SPEED, 0.6F)
-                .add(Attributes.ATTACK_DAMAGE, 10.0f));
+                .add(Attributes.ATTACK_DAMAGE, 7.0f));
     }
 }

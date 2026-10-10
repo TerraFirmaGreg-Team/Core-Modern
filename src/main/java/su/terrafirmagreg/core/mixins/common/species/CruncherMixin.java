@@ -18,7 +18,7 @@ public class CruncherMixin {
     // Give it some armor
     @Inject(method = "createAttributes", at = @At("RETURN"), remap = false, cancellable = true)
     private static void createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
-        cir.setReturnValue(cir.getReturnValue().add(Attributes.ARMOR, 12F));
+        cir.setReturnValue(cir.getReturnValue().add(Attributes.ARMOR, 20F));
     }
 
     // Disable the inventory thing

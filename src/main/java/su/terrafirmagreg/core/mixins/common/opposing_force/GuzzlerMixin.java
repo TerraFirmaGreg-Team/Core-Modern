@@ -35,7 +35,7 @@ public class GuzzlerMixin extends Monster {
                 .add(Attributes.ATTACK_KNOCKBACK, 2.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)
                 .add(Attributes.FOLLOW_RANGE, 32.0F)
-                .add(Attributes.ARMOR, 10F));
+                .add(Attributes.ARMOR, 12F));
     }
 
     @Inject(method = "canGuzzlerSpawn", at = @At("HEAD"), remap = false, cancellable = true)
