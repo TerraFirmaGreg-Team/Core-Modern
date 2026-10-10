@@ -27,7 +27,7 @@ public abstract class SmallFireballMixin extends Fireball {
         if (!this.level().isClientSide) {
             Entity entity = pResult.getEntity();
             entity.hurt(this.damageSources().mobProjectile(this, this.getOwner() instanceof LivingEntity ? (LivingEntity) this.getOwner() : null),
-                    5);
+                    10);
         }
     }
 }

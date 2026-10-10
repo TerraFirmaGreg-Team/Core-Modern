@@ -14,6 +14,9 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Strider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.material.FluidState;
+
+import su.terrafirmagreg.core.common.data.TFGFluids;
 
 @Mixin(value = Strider.class)
 public abstract class StriderMixin extends Animal {
@@ -35,5 +38,20 @@ public abstract class StriderMixin extends Animal {
     public void tfg$finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, SpawnGroupData pSpawnData, CompoundTag pDataTag,
             CallbackInfoReturnable<SpawnGroupData> cir) {
         cir.setReturnValue(super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag));
+    }
+
+    // Lets them stand on slurry
+
+    @Inject(method = "canStandOnFluid", at = @At("HEAD"), remap = true, cancellable = true)
+    private void tfg$canStandOnFluid(FluidState fluidState, CallbackInfoReturnable<Boolean> cir) {
+        if (fluidState.is(TFGFluids.GEYSER_SLURRY.getSource()))
+            cir.setReturnValue(true);
+    }
+
+    // Makes them always "heated"
+
+    @Inject(method = "isSuffocating", at = @At("HEAD"), remap = true, cancellable = true)
+    private void tfg$isSuffocating(CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(false);
     }
 }
