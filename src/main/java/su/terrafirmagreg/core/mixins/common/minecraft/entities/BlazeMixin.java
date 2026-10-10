@@ -29,7 +29,7 @@ public class BlazeMixin {
         cir.setReturnValue(false);
     }
 
-    @Inject(method = "createAttributes", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "createAttributes", at = @At("HEAD"), cancellable = true)
     private static void tfg$createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.setReturnValue(Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 80.0f)

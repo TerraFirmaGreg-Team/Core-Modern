@@ -43,7 +43,7 @@ public class SlugMixin extends SummonableMonster {
         return true;
     }
 
-    @Inject(method = "dropFromLootTable", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "dropFromLootTable", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$dropFromLootTable(DamageSource source, boolean drops, CallbackInfo ci) {
         ci.cancel();
     }

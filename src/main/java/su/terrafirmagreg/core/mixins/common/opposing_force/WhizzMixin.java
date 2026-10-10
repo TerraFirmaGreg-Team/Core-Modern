@@ -31,7 +31,7 @@ public class WhizzMixin extends SummonableMonster {
                 .add(Attributes.ATTACK_DAMAGE, 8.0f));
     }
 
-    @Inject(method = "skipAttackInteraction", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "skipAttackInteraction", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$skipAttackInteraction(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         cir.cancel();
     }
