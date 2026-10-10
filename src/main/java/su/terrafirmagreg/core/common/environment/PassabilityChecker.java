@@ -368,7 +368,7 @@ public final class PassabilityChecker {
             return PassInfo.full();
         }
         boolean checkFacades = blockState.is(TFGTags.Blocks.AtmosphereCheckFacades);
-        if (blockState.is(TFGTags.Blocks.AtmospherePassable)) {
+        if (blockState.is(TFGTags.Blocks.AtmospherePassable) || blockState.is(TFGTags.Blocks.AtmosphereHeatPassable)) {
             PassInfo empty = PassInfo.empty();
             return checkFacades ? PassInfo.wrapInCheckFacades(empty) : empty;
         }

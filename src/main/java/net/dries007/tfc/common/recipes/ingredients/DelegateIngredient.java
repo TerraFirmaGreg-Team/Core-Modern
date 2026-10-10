@@ -119,6 +119,12 @@ public abstract class DelegateIngredient extends Ingredient
         return delegate == null;
     }
 
+    @Nullable
+    public Ingredient getDelegate()
+    {
+        return delegate;
+    }
+
     @Override
     public boolean isSimple()
     {
@@ -131,6 +137,7 @@ public abstract class DelegateIngredient extends Ingredient
     /**
      * @return The default items that this ingredient matches when there is no delegate. In order to respect item based caches this <strong>must</strong> return all possible items that could match this ingredient.
      */
+    @SuppressWarnings("deprecation")
     protected ItemStack[] getDefaultItems()
     {
         return BuiltInRegistries.ITEM.stream()
