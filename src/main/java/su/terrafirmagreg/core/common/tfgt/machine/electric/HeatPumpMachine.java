@@ -75,7 +75,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         int size = getFrontInteriorSize();
         if (size <= 0)
             return 0;
-        return EnclosedRoomEnergyCurve.eutForVolume(size);
+        return EnclosedRoomEnergyCurve.eutForVolume(size) * host.getEnergyCostMultiplier();
     }
 
     public boolean isBlocked() {
@@ -123,9 +123,10 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         TFGCore.LOGGER.debug("[heatpump] validateAsync START, pos={}", getPos());
         long start = System.nanoTime();
 
-        BlockPos pos = getPos();
-        BlockPos frontStart = pos.above(1).relative(host.self().getFrontFacing());
-        BlockPos backStart = pos.above(1).relative(host.self().getFrontFacing().getOpposite(), 3);
+        BlockPos frontStart = host.getFrontScanStart();
+        BlockPos backStart = host.getBackScanStart();
+        if (frontStart == null || backStart == null)
+            return;
 
         RoomScan frontScan = FloodFill.fill(reader, frontStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
         RoomScan backScan = FloodFill.fill(reader, backStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
@@ -224,7 +225,11 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         lastTraceRequestTick = currentTick;
 
         ServerLevel traceLevel = level;
-        BlockPos tracePos = getPos().above(1).relative(host.self().getFrontFacing());
+
+        BlockPos tracePos = host.getFrontScanStart();
+        if (tracePos == null)
+            return;
+
         AsyncBlockReader reader = new AsyncBlockReader(traceLevel);
 
         EnvironmentSystem.EXECUTOR.submit(() -> {
