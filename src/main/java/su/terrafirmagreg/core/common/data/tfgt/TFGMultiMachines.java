@@ -1336,9 +1336,9 @@ public class TFGMultiMachines {
                     GTCEu.id("block/casings/mechanic/machine_casing_turbine_stainless_steel"),
 					GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "APA", " A ")
-                    .aisle("AAA", "PPP", "ARA")
-                    .aisle("AXA", "APA", " A ")
+                    .aisle("APA", "AAA")
+                    .aisle("PPP", "ARA")
+                    .aisle("AXA", "AAA")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('A', Predicates.blocks(GTBlocks.CASING_STAINLESS_TURBINE.get())
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))

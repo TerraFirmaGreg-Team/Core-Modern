@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.part;
 import javax.annotation.Nullable;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IWorkableMultiController;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
@@ -12,16 +11,17 @@ import net.minecraft.network.chat.Component;
 
 public class RotorVentPartMachine extends RotorHolderPartMachine {
 
-    /** The Rotor Holder makes damage every seconds, here it's every 5 minutes*/
+    /** The Rotor Holder makes damage every seconds, here it's every 5 minutes and it's also disabled*/
 
     private static final int DAMAGE_INTERVAL = 20 * 60 * 5;
 
-    /** We remove the bonus from the Holder to keep it exclusively on the Rotors */
-    private static final int VENT_EFFICIENCY = 100;
-    private static final int VENT_POWER_MULTIPLIER = 1;
+    /** We remove the bonus from the Holder to keep it exclusively on the Rotors
+     * But we could also use these to specifically alter the strenght of the rotor */
+    private static final int VENT_EFFICIENCY = 100; // mB/t
+    private static final int VENT_POWER_MULTIPLIER = 1; // EU/t be wary though this isn't a percentage
 
-    /** Plus d'info here */
-    private static final double STAT_EXPONENT = 1.0;
+    /** The higher the number, the stronger the bonuses of the Rotor */
+    private static final double STAT_EXPONENT = 0.5;
 
     @Nullable
     private ISubscription wakeSubs;
@@ -62,7 +62,7 @@ public class RotorVentPartMachine extends RotorHolderPartMachine {
             setRotorSpeed(getRotorSpeed() + SPEED_INCREMENT);
             updateRotorSubscription();
         }
-
+        /*
         if (self().getOffsetTimer() % DAMAGE_INTERVAL == 0) {
             int problems = 0;
             if (isFormed() && getControllers().first() instanceof IMaintenanceMachine maintenance) {
@@ -70,6 +70,7 @@ public class RotorVentPartMachine extends RotorHolderPartMachine {
             }
             damageRotor(1 + problems);
         }
+        */
         return true;
     }
 
