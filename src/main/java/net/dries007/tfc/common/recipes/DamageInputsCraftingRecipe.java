@@ -36,24 +36,7 @@ public abstract class DamageInputsCraftingRecipe<R extends Recipe<CraftingContai
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv)
     {
-        NonNullList<ItemStack> items = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
-        for (int i = 0; i < items.size(); ++i)
-        {
-            ItemStack stack = inv.getItem(i);
-            if (stack.isDamageableItem())
-            {
-                items.set(i, Helpers.damageCraftingItem(stack, 1).copy());
-            }
-            else if (isUnbreakable(stack)) // unbreakable items are not damageable, but should still be able to be used in crafting
-            {
-                items.set(i, stack.copy());
-            }
-            else if (stack.hasCraftingRemainingItem())
-            {
-                items.set(i, stack.getCraftingRemainingItem());
-            }
-        }
-        return items;
+        return RecipeHelpers.getRemainingItems(this, inv, true);
     }
 
     @Override

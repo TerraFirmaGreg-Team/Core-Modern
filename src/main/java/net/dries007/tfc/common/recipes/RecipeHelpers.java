@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.recipes;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -17,15 +18,26 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
+import net.minecraftforge.common.crafting.IShapedRecipe;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.capabilities.Capabilities;
+import net.dries007.tfc.common.fluids.FluidHelpers;
+import net.dries007.tfc.common.recipes.ingredients.DelegateIngredient;
+import net.dries007.tfc.common.recipes.ingredients.FluidItemIngredient;
+import net.dries007.tfc.common.recipes.ingredients.FluidStackIngredient;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.util.Helpers;
 
@@ -34,7 +46,6 @@ import net.dries007.tfc.util.Helpers;
  */
 public final class RecipeHelpers
 {
-    // todo: when porting, we can remove the `CraftingInput` construct here, and just store a `Iterable<ItemStack>`
     private static final CraftingInput EMPTY = new CraftingInput(null, Collections::emptyIterator);
     private static final ThreadLocal<CraftingInput> CRAFTING_INPUT = ThreadLocal.withInitial(() -> EMPTY);
 
@@ -301,6 +312,192 @@ public final class RecipeHelpers
             }
         }
         return true;
+    }
+
+    public static NonNullList<ItemStack> getRemainingItems(Recipe<CraftingContainer> recipe, CraftingContainer inventory)
+    {
+        return getRemainingItems(recipe, inventory, false);
+    }
+
+    public static NonNullList<ItemStack> getRemainingItems(Recipe<CraftingContainer> recipe, CraftingContainer inventory, boolean damagesInputs)
+    {
+        final NonNullList<ItemStack> remaining = NonNullList.withSize(inventory.getContainerSize(), ItemStack.EMPTY);
+        final NonNullList<Ingredient> ingredients = recipe.getIngredients();
+
+        if (recipe instanceof IShapedRecipe<?> shaped)
+        {
+            final int w = shaped.getRecipeWidth();
+            final int h = shaped.getRecipeHeight();
+
+            int startCol = -1, startRow = -1;
+            boolean mirror = false, found = false;
+
+            outer:
+            for (int c = 0; c <= inventory.getWidth() - w; ++c) {
+                for (int r = 0; r <= inventory.getHeight() - h; ++r) {
+                    if ((found = matches(ingredients, inventory, c, r, mirror = true, w, h)) ||
+                            (found = matches(ingredients, inventory, c, r, mirror = false, w, h))) {
+                        startCol = c; startRow = r;
+                        break outer;
+                    }
+                }
+            }
+
+            for (int slot = 0; slot < inventory.getContainerSize(); ++slot)
+            {
+                final ItemStack stack = inventory.getItem(slot);
+                if (stack.isEmpty()) continue;
+
+                Ingredient ingredient = Ingredient.EMPTY;
+                if (found)
+                {
+                    int col = (slot % inventory.getWidth()) - startCol;
+                    int row = (slot / inventory.getWidth()) - startRow;
+                    if (col >= 0 && row >= 0 && col < w && row < h)
+                    {
+                        ingredient = ingredients.get(mirror ? (w - col - 1 + row * w) : (col + row * w));
+                    }
+                }
+                remaining.set(slot, getRemainingItem(stack, ingredient, damagesInputs));
+            }
+        }
+        else
+        {
+            final int[] slotToIngredient = matchShapeless(inventory, ingredients);
+            for (int slot = 0; slot < inventory.getContainerSize(); ++slot)
+            {
+                final ItemStack stack = inventory.getItem(slot);
+                if (!stack.isEmpty())
+                {
+                    int idx = slotToIngredient[slot];
+                    remaining.set(slot, getRemainingItem(stack, idx != -1 ? ingredients.get(idx) : Ingredient.EMPTY, damagesInputs));
+                }
+            }
+        }
+        return remaining;
+    }
+
+    public static ItemStack getRemainingItem(ItemStack stack, Ingredient ingredient, boolean damagesInputs)
+    {
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+
+        final FluidItemIngredient fluidIngredient = findFluidIngredient(ingredient);
+        if (fluidIngredient != null)
+        {
+            final FluidStackIngredient filter = fluidIngredient.getFluidIngredient();
+            final int amount = filter.amount();
+            final ItemStack copy = stack.copyWithCount(1);
+            final IFluidHandlerItem handler = Helpers.getCapability(copy, Capabilities.FLUID_ITEM);
+            if (handler != null)
+            {
+                // Attempt to drain exact required amount.
+                final FluidStack drainedSim = handler.drain(amount, IFluidHandler.FluidAction.SIMULATE);
+                if (!drainedSim.isEmpty() && filter.test(drainedSim) && drainedSim.getAmount() == amount)
+                {
+                    handler.drain(drainedSim, IFluidHandler.FluidAction.EXECUTE);
+                    return handler.getContainer();
+                }
+
+                // For containers that don't support partial draining.
+                final FluidStack contained = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+                if (!contained.isEmpty() && filter.test(contained))
+                {
+                    if (amount <= FluidHelpers.BUCKET_VOLUME)
+                    {
+                        handler.drain(contained.getAmount(), IFluidHandler.FluidAction.EXECUTE);
+                        final ItemStack container = handler.getContainer();
+                        if (!container.isEmpty() && !ItemStack.isSameItemSameTags(container, stack))
+                        {
+                            return container;
+                        }
+                        if (stack.hasCraftingRemainingItem())
+                        {
+                            return stack.getCraftingRemainingItem();
+                        }
+                        return container;
+                    }
+                }
+            }
+            else if (stack.hasCraftingRemainingItem() && amount <= FluidHelpers.BUCKET_VOLUME)
+            {
+                return stack.getCraftingRemainingItem();
+            }
+        }
+
+        if (damagesInputs)
+        {
+            if (stack.isDamageableItem()) return Helpers.damageCraftingItem(stack, 1).copy();
+            if (isUnbreakable(stack)) return stack.copy();
+        }
+
+        if (stack.hasCraftingRemainingItem()) return stack.getCraftingRemainingItem();
+
+        final ItemStack copy = stack.copyWithCount(1);
+        final IFluidHandlerItem handler = Helpers.getCapability(copy, Capabilities.FLUID_ITEM);
+        if (handler != null && !handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE).isEmpty())
+        {
+            handler.drain(FluidHelpers.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+            return handler.getContainer();
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    private static int[] matchShapeless(CraftingContainer inventory, NonNullList<Ingredient> ingredients)
+    {
+        final int invSize = inventory.getContainerSize();
+        final int ingCount = ingredients.size();
+        final int[] slotToIngredient = new int[invSize];
+        Arrays.fill(slotToIngredient, -1);
+        final int[] ingredientToSlot = new int[ingCount];
+        Arrays.fill(ingredientToSlot, -1);
+
+        for (int i = 0; i < ingCount; ++i)
+        {
+            final boolean[] visited = new boolean[invSize];
+            findAugmentingPath(i, ingredients, inventory, ingredientToSlot, slotToIngredient, visited);
+        }
+        return slotToIngredient;
+    }
+
+    private static boolean findAugmentingPath(int ingIdx, NonNullList<Ingredient> ingredients, CraftingContainer inventory, int[] ingredientToSlot, int[] slotToIngredient, boolean[] visited)
+    {
+        final Ingredient ingredient = ingredients.get(ingIdx);
+        for (int slot = 0; slot < inventory.getContainerSize(); ++slot)
+        {
+            final ItemStack stack = inventory.getItem(slot);
+            if (!stack.isEmpty() && ingredient.test(stack) && !visited[slot])
+            {
+                visited[slot] = true;
+                if (slotToIngredient[slot] == -1 || findAugmentingPath(slotToIngredient[slot], ingredients, inventory, ingredientToSlot, slotToIngredient, visited))
+                {
+                    slotToIngredient[slot] = ingIdx;
+                    ingredientToSlot[ingIdx] = slot;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    public static FluidItemIngredient findFluidIngredient(Ingredient ingredient)
+    {
+        if (ingredient instanceof FluidItemIngredient fluidIngredient)
+        {
+            return fluidIngredient;
+        }
+        if (ingredient instanceof DelegateIngredient delegateIngredient && delegateIngredient.getDelegate() != null)
+        {
+            return findFluidIngredient(delegateIngredient.getDelegate());
+        }
+        return null;
+    }
+
+    private static boolean isUnbreakable(ItemStack stack)
+    {
+        final CompoundTag tag = stack.getTag();
+        return tag != null && tag.getBoolean("Unbreakable");
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

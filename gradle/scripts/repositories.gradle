@@ -83,5 +83,8 @@ repositories {
             includeGroup 'dev.toma.configuration'
         }
     }
-
+    maven { // AE2 UELM
+        name = "expandiumReleases"
+        url = "https://repo.expandium.net/releases"
+    }
 }

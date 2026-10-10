@@ -152,6 +152,7 @@ public final class TFGTags {
 
         // Environment system tags
         public static final TagKey<Block> AtmospherePassable = createBlockTag("atmosphere_passable");
+        public static final TagKey<Block> AtmosphereHeatPassable = createBlockTag("atmosphere_heat_passable");
         public static final TagKey<Block> AtmosphereImpassable = createBlockTag("atmosphere_impassable");
         public static final TagKey<Block> AtmosphereUseOutline = createBlockTag("atmosphere_use_outline");
         public static final TagKey<Block> AtmosphereCheckFacades = createBlockTag("atmosphere_check_facades");
