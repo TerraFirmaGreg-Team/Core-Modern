@@ -31,7 +31,7 @@ public class TremblerMixin extends Monster {
         cir.setReturnValue(Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 80.0f)
                 .add(Attributes.MOVEMENT_SPEED, 0.15F)
-                .add(Attributes.ATTACK_DAMAGE, 10.0F)
+                .add(Attributes.ATTACK_DAMAGE, 12.0F)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)
                 .add(Attributes.ARMOR, 20.0F));

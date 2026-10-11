@@ -33,6 +33,7 @@ public final class TFGTags {
 
         public static final TagKey<Item> MartianHerbivoreFoods = createItemTag("martian_herbivore_foods");
         public static final TagKey<Item> MartianPiscivoreFoods = createItemTag("martian_piscivore_foods");
+        public static final TagKey<Item> VenusianArthropodFoods = createItemTag("venusian_arthropod_foods");
         public static final TagKey<Item> EmptySyringe = createItemTag("empty_dna_syringes");
 
         public static final TagKey<Item> InsulatingContainer = createItemTag("insulating_container");
@@ -191,8 +192,8 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> IgnoresCacti = createEntityTag("ignores_cacti");
         public static final TagKey<EntityType<?>> NotRammedByRammers = createEntityTag("not_rammed_by_rammers");
         public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("fishing_net_scoopable");
-        public static final TagKey<EntityType<?>> Genderless = createEntityTag("genderless");
         public static final TagKey<EntityType<?>> RammingAnimals = createEntityTag("ramming_animals");
+        public static final TagKey<EntityType<?>> VenusPrey = createEntityTag("venus_prey");
 
         private static TagKey<EntityType<?>> createEntityTag(String path) {
             return createEntityTag(TFGCore.id(path));

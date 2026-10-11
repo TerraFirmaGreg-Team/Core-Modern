@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.mixins.common.opposing_force;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.unusualmodding.opposing_force.entity.UmberSpider;
@@ -11,8 +12,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.level.Level;
+
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mixin(value = UmberSpider.class, remap = false)
 public class UmberSpiderMixin extends Spider {
@@ -28,6 +33,11 @@ public class UmberSpiderMixin extends Spider {
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
                 .add(Attributes.ATTACK_DAMAGE, 20.0F)
                 .add(Attributes.ARMOR, 4.0F));
+    }
+
+    @Inject(method = "registerGoals", at = @At("TAIL"), remap = true)
+    private void tfg$registerGoals(CallbackInfo ci) {
+        this.goalSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, true, (entity) -> entity.getType().is(TFGTags.Entities.VenusPrey)));
     }
 
     @Override

@@ -28,7 +28,7 @@ public class WhizzMixin extends SummonableMonster {
                 .add(Attributes.MAX_HEALTH, 20.0f)
                 .add(Attributes.FLYING_SPEED, 0.7F)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
-                .add(Attributes.ATTACK_DAMAGE, 8.0f));
+                .add(Attributes.ATTACK_DAMAGE, 9.0f));
     }
 
     @Inject(method = "skipAttackInteraction", at = @At("HEAD"), remap = true, cancellable = true)

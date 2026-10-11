@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.compat.jade.common;
 
+import en.predator97427fr.aliencraft.entity.AncientBeetleEntity;
 import net.dries007.tfc.common.entities.livestock.pet.Dog;
 import net.dries007.tfc.common.entities.predator.TFCWolf;
 import net.dries007.tfc.common.entities.prey.TFCFox;
@@ -45,6 +46,7 @@ import net.wanmine.wab.entity.Charger;
 import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.entity.ancient_beetle.AncientBeetleData;
 import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
 import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
 import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
@@ -92,6 +94,7 @@ public final class EntityTooltips
 		registry.register("rabbit", TFG_RABBIT, Rabbit.class);
 		registry.register("surfer", TFG_SURFER, TFCSurfer.class);
 		registry.register("soarer", TFG_SOARER, Soarer.class);
+		registry.register("beetle", TFG_BEETLE, AncientBeetleEntity.class);
 		registry.register("axolotl", TFG_AXOLOTL, Axolotl.class);
 		registry.register("charger", TFG_CHARGER, Charger.class);
 		registry.register("snatcher", TFG_SNATCHER, Snatcher.class);
@@ -359,6 +362,16 @@ public final class EntityTooltips
 			tooltip.accept(Helpers.translateEnum(SnatcherData.isMale(snatcher) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
 
 			float familiarity = Math.max(0.0F, Math.min(1.0F, SnatcherData.getFamiliarity(snatcher)));
+			String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
+			tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
+		}
+	};
+
+	private static final EntityTooltip TFG_BEETLE = (level, entity, tooltip) -> {
+		if (entity instanceof AncientBeetleEntity beetle) {
+			tooltip.accept(Helpers.translateEnum(AncientBeetleData.isMale(beetle) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
+
+			float familiarity = Math.max(0.0F, Math.min(1.0F, AncientBeetleData.getFamiliarity(beetle)));
 			String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
 			tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
 		}
