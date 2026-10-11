@@ -224,14 +224,14 @@ public class TFGFluids {
                         return Blocks.DRIPSTONE_BLOCK.defaultBlockState();
                 }));
 
-		FluidInteractionRegistry.addInteraction(SULFUR_FUMES.getSource().getFluidType(), new FluidInteractionRegistry.InteractionInformation(
-				GEYSER_SLURRY.getSource().getFluidType(),
-				fluidState -> {
-					if (fluidState.isSource())
-						return AllPaletteStoneTypes.SCORIA.getBaseBlock().get().defaultBlockState();
-					else
-						return Blocks.DRIPSTONE_BLOCK.defaultBlockState();
-				}));
+        FluidInteractionRegistry.addInteraction(SULFUR_FUMES.getSource().getFluidType(), new FluidInteractionRegistry.InteractionInformation(
+                GEYSER_SLURRY.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return AllPaletteStoneTypes.SCORIA.getBaseBlock().get().defaultBlockState();
+                    else
+                        return Blocks.DRIPSTONE_BLOCK.defaultBlockState();
+                }));
 
         FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
                 SPRING_WATER.getSource().getFluidType(),
