@@ -64,7 +64,7 @@ public class AncientBeetleEntityMixin extends TamableAnimal {
     private static void tfg$createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.setReturnValue(Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 120.0F)
-                .add(Attributes.MOVEMENT_SPEED, 0.1)
+                .add(Attributes.MOVEMENT_SPEED, 0.2)
                 .add(Attributes.ATTACK_DAMAGE, 12.0F)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)

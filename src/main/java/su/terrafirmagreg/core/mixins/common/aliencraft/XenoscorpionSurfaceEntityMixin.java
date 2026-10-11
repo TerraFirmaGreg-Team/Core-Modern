@@ -18,9 +18,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -57,7 +60,10 @@ public class XenoscorpionSurfaceEntityMixin extends Monster {
 
     @Inject(method = "registerGoals", at = @At("TAIL"), remap = true)
     private void tfg$registerGoals(CallbackInfo ci) {
-        this.goalSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, true, (entity) -> entity.getType().is(TFGTags.Entities.VenusPrey)));
+        var scorp = (XenoscorpionSurfaceEntity) (Object) this;
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(scorp, 1.0F));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(scorp, Player.class, 0.6F));
+        this.goalSelector.addGoal(4, new NearestAttackableTargetGoal<>(scorp, Animal.class, true, (entity) -> entity.getType().is(TFGTags.Entities.VenusPrey)));
     }
 
     @Override
