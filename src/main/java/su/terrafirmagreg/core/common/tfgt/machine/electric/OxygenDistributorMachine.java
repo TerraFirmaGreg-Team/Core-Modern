@@ -93,7 +93,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     /** @return the expected EU/t consumption based on room size. */
     public double computeEnergyCostPerTick() {
         int effectiveVolume = computeEffectiveVolume();
-        return EnclosedRoomEnergyCurve.eutForVolume(effectiveVolume);
+        return EnclosedRoomEnergyCurve.eutForVolume(effectiveVolume) * host.getEnergyCostMultiplier();
     }
 
     public RoomScan getRoomScan() {
@@ -122,8 +122,8 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         if (!fluidInputs.isEmpty()) {
             baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
         }
-        // baseCost mB/min per 10k blocks -> mB/tick for actual volume
-        envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * EnclosedRoomEnergyCurve.BASE_VOLUME));
+        // baseCost mB/min per 10k blocks -> mB/tick for actual volume and multiply by Rotor Efficiency
+        envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * EnclosedRoomEnergyCurve.BASE_VOLUME) * host.getConsumptionMultiplier());
     }
 
     private int computeEffectiveVolume() {
@@ -227,8 +227,13 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
                 String.format("%,.0f", computeEnergyCostPerTick()))
                 .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
 
+        Component ventProblem = host.getVentProblem();
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+
+        } else if (ventProblem != null) {
+            textList.add(ventProblem.copy().withStyle(ChatFormatting.RED));
+
         } else if (host.getEnergyInputPerSec() < computeEnergyCostPerTick()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy")
                     .withStyle(ChatFormatting.RED));

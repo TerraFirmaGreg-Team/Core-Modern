@@ -1,11 +1,9 @@
 package su.terrafirmagreg.core.common.tfgt.machine.electric;
 
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-
 /**
  * Implemented by GT wrappers that host an {@link OxygenDistributorMachine}.
  */
-public interface IOxygenDistributorHost extends IRecipeLogicMachine {
+public interface IOxygenDistributorHost extends IRotorVentHost {
 
     /**
      * The EU/t the machine can draw from its energy input (0 when no hatch / not formed).
