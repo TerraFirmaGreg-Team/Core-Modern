@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
-import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
+import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createTieredHullMachineModel;
@@ -34,17 +34,20 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachi
 import com.gregtechceu.gtceu.common.machine.storage.QuantumChestMachine;
 import com.gregtechceu.gtceu.common.machine.storage.QuantumTankMachine;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
+import com.gregtechceu.gtceu.data.model.builder.MachineModelBuilder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.fluids.FluidType;
 
@@ -397,5 +400,49 @@ public class TFGMachines {
                     TFGCore.id("block/machines/redstone_port"))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .register();
+
+    public static final MachineDefinition ROTOR_VENT = REGISTRATE
+            .machine("rotor_vent", holder -> new RotorVentPartMachine(holder, GTValues.MV))
+            .rotationState(RotationState.ALL)
+            .modelProperty(IS_FORMED, false)
+            .modelProperty(HAS_ROTOR, false)
+            .modelProperty(IS_ROTOR_SPINNING, false)
+            .modelProperty(IS_EMISSIVE_ROTOR, false)
+            .model(createHeatPumpVentModel())
+            .tooltips(Component.translatable("tfg.tooltip.machine.rotor_vent"))
+            .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
+            .register();
+
+    public static MachineBuilder.ModelInitializer createHeatPumpVentModel() {
+        return (ctx, prov, builder) -> {
+            BlockModelProvider models = prov.models();
+
+            // To change the texture of the Rotor Holder
+            var blockModel = models.nested()
+                    .parent(models.getExistingFile(ROTOR_HOLDER_BLOCK));
+            tieredHullTextures(blockModel, GTValues.MV);
+
+            builder.part(blockModel).end();
+            builder.part(ROTOR_HOLDER_OVERLAY).condition(IS_FORMED, true).end();
+
+            rotorState(builder, models, ROTOR_HOLDER_ROTOR_IDLE, false, false);
+            rotorState(builder, models, ROTOR_HOLDER_ROTOR_IDLE.withSuffix(EMISSIVE_SUFFIX), false, true);
+            rotorState(builder, models, ROTOR_HOLDER_ROTOR_SPINNING, true, false);
+            rotorState(builder, models, ROTOR_HOLDER_ROTOR_SPINNING.withSuffix(EMISSIVE_SUFFIX), true, true);
+
+            builder.addReplaceableTextures("bottom", "top", "side");
+        };
+    }
+
+    // Copy directly from GTm
+    private static void rotorState(MachineModelBuilder<BlockModelBuilder> builder, BlockModelProvider models,
+            ResourceLocation model, boolean spinning, boolean emissive) {
+        builder.partialState()
+                .with(IS_FORMED, true)
+                .with(HAS_ROTOR, true)
+                .with(IS_ROTOR_SPINNING, spinning)
+                .with(IS_EMISSIVE_ROTOR, emissive)
+                .setModel(models.getExistingFile(model));
+    }
 
 }

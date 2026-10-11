@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
@@ -27,6 +28,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
@@ -58,6 +60,14 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
         super(holder, args);
         this.machine = new HeatPumpMachine(this);
     }
+
+    public static final String FRONT_VENT = "HeatPumpFrontVent";
+    public static final String BACK_VENT = "HeatPumpBackVent";
+
+    @Nullable
+    private BlockPos frontVentPos = null;
+    @Nullable
+    private BlockPos backVentPos = null;
 
     //////////////////////////////////////
     // ********* GT Overrides **********//
@@ -118,12 +128,17 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
                     .withStyle(ChatFormatting.RED));
             return;
         }
-
+        Component ventProblem = getVentProblem();
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+
+        } else if (ventProblem != null) {
+            textList.add(ventProblem.copy().withStyle(ChatFormatting.RED));
+
         } else if (getEnergyInputPerSec() < machine.computeEnergyCostPerTick()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy")
                     .withStyle(ChatFormatting.RED));
+
         } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
             for (Component reason : recipeLogic.getFailureReasons()) {
                 textList.add(reason.copy().withStyle(ChatFormatting.RED));
@@ -170,6 +185,15 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     public void onStructureFormed() {
         super.onStructureFormed();
         TFGCore.LOGGER.debug("[heatpump-multi] onStructureFormed, pos={}", getPos());
+        this.frontVentPos = null;
+        this.backVentPos = null;
+        var ctx = getMultiblockState().getMatchContext();
+        if (ctx.get(FRONT_VENT) instanceof BlockPos front) {
+            this.frontVentPos = front.immutable();
+        }
+        if (ctx.get(BACK_VENT) instanceof BlockPos back) {
+            this.backVentPos = back.immutable();
+        }
         if (getLevel() instanceof ServerLevel serverLevel) {
             machine.onLoad(serverLevel);
         }
@@ -180,6 +204,8 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
         super.onStructureInvalid();
         TFGCore.LOGGER.debug("[heatpump-multi] onStructureInvalid, pos={}", getPos());
         machine.onRemoved();
+        this.frontVentPos = null;
+        this.backVentPos = null;
     }
 
     @Override
@@ -208,6 +234,16 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
         showTraceButton = show;
     }
 
+    @Override
+    public @Nullable BlockPos getFrontScanStart() {
+        return frontVentPos != null ? frontVentPos.relative(getFrontFacing()) : null;
+    }
+
+    @Override
+    public @Nullable BlockPos getBackScanStart() {
+        return backVentPos != null ? backVentPos.relative(getFrontFacing().getOpposite()) : null;
+    }
+
     /** Scales energy consumption based on the front region size. */
     public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
         if (machine instanceof HeatPumpMultiblock pump) {
@@ -219,7 +255,10 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
             if (baseEUt <= 0) {
                 return ModifierFunction.NULL;
             }
-            return ModifierFunction.builder().eutMultiplier(Math.max(0, energy / baseEUt)).build();
+            return ModifierFunction.builder()
+                    .eutMultiplier(Math.max(0, energy / baseEUt))
+                    .inputModifier(ContentModifier.multiplier(pump.getConsumptionMultiplier()))
+                    .build();
         }
         return ModifierFunction.NULL;
     }

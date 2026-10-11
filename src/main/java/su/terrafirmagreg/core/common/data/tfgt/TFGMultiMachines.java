@@ -1336,15 +1336,17 @@ public class TFGMultiMachines {
                     GTCEu.id("block/casings/mechanic/machine_casing_turbine_stainless_steel"),
 					GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "APA", " A ")
-                    .aisle("AAA", "PPP", "APA")
-                    .aisle("AXA", "APA", " A ")
+                    .aisle("APA", "AAA")
+                    .aisle("PPP", "ARA")
+                    .aisle("AXA", "AAA")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('A', Predicates.blocks(GTBlocks.CASING_STAINLESS_TURBINE.get())
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('P', Predicates.blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+                    .where('R', Predicates.blocks(TFGMachines.ROTOR_VENT.getBlock())
+                            .addTooltips(Component.translatable("tfg.multiblock.pattern.rotor_vent")))
                     .where(" ", Predicates.any())
                     .build())
             .register();
@@ -1378,6 +1380,7 @@ public class TFGMultiMachines {
                     .where(" ", Predicates.any())
                     .build())
             .register();
+
     public static final MultiblockMachineDefinition HEAT_PUMP = REGISTRATE
             .multiblock("heat_pump", HeatPumpMultiblock::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -1392,17 +1395,21 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_pressure_dark"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("SSS", "SVS", "SSS")
-                    .aisle("   ", " P ", "   ")
+            .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.BACK)
+                    .aisle("SXS", "VFV", "SSS")
                     .aisle("SSS", "SPS", "SSS")
-                    .aisle("SXS", "VVV", "SSS")
+                    .aisle("   ", " P ", "   ").setRepeatable(1, 10)
+                    .aisle("SSS", "SBS", "SSS")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('S', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('P', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
 				    .where('V', Predicates.blocks(ModBlocks.VENT.get()))
+                    .where('F', TFGPredicates.markedBlocks(HeatPumpMultiblock.FRONT_VENT, ModBlocks.VENT.get())
+                            .addTooltips(Component.translatable("tfg.multiblock.pattern.heat_pump.front_vent")))
+                    .where('B', TFGPredicates.markedBlocks(HeatPumpMultiblock.BACK_VENT, TFGMachines.ROTOR_VENT.getBlock())
+                            .addTooltips(Component.translatable("tfg.multiblock.pattern.heat_pump.back_vent")))
                     .where(" ", Predicates.any())
                     .build())
             .register();
