@@ -76,15 +76,17 @@ public final class FluidHelpers
 										fluidType == TFCFluids.SALT_WATER.type().get()
 											|| fluidType == TFCFluids.SPRING_WATER.type().get()
 		|| fluidType == TFGFluids.MUDDY_WATER.type().get()
-		|| fluidType == TFGFluids.MARS_WATER.type().get());
+		|| fluidType == TFGFluids.MARS_WATER.type().get()
+		|| fluidType == TFGFluids.GEYSER_SLURRY.type().get());
     }
 
 	public static double getWaterLikeFluidHeight(Entity entity)
 	{
-		return Math.max(Math.max(Math.max(entity.getFluidTypeHeight(TFCFluids.SALT_WATER.type().get()),
+		return Math.max(Math.max(Math.max(Math.max(entity.getFluidTypeHeight(TFCFluids.SALT_WATER.type().get()),
 			entity.getFluidTypeHeight(TFCFluids.SPRING_WATER.type().get())),
 			entity.getFluidTypeHeight(TFGFluids.MUDDY_WATER.type().get())),
-			entity.getFluidTypeHeight(TFGFluids.MARS_WATER.type().get()));
+			entity.getFluidTypeHeight(TFGFluids.MARS_WATER.type().get())),
+			entity.getFluidTypeHeight(TFGFluids.GEYSER_SLURRY.type().get()));
 	}
 
     /**
@@ -95,7 +97,8 @@ public final class FluidHelpers
         return entity.isEyeInFluidType(TFCFluids.SALT_WATER.type().get())
 				   || entity.isEyeInFluidType(TFCFluids.SPRING_WATER.type().get())
 			|| entity.isEyeInFluidType(TFGFluids.MUDDY_WATER.type().get())
-		|| entity.isEyeInFluidType(TFGFluids.MARS_WATER.type().get());
+		|| entity.isEyeInFluidType(TFGFluids.MARS_WATER.type().get())
+			|| entity.isEyeInFluidType(TFGFluids.GEYSER_SLURRY.type().get());
     }
 
 

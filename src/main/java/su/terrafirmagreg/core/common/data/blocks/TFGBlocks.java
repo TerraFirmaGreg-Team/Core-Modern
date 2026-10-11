@@ -223,7 +223,7 @@ public final class TFGBlocks {
             p -> new LiquidBlock(TFGFluids.SULFUR_FUMES.source(), p))
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .initialProperties(() -> Blocks.WATER)
-            .properties(p -> p.mapColor(MapColor.NONE).noLootTable().noCollission())
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).noLootTable().noCollission())
             .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xe8e8d8))
             .register();
 

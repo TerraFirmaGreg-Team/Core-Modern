@@ -100,7 +100,8 @@ public final class EnvironmentHelpers
         return Helpers.isBlock(state, Blocks.WATER)
 				   || Helpers.isBlock(state, TFCBlocks.SALT_WATER.get())
 				   || Helpers.isBlock(state, TFGBlocks.MARS_WATER.get())
-				   || Helpers.isBlock(state, TFGBlocks.MUDDY_WATER.get());
+				   || Helpers.isBlock(state, TFGBlocks.MUDDY_WATER.get())
+				   || Helpers.isBlock(state, TFGBlocks.GEYSER_SLURRY.get());
     }
 
     public static boolean isAdjacentToWater(LevelAccessor level, BlockPos pos)
