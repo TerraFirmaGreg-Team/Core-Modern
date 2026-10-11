@@ -1,5 +1,14 @@
 package su.terrafirmagreg.core.mixins.common.aliencraft;
 
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.wanmine.wab.entity.Toxlacanth;
+import net.wanmine.wab.init.world.WabItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -66,6 +75,18 @@ public class AncientBeetleEntityMixin extends TamableAnimal {
                 .add(Attributes.FOLLOW_RANGE, 16.0F)
                 .add(Attributes.ARMOR, 10F));
     }
+
+	@Inject(method = "registerGoals", at = @At("TAIL"), remap = true)
+	private void tfg$registerGoals(CallbackInfo ci) {
+		var beetle = (AncientBeetleEntity) (Object) this;
+
+		this.goalSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, true, (entity) -> entity.getType().is(TFGTags.Entities.VenusPrey)));
+		this.goalSelector.addGoal(4, new TemptGoal(beetle, 1.0F, Ingredient.of(TFGTags.Items.VenusianArthropodFoods), false));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0F));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(beetle, Player.class, 0.6F));
+		this.goalSelector.addGoal(7, new RandomLookAroundGoal(beetle));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(beetle));
+	}
 
     @Override
     public boolean fireImmune() {
