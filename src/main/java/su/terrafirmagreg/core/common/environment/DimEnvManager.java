@@ -177,7 +177,7 @@ public class DimEnvManager extends SavedData {
         }
 
         tag.put("oxygenProviders", list);
-        TFGCore.LOGGER.info("Saved {} sealed oxygen providers", list.size());
+        TFGCore.LOGGER.debug("Saved {} sealed oxygen providers", list.size());
 
         // Save pressure providers
         ListTag pressureList = new ListTag();
@@ -193,7 +193,7 @@ public class DimEnvManager extends SavedData {
             }
         }
         tag.put("pressureProviders", pressureList);
-        TFGCore.LOGGER.info("Saved {} sealed pressure providers", pressureList.size());
+        TFGCore.LOGGER.debug("Saved {} sealed pressure providers", pressureList.size());
 
         // Save temperature providers
         ListTag tempList = new ListTag();
@@ -207,7 +207,7 @@ public class DimEnvManager extends SavedData {
             }
         }
         tag.put("temperatureProviders", tempList);
-        TFGCore.LOGGER.info("Saved {} temperature providers", tempList.size());
+        TFGCore.LOGGER.debug("Saved {} temperature providers", tempList.size());
 
         // Save gravity providers
         ListTag gravityList = new ListTag();
@@ -221,7 +221,7 @@ public class DimEnvManager extends SavedData {
             }
         }
         tag.put("gravityProviders", gravityList);
-        TFGCore.LOGGER.info("Saved {} gravity providers", gravityList.size());
+        TFGCore.LOGGER.debug("Saved {} gravity providers", gravityList.size());
 
         return tag;
     }

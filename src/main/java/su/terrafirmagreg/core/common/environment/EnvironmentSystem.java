@@ -197,19 +197,19 @@ public final class EnvironmentSystem {
     public static void cancelValidation(IBlockSensitiveMachine machine) {
         if (validationRequested.remove(machine)) {
             validationQueue.removeIf(job -> job.machine() == machine);
-            TFGCore.LOGGER.info("[validation] cancelValidation, pos={}, identity={}",
+            TFGCore.LOGGER.debug("[validation] cancelValidation, pos={}, identity={}",
                     machine.getPos(), System.identityHashCode(machine));
         }
     }
 
     public static void requestValidation(IBlockSensitiveMachine machine, long earliestTick) {
         if (!validationRequested.add(machine)) {
-            TFGCore.LOGGER.info("[validation] requestValidation SKIPPED (already requested), pos={}, identity={}, earliestTick={}",
+            TFGCore.LOGGER.debug("[validation] requestValidation SKIPPED (already requested), pos={}, identity={}, earliestTick={}",
                     machine.getPos(), System.identityHashCode(machine), earliestTick);
             return;
         }
 
-        TFGCore.LOGGER.info("[validation] requestValidation QUEUED, pos={}, identity={}, earliestTick={}, queueSize={}",
+        TFGCore.LOGGER.debug("[validation] requestValidation QUEUED, pos={}, identity={}, earliestTick={}, queueSize={}",
                 machine.getPos(), System.identityHashCode(machine), earliestTick, validationQueue.size() + 1);
         validationQueue.add(new ValidationJob(machine, earliestTick));
     }
@@ -219,7 +219,7 @@ public final class EnvironmentSystem {
         long currentTick = server != null ? server.getTickCount() : 0;
         machine.setLastValidationTick(currentTick);
 
-        TFGCore.LOGGER.info("[validation] dispatchValidation, pos={}, identity={}, tick={}",
+        TFGCore.LOGGER.debug("[validation] dispatchValidation, pos={}, identity={}, tick={}",
                 machine.getPos(), System.identityHashCode(machine), currentTick);
 
         // Create the AsyncBlockReader on the main thread — it captures ChunkMap safely
@@ -228,13 +228,13 @@ public final class EnvironmentSystem {
         long startTime = System.nanoTime();
         EXECUTOR.submit(() -> {
             long threadStartTime = System.nanoTime();
-            TFGCore.LOGGER.info("[validation] async thread started, pos={}, identity={}, waitedMs={}",
+            TFGCore.LOGGER.debug("[validation] async thread started, pos={}, identity={}, waitedMs={}",
                     machine.getPos(), System.identityHashCode(machine),
                     (threadStartTime - startTime) / 1_000_000);
             try {
                 machine.validateAsync(reader);
                 long elapsed = (System.nanoTime() - threadStartTime) / 1_000_000;
-                TFGCore.LOGGER.info("[validation] async thread finished, pos={}, identity={}, elapsedMs={}",
+                TFGCore.LOGGER.debug("[validation] async thread finished, pos={}, identity={}, elapsedMs={}",
                         machine.getPos(), System.identityHashCode(machine), elapsed);
                 doneValidating.add(machine); // Memory visibility guarantee
             } catch (Exception e) {
@@ -247,7 +247,7 @@ public final class EnvironmentSystem {
     }
 
     private static void finalizeValidation(IBlockSensitiveMachine machine) {
-        TFGCore.LOGGER.info("[validation] finalizeValidation, pos={}, identity={}, isDirty={}",
+        TFGCore.LOGGER.debug("[validation] finalizeValidation, pos={}, identity={}, isDirty={}",
                 machine.getPos(), System.identityHashCode(machine), machine.isDirty());
         validationRequested.remove(machine);
         machine.processValidationResult();
@@ -255,7 +255,7 @@ public final class EnvironmentSystem {
         // If the machine got dirty during the async fill (block changed while scanning),
         // the validation result is stale. Re-request validation via the machine's cooldown logic.
         if (machine.isDirty()) {
-            TFGCore.LOGGER.info("[validation] re-requesting (dirty during async), pos={}, identity={}",
+            TFGCore.LOGGER.debug("[validation] re-requesting (dirty during async), pos={}, identity={}",
                     machine.getPos(), System.identityHashCode(machine));
             machine.requestRevalidation();
         }
@@ -285,7 +285,7 @@ public final class EnvironmentSystem {
             if (job == null || job.earliestTick() > currentTick)
                 break;
             validationQueue.poll();
-            TFGCore.LOGGER.info("[validation] tick {} dispatching job, earliestTick={}, pos={}, identity={}",
+            TFGCore.LOGGER.debug("[validation] tick {} dispatching job, earliestTick={}, pos={}, identity={}",
                     currentTick, job.earliestTick(), job.machine().getPos(), System.identityHashCode(job.machine()));
             dispatchValidation(job.machine());
         }
@@ -295,7 +295,7 @@ public final class EnvironmentSystem {
         profiler.push("finalize");
         IBlockSensitiveMachine machine;
         while ((machine = doneValidating.poll()) != null) {
-            TFGCore.LOGGER.info("[validation] tick {} finalizing, pos={}, identity={}",
+            TFGCore.LOGGER.debug("[validation] tick {} finalizing, pos={}, identity={}",
                     currentTick, machine.getPos(), System.identityHashCode(machine));
             finalizeValidation(machine);
         }
