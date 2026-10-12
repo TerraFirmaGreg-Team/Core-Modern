@@ -2,7 +2,10 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.Map;
 
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.Helpers;
@@ -10,9 +13,14 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.Tags;
 
+import earth.terrarium.adastra.common.tags.ModBlockTags;
+
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.TierLockedAcidBlock;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGBlocks_Venus {
@@ -105,4 +113,18 @@ public class TFGBlocks_Venus {
                     .tag(Tags.Items.SANDSTONE, TFGTags.Items.FLUORAPATITE_SANDSTONE)
                     .build()
                     .register());
+
+    public static final BlockEntry<TierLockedAcidBlock> VENUS_HORNFELS = TFGCore.REGISTRATE.block("venus_hornfels", TierLockedAcidBlock::new)
+            .properties(p -> p
+                    .mapColor(MapColor.COLOR_YELLOW)
+                    .sound(SoundType.NETHER_BRICKS)
+                    .strength(80)
+                    .explosionResistance(1200)
+                    .requiresCorrectToolForDrops()
+                    .pushReaction(PushReaction.IGNORE))
+            .tag(ModBlockTags.VENUS_STONE_REPLACEABLES, BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE, CustomTags.NEEDS_NEUTRONIUM_TOOL)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .build()
+            .register();
 }
