@@ -30,6 +30,7 @@
         "common.ae2.WirelessTerminalMenuHostMixin",
         "common.aliencraft.AlienCactusFlowerBlockMixin",
         "common.aliencraft.AncientBeetleEntityMixin",
+        "common.aliencraft.BigAlienCactusBlockMixin",
         "common.aliencraft.CrawlingLilyBlockMixin",
         "common.aliencraft.GiantStickBugEntityMixin",
         "common.aliencraft.SmallDesertCactusBlockMixin",

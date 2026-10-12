@@ -55,15 +55,21 @@ public class TallDecorativePlantFeature extends Feature<TallDecorativePlantConfi
         int index = 0;
         if (middle != 0) {
             for (int i = 0; i < middle; i++) {
-                bsHeights[index++] = i;
+                if (bsHeights.length > index) {
+                    bsHeights[index++] = i;
+                }
             }
         }
         for (int i = 0; i <= height - plantHeight; i++) {
-            bsHeights[index++] = middle;
+            if (bsHeights.length > index) {
+                bsHeights[index++] = middle;
+            }
         }
         if (middle < plantHeight - 1) {
             for (int i = middle + 1; i < plantHeight; i++) {
-                bsHeights[index++] = i;
+                if (bsHeights.length > index) {
+                    bsHeights[index++] = i;
+                }
             }
         }
 

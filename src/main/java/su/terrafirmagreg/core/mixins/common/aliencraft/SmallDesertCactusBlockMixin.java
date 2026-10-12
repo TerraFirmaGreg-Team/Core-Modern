@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import earth.terrarium.adastra.common.tags.ModBlockTags;
 import en.predator97427fr.aliencraft.block.SmallDesertCactusBlock;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
+
 @Mixin(value = SmallDesertCactusBlock.class, remap = false)
 public class SmallDesertCactusBlockMixin {
 
@@ -33,6 +35,8 @@ public class SmallDesertCactusBlockMixin {
 
     @Inject(method = "entityInside", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$entityInside(BlockState blockstate, Level world, BlockPos pos, Entity entity, CallbackInfo ci) {
-        ci.cancel();
+        if (entity.getType().is(TFGTags.Entities.IgnoresCacti)) {
+            ci.cancel();
+        }
     }
 }
