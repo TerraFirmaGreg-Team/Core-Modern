@@ -122,7 +122,7 @@ public class SurfaceSpikeFeature extends Feature<SurfaceSpikeConfig> {
 
                     float rootDistance = Mth.sqrt((float) (x * x + z * z));
 
-                    if (!(rootDistance > (float) this.radius)) {
+                    if (rootDistance <= (float) this.radius) {
                         int height = this.getHeightAtRadius(rootDistance);
                         if (height > 0) {
                             if (random.nextFloat() < 0.2) {
@@ -157,7 +157,6 @@ public class SurfaceSpikeFeature extends Feature<SurfaceSpikeConfig> {
             if (EnvironmentHelpers.isWorldgenReplaceable(level, pos)) {
                 return false;
             } else {
-                float $$3 = 6.0F;
                 float $$4 = 6.0F / (float) radius;
 
                 for (float $$5 = 0.0F; $$5 < (float) (Math.PI * 2); $$5 += $$4) {
