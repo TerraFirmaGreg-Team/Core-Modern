@@ -1,13 +1,11 @@
 package su.terrafirmagreg.core.world.feature;
 
 import com.mojang.serialization.Codec;
+import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
 
 import net.dries007.tfc.util.EnvironmentHelpers;
-import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
-import net.dries007.tfc.world.chunkdata.RockData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.FloatProvider;
@@ -16,6 +14,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.phys.Vec3;
+
+import earth.terrarium.adastra.common.tags.ModBlockTags;
 
 /**
  * Mostly copied from here (which itself is mostly copied from vanilla), but with TFC rock layers added:
@@ -39,8 +39,6 @@ public class SurfaceSpikeFeature extends Feature<SurfaceSpikeConfig> {
             return false;
         } else {
             final int height = (int) (config.columnRadius().sample(random) * config.heightScale().sample(random));
-            final ChunkDataProvider provider = ChunkDataProvider.get(context.chunkGenerator());
-            final RockData rockData = provider.get(context.level(), origin).getRockData();
 
             int unclampedRadius = (int) (height * config.maxColumnRadiusToCaveHeightRatio());
             int maxRadius = Mth.clamp(unclampedRadius, config.columnRadius().getMinValue(), config.columnRadius().getMaxValue());
@@ -48,7 +46,7 @@ public class SurfaceSpikeFeature extends Feature<SurfaceSpikeConfig> {
             int radius = Mth.randomBetweenInclusive(random, config.columnRadius().getMinValue(), maxRadius);
 
             SurfaceSpikeFeature.LargeDripstone floorDripstone = makeDripstone(
-                    rockData, random, origin, radius, config.bluntness(), config.heightScale());
+                    random, origin, radius, config.bluntness(), config.heightScale());
 
             SurfaceSpikeFeature.WindOffsetter windOffsetter;
 
@@ -68,20 +66,18 @@ public class SurfaceSpikeFeature extends Feature<SurfaceSpikeConfig> {
         }
     }
 
-    private static SurfaceSpikeFeature.LargeDripstone makeDripstone(RockData rockData, RandomSource random, BlockPos root, int radius, FloatProvider bluntness,
+    private static SurfaceSpikeFeature.LargeDripstone makeDripstone(RandomSource random, BlockPos root, int radius, FloatProvider bluntness,
             FloatProvider scale) {
-        return new SurfaceSpikeFeature.LargeDripstone(rockData, root, radius, bluntness.sample(random), scale.sample(random));
+        return new SurfaceSpikeFeature.LargeDripstone(root, radius, bluntness.sample(random), scale.sample(random));
     }
 
     static final class LargeDripstone {
-        private final RockData rockData;
         private BlockPos root;
         private int radius;
         private final double bluntness;
         private final double scale;
 
-        LargeDripstone(RockData rockData, BlockPos root, int radius, double bluntness, double scale) {
-            this.rockData = rockData;
+        LargeDripstone(BlockPos root, int radius, double bluntness, double scale) {
             this.root = root;
             this.radius = radius;
             this.bluntness = bluntness;
@@ -135,9 +131,9 @@ public class SurfaceSpikeFeature extends Feature<SurfaceSpikeConfig> {
                             for (int y = 0; y < height && pos.getY() < maxY; y++) {
                                 BlockPos dripstonePos = windOffsetter.offset(pos);
                                 if (EnvironmentHelpers.isWorldgenReplaceable(level, dripstonePos)) {
-                                    level.setBlock(dripstonePos, rockData.getRock(dripstonePos).hardened().defaultBlockState(), Block.UPDATE_CLIENTS);
+                                    level.setBlock(dripstonePos, AllPaletteStoneTypes.CRIMSITE.getBaseBlock().get().defaultBlockState(), Block.UPDATE_CLIENTS);
                                     placedBlock = true;
-                                } else if (placedBlock && level.getBlockState(dripstonePos).is(BlockTags.NETHER_CARVER_REPLACEABLES)) {
+                                } else if (placedBlock && level.getBlockState(dripstonePos).is(ModBlockTags.VENUS_STONE_REPLACEABLES)) {
                                     break;
                                 }
 
