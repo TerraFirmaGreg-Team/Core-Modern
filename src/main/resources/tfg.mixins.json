@@ -231,6 +231,7 @@
         "common.opposing_force.GuzzlerMixin",
         "common.opposing_force.HangingSpiderMixin",
         "common.opposing_force.LadybugMixin",
+        "common.opposing_force.SlugEggBlockMixin",
         "common.opposing_force.SlugMixin",
         "common.opposing_force.TremblerMixin",
         "common.opposing_force.UmberSpiderMixin",
