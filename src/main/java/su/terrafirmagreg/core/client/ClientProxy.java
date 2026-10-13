@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.client;
 
+import static earth.terrarium.adastra.client.forge.AdAstraClientForge.ITEM_RENDERERS;
+
 import java.util.function.BiConsumer;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +38,6 @@ import su.terrafirmagreg.core.common.particle.*;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;
 import su.terrafirmagreg.core.world.dimension_effects.VenusEffects;
-
-import static earth.terrarium.adastra.client.forge.AdAstraClientForge.ITEM_RENDERERS;
 
 public class ClientProxy extends CommonProxy {
     @SuppressWarnings("removal")

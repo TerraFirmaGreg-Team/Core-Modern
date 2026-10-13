@@ -18,6 +18,7 @@ import net.minecraft.client.model.CamelModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -177,9 +178,11 @@ public class ForgeClientEventListener {
         PoseStack poseStack = event.getPoseStack();
 
         RenderSystem.depthMask(false);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.4f);
+
+        var timeOfDay = level.dimensionType().timeOfDay(level.dayTime());
+        float brightness = Mth.clamp(Mth.cos(timeOfDay * (float) (Math.PI * 2)) * 2.0F + 0.5F, 0.0f, 1.0f);
+
+        RenderSystem.setShaderColor(brightness, brightness, brightness, 1.0f);
 
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindForSetup(VENUS_SKY);
@@ -219,7 +222,6 @@ public class ForgeClientEventListener {
 
         BufferUploader.drawWithShader(bufferBuilder.end());
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.disableBlend();
         RenderSystem.depthMask(true);
     }
 }
