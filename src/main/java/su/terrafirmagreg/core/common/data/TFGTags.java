@@ -104,6 +104,7 @@ public final class TFGTags {
 
         public static final TagKey<Item> FLUORAPATITE_SAND = createItemTag("fluorapatite_sand");
         public static final TagKey<Item> FLUORAPATITE_SANDSTONE = createItemTag("fluorapatite_sandstone");
+        public static final TagKey<Item> SULFIE_FOOD = createItemTag("sulfie_food");
 
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
@@ -150,6 +151,7 @@ public final class TFGTags {
         public static final TagKey<Block> FALLING_CONCUSSIVE = createBlockTag("falling_concussive");
         public static final TagKey<Block> HORNFELS = createBlockTag("hornfels");
         public static final TagKey<Block> UNPOSTER_GROWABLE = createBlockTag("unposter_growable");
+        public static final TagKey<Block> SILK_MOTH_BLOCKS = createBlockTag("silk_moth_blocks");
 
         // Environment system tags
         public static final TagKey<Block> AtmospherePassable = createBlockTag("atmosphere_passable");

@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
@@ -23,9 +25,12 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
+
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 // Taken from Better End, MIT license
 
@@ -56,8 +61,15 @@ public class SilkMoth extends Animal implements FlyingAnimal {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(8, new WanderAroundGoal());
-        this.goalSelector.addGoal(9, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new WanderAroundGoal());
+        this.goalSelector.addGoal(3, new MoveToBlockGoal(this, 1f, 16) {
+            @Override
+            protected boolean isValidTarget(@NotNull LevelReader levelReader, @NotNull BlockPos blockPos) {
+                BlockState state = levelReader.getBlockState(blockPos);
+                return Helpers.isBlock(state, TFGTags.Blocks.SILK_MOTH_BLOCKS);
+            }
+        });
     }
 
     @Override
