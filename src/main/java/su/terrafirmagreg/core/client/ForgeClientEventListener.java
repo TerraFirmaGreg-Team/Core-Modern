@@ -40,6 +40,7 @@ import su.terrafirmagreg.core.client.util.UVRange;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelRenderer;
@@ -137,6 +138,9 @@ public class ForgeClientEventListener {
         TFCBlocks.MAGMA_BLOCKS.values().forEach(registryObject -> {
             event.register(magmaColor, registryObject.get());
         });
+
+        event.register((bs, batg, bp, i) -> 0xe8e8d8, TFGBlocks.SULFUR_FUMES.get());
+        event.register((bs, batg, bp, i) -> 0xa3c0cc, TFGBlocks.GEYSER_SLURRY.get());
 
         AsphaltRoadColorHandlers.registerBlocks(event);
     }
