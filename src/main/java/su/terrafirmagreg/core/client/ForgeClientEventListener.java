@@ -1,6 +1,11 @@
 package su.terrafirmagreg.core.client;
 
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 
 import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
@@ -10,6 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.model.CamelModel;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -20,16 +27,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.ComputeFovModifierEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import earth.terrarium.adastra.api.planets.Planet;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
+import su.terrafirmagreg.core.client.util.UVRange;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
@@ -42,6 +49,17 @@ import su.terrafirmagreg.core.common.perf.SupportCache;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class ForgeClientEventListener {
+
+    private static final ResourceLocation VENUS_SKY = TFGCore.id("textures/environment/venus_sky.png");
+
+    public static final UVRange[] TEXTURE_FACES = new UVRange[] {
+            new UVRange(0, 0, 1.0F / 3.0F, 1.0F / 2.0F), // bottom
+            new UVRange(1.0F / 3.0F, 1.0F / 2.0F, 2.0F / 3.0F, 1), // north
+            new UVRange(2.0F / 3.0F, 0, 1, 1.0F / 2.0F), // south
+            new UVRange(1.0F / 3.0F, 0, 2.0F / 3.0F, 1.0F / 2.0F), // top
+            new UVRange(2.0F / 3.0F, 1.0F / 2.0F, 1, 1), // east
+            new UVRange(0, 1.0F / 2.0F, 1.0F / 3.0F, 1) // west
+    };
 
     /**
      * Clear the overworld version on disconnect so it doesnt leak into next world
@@ -139,5 +157,65 @@ public class ForgeClientEventListener {
                 .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
         event.registerEntityRenderer(TFGEntities.BACTRIAN_CAMEL.get(),
                 ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
+    }
+
+    // Taken from the mod Nether Skyboxes
+    // https://www.curseforge.com/minecraft/mc-mods/nether-skyboxes
+    @SubscribeEvent
+    public static void renderVenusSky(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SKY)
+            return;
+
+        Level level = Minecraft.getInstance().level;
+        if (level == null || level.dimension() != Planet.VENUS)
+            return;
+
+        PoseStack poseStack = event.getPoseStack();
+
+        RenderSystem.depthMask(false);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.3f);
+
+        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+        textureManager.bindForSetup(VENUS_SKY);
+        RenderSystem.setShaderTexture(0, VENUS_SKY);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+
+        Tesselator tessellator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuilder();
+        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+
+        for (int face = 0; face < 6; face++) {
+            poseStack.pushPose();
+            if (face == 1) {
+                poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(90.0F)));
+            } else if (face == 2) {
+                poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(-90.0F)));
+                poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180.0F)));
+            } else if (face == 3) {
+                poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(180.0F)));
+            } else if (face == 4) {
+                poseStack.mulPose(new Quaternionf().rotateZ((float) Math.toRadians(90.0F)));
+                poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(-90.0F)));
+            } else if (face == 5) {
+                poseStack.mulPose(new Quaternionf().rotateZ((float) Math.toRadians(-90.0F)));
+                poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(90.0F)));
+            }
+
+            Matrix4f matrix4f = poseStack.last().pose();
+            UVRange tex = TEXTURE_FACES[face];
+            bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).uv(tex.minU(), tex.minV()).endVertex();
+            bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).uv(tex.minU(), tex.maxV()).endVertex();
+            bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).uv(tex.maxU(), tex.maxV()).endVertex();
+            bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).uv(tex.maxU(), tex.minV()).endVertex();
+
+            poseStack.popPose();
+        }
+
+        BufferUploader.drawWithShader(bufferBuilder.end());
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
     }
 }
