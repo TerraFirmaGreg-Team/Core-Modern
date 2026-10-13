@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.client;
 
-import static earth.terrarium.adastra.client.forge.AdAstraClientForge.ITEM_RENDERERS;
-
 import java.util.function.BiConsumer;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +37,8 @@ import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;
 import su.terrafirmagreg.core.world.dimension_effects.VenusEffects;
 
+import static earth.terrarium.adastra.client.forge.AdAstraClientForge.ITEM_RENDERERS;
+
 public class ClientProxy extends CommonProxy {
     @SuppressWarnings("removal")
     public ClientProxy() {
@@ -65,6 +65,7 @@ public class ClientProxy extends CommonProxy {
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
         // environmental
         event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
+        event.registerSpriteSet(TFGParticles.LARGE_SMOKE.get(), LargeSmokeProvider::new);
         // Decompression event
         event.registerSpriteSet(TFGParticles.DECOMPRESSION.get(), DecompressionParticle.Provider::new);
         // for machines
