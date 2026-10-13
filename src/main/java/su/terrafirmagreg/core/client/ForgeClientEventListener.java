@@ -175,7 +175,7 @@ public class ForgeClientEventListener {
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.3f);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.4f);
 
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindForSetup(VENUS_SKY);
