@@ -57,10 +57,12 @@ import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamel;
 import su.terrafirmagreg.core.common.entity.camels.TFCDromedaryCamel;
 import su.terrafirmagreg.core.common.entity.charger.ChargerData;
+import su.terrafirmagreg.core.common.entity.dragonfly.Dragonfly;
 import su.terrafirmagreg.core.common.entity.fox.FoxData;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.entity.silk_moth.SilkMoth;
 import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.entity.soarer.SoarerData;
@@ -107,6 +109,8 @@ public final class EntityTooltips
 		registry.register("mongoose", TFC_1_21, TFCMongoose.class);
 		registry.register("fox", TFC_FOX, TFCFox.class);
 		registry.register("tamed_fox", TFG_FOX, TFGFox.class);
+		registry.register("silk_moth", TFG_SILK_MOTH, SilkMoth.class);
+		registry.register("dragonfly", TFG_DRAGONFLY, Dragonfly.class);
     }
 
     public static final EntityTooltip FROG = (level, entity, tooltip) -> {
@@ -385,6 +389,14 @@ public final class EntityTooltips
 
 	private static final EntityTooltip TFC_1_21 = (level, entity, tooltip) -> {
 		tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.tfc"));
+	};
+
+	private static final EntityTooltip TFG_SILK_MOTH = (level, entity, tooltip) -> {
+		tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.betterend"));
+	};
+
+	private static final EntityTooltip TFG_DRAGONFLY = (level, entity, tooltip) -> {
+		tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.betterend"));
 	};
 
 	private static final EntityTooltip TFG_ANIMAL = (level, entity, tooltip) -> {

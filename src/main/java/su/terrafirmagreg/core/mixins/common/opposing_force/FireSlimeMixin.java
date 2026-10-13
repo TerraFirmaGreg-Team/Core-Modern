@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.mixins.common.opposing_force;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.unusualmodding.opposing_force.entity.FireSlime;
@@ -13,12 +14,18 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 @Mixin(value = FireSlime.class, remap = false)
 public class FireSlimeMixin extends SummonableMonster {
 
     protected FireSlimeMixin(EntityType<? extends SummonableMonster> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Inject(method = "<init>", at = @At("TAIL"), remap = false)
+    private void tfg$init(EntityType<? extends SummonableMonster> entityType, Level level, CallbackInfo ci) {
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
     }
 
     @Inject(method = "createAttributes", at = @At("HEAD"), remap = false, cancellable = true)
