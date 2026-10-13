@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.environment;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -36,19 +37,20 @@ public class PressureProvider {
     }
 
     /**
-     * Checks if this provider supplies pressure protection to the given position.
+     * Gets the pressure this provider supplies to the given position.
      * Works even when the machine is unloaded, using cached room data.
      */
-    public boolean hasSafePressure(BlockPos pos) {
+    public Optional<Float> getPressure(BlockPos pos) {
         if (!roomScan.isSealed()) {
-            return false;
+            return Optional.empty();
         }
-
         if (attachedMachine != null && !attachedMachine.isWorking()) {
-            return false;
+            return Optional.empty();
         }
-
-        return roomScan.containsEnvelope(pos);
+        if (roomScan.containsEnvelope(pos)) {
+            return Optional.of(1.0f);
+        }
+        return Optional.empty();
     }
 
     public boolean isMachineLoaded() {

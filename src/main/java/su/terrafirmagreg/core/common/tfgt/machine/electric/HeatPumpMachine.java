@@ -257,7 +257,14 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         manager = EnvironmentSystem.getManager(level);
         provider = manager.getOrCreateTempProvider(getPos());
         provider.attach(this);
+        manager.setTempProviderValue(getPos(), host.getTargetTemperature());
         requestValidation();
+    }
+
+    public void applyTargetTemperature(float temperature) {
+        if (manager != null) {
+            manager.setTempProviderValue(getPos(), temperature);
+        }
     }
 
     public void onUnload() {
