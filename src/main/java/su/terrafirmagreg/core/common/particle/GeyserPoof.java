@@ -42,7 +42,7 @@ public class GeyserPoof extends TextureSheetParticle {
 
         this.yd = 0.05f;
 
-        float speed = 0.4f;
+        float speed = 0.2f;
         this.xd = xWind * speed;
         this.zd = zWind * speed;
     }
