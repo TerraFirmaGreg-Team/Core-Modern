@@ -25,6 +25,8 @@ public class GravityApiImplMixin {
 
     @Inject(method = "getGravity(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)F", at = @At("HEAD"), cancellable = true)
     private void tfg$getGravity(Level level, BlockPos pos, CallbackInfoReturnable<Float> cir) {
+        if (!DimensionEnvironment.isRegistered(level.dimension()))
+            return;
         cir.setReturnValue(EnvironmentSystem.getGravity(level, pos) / DimensionEnvironment.EARTH_GRAVITY);
     }
 

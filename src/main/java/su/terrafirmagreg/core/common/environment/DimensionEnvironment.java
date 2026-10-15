@@ -16,6 +16,8 @@ import earth.terrarium.adastra.api.planets.Planet;
  * <p>Pressure is in atmospheres (atm): Earth = 1.0, vacuum = 0.0, Venus = 90.0.
  * Pressure determines whether decompression/compression events occur when a
  * sealed room is breached, and how much extra oxygen is consumed during breach.
+ * 
+ * Dimension temperature is currently unused since it's biome-based.
  */
 public record DimensionEnvironment(
         boolean hasOxygen,
@@ -57,5 +59,9 @@ public record DimensionEnvironment(
      */
     public static DimensionEnvironment get(ResourceKey<Level> dimension) {
         return REGISTRY.getOrDefault(dimension, EARTH_LIKE);
+    }
+
+    public static boolean isRegistered(ResourceKey<Level> dimension) {
+        return REGISTRY.containsKey(dimension);
     }
 }
