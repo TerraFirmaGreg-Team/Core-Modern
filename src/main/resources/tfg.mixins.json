@@ -196,6 +196,7 @@
         "common.minecraft.HugeFungusFeatureMixin",
         "common.minecraft.IBlockLootSubProviderAccessor",
         "common.minecraft.ItemStackMixin",
+        "common.minecraft.LevelMixin",
         "common.minecraft.MinecartFurnaceMixin",
         "common.minecraft.MinecraftServerPackOrderMixin",
         "common.minecraft.ModelProviderMixin",
@@ -357,6 +358,7 @@
         "client.iris.IrisModernExclusiveUniformsMixin",
         "client.ldlib.ModularUIGuiContainerMixin",
         "client.minecraft.CameraMixin",
+        "client.minecraft.ClientLevelMixin",
         "client.minecraft.CreateWorldScreenMixin",
         "client.minecraft.CustomHeadLayerMixin",
         "client.minecraft.GameTabMixin",
@@ -374,6 +376,7 @@
         "client.tmrv.TooManyRecipeViewersModMixin",
         "common.ad_astra.PlanetsScreenMixin",
         "common.minecraft.FogRendererMixin",
+        "common.minecraft.LevelRendererMixin",
         "common.tfchotornot.ClientEventHandlerMixin"
     ],
     "required": true,
