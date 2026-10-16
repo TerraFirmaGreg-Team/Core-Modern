@@ -185,4 +185,7 @@ dependencies {
 
     // I <3 TFC
     modCompileOnly "curse.maven:ihearttfc-1118578:5901425"
+
+    // Player: real zero gravity
+    modCompileOnly "maven.modrinth:player-real-zero-gravity:1.0.1"
 }

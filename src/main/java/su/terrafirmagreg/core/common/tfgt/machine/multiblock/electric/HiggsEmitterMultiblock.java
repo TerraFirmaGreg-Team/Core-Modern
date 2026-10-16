@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -18,8 +19,12 @@ import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
@@ -27,6 +32,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+
+import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
 import su.terrafirmagreg.core.common.environment.*;
@@ -43,6 +50,13 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
+
+    public static final float MAX_TARGET_GRAVITY = 100f;
+
+    @Persisted
+    @DescSynced
+    @Getter
+    private float targetGravity = DimensionEnvironment.EARTH_GRAVITY;
 
     @Nullable
     private GravityProvider provider;
@@ -107,15 +121,59 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     @Override
     public Widget createUIWidget() {
         int width = 180;
-        int height = 78;
+        int height = 64;
         var group = new WidgetGroup(0, 0, width, height);
         group.setBackground(ResourceBorderTexture.BORDERED_BACKGROUND);
         group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
                 .setMaxWidthLimit(width - 8));
+
+        group.addWidget(new LabelWidget(6, 45,
+                () -> Component.translatable("tfg.machine.higgs_emitter.gravity").getString()));
+        var gravityField = new TextFieldWidget(100, 44, 74, 14,
+                null,
+                s -> setTargetGravity(parseTargetGravity(s)));
+        gravityField.setNumbersOnly(0f, MAX_TARGET_GRAVITY);
+        gravityField.setCurrentString(formatTargetGravity());
+        gravityField.setHoverTooltips(Component.translatable("tfg.machine.higgs_emitter.gravity.tooltip",
+                String.format(Locale.ROOT, "%.3f", DimensionEnvironment.EARTH_GRAVITY)));
+        group.addWidget(gravityField);
+
         return group;
     }
 
+    private String formatTargetGravity() {
+        return String.format(Locale.ROOT, "%.3f", targetGravity);
+    }
+
+    private float parseTargetGravity(String value) {
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return targetGravity;
+        }
+    }
+
+    private void setTargetGravity(float value) {
+        targetGravity = value;
+        if (!isRemote()) {
+            applyGravityToProvider();
+        }
+    }
+
+    private void applyGravityToProvider() {
+        if (manager == null) {
+            if (!(getLevel() instanceof ServerLevel serverLevel))
+                return;
+            manager = EnvironmentSystem.getManager(serverLevel);
+        }
+        manager.setGravityProviderValue(getPos(), targetGravity);
+    }
+
     private void addStatusText(List<Component> textList) {
+        if (!isFormed()) {
+            textList.add(Component.translatable("tfg.machine.unformed").withStyle(ChatFormatting.GRAY));
+            return;
+        }
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
         } else if (getEnergyInputPerSec() < computeEnergyPerTick()) {
@@ -155,10 +213,11 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
 
         manager = EnvironmentSystem.getManager(serverLevel);
         int radius = getRadius();
+        float gravity = targetGravity;
         if (manager.getGravityProviders().containsKey(getPos())) {
-            provider = manager.updateGravityProvider(getPos(), radius);
+            provider = manager.updateGravityProvider(getPos(), radius, gravity);
         } else {
-            provider = manager.getOrCreateGravityProvider(getPos(), radius);
+            provider = manager.getOrCreateGravityProvider(getPos(), radius, gravity);
         }
         provider.attach(this);
     }

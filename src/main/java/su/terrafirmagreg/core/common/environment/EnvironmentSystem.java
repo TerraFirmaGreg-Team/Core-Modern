@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -84,23 +85,24 @@ public final class EnvironmentSystem {
     }
 
     /**
-     * Checks if a position has safe temperature (server-side, or client-side cache).
+     * Gets the temperature at a position (server-side, or client-side cache).
      *
      * @param level The level to check in
      * @param pos The position to check
-     * @return true if the position has safe temperature
+     * @return the temperature at the position
      */
-    public static boolean hasTemperature(Level level, BlockPos pos) {
+    public static float getTemperature(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
-            return EnvironmentClientCache.hasNormalTemperature(pos);
+            Float cached = EnvironmentClientCache.getTemperature(pos);
+            return cached != null ? cached : Climate.getTemperature(level, pos);
         }
 
         DimEnvManager manager = managers.get(level.dimension());
         if (manager == null) {
-            return false;
+            return Climate.getTemperature(level, pos);
         }
 
-        return manager.hasTemperature(pos);
+        return manager.getTemperature(pos);
     }
 
     /**
@@ -108,9 +110,9 @@ public final class EnvironmentSystem {
      *
      * @param level The level to check in
      * @param pos The position to check
-     * @return target temperature, if any.
+     * @return target temperature if any.
      */
-    public static Optional<Float> getTargetTemperature(Level level, BlockPos pos) {
+    public static Optional<Float> getHeatPumpTemperature(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
             return Optional.empty();
         }
@@ -120,58 +122,51 @@ public final class EnvironmentSystem {
             return Optional.empty();
         }
 
-        return manager.getTargetTemperature(pos);
+        return manager.getHeatPumpTemperature(pos);
     }
 
     /**
-     * Checks if a position has safe pressure (server-side, or client-side cache).
-     * True if inside a sealed, active pressure room shielding from dangerous ambient pressure
-     * (e.g. Europa ocean floor).
-     */
-    public static boolean hasSafePressure(Level level, BlockPos pos) {
-        if (!(level instanceof ServerLevel)) {
-            return EnvironmentClientCache.hasNormalPressure(pos);
-        }
-
-        DimEnvManager manager = managers.get(level.dimension());
-        if (manager == null) {
-            return false;
-        }
-
-        return manager.hasSafePressure(pos);
-    }
-
-    /**
-     * Checks if a dimension has normal gravity (planet-level, no per-position providers yet).
-     *
-     * @param level The level to check
-     * @return true if the dimension has Earth-like gravity
-     */
-    public static boolean hasNormalGravity(Level level) {
-        DimEnvManager manager = managers.get(level.dimension());
-        return manager != null && manager.getEnvironment().hasNormalGravity();
-    }
-
-    /**
-     * Checks if a position has normal gravity (server-side, or client-side cache).
-     * True if the dimension naturally has Earth-like gravity, or the position
-     * is inside an active gravity machine's bubble.
+     * Gets the pressure at a position (server-side, or client-side cache).
+     * Sealed pressure rooms give their internal pressure, otherwise the ambient pressure.
      *
      * @param level The level to check in
      * @param pos The position to check
-     * @return true if the position has normal gravity
+     * @return the pressure at the position
      */
-    public static boolean hasNormalGravity(Level level, BlockPos pos) {
+    public static float getPressure(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
-            return EnvironmentClientCache.hasNormalGravity(pos);
+            Float cached = EnvironmentClientCache.getPressure(pos);
+            return cached != null ? cached : DimensionEnvironment.get(level.dimension()).pressure();
         }
 
         DimEnvManager manager = managers.get(level.dimension());
         if (manager == null) {
-            return false;
+            return DimensionEnvironment.get(level.dimension()).pressure();
         }
 
-        return manager.hasNormalGravity(pos);
+        return manager.getPressure(pos);
+    }
+
+    /**
+     * Gets the gravity at a position (server-side, or client-side cache).
+     * Gravity machine bubble override the dimension's natural gravity.
+     *
+     * @param level The level to check in
+     * @param pos The position to check
+     * @return the gravity at the position
+     */
+    public static float getGravity(Level level, BlockPos pos) {
+        if (!(level instanceof ServerLevel)) {
+            Float cached = EnvironmentClientCache.getGravity(pos);
+            return cached != null ? cached : DimensionEnvironment.get(level.dimension()).gravity();
+        }
+
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager == null) {
+            return DimensionEnvironment.get(level.dimension()).gravity();
+        }
+
+        return manager.getGravity(pos);
     }
 
     // ==================== Async Handling ====================
