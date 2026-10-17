@@ -133,7 +133,7 @@ dependencies {
     modImplementation "maven.modrinth:tfcgenviewer:1.5.1"
 
     // TFC Water Flasks, waterflasks-3.0.10.jar, Oct 2, 2025
-    modCompileOnly "curse.maven:water-flasks-354353:7056478"
+    modImplementation "curse.maven:water-flasks-354353:7056478"
 
     // Sacks and such, Sacks 'N Such-1.20.1-1.2.6.jar, Mar 9, 2026
     modImplementation "curse.maven:sacks-n-such-695822:7732041"

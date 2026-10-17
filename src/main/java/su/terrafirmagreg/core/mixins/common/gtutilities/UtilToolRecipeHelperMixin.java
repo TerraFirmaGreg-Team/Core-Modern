@@ -19,6 +19,8 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.neganote.gtutilities.common.tools.UtilToolType;
 import net.neganote.gtutilities.common.tools.recipe.UtilToolRecipeHelper;
 
+import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
+import su.terrafirmagreg.core.common.data.tfgt.TFGToolTypes;
 import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialFlags;
 
 @Mixin(value = UtilToolRecipeHelper.class, remap = false)
@@ -74,5 +76,10 @@ public abstract class UtilToolRecipeHelperMixin {
         } else if (property.hasType(UtilToolType.BUZZSAW_ZPM)) {
             addElectricToolRecipe(provider, TagPrefix.toolHeadBuzzSaw, new GTToolType[] { UtilToolType.BUZZSAW_ZPM }, material);
         }
+    }
+
+    @Inject(method = "processElectricTool", at = @At("TAIL"), remap = false)
+    private static void tfg$processElectricScythe(Consumer<FinishedRecipe> provider, ToolProperty property, Material material, CallbackInfo ci) {
+        addElectricToolRecipe(provider, TFGTagPrefix.toolHeadScythe, TFGToolTypes.ELECTRIC_SCYTHES, material);
     }
 }
