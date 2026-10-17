@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.client;
 
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
-import com.mojang.blaze3d.vertex.*;
 
 import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
@@ -22,12 +21,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
+import su.terrafirmagreg.core.client.renderer.CloudRendererHelper;
 import su.terrafirmagreg.core.client.renderer.SkyboxRenderer;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGEntities;
@@ -148,5 +149,10 @@ public class ForgeClientEventListener {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
             SkyboxRenderer.renderVenusSky(event);
         }
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        CloudRendererHelper.onClientTick();
     }
 }
