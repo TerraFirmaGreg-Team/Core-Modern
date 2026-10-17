@@ -55,19 +55,23 @@ public abstract class LevelRendererMixin {
     private void tfg$renderLevel(LevelRenderer instance, PoseStack poseStack, Matrix4f projectionMatrix, float partialTick, double camX, double camY, double camZ) {
         assert level != null;
         if (level.dimension() == Level.OVERWORLD) {
+
             CloudRendererHelper.render(0, 0.1f, CloudRendererHelper.earthCloudColor,
                     () -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ));
+
         } else if (level.dimension() == Planet.VENUS) {
+
             CloudRendererHelper.render(0, 0.5f, CloudRendererHelper.bottomVenusCloudColor,
                     () -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ));
 
-			if (TFGConfig.CLIENT.VENUS_CLOUD_LAYERS.get()) {
-				CloudRendererHelper.render(30, 1f, CloudRendererHelper.middleVenusCloudColor,
-					() -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ));
+            if (TFGConfig.CLIENT.VENUS_CLOUD_LAYERS.get()) {
+				// Add some offsets to the X and Z so it doesn't look so samey
+                CloudRendererHelper.render(30, 1f, CloudRendererHelper.middleVenusCloudColor,
+                        () -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX + 1000, camY, camZ + 100));
 
-				CloudRendererHelper.render(60, 1.5f, CloudRendererHelper.topVenusCloudColor,
-					() -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ));
-			}
+                CloudRendererHelper.render(60, 1.5f, CloudRendererHelper.topVenusCloudColor,
+                        () -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX + 2000, camY, camZ + 200));
+            }
         }
         // TODO: jupiter
     }
