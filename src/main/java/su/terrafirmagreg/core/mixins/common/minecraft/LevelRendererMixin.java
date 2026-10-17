@@ -42,13 +42,13 @@ public abstract class LevelRendererMixin {
 
     @ModifyVariable(method = "renderClouds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/DimensionSpecialEffects;getCloudHeight()F"), argsOnly = true, ordinal = 0)
     private double tfg$shiftX(double camX) {
-        final double vanillaDrift = ((float) ticks + tfg$partialTick) * 0.03f; //subtract original movement
-        return camX - vanillaDrift - CloudRendererHelper.offsetX(tfg$partialTick) * CloudRendererHelper.currentSpeedMult; //add our offset
+        final double vanillaDrift = ((float) ticks + tfg$partialTick) * 0.03f; // Subtract original movement
+        return camX - vanillaDrift - CloudRendererHelper.offsetX(tfg$partialTick) * CloudRendererHelper.currentSpeedMult; // Add our offset
     }
 
     @ModifyVariable(method = "renderClouds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/DimensionSpecialEffects;getCloudHeight()F"), argsOnly = true, ordinal = 2)
     private double tfg$shiftZ(double camZ) {
-        return camZ - CloudRendererHelper.offsetZ(tfg$partialTick) * CloudRendererHelper.currentSpeedMult; //add our offset
+        return camZ - CloudRendererHelper.offsetZ(tfg$partialTick) * CloudRendererHelper.currentSpeedMult; // Add our offset
     }
 
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderClouds(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FDDD)V"))

@@ -19,6 +19,8 @@ import com.bawnorton.mixinsquared.api.MixinAnnotationAdjuster;
 public class TFGMixinAnnotationAdjuster implements MixinAnnotationAdjuster {
     @Override
     public @Nullable AdjustableAnnotationNode adjust(List<String> targetClassNames, String mixinClassName, MethodNode method, AdjustableAnnotationNode annotation) {
+
+		// Remove ad astra's cloud rendering for acid rain, while keeping its mixin for changing the rain itself
         if (mixinClassName.equals("earth.terrarium.adastra.mixins.client.LevelRendererMixin") && annotation.is(Inject.class)) {
             var injectNode = annotation.as(AdjustableInjectNode.class);
             if (injectNode.getMethod().contains("renderClouds")) {
