@@ -84,20 +84,20 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     @Override
     public void onLoad() {
         super.onLoad();
-        TFGCore.LOGGER.info("[oxy-multiblock] onLoad, pos={}", getPos());
+        TFGCore.LOGGER.debug("[oxy-multiblock] onLoad, pos={}", getPos());
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        TFGCore.LOGGER.info("[oxy-multiblock] onUnload, pos={}", getPos());
+        TFGCore.LOGGER.debug("[oxy-multiblock] onUnload, pos={}", getPos());
         machine.onUnload();
     }
 
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
-        TFGCore.LOGGER.info("[oxy-multiblock] onStructureFormed, pos={}", getPos());
+        TFGCore.LOGGER.debug("[oxy-multiblock] onStructureFormed, pos={}", getPos());
         if (getLevel() instanceof ServerLevel serverLevel) {
             machine.onLoad(serverLevel);
         }
@@ -106,13 +106,13 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
-        TFGCore.LOGGER.info("[oxy-multiblock] onStructureInvalid, pos={}", getPos());
+        TFGCore.LOGGER.debug("[oxy-multiblock] onStructureInvalid, pos={}", getPos());
         machine.onRemoved();
     }
 
     @Override
     public void onMachineRemoved() {
-        TFGCore.LOGGER.info("[oxy-multiblock] onMachineRemoved, pos={}", getPos());
+        TFGCore.LOGGER.debug("[oxy-multiblock] onMachineRemoved, pos={}", getPos());
         machine.onRemoved();
     }
 

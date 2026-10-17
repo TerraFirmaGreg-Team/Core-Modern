@@ -1,11 +1,13 @@
 package su.terrafirmagreg.core.common.tfgt.machine.electric;
 
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.core.BlockPos;
 
 /**
  * Implemented by GT wrappers that host a {@link HeatPumpMachine}.
  */
-public interface IHeatPumpHost extends IRecipeLogicMachine {
+public interface IHeatPumpHost extends IRotorVentHost {
 
     /**
      * The EU/t the machine can draw from its energy input (0 when no hatch / not formed).
@@ -19,4 +21,10 @@ public interface IHeatPumpHost extends IRecipeLogicMachine {
     boolean showTraceButton();
 
     void setShowTraceButton(boolean show);
+
+    @Nullable
+    BlockPos getFrontScanStart();
+
+    @Nullable
+    BlockPos getBackScanStart();
 }
