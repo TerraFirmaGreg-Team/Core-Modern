@@ -42,7 +42,7 @@ public class NoxiousGas extends TextureSheetParticle {
 
         this.yd = 0.05f;
 
-        float speed = 0.2f;
+        float speed = 0.1f;
         this.xd = xWind * speed;
         this.zd = zWind * speed;
     }

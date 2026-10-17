@@ -18,6 +18,8 @@ import net.minecraft.world.level.storage.WritableLevelData;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
+import su.terrafirmagreg.core.config.TFGConfig;
+
 @Mixin(ClientLevel.class)
 public abstract class ClientLevelMixin extends Level {
 
@@ -30,7 +32,7 @@ public abstract class ClientLevelMixin extends Level {
 
     @Inject(method = "getSkyDarken", at = @At("RETURN"), cancellable = true, require = 0)
     private void tfg$getSkyDarken(float partialTick, CallbackInfoReturnable<Float> cir) {
-        if (this.dimension() == Planet.VENUS) {
+        if (this.dimension() == Planet.VENUS && TFGConfig.CLIENT.VENUS_DIMMING.get()) {
             cir.setReturnValue(cir.getReturnValueF() * 0.7f);
         }
     }

@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.client.renderer;
 
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -18,13 +19,21 @@ import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.UVRange;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 // Taken from the mod Nether Skyboxes
 // https://www.curseforge.com/minecraft/mc-mods/nether-skyboxes
 
 public class SkyboxRenderer {
 
-    private static final ResourceLocation VENUS_SKY = TFGCore.id("textures/environment/venus_sky_16px.png");
+    public enum Option {
+        REALISTIC,
+        PIXELATED,
+        SOLID_COLOR
+    }
+
+    @Nullable
+    private static final ResourceLocation VENUS_SKY;
     private static final TextureManager textureMgr;
 
     public static final UVRange[] TEXTURE_FACES = new UVRange[] {
@@ -38,9 +47,18 @@ public class SkyboxRenderer {
 
     static {
         textureMgr = Minecraft.getInstance().getTextureManager();
+
+        VENUS_SKY = switch (TFGConfig.CLIENT.VENUS_SKYBOX.get()) {
+            case PIXELATED -> TFGCore.id("textures/environment/venus_sky_16px.png");
+            case REALISTIC -> TFGCore.id("textures/environment/venus_sky_realistic.png");
+            default -> null;
+        };
     }
 
     public static void renderVenusSky(RenderLevelStageEvent event) {
+        if (VENUS_SKY == null)
+            return;
+
         Level level = Minecraft.getInstance().level;
         if (level == null || level.dimension() != Planet.VENUS)
             return;

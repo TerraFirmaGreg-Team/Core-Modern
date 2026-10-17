@@ -40,9 +40,10 @@ public class GeyserPoof extends TextureSheetParticle {
 
         this.setSpriteFromAge(this.spriteSet);
 
-        this.yd = 0.05f;
+        float verticalSpeed = 0.05f;
+        this.yd = (age * -0.003f + 1) * verticalSpeed;
 
-        float speed = 0.2f;
+        float speed = 0.1f;
         this.xd = xWind * speed;
         this.zd = zWind * speed;
     }
