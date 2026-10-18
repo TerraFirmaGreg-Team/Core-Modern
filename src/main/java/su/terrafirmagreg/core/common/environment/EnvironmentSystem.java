@@ -220,6 +220,8 @@ public final class EnvironmentSystem {
         // Create the AsyncBlockReader on the main thread — it captures ChunkMap safely
         AsyncBlockReader reader = new AsyncBlockReader(machine.getServerLevel());
 
+        machine.prepareValidation();
+
         long startTime = System.nanoTime();
         EXECUTOR.submit(() -> {
             long threadStartTime = System.nanoTime();

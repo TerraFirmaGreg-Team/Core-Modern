@@ -44,6 +44,12 @@ public class TemperatureProvider {
     /** Whether the exhaust is trapped (back region sealed), making the machine unable to work. */
     private boolean blocked = false;
 
+    /** Oxygen providers whose region the temperature provider is inheriting. */
+    @Nullable
+    private OxygenProvider inheritedFront;
+    @Nullable
+    private OxygenProvider inheritedBack;
+
     /** Cached chunk footprint. */
     private Set<ChunkPos> affectedChunks = Set.of();
 
@@ -62,18 +68,21 @@ public class TemperatureProvider {
      * Called on the main thread by the machine driver.
      */
     public void setRegions(RoomScan frontScan, RoomScan backScan, boolean blocked,
-            BlockPos exhaustAnchor, int exhaustRadius) {
+            BlockPos exhaustAnchor, int exhaustRadius,
+            @Nullable OxygenProvider inheritedFront, @Nullable OxygenProvider inheritedBack) {
         this.frontScan = frontScan == null ? RoomScan.empty() : frontScan;
         this.backScan = backScan == null ? RoomScan.empty() : backScan;
         this.blocked = blocked;
         this.exhaustAnchor = exhaustAnchor == null ? machinePos : exhaustAnchor;
         this.exhaustRadius = exhaustRadius;
+        this.inheritedFront = inheritedFront;
+        this.inheritedBack = inheritedBack;
         this.affectedChunks = computeAffectedChunks();
     }
 
     private Set<ChunkPos> computeAffectedChunks() {
-        Set<ChunkPos> chunks = new HashSet<>(frontScan.touchedChunks());
-        chunks.addAll(backScan.touchedChunks());
+        Set<ChunkPos> chunks = new HashSet<>(getFrontScan().touchedChunks());
+        chunks.addAll(getBackScan().touchedChunks());
 
         int r = Math.max(0, exhaustRadius);
         int minCX = (exhaustAnchor.getX() - r) >> 4;
@@ -89,11 +98,11 @@ public class TemperatureProvider {
     }
 
     public RoomScan getFrontScan() {
-        return frontScan;
+        return inheritedFront != null ? inheritedFront.getRoomScan() : frontScan;
     }
 
     public RoomScan getBackScan() {
-        return backScan;
+        return inheritedBack != null ? inheritedBack.getRoomScan() : backScan;
     }
 
     public BlockPos getExhaustAnchor() {
@@ -101,6 +110,8 @@ public class TemperatureProvider {
     }
 
     public boolean isBlocked() {
+        if (inheritedBack != null)
+            return inheritedBack.getRoomScan().isSealed();
         return blocked;
     }
 
@@ -117,17 +128,18 @@ public class TemperatureProvider {
      * Gets the temperature this provider supplies to the given position.
      */
     public Optional<Float> getTemperature(BlockPos pos) {
-        if (blocked)
+        if (isBlocked())
             return Optional.empty();
         if (attachedMachine != null && !attachedMachine.isWorking()) {
             return Optional.empty();
         }
 
-        if (frontScan.isSealed() && frontScan.containsEnvelope(pos)) {
+        RoomScan front = getFrontScan();
+        if (front.isSealed() && front.containsEnvelope(pos)) {
             return Optional.of(targetTemperature);
         }
 
-        if (frontScan.isSealed() && level != null && isWithinExhaust(pos)) {
+        if (front.isSealed() && level != null && isWithinExhaust(pos)) {
             float climate = Climate.getTemperature(level, pos);
             double dist = Math.sqrt(pos.distSqr(exhaustAnchor));
             float falloff = (float) Math.max(0.0, 1.0 - dist / exhaustRadius);

@@ -4,6 +4,8 @@ import static su.terrafirmagreg.core.common.environment.PassabilityChecker.getCa
 
 import java.util.*;
 
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.util.climate.Climate;
@@ -327,6 +329,24 @@ public class DimEnvManager extends SavedData {
         }
         profiler.pop();
         return false;
+    }
+
+    /**
+     * Gets the sealed oxygen provider whose room contains a position.
+     */
+    public @Nullable OxygenProvider getOxygenProviderAt(BlockPos pos) {
+        if (oxygenIndex.isEmpty())
+            return null;
+
+        Set<OxygenProvider> providerSet = oxygenIndex.get(new ChunkPos(pos));
+        if (providerSet != null) {
+            for (OxygenProvider provider : providerSet) {
+                RoomScan scan = provider.getRoomScan();
+                if (scan.isSealed() && scan.containsEnvelope(pos))
+                    return provider;
+            }
+        }
+        return null;
     }
 
     // ==================== Pressure Queries ====================
