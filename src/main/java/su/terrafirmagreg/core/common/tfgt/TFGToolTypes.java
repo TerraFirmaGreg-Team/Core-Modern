@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt;
+package su.terrafirmagreg.core.common.tfgt;
 
 import java.util.function.Supplier;
 
@@ -29,9 +29,10 @@ public final class TFGToolTypes {
     public static final GTToolType SCYTHE_HV = electricScythe("hv", GTValues.HV, 5.0F, 4, 3, ToolHelper.SUPPLY_POWER_UNIT_HV);
     public static final GTToolType SCYTHE_EV = electricScythe("ev", GTValues.EV, 6.0F, 5, 3, ToolHelper.SUPPLY_POWER_UNIT_EV);
     public static final GTToolType SCYTHE_IV = electricScythe("iv", GTValues.IV, 7.0F, 6, 4, ToolHelper.SUPPLY_POWER_UNIT_IV);
+    public static final GTToolType SCYTHE_LuV = electricScythe("luv", GTValues.LuV, 8.0F, 7, 4, UtilToolHelper.SUPPLY_POWER_UNIT_LUV);
     public static final GTToolType SCYTHE_ZPM = electricScythe("zpm", GTValues.ZPM, 9.0F, 8, 4, UtilToolHelper.SUPPLY_POWER_UNIT_ZPM);
 
-    public static final GTToolType[] ELECTRIC_SCYTHES = { SCYTHE_LV, SCYTHE_MV, SCYTHE_HV, SCYTHE_EV, SCYTHE_IV, SCYTHE_ZPM };
+    public static final GTToolType[] ELECTRIC_SCYTHES = { SCYTHE_LV, SCYTHE_MV, SCYTHE_HV, SCYTHE_EV, SCYTHE_IV, SCYTHE_LuV, SCYTHE_ZPM };
 
     private TFGToolTypes() {
     }

@@ -14,7 +14,6 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCraftingComponents;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
-import su.terrafirmagreg.core.common.data.tfgt.TFGToolTypes;
 
 @GTAddon
 @SuppressWarnings("unused")

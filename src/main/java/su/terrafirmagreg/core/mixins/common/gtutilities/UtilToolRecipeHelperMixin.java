@@ -20,7 +20,7 @@ import net.neganote.gtutilities.common.tools.UtilToolType;
 import net.neganote.gtutilities.common.tools.recipe.UtilToolRecipeHelper;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
-import su.terrafirmagreg.core.common.data.tfgt.TFGToolTypes;
+import su.terrafirmagreg.core.common.tfgt.TFGToolTypes;
 import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialFlags;
 
 @Mixin(value = UtilToolRecipeHelper.class, remap = false)
