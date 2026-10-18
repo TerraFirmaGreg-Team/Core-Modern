@@ -35,6 +35,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.IHighlightHandler;
@@ -137,6 +139,7 @@ public class JarShelfBlock extends JarsBlock
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public boolean drawHighlight(Level level, BlockPos pos, Player player, BlockHitResult rayTrace, PoseStack stack, MultiBufferSource buffers, Vec3 rendererPosition)
     {
         final int slot = PlacedItemBlockEntity.getSlotSelected(rayTrace);
