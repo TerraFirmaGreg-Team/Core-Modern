@@ -12,7 +12,8 @@ public enum TFGModsResolver {
     TFC_AMBIENTAL("tfcambiental"),
     TFC("tfc"),
     GRAPPLEMOD("grapplemod"),
-    RNR("rnr");
+    RNR("rnr"),
+    SPACE_GRAVITY("space_gravity");
 
     private final String name;
     private Boolean modLoaded;

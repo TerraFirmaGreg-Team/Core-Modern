@@ -46,6 +46,12 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     private boolean newBlocked = false;
     private BlockPos newExhaustAnchor = BlockPos.ZERO;
 
+    /** Oxygen providers whose rooms are inherited by the front/back scans, if any. */
+    @Nullable
+    private volatile OxygenProvider inheritedFront = null;
+    @Nullable
+    private volatile OxygenProvider inheritedBack = null;
+
     /** Default scan block limit for the flood fills. */
     static final int SCAN_MAX_BLOCKS = 2_000_000;
     static final int MAX_HORIZONTAL_DIMENSION = 128;
@@ -128,11 +134,20 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         if (frontStart == null || backStart == null)
             return;
 
-        RoomScan frontScan = FloodFill.fill(reader, frontStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
-        RoomScan backScan = FloodFill.fill(reader, backStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
+        RoomScan frontScan = inheritedFront != null ? inheritedFront.getRoomScan() : null;
+        if (frontScan == null) {
+            frontScan = FloodFill.fill(reader, frontStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
+        }
 
-        // The exhaust can only escape if the back does not form a sealed room.
-        boolean blocked = backScan.isSealed();
+        RoomScan backScan = inheritedBack != null ? inheritedBack.getRoomScan() : null;
+        boolean blocked;
+        if (backScan != null) {
+            blocked = true;
+        } else {
+            backScan = FloodFill.fill(reader, backStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION, FloodFill.PassMode.PERMISSIVE);
+            // The exhaust can only escape if the back does not form a sealed room.
+            blocked = backScan.isSealed();
+        }
 
         newFrontScan = frontScan;
         newBackScan = backScan;
@@ -140,8 +155,8 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         newExhaustAnchor = backStart;
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
-        TFGCore.LOGGER.debug("[heatpump] validateAsync DONE, pos={}, elapsedMs={}, frontStatus={}, frontSize={}, backStatus={}, blocked={}",
-                getPos(), elapsed, frontScan.status(), frontScan.interiorSize(), backScan.status(), blocked);
+        TFGCore.LOGGER.debug("[heatpump] validateAsync DONE, pos={}, elapsedMs={}, frontStatus={}, frontSize={}, frontInherited={}, backStatus={}, blocked={}, backInherited={}",
+                getPos(), elapsed, frontScan.status(), frontScan.interiorSize(), inheritedFront != null, backScan.status(), blocked, inheritedBack != null);
     }
 
     @Override
@@ -157,7 +172,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
 
         Set<ChunkPos> oldChunks = provider.getAffectedChunks();
 
-        provider.setRegions(newFrontScan, newBackScan, newBlocked, newExhaustAnchor, EXHAUST_RADIUS);
+        provider.setRegions(newFrontScan, newBackScan, newBlocked, newExhaustAnchor, EXHAUST_RADIUS, inheritedFront, inheritedBack);
 
         Set<ChunkPos> newChunks = provider.getAffectedChunks();
 
@@ -204,6 +219,16 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         long now = level.getServer().getTickCount();
         long earliestTick = Math.max(lastValidationTick + REVALIDATION_GAP_TICKS, now);
         EnvironmentSystem.requestValidation(this, earliestTick);
+    }
+
+    @Override
+    public void prepareValidation() {
+        BlockPos frontStart = host.getFrontScanStart();
+        BlockPos backStart = host.getBackScanStart();
+        if (manager != null) {
+            inheritedFront = frontStart != null ? manager.getOxygenProviderAt(frontStart) : null;
+            inheritedBack = backStart != null ? manager.getOxygenProviderAt(backStart) : null;
+        }
     }
 
     @Override
@@ -257,11 +282,20 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         manager = EnvironmentSystem.getManager(level);
         provider = manager.getOrCreateTempProvider(getPos());
         provider.attach(this);
+        manager.setTempProviderValue(getPos(), host.getTargetTemperature());
         requestValidation();
+    }
+
+    public void applyTargetTemperature(float temperature) {
+        if (manager != null) {
+            manager.setTempProviderValue(getPos(), temperature);
+        }
     }
 
     public void onUnload() {
         TFGCore.LOGGER.debug("[heatpump] onUnload, pos={}", getPos());
+        inheritedFront = null;
+        inheritedBack = null;
         if (provider == null)
             return;
         provider.detach();
@@ -271,6 +305,8 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
 
     public void onRemoved() {
         TFGCore.LOGGER.debug("[heatpump] onRemoved, pos={}", getPos());
+        inheritedFront = null;
+        inheritedBack = null;
         if (manager == null)
             return;
         deregisterListeners();

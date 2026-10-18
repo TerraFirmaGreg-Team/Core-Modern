@@ -189,4 +189,7 @@ dependencies {
 
     // I <3 TFC
     modCompileOnly(mods.ihearttfc)
+
+    // Player: real zero gravity
+    modCompileOnly(mods.spaceGravity)
 }

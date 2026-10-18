@@ -114,6 +114,8 @@ oculus = "1.20.1-1.8.0"
 
 buildingGadgets = "6850495"
 
+spaceGravity = "1.0.1"
+
 [libraries]
 # Core / API libraries delivered as mods
 configuration = { module = "maven.modrinth:configuration", version.ref = "configuration" }
@@ -229,3 +231,5 @@ embeddium = { module = "maven.modrinth:embeddium", version.ref = "embeddium" }
 oculus = { module = "maven.modrinth:oculus", version.ref = "oculus" }
 
 buildingGadgets = { module = "curse.maven:building-gadgets-298187", version.ref = "buildingGadgets" }
+
+spaceGravity = { module = "maven.modrinth:player-real-zero-gravity", version.ref = "spaceGravity" }
