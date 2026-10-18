@@ -19,6 +19,8 @@ import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
+
 /**
  * Flood fill algorithm for environment room detection.
  * Uses DFS with UP-first direction order for fast escape detection.
@@ -30,7 +32,9 @@ public class FloodFill {
         /** Doors, window panes and pipes can be passable. */
         DIRECTIONAL,
 
-        /** Only air counts as passable.  */
+        /**
+         * Only air, fluids and tfg:atmosphere_heat_passable count as passable.
+         */
         PERMISSIVE
     }
 
@@ -112,7 +116,7 @@ public class FloodFill {
             }
 
             if (passMode == PassMode.PERMISSIVE) {
-                if (blockState.isAir()) {
+                if (blockState.isAir() || !blockState.getFluidState().isEmpty() || blockState.is(TFGTags.Blocks.AtmosphereHeatPassable)) {
                     state.addInteriorBlock(posLong);
                     if (state.interior.size() > maxBlocks) {
                         state.hitBlockLimit = true;

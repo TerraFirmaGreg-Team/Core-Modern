@@ -140,9 +140,11 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
                 ? recipe.data.getInt("budding_max_tier")
                 : MAX_TIER;
 
-        if (buddingTier >= maxTier) {
+        if (buddingTier != maxTier - 1) {
             RecipeLogic.putFailureReason(this, recipe,
-                    Component.translatable("tfg.machine.budding_charger.tier_too_low")
+                    Component.translatable(buddingTier < maxTier - 1
+                            ? "tfg.machine.budding_charger.tier_too_low"
+                            : "tfg.machine.budding_charger.tier_too_high")
                             .withStyle(ChatFormatting.RED));
             return false;
         }
@@ -168,7 +170,7 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
         int maxTier = last.data.contains("budding_max_tier")
                 ? last.data.getInt("budding_max_tier")
                 : MAX_TIER;
-        if (buddingTier >= maxTier)
+        if (buddingTier != maxTier - 1)
             return;
 
         String recipeId = last.id.toString();

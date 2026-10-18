@@ -8,6 +8,7 @@ package net.dries007.tfc.common.recipes;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import lombok.Getter;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AdvancedShapelessRecipe extends ShapelessRecipe
 {
+    @Getter
     protected final ItemStackProvider result;
     protected final @Nullable Ingredient primaryIngredient;
 
@@ -58,9 +60,10 @@ public class AdvancedShapelessRecipe extends ShapelessRecipe
         return result;
     }
 
-    public ItemStackProvider getResult()
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inventory)
     {
-        return result;
+        return RecipeHelpers.getRemainingItems(this, inventory);
     }
 
     @Nullable

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
@@ -20,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
@@ -110,45 +108,16 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
     public boolean testCondition(@NotNull GTRecipe recipe,
             @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine.self();
-        var level = machine.getLevel();
-        if (!(level instanceof ServerLevel))
+        if (!(machine.getLevel() instanceof ServerLevel))
+            return false;
+        if (!(machine instanceof PastoralEngineMachine pastoral))
             return false;
 
-        AABB box = getSearchBox(machine);
-
-        return !level.getEntities((Entity) null, box, entity -> {
-            if (entity instanceof TFGWoolEggProducingAnimal animal) {
-                if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
-                    return false;
-                if (animalType.equals("dairy")) {
-                    // In case we have a machine in the future that wants eggs
-                    if (!animal.isReadyForAnimalProduct())
-                        return false;
-                } else if (!animal.hasWool()) {
-                    return false;
-                }
-            } else if (entity instanceof TFCAnimalProperties animal) {
-                if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
-                    return false;
-                if (!animal.isReadyForAnimalProduct())
-                    return false;
-            } else {
-                return false;
-            }
-
-            // Filter through entity type if defined
-            if (entityTypeId != null) {
-                ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
-                return entityTypeId.equals(key);
-            }
-
-            // Else per category use TFC Class
-            return switch (animalType) {
-                case "dairy" -> entity instanceof DairyAnimal;
-                case "producing" -> entity instanceof WoolyAnimal;
-                default -> true;
-            };
-        }).isEmpty();
+        for (Entity entity : pastoral.getCachedAnimals()) {
+            if (matchesEntity(entity))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -191,14 +160,5 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
             case "producing" -> entity instanceof WoolyAnimal;
             default -> true;
         };
-    }
-
-    // Use for the search Box from PastoralEngineMachine
-
-    private AABB getSearchBox(MetaMachine machine) {
-        if (machine instanceof PastoralEngineMachine pastoral) {
-            return pastoral.getFormedBoundingBox();
-        }
-        return new AABB(machine.getPos()).inflate(2.5);
     }
 }

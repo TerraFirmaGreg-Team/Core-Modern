@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blockentities;
 
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,7 +24,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.capabilities.Capabilities;
@@ -51,6 +51,7 @@ import net.dries007.tfc.util.IntArrayBuilder;
 import net.dries007.tfc.util.Metal;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 
+@SuppressWarnings("NoTranslation")
 public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBlockEntity.CrucibleInventory> implements ICalendarTickable, IHeatable
 {
     public static final int SLOTS = 10;
@@ -169,6 +170,7 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
     private final IntArrayBuilder syncableData;
 
     private final HeatingRecipe[] cachedRecipes;
+    @Getter
     private float temperature;
     private float targetTemperature;
     private boolean needsRecipeUpdate;
@@ -213,11 +215,6 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
 
         syncableData = new IntArrayBuilder()
             .add(() -> (int) temperature, value -> temperature = value);
-    }
-
-    public float getTemperature()
-    {
-        return temperature;
     }
 
     public ContainerData getSyncableData()
@@ -298,7 +295,6 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
         super.saveAdditional(nbt);
     }
 
-    @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
     {
@@ -379,7 +375,6 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
             alloy.deserializeNBT(nbt.getCompound("alloy"));
         }
 
-        @NotNull
         @Override
         public FluidStack getFluidInTank(int tank)
         {
@@ -393,7 +388,7 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
         }
 
         @Override
-        public boolean isFluidValid(int tank, @NotNull FluidStack stack)
+        public boolean isFluidValid(int tank, FluidStack stack)
         {
             return Metal.get(stack.getFluid()) != null;
         }
@@ -405,15 +400,17 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
             if (metal != null)
             {
                 final int filled = alloy.add(metal, resource.getAmount(), action.simulate());
-				if (filled > 0 && action.execute())
-				{
-					crucible.markForSync();
-				}
+
+                if (filled > 0 && action.execute())
+                {
+                    crucible.markForSync();
+                }
+
+                return filled;
             }
             return 0;
         }
 
-        @NotNull
         @Override
         public FluidStack drain(int maxDrain, FluidAction action)
         {

@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "tfg:block/machine/rotor_vent",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "tfg:block/machine/rotor_vent",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/rotor_vent"
+    },
+    "facing=south": {
+      "model": "tfg:block/machine/rotor_vent",
+      "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/rotor_vent",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "tfg:block/machine/rotor_vent",
+      "y": 270
+    }
+  }
+}

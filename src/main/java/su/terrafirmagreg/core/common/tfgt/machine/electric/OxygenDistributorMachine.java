@@ -93,7 +93,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     /** @return the expected EU/t consumption based on room size. */
     public double computeEnergyCostPerTick() {
         int effectiveVolume = computeEffectiveVolume();
-        return EnclosedRoomEnergyCurve.eutForVolume(effectiveVolume);
+        return EnclosedRoomEnergyCurve.eutForVolume(effectiveVolume) * host.getEnergyCostMultiplier();
     }
 
     public RoomScan getRoomScan() {
@@ -122,8 +122,8 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         if (!fluidInputs.isEmpty()) {
             baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
         }
-        // baseCost mB/min per 10k blocks -> mB/tick for actual volume
-        envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * EnclosedRoomEnergyCurve.BASE_VOLUME));
+        // baseCost mB/min per 10k blocks -> mB/tick for actual volume and multiply by Rotor Efficiency
+        envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * EnclosedRoomEnergyCurve.BASE_VOLUME) * host.getConsumptionMultiplier());
     }
 
     private int computeEffectiveVolume() {
@@ -194,6 +194,11 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     }
 
     private void addStatusText(List<Component> textList) {
+        if (!host.isFormed()) {
+            textList.add(Component.translatable("tfg.machine.unformed").withStyle(ChatFormatting.GRAY));
+            return;
+        }
+
         RoomScan scan = getRoomScan();
         boolean elevated = !scan.isSealed();
 
@@ -227,8 +232,13 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
                 String.format("%,.0f", computeEnergyCostPerTick()))
                 .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
 
+        Component ventProblem = host.getVentProblem();
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+
+        } else if (ventProblem != null) {
+            textList.add(ventProblem.copy().withStyle(ChatFormatting.RED));
+
         } else if (host.getEnergyInputPerSec() < computeEnergyCostPerTick()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy")
                     .withStyle(ChatFormatting.RED));
@@ -329,11 +339,11 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
 
     @Override
     public void validateAsync(AsyncBlockReader reader) {
-        TFGCore.LOGGER.info("[validation] validateAsync START, pos={}", getPos());
+        TFGCore.LOGGER.debug("[validation] validateAsync START, pos={}", getPos());
         long start = System.nanoTime();
         newRoomScan = FloodFill.fill(reader, getPos(), SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
         long elapsed = (System.nanoTime() - start) / 1_000_000;
-        TFGCore.LOGGER.info("[validation] validateAsync DONE, pos={}, elapsedMs={}, status={}, size={}",
+        TFGCore.LOGGER.debug("[validation] validateAsync DONE, pos={}, elapsedMs={}, status={}, size={}",
                 getPos(), elapsed, newRoomScan.status(), newRoomScan.interiorSize());
     }
 
@@ -344,7 +354,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
 
     @Override
     public void processValidationResult() {
-        TFGCore.LOGGER.info("[validation] processValidationResult, pos={}, provider={}, newRoomScan={}",
+        TFGCore.LOGGER.debug("[validation] processValidationResult, pos={}, provider={}, newRoomScan={}",
                 getPos(), provider != null, newRoomScan != null);
         if (provider == null || newRoomScan == null)
             return;
@@ -380,7 +390,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         toAdd.removeAll(oldListenerChunks);
 
         manager.blockChangeListeners.update(this, toRemove, toAdd);
-        TFGCore.LOGGER.info("Registered in {} new chunks for block change listening", toAdd.size());
+        TFGCore.LOGGER.debug("Registered in {} new chunks for block change listening", toAdd.size());
 
         manager.updateProvider(provider, oldScan, newScan);
 
@@ -416,7 +426,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         }
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
-        TFGCore.LOGGER.info("[validation] processValidationResult DONE, pos={}, elapsedMs={}, oldStatus={}, newStatus={}",
+        TFGCore.LOGGER.debug("[validation] processValidationResult DONE, pos={}, elapsedMs={}, oldStatus={}, newStatus={}",
                 getPos(), elapsed, oldScan.status(), newScan.status());
     }
 
@@ -458,11 +468,11 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             if (pos.equals(getPos()))
                 return;
             RoomScan roomScan = provider.getRoomScan();
-            TFGCore.LOGGER.info("Sealed {}, inEnvelope {}, inInterior {}", roomScan.isSealed(), roomScan.containsEnvelope(pos), roomScan.containsInterior(pos));
+            TFGCore.LOGGER.debug("Sealed {}, inEnvelope {}, inInterior {}", roomScan.isSealed(), roomScan.containsEnvelope(pos), roomScan.containsInterior(pos));
             if ((roomScan.isSealed() && roomScan.containsEnvelope(pos)) || roomScan.containsInterior(pos)) {
                 requestValidation();
             } else {
-                TFGCore.LOGGER.info("Ignored");
+                TFGCore.LOGGER.debug("Ignored");
             }
         }
     }
@@ -487,7 +497,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         long now = level.getServer().getTickCount();
         long earliestTick = Math.max(lastValidationTick + getCooldownTicks(), now);
 
-        TFGCore.LOGGER.info("[validation] requestValidation, pos={}, earliestTick={}", getPos(), earliestTick);
+        TFGCore.LOGGER.debug("[validation] requestValidation, pos={}, earliestTick={}", getPos(), earliestTick);
         EnvironmentSystem.requestValidation(this, earliestTick);
 
         if (provider != null && provider.getRoomScan().status() == Status.ESCAPED_UNLOADED) {
@@ -513,7 +523,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     //////////////////////////////////////
 
     public void onLoad(ServerLevel serverLevel) {
-        TFGCore.LOGGER.info("onLoad, pos={}", getPos());
+        TFGCore.LOGGER.debug("onLoad, pos={}", getPos());
         level = serverLevel;
         manager = EnvironmentSystem.getManager(level);
         provider = manager.getOrCreateProvider(getPos());
@@ -522,7 +532,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     }
 
     public void onUnload() {
-        TFGCore.LOGGER.info("onUnload, pos={}, provider={}", getPos(), provider != null);
+        TFGCore.LOGGER.debug("onUnload, pos={}, provider={}", getPos(), provider != null);
         if (provider == null)
             return;
         provider.detach();
@@ -531,7 +541,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     }
 
     public void onRemoved() {
-        TFGCore.LOGGER.info("onRemoved, pos={}, provider={}", getPos(), provider != null);
+        TFGCore.LOGGER.debug("onRemoved, pos={}, provider={}", getPos(), provider != null);
         if (manager == null)
             return;
         deregisterListeners();

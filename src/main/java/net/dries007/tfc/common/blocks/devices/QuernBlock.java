@@ -28,6 +28,8 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
@@ -177,6 +179,7 @@ public class QuernBlock extends DeviceBlock implements IHighlightHandler
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public boolean drawHighlight(Level level, BlockPos pos, Player player, BlockHitResult rayTrace, PoseStack poseStack, MultiBufferSource buffers, Vec3 renderPos)
     {
         SelectionPlace selection = getPlayerSelection(level, pos, player, rayTrace);

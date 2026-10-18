@@ -1,7 +1,9 @@
 {
     "values": [
         "tfc:dehydration",
-        "tfc:pluck"
+        "tfc:pluck",
+        "tfcambiental:frostbite",
+        "tfcambiental:heatstroke"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

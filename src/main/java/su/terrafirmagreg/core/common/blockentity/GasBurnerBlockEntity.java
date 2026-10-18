@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.blockentity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.TickableInventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.Capabilities;
@@ -13,7 +14,6 @@ import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.IntArrayBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -173,7 +173,7 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
             return GasBurnerFuelRecipe.getRecipe(server.overworld(), stack).isPresent();
         }
         if (FMLEnvironment.dist.isClient()) {
-            Level clientLevel = Minecraft.getInstance().level;
+            Level clientLevel = ClientHelpers.getLevel();
             if (clientLevel != null) {
                 return GasBurnerFuelRecipe.getRecipe(clientLevel, stack).isPresent();
             }
