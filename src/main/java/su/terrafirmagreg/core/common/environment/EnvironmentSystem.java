@@ -391,6 +391,18 @@ public final class EnvironmentSystem {
         }
     }
 
+    /**
+     * Eagerly create the dimension manager when a dimension loads.
+     */
+    @SubscribeEvent
+    public static void onLevelLoad(LevelEvent.Load event) {
+        if (!(event.getLevel() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        getManager(serverLevel);
+    }
+
     @SubscribeEvent
     public static void onLevelUnload(LevelEvent.Unload event) {
         if (!(event.getLevel() instanceof ServerLevel serverLevel)) {
