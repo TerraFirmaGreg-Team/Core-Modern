@@ -2,20 +2,19 @@ package su.terrafirmagreg.core.common.tfgt.machine.electric;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IWorkableMultiController;
 
 import net.minecraft.network.chat.Component;
 
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RotorVentPartMachine;
 
-public interface IRotorVentHost extends IRecipeLogicMachine {
+public interface IRotorVentHost extends IWorkableMultiController {
 
     @Nullable
     default RotorVentPartMachine getVent() {
-        if (self() instanceof IMultiController controller && controller.isFormed()) {
-            for (IMultiPart part : controller.getParts()) {
+        if (isFormed()) {
+            for (IMultiPart part : getParts()) {
                 if (part instanceof RotorVentPartMachine vent)
                     return vent;
             }

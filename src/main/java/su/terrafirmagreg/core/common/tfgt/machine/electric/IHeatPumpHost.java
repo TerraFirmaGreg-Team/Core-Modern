@@ -27,4 +27,8 @@ public interface IHeatPumpHost extends IRotorVentHost {
 
     @Nullable
     BlockPos getBackScanStart();
+
+    float getTargetTemperature();
+
+    void setTargetTemperature(float temperature);
 }
