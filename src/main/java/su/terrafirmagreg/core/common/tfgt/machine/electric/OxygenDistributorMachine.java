@@ -194,6 +194,11 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     }
 
     private void addStatusText(List<Component> textList) {
+        if (!host.isFormed()) {
+            textList.add(Component.translatable("tfg.machine.unformed").withStyle(ChatFormatting.GRAY));
+            return;
+        }
+
         RoomScan scan = getRoomScan();
         boolean elevated = !scan.isSealed();
 
