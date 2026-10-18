@@ -2,89 +2,47 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name "Tterrag"
-        url "https://modmaven.dev/"
+        name('Mixin maven')
+        url('https://maven.bawnorton.com/releases')
         content {
-            includeGroup("com.tterrag.registrate")
+            includeGroup('com.github.bawnorton.mixinsquared')
         }
     }
     maven {
-        name = "Sleeping Town"
-        url = "https://repo.sleeping.town/"
-    }
-    maven { // Mixin²
-        url "https://maven.bawnorton.com/releases"
+        name('CurseMaven')
+        url('https://cursemaven.com')
         content {
-            includeGroup "com.github.bawnorton.mixinsquared"
-        }
-    }
-    // Mirror
-    maven {
-        name 'CurseMaven'
-        url 'https://cursemaven.com'
-        content {
-            includeGroup "curse.maven"
+            includeGroup('curse.maven')
         }
     }
     maven {
-        name 'Modrinth'
-        url 'https://api.modrinth.com/maven'
+        name('Modrinth')
+        url('https://api.modrinth.com/maven')
         content {
-            includeGroup 'maven.modrinth'
+            includeGroup('maven.modrinth')
         }
     }
     maven {
-        name "Squiddev maven"
-        url "https://squiddev.cc/maven"
+        name('Squiddev maven')
+        url('https://squiddev.cc/maven')
         content {
-            includeGroup("cc.tweaked")
+            includeGroup('cc.tweaked')
         }
     }
     maven {
-        // location of the maven that hosts JEI files since January 2023
-        name "Jared's maven"
-        url "https://maven.blamejared.com"
+        name('Create Maven')
+        url('https://maven.createmod.net')
+        content {
+            includeGroup('com.simibubi.create')
+            includeGroup('net.createmod.ponder')
+            includeGroup('dev.engine-room.flywheel')
+        }
     }
     maven {
-        name "Shedaniel maven"
-        url "https://maven.shedaniel.me"
-    }
-    maven { // Create, Ponder, Flywheel
-        url = "https://maven.createmod.net"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
+        name('ModMaven')
+        url('https://modmaven.dev')
         content {
-            includeGroup("com.simibubi.create")
-            includeGroup("dev.engine-room.flywheel")
+            includeGroup('com.tterrag.registrate')
         }
-    }
-    maven { //GTM maven
-        name = 'GTCEu Maven'
-        url = 'https://maven.gtceu.com'
-        content {
-            includeGroup 'com.gregtechceu.gtceu'
-            includeGroup 'appeng'
-        }
-    }
-    maven { // LDLib, Shimmer
-        name = "FirstDarkDev Maven"
-        url = "https://maven.firstdarkdev.xyz/snapshots"
-        content {
-            includeGroup("com.lowdragmc.ldlib")
-        }
-    }
-    maven { // Configuration
-        name = 'Repsy Maven'
-        url = 'https://repo.repsy.io/mvn/toma/public'
-        content {
-            includeGroup 'dev.toma.configuration'
-        }
-    }
-    maven { // AE2 UELM
-        name = "expandiumReleases"
-        url = "https://repo.expandium.net/releases"
     }
 }

@@ -3,6 +3,9 @@ import groovy.json.JsonSlurper
 
 File mainResources = file('src/main/resources')
 File generatedResources = file('src/generated/resources')
+String tagPattern = 'data/*/tags/**/*.json'
+List<FileTree> mainTags = tagTrees(mainResources, project)
+List<FileTree> generatedTags = tagTrees(generatedResources, project)
 
 processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -28,19 +31,13 @@ processResources {
     ]
 
     inputs.properties(replaceProperties)
-    inputs.dir(mainResources)
-    inputs.dir(generatedResources)
 
     filesMatching(filterList) {
         expand(replaceProperties + [project: project])
     }
 
-    exclude {
-        isTagJson(it.path)
-    }
-
     doLast {
-        mergeTags(mainResources, generatedResources, destinationDir)
+        mergeTags(mainResources, generatedResources, mainTags, generatedTags, destinationDir)
     }
 }
 
@@ -48,37 +45,34 @@ processDevResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-static boolean isTagJson(String path) {
-    return path ==~ /^data\/[^\/]+\/tags\/[^\/]+\/.+\.json$/
+static List<FileTree> tagTrees(File resources, Project project) {
+    File data = new File(resources, 'data')
+    return (data.listFiles() ?: [])
+            .collect { new File(it, 'tags') }
+            .findAll { it.isDirectory() }
+            .collect { project.fileTree(it) { include('**/*.json') } }
+}
+
+static Set<String> tagPaths(File root, List<FileTree> trees) {
+    Set<String> paths = new LinkedHashSet<>()
+    trees.each { tree ->
+        tree.files.each { file ->
+            paths.add(root.toPath().relativize(file.toPath()).toString().replace('\\', '/'))
+        }
+    }
+    return paths
 }
 
 static void mergeTags(
         File mainResources,
         File generatedResources,
+        List<FileTree> mainTags,
+        List<FileTree> generatedTags,
         File destinationDir
 ) {
-    Set<String> paths = new LinkedHashSet<>()
-
-    [mainResources, generatedResources].each { File resources ->
-        if (!resources.exists()) {
-            return
-        }
-
-        resources.eachFileRecurse { File file ->
-            if (!file.isFile()) {
-                return
-            }
-
-            String path = resources.toPath()
-                    .relativize(file.toPath())
-                    .toString()
-                    .replace('\\', '/')
-
-            if (isTagJson(path)) {
-                paths.add(path)
-            }
-        }
-    }
+    Set<String> mainPaths = tagPaths(mainResources, mainTags)
+    Set<String> generatedPaths = tagPaths(generatedResources, generatedTags)
+    Set<String> paths = mainPaths.intersect(generatedPaths)
 
     JsonSlurper slurper = new JsonSlurper()
 

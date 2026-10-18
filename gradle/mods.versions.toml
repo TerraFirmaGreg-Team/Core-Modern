@@ -1,0 +1,231 @@
+[versions]
+create = "6.0.8-289"
+flywheel = "1.0.5"
+cctweaked = "1.111.0"
+
+# Core / API libraries delivered as mods
+
+configuration = "3.1.0-forge,1.20.1"
+architecturyApi = "9.2.14+forge"
+ferriteCore = "6.0.1-forge,1.20.1"
+tmrv = "0.9.0+mc.20.1"
+
+# EMI
+emi = "1.1.22+1.20.1+forge"
+
+# Create
+ponder = "1.0.91"
+vintageImprovements = "7783979"
+copycats = "3.0.7+mc.1.20.1-forge"
+createRepair = "1.3.0"
+createConnected = "1.2.3-mc1.20.1"
+createPickyWaterwheels = "1.20.1-6.0.8-6"
+createSteamPowered = "1.20.1-3.1.0"
+greate = "0.0.81"
+
+# GregTech
+gtceu = "mc1.20.1-7.5.3"
+ldlib = "mc1.20.1-1.0.40.b-forge"
+gtmUtils = "2.9.2"
+
+# KubeJS
+rhino = "2001.2.2-build.18+forge"
+kubejs = "2001.6.5-build.7+forge"
+kubejsTfc = "1.3.5"
+
+# TFC ecosystem
+patchouli = "1.20.1-84.1-forge"
+firmalife = "2.1.27"
+beneath = "1.0.6"
+alekiships = "1.0.14"
+firmaciv = "1.0.9"
+astikorCartsRedux = "1.1.7-forge,1.20.1"
+astikorCartsTfc = "5141430"
+tfcHotOrNot = "1.0.13"
+roadsAndRoofs = "0.2.5-1.20.1"
+arborfirmacraft = "1.0.23-1.20.1"
+tfcgenviewer = "1.5.1"
+waterFlasks = "3.0.10"
+ihearttfc = "5901425"
+
+# AE2
+guideme = "20.1.13"
+ae2 = "9092015" # cf: appliedenergistics2-forge-15.5.5-uelm.jar
+ae2WirelessTerminals = "15.3.0-forge"
+
+# ComputerCraft
+ccTweaked = "1.111.0-forge,1.20.1"
+
+# FTB
+ftbTeams = "7499810"
+ftbLibrary = "8226927"
+ftbChunks = "8216874"
+ftbQuests = "8078538"
+
+# Jade
+jade = "11.13.2+forge"
+
+# Ad Astra
+adAstra = "1.15.21-forge,1.20.1"
+botarium = "2.3.4"
+resourcefulLib = "2.1.29"
+resourcefulConfig = "2.1.3-forge,1.20.1"
+
+species = "3.5"
+simplyStackedDimensions = "7657445"
+
+# Grappling Hook (needs cloth-config at runtime)
+clothConfig = "11.1.136+forge"
+grapplingHook = "v13-1.20.1"
+
+# Hang Glider
+puzzlesLib = "v8.1.32-1.20.1-Forge"
+hangGlider = "v8.0.1-1.20.1-Forge"
+
+# Wan's Ancient Beasts
+wansAncientBeasts = "8761414"
+geckolib = "4.8.3-forge,1.20.1"
+
+# Dea's Fission
+deafission = "7633771"
+
+# Panda's Falling Trees
+pandasFallingTrees = "0.12.7"
+pandalib = "0.4.2-forge,1.20.1"
+
+sacksNSuch = "1.2.6"
+domumOrnamentum = "7762540"
+framedblocks = "9.4.3"
+craftingStation = "7463065"
+strutYourStuff = "1.1.1+mc1.20.1-forge,1.20.1"
+chromaticColors = "1.13"
+curios = "5.14.1+1.20.1"
+additionalPlacements = "3.0.1"
+jellies = "0.1.6"
+
+# FowlPlay
+smartbrainlib = "1.15"
+yacl = "3.6.6+1.20.1-forge"
+fowlplay = "1.2.3+1.20.1-forge"
+
+# Embeddium + Oculus
+embeddium = "0.3.31+mc1.20.1"
+oculus = "1.20.1-1.8.0"
+
+buildingGadgets = "6850495"
+
+[libraries]
+# Core / API libraries delivered as mods
+configuration = { module = "maven.modrinth:configuration", version.ref = "configuration" }
+architecturyApi = { module = "maven.modrinth:architectury-api", version.ref = "architecturyApi" }
+ferriteCore = { module = "maven.modrinth:ferrite-core", version.ref = "ferriteCore" }
+tmrv = { module = "maven.modrinth:tmrv", version.ref = "tmrv" }
+
+# EMI
+emi = { module = "maven.modrinth:emi", version.ref = "emi" }
+
+# Create
+flywheelApi = { module = "dev.engine-room.flywheel:flywheel-forge-api-1.20.1", version.ref = "flywheel" }
+flywheel = { module = "dev.engine-room.flywheel:flywheel-forge-1.20.1", version.ref = "flywheel" }
+create = { module = "com.simibubi.create:create-1.20.1", version.ref = "create" }
+ponder = { module = "net.createmod.ponder:Ponder-Forge-1.20.1", version.ref = "ponder" }
+vintageImprovements = { module = "curse.maven:vintage-improvements-ssw-edition-1255448", version.ref = "vintageImprovements" }
+copycats = { module = "maven.modrinth:copycats", version.ref = "copycats" }
+createRepair = { module = "maven.modrinth:create-repair", version.ref = "createRepair" }
+createConnected = { module = "maven.modrinth:create-connected", version.ref = "createConnected" }
+createPickyWaterwheels = { module = "maven.modrinth:create-picky-wheels", version.ref = "createPickyWaterwheels" }
+createSteamPowered = { module = "maven.modrinth:create-steam-powered", version.ref = "createSteamPowered" }
+greate = { module = "maven.modrinth:greate", version.ref = "greate" }
+
+# GregTech
+gtceu = { module = "maven.modrinth:gregtechceu-modern", version.ref = "gtceu" }
+ldlib = { module = "maven.modrinth:ldlib", version.ref = "ldlib" }
+gtmUtils = { module = "maven.modrinth:gregtech-modern-utilities", version.ref = "gtmUtils" }
+
+# KubeJS
+rhino = { module = "maven.modrinth:rhino", version.ref = "rhino" }
+kubejs = { module = "maven.modrinth:kubejs", version.ref = "kubejs" }
+kubejsTfc = { module = "maven.modrinth:kubejs-tfc", version.ref = "kubejsTfc" }
+
+# TFC ecosystem
+patchouli = { module = "maven.modrinth:patchouli", version.ref = "patchouli" }
+firmalife = { module = "maven.modrinth:firmalife", version.ref = "firmalife" }
+beneath = { module = "maven.modrinth:beneath", version.ref = "beneath" }
+alekiships = { module = "maven.modrinth:alekiships", version.ref = "alekiships" }
+firmaciv = { module = "maven.modrinth:firmaciv", version.ref = "firmaciv" }
+astikorCartsRedux = { module = "maven.modrinth:astikorcarts-redux", version.ref = "astikorCartsRedux" }
+astikorCartsTfc = { module = "curse.maven:astikor-carts-tfc-844019", version.ref = "astikorCartsTfc" }
+tfcHotOrNot = { module = "maven.modrinth:tfc-hot-or-not", version.ref = "tfcHotOrNot" }
+roadsAndRoofs = { module = "maven.modrinth:roads-and-roofs-tfc", version.ref = "roadsAndRoofs" }
+arborfirmacraft = { module = "maven.modrinth:arborfirmacraft-afc", version.ref = "arborfirmacraft" }
+tfcgenviewer = { module = "maven.modrinth:tfcgenviewer", version.ref = "tfcgenviewer" }
+waterFlasks = { module = "maven.modrinth:water-flasks", version.ref = "waterFlasks" }
+ihearttfc = { module = "curse.maven:ihearttfc-1118578", version.ref = "ihearttfc" } # MR has no 1.1.3 for forge/1.20.1; unfiltered coord resolves a Java 21 build
+
+# AE2 (UELM fork)
+guideme = { module = "maven.modrinth:guideme", version.ref = "guideme" }
+ae2 = { module = "curse.maven:ae2-uelm-1624366", version.ref = "ae2" }
+ae2WirelessTerminals = { module = "maven.modrinth:applied-energistics-2-wireless-terminals", version.ref = "ae2WirelessTerminals" }
+
+# ComputerCraft
+ccTweakedCoreApi = { module = "cc.tweaked:cc-tweaked-1.20.1-core-api", version.ref = "cctweaked" }
+ccTweakedForgeApi = { module = "cc.tweaked:cc-tweaked-1.20.1-forge-api", version.ref = "cctweaked" }
+ccTweaked = { module = "maven.modrinth:cc-tweaked", version.ref = "ccTweaked" }
+
+# FTB
+ftbTeams = { module = "curse.maven:ftb-teams-forge-404468", version.ref = "ftbTeams" }
+ftbLibrary = { module = "curse.maven:ftb-library-forge-404465", version.ref = "ftbLibrary" }
+ftbChunks = { module = "curse.maven:ftb-chunks-forge-314906", version.ref = "ftbChunks" }
+ftbQuests = { module = "curse.maven:ftb-quests-forge-289412", version.ref = "ftbQuests" }
+
+# Jade
+jade = { module = "maven.modrinth:jade", version.ref = "jade" }
+
+# Ad Astra
+adAstra = { module = "maven.modrinth:ad-astra", version.ref = "adAstra" }
+botarium = { module = "maven.modrinth:botarium", version.ref = "botarium" }
+resourcefulLib = { module = "maven.modrinth:resourceful-lib", version.ref = "resourcefulLib" }
+resourcefulConfig = { module = "maven.modrinth:resourceful-config", version.ref = "resourcefulConfig" }
+
+species = { module = "maven.modrinth:species", version.ref = "species" }
+simplyStackedDimensions = { module = "curse.maven:simply-stacked-dimensions-523416", version.ref = "simplyStackedDimensions" }
+
+# Grappling Hook (needs cloth-config at runtime)
+clothConfig = { module = "maven.modrinth:cloth-config", version.ref = "clothConfig" }
+grapplingHook = { module = "maven.modrinth:grappling-hook-mod", version.ref = "grapplingHook" }
+
+# Hang Glider
+puzzlesLib = { module = "maven.modrinth:puzzles-lib", version.ref = "puzzlesLib" }
+hangGlider = { module = "maven.modrinth:hang-glider", version.ref = "hangGlider" }
+
+# Wan's Ancient Beasts
+wansAncientBeasts = { module = "curse.maven:wans-ancient-beasts-1108604", version.ref = "wansAncientBeasts" }
+geckolib = { module = "maven.modrinth:geckolib", version.ref = "geckolib" }
+
+# Dea's Fission
+deafission = { module = "curse.maven:deafission-1354541", version.ref = "deafission" } # MR max for 1.20.1 is 0.14.0 — lacks machine.hb/Heat* classes used by our code
+
+# Panda's Falling Trees
+pandasFallingTrees = { module = "maven.modrinth:pandas-falling-trees", version.ref = "pandasFallingTrees" }
+pandalib = { module = "maven.modrinth:pandalib", version.ref = "pandalib" }
+
+sacksNSuch = { module = "maven.modrinth:sacks-n-such", version.ref = "sacksNSuch" }
+domumOrnamentum = { module = "curse.maven:domum-ornamentum-527361", version.ref = "domumOrnamentum" }
+framedblocks = { module = "maven.modrinth:framedblocks", version.ref = "framedblocks" }
+craftingStation = { module = "curse.maven:crafting-station-improved-1310299", version.ref = "craftingStation" }
+strutYourStuff = { module = "maven.modrinth:strut-your-stuff", version.ref = "strutYourStuff" }
+chromaticColors = { module = "maven.modrinth:phoenixs-chromatic-codes", version.ref = "chromaticColors" }
+curios = { module = "maven.modrinth:curios", version.ref = "curios" }
+additionalPlacements = { module = "maven.modrinth:additional-placements", version.ref = "additionalPlacements" }
+jellies = { module = "maven.modrinth:jellies", version.ref = "jellies" }
+
+# FowlPlay
+smartbrainlib = { module = "maven.modrinth:smartbrainlib", version.ref = "smartbrainlib" }
+yacl = { module = "maven.modrinth:yacl", version.ref = "yacl" }
+fowlplay = { module = "maven.modrinth:fowlplay", version.ref = "fowlplay" }
+
+# Embeddium + Oculus
+embeddium = { module = "maven.modrinth:embeddium", version.ref = "embeddium" }
+oculus = { module = "maven.modrinth:oculus", version.ref = "oculus" }
+
+buildingGadgets = { module = "curse.maven:building-gadgets-298187", version.ref = "buildingGadgets" }
