@@ -137,7 +137,7 @@ dependencies {
     modImplementation(mods.tfcgenviewer)
 
     // TFC Water Flasks, waterflasks-3.0.10.jar, Oct 2, 2025
-    modCompileOnly(mods.waterFlasks)
+    modImplementation(mods.waterFlasks)
 
     // Sacks and such, Sacks 'N Such-1.20.1-1.2.6.jar, Mar 9, 2026
     modImplementation(mods.sacksNSuch)
