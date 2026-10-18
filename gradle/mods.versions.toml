@@ -22,6 +22,7 @@ createConnected = "1.2.3-mc1.20.1"
 createPickyWaterwheels = "1.20.1-6.0.8-6"
 createSteamPowered = "1.20.1-3.1.0"
 greate = "0.0.81"
+strutYourStuff = "1.1.1+mc1.20.1-forge,1.20.1"
 
 # GregTech
 gtceu = "mc1.20.1-7.5.3"
@@ -47,6 +48,7 @@ arborfirmacraft = "1.0.23-1.20.1"
 tfcgenviewer = "1.5.1"
 waterFlasks = "3.0.10"
 ihearttfc = "5901425"
+sacksNSuch = "1.2.6"
 
 # AE2
 guideme = "20.1.13"
@@ -70,9 +72,12 @@ adAstra = "1.15.21-forge,1.20.1"
 botarium = "2.3.4"
 resourcefulLib = "2.1.29"
 resourcefulConfig = "2.1.3-forge,1.20.1"
+spaceGravity = "1.0.1"
 
 species = "3.5"
 simplyStackedDimensions = "7657445"
+jellies = "0.1.6"
+arthropocolypse = "5397648"
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = "11.1.136+forge"
@@ -93,15 +98,13 @@ deafission = "7633771"
 pandasFallingTrees = "0.12.7"
 pandalib = "0.4.2-forge,1.20.1"
 
-sacksNSuch = "1.2.6"
 domumOrnamentum = "7762540"
 framedblocks = "9.4.3"
 craftingStation = "7463065"
-strutYourStuff = "1.1.1+mc1.20.1-forge,1.20.1"
 chromaticColors = "1.13"
 curios = "5.14.1+1.20.1"
 additionalPlacements = "3.0.1"
-jellies = "0.1.6"
+buildingGadgets = "6850495"
 
 # FowlPlay
 smartbrainlib = "1.15"
@@ -112,9 +115,7 @@ fowlplay = "1.2.3+1.20.1-forge"
 embeddium = "0.3.31+mc1.20.1"
 oculus = "1.20.1-1.8.0"
 
-buildingGadgets = "6850495"
 
-spaceGravity = "1.0.1"
 
 [libraries]
 # Core / API libraries delivered as mods
@@ -138,6 +139,7 @@ createConnected = { module = "maven.modrinth:create-connected", version.ref = "c
 createPickyWaterwheels = { module = "maven.modrinth:create-picky-wheels", version.ref = "createPickyWaterwheels" }
 createSteamPowered = { module = "maven.modrinth:create-steam-powered", version.ref = "createSteamPowered" }
 greate = { module = "maven.modrinth:greate", version.ref = "greate" }
+strutYourStuff = { module = "maven.modrinth:strut-your-stuff", version.ref = "strutYourStuff" }
 
 # GregTech
 gtceu = { module = "maven.modrinth:gregtechceu-modern", version.ref = "gtceu" }
@@ -163,6 +165,7 @@ arborfirmacraft = { module = "maven.modrinth:arborfirmacraft-afc", version.ref =
 tfcgenviewer = { module = "maven.modrinth:tfcgenviewer", version.ref = "tfcgenviewer" }
 waterFlasks = { module = "maven.modrinth:water-flasks", version.ref = "waterFlasks" }
 ihearttfc = { module = "curse.maven:ihearttfc-1118578", version.ref = "ihearttfc" } # MR has no 1.1.3 for forge/1.20.1; unfiltered coord resolves a Java 21 build
+sacksNSuch = { module = "maven.modrinth:sacks-n-such", version.ref = "sacksNSuch" }
 
 # AE2 (UELM fork)
 guideme = { module = "maven.modrinth:guideme", version.ref = "guideme" }
@@ -188,9 +191,12 @@ adAstra = { module = "maven.modrinth:ad-astra", version.ref = "adAstra" }
 botarium = { module = "maven.modrinth:botarium", version.ref = "botarium" }
 resourcefulLib = { module = "maven.modrinth:resourceful-lib", version.ref = "resourcefulLib" }
 resourcefulConfig = { module = "maven.modrinth:resourceful-config", version.ref = "resourcefulConfig" }
+spaceGravity = { module = "maven.modrinth:player-real-zero-gravity", version.ref = "spaceGravity" }
 
 species = { module = "maven.modrinth:species", version.ref = "species" }
 simplyStackedDimensions = { module = "curse.maven:simply-stacked-dimensions-523416", version.ref = "simplyStackedDimensions" }
+jellies = { module = "maven.modrinth:jellies", version.ref = "jellies" }
+arthropocolypse = { module = "curse.maven:arthropocolypse-1018606", version.ref = "arthropocolypse" }
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = { module = "maven.modrinth:cloth-config", version.ref = "clothConfig" }
@@ -211,15 +217,13 @@ deafission = { module = "curse.maven:deafission-1354541", version.ref = "deafiss
 pandasFallingTrees = { module = "maven.modrinth:pandas-falling-trees", version.ref = "pandasFallingTrees" }
 pandalib = { module = "maven.modrinth:pandalib", version.ref = "pandalib" }
 
-sacksNSuch = { module = "maven.modrinth:sacks-n-such", version.ref = "sacksNSuch" }
 domumOrnamentum = { module = "curse.maven:domum-ornamentum-527361", version.ref = "domumOrnamentum" }
 framedblocks = { module = "maven.modrinth:framedblocks", version.ref = "framedblocks" }
 craftingStation = { module = "curse.maven:crafting-station-improved-1310299", version.ref = "craftingStation" }
-strutYourStuff = { module = "maven.modrinth:strut-your-stuff", version.ref = "strutYourStuff" }
 chromaticColors = { module = "maven.modrinth:phoenixs-chromatic-codes", version.ref = "chromaticColors" }
 curios = { module = "maven.modrinth:curios", version.ref = "curios" }
 additionalPlacements = { module = "maven.modrinth:additional-placements", version.ref = "additionalPlacements" }
-jellies = { module = "maven.modrinth:jellies", version.ref = "jellies" }
+buildingGadgets = { module = "curse.maven:building-gadgets-298187", version.ref = "buildingGadgets" }
 
 # FowlPlay
 smartbrainlib = { module = "maven.modrinth:smartbrainlib", version.ref = "smartbrainlib" }
@@ -229,7 +233,3 @@ fowlplay = { module = "maven.modrinth:fowlplay", version.ref = "fowlplay" }
 # Embeddium + Oculus
 embeddium = { module = "maven.modrinth:embeddium", version.ref = "embeddium" }
 oculus = { module = "maven.modrinth:oculus", version.ref = "oculus" }
-
-buildingGadgets = { module = "curse.maven:building-gadgets-298187", version.ref = "buildingGadgets" }
-
-spaceGravity = { module = "maven.modrinth:player-real-zero-gravity", version.ref = "spaceGravity" }

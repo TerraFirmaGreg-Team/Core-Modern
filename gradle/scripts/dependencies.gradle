@@ -192,4 +192,7 @@ dependencies {
 
     // Player: real zero gravity
     modCompileOnly(mods.spaceGravity)
+
+    // Arthropocolypse
+    modImplementation(mods.arthropocolypse)
 }
