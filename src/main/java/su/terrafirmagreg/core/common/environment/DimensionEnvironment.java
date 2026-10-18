@@ -17,7 +17,7 @@ import earth.terrarium.adastra.api.planets.Planet;
  * Pressure determines whether decompression/compression events occur when a
  * sealed room is breached, and how much extra oxygen is consumed during breach.
  * 
- * Dimension temperature is currently unused since it's biome-based.
+ * Dimension temperature is currently unused.
  */
 public record DimensionEnvironment(
         boolean hasOxygen,
