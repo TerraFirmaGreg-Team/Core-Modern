@@ -65,7 +65,7 @@ public abstract class LevelRendererMixin {
                     () -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ));
 
             if (TFGConfig.CLIENT.VENUS_CLOUD_LAYERS.get()) {
-				// Add some offsets to the X and Z so it doesn't look so samey
+                // Add some offsets to the X and Z so it doesn't look so samey
                 CloudRendererHelper.render(30, 1f, CloudRendererHelper.middleVenusCloudColor,
                         () -> instance.renderClouds(poseStack, projectionMatrix, partialTick, camX + 1000, camY, camZ + 100));
 

@@ -11,15 +11,14 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 
+import dev.dh.arthropocolypse.entity.Platerodrilus;
+
 import su.terrafirmagreg.core.common.data.TFGTags;
 
-@Pseudo
-@Mixin(targets = "dev.dh.arthropocolypse.entity.Platerodrilus")
+@Mixin(value = Platerodrilus.class, remap = false)
 public class PlaterodrilusMixin {
 
-    // registerGoals
-    @SuppressWarnings("DataFlowIssue")
-    @Inject(method = "m_8099_", at = @At("TAIL"), remap = false)
+    @Inject(method = "registerGoals", at = @At("TAIL"), remap = false)
     protected void tfg$registerGoals(CallbackInfo ci) {
         Animal mob = (Animal) (Object) this;
 
