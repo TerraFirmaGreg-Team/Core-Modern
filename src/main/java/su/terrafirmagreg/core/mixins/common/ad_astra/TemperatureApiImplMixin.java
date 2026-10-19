@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.ad_astra;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,9 +21,6 @@ import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
  */
 @Mixin(value = TemperatureApiImpl.class, remap = false)
 public abstract class TemperatureApiImplMixin {
-
-    @Shadow
-    public abstract boolean isHot(Level level, BlockPos pos);
 
     @Inject(method = "getTemperature(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)S", at = @At("HEAD"), cancellable = true)
     private void tfg$getTemperature(Level level, BlockPos pos, CallbackInfoReturnable<Short> cir) {
