@@ -35,6 +35,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.entity.ai.TFGBrain;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
+import su.terrafirmagreg.core.common.tfgt.TFGToolTypes;
 import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
@@ -104,6 +105,7 @@ public class CommonProxy {
 
     @SubscribeEvent
     public void onPostRegisterMaterials(final PostMaterialEvent event) {
+        TFGToolTypes.init();
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
         TFGModifyMaterials.modify();

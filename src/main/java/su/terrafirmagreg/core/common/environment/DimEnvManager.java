@@ -4,8 +4,11 @@ import static su.terrafirmagreg.core.common.environment.PassabilityChecker.getCa
 
 import java.util.*;
 
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NotNull;
 
+import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -329,11 +332,45 @@ public class DimEnvManager extends SavedData {
     }
 
     /**
-     * Gets the ambient pressure at a position, in atmospheres.
+     * Gets the sealed oxygen provider whose room contains a position.
+     */
+    public @Nullable OxygenProvider getOxygenProviderAt(BlockPos pos) {
+        if (oxygenIndex.isEmpty())
+            return null;
+
+        Set<OxygenProvider> providerSet = oxygenIndex.get(new ChunkPos(pos));
+        if (providerSet != null) {
+            for (OxygenProvider provider : providerSet) {
+                RoomScan scan = provider.getRoomScan();
+                if (scan.isSealed() && scan.containsEnvelope(pos))
+                    return provider;
+            }
+        }
+        return null;
+    }
+
+    // ==================== Pressure Queries ====================
+
+    /**
+     * Gets the pressure at a position, in atmospheres.
      * Currently returns the dimension default, but may depend on Y-level in the future
      * (e.g. Europa ocean depth).
      */
     public float getPressure(BlockPos pos) {
+        if (pressureIndex.isEmpty()) {
+            return environment.pressure();
+        }
+
+        ChunkPos chunkPos = new ChunkPos(pos);
+        Set<PressureProvider> providerSet = pressureIndex.get(chunkPos);
+        if (providerSet != null) {
+            for (PressureProvider provider : providerSet) {
+                Optional<Float> pressure = provider.getPressure(pos);
+                if (pressure.isPresent()) {
+                    return pressure.get();
+                }
+            }
+        }
         return environment.pressure();
     }
 
@@ -401,23 +438,6 @@ public class DimEnvManager extends SavedData {
         setSavedDataDirty();
     }
 
-    // ==================== Pressure Queries ====================
-
-    public boolean hasSafePressure(BlockPos pos) {
-        if (pressureIndex.isEmpty())
-            return false;
-
-        ChunkPos chunkPos = new ChunkPos(pos);
-        Set<PressureProvider> providerSet = pressureIndex.get(chunkPos);
-        if (providerSet != null) {
-            for (PressureProvider provider : providerSet) {
-                if (provider.hasSafePressure(pos))
-                    return true;
-            }
-        }
-        return false;
-    }
-
     // ==================== Temperature Provider Management ====================
 
     /**
@@ -460,38 +480,31 @@ public class DimEnvManager extends SavedData {
         }
     }
 
+    /**
+     * Updates a provider's target temperature.
+     */
+    public void setTempProviderValue(BlockPos machinePos, float targetTemperature) {
+        TemperatureProvider provider = temperatureProviders.get(machinePos);
+        if (provider != null) {
+            provider.setTargetTemperature(targetTemperature);
+            setSavedDataDirty();
+        }
+    }
+
     // ==================== Temperature Queries ====================
 
     /**
-     * Checks if a position has safe temperature (from natural environment or a machine bubble).
+     * Gets the temperature at a position.
      */
-    public boolean hasTemperature(BlockPos pos) {
-        if (environment.hasNormalTemperature())
-            return true;
-
-        if (temperatureIndex.isEmpty())
-            return false;
-
-        ProfilerFiller profiler = level.getProfiler();
-        profiler.push("tfg.environment.hasTemperature");
-        ChunkPos chunkPos = new ChunkPos(pos);
-        Set<TemperatureProvider> providerSet = temperatureIndex.get(chunkPos);
-        if (providerSet != null) {
-            for (TemperatureProvider provider : providerSet) {
-                if (provider.hasTemperature(pos)) {
-                    profiler.pop();
-                    return true;
-                }
-            }
-        }
-        profiler.pop();
-        return false;
+    public float getTemperature(BlockPos pos) {
+        Optional<Float> bubble = getHeatPumpTemperature(pos);
+        return bubble.orElseGet(() -> Climate.getTemperature(level, pos));
     }
 
     /**
-     * Get a position's target temperature from a machine bubble.
+     * Gets the heat pump target temperature at a position, if inside a heat pump's bubble.
      */
-    public Optional<Float> getTargetTemperature(BlockPos pos) {
+    public Optional<Float> getHeatPumpTemperature(BlockPos pos) {
         if (temperatureIndex.isEmpty())
             return Optional.empty();
 
@@ -501,10 +514,10 @@ public class DimEnvManager extends SavedData {
         Set<TemperatureProvider> providerSet = temperatureIndex.get(chunkPos);
         if (providerSet != null) {
             for (TemperatureProvider provider : providerSet) {
-                Optional<Float> targetTemperature = provider.getTargetTemperature(pos);
-                if (targetTemperature.isPresent()) {
+                Optional<Float> temperature = provider.getTemperature(pos);
+                if (temperature.isPresent()) {
                     profiler.pop();
-                    return targetTemperature;
+                    return temperature;
                 }
             }
         }
@@ -518,9 +531,9 @@ public class DimEnvManager extends SavedData {
      * Gets an existing gravity provider or creates a new one.
      * Called when a gravity machine loads.
      */
-    public GravityProvider getOrCreateGravityProvider(BlockPos machinePos, int radius) {
+    public GravityProvider getOrCreateGravityProvider(BlockPos machinePos, int radius, float gravity) {
         return gravityProviders.computeIfAbsent(machinePos, pos -> {
-            GravityProvider provider = new GravityProvider(pos, radius);
+            GravityProvider provider = new GravityProvider(pos, radius, gravity);
             gravityIndex.add(provider, provider.getAffectedChunks());
             setSavedDataDirty();
             return provider;
@@ -539,15 +552,26 @@ public class DimEnvManager extends SavedData {
     }
 
     /**
-     * Replaces a gravity provider with a new radius. 
+     * Updates a gravity provider's target gravity and persists it.
+     */
+    public void setGravityProviderValue(BlockPos machinePos, float gravity) {
+        GravityProvider provider = gravityProviders.get(machinePos);
+        if (provider != null) {
+            provider.setGravity(gravity);
+            setSavedDataDirty();
+        }
+    }
+
+    /**
+     * Replaces a gravity provider with a new radius.
      * Called when the machine's radius changes due to an energy hatch change.
      */
-    public GravityProvider updateGravityProvider(BlockPos machinePos, int newRadius) {
+    public GravityProvider updateGravityProvider(BlockPos machinePos, int newRadius, float gravity) {
         GravityProvider old = gravityProviders.remove(machinePos);
         if (old != null) {
             gravityIndex.remove(old, old.getAffectedChunks());
         }
-        GravityProvider newProvider = new GravityProvider(machinePos, newRadius);
+        GravityProvider newProvider = new GravityProvider(machinePos, newRadius, gravity);
         gravityProviders.put(machinePos, newProvider);
         gravityIndex.add(newProvider, newProvider.getAffectedChunks());
         setSavedDataDirty();
@@ -557,29 +581,28 @@ public class DimEnvManager extends SavedData {
     // ==================== Gravity Queries ====================
 
     /**
-     * Checks if a position has normal (Earth-like) gravity (from natural environment or a machine bubble).
+     * Gets the gravity (m/s²) at a position. Gravity machine bubbles override
+     * the dimension's natural gravity.
      */
-    public boolean hasNormalGravity(BlockPos pos) {
-        if (environment.hasNormalGravity())
-            return true;
-
+    public float getGravity(BlockPos pos) {
         if (gravityIndex.isEmpty())
-            return false;
+            return environment.gravity();
 
         ProfilerFiller profiler = level.getProfiler();
-        profiler.push("tfg.environment.hasNormalGravity");
+        profiler.push("tfg.environment.getGravity");
         ChunkPos chunkPos = new ChunkPos(pos);
         Set<GravityProvider> providerSet = gravityIndex.get(chunkPos);
         if (providerSet != null) {
             for (GravityProvider provider : providerSet) {
-                if (provider.hasNormalGravity(pos)) {
+                Optional<Float> gravity = provider.getGravity(pos);
+                if (gravity.isPresent()) {
                     profiler.pop();
-                    return true;
+                    return gravity.get();
                 }
             }
         }
         profiler.pop();
-        return false;
+        return environment.gravity();
     }
 
     // ==================== Event Handling ====================

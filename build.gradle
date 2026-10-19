@@ -18,9 +18,9 @@ plugins {
     id 'java'
     id 'java-library'
     id 'idea'
-    id 'net.neoforged.moddev.legacyforge' version "${mdg_legacy_version}"
-    id 'com.diffplug.spotless' version "${spotless_version}"
-    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
+    alias libs.plugins.moddevLegacyforge
+    alias libs.plugins.spotless
+    alias libs.plugins.manifestClasspath
 }
 
 
@@ -47,7 +47,7 @@ idea {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(java_version.toInteger())
     }
 
 }
@@ -163,7 +163,9 @@ legacyForge {
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
-            programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
+            if (instancePath) {
+                programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
+            }
 
             String[] existingMods = new String[]{
                     "tfg", "gtceu", "tfc", "firmalife", "species",

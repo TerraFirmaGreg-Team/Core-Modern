@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -21,6 +22,8 @@ import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -34,6 +37,7 @@ import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
+import su.terrafirmagreg.core.common.environment.TemperatureProvider;
 import su.terrafirmagreg.core.common.tfgt.machine.electric.HeatPumpMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.electric.IHeatPumpHost;
 
@@ -55,6 +59,10 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     @Persisted
     @DescSynced
     private boolean showTraceButton;
+
+    @Persisted
+    @DescSynced
+    private float targetTemperature = TemperatureProvider.DEFAULT_TARGET_TEMPERATURE;
 
     public HeatPumpMultiblock(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -96,12 +104,22 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     @Override
     public @NotNull Widget createUIWidget() {
         int width = 180;
-        int height = 90;
+        int height = 92;
         var group = new WidgetGroup(0, 0, width, height);
         group.setBackground(ResourceBorderTexture.BORDERED_BACKGROUND);
 
         group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
                 .setMaxWidthLimit(width - 8));
+
+        group.addWidget(new LabelWidget(6, 51,
+                () -> Component.translatable("tfg.machine.heat_pump.temperature").getString()));
+        var tempField = new TextFieldWidget(112, 50, 62, 14,
+                null,
+                s -> setTargetTemperature(parseTargetTemperature(s)));
+        tempField.setNumbersOnly(TemperatureProvider.MIN_TARGET_TEMPERATURE, TemperatureProvider.MAX_TARGET_TEMPERATURE);
+        tempField.setCurrentString(String.format(Locale.ROOT, "%.1f", targetTemperature));
+        tempField.setHoverTooltips(Component.translatable("tfg.machine.heat_pump.temperature.tooltip"));
+        group.addWidget(tempField);
 
         var traceButton = new ButtonWidget(41 - 23, height - 19, 18, 18,
                 new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture("💨")),
@@ -123,6 +141,10 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     }
 
     private void addStatusText(List<Component> textList) {
+        if (!isFormed()) {
+            textList.add(Component.translatable("tfg.machine.unformed").withStyle(ChatFormatting.GRAY));
+            return;
+        }
         if (machine.isBlocked()) {
             textList.add(Component.translatable("tfg.machine.heat_pump.status.blocked")
                     .withStyle(ChatFormatting.RED));
@@ -242,6 +264,27 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     @Override
     public @Nullable BlockPos getBackScanStart() {
         return backVentPos != null ? backVentPos.relative(getFrontFacing().getOpposite()) : null;
+    }
+
+    @Override
+    public float getTargetTemperature() {
+        return targetTemperature;
+    }
+
+    @Override
+    public void setTargetTemperature(float temperature) {
+        targetTemperature = temperature;
+        if (!isRemote()) {
+            machine.applyTargetTemperature(targetTemperature);
+        }
+    }
+
+    private float parseTargetTemperature(String value) {
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return targetTemperature;
+        }
     }
 
     /** Scales energy consumption based on the front region size. */
