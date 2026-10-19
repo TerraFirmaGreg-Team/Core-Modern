@@ -28,6 +28,7 @@ import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 public class OreGrinderMachine extends WorkableElectricMultiblockMachine {
 
     private static final Reference2IntMap<RecipeCapability<?>> LIMIT_1 = itemLimit(1);
+    private static final Reference2IntMap<RecipeCapability<?>> LIMIT_2 = itemLimit(2);
     private static final Reference2IntMap<RecipeCapability<?>> LIMIT_3 = itemLimit(3);
     private static final Reference2IntMap<RecipeCapability<?>> LIMIT_4 = itemLimit(4);
 
@@ -52,8 +53,9 @@ public class OreGrinderMachine extends WorkableElectricMultiblockMachine {
         if (!isFormed())
             return super.getOutputLimits();
         return switch (GTUtil.getTierByVoltage(getMaxVoltage())) {
-            case 1, 2 -> LIMIT_1;
-            case 3 -> LIMIT_3;
+            case 0 -> LIMIT_1;
+            case 1 -> LIMIT_2;
+            case 2 -> LIMIT_3;
             default -> LIMIT_4;
         };
     }
