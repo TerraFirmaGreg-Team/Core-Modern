@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
+import earth.terrarium.adastra.common.constants.PlanetConstants;
 import earth.terrarium.adastra.common.systems.TemperatureApiImpl;
 
 import su.terrafirmagreg.core.common.environment.DimensionEnvironment;
@@ -26,7 +27,11 @@ public abstract class TemperatureApiImplMixin {
     private void tfg$getTemperature(Level level, BlockPos pos, CallbackInfoReturnable<Short> cir) {
         if (!(level instanceof ServerLevel))
             return;
-        cir.setReturnValue((short) EnvironmentSystem.getTemperature(level, pos));
+        float temperature = EnvironmentSystem.getTemperature(level, pos);
+        if (level.dimension() == Level.OVERWORLD) {
+            temperature = Math.max(temperature, PlanetConstants.FREEZE_TEMPERATURE);
+        }
+        cir.setReturnValue((short) temperature);
     }
 
     @ModifyConstant(method = { "isHot", "isLiveable" }, constant = @Constant(intValue = 70))
