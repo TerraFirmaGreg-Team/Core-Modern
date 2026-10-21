@@ -217,6 +217,11 @@ public class TFGItems {
             .onRegister(item -> item.attachComponents(new CoverPlaceBehavior(TFGCovers.ITEM_VOIDING_ROTTEN)))
             .register();
 
+    public static final ItemEntry<ElectricFlaskItem> ELECTRIC_FLASK = TFGCore.REGISTRATE.item("electric_flask", ElectricFlaskItem::new)
+            .properties(p -> p.durability(-1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
     public static ItemEntry<Item> ALFISOL_MUD_BRICK = TFGCore.REGISTRATE.item("mud_brick/alfisol", Item::new).defaultModel().register();
     public static ItemEntry<Item> MOLLISOL_MUD_BRICK = TFGCore.REGISTRATE.item("mud_brick/mollisol", Item::new).defaultModel().register();
     public static ItemEntry<Item> OXISOL_MUD_BRICK = TFGCore.REGISTRATE.item("mud_brick/oxisol", Item::new).defaultModel().register();

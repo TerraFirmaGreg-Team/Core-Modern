@@ -251,7 +251,7 @@ public interface EnvironmentalTemperatureProvider {
 
     static Optional<Float> getHeatPumpTemperature(Player player) {
         DimEnvManager manager = EnvironmentSystem.getManager((ServerLevel) player.level());
-        return manager.getTargetTemperature(player.blockPosition());
+        return manager.getHeatPumpTemperature(player.blockPosition());
     }
 
     static void evaluateAll(Player player, TempModifierStorage storage) {

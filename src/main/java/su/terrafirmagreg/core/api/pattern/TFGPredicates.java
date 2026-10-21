@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.api.pattern;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -53,5 +54,35 @@ public class TFGPredicates {
         }, () -> getBuddingTiers().keySet().stream()
                 .map(b -> BlockInfo.fromBlockState(b.defaultBlockState()))
                 .toArray(BlockInfo[]::new));
+    }
+
+    public static TraceabilityPredicate markedBlocks(String posKey, Block... blocks) {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var state = blockWorldState.getBlockState();
+            for (Block block : blocks) {
+                if (state.is(block)) {
+                    blockWorldState.getMatchContext().set(posKey, blockWorldState.getPos());
+                    return true;
+                }
+            }
+            return false;
+        }, () -> Arrays.stream(blocks)
+                .map(b -> BlockInfo.fromBlockState(b.defaultBlockState()))
+                .toArray(BlockInfo[]::new));
+    }
+
+    /**
+     * A funny Predicate to allow everything except a specific block defined in the Mulmtiblock definition
+     * .where('#', TFGPredicates.anyExcept(BLOCK))
+     */
+    public static TraceabilityPredicate anyExcept(Block... blocks) {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var state = blockWorldState.getBlockState();
+            for (Block block : blocks) {
+                if (state.is(block))
+                    return false;
+            }
+            return true;
+        }, null);
     }
 }
