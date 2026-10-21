@@ -9,7 +9,9 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 
-@Mixin(targets = "dev.dh.arthropocolypse.entity.Ice_Crawler")
+import dev.dh.arthropocolypse.entity.Ice_Crawler;
+
+@Mixin(Ice_Crawler.class)
 public class IceCrawlerMixin {
 
     // registerGoals
