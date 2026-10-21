@@ -101,6 +101,9 @@ public final class TFGTags {
 
         public static final TagKey<Item> TROWEL_BLACKLIST = createItemTag("trowel_blacklist");
 
+        public static final TagKey<Item> APPLIANCE_CATALYSTS = createItemTag("appliance_catalysts");
+        public static final TagKey<Item> APPLIANCE_TOOLS = createItemTag("appliance_tools");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }

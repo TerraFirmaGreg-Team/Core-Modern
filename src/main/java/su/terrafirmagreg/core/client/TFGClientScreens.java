@@ -12,6 +12,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.overlay.GlassblowingOverlay;
 import su.terrafirmagreg.core.client.renderer.SprayCanHudOverlay;
 import su.terrafirmagreg.core.client.screen.ArtisanTableScreen;
+import su.terrafirmagreg.core.client.screen.CopperPotScreen;
 import su.terrafirmagreg.core.client.screen.GasBurnerScreen;
 import su.terrafirmagreg.core.client.screen.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.TFGContainers;
@@ -29,6 +30,7 @@ public final class TFGClientScreens {
             MenuScreens.register(TFGContainers.LARGE_NEST_BOX.get(), LargeNestBoxScreen::new);
             MenuScreens.register(TFGContainers.ARTISAN_TABLE.get(), ArtisanTableScreen::new);
             MenuScreens.register(TFGContainers.GAS_BURNER.get(), GasBurnerScreen::new);
+            MenuScreens.register(TFGContainers.COPPER_POT.get(), CopperPotScreen::new);
         });
     }
 

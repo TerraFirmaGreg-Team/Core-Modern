@@ -23,6 +23,7 @@ import electrolyte.greate.content.kinetics.base.TieredSingleAxisRotatingVisual;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.renderer.CookingApplianceBlockEntityRenderer;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelInstance;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelRenderer;
 import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
@@ -123,6 +124,12 @@ public class TFGBlockEntities {
     public static final BlockEntityEntry<GasBurnerBlockEntity> GAS_BURNER = TFGCore.REGISTRATE
             .blockEntity("gas_burner", GasBurnerBlockEntity::new)
             .validBlock(TFGBlocks.GAS_BURNER)
+            .register();
+
+    public static final BlockEntityEntry<CopperPotBlockEntity> COPPER_POT = TFGCore.REGISTRATE
+            .blockEntity("copper_pot", CopperPotBlockEntity::new)
+            .validBlock(TFGBlocks.COPPER_POT)
+            .renderer(() -> CookingApplianceBlockEntityRenderer.CopperPot::new)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();

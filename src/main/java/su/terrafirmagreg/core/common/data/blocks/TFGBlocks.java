@@ -47,9 +47,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.item.CookingApplianceBlockItem;
 import su.terrafirmagreg.core.common.item.GasBurnerBlockItem;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -333,6 +335,37 @@ public final class TFGBlocks {
                             .when(ExplosionCondition.survivesExplosion()))))
             .item(GasBurnerBlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/" + ctx.getName() + "/gas_burner_0_unlit")))
+            .build()
+            .register();
+
+    public static final BlockEntry<CopperPotBlock> COPPER_POT = TFGCore.REGISTRATE
+            .block("copper_pot", p -> new CopperPotBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
+                    .blockEntity(TFGBlockEntities.COPPER_POT)
+                    .serverTicks(CookingApplianceBlockEntity::serverTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                var model = prov.models().getExistingFile(TFGCore.id("block/copper_pot_parent"));
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    builder.partialState()
+                            .with(CopperPotBlock.FACING, dir)
+                            .modelForState()
+                            .modelFile(model)
+                            .rotationY((int) dir.toYRot())
+                            .addModel();
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE)
+            .loot((lt, block) -> lt.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .name("loot_pool")
+                            .setRolls(ConstantValue.exactly(1))
+                            .add(LootItem.lootTableItem(block)
+                                    .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                    .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                            .copy("", "BlockEntityTag", CopyNbtFunction.MergeStrategy.REPLACE)))
+                            .when(ExplosionCondition.survivesExplosion()))))
+            .item(CookingApplianceBlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/copper_pot_parent")))
             .build()
             .register();
 
