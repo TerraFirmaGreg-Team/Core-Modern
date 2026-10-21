@@ -379,7 +379,7 @@ public class DimEnvManager extends SavedData {
     public DecompressionEvent startDecompression(BlockPos breachPoint, RoomScan oldRoomScan) {
         for (DecompressionEvent existing : activeDecompressions) {
             if (existing.getBreachPoint().equals(breachPoint))
-                return null;
+                return existing;
         }
         DecompressionEvent event = new DecompressionEvent(level, breachPoint, oldRoomScan);
         activeDecompressions.add(event);
@@ -676,6 +676,10 @@ public class DimEnvManager extends SavedData {
         }
 
         TFGCore.LOGGER.debug("Dispatching state change at {} to {} machines", pos, machines.size());
+        if (newState.getBlock() instanceof SlidingDoorBlock) {
+            dispatchSlidingDoorPositions(newState, pos);
+            return;
+        }
         for (IBlockSensitiveMachine machine : machines) {
             machine.onBlockChangeAt(pos);
         }
