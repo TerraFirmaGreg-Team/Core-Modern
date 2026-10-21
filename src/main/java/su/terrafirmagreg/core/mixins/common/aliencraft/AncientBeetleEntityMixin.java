@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.aliencraft;
 
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -14,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.sugar.Local;
 
-import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.entities.livestock.horse.HorseProperties;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -23,6 +23,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -145,7 +146,7 @@ public class AncientBeetleEntityMixin extends TamableAnimal {
     @Inject(method = "mobInteract", at = @At(value = "HEAD"), remap = true, cancellable = true)
     private void tfg$mobInteractFood(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         final ItemStack stack = player.getItemInHand(hand);
-        if (isFood(stack)) {
+        if (player.isHolding(this::isFood)) {
             if (!level().isClientSide) {
                 final long ticks = Calendars.SERVER.getTicks();
                 if (ticks > tfg$nextFeedTime) {

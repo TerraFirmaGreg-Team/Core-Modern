@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.arthropocolypse;
 
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraftforge.common.ForgeMod;
 
 import dev.dh.arthropocolypse.entity.Platerodrilus;
 
@@ -60,7 +60,7 @@ public abstract class PlaterodrilusMixin extends TamableAnimal {
                 .add(Attributes.ATTACK_DAMAGE, 14.0F)
                 .add(Attributes.ARMOR, 5.0F)
                 .add(Attributes.JUMP_STRENGTH, 1.0F)
-				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.0f));
+                .add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.0f));
     }
 
     @Override
