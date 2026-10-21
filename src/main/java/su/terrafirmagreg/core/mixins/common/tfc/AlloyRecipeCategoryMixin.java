@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import net.dries007.tfc.common.recipes.AlloyRecipe;
@@ -14,12 +15,18 @@ import net.dries007.tfc.compat.jei.category.AlloyRecipeCategory;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import su.terrafirmagreg.core.utils.TFGHelpers;
+
 @Mixin(value = AlloyRecipeCategory.class, remap = false)
 public abstract class AlloyRecipeCategoryMixin {
     @Redirect(method = "setRecipe", at = @At(value = "NEW", target = "net/minecraftforge/fluids/FluidStack", ordinal = 0))
     private FluidStack tfg$modifyInputFluidStack(Fluid fluid, int amount, @Local(argsOnly = true) AlloyRecipe recipe) {
         Material resultMaterial = ChemicalHelper.getMaterial(recipe.getResult().getFluid());
         Material inputMaterial = ChemicalHelper.getMaterial(fluid);
+
+        if (inputMaterial.equals(TFGHelpers.getMaterial("aluminium_silicate"))) {
+            inputMaterial = GTMaterials.Aluminium;
+        }
 
         for (MaterialStack component : resultMaterial.getMaterialComponents()) {
             if (component.material().equals(inputMaterial)) {

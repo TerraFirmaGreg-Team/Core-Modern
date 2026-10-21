@@ -15,6 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.dries007.tfc.mixin.client.accessor.LevelRendererAccessor;
@@ -33,6 +35,7 @@ public interface IHighlightHandler
      * @param blue      [0-1] blue value
      * @param alpha     [0-1] alpha value
      */
+    @OnlyIn(Dist.CLIENT)
     static void drawBox(PoseStack stack, VoxelShape shape, MultiBufferSource buffers, BlockPos pos, Vec3 renderPos, float red, float green, float blue, float alpha)
     {
         LevelRendererAccessor.invoke$renderShape(stack, buffers.getBuffer(RenderType.lines()), shape, pos.getX() - renderPos.x, pos.getY() - renderPos.y, pos.getZ() - renderPos.z, red, green, blue, alpha);
@@ -50,5 +53,6 @@ public interface IHighlightHandler
      * @param rendererPosition where the renderer is right now (essentially partial ticks)
      * @return true if you wish to cancel drawing the block's bounding box outline
      */
+    @OnlyIn(Dist.CLIENT)
     boolean drawHighlight(Level level, BlockPos pos, Player player, BlockHitResult rayTrace, PoseStack stack, MultiBufferSource buffers, Vec3 rendererPosition);
 }

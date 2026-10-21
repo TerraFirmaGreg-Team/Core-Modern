@@ -39,30 +39,20 @@ public class DebugEnvironmentCommand {
                 "Oxygen at %s: %s", pos.toShortString(), hasOxygen ? "YES" : "NO")), false);
 
         // Temperature status
-        boolean hasTemp = EnvironmentSystem.hasTemperature(level, pos);
-        String tempStatus;
-        if (hasTemp) {
-            tempStatus = "COZY";
-        } else {
-            short dimTemp = DimensionEnvironment.get(level.dimension()).temperature();
-            if (dimTemp < DimensionEnvironment.MIN_LIVEABLE_TEMPERATURE) {
-                tempStatus = "COLD (" + dimTemp + "°C)";
-            } else if (dimTemp > DimensionEnvironment.MAX_LIVEABLE_TEMPERATURE) {
-                tempStatus = "HOT (" + dimTemp + "°C)";
-            } else {
-                tempStatus = "COZY (" + dimTemp + "°C)";
-            }
-        }
+        float temperature = EnvironmentSystem.getTemperature(level, pos);
         source.sendSuccess(() -> Component.literal(String.format(
-                "Temperature at %s: %s", pos.toShortString(), tempStatus)), false);
+                "Temperature at %s: %.1f°C", pos.toShortString(), temperature)), false);
 
         // Gravity status
-        boolean hasGravity = EnvironmentSystem.hasNormalGravity(level, pos);
-        String gravityStatus = hasGravity ? "1.0 (normal)"
-                : String.format(
-                        "%.2f (dimension)", DimensionEnvironment.get(level.dimension()).gravity());
+        float gravity = EnvironmentSystem.getGravity(level, pos);
         source.sendSuccess(() -> Component.literal(String.format(
-                "Gravity at %s: %s", pos.toShortString(), gravityStatus)), false);
+                "Gravity at %s: %.3f m/s² (%.3f g)", pos.toShortString(), gravity,
+                gravity / DimensionEnvironment.EARTH_GRAVITY)), false);
+
+        // Pressure status
+        float pressure = EnvironmentSystem.getPressure(level, pos);
+        source.sendSuccess(() -> Component.literal(String.format(
+                "Pressure at %s: %.3f atm", pos.toShortString(), pressure)), false);
 
         // Oxygen providers
         int oxygenCount = 0;
@@ -99,8 +89,9 @@ public class DebugEnvironmentCommand {
             boolean blocked = provider.isBlocked();
 
             source.sendSuccess(() -> Component.literal(String.format(
-                    "  %s: front=%s(%d), back=%s(%d), blocked=%s, loaded=%s, working=%s",
-                    mPos.toShortString(), frontStatus, frontSize, backStatus, backSize, blocked, loaded, working)), false);
+                    "  %s: front=%s(%d), back=%s(%d), blocked=%s, target=%.1f°C, loaded=%s, working=%s",
+                    mPos.toShortString(), frontStatus, frontSize, backStatus, backSize, blocked,
+                    provider.getTargetTemperature(), loaded, working)), false);
         }
         if (tempCount == 0) {
             source.sendSuccess(() -> Component.literal("  (none)"), false);
@@ -117,8 +108,8 @@ public class DebugEnvironmentCommand {
             boolean working = provider.isMachineWorking();
 
             source.sendSuccess(() -> Component.literal(String.format(
-                    "  %s: radius=%d, loaded=%s, working=%s",
-                    mPos.toShortString(), radius, loaded, working)), false);
+                    "  %s: radius=%d, gravity=%.3f, loaded=%s, working=%s",
+                    mPos.toShortString(), radius, provider.getGravity(), loaded, working)), false);
         }
         if (gravityCount == 0) {
             source.sendSuccess(() -> Component.literal("  (none)"), false);

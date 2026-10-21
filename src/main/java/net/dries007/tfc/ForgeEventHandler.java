@@ -123,6 +123,7 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -1111,6 +1112,12 @@ public final class ForgeEventHandler
                     event.setCanceled(true);
                 }
             }
+
+			// For some reason, installing TFC caelum makes slimes spawn on the surface, so here's an extra check
+			if (entity.getType() == EntityType.SLIME && event.getLevel().getRawBrightness(entity.blockPosition(), 0) != 0) {
+				event.setSpawnCancelled(true);
+				event.setCanceled(true);
+			}
         }
     }
 

@@ -391,6 +391,7 @@ public final class TFGTagPrefix {
         TagPrefix.toolHeadChainsaw.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_CHAINSAW_HEAD));
         TagPrefix.toolHeadWrench.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WRENCH_HEAD));
         TagPrefix.toolHeadWireCutter.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WIRE_CUTTER_HEAD));
+        TFGTagPrefix.toolHeadScythe.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_SCYTHE_HEAD));
 
         // Has to be handled specially because otherwise some recipes crash on startup because of missing recipe inputs
         TagPrefix.toolHeadBuzzSaw.generationCondition(TagPrefix.toolHeadBuzzSaw.generationCondition()
