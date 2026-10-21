@@ -201,4 +201,7 @@ dependencies {
 
     // Aliencraft: Kepler 22b, Oct 7 2026
     modImplementation(mods.aliencraftKepler)
+
+    // Primitive Creatures
+    modCompileOnly(mods.primitiveCreatures)
 }

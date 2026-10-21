@@ -80,6 +80,7 @@ jellies = "0.1.6"
 arthropocolypse = "5397648"
 opposingForce = "1.20.1-2.0.3"
 aliencraftKepler = "8896274"
+primitiveCreatures = "7287434"
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = "11.1.136+forge"
@@ -201,6 +202,7 @@ jellies = { module = "maven.modrinth:jellies", version.ref = "jellies" }
 arthropocolypse = { module = "curse.maven:arthropocolypse-1018606", version.ref = "arthropocolypse" }
 opposingForce = { module = "maven.modrinth:opposing-force", version.ref = "opposingForce" }
 aliencraftKepler = { module = "curse.maven:aliencraft-kepler-22b-1444616", version.ref = "aliencraftKepler" }
+primitiveCreatures = { module = "curse.maven:primitive-creatures-1218288", version.ref = "primitiveCreatures" }
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = { module = "maven.modrinth:cloth-config", version.ref = "clothConfig" }

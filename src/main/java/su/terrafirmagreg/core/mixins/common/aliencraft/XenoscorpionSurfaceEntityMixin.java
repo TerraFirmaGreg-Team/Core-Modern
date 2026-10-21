@@ -48,6 +48,11 @@ public class XenoscorpionSurfaceEntityMixin extends Monster {
         super(entityType, level);
     }
 
+    @Override
+    public void setPersistenceRequired() {
+        // Remove call
+    }
+
     @Inject(method = "createAttributes", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.setReturnValue(Mob.createMobAttributes()
