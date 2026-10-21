@@ -145,8 +145,8 @@ public class AncientBeetleEntityMixin extends TamableAnimal {
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"), remap = true, cancellable = true)
     private void tfg$mobInteractFood(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        final ItemStack stack = player.getItemInHand(hand);
         if (player.isHolding(this::isFood)) {
+			final ItemStack stack = player.getItemInHand(hand);
             if (!level().isClientSide) {
                 final long ticks = Calendars.SERVER.getTicks();
                 if (ticks > tfg$nextFeedTime) {
@@ -174,8 +174,8 @@ public class AncientBeetleEntityMixin extends TamableAnimal {
     }
 
     @Redirect(method = "mobInteract", at = @At(value = "INVOKE", target = "Len/predator97427fr/aliencraft/procedures/AncientBeetleRightclickedOnEntityProcedure;execute(Lnet/minecraft/world/level/LevelAccessor;DDDLnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V"), remap = true)
-    private void tfg$mobInteractSaddle(LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity, @Local(name = "stack") ItemStack stack) {
-        boolean usingSaddle = stack.is(Items.SADDLE);
+    private void tfg$mobInteractSaddle(LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity, @Local(name = "player") Player player) {
+        boolean usingSaddle = player.isHolding(Items.SADDLE);
         boolean wasSaddled = this.entityData.get(DATA_saddled);
 
         if (usingSaddle && !wasSaddled) {
