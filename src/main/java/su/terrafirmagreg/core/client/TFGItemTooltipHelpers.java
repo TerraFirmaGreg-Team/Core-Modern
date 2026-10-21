@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
+import com.gregtechceu.gtceu.common.item.TurbineRotorBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.lang.Lang;
@@ -34,6 +35,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
@@ -50,6 +52,7 @@ import su.terrafirmagreg.core.common.event.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.OreProspectorEvent;
 import su.terrafirmagreg.core.common.event.WeakOreProspectorEventHelper;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RotorVentPartMachine;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 @SuppressWarnings("NoTranslation")
@@ -251,5 +254,37 @@ public class TFGItemTooltipHelpers {
                 .add(CreateLang.translate("generic.unit.rpm")
                         .style(ChatFormatting.RED))
                 .forGoggles(tooltip);
+    }
+    // Trying to have the vent lines appear before TFC size/weight
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onRotorVentTooltip(ItemTooltipEvent event) {
+        addRotorVentTooltip(event.getToolTip(), event.getItemStack());
+    }
+
+    private static void addRotorVentTooltip(List<Component> tooltip, ItemStack stack) {
+
+        TurbineRotorBehaviour behaviour = TurbineRotorBehaviour.getBehaviour(stack);
+        if (behaviour == null)
+            return;
+
+        double energy = RotorVentPartMachine.energyMultiplier(behaviour.getRotorPower(stack));
+        double consumption = RotorVentPartMachine.consumptionMultiplier(behaviour.getRotorEfficiency(stack));
+        if (energy >= 1.0 && consumption >= 1.0)
+            return;
+
+        tooltip.add(Component.translatable("tfg.tooltip.rotor_vent.header").withStyle(ChatFormatting.WHITE));
+        if (energy < 1.0) {
+            tooltip.add(Component.translatable("tfg.tooltip.rotor_vent.energy", formatReduction(energy))
+                    .withStyle(ChatFormatting.WHITE));
+        }
+        if (consumption < 1.0) {
+            tooltip.add(Component.translatable("tfg.tooltip.rotor_vent.consumption", formatReduction(consumption))
+                    .withStyle(ChatFormatting.WHITE));
+        }
+    }
+
+    private static String formatReduction(double multiplier) {
+        return String.format("%.0f%%", (1.0 - multiplier) * 100);
     }
 }

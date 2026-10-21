@@ -118,6 +118,16 @@ public final class ForgeCommonEventListener {
     }
 
     @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            //Checks if the player is in a custom dimension spawn,
+            // and puts them at that pos when they first join
+            GlobalPos spawnPos = CustomSpawnSaveHandler.getSpawnPos(Objects.requireNonNull(player.getServer()).overworld());
+            CustomSpawnHelper.tryFirstJoinTeleport(player, spawnPos);
+        }
+    }
+
+    @SubscribeEvent
     public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         NutrientEffectsHandler.removeFromPlayer(event.getEntity());
         if (event.getEntity() instanceof ServerPlayer player) {

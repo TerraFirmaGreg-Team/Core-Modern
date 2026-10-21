@@ -2,7 +2,10 @@ package su.terrafirmagreg.core.client;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -15,32 +18,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
-
-// If I want to change a boolean to a float
-//  1. Change the record fields - just change boolean to float
-//  2. Update the packet encoding - replace the byte packing with actual float writes:
-//
-//// In EnvironmentResponsePacket
-//public static void encode(EnvironmentResponsePacket pkt, FriendlyByteBuf buf) {
-//    buf.writeBlockPos(pkt.pos);
-//    buf.writeFloat(pkt.state.oxygen());
-//    buf.writeFloat(pkt.state.gravity());
-//    buf.writeFloat(pkt.state.temperature());
-//    buf.writeFloat(pkt.state.pressure());
-//}
-//
-//public static EnvironmentResponsePacket decode(FriendlyByteBuf buf) {
-//    return new EnvironmentResponsePacket(
-//            buf.readBlockPos(),
-//            new EnvironmentState(
-//                    buf.readFloat(),
-//                    buf.readFloat(),
-//                    buf.readFloat(),
-//                    buf.readFloat()));
-//}
-//
-//  3. Update the server-side query in EnvironmentQueryPacket to compute floats instead of booleans
-//  4. Remove toByte()/fromByte() - they don't make sense for floats
 
 /**
  * Client-side cache for environment query results.
@@ -55,32 +32,9 @@ public final class EnvironmentClientCache {
      */
     public record EnvironmentState(
             boolean hasOxygen,
-            boolean hasNormalGravity,
-            boolean hasNormalTemperature,
-            boolean hasNormalPressure) {
-
-        /** Encodes to a single byte for network transmission. */
-        public byte toByte() {
-            byte flags = 0;
-            if (hasOxygen)
-                flags |= 0x01;
-            if (hasNormalGravity)
-                flags |= 0x02;
-            if (hasNormalTemperature)
-                flags |= 0x04;
-            if (hasNormalPressure)
-                flags |= 0x08;
-            return flags;
-        }
-
-        /** Decodes from a byte. */
-        public static EnvironmentState fromByte(byte flags) {
-            return new EnvironmentState(
-                    (flags & 0x01) != 0,
-                    (flags & 0x02) != 0,
-                    (flags & 0x04) != 0,
-                    (flags & 0x08) != 0);
-        }
+            float gravity,
+            float temperature,
+            float pressure) {
     }
 
     private record CacheEntry(EnvironmentState state, long queryTick) {
@@ -96,6 +50,7 @@ public final class EnvironmentClientCache {
     /** Pending queries time out after 100 ticks */
     private static final int PENDING_TIMEOUT_TICKS = 100;
     private static long clientTicks = 0;
+    private static ResourceKey<Level> lastDimension = null;
 
     private EnvironmentClientCache() {
     }
@@ -144,42 +99,33 @@ public final class EnvironmentClientCache {
     }
 
     /**
-     * Checks if a position has normal gravity from the client cache.
-     * Returns true by default if query is pending.
+     * Gets the gravity at a position from the client cache.
+     * Returns null if the query is still pending.
      */
-    public static boolean hasNormalGravity(BlockPos pos) {
-        return hasNormalGravity(pos, true);
-    }
-
-    public static boolean hasNormalGravity(BlockPos pos, boolean fallback) {
+    @Nullable
+    public static Float getGravity(BlockPos pos) {
         EnvironmentState state = get(pos);
-        return state != null ? state.hasNormalGravity() : fallback;
+        return state != null ? state.gravity() : null;
     }
 
     /**
-     * Checks if a position has normal temperature from the client cache.
-     * Returns true by default if query is pending.
+     * Gets the temperature at a position from the client cache.
+     * Returns null if the query is still pending.
      */
-    public static boolean hasNormalTemperature(BlockPos pos) {
-        return hasNormalTemperature(pos, true);
-    }
-
-    public static boolean hasNormalTemperature(BlockPos pos, boolean fallback) {
+    @Nullable
+    public static Float getTemperature(BlockPos pos) {
         EnvironmentState state = get(pos);
-        return state != null ? state.hasNormalTemperature() : fallback;
+        return state != null ? state.temperature() : null;
     }
 
     /**
-     * Checks if a position has normal pressure from the client cache.
-     * Returns true by default if query is pending.
+     * Gets the pressure at a position from the client cache.
+     * Returns null if the query is still pending.
      */
-    public static boolean hasNormalPressure(BlockPos pos) {
-        return hasNormalPressure(pos, true);
-    }
-
-    public static boolean hasNormalPressure(BlockPos pos, boolean fallback) {
+    @Nullable
+    public static Float getPressure(BlockPos pos) {
         EnvironmentState state = get(pos);
-        return state != null ? state.hasNormalPressure() : fallback;
+        return state != null ? state.pressure() : null;
     }
 
     /**
@@ -203,6 +149,13 @@ public final class EnvironmentClientCache {
             return;
         }
         clientTicks++;
+
+        Level level = Minecraft.getInstance().level;
+        if (level != null && !level.dimension().equals(lastDimension)) {
+            lastDimension = level.dimension();
+            clear();
+        }
+
         if (clientTicks % 100 == 0) {
             if (!cache.isEmpty()) {
                 cache.long2ObjectEntrySet().removeIf(entry -> clientTicks - entry.getValue().queryTick() > EVICT_TICKS);
