@@ -32,12 +32,12 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
     private final int currentTempBarWidth = 15;
     private final int currentTempBarHeight = 5;
 
-//    private final int flameX = 63;
-//    private final int flameY = 22;
-//    private final int flameU = currentTempBarU;
-//    private final int flameV = currentTempBarV + currentTempBarHeight * 2;
-//    private final int flameWidth = 21;
-//    private final int flameHeight = 32;
+    //    private final int flameX = 63;
+    //    private final int flameY = 22;
+    //    private final int flameU = currentTempBarU;
+    //    private final int flameV = currentTempBarV + currentTempBarHeight * 2;
+    //    private final int flameWidth = 21;
+    //    private final int flameHeight = 32;
 
     private final int tankX = 44 - 18;
     private final int tankY = 25 + 30;
@@ -113,7 +113,7 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
             }
         }
 
-        graphics.blit(texture, leftPos + tankX + 90 - 1, topPos + tankY  - 7, tankOverlayU, currentTempBarV + 6, (tankWidth + 2) * 3, tankHeight + 1);
+        graphics.blit(texture, leftPos + tankX + 90 - 1, topPos + tankY - 7, tankOverlayU, currentTempBarV + 6, (tankWidth + 2) * 3, tankHeight + 1);
 
         for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
             int column = i % 3;
