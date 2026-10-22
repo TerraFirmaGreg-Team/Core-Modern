@@ -75,6 +75,12 @@ sourceSets {
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
 
+    // Client runs: dev plus client-only mods, which would crash a dedicated server (see dependencies.gradle)
+    clientDev {
+        compileClasspath += sourceSets.dev.compileClasspath
+        runtimeClasspath += sourceSets.dev.output + sourceSets.dev.runtimeClasspath
+    }
+
     test {
         compileClasspath += main.output + main.compileClasspath
         runtimeClasspath += main.output + main.runtimeClasspath
@@ -85,6 +91,11 @@ configurations {
     testCompileClasspath.extendsFrom(compileClasspath)
     testRuntimeClasspath.extendsFrom(runtimeClasspath)
     testAnnotationProcessor.extendsFrom(annotationProcessor)
+}
+
+// Adds modClientDevRuntimeOnly, for client-only mods
+obfuscation {
+    createRemappingConfiguration(configurations.clientDevRuntimeOnly)
 }
 
 mixin {
@@ -131,14 +142,14 @@ legacyForge {
         client {
             client()
             ideName = "Client"
-            sourceSet = sourceSets.dev
+            sourceSet = sourceSets.clientDev
             gameDirectory = project.file('run/client')
         }
 
         client2 {
             client()
             ideName = "Client2"
-            sourceSet = sourceSets.dev
+            sourceSet = sourceSets.clientDev
             programArgument '--username'
             programArgument 'Dev2'
             gameDirectory = project.file('run/client2')
