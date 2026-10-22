@@ -73,18 +73,23 @@ public final class FluidHelpers
     public static boolean isInWaterLikeFluid(Entity entity)
     {
         return entity.isInFluidType((fluidType, value) ->
-										fluidType == TFCFluids.SALT_WATER.type().get()
-											|| fluidType == TFCFluids.SPRING_WATER.type().get()
-		|| fluidType == TFGFluids.MUDDY_WATER.type().get()
-		|| fluidType == TFGFluids.MARS_WATER.type().get());
+				fluidType == TFCFluids.SALT_WATER.type().get()
+				|| fluidType == TFCFluids.SPRING_WATER.type().get()
+				|| fluidType == TFGFluids.MUDDY_WATER.type().get()
+				|| fluidType == TFGFluids.MARS_WATER.type().get()
+				|| fluidType == TFGFluids.SULFUR_FUMES.type().get()
+				|| fluidType == TFGFluids.GEYSER_SLURRY.type().get());
     }
 
 	public static double getWaterLikeFluidHeight(Entity entity)
 	{
-		return Math.max(Math.max(Math.max(entity.getFluidTypeHeight(TFCFluids.SALT_WATER.type().get()),
-			entity.getFluidTypeHeight(TFCFluids.SPRING_WATER.type().get())),
-			entity.getFluidTypeHeight(TFGFluids.MUDDY_WATER.type().get())),
-			entity.getFluidTypeHeight(TFGFluids.MARS_WATER.type().get()));
+		return Math.max(Math.max(Math.max(Math.max(Math.max(
+				entity.getFluidTypeHeight(TFCFluids.SALT_WATER.type().get()),
+				entity.getFluidTypeHeight(TFCFluids.SPRING_WATER.type().get())),
+				entity.getFluidTypeHeight(TFGFluids.MUDDY_WATER.type().get())),
+				entity.getFluidTypeHeight(TFGFluids.MARS_WATER.type().get())),
+				entity.getFluidTypeHeight(TFGFluids.SULFUR_FUMES.type().get())),
+				entity.getFluidTypeHeight(TFGFluids.GEYSER_SLURRY.type().get()));
 	}
 
     /**
@@ -93,9 +98,11 @@ public final class FluidHelpers
     public static boolean isEyeInWaterLikeFluid(Entity entity)
     {
         return entity.isEyeInFluidType(TFCFluids.SALT_WATER.type().get())
-				   || entity.isEyeInFluidType(TFCFluids.SPRING_WATER.type().get())
-			|| entity.isEyeInFluidType(TFGFluids.MUDDY_WATER.type().get())
-		|| entity.isEyeInFluidType(TFGFluids.MARS_WATER.type().get());
+			    || entity.isEyeInFluidType(TFCFluids.SPRING_WATER.type().get())
+				|| entity.isEyeInFluidType(TFGFluids.MUDDY_WATER.type().get())
+				|| entity.isEyeInFluidType(TFGFluids.MARS_WATER.type().get())
+				|| entity.isEyeInFluidType(TFGFluids.SULFUR_FUMES.type().get())
+				|| entity.isEyeInFluidType(TFGFluids.GEYSER_SLURRY.type().get());
     }
 
 

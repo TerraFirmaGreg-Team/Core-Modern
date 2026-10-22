@@ -14,7 +14,9 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
+import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -111,5 +114,9 @@ public final class TFGHelpers {
         } else {
             return duration;
         }
+    }
+
+    public static Vec2 getOverworldWind(Level level, BlockPos pos, long calendarTime, float seaLevel) {
+        return OverworldClimateModel.getOverworldWindVector(level, pos, calendarTime, 8008135, seaLevel);
     }
 }

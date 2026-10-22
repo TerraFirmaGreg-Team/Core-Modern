@@ -30,7 +30,6 @@ import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
@@ -66,6 +65,7 @@ public class ClientProxy extends CommonProxy {
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
         // environmental
         event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
+        event.registerSpriteSet(TFGParticles.LARGE_SMOKE.get(), LargeSmokeProvider::new);
         // Decompression event
         event.registerSpriteSet(TFGParticles.DECOMPRESSION.get(), DecompressionParticle.Provider::new);
         // for machines

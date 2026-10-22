@@ -20,9 +20,6 @@ public abstract class AdAstraCompat {
 
     private static boolean OnGravityTick(Level level, LivingEntity entity, Vec3 travelVector,
             BlockPos movementAffectingPos) {
-        if (entity.getType().getTags().anyMatch(t -> t == TFGTags.Entities.IgnoresGravity))
-            return false;
-
-        return true;
+        return !entity.getType().is(TFGTags.Entities.IgnoresGravity);
     }
 }

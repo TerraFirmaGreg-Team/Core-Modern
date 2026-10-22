@@ -69,6 +69,12 @@
     "tfg:grass/sangnum_kaolin_mycelium",
     "tfg:grass/mars_clay_dirt",
     "tfg:grass/mars_path",
-    "tfg:grass/mars_farmland"
+    "tfg:grass/mars_farmland",
+    "tfg:sand/fluorapatite/white",
+    "tfg:sand/fluorapatite/yellow",
+    "tfg:sand/fluorapatite/orange",
+    "tfg:sand/fluorapatite/brown",
+    "tfg:sand/fluorapatite/blue",
+    "tfg:sand/fluorapatite/green"
   ]
 }

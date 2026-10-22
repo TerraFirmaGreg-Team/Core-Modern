@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.compat.jade.common;
 
+import dev.dh.arthropocolypse.entity.Platerodrilus;
+import en.predator97427fr.aliencraft.entity.AncientBeetleEntity;
 import net.dries007.tfc.common.entities.livestock.pet.Dog;
 import net.dries007.tfc.common.entities.predator.TFCWolf;
 import net.dries007.tfc.common.entities.prey.TFCFox;
@@ -44,7 +46,9 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.wanmine.wab.entity.Charger;
 import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
+import net.wanmine.wab.entity.Walker;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.entity.ancient_beetle.AncientBeetleData;
 import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
 import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
 import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
@@ -55,14 +59,18 @@ import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamel;
 import su.terrafirmagreg.core.common.entity.camels.TFCDromedaryCamel;
 import su.terrafirmagreg.core.common.entity.charger.ChargerData;
+import su.terrafirmagreg.core.common.entity.dragonfly.Dragonfly;
 import su.terrafirmagreg.core.common.entity.fox.FoxData;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.entity.platerodrilus.PlaterodrilusData;
+import su.terrafirmagreg.core.common.entity.silk_moth.SilkMoth;
 import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.entity.soarer.SoarerData;
 import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
+import su.terrafirmagreg.core.common.entity.walker.WalkerData;
 import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptor;
 import team.terrafirmagreg.jellies.common.data.JelliesTags;
 
@@ -92,6 +100,9 @@ public final class EntityTooltips
 		registry.register("rabbit", TFG_RABBIT, Rabbit.class);
 		registry.register("surfer", TFG_SURFER, TFCSurfer.class);
 		registry.register("soarer", TFG_SOARER, Soarer.class);
+		registry.register("walker", TFG_WALKER, Walker.class);
+		registry.register("platerodrilus", TFG_PLATERODRILUS, Platerodrilus.class);
+		registry.register("beetle", TFG_BEETLE, AncientBeetleEntity.class);
 		registry.register("axolotl", TFG_AXOLOTL, Axolotl.class);
 		registry.register("charger", TFG_CHARGER, Charger.class);
 		registry.register("snatcher", TFG_SNATCHER, Snatcher.class);
@@ -104,6 +115,8 @@ public final class EntityTooltips
 		registry.register("mongoose", TFC_1_21, TFCMongoose.class);
 		registry.register("fox", TFC_FOX, TFCFox.class);
 		registry.register("tamed_fox", TFG_FOX, TFGFox.class);
+		registry.register("silk_moth", TFG_SILK_MOTH, SilkMoth.class);
+		registry.register("dragonfly", TFG_DRAGONFLY, Dragonfly.class);
     }
 
     public static final EntityTooltip FROG = (level, entity, tooltip) -> {
@@ -364,6 +377,36 @@ public final class EntityTooltips
 		}
 	};
 
+	private static final EntityTooltip TFG_WALKER = (level, entity, tooltip) -> {
+		if (entity instanceof Walker walker) {
+			tooltip.accept(Helpers.translateEnum(WalkerData.isMale(walker) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
+
+			float familiarity = Math.max(0.0F, Math.min(1.0F, WalkerData.getFamiliarity(walker)));
+			String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
+			tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
+		}
+	};
+
+	private static final EntityTooltip TFG_PLATERODRILUS = (level, entity, tooltip) -> {
+		if (entity instanceof Platerodrilus platero) {
+			tooltip.accept(Helpers.translateEnum(PlaterodrilusData.isMale(platero) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
+
+			float familiarity = Math.max(0.0F, Math.min(1.0F, PlaterodrilusData.getFamiliarity(platero)));
+			String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
+			tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
+		}
+	};
+
+	private static final EntityTooltip TFG_BEETLE = (level, entity, tooltip) -> {
+		if (entity instanceof AncientBeetleEntity beetle) {
+			tooltip.accept(Helpers.translateEnum(AncientBeetleData.isMale(beetle) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
+
+			float familiarity = Math.max(0.0F, Math.min(1.0F, AncientBeetleData.getFamiliarity(beetle)));
+			String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
+			tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
+		}
+	};
+
 	private static final EntityTooltip TFG_AXOLOTL = (level, entity, tooltip) -> {
 		if (entity instanceof Axolotl axolotl) {
 			tooltip.accept(Helpers.translateEnum(AxolotlData.isMale(axolotl) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
@@ -372,6 +415,14 @@ public final class EntityTooltips
 
 	private static final EntityTooltip TFC_1_21 = (level, entity, tooltip) -> {
 		tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.tfc"));
+	};
+
+	private static final EntityTooltip TFG_SILK_MOTH = (level, entity, tooltip) -> {
+		tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.betterend"));
+	};
+
+	private static final EntityTooltip TFG_DRAGONFLY = (level, entity, tooltip) -> {
+		tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.betterend"));
 	};
 
 	private static final EntityTooltip TFG_ANIMAL = (level, entity, tooltip) -> {

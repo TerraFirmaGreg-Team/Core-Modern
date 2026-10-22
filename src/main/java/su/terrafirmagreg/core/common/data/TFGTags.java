@@ -33,6 +33,7 @@ public final class TFGTags {
 
         public static final TagKey<Item> MartianHerbivoreFoods = createItemTag("martian_herbivore_foods");
         public static final TagKey<Item> MartianPiscivoreFoods = createItemTag("martian_piscivore_foods");
+        public static final TagKey<Item> VenusianArthropodFoods = createItemTag("venusian_arthropod_foods");
         public static final TagKey<Item> EmptySyringe = createItemTag("empty_dna_syringes");
 
         public static final TagKey<Item> InsulatingContainer = createItemTag("insulating_container");
@@ -101,6 +102,10 @@ public final class TFGTags {
 
         public static final TagKey<Item> TROWEL_BLACKLIST = createItemTag("trowel_blacklist");
 
+        public static final TagKey<Item> FLUORAPATITE_SAND = createItemTag("fluorapatite_sand");
+        public static final TagKey<Item> FLUORAPATITE_SANDSTONE = createItemTag("fluorapatite_sandstone");
+        public static final TagKey<Item> SULFIE_FOOD = createItemTag("sulfie_food");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }
@@ -146,6 +151,7 @@ public final class TFGTags {
         public static final TagKey<Block> FALLING_CONCUSSIVE = createBlockTag("falling_concussive");
         public static final TagKey<Block> HORNFELS = createBlockTag("hornfels");
         public static final TagKey<Block> UNPOSTER_GROWABLE = createBlockTag("unposter_growable");
+        public static final TagKey<Block> SILK_MOTH_BLOCKS = createBlockTag("silk_moth_blocks");
 
         // Environment system tags
         public static final TagKey<Block> AtmospherePassable = createBlockTag("atmosphere_passable");
@@ -188,8 +194,8 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> IgnoresCacti = createEntityTag("ignores_cacti");
         public static final TagKey<EntityType<?>> NotRammedByRammers = createEntityTag("not_rammed_by_rammers");
         public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("fishing_net_scoopable");
-        public static final TagKey<EntityType<?>> Genderless = createEntityTag("genderless");
         public static final TagKey<EntityType<?>> RammingAnimals = createEntityTag("ramming_animals");
+        public static final TagKey<EntityType<?>> VenusPrey = createEntityTag("venus_prey");
 
         private static TagKey<EntityType<?>> createEntityTag(String path) {
             return createEntityTag(TFGCore.id(path));

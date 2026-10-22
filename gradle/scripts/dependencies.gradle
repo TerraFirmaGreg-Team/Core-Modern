@@ -198,4 +198,13 @@ dependencies {
 
     // Arthropocolypse
     modImplementation(mods.arthropocolypse)
+
+    // Opposing Force, Oct 7 2026
+    modImplementation(mods.opposingForce)
+
+    // Aliencraft: Kepler 22b, Oct 7 2026
+    modImplementation(mods.aliencraftKepler)
+
+    // Primitive Creatures
+    modCompileOnly(mods.primitiveCreatures)
 }
