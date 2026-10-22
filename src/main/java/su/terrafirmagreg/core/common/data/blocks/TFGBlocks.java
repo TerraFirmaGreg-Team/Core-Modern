@@ -344,14 +344,20 @@ public final class TFGBlocks {
                     .serverTicks(CookingApplianceBlockEntity::serverTick)))
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
-                var model = prov.models().getExistingFile(TFGCore.id("block/copper_pot_parent"));
-                for (Direction dir : Direction.Plane.HORIZONTAL) {
-                    builder.partialState()
-                            .with(CopperPotBlock.FACING, dir)
-                            .modelForState()
-                            .modelFile(model)
-                            .rotationY((int) dir.toYRot())
-                            .addModel();
+                for (int level = 0; level <= Collections.max(CookingApplianceBlock.RECEIVED_HEAT.getPossibleValues()); level++) {
+
+                    var model = prov.models().withExistingParent("cooking_appliances/copper_pot_" + level, TFGCore.id("block/copper_pot_parent"))
+                            .texture("0", TFGCore.id("block/cooking_appliances/copper_pot_" + level));
+
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+                        builder.partialState()
+                                .with(CookingApplianceBlock.RECEIVED_HEAT, level)
+                                .with(CopperPotBlock.FACING, dir)
+                                .modelForState()
+                                .modelFile(model)
+                                .rotationY((int) dir.toYRot())
+                                .addModel();
+                    }
                 }
             })
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE)
@@ -365,7 +371,7 @@ public final class TFGBlocks {
                                             .copy("", "BlockEntityTag", CopyNbtFunction.MergeStrategy.REPLACE)))
                             .when(ExplosionCondition.survivesExplosion()))))
             .item(CookingApplianceBlockItem::new)
-            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/copper_pot_parent")))
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/copper_pot_0")))
             .build()
             .register();
 
