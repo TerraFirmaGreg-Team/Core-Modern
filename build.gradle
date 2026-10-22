@@ -225,6 +225,8 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xlint:-removal"
     options.compilerArgs << "-Aquiet=true" // Suppress mixin notes
 
+    // javac runs in a forked worker (toolchain JDK), which defaults to -Xmx512m regardless of org.gradle.jvmargs
+    options.forkOptions.memoryMaximumSize = "4g"
 }
 
 if (enableCopyToInstance) {
