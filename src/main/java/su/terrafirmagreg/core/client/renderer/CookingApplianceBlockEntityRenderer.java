@@ -42,6 +42,14 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
 
         int maxTanks = Math.max(appliance.getFluidOutputCount(), appliance.getFluidInputCount());
 
+        boolean hasAnyOutputFluid = false;
+        for (int i = 0; i < appliance.getFluidOutputCount(); i++) {
+            if (!appliance.getFluidOutputTank(i).isEmpty()) {
+                hasAnyOutputFluid = true;
+                break;
+            }
+        }
+
         // Fluid Plane Renderings
         for (int i = 0; i <= maxTanks; i++) {
             FluidStack fluidToRender = FluidStack.EMPTY;
@@ -57,7 +65,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             }
 
             // Check if input tank has fluid.
-            if (fluidToRender.isEmpty() && appliance.getFluidInputCount() > i) {
+            if (fluidToRender.isEmpty() && !hasAnyOutputFluid && appliance.getFluidInputCount() > i) {
                 FluidStack inFluid = appliance.getFluidInputTank(i);
                 if (!inFluid.isEmpty()) {
                     fluidToRender = inFluid;
@@ -126,13 +134,16 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             }
 
             // Tool Item Rendering
+            float toolScale = 0.8F;
+            float toolY = Mth.clamp(getHighestFluidLevel(appliance), 0.4F, 1.0F);
             ItemStack tool = cap.getStackInSlot(appliance.getToolSlot());
             if (!tool.isEmpty()) {
                 poseStack.pushPose();
-                poseStack.translate(0.5D, 0.4D, 0.5D);
-                poseStack.scale(0.4F, 0.4F, 0.4F);
+                poseStack.translate(0.6D, toolY, 0.6D);
+                poseStack.scale(toolScale, toolScale, toolScale);
                 poseStack.mulPose(Axis.XP.rotationDegrees(45.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(30.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(110.0F));
                 Minecraft.getInstance().getItemRenderer().renderStatic(tool, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffer, appliance.getLevel(), 0);
                 poseStack.popPose();
             }
