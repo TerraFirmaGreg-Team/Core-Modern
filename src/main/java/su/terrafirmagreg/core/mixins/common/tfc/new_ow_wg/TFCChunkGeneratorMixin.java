@@ -70,6 +70,7 @@ import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
+import su.terrafirmagreg.core.world.new_ow_wg.chunk.FluidPostProcess;
 import su.terrafirmagreg.core.world.new_ow_wg.chunk.TFGChunkHeightFiller;
 import su.terrafirmagreg.core.world.new_ow_wg.chunk.TFGChunkNoiseFiller;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureBlendType;
@@ -253,6 +254,13 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     @Inject(method = "applyBiomeDecoration", at = @At("HEAD"), remap = true)
     private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {
         TFGBedrockFluidDefinition.safelyGetFluidVein(chunk, BedrockFluidVeinSavedData.getOrCreate(level.getLevel()));
+    }
+
+    // Spawning runs after all block placement has finalized, so now it's safe to do some fluid tick filtering
+    @Inject(method = "spawnOriginalMobs", at = @At("HEAD"), remap = true)
+    private void tfg$pruneInteriorFluidTicks(WorldGenRegion level, CallbackInfo ci) {
+        final ChunkPos center = level.getCenter();
+        FluidPostProcess.pruneInteriorSources(level.getChunk(center.x, center.z));
     }
 
     @Unique

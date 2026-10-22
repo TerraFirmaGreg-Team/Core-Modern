@@ -189,6 +189,7 @@
         "common.minecraft.HugeFungusFeatureMixin",
         "common.minecraft.IBlockLootSubProviderAccessor",
         "common.minecraft.ItemStackMixin",
+        "common.minecraft.LevelChunkMixin",
         "common.minecraft.MinecartFurnaceMixin",
         "common.minecraft.MinecraftServerPackOrderMixin",
         "common.minecraft.ModelProviderMixin",

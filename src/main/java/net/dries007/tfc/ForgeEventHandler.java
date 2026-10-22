@@ -231,6 +231,7 @@ import su.terrafirmagreg.core.common.block.GasBurnerBlock;
 import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
+import su.terrafirmagreg.core.world.new_ow_wg.chunk.FluidPostProcess;
 
 import static net.dries007.tfc.TerraFirmaCraft.LOGGER;
 
@@ -681,6 +682,11 @@ public final class ForgeEventHandler
         if (state.getBlock() instanceof AqueductBlock)
         {
             event.setResult(Event.Result.DENY); // Waterlogged aqueducts do not count as the source when creating source blocks
+        }
+
+        if (FluidPostProcess.inPostProcess)
+        {
+            return; // Worldgen never places sluices to my knowledge
         }
 
         for (Direction direction : Direction.Plane.HORIZONTAL)
