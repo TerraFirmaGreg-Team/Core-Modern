@@ -1,7 +1,8 @@
 {
     "values": [
         "tfc:dehydration",
-        "tfc:pluck"
+        "tfc:pluck",
+        "tfg:hypoxia"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

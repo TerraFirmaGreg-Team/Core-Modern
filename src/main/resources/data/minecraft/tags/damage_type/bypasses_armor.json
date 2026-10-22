@@ -3,7 +3,8 @@
         "tfc:dehydration",
         "tfc:pluck",
         "tfcambiental:frostbite",
-        "tfcambiental:heatstroke"
+        "tfcambiental:heatstroke",
+        "tfg:hypoxia"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"
