@@ -449,6 +449,9 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     @Override
     public void spawnOriginalMobs(WorldGenRegion level)
     {
+        // All chunk blocks are finalized, prune fluid ticks that won't cause any effects
+        FluidPostProcess.pruneInteriorSources(level.getChunk(level.getCenter().x, level.getCenter().z));
+
         if (!this.noiseSettings.value().disableMobGeneration())
         {
             final ChunkPos pos = level.getCenter();

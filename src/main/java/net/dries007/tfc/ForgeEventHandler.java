@@ -226,6 +226,7 @@ import net.dries007.tfc.util.tracker.WeatherHelpers;
 import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.util.tracker.WorldTrackerCapability;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
+import net.dries007.tfc.world.FluidPostProcess;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
 import su.terrafirmagreg.core.common.block.GasBurnerBlock;
@@ -682,6 +683,11 @@ public final class ForgeEventHandler
         if (state.getBlock() instanceof AqueductBlock)
         {
             event.setResult(Event.Result.DENY); // Waterlogged aqueducts do not count as the source when creating source blocks
+        }
+
+        if (FluidPostProcess.inPostProcess)
+        {
+            return; // Worldgen never places sluices to my knowledge
         }
 
         for (Direction direction : Direction.Plane.HORIZONTAL)
