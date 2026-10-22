@@ -6,13 +6,21 @@ import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.client.screen.BlockEntityScreen;
 import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.network.PacketHandler;
+import net.dries007.tfc.network.ScreenButtonPacket;
 import net.dries007.tfc.util.Tooltips;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
@@ -52,6 +60,42 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
         inventoryLabelY += 20;
         titleLabelX += 105;
         imageHeight += 20;
+    }
+
+    // Handles fluid tank interactions.
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 || button == 1) {
+            ItemStack carried = getMenu().getCarried();
+            if (!carried.isEmpty() && carried.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+                // Check fluid input tanks.
+                for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
+                    int column = i % 3;
+                    int row = i / 3;
+                    int currentTankX = tankX + (column * (tankWidth + 2));
+                    int currentTankY = tankY + (row * tankHeight);
+                    if (RenderHelpers.isInside((int) mouseX, (int) mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+                        PacketHandler.send(PacketDistributor.SERVER.noArg(), new ScreenButtonPacket(CopperPotContainer.BUTTON_FLUID_INPUT_START + i, null));
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
+                        return true;
+                    }
+                }
+
+                // Check fluid output tanks.
+                for (int i = 0; i < blockEntity.getFluidOutputCount(); i++) {
+                    int column = i % 3;
+                    int row = i / 3;
+                    int currentTankX = tankX + 90 + (column * (tankWidth + 2));
+                    int currentTankY = tankY - 7 + (row * tankHeight);
+                    if (RenderHelpers.isInside((int) mouseX, (int) mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+                        PacketHandler.send(PacketDistributor.SERVER.noArg(), new ScreenButtonPacket(CopperPotContainer.BUTTON_FLUID_OUTPUT_START + i, null));
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
+                        return true;
+                    }
+                }
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -115,7 +159,7 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
 
         graphics.blit(texture, leftPos + tankX + 90 - 1, topPos + tankY - 7, tankOverlayU, currentTempBarV + 6, (tankWidth + 2) * 3, tankHeight + 1);
 
-        for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
+        for (int i = 0; i < blockEntity.getFluidOutputCount(); i++) {
             int column = i % 3;
             int row = i / 3;
             int currentTankX = tankX + 90 + (column * (tankWidth + 2));

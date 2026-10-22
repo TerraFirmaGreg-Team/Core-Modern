@@ -1,19 +1,26 @@
 package su.terrafirmagreg.core.common.container;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.container.BlockEntityContainer;
+import net.dries007.tfc.common.container.ButtonHandlerContainer;
 import net.dries007.tfc.common.container.CallbackSlot;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
-public class CopperPotContainer extends BlockEntityContainer<CopperPotBlockEntity> {
+public class CopperPotContainer extends BlockEntityContainer<CopperPotBlockEntity> implements ButtonHandlerContainer {
+
+    public static final int BUTTON_FLUID_INPUT_START = 0;
+    public static final int BUTTON_FLUID_OUTPUT_START = 10;
 
     public static CopperPotContainer create(CopperPotBlockEntity appliance, Inventory playerInventory, int windowId) {
         return new CopperPotContainer(appliance, windowId).init(playerInventory, 20);
@@ -22,6 +29,27 @@ public class CopperPotContainer extends BlockEntityContainer<CopperPotBlockEntit
     public CopperPotContainer(CopperPotBlockEntity appliance, int windowId) {
         super(TFGContainers.COPPER_POT.get(), windowId, appliance);
         addDataSlots(appliance.getSyncableData());
+    }
+
+    // Handles fluid tank interactions.
+    @Override
+    public void onButtonPress(int buttonId, @Nullable CompoundTag extraNbt) {
+        if (player == null) {
+            return;
+        }
+
+        ItemStack carried = getCarried();
+        if (carried.isEmpty()) {
+            return;
+        }
+
+        if (buttonId >= BUTTON_FLUID_INPUT_START && buttonId < BUTTON_FLUID_INPUT_START + blockEntity.getFluidInputCount()) {
+            int tankIdx = buttonId - BUTTON_FLUID_INPUT_START;
+            CookingApplianceBlockEntity.interactFluid(carried, blockEntity, player, tankIdx, false, this::setCarried);
+        } else if (buttonId >= BUTTON_FLUID_OUTPUT_START && buttonId < BUTTON_FLUID_OUTPUT_START + blockEntity.getFluidOutputCount()) {
+            int tankIdx = buttonId - BUTTON_FLUID_OUTPUT_START;
+            CookingApplianceBlockEntity.interactFluid(carried, blockEntity, player, tankIdx, true, this::setCarried);
+        }
     }
 
     @Override
