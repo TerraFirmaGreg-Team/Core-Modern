@@ -54,12 +54,12 @@ public class ScrapingBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         return positions;
     }
 
-    public boolean onClicked(float hitX, float hitZ)
+    public void onClicked(float hitX, float hitZ)
     {
         int xPos = (int) (hitX * 4);
         int zPos = (int) (hitZ * 4);
 		if (checkPosition(positions, xPos, zPos, 1))
-			return false;
+			return;
 
         positions |= 1 << (xPos + zPos * 4);
 
@@ -83,7 +83,6 @@ public class ScrapingBlockEntity extends InventoryBlockEntity<ItemStackHandler>
             markForBlockUpdate();
         }
         level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-		return true;
     }
 
     public boolean dye(DyeColor color)
