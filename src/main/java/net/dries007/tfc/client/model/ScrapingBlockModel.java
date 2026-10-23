@@ -68,7 +68,7 @@ public enum ScrapingBlockModel implements SimpleStaticBlockEntityModel<ScrapingB
             for (int zOffset = 0; zOffset < 4; zOffset++)
             {
                 // Checks the nth bit of positions
-                if ((((positions >> (xOffset + 4 * zOffset)) & 1) == condition))
+				if (ScrapingBlockEntity.checkPosition(positions, xOffset, zOffset, condition))
                 {
                     final float r = color[0];
                     final float g = color[1];
