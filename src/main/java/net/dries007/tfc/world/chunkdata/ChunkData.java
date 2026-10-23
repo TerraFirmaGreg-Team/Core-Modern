@@ -102,12 +102,40 @@ public class ChunkData
     @Nullable private LerpFloatLayer rainfallLayer;
     @Nullable private LerpFloatLayer temperatureLayer;
     private int @Nullable [] aquiferSurfaceHeight;
+    /**
+     * Local acquifer cache
+     */
+    @Nullable private net.dries007.tfc.world.TFCAquifer generationAquifer;
+    /**
+     * The per-column salt/fresh choices of {@link #generationAquifer}.
+     */
+    private long @Nullable [] generationFluidChoices;
     @Getter
 	private ForestType forestType;
     @Getter
 	private float forestWeirdness;
     @Getter
 	private float forestDensity;
+
+    @Nullable
+    public net.dries007.tfc.world.TFCAquifer getGenerationAquifer()
+    {
+        return generationAquifer;
+    }
+
+    public void setGenerationAquifer(@Nullable net.dries007.tfc.world.TFCAquifer aquifer)
+    {
+        this.generationAquifer = aquifer;
+        if (aquifer == null)
+        {
+            this.generationFluidChoices = null;
+        }
+    }
+
+    public long @Nullable [] getGenerationFluidChoices()
+    {
+        return generationFluidChoices;
+    }
 
     public ChunkData(ChunkPos pos)
     {
@@ -228,6 +256,12 @@ public class ChunkData
             nbt.putFloat("forestWeirdness", forestWeirdness);
             nbt.putFloat("forestDensity", forestDensity);
         }
+
+        final long[] fluidChoices = generationAquifer != null ? generationAquifer.baseBlockSource().saveFluidChoices() : generationFluidChoices;
+        if (fluidChoices != null)
+        {
+            nbt.putLongArray("generationFluidChoices", fluidChoices);
+        }
         return nbt;
     }
 
@@ -248,6 +282,11 @@ public class ChunkData
             forestType = ForestType.valueOf(nbt.getByte("forestType"));
             forestWeirdness = nbt.getFloat("forestWeirdness");
             forestDensity = nbt.getFloat("forestDensity");
+        }
+        if (nbt.contains("generationFluidChoices", net.minecraft.nbt.Tag.TAG_LONG_ARRAY))
+        {
+            final long[] fluidChoices = nbt.getLongArray("generationFluidChoices");
+            generationFluidChoices = fluidChoices.length == 4 ? fluidChoices : null;
         }
     }
 
@@ -295,6 +334,9 @@ public class ChunkData
 
         @Override
         public void deserializeNBT(CompoundTag nbt) { error(); }
+
+        @Override
+        public void setGenerationAquifer(@Nullable net.dries007.tfc.world.TFCAquifer aquifer) { if (aquifer != null) error(); }
 
         @Override
         public Status status()
