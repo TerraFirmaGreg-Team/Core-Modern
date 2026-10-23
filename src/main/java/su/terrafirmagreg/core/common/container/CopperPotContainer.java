@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+import su.terrafirmagreg.core.client.screen.CopperPotScreen;
 import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGContainers;
@@ -22,8 +23,19 @@ public class CopperPotContainer extends BlockEntityContainer<CopperPotBlockEntit
     public static final int BUTTON_FLUID_INPUT_START = 0;
     public static final int BUTTON_FLUID_OUTPUT_START = 10;
 
+    private static final int SLOT_SIZE = 18;
+
+    public static final int INPUT_SLOT_X = 26;
+    public static final int INPUT_SLOT_Y = 29;
+    private static final int CATALYST_SLOT_X = INPUT_SLOT_X + (SLOT_SIZE * 3) + 8;
+    private static final int CATALYST_SLOT_Y = INPUT_SLOT_Y + (SLOT_SIZE * 2) - 3;
+    private static final int TOOL_SLOT_X = CATALYST_SLOT_X;
+    private static final int TOOL_SLOT_Y = CATALYST_SLOT_Y + SLOT_SIZE;
+    private static final int OUTPUT_SLOT_X = CopperPotScreen.OUTPUT_TANKS_X + 1;
+    private static final int OUTPUT_SLOT_Y = CopperPotScreen.OUTPUT_TANKS_Y - SLOT_SIZE - 2;
+
     public static CopperPotContainer create(CopperPotBlockEntity appliance, Inventory playerInventory, int windowId) {
-        return new CopperPotContainer(appliance, windowId).init(playerInventory, 20);
+        return new CopperPotContainer(appliance, windowId).init(playerInventory, 35);
     }
 
     public CopperPotContainer(CopperPotBlockEntity appliance, int windowId) {
@@ -90,27 +102,22 @@ public class CopperPotContainer extends BlockEntityContainer<CopperPotBlockEntit
             int outputCount = blockEntity.getItemOutputCount();
 
             // Item input slots.
-            int startX = 44 - 18;
-            int startY = 20;
             for (int i = 0; i < inputCount; i++) {
                 int col = i % 3;
                 int row = i / 3;
-                addSlot(new CallbackSlot(blockEntity, handler, i, startX + col * 18, startY + row * 18));
+                addSlot(new CallbackSlot(blockEntity, handler, i, INPUT_SLOT_X + col * SLOT_SIZE, INPUT_SLOT_Y + row * SLOT_SIZE));
             }
 
             // Catalyst slot.
-            addSlot(new CallbackSlot(blockEntity, handler, blockEntity.getCatalystSlot(), startX + (18 * 3) + 8, startY + 36));
+            addSlot(new CallbackSlot(blockEntity, handler, blockEntity.getCatalystSlot(), CATALYST_SLOT_X, CATALYST_SLOT_Y));
 
             // Tool slot.
-            addSlot(new CallbackSlot(blockEntity, handler, blockEntity.getToolSlot(), startX + (18 * 3) + 8, startY + 36 + 18));
+            addSlot(new CallbackSlot(blockEntity, handler, blockEntity.getToolSlot(), TOOL_SLOT_X, TOOL_SLOT_Y));
 
             // Item output slots.
-            int outStartX = 116;
-            int outStartY = 29;
             for (int i = 0; i < outputCount; i++) {
-                int col = i % 3;
-                int row = i / 3;
-                addSlot(new CallbackSlot(blockEntity, handler, blockEntity.getItemOutputStartSlot() + i, outStartX + col * 18, outStartY + row * 18));
+                int col = i % outputCount;
+                addSlot(new CallbackSlot(blockEntity, handler, blockEntity.getItemOutputStartSlot() + i, OUTPUT_SLOT_X + col * SLOT_SIZE, OUTPUT_SLOT_Y));
             }
         });
     }

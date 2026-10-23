@@ -19,6 +19,8 @@ import net.dries007.tfc.common.capabilities.InventoryItemHandler;
 import net.dries007.tfc.common.capabilities.PartialFluidHandler;
 import net.dries007.tfc.common.capabilities.PartialItemHandler;
 import net.dries007.tfc.common.capabilities.SidedHandler;
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeatBlock;
@@ -69,6 +71,11 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     public static final int TARGET_TEMPERATURE_STABILITY_TICKS = 5;
 
+    public static final int ERROR_NONE = 0;
+    public static final int ERROR_ROTTEN_INGREDIENT = 1 << 1;
+    public static final int ERROR_NOT_ENOUGH_ITEM_SPACE = 1 << 2;
+    public static final int ERROR_NOT_ENOUGH_FLUID_SPACE = 1 << 3;
+
     protected float temperature;
     @Getter
     protected float targetTemperature;
@@ -76,6 +83,10 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     @Getter
     protected int cookingTicks;
     protected long lastCalendarUpdateTick = Integer.MIN_VALUE;
+
+    @Getter
+    protected int recipeError;
+    protected int maxDuration;
 
     @Getter
     protected final ContainerData syncableData;
@@ -97,6 +108,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         this.targetTemperature = 0.0f;
         this.targetTemperatureStabilityTicks = 0;
         this.cookingTicks = 0;
+        this.recipeError = ERROR_NONE;
+        this.maxDuration = 100;
         this.cachedRecipe = null;
 
         this.sidedFluidInventory = new SidedHandler.Builder<>(inventory);
@@ -105,7 +118,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         this.syncableData = new IntArrayBuilder()
                 .add(() -> (int) this.temperature, val -> this.temperature = val)
                 .add(() -> (int) this.targetTemperature, val -> this.targetTemperature = val)
-                .add(() -> this.cookingTicks, val -> this.cookingTicks = val);
+                .add(() -> this.cookingTicks, val -> this.cookingTicks = val)
+                .add(() -> this.recipeError, val -> this.recipeError = val)
+                .add(() -> this.maxDuration, val -> this.maxDuration = val);
 
         configureSidedHandlers();
     }
@@ -207,6 +222,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         if (level == null || level.isClientSide)
             return;
 
+        int prevError = this.recipeError;
+        int prevDuration = this.maxDuration;
+
         if (cachedRecipe == null || !cachedRecipe.matches(this, level)) {
             cachedRecipe = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
                     .filter(r -> r instanceof CookingApplianceRecipe)
@@ -217,6 +235,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         }
 
         if (cachedRecipe != null && cachedRecipe.matches(this, level)) {
+            this.recipeError = ERROR_NONE;
+            this.maxDuration = cachedRecipe.getDuration();
             cookingTicks++;
             if (cookingTicks >= cachedRecipe.getDuration()) {
                 finishRecipe(cachedRecipe);
@@ -225,11 +245,50 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             }
             markForSync();
         } else {
+            int detectedErrors = ERROR_NONE;
+            CookingApplianceRecipe candidate = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
+                    .filter(r -> r instanceof CookingApplianceRecipe)
+                    .map(r -> (CookingApplianceRecipe) r)
+                    .filter(r -> r.matchesInputs(this))
+                    .findFirst()
+                    .orElse(null);
+
+            if (candidate != null) {
+                detectedErrors = candidate.getErrorFlags(this);
+                this.maxDuration = candidate.getDuration();
+            } else {
+                if (hasAnyRottenInput()) {
+                    detectedErrors = ERROR_ROTTEN_INGREDIENT;
+                }
+            }
+
+            this.recipeError = detectedErrors;
+
             if (cookingTicks > 0) {
                 cookingTicks = Math.max(0, cookingTicks - 1);
                 markForSync();
+            } else if (prevError != this.recipeError || prevDuration != this.maxDuration) {
+                markForSync();
             }
         }
+    }
+
+    public boolean hasAnyRottenInput() {
+        for (int i = 0; i < getItemInputCount(); i++) {
+            ItemStack stack = getItemInputStack(i);
+            if (!stack.isEmpty()) {
+                final IFood food = FoodCapability.get(stack);
+                if (food != null && food.isRotten()) {
+                    return true;
+                }
+            }
+        }
+        ItemStack catalyst = getCatalystStack();
+        if (!catalyst.isEmpty()) {
+            final IFood food = FoodCapability.get(catalyst);
+            return food != null && food.isRotten();
+        }
+        return false;
     }
 
     protected void finishRecipe(CookingApplianceRecipe recipe) {
@@ -300,7 +359,10 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     }
 
     public int getMaxDuration() {
-        return cachedRecipe != null ? cachedRecipe.getDuration() : 100;
+        if (cachedRecipe != null) {
+            return cachedRecipe.getDuration();
+        }
+        return this.maxDuration > 0 ? this.maxDuration : 100;
     }
 
     @Nullable
@@ -572,7 +634,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     @Override
     public void setTemperatureIfWarmer(float temperature) {
         if (temperature >= this.temperature) {
-            this.temperature = temperature;
+            this.targetTemperature = temperature;
             this.targetTemperatureStabilityTicks = TARGET_TEMPERATURE_STABILITY_TICKS;
             markForSync();
         }
@@ -599,6 +661,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         this.targetTemperature = nbt.getFloat("targetTemperature");
         this.targetTemperatureStabilityTicks = nbt.getInt("targetTemperatureStabilityTicks");
         this.cookingTicks = nbt.getInt("cookingTicks");
+        this.recipeError = nbt.getInt("recipeError");
+        this.maxDuration = nbt.contains("maxDuration") ? nbt.getInt("maxDuration") : 100;
         this.lastCalendarUpdateTick = nbt.getLong("lastCalendarUpdateTick");
         super.loadAdditional(nbt);
     }
@@ -609,6 +673,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         nbt.putFloat("targetTemperature", this.targetTemperature);
         nbt.putInt("targetTemperatureStabilityTicks", this.targetTemperatureStabilityTicks);
         nbt.putInt("cookingTicks", this.cookingTicks);
+        nbt.putInt("recipeError", this.recipeError);
+        nbt.putInt("maxDuration", this.maxDuration);
         nbt.putLong("lastCalendarUpdateTick", this.lastCalendarUpdateTick);
         super.saveAdditional(nbt);
     }

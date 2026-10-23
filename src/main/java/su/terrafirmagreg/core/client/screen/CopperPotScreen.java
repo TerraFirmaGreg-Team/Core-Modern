@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.client.screen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.client.RenderHelpers;
@@ -7,11 +10,14 @@ import net.dries007.tfc.client.screen.BlockEntityScreen;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.ScreenButtonPacket;
 import net.dries007.tfc.util.Tooltips;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,51 +26,82 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.network.PacketDistributor;
 
+import dev.emi.emi.api.EmiApi;
+import dev.emi.emi.api.stack.EmiStack;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.TemperatureMeterWidget;
+import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.container.CopperPotContainer;
 
-@SuppressWarnings({ "FieldCanBeLocal" })
+@SuppressWarnings({ "FieldCanBeLocal", "NoTranslation", "unused" })
 public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, CopperPotContainer> {
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/copper_pot.png");
 
     private static final int WIDTH = 176;
     private static final int HEIGHT = 201;
+    private static final int SLOT_SIZE = 18;
 
-    private final int tempScaleX = 4;
-    private final int tempScaleY = 38;
+    private static final int TEMP_X = 4;
+    private static final int TEMP_Y = 38;
 
-    //    private final int flameX = 63;
-    //    private final int flameY = 22;
-    //    private final int flameU = currentTempBarU;
-    //    private final int flameV = currentTempBarV + currentTempBarHeight * 2;
-    //    private final int flameWidth = 21;
-    //    private final int flameHeight = 32;
+    private static final int INPUT_TANKS_X = CopperPotContainer.INPUT_SLOT_X - 1;
+    private static final int INPUT_TANKS_Y = CopperPotContainer.INPUT_SLOT_Y - 1 + (SLOT_SIZE * 2);
+    private static final int TANK_HEIGHT = 31;
+    private static final int TANK_WIDTH = 18;
+    private static final int OUTPUT_TANK_OVERLAY_U = 176;
+    private static final int OUTPUT_TANK_OVERLAY_V = 6;
+    private static final int INPUT_TANK_OVERLAY_U = OUTPUT_TANK_OVERLAY_U;
+    private static final int INPUT_TANK_OVERLAY_V = OUTPUT_TANK_OVERLAY_V + TANK_HEIGHT;
+    private static final int TANK_HOVER_U = OUTPUT_TANK_OVERLAY_U + (TANK_WIDTH * 3);
+    private static final int TANK_HOVER_V = OUTPUT_TANK_OVERLAY_V;
 
-    private final int tankX = 44 - 18;
-    private final int tankY = 25 + 30;
-    private final int tankHeight = 30;
-    private final int tankWidth = 16;
-    private final int tankOverlayU = 176;
-    private final int tankOverlayV = tankHeight + 7;
+    private static final int PB_X = INPUT_TANKS_X + (TANK_WIDTH * 3) + 5;
+    private static final int PB_Y = INPUT_TANKS_Y - 14;
+    private static final int PB_U = OUTPUT_TANK_OVERLAY_U;
+    private static final int PB_V = INPUT_TANK_OVERLAY_V + TANK_HEIGHT + 1;
+    private static final int PB_WIDTH = 30;
+    private static final int PB_HEIGHT = 32;
+
+    public static final int OUTPUT_TANKS_X = PB_X + PB_WIDTH + 1;
+    public static final int OUTPUT_TANKS_Y = PB_Y + 5;
+
+    private static final int ERROR_X = PB_X + 8;
+    private static final int ERROR_Y = PB_Y - 2;
+    private static final int ERROR_U = OUTPUT_TANK_OVERLAY_U;
+    private static final int ERROR_V = PB_V + PB_HEIGHT;
+    private static final int ERROR_WIDTH = 9;
+    private static final int ERROR_HEIGHT = 12;
 
     public CopperPotScreen(CopperPotContainer container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TEXTURE);
-        inventoryLabelX += 110;
-        inventoryLabelY += 20;
-        titleLabelX += 105;
-        imageHeight += 20;
+        inventoryLabelY += 35;
+        imageHeight = HEIGHT;
     }
 
     @Override
     protected void init() {
         super.init();
 
+        // EMI Uses Button
+        ItemStack recipeTarget = this.blockEntity.getBlockState().getBlock().asItem().getDefaultInstance();
+
+        this.addRenderableWidget(Button.builder(Component.literal("Recipes"),
+                (button) -> EmiApi.displayUses(EmiStack.of(recipeTarget)))
+        .bounds(this.leftPos + PB_X, this.topPos + PB_Y - 1, PB_WIDTH, 10)
+        .build(builder -> new Button(builder) {
+            @Override
+            public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+                // Override to prevent rendering a button texture.
+            }
+        }));
+
+        // Temp Meter Widget
         this.addRenderableWidget(new TemperatureMeterWidget(
-                leftPos + tempScaleX,
-                topPos + tempScaleY,
+                leftPos + TEMP_X,
+                topPos + TEMP_Y,
                 () -> (int) this.menu.getBlockEntity().getTemperature(),
                 () -> (int) this.menu.getBlockEntity().getTargetTemperature()));
     }
@@ -77,11 +114,9 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
             if (!carried.isEmpty() && carried.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
                 // Check fluid input tanks.
                 for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
-                    int column = i % 3;
-                    int row = i / 3;
-                    int currentTankX = tankX + (column * (tankWidth + 2));
-                    int currentTankY = tankY + (row * tankHeight);
-                    if (RenderHelpers.isInside((int) mouseX, (int) mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+                    int column = i % blockEntity.getFluidInputCount();
+                    int currentTankX = INPUT_TANKS_X + (column * TANK_WIDTH);
+                    if (RenderHelpers.isInside((int) mouseX, (int) mouseY, leftPos + currentTankX, topPos + INPUT_TANKS_Y, TANK_WIDTH, TANK_HEIGHT)) {
                         PacketHandler.send(PacketDistributor.SERVER.noArg(), new ScreenButtonPacket(CopperPotContainer.BUTTON_FLUID_INPUT_START + i, null));
                         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
                         return true;
@@ -90,11 +125,9 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
 
                 // Check fluid output tanks.
                 for (int i = 0; i < blockEntity.getFluidOutputCount(); i++) {
-                    int column = i % 3;
-                    int row = i / 3;
-                    int currentTankX = tankX + 90 + (column * (tankWidth + 2));
-                    int currentTankY = tankY - 7 + (row * tankHeight);
-                    if (RenderHelpers.isInside((int) mouseX, (int) mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+                    int column = i % blockEntity.getFluidOutputCount();
+                    int currentTankX = OUTPUT_TANKS_X + (column * TANK_WIDTH);
+                    if (RenderHelpers.isInside((int) mouseX, (int) mouseY, leftPos + currentTankX, topPos + OUTPUT_TANKS_Y, TANK_WIDTH, TANK_HEIGHT)) {
                         PacketHandler.send(PacketDistributor.SERVER.noArg(), new ScreenButtonPacket(CopperPotContainer.BUTTON_FLUID_OUTPUT_START + i, null));
                         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
                         return true;
@@ -109,81 +142,84 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTicks, mouseX, mouseY);
 
-        // Fluid Input Tanks
+        // =========== Fluid Input Tanks ==========
+
+        // Input Tank Fill
         for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
             FluidStack fluidStack = blockEntity.getFluidInputTank(i);
             if (!fluidStack.isEmpty()) {
-                int column = i % 3;
-                int row = i / 3;
-                int currentTankX = tankX + (column * (tankWidth + 2));
-                int currentTankY = tankY + (row * tankHeight);
+                int column = i % blockEntity.getFluidInputCount();
+                int currentTankX = INPUT_TANKS_X + (column * TANK_WIDTH);
 
                 final TextureAtlasSprite sprite = RenderHelpers.getAndBindFluidSprite(fluidStack);
-                final int fillHeight = (int) Math.ceil((float) tankHeight * fluidStack.getAmount() / (float) blockEntity.getFluidInputCapacity());
+                final int fillHeight = (int) Math.ceil((float) (TANK_HEIGHT - 2) * fluidStack.getAmount() / (float) blockEntity.getFluidInputCapacity());
 
-                RenderHelpers.fillAreaWithSprite(graphics, sprite, leftPos + currentTankX, topPos + currentTankY + tankHeight - fillHeight, tankWidth, fillHeight, 16, 16);
+                RenderHelpers.fillAreaWithSprite(graphics, sprite, leftPos + currentTankX, topPos + INPUT_TANKS_Y + TANK_HEIGHT - fillHeight - 1, TANK_WIDTH, fillHeight, 16, 16);
                 resetToBackgroundSprite();
             }
         }
 
-        graphics.blit(texture, leftPos + tankX - 1, topPos + tankY, tankOverlayU, tankOverlayV, (tankWidth + 2) * 3, tankHeight + 1);
+        // Input Tanks Overlay
+        graphics.blit(texture, leftPos + INPUT_TANKS_X, topPos + INPUT_TANKS_Y, INPUT_TANK_OVERLAY_U, INPUT_TANK_OVERLAY_V, TANK_WIDTH * 3, TANK_HEIGHT);
 
+        // Input Tank Hover Effect
         for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
-            int column = i % 3;
-            int row = i / 3;
-            int currentTankX = tankX + (column * (tankWidth + 2));
-            int currentTankY = tankY + (row * tankHeight);
+            int column = i % blockEntity.getFluidInputCount();
+            int currentTankX = INPUT_TANKS_X + (column * TANK_WIDTH);
 
-            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + INPUT_TANKS_Y, TANK_WIDTH, TANK_HEIGHT)) {
 
-                graphics.blit(texture, leftPos + currentTankX - 1, topPos + currentTankY, tankOverlayU + (tankWidth + 2) * 3, 6, tankWidth + 2, tankHeight + 2);
+                graphics.blit(texture, leftPos + currentTankX, topPos + INPUT_TANKS_Y, TANK_HOVER_U, TANK_HOVER_V, TANK_WIDTH, TANK_HEIGHT);
                 break;
             }
         }
 
-        // Fluid Output Tanks
+        // =========== Fluid Output Tanks ==========
+
+        // Output Tank Fill
         for (int i = 0; i < blockEntity.getFluidOutputCount(); i++) {
             FluidStack fluidStack = blockEntity.getFluidOutputTank(i);
             if (!fluidStack.isEmpty()) {
-                int column = i % 3;
-                int row = i / 3;
-                int currentTankX = tankX + 90 + (column * (tankWidth + 2));
-                int currentTankY = tankY - 7 + (row * tankHeight);
+                int column = i % blockEntity.getFluidOutputCount();
+                int currentTankX = OUTPUT_TANKS_X + (column * TANK_WIDTH);
 
                 final TextureAtlasSprite sprite = RenderHelpers.getAndBindFluidSprite(fluidStack);
-                final int fillHeight = (int) Math.ceil((float) tankHeight * fluidStack.getAmount() / (float) blockEntity.getFluidOutputCapacity());
+                final int fillHeight = (int) Math.ceil((float) (TANK_HEIGHT - 2) * fluidStack.getAmount() / (float) blockEntity.getFluidOutputCapacity());
 
-                RenderHelpers.fillAreaWithSprite(graphics, sprite, leftPos + currentTankX, topPos + currentTankY + tankHeight - fillHeight, tankWidth, fillHeight, 16, 16);
+                RenderHelpers.fillAreaWithSprite(graphics, sprite, leftPos + currentTankX, topPos + OUTPUT_TANKS_Y + TANK_HEIGHT - fillHeight - 1, TANK_WIDTH, fillHeight, 16, 16);
                 resetToBackgroundSprite();
             }
         }
 
-        graphics.blit(texture, leftPos + tankX + 90 - 1, topPos + tankY - 7, tankOverlayU, 6, (tankWidth + 2) * 3, tankHeight + 1);
+        // Output Tanks Overlay
+        graphics.blit(texture, leftPos + OUTPUT_TANKS_X, topPos + OUTPUT_TANKS_Y, OUTPUT_TANK_OVERLAY_U, OUTPUT_TANK_OVERLAY_V, TANK_WIDTH * 3, TANK_HEIGHT);
 
+        // Output Tank Hover Effect
         for (int i = 0; i < blockEntity.getFluidOutputCount(); i++) {
-            int column = i % 3;
-            int row = i / 3;
-            int currentTankX = tankX + 90 + (column * (tankWidth + 2));
-            int currentTankY = tankY - 7 + (row * tankHeight);
+            int column = i % blockEntity.getFluidOutputCount();
+            int currentTankX = OUTPUT_TANKS_X + (column * TANK_WIDTH);
 
-            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + OUTPUT_TANKS_Y, TANK_WIDTH, TANK_HEIGHT)) {
 
-                graphics.blit(texture, leftPos + currentTankX - 1, topPos + currentTankY, tankOverlayU + (tankWidth + 2) * 3, 6, tankWidth + 2, tankHeight + 2);
+                graphics.blit(texture, leftPos + currentTankX, topPos + OUTPUT_TANKS_Y, TANK_HOVER_U, TANK_HOVER_V, TANK_WIDTH, TANK_HEIGHT);
                 break;
             }
         }
 
-        //        int cookingTicks = blockEntity.getCookingTicks();
-        //        int maxDuration = blockEntity.getMaxDuration();
-        //        if (cookingTicks > 0 && maxDuration > 0) {
-        //            float progressPercentage = (float) cookingTicks / (float) maxDuration;
-        //            int filledHeight = Math.round(flameHeight * progressPercentage);
-        //
-        //            if (filledHeight > 0) {
-        //                int burnOffset = flameHeight - filledHeight;
-        //                graphics.blit(texture, leftPos + flameX, topPos + flameY + burnOffset, flameU, flameV + burnOffset, flameWidth, filledHeight);
-        //            }
-        //        }
+        int cookingTicks = blockEntity.getCookingTicks();
+        int maxDuration = blockEntity.getMaxDuration();
+        if (cookingTicks > 0 && maxDuration > 0) {
+            float progressPercentage = (float) cookingTicks / (float) maxDuration;
+            int filledWidth = Math.round(PB_WIDTH * progressPercentage);
+
+            if (filledWidth > 0) {
+                graphics.blit(texture, leftPos + PB_X, topPos + PB_Y, PB_U, PB_V, filledWidth, PB_HEIGHT);
+            }
+        }
+
+        if (blockEntity.getRecipeError() != 0) {
+            graphics.blit(texture, leftPos + ERROR_X, topPos + ERROR_Y, ERROR_U, ERROR_V, ERROR_WIDTH, ERROR_HEIGHT);
+        }
     }
 
     @Override
@@ -192,13 +228,11 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
 
         // Fluid Input Tooltips
         for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
-            int column = i % 3;
-            int row = i / 3;
+            int column = i % blockEntity.getFluidInputCount();
 
-            int currentTankX = tankX + (column * (tankWidth + 2));
-            int currentTankY = tankY + (row * tankHeight);
+            int currentTankX = INPUT_TANKS_X + (column * TANK_WIDTH);
 
-            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + INPUT_TANKS_Y, TANK_WIDTH, TANK_HEIGHT)) {
 
                 FluidStack fluid = blockEntity.getFluidInputTank(i);
 
@@ -211,13 +245,11 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
 
         // Fluid Output Tooltips
         for (int i = 0; i < blockEntity.getFluidOutputCount(); i++) {
-            int column = i % 3;
-            int row = i / 3;
+            int column = i % blockEntity.getFluidOutputCount();
 
-            int currentTankX = tankX + 90 + (column * (tankWidth + 2));
-            int currentTankY = tankY - 7 + (row * tankHeight);
+            int currentTankX = OUTPUT_TANKS_X + (column * TANK_WIDTH);
 
-            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
+            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + OUTPUT_TANKS_Y, TANK_WIDTH, TANK_HEIGHT)) {
 
                 FluidStack fluid = blockEntity.getFluidOutputTank(i);
 
@@ -228,15 +260,39 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
             }
         }
 
-        // Progress Tooltip
-        //        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + flameX, topPos + flameY, flameWidth, flameHeight)) {
-        //            if (blockEntity.getCookingTicks() > 0) {
-        //                int remainingTicks = Math.max(0, blockEntity.getMaxDuration() - blockEntity.getCookingTicks());
-        //                float remainingSeconds = (float) remainingTicks / 20.0f;
-        //                MutableComponent timerIcon = ((int) remainingSeconds % 2 != 0) ? Component.literal("⏳ ") : Component.literal("⌛ ");
-        //                Component timerText = timerIcon.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
-        //                graphics.renderComponentTooltip(font, List.of(timerText), mouseX, mouseY);
-        //            }
-        //        }
+        // Progress Tooltips
+        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + PB_X, topPos + PB_Y - 5, PB_WIDTH, 10)) {
+            List<Component> progressTooltip = new ArrayList<>(List.of());
+
+            MutableComponent openRecipes = Component.translatable("emi.view_all_recipes");
+            progressTooltip.add(openRecipes);
+
+            int error = blockEntity.getRecipeError();
+            if (error != 0) {
+                progressTooltip.add(Component.empty());
+
+                if ((error & CookingApplianceBlockEntity.ERROR_ROTTEN_INGREDIENT) != 0) {
+                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.rotten").withStyle(ChatFormatting.RED));
+                }
+                if ((error & CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_ITEM_SPACE) != 0) {
+                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_item_space").withStyle(ChatFormatting.RED));
+                }
+                if ((error & CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE) != 0) {
+                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_fluid_space").withStyle(ChatFormatting.RED));
+                }
+            }
+
+            if (blockEntity.getCookingTicks() > 0) {
+                int remainingTicks = Math.max(0, blockEntity.getMaxDuration() - blockEntity.getCookingTicks());
+                float remainingSeconds = (float) remainingTicks / 20.0f;
+
+                progressTooltip.add(Component.empty());
+                MutableComponent timerIcon = ((int) remainingSeconds % 2 != 0) ? Component.literal("⏳ ") : Component.literal("⌛ ");
+                Component timerText = timerIcon.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
+                progressTooltip.add(timerText);
+            }
+
+            graphics.renderComponentTooltip(font, progressTooltip, mouseX, mouseY);
+        }
     }
 }

@@ -115,6 +115,10 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
      * bowl only allowing stack sizes of 1 per "slot".
      */
     public MatchResult matchItemInputs(CookingApplianceBlockEntity appliance) {
+        return matchItemInputs(appliance, false);
+    }
+
+    public MatchResult matchItemInputs(CookingApplianceBlockEntity appliance, boolean allowRotten) {
         if (this.itemIngredients.isEmpty()) {
             return new MatchResult(true, new int[appliance.getItemInputCount()]);
         }
@@ -132,9 +136,11 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             if (stack.isEmpty()) {
                 continue;
             }
-            final IFood food = FoodCapability.get(stack);
-            if (food != null && food.isRotten()) {
-                continue;
+            if (!allowRotten) {
+                final IFood food = FoodCapability.get(stack);
+                if (food != null && food.isRotten()) {
+                    continue;
+                }
             }
             int countInSlot = stack.getCount();
             totalAvailable += countInSlot;
@@ -204,6 +210,82 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         return false;
     }
 
+    public boolean hasRottenInputs(CookingApplianceBlockEntity appliance) {
+        if (!this.catalyst.isEmpty()) {
+            ItemStack catalystStack = appliance.getCatalystStack();
+            if (!catalystStack.isEmpty() && this.catalyst.test(catalystStack)) {
+                final IFood food = FoodCapability.get(catalystStack);
+                if (food != null && food.isRotten()) {
+                    return true;
+                }
+            }
+        }
+
+        MatchResult allowRottenMatch = matchItemInputs(appliance, true);
+        if (allowRottenMatch.matches) {
+            for (int s = 0; s < appliance.getItemInputCount(); s++) {
+                if (allowRottenMatch.consumedPerSlot[s] > 0) {
+                    ItemStack stack = appliance.getItemInputStack(s);
+                    final IFood food = FoodCapability.get(stack);
+                    if (food != null && food.isRotten()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean matchesInputs(CookingApplianceBlockEntity appliance) {
+        // Check catalyst.
+        if (!this.catalyst.isEmpty()) {
+            ItemStack catalystStack = appliance.getCatalystStack();
+            if (catalystStack.isEmpty() || !this.catalyst.test(catalystStack)) {
+                return false;
+            }
+        }
+
+        // Check tool.
+        if (!this.tool.isEmpty()) {
+            ItemStack toolStack = appliance.getToolStack();
+            if (toolStack.isEmpty() || !this.tool.test(toolStack)) {
+                return false;
+            }
+        }
+
+        // Check item inputs.
+        MatchResult itemMatch = matchItemInputs(appliance, true);
+        if (!itemMatch.matches) {
+            return false;
+        }
+
+        // Check fluid inputs.
+        if (!this.fluidIngredients.isEmpty()) {
+            List<FluidStack> availableFluids = new ArrayList<>();
+            for (int i = 0; i < appliance.getFluidInputCount(); i++) {
+                FluidStack fluid = appliance.getFluidInputTank(i);
+                if (!fluid.isEmpty()) {
+                    availableFluids.add(fluid.copy());
+                }
+            }
+            for (FluidStackIngredient reqFluid : this.fluidIngredients) {
+                boolean matched = false;
+                for (FluidStack avail : availableFluids) {
+                    if (reqFluid.test(avail) && avail.getAmount() >= reqFluid.amount()) {
+                        avail.shrink(reqFluid.amount());
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public boolean matches(CookingApplianceBlockEntity appliance, Level level) {
         if (appliance.getTemperature() < this.minTemp) {
             return false;
@@ -263,8 +345,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         return canFitOutputs(appliance);
     }
 
-    public boolean canFitOutputs(CookingApplianceBlockEntity appliance) {
-        // Test item outputs fit.
+    public boolean canFitItemOutputs(CookingApplianceBlockEntity appliance) {
         if (!this.itemOutputs.isEmpty()) {
             int availableSlots = 0;
             for (int i = 0; i < appliance.getItemOutputCount(); i++) {
@@ -273,12 +354,12 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                     availableSlots++;
                 }
             }
-            if (availableSlots < this.itemOutputs.size()) {
-                return false;
-            }
+            return availableSlots >= this.itemOutputs.size();
         }
+        return true;
+    }
 
-        // Test fluid outputs fit with overflow into available output tanks.
+    public boolean canFitFluidOutputs(CookingApplianceBlockEntity appliance) {
         if (!this.fluidOutputs.isEmpty()) {
             List<FluidStack> simulatedTanks = new ArrayList<>();
             for (int i = 0; i < appliance.getFluidOutputCount(); i++) {
@@ -319,8 +400,25 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                 }
             }
         }
-
         return true;
+    }
+
+    public boolean canFitOutputs(CookingApplianceBlockEntity appliance) {
+        return canFitItemOutputs(appliance) && canFitFluidOutputs(appliance);
+    }
+
+    public int getErrorFlags(CookingApplianceBlockEntity appliance) {
+        int errors = 0;
+        if (hasRottenInputs(appliance)) {
+            errors |= CookingApplianceBlockEntity.ERROR_ROTTEN_INGREDIENT;
+        }
+        if (!canFitItemOutputs(appliance)) {
+            errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_ITEM_SPACE;
+        }
+        if (!canFitFluidOutputs(appliance)) {
+            errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
+        }
+        return errors;
     }
 
     public void assembleOutputs(CookingApplianceBlockEntity appliance) {
