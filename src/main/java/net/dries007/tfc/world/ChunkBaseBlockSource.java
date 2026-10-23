@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.world;
 
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -47,6 +48,39 @@ public class ChunkBaseBlockSource
 	public void useAccurateBiome(int localX, int localZ, BiomeExtension biome, double weight, boolean couldBeSalty, boolean forceSaltWater)
 	{
 		cachedFluidStates[index(localX, localZ)] = forceSaltWater || (couldBeSalty && (biome.isSalty() || (weight <= 0.5 && biome != TFCBiomes.RIVER))) ? saltWater : freshWater;
+	}
+
+	/**
+	 * @return The fluid chosen for each column as a bitset (bit {@code index(x, z)} set = salt water), or {@code null} if
+	 * not every column has been chosen yet. Used to keep the choices for a chunk that is saved part-way through generation.
+	 */
+	@Nullable
+	public long[] saveFluidChoices()
+	{
+		final long[] bits = new long[4];
+		for (int i = 0; i < cachedFluidStates.length; i++)
+		{
+			if (cachedFluidStates[i] == null)
+			{
+				return null;
+			}
+			if (cachedFluidStates[i] == saltWater)
+			{
+				bits[i >> 6] |= 1L << (i & 63);
+			}
+		}
+		return bits;
+	}
+
+	/**
+	 * Restores the per-column fluid choices saved with {@link #saveFluidChoices()}.
+	 */
+	public void loadFluidChoices(long[] bits)
+	{
+		for (int i = 0; i < cachedFluidStates.length; i++)
+		{
+			cachedFluidStates[i] = (bits[i >> 6] & (1L << (i & 63))) != 0 ? saltWater : freshWater;
+		}
 	}
 
 	public BlockState getBaseBlock(int blockX, int blockY, int blockZ)

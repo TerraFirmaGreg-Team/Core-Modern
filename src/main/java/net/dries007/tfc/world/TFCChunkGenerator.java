@@ -61,6 +61,7 @@ import net.minecraft.world.level.chunk.CarvingMask;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
+import net.minecraft.world.level.chunk.ImposterProtoChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.levelgen.Aquifer;
@@ -148,7 +149,6 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     private Settings settings;
 
     private final NoiseBasedChunkGenerator stupidMojangChunkGenerator; // Mojang fix your god awful deprecated carver nonsense
-    private final FastConcurrentCache<TFCAquifer> aquiferCache;
 
 	/** World seed for the current server session, set before RegionGenerator construction. */
 	private Seed seed;
@@ -167,7 +167,6 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         this.settings = settings;
 
         this.stupidMojangChunkGenerator = new NoiseBasedChunkGenerator(biomeSource.self(), noiseSettings);
-        this.aquiferCache = new FastConcurrentCache<>(256);
     }
 
     @Override
@@ -397,6 +396,9 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         }
 
         level.setCurrentlyGenerating(null);
+
+        // Aquifer cache can be removed when carvers and erosion are done
+        chunkDataProvider.get(chunk).setGenerationAquifer(null);
     }
 
     @Override
@@ -523,7 +525,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
 			chunkData.getRockData().useCache(chunkPos);
 			filler.fillFromNoise();
 
-			aquiferCache.set(chunkPos.x, chunkPos.z, filler.aquifer());
+			chunkData.setGenerationAquifer(filler.aquifer());
 
 			return chunk;
 		}, Util.backgroundExecutor()).whenCompleteAsync((ret, error) -> {
@@ -646,17 +648,22 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
 
     private TFCAquifer getOrCreateAquifer(ChunkAccess chunk, ChunkNoiseSamplingSettings settings, ChunkBaseBlockSource baseBlockSource)
     {
-        final ChunkPos chunkPos = chunk.getPos();
-
-        TFCAquifer aquifer = aquiferCache.getIfPresent(chunkPos.x, chunkPos.z);
+        final ChunkData chunkData = chunkDataProvider.get(chunk);
+        TFCAquifer aquifer = chunkData.getGenerationAquifer();
         if (aquifer == null)
         {
-            final ChunkData chunkData = chunkDataProvider.get(chunk);
-
-            aquifer = new TFCAquifer(chunkPos, settings, baseBlockSource, getSeaLevel(), noiseSampler.positionalRandomFactory, noiseSampler.barrierNoise);
+            final long[] fluidChoices = chunkData.getGenerationFluidChoices();
+            if (fluidChoices != null)
+            {
+                // Saved with the chunk when it was unloaded part-way through generation
+                baseBlockSource.loadFluidChoices(fluidChoices);
+            }
+            aquifer = new TFCAquifer(chunk.getPos(), settings, baseBlockSource, getSeaLevel(), noiseSampler.positionalRandomFactory, noiseSampler.barrierNoise);
             aquifer.setSurfaceHeights(chunkData.getAquiferSurfaceHeight());
-
-            aquiferCache.set(chunkPos.x, chunkPos.z, aquifer);
+            if (chunk instanceof ProtoChunk && !(chunk instanceof ImposterProtoChunk))
+            {
+                chunkData.setGenerationAquifer(aquifer);
+            }
         }
         return aquifer;
     }
