@@ -226,12 +226,19 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         int prevDuration = this.maxDuration;
 
         if (cachedRecipe == null || !cachedRecipe.matches(this, level)) {
-            cachedRecipe = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
+            CookingApplianceRecipe matching = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
                     .filter(r -> r instanceof CookingApplianceRecipe)
                     .map(r -> (CookingApplianceRecipe) r)
                     .filter(r -> r.matches(this, level))
                     .findFirst()
                     .orElse(null);
+
+            if (matching != null) {
+                if (cachedRecipe != null && cachedRecipe != matching) {
+                    cookingTicks = 0;
+                }
+                cachedRecipe = matching;
+            }
         }
 
         if (cachedRecipe != null && cachedRecipe.matches(this, level)) {
@@ -245,13 +252,23 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             }
             markForSync();
         } else {
+            // Check if cachedRecipe still has its inputs in the appliance.
+            if (cachedRecipe != null && !cachedRecipe.matchesInputs(this)) {
+                // Fail if ingredients were removed in the middle of a recipe.
+                cookingTicks = 0;
+                cachedRecipe = null;
+            }
+
             int detectedErrors = ERROR_NONE;
-            CookingApplianceRecipe candidate = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
-                    .filter(r -> r instanceof CookingApplianceRecipe)
-                    .map(r -> (CookingApplianceRecipe) r)
-                    .filter(r -> r.matchesInputs(this))
-                    .findFirst()
-                    .orElse(null);
+            CookingApplianceRecipe candidate = cachedRecipe;
+            if (candidate == null) {
+                candidate = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
+                        .filter(r -> r instanceof CookingApplianceRecipe)
+                        .map(r -> (CookingApplianceRecipe) r)
+                        .filter(r -> r.matchesInputs(this))
+                        .findFirst()
+                        .orElse(null);
+            }
 
             if (candidate != null) {
                 detectedErrors = candidate.getErrorFlags(this);
@@ -260,6 +277,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 if (hasAnyRottenInput()) {
                     detectedErrors = ERROR_ROTTEN_INGREDIENT;
                 }
+                this.maxDuration = 0;
+                cookingTicks = 0;
             }
 
             this.recipeError = detectedErrors;
@@ -482,16 +501,47 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
         // If held item has fluid, try to deposit into an input tank.
         if (!availableInItem.isEmpty() && (!targetIsOutput || targetTankIndex < 0)) {
-            int startTank = targetTankIndex >= 0 && targetTankIndex < appliance.getFluidInputCount() ? targetTankIndex : 0;
-            int endTank = targetTankIndex >= 0 && targetTankIndex < appliance.getFluidInputCount() ? targetTankIndex + 1 : appliance.getFluidInputCount();
+            boolean isBucket = heldItem.getItem() instanceof BucketItem || singleHeld.getItem() == Items.BUCKET || availableInItem.getAmount() >= FluidType.BUCKET_VOLUME;
+            int requiredSpace = (isBucket && heldItem.getCount() == 1) ? Math.min(FluidType.BUCKET_VOLUME, availableInItem.getAmount()) : 1;
 
             int chosenTank = -1;
-            for (int i = startTank; i < endTank; i++) {
-                FluidStack inTank = appliance.getFluidInputTank(i);
-                int capacity = appliance.getFluidInputCapacity();
-                if (inTank.isEmpty() || (inTank.isFluidEqual(availableInItem) && inTank.getAmount() < capacity)) {
-                    chosenTank = i;
-                    break;
+            if (targetTankIndex >= 0) {
+                // Handling fluids in the screen class allows overflow into next tanks.
+                for (int i = targetTankIndex; i < appliance.getFluidInputCount(); i++) {
+                    FluidStack inTank = appliance.getFluidInputTank(i);
+                    int capacity = appliance.getFluidInputCapacity();
+                    int space = capacity - inTank.getAmount();
+                    if (inTank.isEmpty() || (inTank.isFluidEqual(availableInItem) && space >= requiredSpace)) {
+                        chosenTank = i;
+                        break;
+                    }
+                }
+            } else {
+                // In-world interaction only tries to fill 1 input tank per fluid type.
+                for (int i = 0; i < appliance.getFluidInputCount(); i++) {
+                    FluidStack inTank = appliance.getFluidInputTank(i);
+                    if (!inTank.isEmpty() && inTank.isFluidEqual(availableInItem)) {
+                        int capacity = appliance.getFluidInputCapacity();
+                        int space = capacity - inTank.getAmount();
+                        if (space >= requiredSpace) {
+                            chosenTank = i;
+                        }
+                        // Do not look for another tank even if full.
+                        break;
+                    }
+                }
+                // If no tank has this fluid, find first empty tank.
+                if (chosenTank == -1) {
+                    for (int i = 0; i < appliance.getFluidInputCount(); i++) {
+                        FluidStack inTank = appliance.getFluidInputTank(i);
+                        if (inTank.isEmpty()) {
+                            int capacity = appliance.getFluidInputCapacity();
+                            if (capacity >= requiredSpace) {
+                                chosenTank = i;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -499,7 +549,6 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 FluidStack inTank = appliance.getFluidInputTank(chosenTank);
                 int space = appliance.getFluidInputCapacity() - inTank.getAmount();
 
-                boolean isBucket = heldItem.getItem() instanceof BucketItem || singleHeld.getItem() == Items.BUCKET || availableInItem.getAmount() >= FluidType.BUCKET_VOLUME;
                 if (!isBucket || space >= FluidType.BUCKET_VOLUME || heldItem.getCount() > 1) {
                     int toDrain = Math.min(space, availableInItem.getAmount());
                     if (toDrain > 0) {
@@ -751,10 +800,17 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 public int fill(FluidStack resource, FluidAction action) {
                     if (resource.isEmpty())
                         return 0;
+                    // Check if any input tank already contains this fluid.
                     for (int i = 0; i < appliance.getFluidInputCount(); i++) {
-                        int filled = tanks[i].fill(resource, action);
-                        if (filled > 0) {
-                            return filled;
+                        if (!tanks[i].getFluid().isEmpty() && tanks[i].getFluid().isFluidEqual(resource)) {
+                            // Only fill this matching tank. Do not overflow into other tanks.
+                            return tanks[i].fill(resource, action);
+                        }
+                    }
+                    // If no tank has this fluid, fill the first empty tank.
+                    for (int i = 0; i < appliance.getFluidInputCount(); i++) {
+                        if (tanks[i].getFluid().isEmpty()) {
+                            return tanks[i].fill(resource, action);
                         }
                     }
                     return 0;

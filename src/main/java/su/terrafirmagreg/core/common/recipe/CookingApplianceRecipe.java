@@ -33,6 +33,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import lombok.Getter;
 
@@ -346,17 +347,86 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
     }
 
     public boolean canFitItemOutputs(CookingApplianceBlockEntity appliance) {
-        if (!this.itemOutputs.isEmpty()) {
-            int availableSlots = 0;
-            for (int i = 0; i < appliance.getItemOutputCount(); i++) {
-                ItemStack stack = appliance.getItemOutputStack(i);
-                if (stack.isEmpty()) {
-                    availableSlots++;
+        if (this.itemOutputs.isEmpty()) {
+            return true;
+        }
+
+        List<ItemStack> nonNullInputs = new ArrayList<>();
+        List<ItemStack> foodInputs = new ArrayList<>();
+        for (int i = 0; i < appliance.getItemInputCount(); i++) {
+            ItemStack stack = appliance.getItemInputStack(i);
+            if (!stack.isEmpty()) {
+                nonNullInputs.add(stack);
+                if (FoodCapability.get(stack) != null) {
+                    foodInputs.add(stack);
                 }
             }
-            return availableSlots >= this.itemOutputs.size();
         }
-        return true;
+
+        List<ItemStack> simulatedSlots = new ArrayList<>();
+        for (int i = 0; i < appliance.getItemOutputCount(); i++) {
+            simulatedSlots.add(appliance.getItemOutputStack(i).copy());
+        }
+
+        appliance.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> RecipeHelpers.setCraftingInput(handler, 0, appliance.getItemInputCount()));
+        try {
+            for (int outIdx = 0; outIdx < this.itemOutputs.size(); outIdx++) {
+                ItemStackProvider provider = this.itemOutputs.get(outIdx);
+                ItemStack input = ItemStack.EMPTY;
+                if (!foodInputs.isEmpty()) {
+                    input = foodInputs.get(Math.min(outIdx, foodInputs.size() - 1));
+                } else if (!nonNullInputs.isEmpty()) {
+                    input = nonNullInputs.get(Math.min(outIdx, nonNullInputs.size() - 1));
+                }
+
+                ItemStack out = provider.getStack(input);
+                if (out.isEmpty()) {
+                    continue;
+                }
+                final IFood food = FoodCapability.get(out);
+                if (food != null && !food.isTransientNonDecaying() && food.getRottenDate() != FoodHandler.NEVER_DECAY_DATE && food.getCreationDate() <= 0) {
+                    FoodCapability.updateFoodDecayOnCreate(out);
+                }
+
+                ItemStack toInsert = out.copy();
+                // Try to merge into existing non-empty output slots.
+                for (int s = 0; s < simulatedSlots.size() && !toInsert.isEmpty(); s++) {
+                    ItemStack inSlot = simulatedSlots.get(s);
+                    if (!inSlot.isEmpty()) {
+                        if (FoodCapability.get(inSlot) != null && FoodCapability.get(toInsert) != null) {
+                            if (FoodCapability.areFoodStacksStackable(inSlot, toInsert, 0.30f)) {
+                                inSlot = FoodCapability.mergeItemStacks(inSlot, toInsert);
+                                simulatedSlots.set(s, inSlot);
+                            }
+                        } else if (ItemHandlerHelper.canItemStacksStack(inSlot, toInsert)) {
+                            int space = inSlot.getMaxStackSize() - inSlot.getCount();
+                            if (space > 0) {
+                                int countToAdd = Math.min(space, toInsert.getCount());
+                                inSlot.grow(countToAdd);
+                                toInsert.shrink(countToAdd);
+                            }
+                        }
+                    }
+                }
+
+                // Insert remainder into empty slots.
+                for (int s = 0; s < simulatedSlots.size() && !toInsert.isEmpty(); s++) {
+                    ItemStack inSlot = simulatedSlots.get(s);
+                    if (inSlot.isEmpty()) {
+                        int countToPut = Math.min(toInsert.getCount(), toInsert.getMaxStackSize());
+                        ItemStack putStack = toInsert.split(countToPut);
+                        simulatedSlots.set(s, putStack);
+                    }
+                }
+
+                if (!toInsert.isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+        } finally {
+            RecipeHelpers.clearCraftingInput();
+        }
     }
 
     public boolean canFitFluidOutputs(CookingApplianceBlockEntity appliance) {
@@ -438,7 +508,6 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
 
         try {
             // Produce item outputs.
-            int outputSlotIndex = 0;
             for (int outIdx = 0; outIdx < this.itemOutputs.size(); outIdx++) {
                 ItemStackProvider provider = this.itemOutputs.get(outIdx);
                 ItemStack input = ItemStack.EMPTY;
@@ -455,13 +524,37 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                         FoodCapability.updateFoodDecayOnCreate(out);
                     }
                 }
-                while (outputSlotIndex < appliance.getItemOutputCount()) {
-                    if (appliance.getItemOutputStack(outputSlotIndex).isEmpty()) {
-                        appliance.setItemOutputStack(outputSlotIndex, out);
-                        outputSlotIndex++;
-                        break;
+
+                ItemStack toInsert = out.copy();
+                // Try to merge into existing non-empty output slots.
+                for (int s = 0; s < appliance.getItemOutputCount() && !toInsert.isEmpty(); s++) {
+                    ItemStack inSlot = appliance.getItemOutputStack(s);
+                    if (!inSlot.isEmpty()) {
+                        if (FoodCapability.get(inSlot) != null && FoodCapability.get(toInsert) != null) {
+                            if (FoodCapability.areFoodStacksStackable(inSlot, toInsert, 0.30f)) {
+                                inSlot = FoodCapability.mergeItemStacks(inSlot, toInsert);
+                                appliance.setItemOutputStack(s, inSlot);
+                            }
+                        } else if (ItemHandlerHelper.canItemStacksStack(inSlot, toInsert)) {
+                            int space = inSlot.getMaxStackSize() - inSlot.getCount();
+                            if (space > 0) {
+                                int countToAdd = Math.min(space, toInsert.getCount());
+                                inSlot.grow(countToAdd);
+                                toInsert.shrink(countToAdd);
+                                appliance.setItemOutputStack(s, inSlot);
+                            }
+                        }
                     }
-                    outputSlotIndex++;
+                }
+
+                // Insert remainder into empty slots.
+                for (int s = 0; s < appliance.getItemOutputCount() && !toInsert.isEmpty(); s++) {
+                    ItemStack inSlot = appliance.getItemOutputStack(s);
+                    if (inSlot.isEmpty()) {
+                        int countToPut = Math.min(toInsert.getCount(), toInsert.getMaxStackSize());
+                        ItemStack putStack = toInsert.split(countToPut);
+                        appliance.setItemOutputStack(s, putStack);
+                    }
                 }
             }
         } finally {
