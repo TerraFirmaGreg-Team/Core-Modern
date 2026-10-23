@@ -90,13 +90,13 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
 
         this.addRenderableWidget(Button.builder(Component.literal("Recipes"),
                 (button) -> EmiApi.displayUses(EmiStack.of(recipeTarget)))
-        .bounds(this.leftPos + PB_X, this.topPos + PB_Y - 1, PB_WIDTH, 10)
-        .build(builder -> new Button(builder) {
-            @Override
-            public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-                // Override to prevent rendering a button texture.
-            }
-        }));
+                .bounds(this.leftPos + PB_X, this.topPos + PB_Y - 2, PB_WIDTH, 11)
+                .build(builder -> new Button(builder) {
+                    @Override
+                    public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+                        // Override to prevent rendering a button texture.
+                    }
+                }));
 
         // Temp Meter Widget
         this.addRenderableWidget(new TemperatureMeterWidget(
@@ -261,7 +261,7 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
         }
 
         // Progress Tooltips
-        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + PB_X, topPos + PB_Y - 5, PB_WIDTH, 10)) {
+        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + PB_X, topPos + PB_Y - 2, PB_WIDTH - 1, 10)) {
             List<Component> progressTooltip = new ArrayList<>(List.of());
 
             MutableComponent openRecipes = Component.translatable("emi.view_all_recipes");
