@@ -460,8 +460,7 @@ public class TFCRabbit extends Rabbit implements MammalProperties
                 Block aboveBlock = aboveState.getBlock();
                 if (canRaid && Helpers.isBlock(aboveBlock, TFCTags.Blocks.RABBIT_RAIDABLE))
                 {
-                    level.setBlock(abovePos, Blocks.AIR.defaultBlockState(), 2);
-                    level.destroyBlock(abovePos, true, rabbit);
+					level.destroyBlock(abovePos, false, rabbit);
                     rabbit.moreCarrotTicks = 40;
                 }
 
