@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.client.screen.BlockEntityScreen;
-import net.dries007.tfc.common.capabilities.heat.Heat;
-import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.ScreenButtonPacket;
 import net.dries007.tfc.util.Tooltips;
@@ -23,22 +21,20 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.screen.widget.TemperatureMeterWidget;
 import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.container.CopperPotContainer;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({ "FieldCanBeLocal" })
 public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, CopperPotContainer> {
 
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/copper_pot.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/copper_pot.png");
 
-    private final int tempScaleX = 2;
-    private final int tempScaleY = 76;
-    private final int tempScaleHeight = 51;
+    private static final int WIDTH = 176;
+    private static final int HEIGHT = 201;
 
-    private final int currentTempBarU = 176;
-    private final int currentTempBarV = 0;
-    private final int currentTempBarWidth = 15;
-    private final int currentTempBarHeight = 5;
+    private final int tempScaleX = 4;
+    private final int tempScaleY = 38;
 
     //    private final int flameX = 63;
     //    private final int flameY = 22;
@@ -51,8 +47,8 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
     private final int tankY = 25 + 30;
     private final int tankHeight = 30;
     private final int tankWidth = 16;
-    private final int tankOverlayU = currentTempBarU;
-    private final int tankOverlayV = currentTempBarV + tankHeight + 7;
+    private final int tankOverlayU = 176;
+    private final int tankOverlayV = tankHeight + 7;
 
     public CopperPotScreen(CopperPotContainer container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TEXTURE);
@@ -60,6 +56,17 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
         inventoryLabelY += 20;
         titleLabelX += 105;
         imageHeight += 20;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        this.addRenderableWidget(new TemperatureMeterWidget(
+                leftPos + tempScaleX,
+                topPos + tempScaleY,
+                () -> (int) this.menu.getBlockEntity().getTemperature(),
+                () -> (int) this.menu.getBlockEntity().getTargetTemperature()));
     }
 
     // Handles fluid tank interactions.
@@ -102,12 +109,6 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTicks, mouseX, mouseY);
 
-        // Temperature Bar
-        int temp = Heat.scaleTemperatureForGui(blockEntity.getTemperature());
-        if (temp > 0) {
-            graphics.blit(texture, leftPos + tempScaleX, topPos + tempScaleY - Math.min(tempScaleHeight, temp), currentTempBarU, currentTempBarV, currentTempBarWidth, currentTempBarHeight);
-        }
-
         // Fluid Input Tanks
         for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
             FluidStack fluidStack = blockEntity.getFluidInputTank(i);
@@ -135,7 +136,7 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
 
             if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
 
-                graphics.blit(texture, leftPos + currentTankX - 1, topPos + currentTankY, tankOverlayU + (tankWidth + 2) * 3, currentTempBarV + 6, tankWidth + 2, tankHeight + 2);
+                graphics.blit(texture, leftPos + currentTankX - 1, topPos + currentTankY, tankOverlayU + (tankWidth + 2) * 3, 6, tankWidth + 2, tankHeight + 2);
                 break;
             }
         }
@@ -157,7 +158,7 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
             }
         }
 
-        graphics.blit(texture, leftPos + tankX + 90 - 1, topPos + tankY - 7, tankOverlayU, currentTempBarV + 6, (tankWidth + 2) * 3, tankHeight + 1);
+        graphics.blit(texture, leftPos + tankX + 90 - 1, topPos + tankY - 7, tankOverlayU, 6, (tankWidth + 2) * 3, tankHeight + 1);
 
         for (int i = 0; i < blockEntity.getFluidOutputCount(); i++) {
             int column = i % 3;
@@ -167,7 +168,7 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
 
             if (RenderHelpers.isInside(mouseX, mouseY, leftPos + currentTankX, topPos + currentTankY, tankWidth, tankHeight)) {
 
-                graphics.blit(texture, leftPos + currentTankX - 1, topPos + currentTankY, tankOverlayU + (tankWidth + 2) * 3, currentTempBarV + 6, tankWidth + 2, tankHeight + 2);
+                graphics.blit(texture, leftPos + currentTankX - 1, topPos + currentTankY, tankOverlayU + (tankWidth + 2) * 3, 6, tankWidth + 2, tankHeight + 2);
                 break;
             }
         }
@@ -188,14 +189,6 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
     @Override
     protected void renderTooltip(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
         super.renderTooltip(graphics, mouseX, mouseY);
-
-        // Temperature Indicator Tooltip
-        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + tempScaleX, topPos + tempScaleY - tempScaleHeight, currentTempBarWidth, tempScaleHeight)) {
-            final var text = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(blockEntity.getTemperature());
-            if (text != null) {
-                graphics.renderTooltip(font, text, mouseX, mouseY);
-            }
-        }
 
         // Fluid Input Tooltips
         for (int i = 0; i < blockEntity.getFluidInputCount(); i++) {
