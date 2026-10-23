@@ -144,6 +144,13 @@ public class ScrapingBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         return outputTexture;
     }
 
+	@Override
+	public void setAndUpdateSlots(int slot)
+	{
+		updateDisplayCache();
+		super.setAndUpdateSlots(slot);
+	}
+
     public void updateDisplayCache()
     {
         if (!isComplete())
