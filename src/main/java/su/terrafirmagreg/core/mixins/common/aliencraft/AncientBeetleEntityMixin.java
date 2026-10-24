@@ -172,7 +172,7 @@ public class AncientBeetleEntityMixin extends TamableAnimal {
         }
     }
 
-    @Redirect(method = "mobInteract", at = @At(value = "INVOKE", target = "Len/predator97427fr/aliencraft/procedures/AncientBeetleRightclickedOnEntityProcedure;execute(Lnet/minecraft/world/level/LevelAccessor;DDDLnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V"), remap = true)
+    @Redirect(method = "mobInteract", at = @At(value = "INVOKE", target = "Len/predator97427fr/aliencraft/procedures/AncientBeetleRightclickedOnEntityProcedure;execute(Lnet/minecraft/world/level/LevelAccessor;DDDLnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V", remap = false), remap = true)
     private void tfg$mobInteractSaddle(LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity, @Local(name = "player") Player player) {
         boolean usingSaddle = player.isHolding(Items.SADDLE);
         boolean wasSaddled = this.entityData.get(DATA_saddled);
