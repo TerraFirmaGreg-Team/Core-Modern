@@ -38,6 +38,10 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
 
+/**
+ * Base class for cooking appliances like {@link CopperPotBlock}.
+ * Extends {@link DeviceBlock} and provides facing, and received heat blockstates.
+ */
 @SuppressWarnings("deprecation")
 public abstract class CookingApplianceBlock extends DeviceBlock {
 
@@ -68,8 +72,16 @@ public abstract class CookingApplianceBlock extends DeviceBlock {
     }
 
     @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (level.getBlockEntity(pos) instanceof CookingApplianceBlockEntity appliance) {
+            appliance.resetHeat();
+        }
+    }
+
+    @Override
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
-        if (!entity.fireImmune() && entity instanceof LivingEntity && level.getBlockState(pos).getValue(RECEIVED_HEAT) > 0) {
+        if (!entity.fireImmune() && entity instanceof LivingEntity && level.getBlockState(pos).getValue(RECEIVED_HEAT) > 1) {
             entity.hurt(entity.damageSources().hotFloor(), 0.5f);
         }
         super.stepOn(level, pos, state, entity);
