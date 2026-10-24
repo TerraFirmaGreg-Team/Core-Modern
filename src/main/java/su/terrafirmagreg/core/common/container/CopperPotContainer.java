@@ -13,8 +13,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 import su.terrafirmagreg.core.client.screen.CopperPotScreen;
-import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.data.TFGTags;
 

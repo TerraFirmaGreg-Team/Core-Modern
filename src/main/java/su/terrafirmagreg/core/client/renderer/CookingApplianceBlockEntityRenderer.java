@@ -17,8 +17,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 
 @SuppressWarnings({ "UnnecessaryLocalVariable", "unused" })
 public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlockEntity> implements BlockEntityRenderer<T> {

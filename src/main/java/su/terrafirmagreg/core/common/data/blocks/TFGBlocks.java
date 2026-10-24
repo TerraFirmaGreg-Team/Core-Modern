@@ -47,8 +47,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
-import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.block.appliances.CookingApplianceBlock;
+import su.terrafirmagreg.core.common.block.appliances.CopperPotBlock;
+import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.item.CookingApplianceBlockItem;

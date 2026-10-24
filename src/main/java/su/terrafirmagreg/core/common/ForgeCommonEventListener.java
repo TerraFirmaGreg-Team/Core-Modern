@@ -41,7 +41,7 @@ import net.minecraftforge.registries.MissingMappingsEvent;
 import team.terrafirmagreg.jellies.common.data.JelliesItems;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
 import su.terrafirmagreg.core.common.data.TFGCommands;

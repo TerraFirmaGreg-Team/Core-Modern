@@ -16,7 +16,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.minecraft.client.gui.GuiGraphics;
 
-import su.terrafirmagreg.core.common.block.GasBurnerBlock;
+import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 @Mixin(value = AnimatedBlazeBurner.class, remap = false)

@@ -28,7 +28,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 @SuppressWarnings("NoTranslation")

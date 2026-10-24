@@ -30,6 +30,8 @@ import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpr
 import su.terrafirmagreg.core.common.block.create.CombustionEngineBlockEntity;
 import su.terrafirmagreg.core.common.block.create.CombustionEngineRenderer;
 import su.terrafirmagreg.core.common.blockentity.*;
+import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 

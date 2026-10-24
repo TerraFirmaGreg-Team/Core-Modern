@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.blockentity;
+package su.terrafirmagreg.core.common.blockentity.appliances;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

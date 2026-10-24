@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.block;
+package su.terrafirmagreg.core.common.block.appliances;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +36,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 
 /**
  * Base class for cooking appliances like {@link CopperPotBlock}.

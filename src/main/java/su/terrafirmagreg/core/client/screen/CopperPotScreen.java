@@ -31,8 +31,8 @@ import dev.emi.emi.api.stack.EmiStack;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.TemperatureMeterWidget;
-import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.container.CopperPotContainer;
 
 @SuppressWarnings({ "FieldCanBeLocal", "NoTranslation", "unused" })

@@ -5,7 +5,8 @@ import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.*;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.GasBurnerBlock;
+import su.terrafirmagreg.core.common.block.appliances.CookingApplianceBlock;
+import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
 import su.terrafirmagreg.core.common.block.TierLockedBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmClusterBlock;
 
@@ -19,5 +20,6 @@ public class TFGJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(TierLockedProvider.INSTANCE, TierLockedBlock.class);
         registration.registerBlockComponent(DynamicAgeProvider.INSTANCE, PalmClusterBlock.class);
         registration.registerBlockComponent(GasBurnerProvider.INSTANCE, GasBurnerBlock.class);
+        registration.registerBlockComponent(CookingApplianceProvider.INSTANCE, CookingApplianceBlock.class);
     }
 }

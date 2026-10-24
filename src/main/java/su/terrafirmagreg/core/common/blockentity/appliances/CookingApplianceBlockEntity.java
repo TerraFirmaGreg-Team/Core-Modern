@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.blockentity;
+package su.terrafirmagreg.core.common.blockentity.appliances;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import lombok.Getter;
 
-import su.terrafirmagreg.core.common.block.CookingApplianceBlock;
+import su.terrafirmagreg.core.common.block.appliances.CookingApplianceBlock;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.recipe.CookingApplianceRecipe;
 

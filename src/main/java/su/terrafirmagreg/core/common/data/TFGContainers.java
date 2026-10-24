@@ -20,8 +20,8 @@ import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.ArtisanTableBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.container.CopperPotContainer;

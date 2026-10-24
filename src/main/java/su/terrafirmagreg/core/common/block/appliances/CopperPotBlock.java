@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.block;
+package su.terrafirmagreg.core.common.block.appliances;
 
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -15,7 +15,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.client.renderer.CookingApplianceBlockEntityRenderer;
-import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
 public class CopperPotBlock extends CookingApplianceBlock {

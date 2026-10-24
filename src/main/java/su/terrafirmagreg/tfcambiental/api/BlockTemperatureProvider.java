@@ -54,12 +54,11 @@ import net.minecraftforge.registries.RegistryObject;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import su.terrafirmagreg.core.common.block.ParticleEmitterDecorationBlock;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
-import su.terrafirmagreg.tfcambiental.api.BlockTemperatureProvider.TempModifierSpec;
 import su.terrafirmagreg.tfcambiental.item.TFCAmbientalItems;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifierStorage;

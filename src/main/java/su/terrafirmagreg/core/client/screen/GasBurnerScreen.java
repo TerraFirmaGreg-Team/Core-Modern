@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.TemperatureMeterWidget;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
 
 @SuppressWarnings("FieldCanBeLocal")

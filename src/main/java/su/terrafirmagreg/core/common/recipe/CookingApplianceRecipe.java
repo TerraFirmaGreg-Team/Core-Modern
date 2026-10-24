@@ -37,7 +37,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import lombok.Getter;
 
-import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 
 public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container> {
 

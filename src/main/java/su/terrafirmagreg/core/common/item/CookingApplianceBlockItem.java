@@ -34,7 +34,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
 import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
-import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 
 /**
  * Base class for cooking appliance block items.
