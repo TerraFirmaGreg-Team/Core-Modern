@@ -27,6 +27,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import dev.ftb.mods.ftbquests.quest.QuestObjectBase;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 
@@ -118,5 +120,13 @@ public final class TFGHelpers {
 
     public static Vec2 getOverworldWind(Level level, BlockPos pos, long calendarTime, float seaLevel) {
         return OverworldClimateModel.getOverworldWindVector(level, pos, calendarTime, 8008135, seaLevel);
+    }
+
+    /**
+     * Quest IDs are longs (64-bit integers). In javascript, everything is a 64-bit FLOAT.
+     * So trying to use quest IDs in kubejs rounds them, which we don't want.
+     */
+    public static String getQuestID(QuestObjectBase quest) {
+        return String.valueOf(quest.getId());
     }
 }
