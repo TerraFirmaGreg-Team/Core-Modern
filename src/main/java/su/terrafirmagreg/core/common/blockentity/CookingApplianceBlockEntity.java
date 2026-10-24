@@ -65,6 +65,12 @@ import su.terrafirmagreg.core.common.block.CookingApplianceBlock;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.recipe.CookingApplianceRecipe;
 
+/**
+ * Base class for cooking appliances like {@link CopperPotBlockEntity}, extending functionality from
+ * heatable, calendar tickable, and tickable inventory block entities.
+ * Provides mechanics for handling item and fluid inputs/outputs, managing recipes,
+ * and temperature properties.
+ */
 @SuppressWarnings("unused")
 public abstract class CookingApplianceBlockEntity extends TickableInventoryBlockEntity<CookingApplianceBlockEntity.CookingApplianceInventory>
         implements ICalendarTickable, IHeatable, IHeatBlock {
@@ -163,6 +169,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         return getFluidInputCount();
     }
 
+    /**
+     * Configures the sided handlers for item, fluid, and heat logistics.
+     */
     protected void configureSidedHandlers() {
         int[] inputSlots = new int[getItemInputCount() + 2];
         for (int i = 0; i < getItemInputCount() + 2; i++) {
@@ -218,6 +227,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         appliance.updateAndTickRecipe(level);
     }
 
+    /**
+     * Updates the cooking appliance's recipe state and advances recipe ticks if a valid recipe is active.
+     */
     protected void updateAndTickRecipe(Level level) {
         if (level == null || level.isClientSide)
             return;
@@ -389,7 +401,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         return cachedRecipe;
     }
 
-    // Item slot accessors.
+    // ============== Item Slot Accessors =============
+
     public ItemStack getItemInputStack(int index) {
         if (index >= 0 && index < getItemInputCount()) {
             return inventory.getItemHandler().getStackInSlot(index);
@@ -436,7 +449,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         }
     }
 
-    // Fluid tank accessors.
+    // ============== Fluid Tank Accessors =============
+
     public FluidStack getFluidInputTank(int index) {
         if (index >= 0 && index < getFluidInputCount()) {
             return inventory.getTankArray()[index].getFluid();
@@ -481,7 +495,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             Player player,
             int targetTankIndex,
             boolean targetIsOutput,
-            java.util.function.Consumer<ItemStack> containerSetter) {
+            Consumer<ItemStack> containerSetter) {
         if (heldItem.isEmpty() || appliance == null) {
             return false;
         }
@@ -504,6 +518,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             boolean isBucket = heldItem.getItem() instanceof BucketItem || singleHeld.getItem() == Items.BUCKET || availableInItem.getAmount() >= FluidType.BUCKET_VOLUME;
             int requiredSpace = (isBucket && heldItem.getCount() == 1) ? Math.min(FluidType.BUCKET_VOLUME, availableInItem.getAmount()) : 1;
 
+            // Find the best tank to deposit into.
             int chosenTank = -1;
             if (targetTankIndex >= 0) {
                 // Handling fluids in the screen class allows overflow into next tanks.
@@ -545,6 +560,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 }
             }
 
+            // Deposit into chosen tank.
             if (chosenTank != -1) {
                 FluidStack inTank = appliance.getFluidInputTank(chosenTank);
                 int space = appliance.getFluidInputCapacity() - inTank.getAmount();
@@ -552,7 +568,11 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 if (!isBucket || space >= FluidType.BUCKET_VOLUME || heldItem.getCount() > 1) {
                     int toDrain = Math.min(space, availableInItem.getAmount());
                     if (toDrain > 0) {
-                        FluidStack drained = fluidHandler.drain(toDrain, IFluidHandler.FluidAction.EXECUTE);
+                        boolean isCreative = player.isCreative();
+                        // Simulate fluid draining if in creative to not actually drain the held item.
+                        IFluidHandler.FluidAction action = isCreative ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE;
+                        FluidStack drained = fluidHandler.drain(toDrain, action);
+
                         if (!drained.isEmpty()) {
                             if (inTank.isEmpty()) {
                                 appliance.setFluidInputTank(chosenTank, drained.copy());
@@ -561,8 +581,11 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                                 appliance.setFluidInputTank(chosenTank, inTank);
                             }
 
-                            ItemStack containerStack = fluidHandler.getContainer();
-                            updateContainer(heldItem, containerStack, player, containerSetter);
+                            // Only update the held container if not in creative mode.
+                            if (!isCreative) {
+                                ItemStack containerStack = fluidHandler.getContainer();
+                                updateContainer(heldItem, containerStack, player, containerSetter);
+                            }
 
                             Level level = appliance.getLevel();
                             if (level != null) {
@@ -687,6 +710,13 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             this.targetTemperatureStabilityTicks = TARGET_TEMPERATURE_STABILITY_TICKS;
             markForSync();
         }
+    }
+
+    public void resetHeat() {
+        this.temperature = 0.0f;
+        this.targetTemperature = 0.0f;
+        this.targetTemperatureStabilityTicks = 0;
+        markForSync();
     }
 
     @Override
