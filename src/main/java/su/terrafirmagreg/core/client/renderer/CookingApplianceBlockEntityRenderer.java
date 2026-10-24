@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import su.terrafirmagreg.core.common.blockentity.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.CopperPotBlockEntity;
 
-@SuppressWarnings("UnnecessaryLocalVariable")
+@SuppressWarnings({ "UnnecessaryLocalVariable", "unused" })
 public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlockEntity> implements BlockEntityRenderer<T> {
 
     public CookingApplianceBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
@@ -154,7 +154,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
      * Returns the highest fluid level from all tanks, with preference to output tanks.
      * @return Fluid level between 2/16F and 12/16F
      */
-    private float getHighestFluidLevel(T appliance) {
+    public static float getHighestFluidLevel(CookingApplianceBlockEntity appliance) {
         float minY = 2 / 16F;
         float maxY = 12 / 16F;
         float highestLevel = minY;
@@ -217,7 +217,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
         double x = 0.5D + (Mth.cos(currentAngleRadians) * radius);
         double z = 0.5D + (Mth.sin(currentAngleRadians) * radius);
 
-        float highestFluidY = this.getHighestFluidLevel(appliance);
+        float highestFluidY = getHighestFluidLevel(appliance);
 
         RandomSource rand = RandomSource.create(posSeed ^ (slot * 312345L + 17L));
         float randY = (rand.nextFloat() + rand.nextFloat()) * 0.5F;
