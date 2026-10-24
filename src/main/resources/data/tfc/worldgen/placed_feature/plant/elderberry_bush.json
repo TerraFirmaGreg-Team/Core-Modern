@@ -8,7 +8,7 @@
             "type": "tfc:climate",
             "min_rainfall": 100,
             "min_forest": "none",
-            "min_temperature": 10
+            "min_temperature": 5
         },
         {
             "heightmap": "WORLD_SURFACE_WG",
