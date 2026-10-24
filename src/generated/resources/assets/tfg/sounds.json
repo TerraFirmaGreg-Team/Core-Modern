@@ -61,6 +61,23 @@
     ],
     "subtitle": "tfg.subtitle.burner"
   },
+  "cooking": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:cooking"
+      },
+      {
+        "type": "file",
+        "name": "tfg:cooking_1"
+      },
+      {
+        "type": "file",
+        "name": "tfg:cooking_2"
+      }
+    ],
+    "subtitle": "tfg.subtitle.cooking"
+  },
   "fire_click_click": {
     "sounds": [
       {

@@ -21,8 +21,8 @@
               "ops": [
                 {
                   "op": "replace",
-                  "source": "",
-                  "target": "BlockEntityTag"
+                  "source": "inventory",
+                  "target": "BlockEntityTag.inventory"
                 }
               ],
               "source": "block_entity"
