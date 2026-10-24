@@ -368,7 +368,7 @@ public final class TFGBlocks {
                             .add(LootItem.lootTableItem(block)
                                     .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
                                     .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
-                                            .copy("", "BlockEntityTag", CopyNbtFunction.MergeStrategy.REPLACE)))
+                                            .copy("inventory", "BlockEntityTag.inventory", CopyNbtFunction.MergeStrategy.REPLACE)))
                             .when(ExplosionCondition.survivesExplosion()))))
             .item(CookingApplianceBlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/copper_pot_0")))
