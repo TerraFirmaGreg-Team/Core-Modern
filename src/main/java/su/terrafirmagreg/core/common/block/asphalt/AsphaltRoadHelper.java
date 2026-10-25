@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.block.asphalt;
 
 import com.gregtechceu.gtceu.utils.EntityDamageUtil;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
@@ -63,7 +64,7 @@ public final class AsphaltRoadHelper {
             double x = pos.getX() + random.nextDouble();
             double z = pos.getZ() + random.nextDouble();
             double rise = 0.05 + random.nextDouble() * 0.04;
-            level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, baseY, z, 0.0, rise, 0.0);
+            level.addParticle(TFCParticles.SMOKE_0.get(), x, baseY, z, 0.0, rise, 0.0);
         }
     }
 
