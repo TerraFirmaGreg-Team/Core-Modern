@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/condenser_parent",
+  "textures": {
+    "0": "tfg:block/cooking_appliances/condenser"
+  }
+}
