@@ -47,9 +47,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.block.appliances.CondenserBlock;
 import su.terrafirmagreg.core.common.block.appliances.CookingApplianceBlock;
 import su.terrafirmagreg.core.common.block.appliances.CopperPotBlock;
 import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
+import su.terrafirmagreg.core.common.blockentity.appliances.CondenserBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
@@ -344,6 +346,8 @@ public final class TFGBlocks {
     public static final BlockEntry<CopperPotBlock> COPPER_POT = TFGCore.REGISTRATE
             .block("copper_pot", p -> new CopperPotBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
                     .blockEntity(TFGBlockEntities.COPPER_POT)
+                    .strength(3.0f, 6.0f)
+                    .noOcclusion()
                     .serverTicks(CookingApplianceBlockEntity::serverTick)))
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
@@ -375,6 +379,32 @@ public final class TFGBlocks {
                             .when(ExplosionCondition.survivesExplosion()))))
             .item(CookingApplianceBlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/copper_pot_0")))
+            .build()
+            .register();
+
+    public static final BlockEntry<CondenserBlock> CONDENSER = TFGCore.REGISTRATE
+            .block("condenser", p -> new CondenserBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
+                    .sound(SoundType.COPPER)
+                    .strength(3.0f, 6.0f)
+                    .noOcclusion()
+                    .blockEntity(TFGBlockEntities.CONDENSER)
+                    .serverTicks(CondenserBlockEntity::serverTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                var model = prov.models().withExistingParent("cooking_appliances/condenser", TFGCore.id("block/condenser_parent"))
+                        .texture("0", TFGCore.id("block/cooking_appliances/condenser"));
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    builder.partialState()
+                            .with(CondenserBlock.FACING, dir)
+                            .modelForState()
+                            .modelFile(model)
+                            .rotationY((int) dir.toYRot())
+                            .addModel();
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/condenser")))
             .build()
             .register();
 

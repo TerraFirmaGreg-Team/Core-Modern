@@ -30,6 +30,7 @@ import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpr
 import su.terrafirmagreg.core.common.block.create.CombustionEngineBlockEntity;
 import su.terrafirmagreg.core.common.block.create.CombustionEngineRenderer;
 import su.terrafirmagreg.core.common.blockentity.*;
+import su.terrafirmagreg.core.common.blockentity.appliances.CondenserBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.*;
@@ -132,6 +133,11 @@ public class TFGBlockEntities {
             .blockEntity("copper_pot", CopperPotBlockEntity::new)
             .validBlock(TFGBlocks.COPPER_POT)
             .renderer(() -> CookingApplianceBlockEntityRenderer.CopperPot::new)
+            .register();
+
+    public static final BlockEntityEntry<CondenserBlockEntity> CONDENSER = TFGCore.REGISTRATE
+            .blockEntity("condenser", CondenserBlockEntity::new)
+            .validBlock(TFGBlocks.CONDENSER)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
