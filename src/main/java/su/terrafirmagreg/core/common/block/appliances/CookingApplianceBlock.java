@@ -120,10 +120,9 @@ public abstract class CookingApplianceBlock extends DeviceBlock {
     @Override
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         if (level.getBlockEntity(pos) instanceof CookingApplianceBlockEntity appliance) {
-            if (appliance.getCachedRecipe() != null && appliance.getCachedRecipe().getDuration() > 0) {
-                return (int) Math.floor((double) appliance.getCookingTicks() / (double) appliance.getCachedRecipe().getDuration() * 15.0);
-            }
-            return appliance.getCapability(Capabilities.ITEM).map(ItemHandlerHelper::calcRedstoneFromInventory).orElse(0);
+            return appliance.getCapability(Capabilities.ITEM)
+                    .map(ItemHandlerHelper::calcRedstoneFromInventory)
+                    .orElse(0);
         }
         return 0;
     }
