@@ -2,16 +2,15 @@ package su.terrafirmagreg.core.common.block;
 
 import java.util.function.Supplier;
 
-import net.dries007.tfc.client.particle.TFCParticles;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;

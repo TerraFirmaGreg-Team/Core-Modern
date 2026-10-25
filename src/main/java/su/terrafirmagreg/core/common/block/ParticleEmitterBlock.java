@@ -2,13 +2,14 @@ package su.terrafirmagreg.core.common.block;
 
 import java.util.function.Supplier;
 
-import net.dries007.tfc.client.particle.TFCParticles;
+import javax.annotation.Nullable;
+
 import org.joml.Vector3f;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -27,8 +28,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.blockentity.TickerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
-
-import javax.annotation.Nullable;
 
 /**
  * Basic particle emitter block.
