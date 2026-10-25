@@ -4,7 +4,6 @@ import com.gregtechceu.gtceu.utils.EntityDamageUtil;
 
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

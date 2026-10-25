@@ -1,15 +1,23 @@
 package su.terrafirmagreg.core.common.environment;
 
+import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
+
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingBreatheEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -21,26 +29,35 @@ import earth.terrarium.adastra.common.tags.ModItemTags;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGDamageSources;
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class HypoxiaHandler {
 
+    /**  */
     private static final int BREATH_LOSS = 1;
-    private static final int BREATH_LOSS_VACUUM = 5;
+    private static final int BREATH_LOSS_VACUUM = 4;
 
     /** Armstrong limit, constant use to see if the player is in a vacuum dimension depending of the defined value in DimensionEnvironment */
     private static final float ARMSTRONG_LIMIT = 0.0618f;
 
     private static final int DAMAGE_INTERVAL = 20;
 
+    /** Damage are in percentage so all players are equel */
     private static final float DAMAGE_START = 0.05f;
     private static final float DAMAGE_STEP = 0.03f;
     private static final float DAMAGE_MAX = 0.25f;
     private static final int SEVERE_AFTER = 60;
 
-    /** Debt which stacks at 1 per tick */
-    private static final int RECOVERY_RATE = 2;
+    /** Debt stacks at 1 per tick of hypoxia, and is paid back 1 point every RECOVERY_INTERVAL ticks of breathing */
+    private static final int RECOVERY_INTERVAL = 4;
     private static final int MAX_DEBT = 200;
+
+    /** Bubbles of the vanilla air bar. The debt locks up to AIR_BUBBLES * MAX_LOCKED_SHARE of them */
+    public static final int AIR_BUBBLES = 10;
+
+    /** Percentage of the bar that is being locked when you spend too much time in Hypoxia. Not higher than 0.95 */
+    private static final float MAX_LOCKED_SHARE = 0.9f;
 
     /** Negative effects duration */
     private static final int EFFECT_DURATION = 60;
@@ -77,7 +94,19 @@ public final class HypoxiaHandler {
         if (SpaceSuitItem.hasFullSet(player) && SpaceSuitItem.hasOxygen(player)) {
             return true;
         }
+        if (isDivingWithAir(player)) {
+            return true;
+        }
         return OxygenApi.API.hasOxygen(player);
+    }
+
+    public static boolean isDivingGearDisabled(LivingEntity entity) {
+        BlockPos eyePos = BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ());
+        return !(EnvironmentSystem.getPressure(entity.level(), eyePos) < ARMSTRONG_LIMIT) || EnvironmentSystem.hasOxygen(entity.level(), eyePos);
+    }
+
+    private static boolean isDivingWithAir(Player player) {
+        return player.isEyeInFluid(FluidTags.WATER) && DivingHelmetItem.isWornBy(player) && isDivingGearDisabled(player) && !BacktankUtil.getAllWithAir(player).isEmpty();
     }
 
     public static boolean isSuffocating(Player player) {
@@ -88,7 +117,12 @@ public final class HypoxiaHandler {
         return player.getPersistentData().getInt(OXYGEN_DEBT);
     }
 
-    @SubscribeEvent
+    public static int getLockedBubbles(int debt) {
+        return Mth.ceil(AIR_BUBBLES * MAX_LOCKED_SHARE * debt / MAX_DEBT);
+    }
+
+    /** It runs lowest simply to be after Create diving blue suit */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingBreathe(LivingBreatheEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
@@ -96,11 +130,14 @@ public final class HypoxiaHandler {
 
         CompoundTag data = player.getPersistentData();
         int debt = data.getInt(OXYGEN_DEBT);
+        int previousDebt = debt;
 
         if (hasBreathableAir(player)) {
             if (debt > 0 && event.canBreathe()) {
-                debt = Math.max(0, debt - RECOVERY_RATE);
-                setOxygenDebt(data, debt);
+                if (player.tickCount % RECOVERY_INTERVAL == 0) {
+                    debt--;
+                    setOxygenDebt(player, data, previousDebt, debt);
+                }
                 limitRefill(event, player, debt);
             }
             return;
@@ -118,7 +155,7 @@ public final class HypoxiaHandler {
         }
 
         debt = Math.min(debt + 1, MAX_DEBT);
-        setOxygenDebt(data, debt);
+        setOxygenDebt(player, data, previousDebt, debt);
 
         if (player.level().getGameTime() % DAMAGE_INTERVAL == 0) {
             hurt(player, debt);
@@ -129,6 +166,20 @@ public final class HypoxiaHandler {
     public static void onLivingHeal(LivingHealEvent event) {
         if (event.getEntity() instanceof ServerPlayer player && isSuffocating(player)) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player && getOxygenDebt(player) > 0) {
+            TFGNetworkHandler.sendOxygenDebt(player, getOxygenDebt(player));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            TFGNetworkHandler.sendOxygenDebt(player, getOxygenDebt(player));
         }
     }
 
@@ -151,10 +202,10 @@ public final class HypoxiaHandler {
         }
     }
 
-    // Debt locking the breath bar - may need a better visual indicator
-
+    // MAX LOCKED SHARE shouldn't be higher that 95% else when getting out so non Oxygen environment you still won't be able to breath
     private static void limitRefill(LivingBreatheEvent event, Player player, int debt) {
-        int capacity = player.getMaxAirSupply() * (MAX_DEBT - debt) / MAX_DEBT;
+        int maxAir = player.getMaxAirSupply();
+        int capacity = maxAir - Mth.ceil(maxAir * MAX_LOCKED_SHARE * debt / MAX_DEBT);
         int room = capacity - player.getAirSupply();
         if (room <= 0) {
             event.setCanRefillAir(false);
@@ -163,11 +214,14 @@ public final class HypoxiaHandler {
         }
     }
 
-    private static void setOxygenDebt(CompoundTag data, int debt) {
+    private static void setOxygenDebt(ServerPlayer player, CompoundTag data, int previousDebt, int debt) {
         if (debt > 0) {
             data.putInt(OXYGEN_DEBT, debt);
         } else {
             data.remove(OXYGEN_DEBT);
+        }
+        if (getLockedBubbles(debt) != getLockedBubbles(previousDebt)) {
+            TFGNetworkHandler.sendOxygenDebt(player, debt);
         }
     }
 

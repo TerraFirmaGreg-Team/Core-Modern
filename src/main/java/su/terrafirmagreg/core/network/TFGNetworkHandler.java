@@ -130,10 +130,21 @@ public class TFGNetworkHandler {
                 ForcedPosePacket::encode,
                 ForcedPosePacket::decode,
                 ForcedPosePacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                OxygenDebtSyncPacket.class,
+                OxygenDebtSyncPacket::encode,
+                OxygenDebtSyncPacket::decode,
+                OxygenDebtSyncPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendForcedPose(ServerPlayer player, @Nullable Pose pose) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ForcedPosePacket(pose));
+    }
+
+    public static void sendOxygenDebt(ServerPlayer player, int oxygenDebt) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new OxygenDebtSyncPacket(oxygenDebt));
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
