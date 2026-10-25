@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.block;
 
 import java.util.function.Supplier;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import org.joml.Vector3f;
 
 import net.minecraft.core.BlockPos;
@@ -26,6 +27,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.blockentity.TickerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+
+import javax.annotation.Nullable;
 
 /**
  * Basic particle emitter block.
@@ -83,9 +86,9 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
      */
     public ParticleEmitterBlock(
             Properties properties,
-            VoxelShape shape,
+            @Nullable VoxelShape shape,
             Supplier<Item> itemSupplier,
-            Supplier<SimpleParticleType> particleType,
+            @Nullable Supplier<SimpleParticleType> particleType,
             double posX, double posY, double posZ,
             double rangeX, double rangeY, double rangeZ,
             double velocityX, double velocityY, double velocityZ,
@@ -98,7 +101,7 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
-        this.particleType = particleType != null ? particleType : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+        this.particleType = particleType != null ? particleType : TFCParticles.SMOKE_2;
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;

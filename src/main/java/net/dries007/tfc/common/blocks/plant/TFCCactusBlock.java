@@ -23,6 +23,7 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.registry.RegistryPlant;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 public abstract class TFCCactusBlock extends TFCTallGrassBlock
 {
@@ -93,7 +94,9 @@ public abstract class TFCCactusBlock extends TFCTallGrassBlock
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
     {
-        entity.hurt(entity.damageSources().cactus(), 1f);
+		if (!entity.getType().is(TFGTags.Entities.IgnoresCacti)) {
+			entity.hurt(entity.damageSources().cactus(), 1f);
+		}
     }
 
     @Override

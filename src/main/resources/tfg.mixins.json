@@ -133,6 +133,7 @@
         "common.gtceu.NotifiableItemStackHandlerMixin",
         "common.gtceu.ProtectionTypeMixin",
         "common.gtceu.QuarkTechSuiteMixin",
+        "common.gtceu.RotorHolderPartMachineMixin",
         "common.gtceu.SteamBoilerMachineMixin",
         "common.gtceu.SurfaceRockBlockMixin",
         "common.gtceu.TagPrefixItemMixin",
