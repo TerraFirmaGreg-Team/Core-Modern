@@ -348,7 +348,7 @@ public final class TFGBlocks {
                     .blockEntity(TFGBlockEntities.COPPER_POT)
                     .strength(3.0f, 6.0f)
                     .noOcclusion()
-                    .serverTicks(CookingApplianceBlockEntity::serverTick)))
+                    .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
                 for (int level = 0; level <= Collections.max(CookingApplianceBlock.RECEIVED_HEAT.getPossibleValues()); level++) {
