@@ -258,14 +258,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
     {
 		if (level != null)
 		{
-			cachedRecipe = level.getRecipeManager()
-							   .getAllRecipesFor(TFCRecipeTypes.POT.get())
-							   .stream()
-							   // 1.21 TFC has this part, but RecipeHolder::value doesn't seem to exist on 1.20?
-							   //.map(RecipeHolder::value)
-							   //.filter(recipe -> recipe.matches(inventory, level))
-							   .min(Comparator.comparing(PotRecipe::isFallback))
-							   .orElse(null);
+			cachedRecipe = level.getRecipeManager().getRecipeFor(TFCRecipeTypes.POT.get(), inventory, level).orElse(null);
 		}
     }
 

@@ -127,14 +127,12 @@ public class PitKilnBlock extends DeviceBlock
                     level.setBlock(pos, state.setValue(STAGE, stage + 1), 10);
                     kiln.addStraw(held.split(1), stage + 1);
                     Helpers.playPlaceSound(level, pos, SoundType.GRASS);
-					return InteractionResult.sidedSuccess(level.isClientSide);
                 }
                 else if (stage >= STRAW_END && stage < LIT - 1 && Helpers.isItem(item, TFCTags.Items.PIT_KILN_LOGS))
                 {
                     level.setBlock(pos, state.setValue(STAGE, stage + 1), 10);
                     kiln.addLog(held.split(1), stage - LOG_START + 1);
                     Helpers.playPlaceSound(level, pos, SoundType.WOOD);
-					return InteractionResult.sidedSuccess(level.isClientSide);
                 }
                 else if (held.isEmpty())
                 {
@@ -165,12 +163,11 @@ public class PitKilnBlock extends DeviceBlock
                         {
                             level.setBlock(pos, state.setValue(STAGE, stage - 1), 10);
                         }
-						return InteractionResult.sidedSuccess(level.isClientSide);
                     }
                 }
             }
         }
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
