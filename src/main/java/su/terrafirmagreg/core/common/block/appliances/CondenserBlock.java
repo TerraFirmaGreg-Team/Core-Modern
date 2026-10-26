@@ -38,7 +38,7 @@ public class CondenserBlock extends DeviceBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     protected static final VoxelShape SHAPE = Shapes.or(
-            Block.box(2.0D, -2.0D, 2.0D, 14.0D, 5.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 5.0D, 14.0D),
             Block.box(4.0D, 5.0D, 4.0D, 12.0D, 8.0D, 12.0D),
             Block.box(6.0D, 8.0D, 6.0D, 10.0D, 12.0D, 10.0D));
 
