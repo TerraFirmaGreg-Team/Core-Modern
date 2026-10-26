@@ -257,14 +257,6 @@ public abstract class PotRecipe implements ISimpleRecipe<PotBlockEntity.PotInven
         Output read(CompoundTag nbt);
     }
 
-	/**
-	 * @return true if this recipe should only be used when no other non-fallback recipe matches.
-	 */
-	public boolean isFallback()
-	{
-		return false;
-	}
-
     public abstract static class Serializer<R extends PotRecipe> extends RecipeSerializerImpl<R>
     {
         @Override

@@ -119,12 +119,6 @@ public class SoupPotRecipe extends PotRecipe
         return TFCRecipeSerializers.POT_SOUP.get();
     }
 
-	@Override
-	public boolean isFallback()
-	{
-		return true;
-	}
-
     public record SoupOutput(ItemStack stack) implements Output
     {
         @Override
