@@ -241,6 +241,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             CookingApplianceRecipe matching = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
                     .filter(r -> r instanceof CookingApplianceRecipe)
                     .map(r -> (CookingApplianceRecipe) r)
+                    .sorted((r1, r2) -> Integer.compare(r2.getAttachments().size(), r1.getAttachments().size()))
                     .filter(r -> r.matches(this, level))
                     .findFirst()
                     .orElse(null);
@@ -277,6 +278,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 candidate = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
                         .filter(r -> r instanceof CookingApplianceRecipe)
                         .map(r -> (CookingApplianceRecipe) r)
+                        .sorted((r1, r2) -> Integer.compare(r2.getAttachments().size(), r1.getAttachments().size()))
                         .filter(r -> r.matchesInputs(this))
                         .findFirst()
                         .orElse(null);
@@ -330,9 +332,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
         // Consume item inputs.
         CookingApplianceRecipe.MatchResult matchResult = recipe.matchItemInputs(this);
-        if (matchResult.matches) {
+        if (matchResult.matches()) {
             for (int i = 0; i < getItemInputCount(); i++) {
-                int toShrink = matchResult.consumedPerSlot[i];
+                int toShrink = matchResult.consumedPerSlot()[i];
                 if (toShrink > 0) {
                     ItemStack stack = getItemInputStack(i);
                     stack.shrink(toShrink);
