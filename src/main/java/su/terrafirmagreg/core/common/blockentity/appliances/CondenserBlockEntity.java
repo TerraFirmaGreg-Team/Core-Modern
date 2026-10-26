@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.common.blockentity.appliances;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,25 +14,31 @@ import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.capabilities.FluidTankCallback;
 import net.dries007.tfc.common.capabilities.InventoryFluidTank;
 import net.dries007.tfc.common.fluids.FluidHelpers;
-import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -74,14 +83,14 @@ public class CondenserBlockEntity extends TFCBlockEntity implements FluidTankCal
             return;
         }
 
-        Direction facing = state.getValue(CondenserBlock.FACING);
+        Direction facing = state.getValue(CondenserBlock.FACING).getOpposite();
         BlockPos facingPos = pos.relative(facing);
         BlockEntity facingBE = level.getBlockEntity(facingPos);
 
         if (facingBE != null) {
             LazyOptional<IFluidHandler> cap = facingBE.getCapability(Capabilities.FLUID, facing.getOpposite());
-            if (cap.isPresent()) {
-                IFluidHandler target = (IFluidHandler) cap;
+            IFluidHandler target = cap.resolve().orElse(null);
+            if (target != null) {
                 FluidStack transferred = FluidUtil.tryFluidTransfer(target, outputTank, outputTank.getFluidAmount(), true);
                 if (!transferred.isEmpty()) {
                     markDirty();
@@ -104,12 +113,10 @@ public class CondenserBlockEntity extends TFCBlockEntity implements FluidTankCal
 
         if (belowBE != null) {
             LazyOptional<IFluidHandler> belowCap = belowBE.getCapability(Capabilities.FLUID, Direction.UP);
-            if (belowCap.isPresent()) {
-                IFluidHandler target = (IFluidHandler) belowCap;
-                if (FluidHelpers.couldTransferExact(outputTank, target, 1)) {
-                    FluidHelpers.transferExact(outputTank, target, 1);
-                    transferred = true;
-                }
+            IFluidHandler target = belowCap.resolve().orElse(null);
+            if (target != null && FluidHelpers.couldTransferExact(outputTank, target, 1)) {
+                FluidHelpers.transferExact(outputTank, target, 1);
+                transferred = true;
             }
         }
 
@@ -125,38 +132,28 @@ public class CondenserBlockEntity extends TFCBlockEntity implements FluidTankCal
             markForSync();
 
             if (level.getGameTime() % 12 == 0 && level instanceof ServerLevel server) {
-                final double offset = 0.6;
+                final double offset = 0.8;
                 final double dx = facing.getStepX() > 0 ? offset : facing.getStepX() < 0 ? -offset : 0;
                 final double dz = facing.getStepZ() > 0 ? offset : facing.getStepZ() < 0 ? -offset : 0;
                 final double x = pos.getX() + 0.5f + dx;
-                final double y = pos.getY() + 0.125f;
+                final double y = pos.getY() + 0.25f;
                 final double z = pos.getZ() + 0.5f + dz;
 
-                Helpers.playSound(level, pos, TFCSounds.BARREL_DRIP.get());
+                var rand = level.getRandom();
+                level.playSound(null, pos, TFCSounds.BARREL_DRIP.get(), SoundSource.BLOCKS, 0.4F + rand.nextFloat(), rand.nextFloat() + 0.7F + 0.3F);
                 server.sendParticles(new FluidParticleOption(TFCParticles.BARREL_DRIP.get(), fluid), x, y, z, 1, 0, 0, 0, 1f);
             }
         }
     }
 
     public boolean interactWithItem(ItemStack heldItem, Player player, InteractionHand hand) {
-        if (heldItem.isEmpty()) {
+        if (heldItem.isEmpty() || level == null) {
             return false;
         }
 
-        LazyOptional<IFluidHandlerItem> itemCap = heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
-
-        if (player.isShiftKeyDown()) {
-            if (!coolantTank.isEmpty() && level != null && itemCap.resolve().isPresent()) {
-                return FluidHelpers.transferBetweenItemAndOther(
-                        heldItem,
-                        itemCap.resolve().get(),
-                        coolantTank,
-                        itemCap.resolve().get(),
-                        FluidHelpers.Transfer.FILL,
-                        level,
-                        worldPosition,
-                        new FluidHelpers.AfterTransferWithPlayer(player, hand));
-            }
+        ItemStack singleHeld = heldItem.copyWithCount(1);
+        LazyOptional<IFluidHandlerItem> itemCap = singleHeld.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
+        if (!itemCap.isPresent()) {
             return false;
         }
 
@@ -165,20 +162,114 @@ public class CondenserBlockEntity extends TFCBlockEntity implements FluidTankCal
             return false;
         }
 
-        FluidStack inItem = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        if (!inItem.isEmpty() && isCoolant(inItem) && level != null) {
-            return FluidHelpers.transferBetweenItemAndOther(
-                    heldItem,
-                    fluidHandler,
-                    fluidHandler,
-                    coolantTank,
-                    FluidHelpers.Transfer.DRAIN,
-                    level,
-                    worldPosition,
-                    new FluidHelpers.AfterTransferWithPlayer(player, hand));
+        FluidStack availableInItem = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+
+        // Try to deposit coolant.
+        if (!availableInItem.isEmpty() && isCoolant(availableInItem)) {
+            FluidStack inTank = coolantTank.getFluid();
+            int capacity = coolantTank.getCapacity();
+            int space = capacity - inTank.getAmount();
+
+            boolean isBucket = heldItem.getItem() instanceof BucketItem || singleHeld.getItem() == Items.BUCKET || availableInItem.getAmount() >= FluidType.BUCKET_VOLUME;
+            int requiredSpace = (isBucket && heldItem.getCount() == 1) ? Math.min(FluidType.BUCKET_VOLUME, availableInItem.getAmount()) : 1;
+
+            if (inTank.isEmpty() || (inTank.isFluidEqual(availableInItem) && space >= requiredSpace)) {
+                if (!isBucket || space >= FluidType.BUCKET_VOLUME || heldItem.getCount() > 1) {
+                    int toDrain = Math.min(space, availableInItem.getAmount());
+                    if (toDrain > 0) {
+                        boolean isCreative = player.isCreative();
+                        IFluidHandler.FluidAction action = isCreative ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE;
+                        FluidStack drained = fluidHandler.drain(toDrain, action);
+
+                        if (!drained.isEmpty()) {
+                            if (inTank.isEmpty()) {
+                                coolantTank.setFluid(drained.copy());
+                            } else {
+                                inTank.grow(drained.getAmount());
+                                coolantTank.setFluid(inTank);
+                            }
+
+                            if (!isCreative) {
+                                ItemStack containerStack = fluidHandler.getContainer();
+                                updateContainer(heldItem, containerStack, player, stack -> player.setItemInHand(hand, stack));
+                            }
+
+                            SoundEvent sound = drained.getFluid().getFluidType().getSound(drained, SoundActions.BUCKET_EMPTY);
+                            if (sound == null) {
+                                sound = SoundEvents.BUCKET_EMPTY;
+                            }
+                            level.playSound(null, worldPosition, sound, SoundSource.BLOCKS, 1.0f, 1.0f);
+
+                            markDirty();
+                            markForSync();
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Try to withdraw coolant or output.
+        List<InventoryFluidTank> tanks = List.of(coolantTank, outputTank);
+        for (InventoryFluidTank tank : tanks) {
+            FluidStack inTank = tank.getFluid();
+            if (inTank.isEmpty()) {
+                continue;
+            }
+
+            int fillable = fluidHandler.fill(inTank, IFluidHandler.FluidAction.SIMULATE);
+            if (fillable <= 0) {
+                continue;
+            }
+
+            boolean isBucket = heldItem.getItem() instanceof BucketItem || singleHeld.getItem() == Items.BUCKET;
+            if (isBucket && (inTank.getAmount() < FluidType.BUCKET_VOLUME || fillable < FluidType.BUCKET_VOLUME)) {
+                continue;
+            }
+
+            int toFill = Math.min(inTank.getAmount(), fillable);
+            int filled = fluidHandler.fill(new FluidStack(inTank, toFill), IFluidHandler.FluidAction.EXECUTE);
+            if (filled > 0) {
+                inTank.shrink(filled);
+                tank.setFluid(inTank);
+
+                ItemStack containerStack = fluidHandler.getContainer();
+                updateContainer(heldItem, containerStack, player, stack -> player.setItemInHand(hand, stack));
+
+                SoundEvent sound = inTank.getFluid().getFluidType().getSound(inTank, SoundActions.BUCKET_FILL);
+                if (sound == null) {
+                    sound = SoundEvents.BUCKET_FILL;
+                }
+                level.playSound(null, worldPosition, sound, SoundSource.BLOCKS, 1.0f, 1.0f);
+
+                markDirty();
+                markForSync();
+                return true;
+            }
         }
 
         return false;
+    }
+
+    private static void updateContainer(ItemStack heldItem, ItemStack containerStack, Player player, Consumer<ItemStack> containerSetter) {
+        if (containerSetter != null) {
+            if (heldItem.getCount() == 1) {
+                containerSetter.accept(containerStack);
+            } else {
+                heldItem.shrink(1);
+                containerSetter.accept(heldItem);
+                if (!containerStack.isEmpty() && !player.getInventory().add(containerStack)) {
+                    player.drop(containerStack, false);
+                }
+            }
+        } else {
+            if (heldItem.getCount() > 1) {
+                heldItem.shrink(1);
+                if (!containerStack.isEmpty() && !player.getInventory().add(containerStack)) {
+                    player.drop(containerStack, false);
+                }
+            }
+        }
     }
 
     @Override
