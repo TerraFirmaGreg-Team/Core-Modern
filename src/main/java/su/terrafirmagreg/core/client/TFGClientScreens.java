@@ -11,6 +11,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.overlay.AirLevelOverlay;
 import su.terrafirmagreg.core.client.overlay.GlassblowingOverlay;
+import su.terrafirmagreg.core.client.overlay.VignetteOverlay;
 import su.terrafirmagreg.core.client.renderer.SprayCanHudOverlay;
 import su.terrafirmagreg.core.client.screen.ArtisanTableScreen;
 import su.terrafirmagreg.core.client.screen.GasBurnerScreen;
@@ -38,5 +39,6 @@ public final class TFGClientScreens {
         event.registerAboveAll("spray_can_info", SprayCanHudOverlay.HUD_SPRAY_CAN);
         event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "glassblowing", GlassblowingOverlay.OVERLAY);
         event.registerAbove(VanillaGuiOverlay.AIR_LEVEL.id(), "air_level", AirLevelOverlay.OVERLAY);
+        event.registerAbove(VanillaGuiOverlay.FROSTBITE.id(), "oxygen_vignette", VignetteOverlay.OVERLAY);
     }
 }
