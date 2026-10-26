@@ -311,6 +311,7 @@
         "common.vintageimprovements.CurvingRecipeMixin",
         "common.vintageimprovements.HelveItemsRendererMixin",
         "common.vintageimprovements.PressurizingCategoryMixin",
+        "common.vintageimprovements.VacuumChamberBlockEntityAccessor",
         "common.vintageimprovements.VacuumChamberBlockEntityMixin",
         "common.vintageimprovements.VacuumizingCategoryMixin",
         "common.vintageimprovements.VibratingRecipeMixin",
