@@ -176,6 +176,7 @@ public final class TFGTags {
         public static final TagKey<Fluid> SMR_FLUIDS = createFluidTag("smr_fluids");
         public static final TagKey<Fluid> GT_OILS = createFluidTag("oils");
         public static final TagKey<Fluid> OreProcGas = createFluidTag("ore_proc_gas");
+        public static final TagKey<Fluid> CONDENSER_COOLANTS = createFluidTag("condenser_coolants");
 
         private static TagKey<Fluid> createFluidTag(String path) {
             return createFluidTag(TFGCore.id(path));
