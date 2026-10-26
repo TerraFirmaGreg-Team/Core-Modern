@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.capabilities.Capabilities;
@@ -15,12 +16,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.recipe.attachment.MixerAttachment;
 
-@SuppressWarnings({ "UnnecessaryLocalVariable", "unused" })
+@SuppressWarnings("unused")
 public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlockEntity> implements BlockEntityRenderer<T> {
 
     public CookingApplianceBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
@@ -86,12 +89,17 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 float maxZ = 13 / 16F;
 
                 float minY = (2 / 16F) + (i * spacing);
-                float maxY = (12 / 16F) + (i * spacing);
+                float maxY = (14 / 16F) + (i * spacing);
                 float fluidY = Mth.map(fluidLevel, 0, fluidToRenderCapacity, minY, maxY);
 
                 RenderHelpers.renderFluidFace(poseStack, fluidToRender, buffer, minX, minZ, maxX, maxZ, fluidY, combinedOverlay, combinedLight);
             }
         }
+
+        // Don't render items if there is a block above.
+        BlockState above = appliance.getLevel().getBlockState(appliance.getBlockPos().above());
+        if (!above.isAir())
+            return;
 
         // Item Inputs and Outputs Rendering
         appliance.getCapability(Capabilities.ITEM).ifPresent(cap -> {
@@ -114,11 +122,19 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
 
             int currentRenderIndex = 0;
 
+            int cookTime = appliance.getCookingTicks();
+            float rpm = 0;
+
+            MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(appliance);
+            if (mixer != null && mixer.running && mixer.runningTicks >= 20) {
+                rpm = mixer.getSpeed();
+            }
+
             // Render inputs
             for (int i = 0; i < appliance.getItemInputCount(); i++) {
                 ItemStack item = cap.getStackInSlot(i);
                 if (!item.isEmpty()) {
-                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender);
+                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm);
                     currentRenderIndex++;
                 }
             }
@@ -128,7 +144,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 int slot = appliance.getItemOutputStartSlot() + i;
                 ItemStack item = cap.getStackInSlot(slot);
                 if (!item.isEmpty()) {
-                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender);
+                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm);
                     currentRenderIndex++;
                 }
             }
@@ -156,7 +172,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
      */
     public static float getHighestFluidLevel(CookingApplianceBlockEntity appliance) {
         float minY = 2 / 16F;
-        float maxY = 12 / 16F;
+        float maxY = 14 / 16F;
         float highestLevel = minY;
         boolean foundInOutput = false;
 
@@ -195,6 +211,8 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
      * @param posSeed The position seed for rendering.
      * @param slot The slot index for rendering.
      * @param totalCount The total number of items to render. Controls the radius of the circular formation.
+     * @param spinTicks Time to spin the items for.
+     * @param rpm The revolutions per minute of the spinning item.
      */
     private void renderFloatingItem(
             PoseStack poseStack,
@@ -205,17 +223,34 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             ItemStack item,
             long posSeed,
             int slot,
-            int totalCount) {
+            int totalCount,
+            int spinTicks,
+            float rpm
+    ) {
 
         float angleStep = 360.0F / Math.max(1, totalCount);
         float currentAngleDegrees = slot * angleStep;
-        float currentAngleRadians = currentAngleDegrees * ((float) Math.PI / 180.0F);
 
+        float degreesPerTick = (360.0F * rpm) / 1200.0F;
+        float spinAngle = spinTicks * degreesPerTick;
+
+        float orbitAngleDegrees;
+        float rotY;
+
+        if (totalCount == 1) {
+            orbitAngleDegrees = currentAngleDegrees;
+            rotY = currentAngleDegrees + spinAngle;
+        } else {
+            orbitAngleDegrees = currentAngleDegrees - spinAngle;
+            rotY = currentAngleDegrees;
+        }
+
+        float totalAngleRadians = orbitAngleDegrees * ((float) Math.PI / 180.0F);
         float radius = totalCount == 1 ? 0.0F : 0.20F;
         float scale = 0.33F;
 
-        double x = 0.5D + (Mth.cos(currentAngleRadians) * radius);
-        double z = 0.5D + (Mth.sin(currentAngleRadians) * radius);
+        double x = 0.5D + (Mth.cos(totalAngleRadians) * radius);
+        double z = 0.5D + (Mth.sin(totalAngleRadians) * radius);
 
         float highestFluidY = getHighestFluidLevel(appliance);
 
@@ -224,14 +259,14 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
         double y = highestFluidY + ((randY - 0.5F) * 0.04D);
 
         float rotX = rand.nextFloat() * 360.0F;
-        float rotY = currentAngleDegrees;
         float rotZ = rand.nextFloat() * 360.0F;
 
         poseStack.pushPose();
         poseStack.translate(x, y, z);
         poseStack.scale(scale, scale, scale);
-        poseStack.mulPose(Axis.XP.rotationDegrees(rotX));
+
         poseStack.mulPose(Axis.YP.rotationDegrees(rotY));
+        poseStack.mulPose(Axis.XP.rotationDegrees(rotX));
         poseStack.mulPose(Axis.ZP.rotationDegrees(rotZ));
 
         Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffer, appliance.getLevel(), 0);
