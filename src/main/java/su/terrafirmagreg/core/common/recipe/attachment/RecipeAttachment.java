@@ -25,6 +25,13 @@ public interface RecipeAttachment {
         return 0;
     }
 
+    default void tickActive(CookingApplianceBlockEntity appliance) {
+    }
+
+    default float getSpeedMultiplier(CookingApplianceBlockEntity appliance) {
+        return 1.0f;
+    }
+
     boolean canFitOutputs(CookingApplianceBlockEntity appliance);
 
     void assembleOutputs(CookingApplianceBlockEntity appliance);
@@ -37,6 +44,12 @@ public interface RecipeAttachment {
         String type = json.has("type") ? json.get("type").getAsString() : "";
         if (CondenserAttachment.TYPE.equalsIgnoreCase(type)) {
             return CondenserAttachment.fromJson(json);
+        } else if (MixerAttachment.TYPE.equalsIgnoreCase(type) || "mechanical_mixer".equalsIgnoreCase(type) || "greate_mixer".equalsIgnoreCase(type)) {
+            return MixerAttachment.fromJson(json);
+        } else if (PressAttachment.TYPE.equalsIgnoreCase(type) || "mechanical_press".equalsIgnoreCase(type) || "greate_press".equalsIgnoreCase(type)) {
+            return PressAttachment.fromJson(json);
+        } else if (VacuumChamberAttachment.TYPE.equalsIgnoreCase(type) || "vacuum".equalsIgnoreCase(type) || "condenser_vacuum".equalsIgnoreCase(type) || "vacuum_condenser".equalsIgnoreCase(type)) {
+            return VacuumChamberAttachment.fromJson(json);
         }
         return null;
     }
@@ -45,6 +58,12 @@ public interface RecipeAttachment {
         String type = buffer.readUtf();
         if (CondenserAttachment.TYPE.equalsIgnoreCase(type)) {
             return CondenserAttachment.fromNetwork(buffer);
+        } else if (MixerAttachment.TYPE.equalsIgnoreCase(type)) {
+            return MixerAttachment.fromNetwork(buffer);
+        } else if (PressAttachment.TYPE.equalsIgnoreCase(type)) {
+            return PressAttachment.fromNetwork(buffer);
+        } else if (VacuumChamberAttachment.TYPE.equalsIgnoreCase(type)) {
+            return VacuumChamberAttachment.fromNetwork(buffer);
         }
         return null;
     }
