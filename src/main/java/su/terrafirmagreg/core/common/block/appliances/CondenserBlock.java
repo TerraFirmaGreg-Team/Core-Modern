@@ -29,6 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CondenserBlockEntity;
 
@@ -122,8 +123,13 @@ public class CondenserBlock extends DeviceBlock {
         }
 
         if (level.getBlockEntity(pos) instanceof CondenserBlockEntity condenser) {
-            if (!heldItem.isEmpty() && condenser.interactWithItem(heldItem, player, hand)) {
-                return InteractionResult.sidedSuccess(level.isClientSide());
+            if (!heldItem.isEmpty()) {
+                if (condenser.interactWithItem(heldItem, player, hand)) {
+                    return InteractionResult.sidedSuccess(level.isClientSide());
+                }
+                if (heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+                    return InteractionResult.sidedSuccess(level.isClientSide());
+                }
             }
             return InteractionResult.PASS;
         }
