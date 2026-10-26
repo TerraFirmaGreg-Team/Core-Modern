@@ -141,16 +141,28 @@ public record CondenserAttachment(@NotNull FluidStack fluidOutput,
     }
 
     @Override
-    public boolean matchesInputs(CookingApplianceBlockEntity appliance) {
+    public boolean isPresent(CookingApplianceBlockEntity appliance) {
+        return getCondenser(appliance) != null;
+    }
+
+    @Override
+    public int getErrorFlags(CookingApplianceBlockEntity appliance) {
+        int errors = 0;
         CondenserBlockEntity condenser = getCondenser(appliance);
         if (condenser == null) {
-            return false;
+            errors |= CookingApplianceBlockEntity.ERROR_NO_CONDENSER;
+        } else {
+            if (coolantCondition != null) {
+                FluidStack coolantInTank = condenser.getCoolantTank().getFluid();
+                if (!coolantCondition.test(coolantInTank)) {
+                    errors |= CookingApplianceBlockEntity.ERROR_INSUFFICIENT_COOLANT;
+                }
+            }
+            if (!canFitOutputs(appliance)) {
+                errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
+            }
         }
-        if (coolantCondition != null) {
-            FluidStack coolantInTank = condenser.getCoolantTank().getFluid();
-            return coolantCondition.test(coolantInTank);
-        }
-        return true;
+        return errors;
     }
 
     @Override

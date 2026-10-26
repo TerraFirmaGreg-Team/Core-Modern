@@ -13,7 +13,17 @@ public interface RecipeAttachment {
 
     boolean matches(CookingApplianceBlockEntity appliance, Level level);
 
-    boolean matchesInputs(CookingApplianceBlockEntity appliance);
+    default boolean matchesInputs(CookingApplianceBlockEntity appliance) {
+        return true;
+    }
+
+    default boolean isPresent(CookingApplianceBlockEntity appliance) {
+        return true;
+    }
+
+    default int getErrorFlags(CookingApplianceBlockEntity appliance) {
+        return 0;
+    }
 
     boolean canFitOutputs(CookingApplianceBlockEntity appliance);
 

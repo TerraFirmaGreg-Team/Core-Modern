@@ -280,6 +280,12 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
                 if ((error & CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE) != 0) {
                     progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_fluid_space").withStyle(ChatFormatting.RED));
                 }
+                if ((error & CookingApplianceBlockEntity.ERROR_NO_CONDENSER) != 0) {
+                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_condenser").withStyle(ChatFormatting.RED));
+                }
+                if ((error & CookingApplianceBlockEntity.ERROR_INSUFFICIENT_COOLANT) != 0) {
+                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_coolant").withStyle(ChatFormatting.RED));
+                }
             }
 
             if (blockEntity.getCookingTicks() > 0) {

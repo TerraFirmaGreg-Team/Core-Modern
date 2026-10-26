@@ -81,6 +81,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     public static final int ERROR_ROTTEN_INGREDIENT = 1 << 1;
     public static final int ERROR_NOT_ENOUGH_ITEM_SPACE = 1 << 2;
     public static final int ERROR_NOT_ENOUGH_FLUID_SPACE = 1 << 3;
+    public static final int ERROR_NO_CONDENSER = 1 << 4;
+    public static final int ERROR_INSUFFICIENT_COOLANT = 1 << 5;
 
     protected float temperature;
     @Getter
@@ -278,9 +280,14 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 candidate = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
                         .filter(r -> r instanceof CookingApplianceRecipe)
                         .map(r -> (CookingApplianceRecipe) r)
-                        .sorted((r1, r2) -> Integer.compare(r2.getAttachments().size(), r1.getAttachments().size()))
-                        .filter(r -> r.matchesInputs(this))
-                        .findFirst()
+                        .filter(r -> r.matchesInputs(this)).min((r1, r2) -> {
+                            boolean r1AttachmentsPresent = r1.areAttachmentsPresent(this);
+                            boolean r2AttachmentsPresent = r2.areAttachmentsPresent(this);
+                            if (r1AttachmentsPresent != r2AttachmentsPresent) {
+                                return r1AttachmentsPresent ? -1 : 1;
+                            }
+                            return Integer.compare(r2.getAttachments().size(), r1.getAttachments().size());
+                        })
                         .orElse(null);
             }
 

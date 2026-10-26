@@ -499,6 +499,15 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         return true;
     }
 
+    public boolean areAttachmentsPresent(CookingApplianceBlockEntity appliance) {
+        for (RecipeAttachment attachment : this.attachments) {
+            if (!attachment.isPresent(appliance)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean canFitOutputs(CookingApplianceBlockEntity appliance) {
         if (!canFitItemOutputs(appliance) || !canFitFluidOutputs(appliance)) {
             return false;
@@ -523,10 +532,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
         }
         for (RecipeAttachment attachment : this.attachments) {
-            if (!attachment.canFitOutputs(appliance)) {
-                errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
-                break;
-            }
+            errors |= attachment.getErrorFlags(appliance);
         }
         return errors;
     }
