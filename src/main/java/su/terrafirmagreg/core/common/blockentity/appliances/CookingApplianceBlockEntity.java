@@ -7,6 +7,13 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.negodya1.vintageimprovements.content.kinetics.vacuum_chamber.VacuumChamberBlockEntity;
+import com.simibubi.create.content.fluids.FluidFX;
+import com.simibubi.create.content.kinetics.base.IRotate;
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
+import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
+
+import net.createmod.catnip.math.VecHelper;
 import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.blockentities.TickableInventoryBlockEntity;
@@ -30,6 +37,9 @@ import net.dries007.tfc.util.IntArrayBuilder;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -48,6 +58,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -64,6 +75,10 @@ import lombok.Getter;
 import su.terrafirmagreg.core.common.block.appliances.CookingApplianceBlock;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.recipe.CookingApplianceRecipe;
+import su.terrafirmagreg.core.common.recipe.attachment.MixerAttachment;
+import su.terrafirmagreg.core.common.recipe.attachment.PressAttachment;
+import su.terrafirmagreg.core.common.recipe.attachment.VacuumChamberAttachment;
+import su.terrafirmagreg.core.mixins.common.vintageimprovements.VacuumChamberBlockEntityAccessor;
 
 /**
  * Base class for cooking appliances like {@link CopperPotBlockEntity}, extending functionality from
@@ -83,6 +98,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     public static final int ERROR_NOT_ENOUGH_FLUID_SPACE = 1 << 3;
     public static final int ERROR_NO_CONDENSER = 1 << 4;
     public static final int ERROR_INSUFFICIENT_COOLANT = 1 << 5;
+    public static final int ERROR_INSUFFICIENT_MIXER = 1 << 6;
+    public static final int ERROR_INSUFFICIENT_PRESS = 1 << 7;
+    public static final int ERROR_INSUFFICIENT_VACUUM = 1 << 8;
 
     protected float temperature;
     @Getter
@@ -200,6 +218,117 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         sidedHeat.on(this, Direction.UP);
     }
 
+    // Handle effects from attachments.
+    public static void clientTick(Level level, BlockPos pos, BlockState state, CookingApplianceBlockEntity appliance) {
+        MechanicalPressBlockEntity press = PressAttachment.getPress(appliance);
+        if (appliance.cookingTicks > 0 && appliance.recipeError == ERROR_NONE) {
+            MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(appliance);
+            if (mixer != null && mixer.running && mixer.runningTicks >= 20) {
+               appliance.renderMixerParticles(mixer);
+            }
+            VacuumChamberBlockEntity chamber = VacuumChamberAttachment.getChamber(appliance);
+            if (chamber != null && chamber.running && chamber.runningTicks >= 20) {
+                appliance.renderVacuumChamberParticles(chamber);
+            }
+            if (press != null && press.getPressingBehaviour().running) {
+                var behaviour = press.getPressingBehaviour();
+                if (behaviour.runningTicks >= 120 || behaviour.runningTicks == -120) {
+                    behaviour.runningTicks = -120;
+                    behaviour.prevRunningTicks = 120;
+                }
+            }
+        } else {
+            if (press != null && press.getPressingBehaviour().running) {
+                var behaviour = press.getPressingBehaviour();
+                if (behaviour.runningTicks == -120) {
+                    behaviour.runningTicks = 121;
+                    behaviour.prevRunningTicks = 121;
+                }
+            }
+        }
+    }
+
+    // Copy vacuum chamber particle stuff.
+    public void renderVacuumChamberParticles(VacuumChamberBlockEntity chamber) {
+        if (this.level == null || !this.level.isClientSide) {
+            return;
+        }
+        if (!this.level.getBlockState(chamber.getBlockPos().above()).isAir()) {
+            return;
+        }
+        float speed = chamber.getSpeed();
+        if (Math.abs(speed) < IRotate.SpeedLevel.MEDIUM.getSpeedValue()) {
+            return;
+        }
+        boolean mode = ((VacuumChamberBlockEntityAccessor) chamber).tfg$getMode();
+        float angle = level.random.nextFloat() * 360.0F;
+        Vec3 vec = new Vec3(0.0, 0.0, 0.25);
+        vec = VecHelper.rotate(vec, angle, Direction.Axis.Y);
+        Vec3 centerOffset = VecHelper.rotate(vec, speed > 0.0F ? 25.0 : -25.0, Direction.Axis.Y).add(0.0, 0.25, 0.0);
+        Vec3 pos = VecHelper.getCenterOf(chamber.getBlockPos()).add(vec);
+        Vec3 motion = centerOffset.subtract(vec);
+        Vec3 randomMotion = VecHelper.offsetRandomly(motion, level.random, 0.0078125F);
+        if (mode) {
+            level.addParticle(
+                    ParticleTypes.CLOUD,
+                    pos.x + randomMotion.x * 10.0,
+                    pos.y + 0.5 + randomMotion.y * 10.0,
+                    pos.z + randomMotion.z * 10.0,
+                    -randomMotion.x * 0.6,
+                    -randomMotion.y * 0.6,
+                    -randomMotion.z * 0.6);
+        } else {
+            level.addParticle(
+                    ParticleTypes.CLOUD,
+                    pos.x,
+                    pos.y + 0.5,
+                    pos.z,
+                    randomMotion.x,
+                    randomMotion.y,
+                    randomMotion.z);
+        }
+    }
+
+    // Copy mechanical mixer particle stuff.
+    public void renderMixerParticles(MechanicalMixerBlockEntity mixer) {
+        if (this.level == null || !this.level.isClientSide) {
+            return;
+        }
+        float speed = mixer.getSpeed();
+        if (speed == 0) {
+            return;
+        }
+
+        // Render item particles from appliance input slots.
+        for (int i = 0; i < getItemInputCount(); i++) {
+            ItemStack stack = getItemInputStack(i);
+            if (!stack.isEmpty()) {
+                spillMixerParticle(mixer, new ItemParticleOption(ParticleTypes.ITEM, stack), speed);
+            }
+        }
+
+        // Render fluid particles from appliance fluid tanks.
+        for (InventoryFluidTank tank : inventory.tanks) {
+            FluidStack fluid = tank.getFluid();
+            if (!fluid.isEmpty()) {
+                spillMixerParticle(mixer, FluidFX.getFluidParticle(fluid), speed);
+            }
+        }
+    }
+
+    private void spillMixerParticle(MechanicalMixerBlockEntity mixer, ParticleOptions data, float speed) {
+        if (level == null) {
+            return;
+        }
+        float angle = level.random.nextFloat() * 360.0F;
+        Vec3 offset = new Vec3(0.0, 0.0, 0.25);
+        offset = VecHelper.rotate(offset, angle, Direction.Axis.Y);
+        Vec3 target = VecHelper.rotate(offset, speed > 0.0F ? 25.0 : -25.0, Direction.Axis.Y).add(0.0, 0.25, 0.0);
+        Vec3 center = offset.add(VecHelper.getCenterOf(mixer.getBlockPos()));
+        target = VecHelper.offsetRandomly(target.subtract(offset), level.random, 0.0078125F);
+        level.addParticle(data, center.x, center.y - 1.75, center.z, target.x, target.y, target.z);
+    }
+
     public static void serverTick(Level level, BlockPos pos, BlockState state, CookingApplianceBlockEntity appliance) {
         appliance.checkForLastTickSync();
         appliance.checkForCalendarUpdate();
@@ -258,9 +387,11 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
         if (cachedRecipe != null && cachedRecipe.matches(this, level)) {
             this.recipeError = ERROR_NONE;
-            this.maxDuration = cachedRecipe.getDuration();
+            int effectiveDuration = cachedRecipe.getEffectiveDuration(this);
+            this.maxDuration = effectiveDuration;
+            cachedRecipe.tickActive(this);
             cookingTicks++;
-            if (cookingTicks >= cachedRecipe.getDuration()) {
+            if (cookingTicks >= effectiveDuration) {
                 finishRecipe(cachedRecipe);
                 cookingTicks = 0;
                 cachedRecipe = null;
@@ -293,7 +424,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
             if (candidate != null) {
                 detectedErrors = candidate.getErrorFlags(this);
-                this.maxDuration = candidate.getDuration();
+                this.maxDuration = candidate.getEffectiveDuration(this);
             } else {
                 if (hasAnyRottenInput()) {
                     detectedErrors = ERROR_ROTTEN_INGREDIENT;
@@ -400,7 +531,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     public int getMaxDuration() {
         if (cachedRecipe != null) {
-            return cachedRecipe.getDuration();
+            return cachedRecipe.getEffectiveDuration(this);
         }
         return this.maxDuration > 0 ? this.maxDuration : 100;
     }
@@ -741,6 +872,19 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     @Override
     public void setLastCalendarUpdateTick(long tick) {
         this.lastCalendarUpdateTick = tick;
+    }
+
+    @Override
+    protected void onUnloadAdditional() {
+        super.onUnloadAdditional();
+        MechanicalPressBlockEntity press = PressAttachment.getPress(this);
+        if (press != null && press.getPressingBehaviour().running) {
+            var behaviour = press.getPressingBehaviour();
+            if (behaviour.runningTicks == -120) {
+                behaviour.runningTicks = 121;
+                behaviour.prevRunningTicks = 121;
+            }
+        }
     }
 
     @Override

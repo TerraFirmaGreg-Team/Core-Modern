@@ -25,6 +25,9 @@ import dev.latvian.mods.kubejs.util.MapJS;
 
 import su.terrafirmagreg.core.compat.kjs.attachment.AttachmentJS;
 import su.terrafirmagreg.core.compat.kjs.attachment.CondenserAttachmentJS;
+import su.terrafirmagreg.core.compat.kjs.attachment.MixerAttachmentJS;
+import su.terrafirmagreg.core.compat.kjs.attachment.PressAttachmentJS;
+import su.terrafirmagreg.core.compat.kjs.attachment.VacuumChamberAttachmentJS;
 
 @SuppressWarnings("unused")
 public class CookingApplianceRecipeJS extends RecipeJS {
@@ -281,6 +284,21 @@ public class CookingApplianceRecipeJS extends RecipeJS {
             CondenserAttachmentJS condenserJS = new CondenserAttachmentJS();
             consumer.accept(condenserJS);
             this.attachments.add(condenserJS);
+            updateJson();
+        } else if ("mixer".equalsIgnoreCase(type) || "mechanical_mixer".equalsIgnoreCase(type) || "greate_mixer".equalsIgnoreCase(type)) {
+            MixerAttachmentJS mixerJS = new MixerAttachmentJS();
+            consumer.accept(mixerJS);
+            this.attachments.add(mixerJS);
+            updateJson();
+        } else if ("press".equalsIgnoreCase(type) || "mechanical_press".equalsIgnoreCase(type) || "greate_press".equalsIgnoreCase(type)) {
+            PressAttachmentJS pressJS = new PressAttachmentJS();
+            consumer.accept(pressJS);
+            this.attachments.add(pressJS);
+            updateJson();
+        } else if ("vacuum_chamber".equalsIgnoreCase(type) || "vacuum".equalsIgnoreCase(type)) {
+            VacuumChamberAttachmentJS vacuumChamberJS = new VacuumChamberAttachmentJS();
+            consumer.accept(vacuumChamberJS);
+            this.attachments.add(vacuumChamberJS);
             updateJson();
         }
         return this;

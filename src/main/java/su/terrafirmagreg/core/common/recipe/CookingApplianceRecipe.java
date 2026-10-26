@@ -124,6 +124,22 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         this.attachments = attachments != null ? attachments : List.of();
     }
 
+    public int getEffectiveDuration(CookingApplianceBlockEntity appliance) {
+        float multiplier = 1.0f;
+        boolean hasMultiplier = false;
+        for (RecipeAttachment attachment : attachments) {
+            float speedMult = attachment.getSpeedMultiplier(appliance);
+            if (speedMult > 0 && Math.abs(speedMult - 1.0f) > 1e-4) {
+                multiplier *= speedMult;
+                hasMultiplier = true;
+            }
+        }
+        if (!hasMultiplier || multiplier <= 0) {
+            return this.duration;
+        }
+        return Math.max(20, Math.round(this.duration / multiplier));
+    }
+
     /**
      * Item inputs need to be checked so that multi-stacks can be all in one slot
      * or spread across multiple slots. Helps prevent annoyances like the mixing
@@ -535,6 +551,12 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             errors |= attachment.getErrorFlags(appliance);
         }
         return errors;
+    }
+
+    public void tickActive(CookingApplianceBlockEntity appliance) {
+        for (RecipeAttachment attachment : this.attachments) {
+            attachment.tickActive(appliance);
+        }
     }
 
     public void assembleOutputs(CookingApplianceBlockEntity appliance) {
