@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.compat.kjs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,9 @@ import dev.latvian.mods.kubejs.item.InputItem;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
 import dev.latvian.mods.kubejs.util.MapJS;
 
+import su.terrafirmagreg.core.compat.kjs.attachment.AttachmentJS;
+import su.terrafirmagreg.core.compat.kjs.attachment.CondenserAttachmentJS;
+
 @SuppressWarnings("unused")
 public class CookingApplianceRecipeJS extends RecipeJS {
 
@@ -32,6 +36,7 @@ public class CookingApplianceRecipeJS extends RecipeJS {
     private final List<FluidStackIngredient> fluidIngredients = new ArrayList<>();
     private final List<ItemStackProviderJS> itemOutputs = new ArrayList<>();
     private final List<JsonObject> fluidOutputs = new ArrayList<>();
+    private final List<AttachmentJS> attachments = new ArrayList<>();
     private Ingredient catalyst = Ingredient.EMPTY;
     private Ingredient tool = Ingredient.EMPTY;
     private int toolDamage = 1;
@@ -271,6 +276,16 @@ public class CookingApplianceRecipeJS extends RecipeJS {
         return temperature(minTemp);
     }
 
+    public CookingApplianceRecipeJS attachment(String type, Consumer<Object> consumer) {
+        if ("condenser".equalsIgnoreCase(type)) {
+            CondenserAttachmentJS condenserJS = new CondenserAttachmentJS();
+            consumer.accept(condenserJS);
+            this.attachments.add(condenserJS);
+            updateJson();
+        }
+        return this;
+    }
+
     private void updateJson() {
         if (!itemIngredients.isEmpty()) {
             JsonArray arr = new JsonArray();
@@ -311,6 +326,14 @@ public class CookingApplianceRecipeJS extends RecipeJS {
                 arr.add(fo);
             }
             json.add("fluid_outputs", arr);
+        }
+
+        if (!attachments.isEmpty()) {
+            JsonArray arr = new JsonArray();
+            for (AttachmentJS att : attachments) {
+                arr.add(att.toJson());
+            }
+            json.add("attachments", arr);
         }
 
         json.addProperty("duration", duration);

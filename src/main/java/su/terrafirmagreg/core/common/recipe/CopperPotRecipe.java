@@ -15,7 +15,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 import su.terrafirmagreg.core.common.data.TFGRecipeSerializers;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.recipe.attachment.RecipeAttachment;
 
+@SuppressWarnings("unused")
 public class CopperPotRecipe extends CookingApplianceRecipe {
 
     public CopperPotRecipe(
@@ -29,7 +31,22 @@ public class CopperPotRecipe extends CookingApplianceRecipe {
             List<FluidStack> fluidOutputs,
             int duration,
             float minTemp) {
-        super(id, itemIngredients, fluidIngredients, catalyst, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp);
+        super(id, itemIngredients, fluidIngredients, catalyst, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, List.of());
+    }
+
+    public CopperPotRecipe(
+            ResourceLocation id,
+            NonNullList<Ingredient> itemIngredients,
+            List<FluidStackIngredient> fluidIngredients,
+            Ingredient catalyst,
+            Ingredient tool,
+            int toolDamage,
+            List<ItemStackProvider> itemOutputs,
+            List<FluidStack> fluidOutputs,
+            int duration,
+            float minTemp,
+            List<RecipeAttachment> attachments) {
+        super(id, itemIngredients, fluidIngredients, catalyst, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, attachments);
     }
 
     @Override

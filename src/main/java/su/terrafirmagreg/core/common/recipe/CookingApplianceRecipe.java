@@ -38,7 +38,9 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.recipe.attachment.RecipeAttachment;
 
+@SuppressWarnings({ "unused", "BooleanMethodIsAlwaysInverted" })
 public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container> {
 
     @FunctionalInterface
@@ -53,17 +55,11 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                 List<ItemStackProvider> itemOutputs,
                 List<FluidStack> fluidOutputs,
                 int duration,
-                float minTemp);
+                float minTemp,
+                List<RecipeAttachment> attachments);
     }
 
-    public static class MatchResult {
-        public final boolean matches;
-        public final int[] consumedPerSlot;
-
-        public MatchResult(boolean matches, int[] consumedPerSlot) {
-            this.matches = matches;
-            this.consumedPerSlot = consumedPerSlot;
-        }
+    public record MatchResult(boolean matches, int[] consumedPerSlot) {
     }
 
     @Getter
@@ -86,6 +82,8 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
     protected final int duration;
     @Getter
     protected final float minTemp;
+    @Getter
+    protected final List<RecipeAttachment> attachments;
 
     public CookingApplianceRecipe(
             ResourceLocation id,
@@ -98,6 +96,21 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             List<FluidStack> fluidOutputs,
             int duration,
             float minTemp) {
+        this(id, itemIngredients, fluidIngredients, catalyst, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, List.of());
+    }
+
+    public CookingApplianceRecipe(
+            ResourceLocation id,
+            NonNullList<Ingredient> itemIngredients,
+            List<FluidStackIngredient> fluidIngredients,
+            Ingredient catalyst,
+            Ingredient tool,
+            int toolDamage,
+            List<ItemStackProvider> itemOutputs,
+            List<FluidStack> fluidOutputs,
+            int duration,
+            float minTemp,
+            List<RecipeAttachment> attachments) {
         this.id = id;
         this.itemIngredients = itemIngredients;
         this.fluidIngredients = fluidIngredients;
@@ -108,6 +121,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         this.fluidOutputs = fluidOutputs;
         this.duration = duration;
         this.minTemp = minTemp;
+        this.attachments = attachments != null ? attachments : List.of();
     }
 
     /**
@@ -284,6 +298,12 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             }
         }
 
+        for (RecipeAttachment attachment : this.attachments) {
+            if (!attachment.matchesInputs(appliance)) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -339,6 +359,12 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                 if (!matched) {
                     return false;
                 }
+            }
+        }
+
+        for (RecipeAttachment attachment : this.attachments) {
+            if (!attachment.matches(appliance, level)) {
+                return false;
             }
         }
 
@@ -474,7 +500,15 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
     }
 
     public boolean canFitOutputs(CookingApplianceBlockEntity appliance) {
-        return canFitItemOutputs(appliance) && canFitFluidOutputs(appliance);
+        if (!canFitItemOutputs(appliance) || !canFitFluidOutputs(appliance)) {
+            return false;
+        }
+        for (RecipeAttachment attachment : this.attachments) {
+            if (!attachment.canFitOutputs(appliance)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getErrorFlags(CookingApplianceBlockEntity appliance) {
@@ -487,6 +521,12 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         }
         if (!canFitFluidOutputs(appliance)) {
             errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
+        }
+        for (RecipeAttachment attachment : this.attachments) {
+            if (!attachment.canFitOutputs(appliance)) {
+                errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
+                break;
+            }
         }
         return errors;
     }
@@ -591,6 +631,10 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                 }
             }
         }
+
+        for (RecipeAttachment attachment : this.attachments) {
+            attachment.assembleOutputs(appliance);
+        }
     }
 
     @Override
@@ -693,6 +737,35 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             int duration = JsonHelpers.getAsInt(json, "duration", JsonHelpers.getAsInt(json, "cooking_time", 100));
             float minTemp = JsonHelpers.getAsFloat(json, "temperature", JsonHelpers.getAsFloat(json, "min_temp", 0.0f));
 
+            List<RecipeAttachment> attachments = new ArrayList<>();
+            if (json.has("attachments")) {
+                JsonElement attElement = json.get("attachments");
+                if (attElement.isJsonArray()) {
+                    for (JsonElement el : attElement.getAsJsonArray()) {
+                        if (el.isJsonObject()) {
+                            RecipeAttachment att = RecipeAttachment.fromJson(el.getAsJsonObject());
+                            if (att != null) {
+                                attachments.add(att);
+                            }
+                        }
+                    }
+                } else if (attElement.isJsonObject()) {
+                    JsonObject attObj = attElement.getAsJsonObject();
+                    for (var entry : attObj.entrySet()) {
+                        if (entry.getValue().isJsonObject()) {
+                            JsonObject entryObj = entry.getValue().getAsJsonObject();
+                            if (!entryObj.has("type")) {
+                                entryObj.addProperty("type", entry.getKey());
+                            }
+                            RecipeAttachment att = RecipeAttachment.fromJson(entryObj);
+                            if (att != null) {
+                                attachments.add(att);
+                            }
+                        }
+                    }
+                }
+            }
+
             return factory.create(
                     recipeId,
                     itemIngredients,
@@ -703,7 +776,8 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                     itemOutputs,
                     fluidOutputs,
                     duration,
-                    minTemp);
+                    minTemp,
+                    attachments);
         }
 
         @Override
@@ -739,6 +813,15 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             int duration = buffer.readVarInt();
             float minTemp = buffer.readFloat();
 
+            int attachmentCount = buffer.readVarInt();
+            List<RecipeAttachment> attachments = new ArrayList<>();
+            for (int i = 0; i < attachmentCount; i++) {
+                RecipeAttachment att = RecipeAttachment.fromNetwork(buffer);
+                if (att != null) {
+                    attachments.add(att);
+                }
+            }
+
             return factory.create(
                     recipeId,
                     itemIngredients,
@@ -749,7 +832,8 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                     itemOutputs,
                     fluidOutputs,
                     duration,
-                    minTemp);
+                    minTemp,
+                    attachments);
         }
 
         @Override
@@ -780,6 +864,12 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
 
             buffer.writeVarInt(recipe.duration);
             buffer.writeFloat(recipe.minTemp);
+
+            buffer.writeVarInt(recipe.attachments.size());
+            for (RecipeAttachment attachment : recipe.attachments) {
+                buffer.writeUtf(attachment.getType());
+                attachment.toNetwork(buffer);
+            }
         }
     }
 }
