@@ -536,21 +536,29 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         return true;
     }
 
-    public int getErrorFlags(CookingApplianceBlockEntity appliance) {
-        int errors = 0;
+    public CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
         if (hasRottenInputs(appliance)) {
-            errors |= CookingApplianceBlockEntity.ERROR_ROTTEN_INGREDIENT;
+            return CookingApplianceBlockEntity.CookingError.ROTTEN_INGREDIENT;
         }
         if (!canFitItemOutputs(appliance)) {
-            errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_ITEM_SPACE;
+            return CookingApplianceBlockEntity.CookingError.NOT_ENOUGH_ITEM_SPACE;
         }
         if (!canFitFluidOutputs(appliance)) {
-            errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
+            return CookingApplianceBlockEntity.CookingError.NOT_ENOUGH_FLUID_SPACE;
         }
+
         for (RecipeAttachment attachment : this.attachments) {
-            errors |= attachment.getErrorFlags(appliance);
+            CookingApplianceBlockEntity.CookingError error = attachment.getError(appliance);
+            if (error != CookingApplianceBlockEntity.CookingError.NONE) {
+                return error;
+            }
         }
-        return errors;
+
+        return CookingApplianceBlockEntity.CookingError.NONE;
+    }
+
+    public CookingApplianceBlockEntity.CookingError getErrorFlags(CookingApplianceBlockEntity appliance) {
+        return getError(appliance);
     }
 
     public void tickActive(CookingApplianceBlockEntity appliance) {

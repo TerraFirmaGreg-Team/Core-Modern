@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 
+@SuppressWarnings("unused")
 public interface RecipeAttachment {
 
     String getType();
@@ -21,8 +22,12 @@ public interface RecipeAttachment {
         return true;
     }
 
-    default int getErrorFlags(CookingApplianceBlockEntity appliance) {
-        return 0;
+    default CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
+        return CookingApplianceBlockEntity.CookingError.NONE;
+    }
+
+    default CookingApplianceBlockEntity.CookingError getErrorFlags(CookingApplianceBlockEntity appliance) {
+        return getError(appliance);
     }
 
     default void tickActive(CookingApplianceBlockEntity appliance) {

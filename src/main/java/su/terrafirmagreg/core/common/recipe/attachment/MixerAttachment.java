@@ -66,11 +66,11 @@ public record MixerAttachment(@Nullable Float minRpm, @Nullable Integer circuit)
     }
 
     @Override
-    public int getErrorFlags(CookingApplianceBlockEntity appliance) {
+    public CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
         if (!matches(appliance, appliance.getLevel())) {
-            return CookingApplianceBlockEntity.ERROR_INSUFFICIENT_MIXER;
+            return CookingApplianceBlockEntity.CookingError.INSUFFICIENT_MIXER;
         }
-        return 0;
+        return CookingApplianceBlockEntity.CookingError.NONE;
     }
 
     @Override

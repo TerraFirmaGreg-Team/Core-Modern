@@ -225,8 +225,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             int slot,
             int totalCount,
             int spinTicks,
-            float rpm
-    ) {
+            float rpm) {
 
         float angleStep = 360.0F / Math.max(1, totalCount);
         float currentAngleDegrees = slot * angleStep;

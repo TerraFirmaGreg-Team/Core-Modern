@@ -146,23 +146,38 @@ public record CondenserAttachment(@NotNull FluidStack fluidOutput,
     }
 
     @Override
-    public int getErrorFlags(CookingApplianceBlockEntity appliance) {
-        int errors = 0;
+    public CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
         CondenserBlockEntity condenser = getCondenser(appliance);
         if (condenser == null) {
-            errors |= CookingApplianceBlockEntity.ERROR_NO_CONDENSER;
-        } else {
-            if (coolantCondition != null) {
-                FluidStack coolantInTank = condenser.getCoolantTank().getFluid();
-                if (!coolantCondition.test(coolantInTank)) {
-                    errors |= CookingApplianceBlockEntity.ERROR_INSUFFICIENT_COOLANT;
-                }
-            }
-            if (!canFitOutputs(appliance)) {
-                errors |= CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE;
+            return CookingApplianceBlockEntity.CookingError.NO_CONDENSER;
+        }
+        if (coolantCondition != null) {
+            FluidStack coolantInTank = condenser.getCoolantTank().getFluid();
+            if (!coolantCondition.test(coolantInTank)) {
+                return CookingApplianceBlockEntity.CookingError.INSUFFICIENT_COOLANT;
             }
         }
-        return errors;
+        if (!canFitOutputs(appliance)) {
+            return CookingApplianceBlockEntity.CookingError.NOT_ENOUGH_FLUID_SPACE;
+        }
+        return CookingApplianceBlockEntity.CookingError.NONE;
+    }
+
+    @Override
+    public float getSpeedMultiplier(CookingApplianceBlockEntity appliance) {
+        CondenserBlockEntity condenser = getCondenser(appliance);
+        if (condenser != null && coolantCondition != null && coolantCondition.maxTemp() != null) {
+            FluidStack coolant = condenser.getCoolantTank().getFluid();
+            if (!coolant.isEmpty() && coolantCondition.test(coolant)) {
+                int fluidTemp = coolant.getFluid().getFluidType().getTemperature(coolant);
+                float maxTemp = coolantCondition.maxTemp();
+                float tempDiff = maxTemp - fluidTemp;
+                if (tempDiff > 0) {
+                    return 1.0f + (tempDiff / 20.0f) * 0.5f;
+                }
+            }
+        }
+        return 1.0f;
     }
 
     @Override

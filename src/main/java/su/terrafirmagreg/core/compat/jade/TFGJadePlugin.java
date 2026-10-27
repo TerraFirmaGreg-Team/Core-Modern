@@ -5,9 +5,9 @@ import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.*;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.TierLockedBlock;
 import su.terrafirmagreg.core.common.block.appliances.CookingApplianceBlock;
 import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
-import su.terrafirmagreg.core.common.block.TierLockedBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmClusterBlock;
 
 @WailaPlugin

@@ -61,11 +61,11 @@ public record VacuumChamberAttachment(boolean mode) implements RecipeAttachment 
     }
 
     @Override
-    public int getErrorFlags(CookingApplianceBlockEntity appliance) {
+    public CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
         if (!matches(appliance, appliance.getLevel())) {
-            return CookingApplianceBlockEntity.ERROR_INSUFFICIENT_VACUUM;
+            return CookingApplianceBlockEntity.CookingError.INSUFFICIENT_VACUUM;
         }
-        return 0;
+        return CookingApplianceBlockEntity.CookingError.NONE;
     }
 
     @Override

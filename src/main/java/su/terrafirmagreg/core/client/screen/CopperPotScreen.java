@@ -10,7 +10,6 @@ import net.dries007.tfc.client.screen.BlockEntityScreen;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.ScreenButtonPacket;
 import net.dries007.tfc.util.Tooltips;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -217,7 +216,7 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
             }
         }
 
-        if (blockEntity.getRecipeError() != 0) {
+        if (blockEntity.getRecipeError() != CookingApplianceBlockEntity.CookingError.NONE) {
             graphics.blit(texture, leftPos + ERROR_X, topPos + ERROR_Y, ERROR_U, ERROR_V, ERROR_WIDTH, ERROR_HEIGHT);
         }
     }
@@ -267,34 +266,10 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
             MutableComponent openRecipes = Component.translatable("emi.view_all_recipes");
             progressTooltip.add(openRecipes);
 
-            int error = blockEntity.getRecipeError();
-            if (error != 0) {
+            CookingApplianceBlockEntity.CookingError error = blockEntity.getRecipeError();
+            if (error != CookingApplianceBlockEntity.CookingError.NONE) {
                 progressTooltip.add(Component.empty());
-
-                if ((error & CookingApplianceBlockEntity.ERROR_ROTTEN_INGREDIENT) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.rotten").withStyle(ChatFormatting.RED));
-                }
-                if ((error & CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_ITEM_SPACE) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_item_space").withStyle(ChatFormatting.RED));
-                }
-                if ((error & CookingApplianceBlockEntity.ERROR_NOT_ENOUGH_FLUID_SPACE) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_fluid_space").withStyle(ChatFormatting.RED));
-                }
-                if ((error & CookingApplianceBlockEntity.ERROR_NO_CONDENSER) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_condenser").withStyle(ChatFormatting.RED));
-                }
-                if ((error & CookingApplianceBlockEntity.ERROR_INSUFFICIENT_COOLANT) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_coolant").withStyle(ChatFormatting.RED));
-                }
-                if ((error & CookingApplianceBlockEntity.ERROR_INSUFFICIENT_MIXER) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_mixer").withStyle(ChatFormatting.RED));
-                }
-                if ((error & CookingApplianceBlockEntity.ERROR_INSUFFICIENT_PRESS) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_press").withStyle(ChatFormatting.RED));
-                }
-                if ((error & CookingApplianceBlockEntity.ERROR_INSUFFICIENT_VACUUM) != 0) {
-                    progressTooltip.add(Component.translatable("tfg.tooltip.recipe.error.no_vacuum").withStyle(ChatFormatting.RED));
-                }
+                progressTooltip.add(error.getTooltipComponent());
             }
 
             if (blockEntity.getCookingTicks() > 0) {

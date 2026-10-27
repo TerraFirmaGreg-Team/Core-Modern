@@ -44,6 +44,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -92,15 +93,27 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     public static final int TARGET_TEMPERATURE_STABILITY_TICKS = 5;
 
-    public static final int ERROR_NONE = 0;
-    public static final int ERROR_ROTTEN_INGREDIENT = 1 << 1;
-    public static final int ERROR_NOT_ENOUGH_ITEM_SPACE = 1 << 2;
-    public static final int ERROR_NOT_ENOUGH_FLUID_SPACE = 1 << 3;
-    public static final int ERROR_NO_CONDENSER = 1 << 4;
-    public static final int ERROR_INSUFFICIENT_COOLANT = 1 << 5;
-    public static final int ERROR_INSUFFICIENT_MIXER = 1 << 6;
-    public static final int ERROR_INSUFFICIENT_PRESS = 1 << 7;
-    public static final int ERROR_INSUFFICIENT_VACUUM = 1 << 8;
+    public enum CookingError {
+        NONE("none"),
+        ROTTEN_INGREDIENT("rotten"),
+        NOT_ENOUGH_ITEM_SPACE("no_item_space"),
+        NOT_ENOUGH_FLUID_SPACE("no_fluid_space"),
+        NO_CONDENSER("no_condenser"),
+        INSUFFICIENT_COOLANT("no_coolant"),
+        INSUFFICIENT_MIXER("no_mixer"),
+        INSUFFICIENT_PRESS("no_press"),
+        INSUFFICIENT_VACUUM("no_vacuum");
+
+        private final String translationKey;
+
+        CookingError(String subKey) {
+            this.translationKey = "tfg.tooltip.recipe.error." + subKey;
+        }
+
+        public Component getTooltipComponent() {
+            return Component.translatable(this.translationKey).withStyle(net.minecraft.ChatFormatting.RED);
+        }
+    }
 
     protected float temperature;
     @Getter
@@ -111,7 +124,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     protected long lastCalendarUpdateTick = Integer.MIN_VALUE;
 
     @Getter
-    protected int recipeError;
+    protected CookingError recipeError;
     protected int maxDuration;
 
     @Getter
@@ -119,6 +132,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     @Nullable
     protected CookingApplianceRecipe cachedRecipe;
+    @Nullable
+    protected ResourceLocation cachedRecipeId;
 
     protected final SidedHandler.Builder<IFluidHandler> sidedFluidInventory;
     protected final SidedHandler.Builder<IHeatBlock> sidedHeat;
@@ -134,7 +149,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         this.targetTemperature = 0.0f;
         this.targetTemperatureStabilityTicks = 0;
         this.cookingTicks = 0;
-        this.recipeError = ERROR_NONE;
+        this.recipeError = CookingError.NONE;
         this.maxDuration = 100;
         this.cachedRecipe = null;
 
@@ -145,7 +160,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 .add(() -> (int) this.temperature, val -> this.temperature = val)
                 .add(() -> (int) this.targetTemperature, val -> this.targetTemperature = val)
                 .add(() -> this.cookingTicks, val -> this.cookingTicks = val)
-                .add(() -> this.recipeError, val -> this.recipeError = val)
+                .add(() -> this.recipeError.ordinal(), val -> this.recipeError = CookingError.values()[Mth.clamp(val, 0, CookingError.values().length - 1)])
                 .add(() -> this.maxDuration, val -> this.maxDuration = val);
 
         configureSidedHandlers();
@@ -221,10 +236,10 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     // Handle effects from attachments.
     public static void clientTick(Level level, BlockPos pos, BlockState state, CookingApplianceBlockEntity appliance) {
         MechanicalPressBlockEntity press = PressAttachment.getPress(appliance);
-        if (appliance.cookingTicks > 0 && appliance.recipeError == ERROR_NONE) {
+        if (appliance.cookingTicks > 0 && appliance.recipeError == CookingError.NONE) {
             MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(appliance);
             if (mixer != null && mixer.running && mixer.runningTicks >= 20) {
-               appliance.renderMixerParticles(mixer);
+                appliance.renderMixerParticles(mixer);
             }
             VacuumChamberBlockEntity chamber = VacuumChamberAttachment.getChamber(appliance);
             if (chamber != null && chamber.running && chamber.runningTicks >= 20) {
@@ -365,7 +380,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         if (level == null || level.isClientSide)
             return;
 
-        int prevError = this.recipeError;
+        CookingError prevError = this.recipeError;
         int prevDuration = this.maxDuration;
 
         if (cachedRecipe == null || !cachedRecipe.matches(this, level)) {
@@ -382,11 +397,12 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                     cookingTicks = 0;
                 }
                 cachedRecipe = matching;
+                cachedRecipeId = matching.getId();
             }
         }
 
         if (cachedRecipe != null && cachedRecipe.matches(this, level)) {
-            this.recipeError = ERROR_NONE;
+            this.recipeError = CookingError.NONE;
             int effectiveDuration = cachedRecipe.getEffectiveDuration(this);
             this.maxDuration = effectiveDuration;
             cachedRecipe.tickActive(this);
@@ -395,6 +411,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 finishRecipe(cachedRecipe);
                 cookingTicks = 0;
                 cachedRecipe = null;
+                cachedRecipeId = null;
             }
             markForSync();
         } else {
@@ -403,9 +420,10 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 // Fail if ingredients were removed in the middle of a recipe.
                 cookingTicks = 0;
                 cachedRecipe = null;
+                cachedRecipeId = null;
             }
 
-            int detectedErrors = ERROR_NONE;
+            CookingError detectedErrors = CookingError.NONE;
             CookingApplianceRecipe candidate = cachedRecipe;
             if (candidate == null) {
                 candidate = level.getRecipeManager().getAllRecipesFor(getRecipeType()).stream()
@@ -427,7 +445,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 this.maxDuration = candidate.getEffectiveDuration(this);
             } else {
                 if (hasAnyRottenInput()) {
-                    detectedErrors = ERROR_ROTTEN_INGREDIENT;
+                    detectedErrors = CookingError.ROTTEN_INGREDIENT;
                 }
                 this.maxDuration = 0;
                 cookingTicks = 0;
@@ -538,6 +556,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     @Nullable
     public CookingApplianceRecipe getCachedRecipe() {
+        if (this.cachedRecipe == null && this.cachedRecipeId != null && this.level != null) {
+            this.cachedRecipe = (CookingApplianceRecipe) this.level.getRecipeManager().byKey(this.cachedRecipeId).orElse(null);
+        }
         return cachedRecipe;
     }
 
@@ -893,9 +914,18 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         this.targetTemperature = nbt.getFloat("targetTemperature");
         this.targetTemperatureStabilityTicks = nbt.getInt("targetTemperatureStabilityTicks");
         this.cookingTicks = nbt.getInt("cookingTicks");
-        this.recipeError = nbt.getInt("recipeError");
+        this.recipeError = nbt.contains("recipeError") ? CookingError.values()[Mth.clamp(nbt.getInt("recipeError"), 0, CookingError.values().length - 1)] : CookingError.NONE;
         this.maxDuration = nbt.contains("maxDuration") ? nbt.getInt("maxDuration") : 100;
         this.lastCalendarUpdateTick = nbt.getLong("lastCalendarUpdateTick");
+        if (nbt.contains("recipeId")) {
+            this.cachedRecipeId = ResourceLocation.tryParse(nbt.getString("recipeId"));
+            if (this.cachedRecipeId != null && this.level != null) {
+                this.cachedRecipe = (CookingApplianceRecipe) this.level.getRecipeManager().byKey(this.cachedRecipeId).orElse(null);
+            }
+        } else {
+            this.cachedRecipeId = null;
+            this.cachedRecipe = null;
+        }
         super.loadAdditional(nbt);
     }
 
@@ -905,9 +935,14 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         nbt.putFloat("targetTemperature", this.targetTemperature);
         nbt.putInt("targetTemperatureStabilityTicks", this.targetTemperatureStabilityTicks);
         nbt.putInt("cookingTicks", this.cookingTicks);
-        nbt.putInt("recipeError", this.recipeError);
+        nbt.putInt("recipeError", this.recipeError.ordinal());
         nbt.putInt("maxDuration", this.maxDuration);
         nbt.putLong("lastCalendarUpdateTick", this.lastCalendarUpdateTick);
+        if (this.cachedRecipe != null) {
+            nbt.putString("recipeId", this.cachedRecipe.getId().toString());
+        } else if (this.cachedRecipeId != null) {
+            nbt.putString("recipeId", this.cachedRecipeId.toString());
+        }
         super.saveAdditional(nbt);
     }
 

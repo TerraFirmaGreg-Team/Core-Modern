@@ -63,11 +63,11 @@ public record PressAttachment(@Nullable Integer circuit) implements RecipeAttach
     }
 
     @Override
-    public int getErrorFlags(CookingApplianceBlockEntity appliance) {
+    public CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
         if (!matches(appliance, appliance.getLevel())) {
-            return CookingApplianceBlockEntity.ERROR_INSUFFICIENT_PRESS;
+            return CookingApplianceBlockEntity.CookingError.INSUFFICIENT_PRESS;
         }
-        return 0;
+        return CookingApplianceBlockEntity.CookingError.NONE;
     }
 
     @Override

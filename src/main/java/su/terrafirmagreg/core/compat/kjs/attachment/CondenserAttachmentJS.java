@@ -56,7 +56,10 @@ public class CondenserAttachmentJS implements AttachmentJS {
         if (temp instanceof Number num) {
             obj.addProperty("max_temp", num.floatValue());
         } else {
-            obj.addProperty("max_temp", Float.parseFloat(temp.toString()));
+            try {
+                obj.addProperty("max_temp", Float.parseFloat(temp.toString()));
+            } catch (NumberFormatException ignored) {
+            }
         }
 
         int amt = 10;
@@ -67,7 +70,7 @@ public class CondenserAttachmentJS implements AttachmentJS {
         }
         obj.addProperty("amount", amt);
 
-        FluidIngredient ingredient = null;
+        FluidIngredient ingredient;
         if (fluidId != null) {
             if (fluidId instanceof FluidIngredient fi) {
                 ingredient = fi;
