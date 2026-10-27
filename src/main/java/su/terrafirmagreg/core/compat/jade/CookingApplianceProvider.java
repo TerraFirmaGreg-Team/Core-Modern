@@ -44,7 +44,7 @@ public class CookingApplianceProvider implements IBlockComponentProvider {
                 Component timerText = timerIcon.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
 
                 tooltip.add(timerText);
-            // Errors
+                // Errors
             } else if (appliance.getRecipeError() != CookingApplianceBlockEntity.CookingError.NONE) {
                 tooltip.add(appliance.getRecipeError().getTooltipComponent());
             }
