@@ -27,6 +27,7 @@ import su.terrafirmagreg.core.TFGCore;
 @SuppressWarnings({ "unused", "UnusedAssignment", "NoTranslation" })
 public class TemperatureMeterWidget extends AbstractWidget {
     public static final ResourceLocation TEMP_METER = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/widgets/temperature_widget.png");
+    private static final ResourceLocation TEMP_METER_CAT = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/widgets/temperature_widget_cat.png");
     private static final int TEXTURE_SIZE = 64;
 
     private static final int METER_U = 0;
@@ -99,7 +100,11 @@ public class TemperatureMeterWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        graphics.blit(TEMP_METER, getX(), getY(), METER_U, METER_V, METER_WIDTH, METER_HEIGHT, TEXTURE_SIZE, TEXTURE_SIZE);
+        ResourceLocation tempTexture = TEMP_METER;
+        if (TFGCore.IS_APRIL_FIRST) {
+            tempTexture = TEMP_METER_CAT;
+        }
+        graphics.blit(tempTexture, getX(), getY(), METER_U, METER_V, METER_WIDTH, METER_HEIGHT, TEXTURE_SIZE, TEXTURE_SIZE);
 
         // Max temp lock.
         int rawMaxTemp = 0;
