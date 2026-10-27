@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Items;
@@ -23,9 +24,10 @@ import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.SlotWidget;
-import dev.emi.emi.api.widget.TextureWidget;
-import dev.emi.emi.api.widget.WidgetHolder;
+import dev.emi.emi.api.widget.*;
+import electrolyte.greate.compat.jei.category.animations.TieredAnimatedMechanicalPress;
+import electrolyte.greate.registry.MechanicalMixers;
+import electrolyte.greate.registry.MechanicalPresses;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
@@ -34,9 +36,12 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
+import su.terrafirmagreg.core.compat.emi.widgets.BasinlessTieredMixer;
+import su.terrafirmagreg.core.compat.emi.widgets.BasinlessVacuumChamber;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 
 @EmiEntrypoint
@@ -68,6 +73,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory GREENHOUSE_PLANTABLE = new EmiRecipeCategory(TFGCore.id("greenhouse_plantable"),
             EmiStack.of(FLBlocks.LARGE_PLANTER.get()));
+
+    public static final EmiRecipeCategory COPPER_POT = new EmiRecipeCategory(TFGCore.id("copper_pot"),
+            EmiStack.of(TFGBlocks.COPPER_POT.get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -179,6 +187,13 @@ public class TFGEmiPlugin implements EmiPlugin {
             emiRegistry.addWorkstation(GREENHOUSE_PLANTABLE, EmiStack.of(GreenhousePlantableEmiRecipe.resolvePlanterBlock(plantable.getPlanterType())));
             emiRegistry.addRecipe(new GreenhousePlantableEmiRecipe(plantable));
         }
+
+        //Cooking Appliances
+        emiRegistry.addCategory(COPPER_POT);
+        emiRegistry.addWorkstation(COPPER_POT, EmiStack.of(TFGBlocks.COPPER_POT.get().asItem()));
+        for (CopperPotRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.COPPER_POT.get())) {
+            emiRegistry.addRecipe(new CopperPotEmiRecipe(recipe));
+        }
     }
 
     private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
@@ -222,6 +237,109 @@ public class TFGEmiPlugin implements EmiPlugin {
         };
         widget.drawBack(false);
         holder.add(widget);
+    }
+
+    /**
+     * Creates a blank item widget that does not render anything with a custom tooltip.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param component Tooltip component.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     */
+    public static void createBlankTooltipItemWidget(WidgetHolder holder, EmiIngredient stack, Component component, int offsetX, int offsetY) {
+        SlotWidget widget = new SlotWidget(stack, offsetX, offsetY) {
+            @Override
+            public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+            }
+        };
+        widget.drawBack(false);
+        widget.appendTooltip(component);
+        holder.add(widget);
+    }
+
+    /**
+     * Creates a {@link BasinlessTieredMixer} widget.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     * @param tier Mixer tier. [0-9]
+     * @param renderSlot Whether to render the blank slot for viewing the stack tooltip.
+     */
+    public static void createBasinlessMixerWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY, int tier, boolean renderSlot) {
+        Widget widget = new Widget() {
+            @Override
+            public Bounds getBounds() {
+                return new Bounds(offsetX, offsetY, 48, 48);
+            }
+
+            @Override
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                new BasinlessTieredMixer(MechanicalMixers.MECHANICAL_MIXERS[tier].get())
+                        .draw(graphics, offsetX, offsetY);
+            }
+        };
+        holder.add(widget);
+        if (renderSlot) {
+            TFGEmiPlugin.createBlankItemWidget(holder, stack, offsetX, offsetY - 18);
+        }
+    }
+
+    /**
+     * Creates a {@link TieredAnimatedMechanicalPress} widget without a basin.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     * @param tier Press tier. [0-9]
+     * @param renderSlot Whether to render the blank slot for viewing the stack tooltip.
+     */
+    public static void createBasinlessPressWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY, int tier, boolean renderSlot) {
+        Widget widget = new Widget() {
+            @Override
+            public Bounds getBounds() {
+                return new Bounds(offsetX, offsetY, 48, 48);
+            }
+
+            @Override
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                new TieredAnimatedMechanicalPress(MechanicalPresses.MECHANICAL_PRESSES[tier].get(), false)
+                        .draw(graphics, offsetX, offsetY);
+            }
+        };
+        holder.add(widget);
+        if (renderSlot) {
+            TFGEmiPlugin.createBlankItemWidget(holder, stack, offsetX, offsetY - 18);
+        }
+    }
+
+    /**
+     * Creates a {@link BasinlessVacuumChamber} widget.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     * @param mode `false` for vacuum, `true` for pressure.
+     * @param renderSlot Whether to render the blank slot for viewing the stack tooltip.
+     */
+    public static void createBasinlessVacuumChamberWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY, boolean mode, boolean renderSlot) {
+        Widget widget = new Widget() {
+            @Override
+            public Bounds getBounds() {
+                return new Bounds(offsetX, offsetY, 48, 48);
+            }
+
+            @Override
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                new BasinlessVacuumChamber()
+                        .draw(graphics, offsetX, offsetY, mode);
+            }
+        };
+        holder.add(widget);
+        if (renderSlot) {
+            TFGEmiPlugin.createBlankItemWidget(holder, stack, offsetX, offsetY - 18);
+        }
     }
 
     private boolean onLegacyWorldgen() {
