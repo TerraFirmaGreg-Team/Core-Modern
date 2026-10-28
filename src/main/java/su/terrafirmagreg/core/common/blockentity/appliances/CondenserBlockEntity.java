@@ -70,8 +70,7 @@ public class CondenserBlockEntity extends TFCBlockEntity implements FluidTankCal
 
     @SuppressWarnings("deprecation")
     public static boolean isCoolant(Fluid fluid) {
-        // TODO: water here is for testing!!! dont forget to remove it
-        return fluid != null && fluid != Fluids.EMPTY && (fluid.is(TFGTags.Fluids.CONDENSER_COOLANTS) || fluid.is(FluidTags.WATER));
+        return fluid != null && fluid != Fluids.EMPTY && fluid.is(TFGTags.Fluids.CONDENSER_COOLANTS);
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, CondenserBlockEntity condenser) {
