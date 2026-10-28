@@ -14,9 +14,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -32,6 +36,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -41,6 +46,7 @@ import net.minecraftforge.registries.MissingMappingsEvent;
 import team.terrafirmagreg.jellies.common.data.JelliesItems;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
@@ -164,6 +170,25 @@ public final class ForgeCommonEventListener {
     @SubscribeEvent
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(BedrockFluidSpoutLoader.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void onAttack(AttackEntityEvent event) {
+        Player player = event.getEntity();
+        Level level = player.level();
+
+        if (!level.isClientSide() && event.getTarget() instanceof LivingEntity target) {
+            ItemStack heldItem = player.getMainHandItem();
+            if (heldItem.getItem() instanceof BlockItem blockItem) {
+                if (blockItem.getBlock() instanceof SkilletBlock) {
+
+                    level.playSound(null, target.getX(), target.getY(), target.getZ(),
+                            SoundEvents.BELL_BLOCK, SoundSource.AMBIENT, 3.0F, 0.1F);
+
+                    target.knockback(2.0F, player.getX() - target.getX(), player.getZ() - target.getZ());
+                }
+            }
+        }
     }
 
     @SubscribeEvent
