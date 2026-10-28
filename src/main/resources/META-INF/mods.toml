@@ -9,11 +9,11 @@ issueTrackerURL = "https://github.com/TerraFirmaGreg-Team/Modpack-Modern/issues"
 
 [[mods]]
 modId = "tfc"
-version = "3.2.25"
+version = "3.2.28"
 displayName = "TerraFirmaCraft"
 credits = "By AlcatrazEscapee, Disastermoo, Dries007, Bunsan, Claycorp, DavidTriphon, EERussianguy, Gaelmare, and many others. Based on the original work by Bioxx, Dunk, and Kitty. Music by Mike \"Menoch\" Pelaez"
 authors = "AlcatrazEscapee"
-description = '''TerraFirmaCraft - The Next Generation'''
+description = '''TerraFirmaCraft fork for TerraFirmaGreg.'''
 
 [[dependencies.tfc]]
 modId = "patchouli"

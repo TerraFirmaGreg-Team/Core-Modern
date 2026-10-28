@@ -33,6 +33,7 @@ import net.dries007.tfc.config.TFCConfig;
 public abstract class ItemColorsMixin
 {
     @Dynamic("Inject into method added by a Sodium mixin")
+    @SuppressWarnings("target") // The targets are added by Sodium mixins, so the annotation processor cannot see them
     @Inject(
         at = @At("TAIL"),
         target = {

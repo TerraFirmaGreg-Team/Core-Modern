@@ -18,10 +18,11 @@
     "config.jade.plugin_tfc.bactrian_camel": "",
     "config.jade.plugin_tfg.dynamic_age": "",
     "config.jade.plugin_tfc.dog": "",
-    "config.jade.plugin_tfg.cooking_appliance_info": "",
+    "config.jade.plugin_tfc.scraping": "",
     "config.jade.plugin_tfc.charger": "",
     "config.jade.plugin_tfc.snatcher": "",
     "config.jade.plugin_tfg.tier_locked_block_info": "",
     "config.jade.plugin_tfc.anemometer": "",
-    "config.jade.plugin_tfc.vane": ""
+    "config.jade.plugin_tfc.vane": "",
+    "config.jade.plugin_tfg.cooking_appliance_info": ""
 }
