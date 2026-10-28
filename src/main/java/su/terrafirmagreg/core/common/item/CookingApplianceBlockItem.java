@@ -90,7 +90,7 @@ public class CookingApplianceBlockItem extends BlockItem {
 
         if (level != null) {
             if (Screen.hasShiftDown()) {
-                tooltip.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.cooking_appliance.flavor_text")));
+                tooltip.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.copper_pot.flavor_text")));
             } else {
                 tooltip.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
             }
