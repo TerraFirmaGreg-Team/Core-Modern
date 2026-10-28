@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.NotNull;
 
 import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
@@ -42,6 +43,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
+import su.terrafirmagreg.core.common.block.appliances.CondenserBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
@@ -142,6 +144,15 @@ public class TFGItemTooltipHelpers {
                     .append(Component.literal(": ")
                             .append(Component.translatable("tfc.tooltip.time_delta_days", daysToGrow)
                                     .withStyle(ChatFormatting.ITALIC, dynamicColor))));
+        }
+
+        // Condenser
+        if (block instanceof CondenserBlock) {
+            if (Screen.hasShiftDown()) {
+                tooltip.add(Component.translatable("tfg.tooltip.condenser.flavor_text"));
+            } else {
+                tooltip.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
+            }
         }
     }
 

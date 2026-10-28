@@ -1,9 +1,12 @@
 package su.terrafirmagreg.core.compat.emi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.blocks.OvenType;
 import com.eerussianguy.firmalife.common.util.Plantable;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
@@ -15,8 +18,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
@@ -240,22 +246,23 @@ public class TFGEmiPlugin implements EmiPlugin {
     }
 
     /**
-     * Creates a blank item widget that does not render anything with a custom tooltip.
+     * Creates a GT circuit number widget.
+     * I'm sure GT has a public method for this. But it was faster to make one than to look.
      * @param holder WidgetHolder.
-     * @param stack Item stack.
-     * @param component Tooltip component.
+     * @param circuit Circuit number.
      * @param offsetX X-position on screen.
      * @param offsetY Y-position on screen.
      */
-    public static void createBlankTooltipItemWidget(WidgetHolder holder, EmiIngredient stack, Component component, int offsetX, int offsetY) {
-        SlotWidget widget = new SlotWidget(stack, offsetX, offsetY) {
-            @Override
-            public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-            }
-        };
-        widget.drawBack(false);
-        widget.appendTooltip(component);
-        holder.add(widget);
+    public static void createCircuitNumberWidget(WidgetHolder holder, int circuit, int offsetX, int offsetY) {
+        if (circuit < 0 || circuit > 32) {
+            return;
+        }
+
+        ItemStack circuitStack = new ItemStack(GTItems.PROGRAMMED_CIRCUIT.get());
+        circuitStack.getOrCreateTag().putInt("Configuration", circuit);
+        Ingredient configuredCircuit = StrictNBTIngredient.of(circuitStack);
+
+        holder.add(new SlotWidget(EmiIngredient.of(configuredCircuit), offsetX, offsetY));
     }
 
     /**
@@ -340,6 +347,29 @@ public class TFGEmiPlugin implements EmiPlugin {
         if (renderSlot) {
             TFGEmiPlugin.createBlankItemWidget(holder, stack, offsetX, offsetY - 18);
         }
+    }
+
+    /**
+     * Gets heat sources as an EmiIngredient.
+     * @return EmiIngredient list of heat sources.
+     */
+    public static EmiIngredient heatSources() {
+        List<EmiStack> heatersList = new ArrayList<>();
+        heatersList.add(EmiStack.of(TFGBlocks.GAS_BURNER.get().asItem()));
+        for (OvenType type : OvenType.values()) {
+            heatersList.add(EmiStack.of(FLBlocks.CURED_OVEN_BOTTOM.get(type).get().asItem()));
+            heatersList.add(EmiStack.of(FLBlocks.INSULATED_OVEN_BOTTOM.get(type).get().asItem()));
+        }
+        return EmiIngredient.of(heatersList);
+    }
+
+    /**
+     * Gets the negative x-offset of a component to center the text.
+     * @return Text length divided by 2.
+     */
+    public static int centeredTextOffset(Component component) {
+        int tempTextLength = Minecraft.getInstance().font.width(component.getVisualOrderText());
+        return tempTextLength / 2;
     }
 
     private boolean onLegacyWorldgen() {
