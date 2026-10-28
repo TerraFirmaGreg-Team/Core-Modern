@@ -10,6 +10,7 @@ import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Tooltips;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -17,12 +18,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 
+import dev.emi.emi.api.EmiApi;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.TemperatureMeterWidget;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
+import su.terrafirmagreg.core.compat.emi.TFGEmiPlugin;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({ "FieldCanBeLocal", "NoTranslation" })
 public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, GasBurnerBlockContainer> {
     private static final ResourceLocation BURNER = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/gas_burner.png");
 
@@ -36,6 +40,9 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
     private final int flameWidth = 21;
     private final int flameHeight = 32;
 
+    private final int recipesX = flameX;
+    private final int recipesY = flameY + flameHeight + 4;
+
     private final int tankX = 108;
     private final int tankY = 26;
     private final int tankHeight = 50;
@@ -47,6 +54,18 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
     protected void init() {
         super.init();
 
+        // EMI Uses Button
+        this.addRenderableWidget(Button.builder(Component.literal("Recipes"),
+                (button) -> EmiApi.displayRecipeCategory(TFGEmiPlugin.GAS_BURNER))
+                .bounds(this.leftPos + recipesX, this.topPos + recipesY, flameWidth, flameHeight)
+                .build(builder -> new Button(builder) {
+                    @Override
+                    public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+                        // Override to prevent rendering a button texture.
+                    }
+                }));
+
+        // Temp Meter
         this.addRenderableWidget(new TemperatureMeterWidget(
                 leftPos + tempScaleX,
                 topPos + tempScaleY,
@@ -97,6 +116,11 @@ public class GasBurnerScreen extends BlockEntityScreen<GasBurnerBlockEntity, Gas
     @Override
     protected void renderTooltip(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
         super.renderTooltip(graphics, mouseX, mouseY);
+
+        // Recipes Tooltips
+        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + recipesX, topPos + recipesY, flameWidth, flameHeight)) {
+            graphics.renderTooltip(font, Component.translatable("emi.view_all_recipes"), mouseX, mouseY);
+        }
 
         // Fluid Tooltip.
         if (RenderHelpers.isInside(mouseX, mouseY, leftPos + tankX, topPos + tankY, tankWidth, tankHeight)) {

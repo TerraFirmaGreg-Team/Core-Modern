@@ -26,13 +26,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.network.PacketDistributor;
 
 import dev.emi.emi.api.EmiApi;
-import dev.emi.emi.api.stack.EmiStack;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.TemperatureMeterWidget;
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.container.CopperPotContainer;
+import su.terrafirmagreg.core.compat.emi.TFGEmiPlugin;
 
 @SuppressWarnings({ "FieldCanBeLocal", "NoTranslation", "unused" })
 public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, CopperPotContainer> {
@@ -85,10 +85,8 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
         super.init();
 
         // EMI Uses Button
-        ItemStack recipeTarget = this.blockEntity.getBlockState().getBlock().asItem().getDefaultInstance();
-
         this.addRenderableWidget(Button.builder(Component.literal("Recipes"),
-                (button) -> EmiApi.displayUses(EmiStack.of(recipeTarget)))
+                (button) -> EmiApi.displayRecipeCategory(TFGEmiPlugin.COPPER_POT))
                 .bounds(this.leftPos + PB_X, this.topPos + PB_Y - 2, PB_WIDTH, 11)
                 .build(builder -> new Button(builder) {
                     @Override
