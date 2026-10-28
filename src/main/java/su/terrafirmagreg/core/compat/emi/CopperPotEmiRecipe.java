@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.compat.emi;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.Nullable;
 
 import com.eerussianguy.beneath.common.blocks.BeneathBlocks;
@@ -16,6 +15,7 @@ import com.negodya1.vintageimprovements.VintageBlocks;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.config.TFCConfig;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

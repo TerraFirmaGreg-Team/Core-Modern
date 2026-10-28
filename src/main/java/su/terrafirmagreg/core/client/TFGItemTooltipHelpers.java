@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.NotNull;
 
 import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
@@ -22,6 +21,7 @@ import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
