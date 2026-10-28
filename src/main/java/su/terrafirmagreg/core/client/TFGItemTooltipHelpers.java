@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.Mod;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
 import su.terrafirmagreg.core.common.block.appliances.CondenserBlock;
+import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
@@ -148,11 +149,12 @@ public class TFGItemTooltipHelpers {
 
         // Condenser
         if (block instanceof CondenserBlock) {
-            if (Screen.hasShiftDown()) {
-                tooltip.add(Component.translatable("tfg.tooltip.condenser.flavor_text"));
-            } else {
-                tooltip.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
-            }
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.condenser.flavor_text")));
+        }
+
+        // Skillet
+        if (block instanceof SkilletBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.skillet.flavor_text")));
         }
     }
 
@@ -297,5 +299,18 @@ public class TFGItemTooltipHelpers {
 
     private static String formatReduction(double multiplier) {
         return String.format("%.0f%%", (1.0 - multiplier) * 100);
+    }
+
+    /**
+     * Component helper for "press-shift" tooltips.
+     * @param component Component to display.
+     * @return Component to display or shift display.
+     */
+    public static Component shiftHintTooltip(Component component) {
+        if (Screen.hasShiftDown()) {
+            return component;
+        } else {
+            return Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD);
+        }
     }
 }
