@@ -46,11 +46,15 @@ public abstract class CookingApplianceBlock extends DeviceBlock {
     // Different from TFCBlockStateProperties.HEAT_LEVEL since that's used by heat providers.
     public static final IntegerProperty RECEIVED_HEAT = IntegerProperty.create("received_heat", 0, 4);
 
-    public CookingApplianceBlock(ExtendedProperties properties) {
-        super(properties, InventoryRemoveBehavior.SAVE);
+    public CookingApplianceBlock(ExtendedProperties properties, InventoryRemoveBehavior removeBehavior) {
+        super(properties, removeBehavior);
         registerDefaultState(getStateDefinition().any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(RECEIVED_HEAT, 0));
+    }
+
+    public CookingApplianceBlock(ExtendedProperties properties) {
+        this(properties, InventoryRemoveBehavior.SAVE);
     }
 
     @Override
@@ -117,7 +121,7 @@ public abstract class CookingApplianceBlock extends DeviceBlock {
         }
 
         if (level.getBlockEntity(pos) instanceof CookingApplianceBlockEntity appliance) {
-            if (!heldItem.isEmpty() && heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+            if (appliance.getTotalFluidTanks() > 0 && !heldItem.isEmpty() && heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
                 if (CookingApplianceBlockEntity.depositFluid(heldItem, appliance, player, hand, -1)) {
                     return InteractionResult.sidedSuccess(level.isClientSide());
                 }

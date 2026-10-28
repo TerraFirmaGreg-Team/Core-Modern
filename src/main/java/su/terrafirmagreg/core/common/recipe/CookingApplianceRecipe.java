@@ -314,6 +314,10 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             }
         }
 
+        if (!this.attachments.isEmpty() && !appliance.supportsAttachments()) {
+            return false;
+        }
+
         for (RecipeAttachment attachment : this.attachments) {
             if (!attachment.matchesInputs(appliance)) {
                 return false;
@@ -376,6 +380,10 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                     return false;
                 }
             }
+        }
+
+        if (!this.attachments.isEmpty() && !appliance.supportsAttachments()) {
+            return false;
         }
 
         for (RecipeAttachment attachment : this.attachments) {

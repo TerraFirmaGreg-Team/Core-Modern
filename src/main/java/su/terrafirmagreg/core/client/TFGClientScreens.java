@@ -15,6 +15,7 @@ import su.terrafirmagreg.core.client.screen.ArtisanTableScreen;
 import su.terrafirmagreg.core.client.screen.CopperPotScreen;
 import su.terrafirmagreg.core.client.screen.GasBurnerScreen;
 import su.terrafirmagreg.core.client.screen.LargeNestBoxScreen;
+import su.terrafirmagreg.core.client.screen.SkilletScreen;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowScreen;
 
@@ -31,6 +32,7 @@ public final class TFGClientScreens {
             MenuScreens.register(TFGContainers.ARTISAN_TABLE.get(), ArtisanTableScreen::new);
             MenuScreens.register(TFGContainers.GAS_BURNER.get(), GasBurnerScreen::new);
             MenuScreens.register(TFGContainers.COPPER_POT.get(), CopperPotScreen::new);
+            MenuScreens.register(TFGContainers.SKILLET.get(), SkilletScreen::new);
         });
     }
 

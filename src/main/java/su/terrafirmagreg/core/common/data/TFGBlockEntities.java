@@ -33,6 +33,7 @@ import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.blockentity.appliances.CondenserBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.SkilletBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 
@@ -133,6 +134,12 @@ public class TFGBlockEntities {
             .blockEntity("copper_pot", CopperPotBlockEntity::new)
             .validBlock(TFGBlocks.COPPER_POT)
             .renderer(() -> CookingApplianceBlockEntityRenderer.CopperPot::new)
+            .register();
+
+    public static final BlockEntityEntry<SkilletBlockEntity> SKILLET = TFGCore.REGISTRATE
+            .blockEntity("skillet", SkilletBlockEntity::new)
+            .validBlock(TFGBlocks.SKILLET)
+            .renderer(() -> CookingApplianceBlockEntityRenderer.Skillet::new)
             .register();
 
     public static final BlockEntityEntry<CondenserBlockEntity> CONDENSER = TFGCore.REGISTRATE

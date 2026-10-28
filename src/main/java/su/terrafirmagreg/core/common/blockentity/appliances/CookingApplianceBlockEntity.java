@@ -180,6 +180,10 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     public abstract RecipeType<? extends CookingApplianceRecipe> getRecipeType();
 
+    public boolean supportsAttachments() {
+        return true;
+    }
+
     public int getCatalystSlot() {
         return getItemInputCount();
     }
@@ -235,6 +239,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     // Handle effects from attachments.
     public static void clientTick(Level level, BlockPos pos, BlockState state, CookingApplianceBlockEntity appliance) {
+        if (!appliance.supportsAttachments()) {
+            return;
+        }
         MechanicalPressBlockEntity press = PressAttachment.getPress(appliance);
         if (appliance.cookingTicks > 0 && appliance.recipeError == CookingError.NONE) {
             MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(appliance);
@@ -898,12 +905,14 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     @Override
     protected void onUnloadAdditional() {
         super.onUnloadAdditional();
-        MechanicalPressBlockEntity press = PressAttachment.getPress(this);
-        if (press != null && press.getPressingBehaviour().running) {
-            var behaviour = press.getPressingBehaviour();
-            if (behaviour.runningTicks == -120) {
-                behaviour.runningTicks = 121;
-                behaviour.prevRunningTicks = 121;
+        if (supportsAttachments()) {
+            MechanicalPressBlockEntity press = PressAttachment.getPress(this);
+            if (press != null && press.getPressingBehaviour().running) {
+                var behaviour = press.getPressingBehaviour();
+                if (behaviour.runningTicks == -120) {
+                    behaviour.runningTicks = 121;
+                    behaviour.prevRunningTicks = 121;
+                }
             }
         }
     }
@@ -949,7 +958,10 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == Capabilities.FLUID) {
+        if (cap == Capabilities.FLUID || cap == ForgeCapabilities.FLUID_HANDLER) {
+            if (getTotalFluidTanks() == 0) {
+                return LazyOptional.empty();
+            }
             return sidedFluidInventory.getSidedHandler(side).cast();
         }
         if (cap == HeatCapability.BLOCK_CAPABILITY) {

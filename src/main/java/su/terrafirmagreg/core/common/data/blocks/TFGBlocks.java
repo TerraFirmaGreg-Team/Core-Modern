@@ -51,6 +51,7 @@ import su.terrafirmagreg.core.common.block.appliances.CondenserBlock;
 import su.terrafirmagreg.core.common.block.appliances.CookingApplianceBlock;
 import su.terrafirmagreg.core.common.block.appliances.CopperPotBlock;
 import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
+import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
 import su.terrafirmagreg.core.common.blockentity.appliances.CondenserBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
@@ -405,6 +406,33 @@ public final class TFGBlocks {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/condenser")))
+            .build()
+            .register();
+
+    public static final BlockEntry<SkilletBlock> SKILLET = TFGCore.REGISTRATE
+            .block("skillet", p -> new SkilletBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .blockEntity(TFGBlockEntities.SKILLET)
+                    .strength(3.0f, 7.0f)
+                    .noOcclusion()
+                    .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                var model = prov.models().withExistingParent("cooking_appliances/skillet", TFGCore.id("block/skillet_parent"))
+                        .texture("0", TFGCore.id("block/cooking_appliances/skillet"));
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    builder.partialState()
+                            .with(SkilletBlock.FACING, dir)
+                            .modelForState()
+                            .modelFile(model)
+                            .rotationY((int) dir.toYRot())
+                            .addModel();
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE)
+            .loot(RegistrateBlockLootTables::dropSelf)
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/skillet")))
             .build()
             .register();
 
