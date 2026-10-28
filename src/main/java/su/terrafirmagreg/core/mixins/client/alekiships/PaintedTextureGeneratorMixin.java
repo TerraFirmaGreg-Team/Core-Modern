@@ -16,6 +16,6 @@ public class PaintedTextureGeneratorMixin {
     @Redirect(method = "onResourceManagerReload", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;register(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V", ordinal = 0))
     private void tfg$lazyRegisterBoatTexture(TextureManager instance, ResourceLocation path, AbstractTexture texture) {
         instance.register(path, texture instanceof PaintedTexture pt ? new LazyPaintedTexture(pt) : texture);
-        TFGCore.LOGGER.info("Lazy paint registered texture: {}", path);
+        TFGCore.LOGGER.debug("Lazy paint registered texture: {}", path);
     }
 }

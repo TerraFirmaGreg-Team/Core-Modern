@@ -26,15 +26,14 @@ public class LazyPaintedTexture extends AbstractTexture {
     public int getId() {
         if (!loaded) {
             try {
-                TFGCore.LOGGER.info("Lazy paint loading texture: {}", deferredTexture);
+                TFGCore.LOGGER.debug("Lazy paint loading texture: {}", deferredTexture);
                 deferredTexture.load(resourceManager);
                 loaded = true;
             } catch (IOException e) {
                 TFGCore.LOGGER.error("Lazy paint failed", e);
-                //                throw new RuntimeException("Failed to load deferred texture", e);
             }
         } else {
-            TFGCore.LOGGER.info("Lazy paint texture already loaded: {}", deferredTexture);
+            TFGCore.LOGGER.debug("Lazy paint texture already loaded: {}", deferredTexture);
         }
         return deferredTexture.getId();
     }
