@@ -22,6 +22,9 @@ public class LazyPaintedTexture extends AbstractTexture {
         this.resourceManager = resourceManager;
     }
 
+    /**
+     * @return the texture ID, loading the texture if it hasn't been loaded yet
+     */
     @Override
     public int getId() {
         if (!loaded) {

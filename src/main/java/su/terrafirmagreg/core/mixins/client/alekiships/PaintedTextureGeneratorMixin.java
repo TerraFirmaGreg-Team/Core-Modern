@@ -11,6 +11,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.LazyPaintedTexture;
 
+/**
+ * Replaces {@link PaintedTexture} with {@link LazyPaintedTexture} at texture registration for lazy loading.
+ */
 @Mixin(value = PaintedTextureGenerator.class, remap = true)
 public class PaintedTextureGeneratorMixin {
     @Redirect(method = "onResourceManagerReload", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;register(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V", ordinal = 0))
