@@ -19,6 +19,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 /**
  * Widget for displaying temperature for TFC {@link Heat} capable devices.
@@ -101,7 +102,7 @@ public class TemperatureMeterWidget extends AbstractWidget {
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         ResourceLocation tempTexture = TEMP_METER;
-        if (TFGCore.IS_APRIL_FIRST) {
+        if (TFGCore.IS_APRIL_FIRST || TFGConfig.CLIENT.catHeatMeter.get() == true) {
             tempTexture = TEMP_METER_CAT;
         }
         graphics.blit(tempTexture, getX(), getY(), METER_U, METER_V, METER_WIDTH, METER_HEIGHT, TEXTURE_SIZE, TEXTURE_SIZE);

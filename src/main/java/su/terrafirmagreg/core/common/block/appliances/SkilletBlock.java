@@ -1,11 +1,11 @@
 package su.terrafirmagreg.core.common.block.appliances;
 
-import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
