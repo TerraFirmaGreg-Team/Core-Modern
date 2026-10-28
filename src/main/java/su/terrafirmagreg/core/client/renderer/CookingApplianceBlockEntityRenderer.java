@@ -12,18 +12,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.fluids.FluidStack;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.SkilletBlockEntity;
 import su.terrafirmagreg.core.common.recipe.attachment.MixerAttachment;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "UnnecessaryLocalVariable" })
 public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlockEntity> implements BlockEntityRenderer<T> {
 
     public CookingApplianceBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
@@ -34,6 +37,12 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
 
     public static class CopperPot extends CookingApplianceBlockEntityRenderer<CopperPotBlockEntity> {
         public CopperPot(BlockEntityRendererProvider.Context context) {
+            super(context);
+        }
+    }
+
+    public static class Skillet extends CookingApplianceBlockEntityRenderer<SkilletBlockEntity> {
+        public Skillet(BlockEntityRendererProvider.Context context) {
             super(context);
         }
     }
@@ -96,10 +105,11 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             }
         }
 
-        // Don't render items if there is a block above.
+        // Don't render items if there is a block above copper pot.
         BlockState above = appliance.getLevel().getBlockState(appliance.getBlockPos().above());
-        if (!above.isAir())
+        if (!above.isAir() && appliance instanceof CopperPotBlockEntity) {
             return;
+        }
 
         // Item Inputs and Outputs Rendering
         appliance.getCapability(Capabilities.ITEM).ifPresent(cap -> {
@@ -150,17 +160,90 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             }
 
             // Tool Item Rendering
-            float toolScale = 0.8F;
             float toolY = Mth.clamp(getHighestFluidLevel(appliance), 0.4F, 1.0F);
             ItemStack tool = cap.getStackInSlot(appliance.getToolSlot());
+
+            // Base Translations
+            float toolScale = 0.8F;
+            float tranX = 0;
+            float tranY = 0;
+            float tranZ = 0;
+            float corner = 0;
+            float rotX = 0;
+            float rotY = 0;
+            float rotZ = 0;
+
+            // Copper Pot Translations
+            float potTranX = 0.6F;
+            float potTranY = toolY;
+            float potTranZ = 0.6F;
+            float potRotX = 45.0F;
+            float potRotY = 45.0F;
+            float potRotZ = 110.0F;
+
+            if (appliance instanceof CopperPotBlockEntity) {
+                tranX = potTranX;
+                tranY = potTranY;
+                tranZ = potTranZ;
+                rotX = potRotX;
+                rotY = potRotY;
+                rotZ = potRotZ;
+            }
+
+            // Skillet Translations
+            float skilletTranX = 0.2F;
+            float skilletTranY = 0.2F;
+            float skilletTranZ = 0.7F;
+            float skilletRotX = 90.0F;
+            float skilletRotY = -20.0F;
+            float skilletRotZ = 190.0F;
+
+            if (appliance instanceof SkilletBlockEntity) {
+                corner = 180;
+                tranX = skilletTranX;
+                tranY = skilletTranY;
+                tranZ = skilletTranZ;
+                rotX = skilletRotX;
+                rotY = skilletRotY;
+                rotZ = skilletRotZ;
+            }
+
+            // Render Tool
             if (!tool.isEmpty()) {
+                BlockState state = appliance.getBlockState();
+                Direction facing = Direction.SOUTH;
+                if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+                    facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+                } else if (state.hasProperty(BlockStateProperties.FACING)) {
+                    facing = state.getValue(BlockStateProperties.FACING);
+                }
+
+                float horizontalAngle = facing.toYRot();
+
                 poseStack.pushPose();
-                poseStack.translate(0.6D, toolY, 0.6D);
+
+                // Pivot around center.
+                poseStack.translate(0.5F, 0.5F, 0.5F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(corner));
+                poseStack.mulPose(Axis.YP.rotationDegrees(-horizontalAngle));
+
+                poseStack.translate(-0.5F, -0.5F, -0.5F);
+                poseStack.translate(tranX, tranY, tranZ);
                 poseStack.scale(toolScale, toolScale, toolScale);
-                poseStack.mulPose(Axis.XP.rotationDegrees(45.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(110.0F));
-                Minecraft.getInstance().getItemRenderer().renderStatic(tool, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffer, appliance.getLevel(), 0);
+                poseStack.mulPose(Axis.XP.rotationDegrees(rotX));
+                poseStack.mulPose(Axis.YP.rotationDegrees(rotY));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(rotZ));
+
+                Minecraft.getInstance().getItemRenderer().renderStatic(
+                        tool,
+                        ItemDisplayContext.FIXED,
+                        combinedLight,
+                        combinedOverlay,
+                        poseStack,
+                        buffer,
+                        appliance.getLevel(),
+                        0);
+
                 poseStack.popPose();
             }
         });
