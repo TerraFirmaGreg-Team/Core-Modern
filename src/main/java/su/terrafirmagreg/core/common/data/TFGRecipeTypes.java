@@ -10,6 +10,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
+import su.terrafirmagreg.core.common.recipe.SkilletRecipe;
 
 public class TFGRecipeTypes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister
@@ -18,6 +19,7 @@ public class TFGRecipeTypes {
     public static final RegistryObject<RecipeType<ArtisanRecipe>> ARTISAN = register("artisan");
     public static final RegistryObject<RecipeType<GasBurnerFuelRecipe>> GAS_BURNER_FUEL = register("gas_burner_fuel");
     public static final RegistryObject<RecipeType<CopperPotRecipe>> COPPER_POT = register("copper_pot");
+    public static final RegistryObject<RecipeType<SkilletRecipe>> SKILLET = register("skillet");
 
     private static <R extends Recipe<?>> RegistryObject<RecipeType<R>> register(String name) {
         return RECIPE_TYPES.register(name, () -> new RecipeType<R>() {

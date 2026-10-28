@@ -56,6 +56,7 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         event.register(TFGCore.id("item_repair"), ItemRepairRecipeSchema.SCHEMA);
         event.register(TFGCore.id("gas_burner_fuel"), GasBurnerFuelRecipeSchema.SCHEMA);
         event.register(TFGCore.id("copper_pot"), CopperPotRecipeSchema.SCHEMA);
+        event.register(TFGCore.id("skillet"), SkilletRecipeSchema.SCHEMA);
     }
 
     @Override
