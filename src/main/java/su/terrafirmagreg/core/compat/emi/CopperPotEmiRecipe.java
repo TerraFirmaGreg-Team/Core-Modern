@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.compat.emi;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.Nullable;
 
 import com.eerussianguy.beneath.common.blocks.BeneathBlocks;
@@ -49,21 +50,20 @@ import su.terrafirmagreg.core.common.recipe.attachment.VacuumChamberAttachment;
 import su.terrafirmagreg.core.compat.emi.widgets.CyclingWidget;
 import su.terrafirmagreg.core.compat.emi.widgets.EmiBlockWidget;
 
-@SuppressWarnings("UnnecessaryLocalVariable")
+@SuppressWarnings({ "UnnecessaryLocalVariable", "NoTranslation" })
 public class CopperPotEmiRecipe implements EmiRecipe {
 
     private static final ResourceLocation PB = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/emi/copper_pot_progress_bar.png");
     private static final ResourceLocation POT = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/emi/copper_pot_emi.png");
 
-    private static final int WIDTH = 250;
-    private static final int HEIGHT = 140;
+    private static final int WIDTH = 240;
+    private static final int HEIGHT = 136;
     private static final int SLOT_SIZE = 18;
 
     private static final int PB_SIZE = 32;
-    private static final int POT_SIZE = 128;
     private static final int POT_X = 0;
-    private static final int POT_Y = 6;
-    private static final int ATTACHMENT_X = POT_X + POT_SIZE + 38;
+    private static final int POT_Y = 0;
+    private static final int ATTACHMENT_X = POT_X + 178;
     private static final int ATTACHMENT_Y = 30;
 
     private static final EmiTexture PB_BACKGROUND = new EmiTexture(
@@ -82,9 +82,9 @@ public class CopperPotEmiRecipe implements EmiRecipe {
     private static final EmiTexture POT_UNDERLAY = new EmiTexture(
             POT,
             0, 0,
-            POT_SIZE, POT_SIZE,
-            POT_SIZE, POT_SIZE,
-            POT_SIZE, POT_SIZE);
+            WIDTH, HEIGHT,
+            WIDTH, HEIGHT,
+            WIDTH, HEIGHT);
 
     @Getter
     private final CopperPotRecipe recipe;
@@ -162,7 +162,7 @@ public class CopperPotEmiRecipe implements EmiRecipe {
 
         // Heaters
         if (recipe.getMinTemp() > 0) {
-            this.catalysts.add(heatSources());
+            this.catalysts.add(TFGEmiPlugin.heatSources());
         }
 
         this.outputs = new ArrayList<>();
@@ -230,8 +230,8 @@ public class CopperPotEmiRecipe implements EmiRecipe {
         holder.addTexture(POT_UNDERLAY, POT_X, POT_Y);
 
         // Render Item Inputs
-        int inputItemX = POT_X + 14;
-        int inputItemY = POT_Y + 13;
+        int inputItemX = POT_X + 17;
+        int inputItemY = POT_Y + 21;
         int inputIdx = 0;
         for (EmiIngredient ing : this.itemInputs) {
             int col = inputIdx % 3;
@@ -255,19 +255,29 @@ public class CopperPotEmiRecipe implements EmiRecipe {
         }
 
         // Render Copper Pot Block
+        float temp = recipe.getMinTemp();
+        float rpm = 0;
+        int circuit = 0;
+        boolean vacuumPresent = false;
+        boolean vacuumMode = false;
+
         int renderZ = 201;
         int renderScale = 23;
         float renderRotX = -15.5F;
         float renderRotY = 22.5F + 180;
+        int attachmentY = ATTACHMENT_Y;
 
-        holder.add(new EmiBlockWidget(TFGBlocks.COPPER_POT.getDefaultState(), ATTACHMENT_X + 6, ATTACHMENT_Y + SLOT_SIZE, renderZ, renderScale, renderRotX, renderRotY));
-        TFGEmiPlugin.createBlankItemWidget(holder, EmiIngredient.of(Ingredient.of(TFGBlocks.COPPER_POT.asItem())), ATTACHMENT_X, ATTACHMENT_Y + SLOT_SIZE);
+        if (temp <= 0) {
+            attachmentY += 21;
+        }
 
-        float temp = recipe.getMinTemp();
+        holder.add(new EmiBlockWidget(TFGBlocks.COPPER_POT.getDefaultState(), ATTACHMENT_X + 6, attachmentY + SLOT_SIZE, renderZ, renderScale, renderRotX, renderRotY));
+        TFGEmiPlugin.createBlankItemWidget(holder, EmiIngredient.of(Ingredient.of(TFGBlocks.COPPER_POT.asItem())), ATTACHMENT_X, attachmentY + SLOT_SIZE);
 
         // Heat Sources
-        int heatSourceX = ATTACHMENT_X + 6;
-        int heatSourceY = ATTACHMENT_Y + 41;
+        int heatSourceX = ATTACHMENT_X + 7;
+        int heatSourceY = attachmentY + 41;
+        int heatSourceZ = renderZ - 20;
         if (temp > 0) {
             Bounds widgetBounds = new Bounds(heatSourceX, heatSourceY, WIDTH, HEIGHT);
 
@@ -275,18 +285,18 @@ public class CopperPotEmiRecipe implements EmiRecipe {
                     widgetBounds,
                     new EmiBlockWidget(
                             TFCBlocks.CHARCOAL_FORGE.get().defaultBlockState().setValue(CharcoalForgeBlock.HEAT, 3),
-                            heatSourceX, heatSourceY, renderZ, renderScale, renderRotX, renderRotY),
+                            heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
                     new EmiBlockWidget(
                             BeneathBlocks.HELLFORGE.get().defaultBlockState().setValue(HellforgeBlock.HEAT, 3),
-                            heatSourceX, heatSourceY, renderZ, renderScale, renderRotX, renderRotY),
+                            heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
                     new EmiBlockWidget(
                             TFGBlocks.GAS_BURNER.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, 3).setValue(GasBurnerBlock.LIT, true),
-                            heatSourceX, heatSourceY, renderZ, renderScale, renderRotX, renderRotY),
+                            heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
                     new EmiBlockWidget(
                             FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.BRICK).get().defaultBlockState().setValue(OvenBottomBlock.LOGS, 3).setValue(OvenBottomBlock.LIT, true),
-                            heatSourceX, heatSourceY, renderZ, renderScale, renderRotX, renderRotY)));
+                            heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY)));
 
-            holder.add(new SlotWidget(heatSources(), heatSourceX, heatSourceY) {
+            holder.add(new SlotWidget(TFGEmiPlugin.heatSources(), heatSourceX, heatSourceY) {
                 @Override
                 public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
                 }
@@ -297,6 +307,10 @@ public class CopperPotEmiRecipe implements EmiRecipe {
         for (RecipeAttachment attachment : recipe.getAttachments()) {
 
             // Render Condenser
+            int coolantX = ATTACHMENT_X + 6;
+            int coolantY = attachmentY - 25;
+            int condensedFluidX = ATTACHMENT_X + (SLOT_SIZE * 2) + 2;
+            int condensedFluidY = attachmentY + 4;
             if (attachment instanceof CondenserAttachment condenserAttachment) {
                 var coolant = condenserAttachment.coolantCondition();
                 if (coolant != null && coolant.ingredient() != null) {
@@ -304,31 +318,51 @@ public class CopperPotEmiRecipe implements EmiRecipe {
                             .map(fluid -> (EmiIngredient) EmiStack.of(fluid, Math.max(1, coolant.amount())))
                             .toList();
                     if (!fluidStacks.isEmpty()) {
-                        var slot = holder.addSlot(EmiIngredient.of(fluidStacks), inputFluidX + fluidInIdx * SLOT_SIZE, inputFluidY + 38);
+                        var slot = holder.addSlot(EmiIngredient.of(fluidStacks), coolantX, coolantY);
                         if (coolant.maxTemp() != null) {
-                            slot.appendTooltip(Component.literal(String.format("Max Temp: %.0f K", coolant.maxTemp())));
+                            slot.appendTooltip(Component.translatable("tfg.tooltip.condenser.coolant_info"));
+                            slot.appendTooltip(Component.translatable("tfg.tooltip.condenser.coolant_temp", Component.literal(String.format("%.0f", coolant.maxTemp()))));
                         }
-                        fluidInIdx++;
                     }
                 }
+                FluidStack fs = condenserAttachment.fluidOutput();
+                if (!fs.isEmpty()) {
+                    var slot = holder.addSlot(EmiStack.of(fs.getFluid(), fs.getTag(), fs.getAmount()), condensedFluidX, condensedFluidY).recipeContext(this);
+                    slot.appendTooltip(Component.translatable("tfg.tooltip.condenser.condensate_info"));
+                }
 
-                holder.add(new EmiBlockWidget(TFGBlocks.CONDENSER.getDefaultState(), ATTACHMENT_X + 6, ATTACHMENT_Y - 4, renderZ + 10, renderScale, renderRotX, renderRotY + 90));
-                TFGEmiPlugin.createBlankItemWidget(holder, EmiIngredient.of(Ingredient.of(TFGBlocks.CONDENSER.asItem())), ATTACHMENT_X, ATTACHMENT_Y - 6);
+                holder.add(new EmiBlockWidget(TFGBlocks.CONDENSER.getDefaultState(), ATTACHMENT_X + 6, attachmentY - 4, renderZ + 10, renderScale, renderRotX, renderRotY - 90));
+                TFGEmiPlugin.createBlankItemWidget(holder, EmiIngredient.of(Ingredient.of(TFGBlocks.CONDENSER.asItem())), ATTACHMENT_X, attachmentY - 6);
             }
 
             // Render Mixer
             if (attachment instanceof MixerAttachment mixerAttachment) {
-                TFGEmiPlugin.createBasinlessMixerWidget(holder, EmiIngredient.of(getAttachment(mixerAttachment)), ATTACHMENT_X, ATTACHMENT_Y, 1, true);
+                TFGEmiPlugin.createBasinlessMixerWidget(holder, EmiIngredient.of(getAttachment(mixerAttachment)), ATTACHMENT_X, attachmentY, 1, true);
+                if (mixerAttachment.minRpm() != null) {
+                    rpm = mixerAttachment.minRpm();
+                }
+                if (mixerAttachment.circuit() != null) {
+                    circuit = mixerAttachment.circuit();
+                }
+                if (circuit > 0) {
+                    TFGEmiPlugin.createCircuitNumberWidget(holder, circuit, condensedFluidX, condensedFluidY);
+                }
             }
 
             // Render Press
             if (attachment instanceof PressAttachment pressAttachment) {
-                TFGEmiPlugin.createBasinlessPressWidget(holder, EmiIngredient.of(getAttachment(pressAttachment)), ATTACHMENT_X, ATTACHMENT_Y, 1, true);
+                TFGEmiPlugin.createBasinlessPressWidget(holder, EmiIngredient.of(getAttachment(pressAttachment)), ATTACHMENT_X, attachmentY, 1, true);
+                if (pressAttachment.circuit() != null) {
+                    circuit = pressAttachment.circuit();
+                }
+                TFGEmiPlugin.createCircuitNumberWidget(holder, circuit, condensedFluidX, condensedFluidY);
             }
 
             // Render Vacuum Compressor
             if (attachment instanceof VacuumChamberAttachment vacuumChamberAttachment) {
-                TFGEmiPlugin.createBasinlessVacuumChamberWidget(holder, EmiIngredient.of(getAttachment(vacuumChamberAttachment)), ATTACHMENT_X, ATTACHMENT_Y, vacuumChamberAttachment.mode(), true);
+                TFGEmiPlugin.createBasinlessVacuumChamberWidget(holder, EmiIngredient.of(getAttachment(vacuumChamberAttachment)), ATTACHMENT_X, attachmentY, vacuumChamberAttachment.mode(), true);
+                vacuumMode = vacuumChamberAttachment.mode();
+                vacuumPresent = true;
             }
         }
 
@@ -384,28 +418,33 @@ public class CopperPotEmiRecipe implements EmiRecipe {
                 fluidOutIdx++;
             }
         }
-        for (RecipeAttachment attachment : recipe.getAttachments()) {
-            if (attachment instanceof CondenserAttachment condenserAttachment) {
-                FluidStack fs = condenserAttachment.fluidOutput();
-                if (!fs.isEmpty()) {
-                    holder.addSlot(EmiStack.of(fs.getFluid(), fs.getTag(), fs.getAmount()), outputFluidX + fluidOutIdx * SLOT_SIZE, outputFluidY).recipeContext(this);
-                    fluidOutIdx++;
-                }
-            }
-        }
 
-        // Tooltips & text for Time & Temp
+        // Text
+        int fontSize = Minecraft.getInstance().font.lineHeight + 2;
+        int textY = ATTACHMENT_Y + SLOT_SIZE + 60;
+
         MutableComponent formattedTemp = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(temp);
         if (formattedTemp == null) {
             formattedTemp = TFCConfig.CLIENT.heatTooltipStyle.get().formatRange(temp);
         }
-        int textY = heatSourceY + SLOT_SIZE + 8;
+        Component timeText = Component.literal("⌛ ").append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", seconds)));
+        holder.add(new TextWidget(timeText.getVisualOrderText(), inputItemX + SLOT_SIZE + (SLOT_SIZE / 2) - TFGEmiPlugin.centeredTextOffset(timeText), textY, 0xFFFFFF, true));
         if (temp > 0) {
             Component tempText = Component.literal("\uD83D\uDD25 ").append(formattedTemp != null ? formattedTemp : Component.empty());
-            holder.add(new TextWidget(tempText.getVisualOrderText(), heatSourceX + (SLOT_SIZE / 2) - centeredTextOffset(tempText), textY, 0xFFFFFF, true));
+            holder.add(new TextWidget(tempText.getVisualOrderText(), heatSourceX + (SLOT_SIZE / 2) - TFGEmiPlugin.centeredTextOffset(tempText), textY, 0xFFFFFF, true));
+            textY += fontSize;
         }
-        Component timeText = Component.literal("⌛ ").append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", seconds)));
-        holder.add(new TextWidget(timeText.getVisualOrderText(), inputItemX + SLOT_SIZE + (SLOT_SIZE / 2) - centeredTextOffset(timeText), textY, 0xFFFFFF, true));
+        if (rpm > 0) {
+            Component rpmText = Component.translatable("tfg.tooltip.unit.min_rpm", Component.literal(String.format("%.0f", rpm)).withStyle(ChatFormatting.GOLD));
+            holder.add(new TextWidget(rpmText.getVisualOrderText(), heatSourceX + (SLOT_SIZE / 2) - TFGEmiPlugin.centeredTextOffset(rpmText), textY, 0xFFFFFF, true));
+            textY += fontSize;
+        }
+        if (vacuumPresent) {
+            Component vacuumText = Component.translatable("tfg.tooltip.compressor.vacuum_mode").withStyle(ChatFormatting.LIGHT_PURPLE);
+            Component pressureText = Component.translatable("tfg.tooltip.compressor.pressure_mode").withStyle(ChatFormatting.AQUA);
+            Component compressorText = vacuumMode ? pressureText : vacuumText;
+            holder.add(new TextWidget(compressorText.getVisualOrderText(), heatSourceX + (SLOT_SIZE / 2) - TFGEmiPlugin.centeredTextOffset(compressorText), textY, 0xFFFFFF, true));
+        }
 
     }
 
@@ -428,28 +467,5 @@ public class CopperPotEmiRecipe implements EmiRecipe {
             return Ingredient.of(VintageBlocks.VACUUM_CHAMBER.get());
         }
         return Ingredient.EMPTY;
-    }
-
-    /**
-     * Gets heat sources as an EmiIngredient.
-     * @return EmiIngredient list of heat sources.
-     */
-    public static EmiIngredient heatSources() {
-        List<EmiStack> heatersList = new ArrayList<>();
-        heatersList.add(EmiStack.of(TFGBlocks.GAS_BURNER.get().asItem()));
-        for (OvenType type : OvenType.values()) {
-            heatersList.add(EmiStack.of(FLBlocks.CURED_OVEN_BOTTOM.get(type).get().asItem()));
-            heatersList.add(EmiStack.of(FLBlocks.INSULATED_OVEN_BOTTOM.get(type).get().asItem()));
-        }
-        return EmiIngredient.of(heatersList);
-    }
-
-    /**
-     * Gets the negative x-offset of a component to center the text.
-     * @return Text length divided by 2.
-     */
-    public static int centeredTextOffset(Component component) {
-        int tempTextLength = Minecraft.getInstance().font.width(component.getVisualOrderText());
-        return tempTextLength / 2;
     }
 }
