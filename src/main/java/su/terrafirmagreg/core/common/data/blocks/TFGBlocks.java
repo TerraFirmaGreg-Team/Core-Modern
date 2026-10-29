@@ -432,6 +432,7 @@ public final class TFGBlocks {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE)
             .loot(RegistrateBlockLootTables::dropSelf)
             .item(BlockItem::new)
+            .tag(TFCTags.Items.USABLE_ON_TOOL_RACK)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/skillet")))
             .build()
             .register();

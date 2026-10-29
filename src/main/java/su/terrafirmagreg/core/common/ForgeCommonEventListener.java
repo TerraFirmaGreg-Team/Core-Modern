@@ -183,7 +183,7 @@ public final class ForgeCommonEventListener {
                 if (blockItem.getBlock() instanceof SkilletBlock) {
 
                     level.playSound(null, target.getX(), target.getY(), target.getZ(),
-                            SoundEvents.BELL_BLOCK, SoundSource.AMBIENT, 3.0F, 0.1F);
+                            SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 3.0F, 0.1F);
 
                     target.knockback(2.0F, player.getX() - target.getX(), player.getZ() - target.getZ());
                 }

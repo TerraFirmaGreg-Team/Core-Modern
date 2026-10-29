@@ -3,11 +3,15 @@ package su.terrafirmagreg.core.common.block.appliances;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.capabilities.size.IItemSize;
+import net.dries007.tfc.common.capabilities.size.Size;
+import net.dries007.tfc.common.capabilities.size.Weight;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -19,7 +23,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 
-public class SkilletBlock extends CookingApplianceBlock {
+public class SkilletBlock extends CookingApplianceBlock implements IItemSize {
 
     protected static final VoxelShape SHAPE = Shapes.or(
             Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D),
@@ -77,6 +81,16 @@ public class SkilletBlock extends CookingApplianceBlock {
                 }
             }
         }
+    }
+
+    @Override
+    public Size getSize(ItemStack stack) {
+        return Size.NORMAL;
+    }
+
+    @Override
+    public Weight getWeight(ItemStack stack) {
+        return Weight.HEAVY;
     }
 
     @SuppressWarnings("deprecation")
