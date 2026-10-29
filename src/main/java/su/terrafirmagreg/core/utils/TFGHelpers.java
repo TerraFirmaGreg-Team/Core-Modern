@@ -24,6 +24,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import dev.ftb.mods.ftbquests.quest.QuestObjectBase;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 
@@ -111,5 +113,13 @@ public final class TFGHelpers {
         } else {
             return duration;
         }
+    }
+
+    /**
+     * Quest IDs are longs (64-bit integers). In javascript, everything is a 64-bit FLOAT.
+     * So trying to use quest IDs in kubejs rounds them, which we don't want.
+     */
+    public static String getQuestID(QuestObjectBase quest) {
+        return String.valueOf(quest.getId());
     }
 }

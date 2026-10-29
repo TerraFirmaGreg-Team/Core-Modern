@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blockentities;
 
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -44,6 +45,7 @@ public abstract class InventoryBlockEntity<C extends IItemHandlerModifiable & IN
         return self -> new InventoryItemHandler(self, slots);
     }
 
+	@Getter
     protected final C inventory;
     protected final SidedHandler.Builder<IItemHandler> sidedInventory;
     @Nullable protected Component customName;

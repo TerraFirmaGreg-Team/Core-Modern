@@ -34,6 +34,11 @@ public class ScrapingBlockEntity extends InventoryBlockEntity<ItemStackHandler>
     @Nullable private DyeColor color1 = null;
     @Nullable private DyeColor color2 = null;
 
+	public static boolean checkPosition(short data, int x, int z, int value)
+	{
+		return ((data >> (x + 4 * z)) & 1) == value;
+	}
+
     public ScrapingBlockEntity(BlockPos pos, BlockState state)
     {
         super(TFCBlockEntities.SCRAPING.get(), pos, state, defaultInventory(1), NAME);
@@ -53,6 +58,9 @@ public class ScrapingBlockEntity extends InventoryBlockEntity<ItemStackHandler>
     {
         int xPos = (int) (hitX * 4);
         int zPos = (int) (hitZ * 4);
+		if (checkPosition(positions, xPos, zPos, 1))
+			return;
+
         positions |= 1 << (xPos + zPos * 4);
 
         assert level != null;
@@ -144,6 +152,13 @@ public class ScrapingBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         return outputTexture;
     }
 
+	@Override
+	public void setAndUpdateSlots(int slot)
+	{
+		updateDisplayCache();
+		super.setAndUpdateSlots(slot);
+	}
+
     public void updateDisplayCache()
     {
         if (!isComplete())
@@ -156,7 +171,7 @@ public class ScrapingBlockEntity extends InventoryBlockEntity<ItemStackHandler>
     }
 
     @Nullable
-    private ScrapingRecipe getRecipe(ItemStack stack)
+    public ScrapingRecipe getRecipe(ItemStack stack)
     {
         assert level != null;
         return ScrapingRecipe.getRecipe(level, new ItemStackInventory(stack));
