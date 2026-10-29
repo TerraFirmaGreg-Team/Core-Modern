@@ -226,6 +226,7 @@ import net.dries007.tfc.util.tracker.WeatherHelpers;
 import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.util.tracker.WorldTrackerCapability;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
+import net.dries007.tfc.world.FluidPostProcess;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
 import su.terrafirmagreg.core.common.block.GasBurnerBlock;
@@ -684,6 +685,11 @@ public final class ForgeEventHandler
             event.setResult(Event.Result.DENY); // Waterlogged aqueducts do not count as the source when creating source blocks
         }
 
+        if (FluidPostProcess.inPostProcess)
+        {
+            return; // Worldgen never places sluices to my knowledge
+        }
+
         for (Direction direction : Direction.Plane.HORIZONTAL)
         {
             final BlockPos relPos = pos.relative(direction).above();
@@ -1112,13 +1118,13 @@ public final class ForgeEventHandler
                     event.setCanceled(true);
                 }
             }
-
-			// For some reason, installing TFC caelum makes slimes spawn on the surface, so here's an extra check
-			if (entity.getType() == EntityType.SLIME && event.getLevel().getRawBrightness(entity.blockPosition(), 0) != 0) {
-				event.setSpawnCancelled(true);
-				event.setCanceled(true);
-			}
         }
+
+		// For some reason, installing TFC caelum makes slimes spawn on the surface, so here's an extra check
+		if (entity.getType() == EntityType.SLIME && event.getLevel().getRawBrightness(entity.blockPosition(), 0) != 0) {
+			event.setSpawnCancelled(true);
+			event.setCanceled(true);
+		}
     }
 
     /**

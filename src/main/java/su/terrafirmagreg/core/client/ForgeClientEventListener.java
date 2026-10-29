@@ -20,18 +20,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
+import su.terrafirmagreg.core.client.renderer.CloudRendererHelper;
+import su.terrafirmagreg.core.client.renderer.SkyboxRenderer;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelRenderer;
@@ -111,6 +116,9 @@ public class ForgeClientEventListener {
             event.register(magmaColor, registryObject.get());
         });
 
+        event.register((bs, batg, bp, i) -> 0xe8e8d8, TFGBlocks.SULFUR_FUMES.get());
+        event.register((bs, batg, bp, i) -> 0xa3c0cc, TFGBlocks.GEYSER_SLURRY.get());
+
         AsphaltRoadColorHandlers.registerBlocks(event);
     }
 
@@ -130,5 +138,17 @@ public class ForgeClientEventListener {
                 .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
         event.registerEntityRenderer(TFGEntities.BACTRIAN_CAMEL.get(),
                 ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
+    }
+
+    @SubscribeEvent
+    public static void onRenderLevelStageEvent(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
+            SkyboxRenderer.renderVenusSky(event);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        CloudRendererHelper.onClientTick();
     }
 }

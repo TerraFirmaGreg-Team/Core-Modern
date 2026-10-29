@@ -30,7 +30,7 @@ public class HeightmapMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void inject$init(String key, int usage, String opaque, Heightmap.Usage usageType,
             Predicate<BlockState> predicate, CallbackInfo ci) {
-        if (key.equals("OCEAN_FLOOR")) {
+        if (key.equals("OCEAN_FLOOR") || key.equals("OCEAN_FLOOR_WG")) {
             final Predicate<BlockState> finalPredicate = predicate;
             isOpaque = state -> finalPredicate.test(state) && !state.is(TFGTags.Blocks.HeightmapIgnore);
         }

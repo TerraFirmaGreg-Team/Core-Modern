@@ -1,0 +1,28 @@
+{
+  "values": [
+    "tfg:sandstone/raw/fluorapatite/white",
+    "tfg:sandstone/raw/fluorapatite/yellow",
+    "tfg:sandstone/raw/fluorapatite/orange",
+    "tfg:sandstone/raw/fluorapatite/brown",
+    "tfg:sandstone/raw/fluorapatite/blue",
+    "tfg:sandstone/raw/fluorapatite/green",
+    "tfg:sandstone/smooth/fluorapatite/white",
+    "tfg:sandstone/smooth/fluorapatite/yellow",
+    "tfg:sandstone/smooth/fluorapatite/orange",
+    "tfg:sandstone/smooth/fluorapatite/brown",
+    "tfg:sandstone/smooth/fluorapatite/blue",
+    "tfg:sandstone/smooth/fluorapatite/green",
+    "tfg:sandstone/chiseled/fluorapatite/white",
+    "tfg:sandstone/chiseled/fluorapatite/yellow",
+    "tfg:sandstone/chiseled/fluorapatite/orange",
+    "tfg:sandstone/chiseled/fluorapatite/brown",
+    "tfg:sandstone/chiseled/fluorapatite/blue",
+    "tfg:sandstone/chiseled/fluorapatite/green",
+    "tfg:sandstone/cut/fluorapatite/white",
+    "tfg:sandstone/cut/fluorapatite/yellow",
+    "tfg:sandstone/cut/fluorapatite/orange",
+    "tfg:sandstone/cut/fluorapatite/brown",
+    "tfg:sandstone/cut/fluorapatite/blue",
+    "tfg:sandstone/cut/fluorapatite/green"
+  ]
+}

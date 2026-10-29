@@ -77,7 +77,6 @@ public class CommonProxy {
         TFGRecipeTypes.RECIPE_TYPES.register(bus);
         TFGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
         TFGEvents.register();
-        TFGCarvers.CARVERS.register(bus);
         TFGStructureProcessors.STRUCTURE_PROCESSORS.register(bus);
         TFGLootConditions.LOOT_CONDITIONS.register(bus);
 

@@ -3,21 +3,35 @@ package su.terrafirmagreg.core.mixins.common.arthropocolypse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
 
-@Mixin(targets = "dev.dh.arthropocolypse.entity.Ice_Crawler")
-public class IceCrawlerMixin {
+import dev.dh.arthropocolypse.entity.Ice_Crawler;
 
-    // registerGoals
-    @SuppressWarnings("DataFlowIssue")
-    @Inject(method = "registerGoals", at = @At("TAIL"))
-    protected void tfg$registerGoals(CallbackInfo ci) {
-        PathfinderMob mob = (PathfinderMob) (Object) this;
+@Mixin(value = Ice_Crawler.class, remap = false)
+public class IceCrawlerMixin extends PathfinderMob {
 
-        mob.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(mob, Player.class, true, true));
+    protected IceCrawlerMixin(EntityType<? extends PathfinderMob> entityType, Level level) {
+        super(entityType, level);
+    }
+
+    @Inject(method = "createAttributes", at = @At("HEAD"), remap = false, cancellable = true)
+    private static void tfg$createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
+        cir.setReturnValue(Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 70.0F)
+                .add(Attributes.ARMOR, 6.0F)
+                .add(Attributes.MOVEMENT_SPEED, 0.2)
+                .add(Attributes.ATTACK_DAMAGE, 12));
+    }
+
+    @Override
+    public boolean fireImmune() {
+        return true;
     }
 }

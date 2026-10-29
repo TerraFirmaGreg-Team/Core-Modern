@@ -75,7 +75,7 @@ public class TFGFluids {
                     .density(0)
                     .canSwim(true)
                     .descriptionId("fluid.tfg.sulfur_fumes"),
-            new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
+            new FluidTypeClientProperties(ALPHA_MASK | 0xe8e8d8,
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/sulfur_fumes_still"),
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/sulfur_fumes_flow"),
                     null, null),
@@ -102,7 +102,7 @@ public class TFGFluids {
                     .temperature(1300)
                     .canPushEntity(true)
                     .descriptionId("fluid.tfg.geyser_slurry"),
-            new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
+            new FluidTypeClientProperties(ALPHA_MASK | 0xa3c0cc,
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_still"),
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_flow"),
                     null, null),
@@ -220,6 +220,15 @@ public class TFGFluids {
                 fluidState -> {
                     if (fluidState.isSource())
                         return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return Blocks.DRIPSTONE_BLOCK.defaultBlockState();
+                }));
+
+        FluidInteractionRegistry.addInteraction(SULFUR_FUMES.getSource().getFluidType(), new FluidInteractionRegistry.InteractionInformation(
+                GEYSER_SLURRY.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return AllPaletteStoneTypes.SCORIA.getBaseBlock().get().defaultBlockState();
                     else
                         return Blocks.DRIPSTONE_BLOCK.defaultBlockState();
                 }));

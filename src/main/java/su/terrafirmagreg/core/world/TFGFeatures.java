@@ -73,6 +73,8 @@ public class TFGFeatures {
     // A copy of minecraft:large_dripstone but uses the local tfc rock block
     public static final RegistryObject<LargeDripstoneFeature> LARGE_DRIPSTONE = register(
             "large_dripstone", LargeDripstoneFeature::new, LargeDripstoneConfig.CODEC);
+    public static final RegistryObject<SurfaceSpikeFeature> SURFACE_SPIKE = register(
+            "surface_spike", SurfaceSpikeFeature::new, SurfaceSpikeConfig.CODEC);
     // A copy of minecraft:waterlogged_vegetation_patch but with an arbitrary fluid
     public static final RegistryObject<FluidloggedVegetationPatchFeature> FLUIDLOGGED_VEGETATION_PATCH = register(
             "fluidlogged_vegetation_patch", FluidloggedVegetationPatchFeature::new, FluidloggedVegetationPatchConfig.CODEC);

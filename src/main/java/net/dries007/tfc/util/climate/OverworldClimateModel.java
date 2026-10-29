@@ -217,13 +217,18 @@ public class OverworldClimateModel implements WorldGenClimateModel
         return 1f;
     }
 
-    @Override
-    public Vec2 getWindVector(Level level, BlockPos pos, long calendarTime)
+	@Override
+	public Vec2 getWindVector(Level level, BlockPos pos, long calendarTime)
+	{
+		return getOverworldWindVector(level, pos, calendarTime, climateSeed, SEA_LEVEL);
+	}
+
+    public static Vec2 getOverworldWindVector(Level level, BlockPos pos, long calendarTime, long climateSeed, float seaLevel)
     {
         final int y = pos.getY();
-        if (y < SEA_LEVEL - 6)
+        if (y < seaLevel - 6)
             return Vec2.ZERO;
-        final Random random = seededRandom(ICalendar.getTotalDays(calendarTime), 129341623413L);
+        final Random random = seededRandom(climateSeed, ICalendar.getTotalDays(calendarTime), 129341623413L);
 
         final Holder<Biome> biome = level.getBiome(pos);
         if (biome.is(TFCTags.Biomes.HAS_PREDICTABLE_WINDS))
@@ -249,7 +254,7 @@ public class OverworldClimateModel implements WorldGenClimateModel
 
         final float preventFrequentWindyDays = random.nextFloat() < 0.1f ? 1f : random.nextFloat();
         final float intensity = Math.min(0.5f * random.nextFloat() * preventFrequentWindyDays
-            + 0.4f * Mth.clampedMap(y, SEA_LEVEL, SEA_LEVEL + 65, 0f, 1f)
+            + 0.4f * Mth.clampedMap(y, seaLevel, seaLevel + 65, 0f, 1f)
             + 0.6f * level.getRainLevel(0f), 1f);
         final float angle = random.nextFloat() * Mth.TWO_PI;
         return new Vec2(Mth.cos(angle), Mth.sin(angle)).scale(intensity);
@@ -347,8 +352,13 @@ public class OverworldClimateModel implements WorldGenClimateModel
 
     protected Random seededRandom(long day, long salt)
     {
-        long seed = LinearCongruentialGenerator.next(climateSeed, day);
-        seed = LinearCongruentialGenerator.next(seed, salt);
-        return new Random(seed);
+		return seededRandom(climateSeed, day, salt);
     }
+
+	protected static Random seededRandom(long climateSeed, long day, long salt)
+	{
+		long seed = LinearCongruentialGenerator.next(climateSeed, day);
+		seed = LinearCongruentialGenerator.next(seed, salt);
+		return new Random(seed);
+	}
 }

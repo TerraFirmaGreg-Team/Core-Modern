@@ -61,6 +61,7 @@ public final class TFGBlocks {
     public static void init() {
         TFGBlocks_Earth.init();
         TFGBlocks_Mars.init();
+        TFGBlocks_Venus.init();
         TFGBlocks_Casings.init();
         TFGBlocks_Buds.init();
         TFGBlocks_Wood.init();
@@ -222,13 +223,15 @@ public final class TFGBlocks {
             p -> new LiquidBlock(TFGFluids.SULFUR_FUMES.source(), p))
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .initialProperties(() -> Blocks.WATER)
-            .properties(p -> p.mapColor(MapColor.NONE).noLootTable().noCollission())
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).noLootTable().noCollission())
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xe8e8d8))
             .register();
 
     public static final BlockEntry<LiquidBlock> GEYSER_SLURRY = TFGCore.REGISTRATE.block("fluid/geyser_slurry", p -> new LiquidBlock(TFGFluids.GEYSER_SLURRY.source(), p))
             .initialProperties(() -> Blocks.WATER)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable())
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xa3c0cc))
             .register();
 
     ///// Misc blocks
