@@ -8,7 +8,7 @@
         {"type": "minecraft:in_square"},
         {
             "distance": 0.84,
-            "type": "tfg:tuya"
+            "type": "tfc:tuya"
         }
     ],
     "__comment__": "This file was automatically created by mcresources"

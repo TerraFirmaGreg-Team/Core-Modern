@@ -1,0 +1,18 @@
+{
+    "feature": "tfg:earth/wizard_island_lava",
+    "placement": [
+        {
+            "center": true,
+            "variant": "crater_lake",
+            "hash_max": 0.6,
+            "hash_min": 0,
+            "type": "tfc:stratovolcano",
+            "use_offset_center": true
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

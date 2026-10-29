@@ -1,7 +1,8 @@
 {
     "values": [
         "#tfc:feature/boulders",
-        "#tfg:feature/volcanoes",
+        "#tfg:feature/cinder_cones",
+        "#tfg:feature/volcanic",
         "tfg:earth/forest",
         "tfc:rare_bamboo",
         "tfc:bamboo",

@@ -12,7 +12,12 @@
         "tfg:earth/embayments",
         "tfg:earth/shield_volcano_shore",
         "tfg:earth/old_shield_volcano_shore",
-        "tfg:earth/ice_sheet_shore"
+        "tfg:earth/ice_sheet_shore",
+        "tfg:earth/oceanic_volcanic_arc",
+        "tfg:earth/ocean_atolls",
+        "tfg:earth/deep_ocean_atolls",
+        "tfg:earth/volcanic_mountain_islands",
+        "tfg:earth/volcanic_island"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

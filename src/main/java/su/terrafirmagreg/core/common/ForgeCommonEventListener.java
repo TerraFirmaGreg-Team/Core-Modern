@@ -266,6 +266,7 @@ public final class ForgeCommonEventListener {
         event.getAllMappings(Registries.BLOCK).forEach(ForgeCommonEventListener::remapBlocks);
         event.getAllMappings(Registries.ITEM).forEach(ForgeCommonEventListener::remapItems);
         event.getAllMappings(Registries.BLOCK_ENTITY_TYPE).forEach(ForgeCommonEventListener::remapBlockEntities);
+        event.getAllMappings(Registries.BIOME).forEach(ForgeCommonEventListener::remapBiomes);
     }
 
     private static void remapBlocks(MissingMappingsEvent.Mapping<Block> mapping) {
@@ -323,5 +324,24 @@ public final class ForgeCommonEventListener {
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlockEntityType());
+    }
+
+    private static void remapBiomes(MissingMappingsEvent.Mapping<Biome> mapping) {
+        if (!mapping.getKey().getNamespace().equals("tfc"))
+            return;
+
+        String path = mapping.getKey().getPath();
+        // This biome no longer exists
+        if (path.equals("inverted_badlands"))
+            path = "hoodoos";
+
+        var found = mapping.getRegistry().getValue(TFGCore.id("earth/" + path));
+        if (found != null) {
+            mapping.remap(found);
+        } else {
+            // Fallback
+            TFGCore.LOGGER.warn("Failed to remap old TFC biome: {}, using tfg:earth/ocean as a fallback", mapping.getKey());
+            mapping.remap(mapping.getRegistry().getValue(TFGCore.id("earth/ocean")));
+        }
     }
 }

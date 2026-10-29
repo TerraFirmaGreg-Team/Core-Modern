@@ -1,0 +1,18 @@
+{
+    "feature": "tfg:earth/sapphire_volcano_spring_water_fissure",
+    "placement": [
+        {
+            "center": true,
+            "variant": "kelimutu",
+            "hash_max": 0.75,
+            "hash_min": 0.25,
+            "type": "tfc:stratovolcano",
+            "use_offset_center": true
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

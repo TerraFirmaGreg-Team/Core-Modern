@@ -1,0 +1,12 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_random_selector",
+    "config": {"features": [
+        "tfg:earth/tahoma_sapphire_volcano_spring_water_fissure",
+        "tfg:earth/tahoma_sapphire_volcano_spring_water_fissure",
+        "tfg:earth/tahoma_emerald_volcano_spring_water_fissure",
+        "tfg:earth/tahoma_emerald_volcano_spring_water_fissure",
+        "tfg:earth/tahoma_volcano_spring_water_fissure",
+        "tfg:earth/tahoma_volcano_spring_water_fissure"
+    ]}
+}

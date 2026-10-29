@@ -22,7 +22,13 @@
         "tfg:earth/knob_and_kettle",
         "tfg:earth/patterned_ground",
         "tfg:earth/inverted_patterned_ground",
-        "tfg:earth/stone_circles"
+        "tfg:earth/stone_circles",
+        "tfg:earth/ice_sheet_volcanic_mountains",
+        "tfg:earth/ice_sheet_volcanic_oceanic_mountains",
+        "tfg:earth/glaciated_volcanic_mountains",
+        "tfg:earth/glaciated_volcanic_oceanic_mountains",
+        "tfg:earth/glacially_carved_volcanic_mountains",
+        "tfg:earth/glacially_carved_volcanic_oceanic_mountains"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

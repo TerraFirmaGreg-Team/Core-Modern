@@ -7,9 +7,11 @@
 package net.dries007.tfc.world.surface.builder;
 
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
+import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class LowlandsSurfaceBuilder implements SurfaceBuilder
@@ -18,15 +20,16 @@ public class LowlandsSurfaceBuilder implements SurfaceBuilder
 
     private final Noise2D surfaceMaterialNoise;
 
-    public LowlandsSurfaceBuilder(long seed)
+    public LowlandsSurfaceBuilder(Seed seed)
     {
-        surfaceMaterialNoise = new OpenSimplex2D(seed).octaves(2).spread(0.04f);
+        surfaceMaterialNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.04f);
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
         final float noise = (float) surfaceMaterialNoise.noise(context.pos().getX(), context.pos().getZ()) * 0.9f + context.random().nextFloat() * 0.1f;
-        NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, noise < 0f ? SurfaceStates.GRASS : SurfaceStates.MUD, SurfaceStates.MUD, SurfaceStates.DIRT, noise > 0 ? SurfaceStates.DIRT : SurfaceStates.MUD, SurfaceStates.MUD);
+        final SurfaceState mud = context.rainfall() < 130f ? SurfaceStates.DRY_MUD : SurfaceStates.MUD;
+        NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, noise < 0f ? SurfaceStates.TOP_GRASS_TO_GRAVEL : mud, mud, SurfaceStates.MID_DIRT_TO_GRAVEL, noise > 0 ? SurfaceStates.MID_DIRT_TO_GRAVEL : mud, mud);
     }
 }

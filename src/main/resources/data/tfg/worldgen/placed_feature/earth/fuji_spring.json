@@ -1,0 +1,16 @@
+{
+    "feature": "tfg:earth/fuji_spring",
+    "placement": [
+        {
+            "center": true,
+            "variant": "fuji",
+            "hash_min": 0.8,
+            "type": "tfc:stratovolcano"
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

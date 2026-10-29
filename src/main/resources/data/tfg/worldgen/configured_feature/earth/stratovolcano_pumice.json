@@ -1,0 +1,11 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "state": {
+            "Properties": {"fluid": "empty"},
+            "Name": "tfc:groundcover/pumice"
+        },
+        "type": "minecraft:simple_state_provider"
+    }}
+}

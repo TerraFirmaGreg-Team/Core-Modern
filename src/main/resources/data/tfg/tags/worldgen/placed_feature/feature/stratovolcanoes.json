@@ -1,0 +1,28 @@
+{
+    "values": [
+        "tfg:earth/stratovolcano_pumice_patch",
+        "tfg:earth/fuji_caldera",
+        "tfg:earth/fuji_spring",
+        "tfg:earth/kelimutu_lava",
+        "tfg:earth/kelimutu_spring_water",
+        "tfg:earth/kelimutu_water",
+        "tfg:earth/tahoma_caldera",
+        "tfg:earth/tahoma_spring",
+        "tfg:earth/wizard_island_lava",
+        "tfg:earth/wizard_island_spring",
+        "tfg:earth/random_fuji_fissure",
+        "tfg:earth/random_fuji_spring_water_fissure",
+        "tfg:earth/random_tahoma_fissure",
+        "tfg:earth/random_tahoma_spring_water_fissure",
+        "tfg:earth/random_kelimutu_fissure",
+        "tfg:earth/random_kelimutu_spring_water_fissure",
+        "tfg:earth/random_crater_lake_fissure",
+        "tfg:earth/random_crater_lake_spring_water_fissure",
+        "tfg:earth/fuji_rivulet",
+        "tfg:earth/tahoma_rivulet",
+        "tfg:earth/crater_lake_rivulet",
+        "tfg:earth/crater_lake_sulfur"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}
