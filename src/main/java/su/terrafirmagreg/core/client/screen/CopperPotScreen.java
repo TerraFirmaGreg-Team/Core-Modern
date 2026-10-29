@@ -33,6 +33,7 @@ import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBloc
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.container.CopperPotContainer;
 import su.terrafirmagreg.core.compat.emi.TFGEmiPlugin;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 @SuppressWarnings({ "FieldCanBeLocal", "NoTranslation", "unused" })
 public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, CopperPotContainer> {
@@ -271,13 +272,8 @@ public class CopperPotScreen extends BlockEntityScreen<CopperPotBlockEntity, Cop
             }
 
             if (blockEntity.getCookingTicks() > 0) {
-                int remainingTicks = Math.max(0, blockEntity.getMaxDuration() - blockEntity.getCookingTicks());
-                float remainingSeconds = (float) remainingTicks / 20.0f;
-
                 progressTooltip.add(Component.empty());
-                MutableComponent timerIcon = ((int) remainingSeconds % 2 != 0) ? Component.literal("⏳ ") : Component.literal("⌛ ");
-                Component timerText = timerIcon.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
-                progressTooltip.add(timerText);
+                progressTooltip.add(TFGHelpers.formattedTimer(blockEntity.getCookingTicks(), blockEntity.getMaxDuration()));
             }
 
             graphics.renderComponentTooltip(font, progressTooltip, mouseX, mouseY);

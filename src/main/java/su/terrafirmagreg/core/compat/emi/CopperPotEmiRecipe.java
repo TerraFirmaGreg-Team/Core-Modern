@@ -49,6 +49,7 @@ import su.terrafirmagreg.core.common.recipe.attachment.RecipeAttachment;
 import su.terrafirmagreg.core.common.recipe.attachment.VacuumChamberAttachment;
 import su.terrafirmagreg.core.compat.emi.widgets.CyclingWidget;
 import su.terrafirmagreg.core.compat.emi.widgets.EmiBlockWidget;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 @SuppressWarnings({ "UnnecessaryLocalVariable", "NoTranslation" })
 public class CopperPotEmiRecipe implements EmiRecipe {
@@ -427,7 +428,7 @@ public class CopperPotEmiRecipe implements EmiRecipe {
         if (formattedTemp == null) {
             formattedTemp = TFCConfig.CLIENT.heatTooltipStyle.get().formatRange(temp);
         }
-        Component timeText = Component.literal("⌛ ").append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", seconds)));
+        Component timeText = TFGHelpers.formatTime(recipe.getDuration());
         holder.add(new TextWidget(timeText.getVisualOrderText(), inputItemX + SLOT_SIZE + (SLOT_SIZE / 2) - TFGEmiPlugin.centeredTextOffset(timeText), textY, 0xFFFFFF, true));
         if (temp > 0) {
             Component tempText = Component.literal("\uD83D\uDD25 ").append(formattedTemp != null ? formattedTemp : Component.empty());

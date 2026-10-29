@@ -13,6 +13,7 @@ import snownee.jade.api.config.IPluginConfig;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.recipe.CookingApplianceRecipe;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 public class CookingApplianceProvider implements IBlockComponentProvider {
 
@@ -37,13 +38,7 @@ public class CookingApplianceProvider implements IBlockComponentProvider {
             // Cooking timer.
             CookingApplianceRecipe recipe = appliance.getCachedRecipe();
             if (recipe != null && appliance.getCookingTicks() > 0) {
-                int remainingTicks = Math.max(0, appliance.getMaxDuration() - appliance.getCookingTicks());
-                float remainingSeconds = (float) remainingTicks / 20.0f;
-
-                MutableComponent timerIcon = ((int) remainingSeconds % 2 != 0) ? Component.literal("⏳ ") : Component.literal("⌛ ");
-                Component timerText = timerIcon.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
-
-                tooltip.add(timerText);
+                tooltip.add(TFGHelpers.formattedTimer(appliance.getCookingTicks(), appliance.getMaxDuration()));
                 // Errors
             } else if (appliance.getRecipeError() != CookingApplianceBlockEntity.CookingError.NONE) {
                 tooltip.add(appliance.getRecipeError().getTooltipComponent());
