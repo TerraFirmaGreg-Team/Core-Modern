@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blocks.devices;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -135,7 +136,7 @@ public class BurningLogPileBlock extends BaseEntityBlock implements IForgeBlockE
             {
                 level.playLocalSound(x, y, z, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.5F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.6F, false);
             }
-            level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, (0.5F - rand.nextFloat()) / 10, 0.1f + rand.nextFloat() / 8, (0.5F - rand.nextFloat()) / 10);
+            level.addParticle(TFCParticles.SMOKE_1.get(), x, y, z, (0.5F - rand.nextFloat()) / 10, 0.1f + rand.nextFloat() / 8, (0.5F - rand.nextFloat()) / 10);
         }
     }
 

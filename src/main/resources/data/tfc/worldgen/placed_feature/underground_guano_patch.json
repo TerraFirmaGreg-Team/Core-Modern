@@ -2,7 +2,7 @@
     "feature": "tfc:underground_guano_patch",
     "placement": [
         {
-            "chance": 40,
+            "chance": 20,
             "type": "minecraft:rarity_filter"
         },
         {
