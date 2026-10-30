@@ -28,10 +28,13 @@ public abstract class AlloyRecipeCategoryMixin {
             inputMaterial = GTMaterials.Aluminium;
         }
 
-        for (MaterialStack component : resultMaterial.getMaterialComponents()) {
-            if (component.material().equals(inputMaterial)) {
-                amount = (int) component.amount();
-                break;
+        var components = resultMaterial.getMaterialComponents();
+        if (components != null) {
+            for (MaterialStack component : components) {
+                if (component.material().equals(inputMaterial)) {
+                    amount = (int) component.amount();
+                    break;
+                }
             }
         }
 
