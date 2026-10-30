@@ -106,7 +106,7 @@ public class WorldgenData extends SavedData {
         setDirty();
     }
 
-    public static MountainScaling createCycleButtonValue() {
+    public static MountainScaling currentOrDefaultMountainScaling() {
         if (MOUNTAIN_SCALING != null)
             return MOUNTAIN_SCALING;
         else

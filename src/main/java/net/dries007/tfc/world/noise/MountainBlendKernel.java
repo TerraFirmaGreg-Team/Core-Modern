@@ -3,7 +3,7 @@ package net.dries007.tfc.world.noise;
 import su.terrafirmagreg.core.world.WorldgenData;
 
 public class MountainBlendKernel {
-	public static volatile Kernel KERNEL = rebuild(WorldgenData.MOUNTAIN_SCALING.heightBlend());
+	public static volatile Kernel KERNEL = rebuild(WorldgenData.currentOrDefaultMountainScaling().heightBlend());
 
 	public static Kernel rebuild(int radius)
 	{

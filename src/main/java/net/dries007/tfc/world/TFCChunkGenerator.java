@@ -474,7 +474,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     @Override
     public int getGenDepth()
     {
-		return WorldgenData.MOUNTAIN_SCALING.dimHeight();
+		return WorldgenData.currentOrDefaultMountainScaling().dimHeight();
     }
 
     @Override
@@ -632,7 +632,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         final int cellWidth = noiseSettings.getCellWidth();
         final int cellHeight = noiseSettings.getCellHeight();
 
-		final int dimHeight = WorldgenData.MOUNTAIN_SCALING.dimHeight();
+		final int dimHeight = WorldgenData.currentOrDefaultMountainScaling().dimHeight();
 
         final int minY = Math.max(noiseSettings.minY(), level.getMinBuildHeight());
         final int maxY = Math.min(noiseSettings.minY() + dimHeight, level.getMaxBuildHeight());

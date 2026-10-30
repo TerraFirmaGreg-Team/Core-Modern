@@ -160,7 +160,7 @@ public class BiomeExtension
 		if (!isVolcanoBiome())
 			return centeredFeatureBaseHeight;
 
-		return (int) Math.round(centeredFeatureBaseHeight * WorldgenData.MOUNTAIN_SCALING.volcanoHeightScale());
+		return (int) Math.round(centeredFeatureBaseHeight * WorldgenData.currentOrDefaultMountainScaling().volcanoHeightScale());
 	}
 
 	public int getCenteredFeatureScaleHeight()
@@ -168,7 +168,7 @@ public class BiomeExtension
 		if (!isVolcanoBiome())
 			return centeredFeatureScaleHeight;
 
-		return (int) Math.round(centeredFeatureScaleHeight * WorldgenData.MOUNTAIN_SCALING.volcanoHeightScale());
+		return (int) Math.round(centeredFeatureScaleHeight * WorldgenData.currentOrDefaultMountainScaling().volcanoHeightScale());
 	}
 
 	public boolean getCenteredFeatureIce()
