@@ -497,7 +497,8 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
 
     protected void updateRecipe()
     {
-        assert level != null;
+		if (level == null)
+			return;
 
         final SealedBarrelRecipe oldRecipe = recipe;
         if (inventory.excess.isEmpty())
