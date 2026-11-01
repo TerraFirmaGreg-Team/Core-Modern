@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.RegisterEvent;
 
@@ -144,15 +143,16 @@ public final class CustomArmInteractionPointTypes {
             return Direction.UP;
         }
 
+        @SuppressWarnings("DataFlowIssue")
         @Override
+        @Nullable
         protected IItemHandler getHandler() {
             if (!cachedHandler.isPresent()) {
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be == null) {
                     return null;
                 }
-                LazyOptional<IItemHandler> handler = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
-                cachedHandler = handler;
+                cachedHandler = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
             }
             return cachedHandler.orElse(null);
         }
@@ -254,6 +254,7 @@ public final class CustomArmInteractionPointTypes {
             return -1;
         }
 
+        @SuppressWarnings("DataFlowIssue")
         @Override
         @Nullable
         protected IItemHandler getHandler() {
