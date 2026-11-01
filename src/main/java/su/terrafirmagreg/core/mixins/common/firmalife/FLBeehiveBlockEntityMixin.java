@@ -1,23 +1,20 @@
 package su.terrafirmagreg.core.mixins.common.firmalife;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.eerussianguy.firmalife.common.blockentities.ClimateReceiver;
 import com.eerussianguy.firmalife.common.blockentities.ClimateType;
 import com.eerussianguy.firmalife.common.blockentities.FLBeehiveBlockEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-
 import net.dries007.tfc.common.blockentities.TickableInventoryBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.environment.IGreenhouseReceiver;
 
@@ -37,12 +34,12 @@ public abstract class FLBeehiveBlockEntityMixin implements ClimateReceiver, IGre
         this.tfg$insideValidGreenhouse = false;
     }
 
-    @Inject(method = "loadAdditional", at = @At("RETURN"))
+    @Inject(method = "loadAdditional", at = @At("RETURN"), remap = true)
     public void tfg$injectGreenhouseValidityOnLoad(CallbackInfo ci, @Local(argsOnly = true) CompoundTag nbt) {
         tfg$insideValidGreenhouse = nbt.getBoolean("inValidGreenhouse");
     }
 
-    @Inject(method = "saveAdditional", at = @At("RETURN"))
+    @Inject(method = "saveAdditional", at = @At("RETURN"), remap = true)
     public void tfg$injectGreenhouseValidityOnSave(CallbackInfo ci, @Local(argsOnly = true) CompoundTag nbt) {
         nbt.putBoolean("inValidGreenhouse", tfg$insideValidGreenhouse);
     }
