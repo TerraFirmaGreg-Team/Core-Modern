@@ -34,7 +34,7 @@ public abstract class FLBeehiveBlockEntityMixin implements ClimateReceiver, IGre
         this.tfg$insideValidGreenhouse = false;
     }
 
-    @Inject(method = "loadAdditional", at = @At("RETURN"), remap = true)
+    @Inject(method = "loadAdditional", at = @At("RETURN"), remap = false) // loadAdditional is a TFC method, does not need to be remapped
     public void tfg$injectGreenhouseValidityOnLoad(CallbackInfo ci, @Local(argsOnly = true) CompoundTag nbt) {
         tfg$insideValidGreenhouse = nbt.getBoolean("inValidGreenhouse");
     }
