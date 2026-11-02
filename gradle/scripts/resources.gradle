@@ -1,5 +1,11 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import org.gradle.work.FileChange
+import org.gradle.work.Incremental
+import org.gradle.work.InputChanges
 
 File mainResources = file('src/main/resources')
 File generatedResources = file('src/generated/resources')
@@ -7,8 +13,18 @@ String tagPattern = 'data/*/tags/**/*.json'
 List<FileTree> mainTags = tagTrees(mainResources, project)
 List<FileTree> generatedTags = tagTrees(generatedResources, project)
 
+List<String> filterList = [
+        'META-INF/mods.toml',
+        'pack.mcmeta'
+]
+
+// processResources only handles the files it cares about: the metadata and the json tags.
+// Everything else goes through syncResources, which works incrementally.
+List<String> processedResources = filterList + [tagPattern]
+
 processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    include(processedResources)
 
     Map<String, Object> replaceProperties = [
             'mod_id'              : "${mod_id}",
@@ -25,11 +41,6 @@ processResources {
             'loader_version_range': "${loader_version_range}"
     ]
 
-    List<String> filterList = [
-            'META-INF/mods.toml',
-            'pack.mcmeta'
-    ]
-
     inputs.properties(replaceProperties)
 
     filesMatching(filterList) {
@@ -40,6 +51,18 @@ processResources {
         mergeTags(mainResources, generatedResources, mainTags, generatedTags, destinationDir)
     }
 }
+
+Provider<Directory> syncedResources = layout.buildDirectory.dir('resources/mainSynced')
+
+TaskProvider<SyncResources> syncResources = tasks.register('syncResources', SyncResources) {
+    List<File> resourceDirs = sourceSets.main.resources.srcDirs as List
+    sourceDirs = resourceDirs
+    resourceDirs.each { dir -> sources.from(fileTree(dir) { exclude(processedResources) }) }
+    destinationDir = syncedResources
+}
+
+// Register syncResources dir as sourceSets output to put it in the jar and in runClient/runServer
+sourceSets.main.output.dir([builtBy: syncResources], syncedResources)
 
 processDevResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -118,6 +141,62 @@ static void mergeTags(
 
         targetFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(main)
         )
+    }
+}
+
+/**
+ * Copies resource dirs into one output dir like a Copy task, but after the first run it only copies the files that
+ * changed and deletes the ones that were removed. When a path exists in more than one source dir, the last dir wins,
+ * the same as processResources with DuplicatesStrategy.INCLUDE.
+ */
+abstract class SyncResources extends DefaultTask {
+    /** The source dirs in priority order, lowest first. {@link #getSources} holds the files to copy from them. */
+    @Internal
+    abstract ListProperty<File> getSourceDirs()
+
+    @Incremental
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    abstract ConfigurableFileCollection getSources()
+
+    @OutputDirectory
+    abstract DirectoryProperty getDestinationDir()
+
+    @TaskAction
+    void sync(InputChanges changes) {
+        File destination = destinationDir.get().asFile
+        if (!changes.incremental) {
+            // First time running, or last run had an issue: start from an empty dir
+            destination.deleteDir()
+            destination.mkdirs()
+        }
+
+        List<File> dirsByPriority = sourceDirs.get().reverse()
+        for (FileChange change : changes.getFileChanges(sources)) {
+            if (change.fileType == FileType.DIRECTORY) {
+                continue
+            }
+
+            // A change in one dir can hide or reveal the same path in another, so look up which file wins now
+            String path = change.normalizedPath
+            File source = dirsByPriority.collect { new File(it, path) }.find { it.isFile() }
+            File target = new File(destination, path)
+
+            if (source != null) {
+                target.parentFile.mkdirs()
+                Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            } else {
+                target.delete()
+                deleteEmptyParents(target.parentFile, destination)
+            }
+        }
+    }
+
+    private static void deleteEmptyParents(File dir, File root) {
+        while (dir != root && dir.list()?.length == 0) {
+            dir.delete()
+            dir = dir.parentFile
+        }
     }
 }
 

@@ -21,7 +21,15 @@ public class LayLargeEggBehavior extends MoveOntoBlockBehavior<TFGWoolEggProduci
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, TFGWoolEggProducingAnimal animal) {
-        return animal.isReadyForAnimalProduct() && super.checkExtraStartConditions(level, animal);
+        if (!animal.isReadyForAnimalProduct()) {
+            return false;
+        }
+        final Optional<BlockPos> target = getNearestTarget(animal);
+        if (target.isPresent() && !isTargetAt(level, target.get())) {
+            animal.getBrain().eraseMemory(TFGBrain.LARGE_NEST_MEMORY.get());
+            return false;
+        }
+        return super.checkExtraStartConditions(level, animal);
     }
 
     @Override

@@ -195,8 +195,8 @@ public class CharcoalForgeBlockEntity extends TickableInventoryBlockEntity<ItemS
     {
         assert level != null;
         final BlockState state = level.getBlockState(worldPosition);
-        if (state.getValue(CharcoalForgeBlock.HEAT) != 0)
-        {
+		if (state.hasProperty(CharcoalForgeBlock.HEAT) && state.getValue(CharcoalForgeBlock.HEAT) != 0)
+		{
             HeatCapability.Remainder remainder = HeatCapability.consumeFuelForTicks(ticks, inventory, burnTicks, burnTemperature, SLOT_FUEL_MIN, SLOT_FUEL_MAX);
 
             burnTicks = remainder.burnTicks();

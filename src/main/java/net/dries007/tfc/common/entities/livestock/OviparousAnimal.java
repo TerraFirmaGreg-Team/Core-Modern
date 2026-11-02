@@ -80,7 +80,7 @@ public abstract class OviparousAnimal extends ProducingAnimal implements Pluckab
     public void addAdditionalSaveData(CompoundTag tag)
     {
         super.addAdditionalSaveData(tag);
-        tag.putLong("plucked", lastPlucked);
+		setLastPluckedTick(EntityHelpers.getLongOrDefault(tag, "plucked", Long.MIN_VALUE));
     }
 
     @Override

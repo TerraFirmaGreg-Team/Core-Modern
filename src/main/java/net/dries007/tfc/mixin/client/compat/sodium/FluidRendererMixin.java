@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class FluidRendererMixin
 {
     @Dynamic("Method boolean isFluidOccluded(BlockAndTintGetter, int, int, Direction, Fluid) in Sodium's FluidRenderer")
-    @Redirect(method = "isFluidOccluded", target = @Desc(value = "isFluidOccluded", args = {BlockAndTintGetter.class, int.class, int.class, int.class, Direction.class, Fluid.class}, ret = boolean.class), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/material/Fluid;isSame(Lnet/minecraft/world/level/material/Fluid;)Z"), require = 0)
+    @Redirect(target = @Desc(value = "isFluidOccluded", args = {BlockAndTintGetter.class, int.class, int.class, int.class, Direction.class, Fluid.class}, ret = boolean.class), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/material/Fluid;isSame(Lnet/minecraft/world/level/material/Fluid;)Z"), require = 0)
     private boolean isFluidOccludedWithMixing(Fluid fluid, Fluid fluidIn)
     {
         return fluid.isSame(fluidIn) || FluidHelpers.canMixFluids(fluid, fluidIn);

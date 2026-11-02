@@ -70,7 +70,7 @@ public class BowlBlock extends DeviceBlock
                     if (op != null)
                     {
                         GlassWorkData.apply(held, op);
-                        inv.getStackInSlot(0).shrink(1);
+						inv.extractItem(0, 1, false);
                         Helpers.playSound(level, pos, SoundEvents.SAND_PLACE);
                         player.getCooldowns().addCooldown(held.getItem(), 10);
                         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -98,7 +98,7 @@ public class BowlBlock extends DeviceBlock
                         final ItemStack salted = held.split(toSalt);
                         FoodCapability.applyTrait(salted, FoodTraits.SALTED);
                         ItemHandlerHelper.giveItemToPlayer(player, salted);
-                        inv.getStackInSlot(0).shrink(toSalt);
+						inv.extractItem(0, toSalt, false);
                         Helpers.playSound(level, pos, SoundEvents.SAND_PLACE);
                         return InteractionResult.sidedSuccess(level.isClientSide);
                     }

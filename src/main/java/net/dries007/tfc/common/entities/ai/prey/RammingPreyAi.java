@@ -45,8 +45,8 @@ public class RammingPreyAi
     private static final UniformInt TIME_BETWEEN_RAMS_FEMALE = UniformInt.of(1000, 2000);
     private static final TargetingConditions RAM_TARGET_CONDITIONS = TargetingConditions.forCombat().selector(
 		(target) -> target.level().getWorldBorder().isWithinBounds(target.getBoundingBox())
-						&& !(target instanceof RammingPrey)
-						&& !Helpers.isEntity(target, TFGTags.Entities.NotRammedByRammers));
+						&& !Helpers.isEntity(target, TFGTags.Entities.NotRammedByRammers)
+						&& !(target instanceof RammingPrey && (!((RammingPrey) target).isMale() || target.isBaby() || (target.getHealth() / target.getMaxHealth() < 0.7))));
 
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(7, 22);
 

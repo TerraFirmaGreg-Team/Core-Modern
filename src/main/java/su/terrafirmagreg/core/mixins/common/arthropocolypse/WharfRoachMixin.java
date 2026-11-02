@@ -9,7 +9,9 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 
-@Mixin(targets = "dev.dh.arthropocolypse.entity.Wharf_Roach")
+import dev.dh.arthropocolypse.entity.Wharf_Roach;
+
+@Mixin(Wharf_Roach.class)
 public class WharfRoachMixin {
 
     // registerGoals

@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 
 import net.dries007.tfc.common.blocks.ExtendedProperties;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class BranchingCactusBlock extends PipePlantBlock
 {
@@ -50,7 +51,9 @@ public class BranchingCactusBlock extends PipePlantBlock
     @SuppressWarnings("deprecation")
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
     {
-        entity.hurt(entity.damageSources().cactus(), 1f);
+		if (!entity.getType().is(TFGTags.Entities.IgnoresCacti)) {
+			entity.hurt(entity.damageSources().cactus(), 1f);
+		}
     }
 
     @Override

@@ -15,7 +15,7 @@
         },
         {
             "predicate": {
-                "tag": "tfc:creeping_stone_plantable_on",
+                "tag": "minecraft:overworld_carver_replaceables",
                 "type": "minecraft:matching_block_tag"
             },
             "type": "tfc:on_top"

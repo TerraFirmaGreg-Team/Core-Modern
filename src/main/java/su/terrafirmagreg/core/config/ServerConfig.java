@@ -29,6 +29,8 @@ public final class ServerConfig {
             Planet.VENUS, Planet.MERCURY, Planet.GLACIO);
     public final HashMap<ResourceKey<Level>, ForgeConfigSpec.BooleanValue> glidersWorkOnPlanets;
 
+    public final ForgeConfigSpec.BooleanValue enableQuestBroadcasts;
+
     public final PropickConfig copperPropickConfig;
     public final PropickConfig bronzePropickConfig;
     public final PropickConfig wroughtIronPropickConfig;
@@ -81,7 +83,11 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue atmosphereRevalidationBaseTicks;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
-        builder.push("hang_glider");
+        builder.push("quests");
+        enableQuestBroadcasts = builder
+                .comment("Enables announcing certain quests in chat when players complete them.")
+                .define("enableQuestBroadcasts", false);
+        builder.pop().push("hang_glider");
 
         glidersWorkOnPlanets = new HashMap<>();
         for (ResourceKey<Level> dimension : planetDimensions) {

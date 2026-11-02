@@ -15,7 +15,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 @Mixin(RenderTarget.class)
 public abstract class RenderTargetStencilMixin {
 
-    @Shadow
+    @Shadow(remap = false) // Forge field
     private boolean stencilEnabled;
 
     @Inject(method = "createBuffers", at = @At("HEAD"))

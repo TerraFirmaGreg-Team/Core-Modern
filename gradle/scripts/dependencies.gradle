@@ -181,8 +181,11 @@ dependencies {
     modImplementation(mods.fowlplay)
 
     // Oculus, 13 aug 2026
-    modImplementation(mods.embeddium)
-    modImplementation(mods.oculus)
+    // Client-only: compile against it everywhere, but only load it in the client runs, it crashes a dedicated server
+    modCompileOnly(mods.embeddium)
+    modCompileOnly(mods.oculus)
+    modClientDevRuntimeOnly(mods.embeddium)
+    modClientDevRuntimeOnly(mods.oculus)
 
     // Building Gadgets, Aug 5 2025
     modImplementation(mods.buildingGadgets.get()) { transitive = false }

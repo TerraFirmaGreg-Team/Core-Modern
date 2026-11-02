@@ -9,7 +9,9 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 
-@Mixin(targets = "dev.dh.arthropocolypse.entity.Mealworm_Beetle")
+import dev.dh.arthropocolypse.entity.Mealworm_Beetle;
+
+@Mixin(Mealworm_Beetle.class)
 public class MealwormBeetleMixin {
 
     // registerGoals

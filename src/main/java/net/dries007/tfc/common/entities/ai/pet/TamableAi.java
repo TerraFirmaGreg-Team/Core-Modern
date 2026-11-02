@@ -10,32 +10,19 @@ import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.AnimalPanic;
-import net.minecraft.world.entity.ai.behavior.BabyFollowAdult;
-import net.minecraft.world.entity.ai.behavior.CountDownCooldownTicks;
-import net.minecraft.world.entity.ai.behavior.DoNothing;
-import net.minecraft.world.entity.ai.behavior.EntityTracker;
-import net.minecraft.world.entity.ai.behavior.EraseMemoryIf;
-import net.minecraft.world.entity.ai.behavior.FollowTemptation;
-import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
-import net.minecraft.world.entity.ai.behavior.MeleeAttack;
+import net.minecraft.world.entity.ai.behavior.*;
 
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTargetOutOfReach;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromLookTarget;
-import net.minecraft.world.entity.ai.behavior.StartAttacking;
-import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
-import net.minecraft.world.entity.ai.behavior.StrollAroundPoi;
-import net.minecraft.world.entity.ai.behavior.StrollToPoi;
-import net.minecraft.world.entity.ai.behavior.Swim;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
@@ -155,7 +142,7 @@ public class TamableAi
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
             SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.15F),
             MeleeAttack.create(40),
-            StopAttackingIfTargetInvalid.create(TamableAi::couldFlee, (t, e) -> t.refreshCommandOnNextTick(), false)
+            StopAttackingIfTargetInvalid.create(e -> false, (t, e) -> t.refreshCommandOnNextTick(), false)
         ), MemoryModuleType.ATTACK_TARGET);
     }
 
@@ -180,6 +167,22 @@ public class TamableAi
     {
         return LivestockAi.createIdleMovementBehaviors();
     }
+
+	public static OneShot<TamableMammal> returnHomeIfTooFar()
+	{
+		return BehaviorBuilder.triggerIf(TamableAi::isTooFarFromHome, BehaviorBuilder.create(instance -> instance.group(
+			instance.present(MemoryModuleType.HOME),
+			instance.registered(MemoryModuleType.WALK_TARGET)
+		).apply(instance, (homeMemory, walkMemory) -> (level, entity, time) -> {
+			final GlobalPos home = instance.get(homeMemory);
+			if (home.dimension() != level.dimension())
+			{
+				return false;
+			}
+			walkMemory.set(new WalkTarget(home.pos(), 1F, 10));
+			return true;
+		})));
+	}
 
     public static boolean isTooFarFromHome(TamableMammal entity)
     {
@@ -224,14 +227,24 @@ public class TamableAi
         final Activity current = brain.getActiveNonCoreActivity().orElse(null);
         if (current != null)
         {
+			if (couldFlee(entity) && !brain.hasMemoryValue(MemoryModuleType.AVOID_TARGET))
+			{
+				getFleeTarget(entity).ifPresent(target -> startFleeing(entity, target));
+			}
             if (brain.hasMemoryValue(MemoryModuleType.AVOID_TARGET) && couldFlee(entity))
             {
                 brain.setActiveActivityIfPossible(Activity.AVOID);
                 return;
             }
+			else if (current.equals(Activity.AVOID))
+			{
+				entity.refreshCommandOnNextTick();
+				return;
+			}
             else if (brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET))
             {
                 brain.setActiveActivityIfPossible(Activity.FIGHT);
+				return;
             }
             if (doMoreChecks)
             {
@@ -284,9 +297,32 @@ public class TamableAi
         return entity.getHealth() < 5f || entity.isOnFire();
     }
 
+	private static Optional<LivingEntity> getFleeTarget(TamableMammal entity)
+	{
+		final var brain = entity.getBrain();
+		return brain.getMemory(MemoryModuleType.ATTACK_TARGET)
+				   .or(() -> brain.getMemory(MemoryModuleType.HURT_BY_ENTITY))
+				   .filter(target -> !entity.isOwnedBy(target));
+	}
+
+	private static void startFleeing(TamableMammal entity, LivingEntity target)
+	{
+		if (entity.isSitting())
+		{
+			entity.setCommand(TamableMammal.Command.RELAX);
+		}
+		entity.setSitting(false);
+		entity.setSleeping(false);
+		PreyAi.setAvoidTarget(entity, target);
+	}
+
     private static Optional<? extends LivingEntity> getUnwantedAttackTarget(TamableMammal entity)
     {
         final var brain = entity.getBrain();
+		if (couldFlee(entity))
+		{
+			return Optional.empty();
+		}
         if (brain.hasMemoryValue(MemoryModuleType.HURT_BY_ENTITY))
         {
             return brain.getMemory(MemoryModuleType.HURT_BY_ENTITY);
@@ -304,12 +340,12 @@ public class TamableAi
         if (entity.getOwner() instanceof ServerPlayer player)
         {
             LivingEntity target = player.getLastHurtByMob();
-            if (target != null && entity.canAttack(target) && target.tickCount < player.getLastHurtByMobTimestamp() + 120)
+            if (target != null && entity.canAttack(target) && player.tickCount < player.getLastHurtByMobTimestamp() + 120)
             {
                 return Optional.of(target);
             }
             target = player.getLastHurtMob();
-            if (target != null && entity.canAttack(target) && target.tickCount < player.getLastHurtMobTimestamp() + 120)
+            if (target != null && entity.canAttack(target) && player.tickCount < player.getLastHurtMobTimestamp() + 120)
             {
                 return Optional.of(target);
             }

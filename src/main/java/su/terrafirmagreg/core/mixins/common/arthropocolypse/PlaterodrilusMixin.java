@@ -9,7 +9,9 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 
-@Mixin(targets = "dev.dh.arthropocolypse.entity.Platerodrilus")
+import dev.dh.arthropocolypse.entity.Platerodrilus;
+
+@Mixin(Platerodrilus.class)
 public class PlaterodrilusMixin {
 
     // registerGoals
