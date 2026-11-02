@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.afc;
 
-import com.eerussianguy.firmalife.common.blockentities.ClimateReceiver;
 import com.eerussianguy.firmalife.common.blockentities.ClimateType;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -21,7 +20,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.environment.IGreenhouseReceiver;
 
 @Mixin(value = TapBlockEntity.class, remap = false)
-public abstract class TapBlockEntityMixin extends BlockEntity implements ClimateReceiver, IGreenhouseReceiver {
+public abstract class TapBlockEntityMixin extends BlockEntity implements IGreenhouseReceiver {
 
     @Unique
     protected boolean tfg$insideValidGreenhouse;
