@@ -228,6 +228,9 @@ public final class CustomArmInteractionPointTypes {
             super(type, level, pos, state);
         }
 
+        /**
+         * Checks if a given {@link ItemStack} is a {@link Plantable}, and if the given planter is the correct type and tier for that plantable.
+         */
         protected boolean isItemValidForPlanter(LargePlanterBlockEntity planter, ItemStack stack) {
             Plantable plant = Plantable.get(stack);
             return plant != null
@@ -243,6 +246,16 @@ public final class CustomArmInteractionPointTypes {
                 }
             }
             return -1;
+        }
+
+        protected static int countOpenSlots(IItemHandler handler, int slotCount) {
+            int count = 0;
+            for (int slot = 0; slot < slotCount; slot++) {
+                if (handler.getStackInSlot(slot).isEmpty()) {
+                    count++;
+                }
+            }
+            return count;
         }
 
         protected static int findValidSlotForItem(LargePlanterBlockEntity planter, IItemHandler handler, ItemStack stack) {
@@ -273,26 +286,34 @@ public final class CustomArmInteractionPointTypes {
                 return stack;
             }
 
+            // java pass by reference value makes my head hurt
+
             IItemHandler handler = getHandler();
             if (handler == null)
                 return stack;
 
             // Check if the seed is the correct type for the planter
-            if (!isItemValidForPlanter(planter, stack)) {
+            if (!isItemValidForPlanter(planter, stack))
                 return stack;
-            }
 
             // Find the first valid slot for the seed in the planter
             int slot = findValidSlotForItem(planter, handler, stack);
             if (slot < 0)
                 return stack;
 
-            // Only take a single seed, leaving the rest of the arm's stack untouched
+            // if simulate, tell arm how many seeds can be inserted into the planter
+            if (simulate) {
+                int numOpenSlots = countOpenSlots(handler, getSlotCount());
+                if (numOpenSlots == 0)
+                    return stack;   // No open slots, return the original stack
+
+                ItemStack remainder = stack.copy();
+                remainder.shrink(Math.min(numOpenSlots, stack.getCount()));
+                return remainder;
+            }
+
             ItemStack remainder = stack.copy();
             ItemStack toInsert = remainder.split(1);
-            if (simulate)
-                return remainder;
-
             // Insert the seed into the planter and set growth to 0
             if (!handler.insertItem(slot, toInsert, false).isEmpty()) {
                 return stack;   // If the insert failed, return the original stack
