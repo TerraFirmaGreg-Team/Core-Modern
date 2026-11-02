@@ -42,19 +42,19 @@ public class ThermometerDisplaySource extends NumericSingleLineDisplaySource {
 
         int mode = context.sourceConfig().getInt("Mode");
 
-        // Mode 0: Unit Temperature
-        if (mode == 0) {
-            return Objects.requireNonNull(unit.format(getTemperature(state, level, pos, isFacing)));
-        }
-        // Mode 1: Color Temperature
-        else if (mode == 1) {
-            return Objects.requireNonNull(style.formatColored(getTemperature(state, level, pos, isFacing)));
-        }
-        // Mode 2: Redstone Power Output
-        else {
-            int power = state.getOptionalValue(BlockStateProperties.POWER).orElse(0);
-            return Component.literal(String.valueOf(power));
-        }
+        return switch (mode) {
+            case 0 ->
+                // Unit Temperature
+                Objects.requireNonNull(unit.format(getTemperature(state, level, pos, isFacing)));
+            case 1 ->
+                //Color Temperature
+                Objects.requireNonNull(style.formatColored(getTemperature(state, level, pos, isFacing)));
+            default -> {
+                // Redstone Power Output
+                int power = state.getOptionalValue(BlockStateProperties.POWER).orElse(0);
+                yield Component.literal(String.valueOf(power));
+            }
+        };
     }
 
     @Override
@@ -73,7 +73,10 @@ public class ThermometerDisplaySource extends NumericSingleLineDisplaySource {
         super.initConfigurationWidgets(context, builder, isFirstLine);
         if (!isFirstLine) {
             builder.addSelectionScrollInput(0, 120, (si, l) -> si
-                    .forOptions(CreateLang.translatedOptions("display_source.thermometer", "unit_temperature", "color_temperature", "redstone_power"))
+                    .forOptions(CreateLang.translatedOptions("display_source.thermometer",
+                            "unit_temperature",
+                            "color_temperature",
+                            "redstone_power"))
                     .titled(Component.translatable("tfg.display_source.thermometer.display_mode")), "Mode");
         }
     }
