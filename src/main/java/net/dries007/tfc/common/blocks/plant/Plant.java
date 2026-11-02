@@ -278,7 +278,7 @@ public enum Plant implements RegistryPlant
 
     public boolean hasFlowerPot()
     {
-        return type == BlockType.STANDARD || type == BlockType.FLOWERBED || type == BlockType.DRY || type == BlockType.DEAD_GRASS || type == BlockType.CACTUS_FLOWER || SPECIAL_POTTED_PLANTS.contains(this);
+        return type == BlockType.STANDARD || type == BlockType.FLOWERBED || type == BlockType.DRY || type == BlockType.DEAD_BUSH || type == BlockType.CACTUS_FLOWER || SPECIAL_POTTED_PLANTS.contains(this);
     }
 
     /**
