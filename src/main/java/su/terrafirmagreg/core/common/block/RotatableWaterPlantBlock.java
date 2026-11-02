@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.block;
 
 import java.util.Map;
 
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableMap;
@@ -23,7 +25,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -83,7 +84,7 @@ public abstract class RotatableWaterPlantBlock extends WaterPlantBlock {
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         if (direction.getOpposite() == state.getValue(FACING) && !Helpers.isBlock(facingState, TFGTags.Blocks.AnemonePlantableOn)) {
-            return Blocks.AIR.defaultBlockState();
+			return state.getFluidState().createLegacyBlock();
         }
         return state;
     }
@@ -136,14 +137,21 @@ public abstract class RotatableWaterPlantBlock extends WaterPlantBlock {
     @SuppressWarnings("deprecation")
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide && level.getFluidState(pos).getType().isSame(TFCFluids.SALT_WATER.getSource())) {
-            level.setBlock(pos, state.setValue(OPEN, true), Block.UPDATE_ALL);
+			if (level.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos.getCenter(), 1, 1, 1)).isEmpty())
+			{
+				level.setBlock(pos, state.setValue(OPEN, true), Block.UPDATE_ALL);
+			}
+			else
+			{
+				level.scheduleTick(pos, this, 150);
+			}
         }
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (!level.isClientSide) {
+		if (!level.isClientSide && state.getValue(OPEN)) {
             level.setBlock(pos, state.setValue(OPEN, false), Block.UPDATE_ALL);
             level.scheduleTick(pos, this, 150);
         }

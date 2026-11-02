@@ -109,7 +109,7 @@ public abstract class CreepingWaterPlantBlock extends CreepingPlantBlock impleme
     public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         FluidHelpers.tickFluid(level, currentPos, state);
         state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), canCreepOn(level, facingPos, facingState, direction));
-        return isEmptyContents(state) ? Blocks.AIR.defaultBlockState() : state;
+        return isEmptyContents(state) ? state.getFluidState().createLegacyBlock() : state;
     }
 
     private static boolean isEmptyContents(BlockState state) {
