@@ -16,6 +16,7 @@ public class TFGDisplaySources {
 
     public static final RegistryObject<ThermometerDisplaySource> THERMOMETER = TFGDisplaySources.DISPLAY_SOURCES.register("thermometer", ThermometerDisplaySource::new);
     public static final RegistryObject<CalendarClockDisplaySource> CALENDAR_CLOCK = TFGDisplaySources.DISPLAY_SOURCES.register("calendar_clock", CalendarClockDisplaySource::new);
+    public static final RegistryObject<AnemometerDisplaySource> ANEMOMETER = TFGDisplaySources.DISPLAY_SOURCES.register("anemometer", AnemometerDisplaySource::new);
 
     public static void init(IEventBus modEventBus) {
         DISPLAY_SOURCES.register(modEventBus);
@@ -26,6 +27,8 @@ public class TFGDisplaySources {
         event.enqueueWork(() -> {
             DisplaySource.BY_BLOCK.add(TFCBlocks.THERMOMETER.get(), THERMOMETER.get());
             DisplaySource.BY_BLOCK.add(TFCBlocks.CALENDAR_CLOCK.get(), CALENDAR_CLOCK.get());
+            DisplaySource.BY_BLOCK.add(TFCBlocks.ANEMOMETER.get(), ANEMOMETER.get());
+            DisplaySource.BY_BLOCK.add(TFCBlocks.VANE.get(), ANEMOMETER.get());
         });
     }
 }

@@ -62,7 +62,7 @@ public class ThermometerDisplaySource extends NumericSingleLineDisplaySource {
                 unit.format(avgTemp);
             case 3 ->
                 // Annual Rainfall
-                Component.literal(String.format("%.0fmm", rainfall));
+                Component.translatable("tfg.tooltip.climate_precipitation.mm", String.format("%.0f", rainfall));
             case 4 -> {
                 // Active Precipitation
                 if (EnvironmentHelpers.isRainingOrSnowing(level, pos)) {
