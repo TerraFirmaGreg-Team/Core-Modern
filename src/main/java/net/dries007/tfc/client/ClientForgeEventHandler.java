@@ -16,8 +16,10 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.resources.sounds.AmbientSoundHandler;
@@ -141,6 +143,7 @@ public class ClientForgeEventHandler
         bus.addListener(ClientForgeEventHandler::onToast);
         bus.addListener(ClientForgeEventHandler::onEffectRender);
         bus.addListener(IngameOverlays::checkGuiOverlays);
+		bus.addListener(ClientForgeEventHandler::onScreenOpen);
     }
 
     public static void onRenderGameOverlayText(CustomizeGuiOverlayEvent.DebugText event)
@@ -420,7 +423,6 @@ public class ClientForgeEventHandler
         if (event.getPlayer() != null)
         {
             Calendars.CLIENT.resetToDefault();
-            IndirectHashCollection.clearAllCaches();
         }
     }
 
@@ -658,4 +660,12 @@ public class ClientForgeEventHandler
     {
         event.addHorizontalOffset(TFCConfig.CLIENT.effectHorizontalAdjustment.get());
     }
+
+	private static void onScreenOpen(ScreenEvent.Opening event)
+	{
+		if (event.getScreen() instanceof TitleScreen || event.getScreen() instanceof JoinMultiplayerScreen)
+		{
+			IndirectHashCollection.clearAllCaches();
+		}
+	}
 }

@@ -163,18 +163,18 @@ public abstract class DoubleCropBlock extends CropBlock
     @Override
     public void die(Level level, BlockPos pos, BlockState state, boolean fullyGrown)
     {
-        final BlockPos posAbove = pos.above();
-        final BlockState stateAbove = level.getBlockState(posAbove);
-        final BlockState deadState = dead.get().defaultBlockState().setValue(DeadCropBlock.MATURE, fullyGrown);
-        if (fullyGrown && isSameOrAir(stateAbove))
-        {
-            level.setBlock(posAbove, deadState.setValue(DeadDoubleCropBlock.PART, Part.TOP), Block.UPDATE_CLIENTS);
-        }
-        else if (stateAbove.getBlock() == this)
-        {
-            level.destroyBlock(posAbove, false);
-        }
-        level.setBlockAndUpdate(pos, deadState.setValue(DeadDoubleCropBlock.PART, Part.BOTTOM));
+		final BlockPos posAbove = pos.above();
+		final BlockState stateAbove = level.getBlockState(posAbove);
+		final BlockState deadState = dead.get().defaultBlockState().setValue(DeadCropBlock.MATURE, fullyGrown);
+		if (fullyGrown && isSameOrAir(stateAbove))
+		{
+			level.setBlock(posAbove, deadState.setValue(DeadDoubleCropBlock.PART, Part.TOP), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+		}
+		else if (stateAbove.getBlock() == this)
+		{
+			level.setBlock(posAbove, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+		}
+		level.setBlockAndUpdate(pos, deadState.setValue(DeadDoubleCropBlock.PART, Part.BOTTOM));
     }
 
     protected boolean isSameOrAir(BlockState state)

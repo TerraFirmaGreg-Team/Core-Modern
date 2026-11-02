@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -130,27 +131,24 @@ public class GrillBlock extends FirepitBlock implements IHighlightHandler
             }
             if (stack.isEmpty() && player.isShiftKeyDown())
             {
-                if (!level.isClientSide)
-                {
-                    if (state.getValue(LIT))
-                    {
-                        TFCDamageSources.grill(player, 1f);
-                        Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
-                    }
-                    if (!state.getValue(LIT) && !state.getValue(LIT) && grill.getAsh() > 0)
-                    {
-                        ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POWDERS.get(Powder.WOOD_ASH).get(), grill.getAsh()));
-                        grill.setAsh(0);
-                        Helpers.playSound(level, pos, SoundEvents.SAND_BREAK);
-                        return InteractionResult.sidedSuccess(level.isClientSide);
-                    }
-                    else
-                    {
-                        ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.WROUGHT_IRON_GRILL.get()));
-                        AbstractFirepitBlockEntity.convertTo(level, pos, state, grill, TFCBlocks.FIREPIT.get());
-                    }
-                }
-                return InteractionResult.SUCCESS;
+				if (!state.getValue(LIT) && grill.getAsh() > 0)
+				{
+					ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POWDERS.get(Powder.WOOD_ASH).get(), grill.getAsh()));
+					grill.setAsh(0);
+					Helpers.playSound(level, pos, SoundEvents.SAND_BREAK);
+					return InteractionResult.sidedSuccess(level.isClientSide);
+				}
+				else
+				{
+					ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.WROUGHT_IRON_GRILL.get()));
+					AbstractFirepitBlockEntity.convertTo(level, pos, state, grill, TFCBlocks.FIREPIT.get());
+				}
+				if (state.getValue(LIT))
+				{
+					TFCDamageSources.grill(player, 1f);
+					Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
+				}
+				return InteractionResult.sidedSuccess(level.isClientSide);
             }
             else if (tryInsertLog(player, stack, grill, result.getLocation().y - pos.getY() < 0.6))
             {

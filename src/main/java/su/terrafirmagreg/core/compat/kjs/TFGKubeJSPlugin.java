@@ -26,6 +26,7 @@ import su.terrafirmagreg.core.compat.kjs.events.TFGAE2PowerConsumption;
 import su.terrafirmagreg.core.compat.kjs.events.TFGServerEvents;
 import su.terrafirmagreg.core.compat.kjs.events.TFGStartupEvents;
 import su.terrafirmagreg.core.utils.TFGHelpers;
+import su.terrafirmagreg.core.world.rock_getters.TFGRockGetters;
 
 public final class TFGKubeJSPlugin extends KubeJSPlugin {
 
@@ -65,6 +66,7 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         event.add("TFGPropertyKey", TFGPropertyKeys.class);
         event.add("TFGMaterialFlags", TFGMaterialFlags.class);
         event.add("TFGHelpers", TFGHelpers.class);
+        event.add("TFGRockGetters", TFGRockGetters.class);
 
         event.add("ToolHelper", ToolHelper.class);
         event.add("MaterialFlags", MaterialFlags.class);

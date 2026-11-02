@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.notenoughmail.kubejs_tfc.block.internal.ExtendedPropertiesBlockBuilder;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -144,7 +145,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
      * <p>- dust: Optional RGB + scale for DustParticleOptions.
      */
     public static class ParticleSetBuilder {
-        private Supplier<SimpleParticleType> particle = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+        private Supplier<SimpleParticleType> particle = () -> (SimpleParticleType) TFCParticles.SMOKE_2.get();
         private double posX = 0.5, posY = 0.5, posZ = 0.5;
         private double rangeX = 0.0, rangeY = 0.0, rangeZ = 0.0;
         private double velX = 0.0, velY = 0.0, velZ = 0.0;

@@ -2,12 +2,12 @@
     "feature": "tfc:plant/olive",
     "placement": [
         {
-            "max_temperature": 30,
+            "max_temperature": 25,
             "max_rainfall": 500,
             "max_forest": "normal",
             "type": "tfc:climate",
             "min_rainfall": 150,
-            "min_temperature": 5
+            "min_temperature": -8
         },
         {
             "heightmap": "WORLD_SURFACE_WG",
