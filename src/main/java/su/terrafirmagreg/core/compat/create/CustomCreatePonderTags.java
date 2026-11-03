@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
+import su.terrafirmagreg.core.compat.create.display_source.TFGDisplaySources;
+
 public class CustomCreatePonderTags {
 
     public static void register(PonderTagRegistrationHelper<ResourceLocation> helper) {
@@ -27,6 +29,7 @@ public class CustomCreatePonderTags {
                 //.add(FLBlocks.CURED_OVEN_HOPPER.get(BRICK).get())
                 .add(PartAbility.ROTOR_HOLDER.getAllBlocks().stream().findAny().get());
 
+        TFGDisplaySources.register(helper);
     }
 
 }
