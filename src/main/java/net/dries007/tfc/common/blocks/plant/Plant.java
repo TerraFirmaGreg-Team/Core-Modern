@@ -86,7 +86,7 @@ public enum Plant implements RegistryPlant
     COONTAIL(BlockType.GRASS_WATER_FRESH, 0.8F, new int[] {3, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2}),
     CORDGRASS(BlockType.TALL_WATER, 0.6F, new int[] {0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0}),
     DANDELION(BlockType.STANDARD, 1F, new int[] {9, 9, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8}),
-    DEAD_BUSH(BlockType.DRY, 0.7F),
+    DEAD_BUSH(BlockType.DEAD_BUSH, 0.7F),
     DESERT_FLAME(BlockType.STANDARD, 1F, new int[] {1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1}),
     DUCKWEED(BlockType.FLOATING_FRESH, 0.7F),
     EEL_GRASS(BlockType.GRASS_WATER_FRESH, 0.8F, new int[] {3, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2}),
@@ -278,7 +278,7 @@ public enum Plant implements RegistryPlant
 
     public boolean hasFlowerPot()
     {
-        return type == BlockType.STANDARD || type == BlockType.FLOWERBED || type == BlockType.DRY || type == BlockType.CACTUS_FLOWER || SPECIAL_POTTED_PLANTS.contains(this);
+        return type == BlockType.STANDARD || type == BlockType.FLOWERBED || type == BlockType.DRY || type == BlockType.DEAD_BUSH || type == BlockType.CACTUS_FLOWER || SPECIAL_POTTED_PLANTS.contains(this);
     }
 
     /**
@@ -327,6 +327,7 @@ public enum Plant implements RegistryPlant
         CACTUS_FLOWER((plant, type) -> PlantBlock.createCactusFlower(plant, fire(nonSolid(plant)).sound(SoundType.CROP))),
         CACTUS((plant, type) -> TFCCactusBlock.create(plant, fire(solid().strength(0.25F).sound(SoundType.WOOL)).pathType(BlockPathTypes.DAMAGE_OTHER))),
         DRY((plant, type) -> PlantBlock.createDry(plant, fire(nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)))),
+		DEAD_BUSH((plant, type) -> PlantBlock.createDeadBush(plant, fire(nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)))),
         CREEPING((plant, type) -> CreepingPlantBlock.create(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))), // Post process ensures shape is updated after world gen
         CREEPING_STONE((plant, type) -> CreepingPlantBlock.createStone(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))),
         EPIPHYTE((plant, type) -> EpiphytePlantBlock.create(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))),

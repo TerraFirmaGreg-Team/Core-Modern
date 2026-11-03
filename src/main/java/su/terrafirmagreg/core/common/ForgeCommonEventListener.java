@@ -4,8 +4,6 @@ import java.util.Objects;
 
 import com.gregtechceu.gtceu.GTCEu;
 
-import net.dries007.tfc.common.blocks.rock.Ore;
-import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -37,8 +35,6 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.MissingMappingsEvent;
-
-import team.terrafirmagreg.jellies.common.data.JelliesItems;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
@@ -296,20 +292,6 @@ public final class ForgeCommonEventListener {
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getItem());
-
-        if (mapping.getKey().equals(GTCEu.id("rich_raw_coal")))
-            mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
-        if (mapping.getKey().equals(GTCEu.id("raw_coal")))
-            mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
-        if (mapping.getKey().equals(GTCEu.id("poor_raw_coal")))
-            mapping.remap(TFCItems.ORES.get(Ore.LIGNITE).get());
-
-        if (mapping.getKey().equals(TFGCore.id("slime/slime_ball/glowberry")))
-            mapping.remap(JelliesItems.GLOWBERRY_SLIME_BALL.get());
-        if (mapping.getKey().equals(TFGCore.id("slime/slime_ball/latex")))
-            mapping.remap(JelliesItems.LATEX_SLIME_BALL.get());
-        if (mapping.getKey().equals(TFGCore.id("slime/slime_ball/plant")))
-            mapping.remap(JelliesItems.PLANT_SLIME_BALL.get());
     }
 
     private static void remapBlockEntities(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
