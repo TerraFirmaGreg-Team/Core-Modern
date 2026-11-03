@@ -64,9 +64,9 @@ public abstract class TapBlockEntityMixin extends BlockEntity implements IGreenh
     @Override
     public void setValid(Level level, BlockPos pos, boolean valid, int tier, ClimateType climate) {
         if (climate == ClimateType.GREENHOUSE) {
-            TFGCore.LOGGER.info("Setting greenhouse validity for TapBlockEntity at {} to {}", pos, valid);
+            TFGCore.LOGGER.debug("Setting greenhouse validity for TapBlockEntity at {} to {}", pos, valid);
             this.tfg$insideValidGreenhouse = valid;
-            TFGCore.LOGGER.info("Greenhouse validity for TapBlockEntity at {} is now {}", pos, this.tfg$insideValidGreenhouse);
+            TFGCore.LOGGER.debug("Greenhouse validity for TapBlockEntity at {} is now {}", pos, this.tfg$insideValidGreenhouse);
         }
         this.setChanged();
     }
