@@ -26,11 +26,11 @@ public class VignetteOverlay {
     private static final ResourceLocation LOW_OXYGEN = TFGCore.id("textures/gui/hypoxia_overlay.png");
 
     private static final float LOW_OXYGEN_START = 0.2f;
-    private static final float MAX_OPACITY = 0.8f;
+    private static final float MAX_OPACITY = 0.9f;
 
     public static final IGuiOverlay OVERLAY = (gui, graphics, partialTick, width, height) -> {
         final Minecraft minecraft = gui.getMinecraft();
-        if (minecraft.options.hideGui || !(minecraft.getCameraEntity() instanceof Player player)) {
+        if (minecraft.options.hideGui || !gui.shouldDrawSurvivalElements() || !(minecraft.getCameraEntity() instanceof Player player) || !player.isAlive()) {
             return;
         }
         final float opacity = getLowOxygenOpacity(player);
