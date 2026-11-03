@@ -8,6 +8,7 @@ package net.dries007.tfc.common.blocks.plant;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
@@ -111,6 +112,23 @@ public abstract class TallWaterPlantBlock extends TFCTallGrassBlock implements I
     {
         super.createBlockStateDefinition(builder.add(getFluidProperty()));
     }
+
+	@Override
+	protected void spread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	{
+		if (state.getValue(PART) == Part.LOWER)
+		{
+			final BlockPos newPos = PlantRegrowth.spreadSelf(state, level, pos, random, 2, 2, 4, (s, p) -> Helpers.isBlock(s, TFCTags.Blocks.PLANTS), (s, p) -> FluidHelpers.isEmptyFluid(s));
+			if (newPos != null)
+			{
+				final BlockState aboveState = level.getBlockState(newPos.above());
+				if (FluidHelpers.isAirOrEmptyFluid(aboveState) && getFluidProperty().canContain(aboveState.getFluidState().getType()))
+				{
+					placeTwoHalves(level, newPos, 2, random);
+				}
+			}
+		}
+	}
 
     //Used in worldgen, not on player placement
     @Override
