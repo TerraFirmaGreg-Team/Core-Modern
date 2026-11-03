@@ -18,72 +18,55 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
 {
     INSTANCE;
 
-    @Override
-    public int apply(AreaContext context, int north, int east, int south, int west, int center)
-    {
-        final Predicate<IntPredicate> matcher = p -> p.test(north) || p.test(east) || p.test(south) || p.test(west);
+	@Override
+	public int apply(AreaContext context, int north, int east, int south, int west, int center) {
+		final Predicate<IntPredicate> matcher = p -> p.test(north) || p.test(east) || p.test(south) || p.test(west);
 
-        // >= 2 Adjacent border conditions
-        if (TFCLayers.isLow(center))
-        {
-            if (matcher.test(TFCLayers::isOcean) && matcher.test(TFCLayers::isMountains))
-            {
-                return OCEANIC_MOUNTAINS;
-            }
-            else if (matcher.test(TFCLayers::isOcean) && matcher.test(i -> i ==LOWLANDS))
-            {
-                return SALT_MARSH;
-            }
-        }
+		// >= 2 Adjacent border conditions
+		if (TFCLayers.isLow(center)) {
+			if (matcher.test(TFCLayers::isOcean) && matcher.test(TFCLayers::isMountains)) {
+				return TFCLayers.OCEANIC_MOUNTAINS;
+			} else if (matcher.test(TFCLayers::isOcean) && matcher.test(i -> i == TFCLayers.LOWLANDS)) {
+				return TFCLayers.SALT_MARSH;
+			}
+		}
 
-        if (center == PLATEAU || center == BADLANDS || center == INVERTED_BADLANDS)
-        {
-            if (matcher.test(i -> i == LOW_CANYONS || i == LOWLANDS))
-            {
-                return HILLS;
-            }
-            else if (matcher.test(i -> i == PLAINS || i == HILLS))
-            {
-                return ROLLING_HILLS;
-            }
-        }
-        else if (TFCLayers.isMountains(center))
-        {
-            if (matcher.test(TFCLayers::isLow))
-            {
-                return ROLLING_HILLS;
-            }
-        }
-        // Inverses of above conditions
-        else if (center == LOWLANDS || center == LOW_CANYONS)
-        {
-            if (matcher.test(i -> i == PLATEAU || i == BADLANDS || i == INVERTED_BADLANDS))
-            {
-                return HILLS;
-            }
-            else if (matcher.test(TFCLayers::isMountains))
-            {
-                return ROLLING_HILLS;
-            }
-        }
-        else if (center == PLAINS || center == HILLS)
-        {
-            if (matcher.test(i -> i == PLATEAU || i == BADLANDS || i == INVERTED_BADLANDS))
-            {
-                return HILLS;
-            }
-            else if (matcher.test(TFCLayers::isMountains))
-            {
-                return ROLLING_HILLS;
-            }
-        }
-        else if (center == DEEP_OCEAN_TRENCH)
-        {
-            if (matcher.test(i -> !TFCLayers.isOcean(i)))
-            {
-                return OCEAN;
-            }
-        }
-        return center;
-    }
+		// No mud/salt flats near oceans
+		if (TFCLayers.isFlats(center)) {
+			if (matcher.test(TFCLayers::isOcean) && matcher.test(TFCLayers::isFlats)) {
+				return TFCLayers.CANYONS;
+			}
+		}
+
+		if (center == TFCLayers.PLATEAU || center == TFCLayers.BADLANDS) {
+			if (matcher.test(i -> i == TFCLayers.LOW_CANYONS || i == TFCLayers.LOWLANDS)) {
+				return TFCLayers.HILLS;
+			} else if (matcher.test(i -> i == TFCLayers.PLAINS || i == TFCLayers.HILLS)) {
+				return TFCLayers.ROLLING_HILLS;
+			}
+		} else if (TFCLayers.isMountains(center)) {
+			if (matcher.test(TFCLayers::isLow)) {
+				return TFCLayers.ROLLING_HILLS;
+			}
+		}
+		// Inverses of above conditions
+		else if (center == TFCLayers.LOWLANDS || center == TFCLayers.LOW_CANYONS) {
+			if (matcher.test(i -> i == TFCLayers.PLATEAU || i == TFCLayers.BADLANDS)) {
+				return TFCLayers.HILLS;
+			} else if (matcher.test(TFCLayers::isMountains)) {
+				return TFCLayers.ROLLING_HILLS;
+			}
+		} else if (center == TFCLayers.PLAINS || center == TFCLayers.HILLS) {
+			if (matcher.test(i -> i == TFCLayers.PLATEAU || i == TFCLayers.BADLANDS)) {
+				return TFCLayers.HILLS;
+			} else if (matcher.test(TFCLayers::isMountains)) {
+				return TFCLayers.ROLLING_HILLS;
+			}
+		} else if (center == TFCLayers.DEEP_OCEAN_TRENCH) {
+			if (matcher.test(i -> !TFCLayers.isOcean(i))) {
+				return TFCLayers.OCEAN;
+			}
+		}
+		return center;
+	}
 }

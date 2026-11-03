@@ -1,6 +1,10 @@
 {
     "values": [
-        "#tfg:feature/volcanoes",
+        "#tfg:feature/stratovolcanoes",
+        "#tfg:feature/volcanic",
+        "tfc:coral_mushroom",
+        "tfc:coral_tree",
+        "tfc:coral_claw",
         "tfg:earth/forest",
         "tfc:rare_bamboo",
         "tfc:bamboo",
