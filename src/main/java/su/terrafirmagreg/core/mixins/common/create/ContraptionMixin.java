@@ -5,11 +5,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
 
+import net.dries007.tfc.common.fluids.FluidPropertyHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
@@ -54,5 +63,30 @@ public class ContraptionMixin {
                 }
             }
         }
+    }
+
+    // Stops contraptions from messing with TFC fluid block properties in weird ways
+    // (Sent to me by Allmoz from ATFC)
+
+    @WrapOperation(method = "removeBlocksFromWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z", ordinal = 1, remap = true))
+    private boolean tfg$preserveTFCFluidState(Level world, BlockPos pPos, BlockState pNewState, int pFlags, Operation<Boolean> original, @Local BlockState oldState) {
+        if (FluidPropertyHelper.hasProperty(oldState)) {
+            return world.setBlock(pPos, FluidPropertyHelper.getFluidBlockState(oldState), pFlags);
+        }
+        return original.call(world, pPos, pNewState, pFlags);
+    }
+
+    @WrapOperation(method = "addBlocksToWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;destroyBlock(Lnet/minecraft/core/BlockPos;Z)Z", remap = true, ordinal = 0))
+    private boolean tfg$rememberTFCFluidState(Level world, BlockPos pos, boolean dropBlock, Operation<Boolean> original, @Share("oldFluidState") LocalRef<FluidState> oldFluidState) {
+        oldFluidState.set(world.getFluidState(pos));
+        return original.call(world, pos, dropBlock);
+    }
+
+    @WrapOperation(method = "addBlocksToWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z", remap = true))
+    private boolean tfg$applyTFCFluidState(Level world, BlockPos pPos, BlockState pNewState, int pFlags, Operation<Boolean> original, @Share("oldFluidState") LocalRef<FluidState> oldFluidState) {
+        if (FluidPropertyHelper.hasProperty(pNewState)) {
+            pNewState = FluidPropertyHelper.set(pNewState, oldFluidState.get().getType());
+        }
+        return original.call(world, pPos, pNewState, pFlags);
     }
 }
