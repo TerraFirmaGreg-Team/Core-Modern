@@ -29,6 +29,8 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
+
 @SuppressWarnings("NoTranslation")
 public class ThermometerDisplaySource extends NumericSingleLineDisplaySource {
 
@@ -51,15 +53,29 @@ public class ThermometerDisplaySource extends NumericSingleLineDisplaySource {
         int mode = context.sourceConfig().getInt("Mode");
 
         return switch (mode) {
-            case 0 ->
+            case 0 -> {
                 // Unit Temperature
-                unit.format(getTemperature(state, level, pos, isFacing));
-            case 1 ->
+                float temp = getTemperature(state, level, pos, isFacing);
+                MutableComponent formatted = unit.format(temp, true);
+                yield formatted != null ? formatted : Component.literal(String.format("%.0f°C", temp));
+            }
+            case 1 -> {
                 // Color Temperature
-                style.formatColored(getTemperature(state, level, pos, isFacing));
-            case 2 ->
+                float temp = getTemperature(state, level, pos, isFacing);
+                MutableComponent formatted = style.formatColored(temp);
+                if (formatted == null) {
+                    formatted = style.format(temp, true);
+                }
+                if (formatted == null) {
+                    formatted = unit.format(temp, true);
+                }
+                yield formatted != null ? formatted : Component.literal(String.format("%.0f°C", temp));
+            }
+            case 2 -> {
                 // Avg Temperature
-                unit.format(avgTemp);
+                MutableComponent formatted = unit.format(avgTemp, true);
+                yield formatted != null ? formatted : Component.literal(String.format("%.0f°C", avgTemp));
+            }
             case 3 ->
                 // Annual Rainfall
                 Component.translatable("tfg.tooltip.climate_precipitation.mm", String.format("%.0f", rainfall));
@@ -191,7 +207,7 @@ public class ThermometerDisplaySource extends NumericSingleLineDisplaySource {
                 temperature = heatable.getTemperature();
             }
         } else {
-            temperature = Climate.getTemperature(level, pos);
+            temperature = EnvironmentSystem.getTemperature(level, pos);
         }
         return temperature;
     }

@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -33,35 +34,36 @@ public class CalendarClockDisplaySource extends NumericSingleLineDisplaySource {
             return ZERO.copy();
         }
 
+        ICalendar calendar = Calendars.get(level);
         int mode = context.sourceConfig().getInt("Mode");
         return switch (mode) {
             case 0 ->
                 // Weekday (Monday, Tuesday, etc.)
-                Calendars.SERVER.getCalendarDayOfYear();
+                calendar.getCalendarDayOfYear();
             case 1 ->
                 // Time and Date (24:24 month dd, yyyy)
-                Calendars.SERVER.getCalendarTimeAndDate();
+                calendar.getCalendarTimeAndDate();
             case 2 ->
                 // Time and Date (12:12 AM/PM month dd, yyyy)
-                Calendars.SERVER.getCalendarTimeAndDate12();
+                calendar.getCalendarTimeAndDate12();
             case 3 ->
                 // Weekday and Date (weekday month dd, yyyy)
-                Calendars.SERVER.getCalendarWeekdayAndDate();
+                calendar.getCalendarWeekdayAndDate();
             case 4 ->
                 // Date (mm/dd/yyyy)
-                Calendars.SERVER.getCalendarDateUS();
+                calendar.getCalendarDateUS();
             case 5 ->
                 // Date (dd/mm/yyyy)
-                Calendars.SERVER.getCalendarDateEU();
+                calendar.getCalendarDateEU();
             case 6 ->
                 // Date (yyyy-mm-dd)
-                Calendars.SERVER.getCalendarDateISO();
+                calendar.getCalendarDateISO();
             case 7 ->
                 // Month and Day (month-dd)
-                Calendars.SERVER.getCalendarMonthAndDay();
+                calendar.getCalendarMonthAndDay();
             case 8 ->
                 // Season
-                Component.translatable(Calendars.SERVER.getCalendarMonthOfYear().getTranslationKey(Month.Style.SEASON));
+                Component.translatable(calendar.getCalendarMonthOfYear().getTranslationKey(Month.Style.SEASON));
             default -> {
                 // Redstone Power Output
                 int power = block.getSignal(state, level, pos, state.getValue(CalendarClockBlock.FACING));
