@@ -502,6 +502,15 @@ public class DimEnvManager extends SavedData {
     }
 
     /**
+     * Gets the average temperature at a position. Used for Ad Astra's temperature checks.
+     * Returns heat pump temperature if present, otherwise the dimension's average temperature.
+     */
+    public float getAverageTemperature(BlockPos pos) {
+        Optional<Float> bubble = getHeatPumpTemperature(pos);
+        return bubble.orElse((float) environment.temperature());
+    }
+
+    /**
      * Gets the heat pump target temperature at a position, if inside a heat pump's bubble.
      */
     public Optional<Float> getHeatPumpTemperature(BlockPos pos) {

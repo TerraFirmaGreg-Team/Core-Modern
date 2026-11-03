@@ -44,7 +44,6 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     private RoomScan newFrontScan = RoomScan.empty();
     private RoomScan newBackScan = RoomScan.empty();
     private boolean newBlocked = false;
-    private BlockPos newExhaustAnchor = BlockPos.ZERO;
 
     /** Oxygen providers whose rooms are inherited by the front/back scans, if any. */
     @Nullable
@@ -56,15 +55,16 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     static final int SCAN_MAX_BLOCKS = 2_000_000;
     static final int MAX_HORIZONTAL_DIMENSION = 128;
 
-    /** Radius (blocks) of the proximity-based exhaust heat field behind the machine. */
-    static final int EXHAUST_RADIUS = 12;
-
     private static final int TRACE_MAX_BLOCKS = 1_000_000;
     private static final int TRACE_COOLDOWN_TICKS = 100;
     private long lastTraceRequestTick = 0;
 
-    /** Throttled revalidation period for block changes. */
-    private static final int REVALIDATION_GAP_TICKS = 40;
+    private int getCooldownTicks() {
+        if (provider == null)
+            return 2;
+        int size = getFrontInteriorSize();
+        return size < 100_000 ? 2 : 10;
+    }
 
     public HeatPumpMachine(IHeatPumpHost host) {
         this.host = host;
@@ -102,11 +102,6 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
 
     public int getFrontInteriorSize() {
         return getFrontScan().interiorSize();
-    }
-
-    /** @return the anchor of the proximity exhaust heat field (centre of the machine's back). */
-    public BlockPos getExhaustAnchor() {
-        return provider != null ? provider.getExhaustAnchor() : newExhaustAnchor;
     }
 
     //////////////////////////////////////
@@ -152,7 +147,6 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         newFrontScan = frontScan;
         newBackScan = backScan;
         newBlocked = blocked;
-        newExhaustAnchor = backStart;
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
         TFGCore.LOGGER.debug("[heatpump] validateAsync DONE, pos={}, elapsedMs={}, frontStatus={}, frontSize={}, frontInherited={}, backStatus={}, blocked={}, backInherited={}",
@@ -172,7 +166,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
 
         Set<ChunkPos> oldChunks = provider.getAffectedChunks();
 
-        provider.setRegions(newFrontScan, newBackScan, newBlocked, newExhaustAnchor, EXHAUST_RADIUS, inheritedFront, inheritedBack);
+        provider.setRegions(newFrontScan, newBackScan, newBlocked, inheritedFront, inheritedBack);
 
         Set<ChunkPos> newChunks = provider.getAffectedChunks();
 
@@ -217,7 +211,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     private void requestValidation() {
         setDirty(true);
         long now = level.getServer().getTickCount();
-        long earliestTick = Math.max(lastValidationTick + REVALIDATION_GAP_TICKS, now);
+        long earliestTick = Math.max(lastValidationTick + getCooldownTicks(), now);
         EnvironmentSystem.requestValidation(this, earliestTick);
     }
 

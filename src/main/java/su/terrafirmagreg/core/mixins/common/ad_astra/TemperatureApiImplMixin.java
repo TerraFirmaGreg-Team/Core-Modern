@@ -27,7 +27,7 @@ public abstract class TemperatureApiImplMixin {
     private void tfg$getTemperature(Level level, BlockPos pos, CallbackInfoReturnable<Short> cir) {
         if (!(level instanceof ServerLevel))
             return;
-        float temperature = EnvironmentSystem.getTemperature(level, pos);
+        float temperature = EnvironmentSystem.getAverageTemperature(level, pos);
         if (level.dimension() == Level.OVERWORLD) {
             temperature = Math.max(temperature, PlanetConstants.FREEZE_TEMPERATURE);
         }
