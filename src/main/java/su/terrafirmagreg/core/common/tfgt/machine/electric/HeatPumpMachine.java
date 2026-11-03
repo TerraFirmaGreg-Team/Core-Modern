@@ -81,7 +81,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
         int size = getFrontInteriorSize();
         if (size <= 0)
             return 0;
-        return EnclosedRoomEnergyCurve.eutForVolume(size) * host.getEnergyCostMultiplier();
+        return EnclosedRoomEnergyCurve.eutForVolume(size) * host.getEnergyCostMultiplier() * 0.5;
     }
 
     public boolean isBlocked() {
