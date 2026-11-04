@@ -51,7 +51,7 @@ public class DeadBerryBushBlock extends SeasonalPlantBlock implements IFluidLogg
     {
         if (!state.canSurvive(level, currentPos))
         {
-            return Blocks.AIR.defaultBlockState();
+            return state.getFluidState().createLegacyBlock();
         }
         else
         {
