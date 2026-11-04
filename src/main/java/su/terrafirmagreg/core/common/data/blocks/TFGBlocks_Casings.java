@@ -296,6 +296,9 @@ public class TFGBlocks_Casings {
             ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ae2")),
             SoundType.METAL, 6, 5, MapColor.COLOR_BLACK, false);
 
+    public static final BlockEntry<Block> MALDONITE_CASING = createCasingBlock("casings/machine_casing_maldonite", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_maldonite")),
+            SoundType.COPPER, 5.5f, 6f, MapColor.COLOR_RED, false);
+
     public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> modelProvider,
             SoundType sound, float strength, float explosionResist, MapColor mapColor, boolean onlyDropWithTool) {
         return TFGCore.REGISTRATE.block(name, ActiveBlock::new)
