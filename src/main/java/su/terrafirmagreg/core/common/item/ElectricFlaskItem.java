@@ -21,6 +21,7 @@ import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -81,8 +82,12 @@ public class ElectricFlaskItem extends FlaskItem {
             return;
         }
 
+        final boolean wasSprinting = player.isSprinting();
         electric.discharge(EU_PER_DRINK, TIER, true, false, false);
         drinkable.onDrink(player, handler.drain(DEFAULT_DRINK, IFluidHandler.FluidAction.EXECUTE).getAmount());
+        if (wasSprinting) {
+            player.setSprinting(true);
+        }
         level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 0.5f, 1.0f);
     }
 
