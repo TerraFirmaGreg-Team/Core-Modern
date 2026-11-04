@@ -717,7 +717,7 @@ public class DimEnvManager extends SavedData {
     }
 
     /** Dispatches a block change at the given position to all machines listening in that chunk. */
-    private void dispatchToMachines(BlockPos pos) {
+    public void dispatchToMachines(BlockPos pos) {
         Set<IBlockSensitiveMachine> machines = blockChangeListeners.get(pos.getX() >> 4, pos.getZ() >> 4);
         if (machines == null)
             return;

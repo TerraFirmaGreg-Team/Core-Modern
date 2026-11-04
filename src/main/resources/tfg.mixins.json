@@ -25,6 +25,7 @@
         "common.ad_astra.TemperatureApiImplMixin",
         "common.advanced_peripherals.APCreativeTabMixin",
         "common.ae2.ConfigMenuInventoryMixin",
+        "common.ae2.CableBusContainerFacadeMixin",
         "common.ae2.InitP2PAttunementsMixin",
         "common.ae2.StorageHelperMixin",
         "common.ae2.WirelessTerminalMenuHostMixin",

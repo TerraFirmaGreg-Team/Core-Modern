@@ -351,6 +351,14 @@ public final class EnvironmentSystem {
         }
     }
 
+    /** Dispatches a block change at the given position to all machines listening in that chunk. */
+    public static void dispatchToMachines(ServerLevel level, BlockPos pos) {
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager != null) {
+            manager.dispatchToMachines(pos);
+        }
+    }
+
     /**
      * Called when a block has potentially changed state
      * Dispatches to the applicable dimension manager
