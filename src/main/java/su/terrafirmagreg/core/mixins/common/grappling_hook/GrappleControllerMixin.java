@@ -8,6 +8,8 @@ package su.terrafirmagreg.core.mixins.common.grappling_hook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -15,6 +17,9 @@ import com.yyon.grapplinghook.controllers.GrappleController;
 import com.yyon.grapplinghook.utils.Vec;
 
 import net.minecraft.world.entity.Entity;
+
+import su.terrafirmagreg.core.common.environment.DimensionEnvironment;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 
 @Mixin(value = GrappleController.class, remap = false)
 public class GrappleControllerMixin {
@@ -28,5 +33,10 @@ public class GrappleControllerMixin {
     private void tfg$resetFallDistanceOnDoubleJump(Vec instance, Entity e, Operation<Void> original) {
         this.motion.setMotion(e);
         e.resetFallDistance();
+    }
+
+    @ModifyConstant(method = "updatePlayerPos", constant = @Constant(doubleValue = -0.05))
+    private double tfg$gravity(double original) {
+        return original * EnvironmentSystem.getGravity(this.entity.level(), this.entity.blockPosition()) / DimensionEnvironment.EARTH_GRAVITY;
     }
 }
