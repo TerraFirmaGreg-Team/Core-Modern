@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IWorkableMultiController;
+import com.gregtechceu.gtceu.common.item.TurbineRotorBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 
@@ -28,6 +29,7 @@ public class RotorVentPartMachine extends RotorHolderPartMachine {
 
     public RotorVentPartMachine(IMachineBlockEntity holder, int tier) {
         super(holder, tier);
+        inventory.setFilter(stack -> TurbineRotorBehaviour.getBehaviour(stack) != null);
     }
 
     @Override
@@ -75,6 +77,12 @@ public class RotorVentPartMachine extends RotorHolderPartMachine {
     }
 
     // With this part we get the stats of the Rotors, also will be easy to duplicate for future mechanics
+
+    // Only Rotors are accepted
+    @Override
+    public boolean hasRotor() {
+        return TurbineRotorBehaviour.getBehaviour(getRotorStack()) != null;
+    }
 
     @Override
     public int getHolderEfficiency() {

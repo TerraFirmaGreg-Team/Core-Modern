@@ -15,6 +15,7 @@ import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
+import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -23,7 +24,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MilkBucketItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -40,7 +40,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -131,24 +130,39 @@ public class CombustionEngineBlock extends DirectionalKineticBlock implements IB
         if (tank == null)
             return InteractionResult.PASS;
 
-        if (stack.getItem() instanceof BucketItem || stack.getItem() instanceof MilkBucketItem) {
-            Fluid fluid = stack.getItem() instanceof BucketItem bi ? bi.getFluid() : ForgeMod.MILK.get();
-
-            if (!tank.getFluidInTank(0).isEmpty())
-                return InteractionResult.FAIL;
-
-            tank.fill(new FluidStack(fluid, 1000), IFluidHandler.FluidAction.EXECUTE);
-            if (!player.isCreative())
-                player.setItemInHand(hand, new ItemStack(Items.BUCKET));
-
+        if (FluidHelpers.transferBetweenBlockEntityAndItem(stack, be, player, hand)) {
             return InteractionResult.SUCCESS;
         }
 
-        IFluidHandlerItem itemTank = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
-        if (itemTank == null)
-            return InteractionResult.PASS;
+        // Rclick with filled bucket
+        else if (stack.getItem() instanceof BucketItem bi) {
+            Fluid fluid = bi.getFluid();
 
-        itemTank.drain(tank.fill(itemTank.getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+            var itemTankFluid = tank.getFluidInTank(0);
+            if (tank.fill(new FluidStack(fluid, FluidHelpers.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) > 0) {
+                FluidHelpers.playTransferSound(level, pos, itemTankFluid, FluidHelpers.Transfer.DRAIN);
+                if (!player.isCreative())
+                    player.setItemInHand(hand, new ItemStack(Items.BUCKET));
+            }
+        }
+        // Other fluid containers
+        else {
+            IFluidHandlerItem itemTank = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+            if (itemTank == null)
+                return InteractionResult.PASS;
+
+            var itemTankFluid = itemTank.getFluidInTank(0);
+            if (itemTankFluid.isEmpty()) {
+                if (itemTank.fill(tank.drain(tank.getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE) > 0) {
+                    FluidHelpers.playTransferSound(level, pos, itemTankFluid, FluidHelpers.Transfer.FILL);
+                }
+            } else {
+                if (!itemTank.drain(tank.fill(itemTankFluid, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE).isEmpty()) {
+                    FluidHelpers.playTransferSound(level, pos, itemTankFluid, FluidHelpers.Transfer.DRAIN);
+                }
+            }
+
+        }
         return InteractionResult.SUCCESS;
     }
 

@@ -105,6 +105,8 @@ public class TFGItems {
     public static final ItemEntry<ForgeSpawnEggItem> MONGOOSE_SPAWN_EGG = registerSpawnEgg(TFGEntities.MONGOOSE, 0x8C7355, 0x3D2B1A);
     public static final ItemEntry<ForgeSpawnEggItem> BACTRIAN_CAMEL_SPAWN_EGG = registerSpawnEgg(TFGEntities.BACTRIAN_CAMEL, 0x8C7355, 0x3D2B1A);
     public static final ItemEntry<ForgeSpawnEggItem> DROMEDARY_CAMEL_SPAWN_EGG = registerSpawnEgg(TFGEntities.DROMEDARY_CAMEL, 0x8C7355, 0x3D2B1A);
+    public static final ItemEntry<ForgeSpawnEggItem> SILK_MOTH_SPAWN_EGG = registerSpawnEgg(TFGEntities.SILK_MOTH, 0xc68acc, 0xf2dcec);
+    public static final ItemEntry<ForgeSpawnEggItem> DRAGONFLY_SPAWN_EGG = registerSpawnEgg(TFGEntities.DRAGONFLY, 0x202ab0, 0x73e1f9);
 
     @SuppressWarnings("deprecation")
     public static final ItemEntry<BucketItem> MARS_WATER_BUCKET = TFGCore.REGISTRATE.item("semiheavy_ammoniacal_water_bucket",

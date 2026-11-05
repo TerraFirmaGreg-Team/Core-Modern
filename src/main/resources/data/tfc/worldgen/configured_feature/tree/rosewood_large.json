@@ -13,7 +13,6 @@
             "tfc:rosewood_large/8"
         ],
         "placement": {
-            "ground_type": "submerged",
             "width": 1,
             "height": 9
         },

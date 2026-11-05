@@ -22,7 +22,9 @@
         "tfc:plant/sea_lavender",
         "tfc:plant/water_canna",
         "tfc:plant/water_lily",
-        "tfc:plant/water_taro"
+        "tfc:plant/water_taro",
+        "tfc:plant/cranberry_bush",
+        "tfc:crop/rice"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

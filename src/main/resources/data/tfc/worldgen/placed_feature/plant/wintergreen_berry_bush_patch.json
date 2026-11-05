@@ -2,13 +2,13 @@
     "feature": "tfc:plant/wintergreen_berry_bush_patch",
     "placement": [
         {
-            "max_temperature": 17,
-            "max_rainfall": 400,
+            "max_temperature": 15,
+            "max_rainfall": 350,
             "max_forest": "old_growth",
             "type": "tfc:climate",
-            "min_rainfall": 100,
+            "min_rainfall": 50,
             "min_forest": "edge",
-            "min_temperature": -6
+            "min_temperature": -20
         },
         {"type": "minecraft:in_square"},
         {

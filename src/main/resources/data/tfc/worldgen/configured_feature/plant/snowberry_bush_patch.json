@@ -3,7 +3,7 @@
     "type": "minecraft:random_patch",
     "config": {
         "xz_spread": 4,
-        "tries": 4,
+        "tries": 6,
         "y_spread": 1,
         "feature": "tfc:plant/snowberry_bush"
     }

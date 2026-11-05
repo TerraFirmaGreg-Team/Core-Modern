@@ -18,7 +18,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 public class UnposterBlockMixin {
     // Makes the unposter grow anything from a new tag, instead of being hardcoded to mushrooms
 
-    @Redirect(method = "randomTick", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/util/Helpers;isBlock(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/tags/TagKey;)Z"), remap = true)
+    @Redirect(method = "randomTick", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/util/Helpers;isBlock(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/tags/TagKey;)Z", remap = false), remap = true)
     private boolean tfg$randomTick(BlockState state, TagKey<Block> tag) {
         return Helpers.isBlock(state, TFGTags.Blocks.UNPOSTER_GROWABLE) && !Helpers.isBlock(state, TFCTags.Blocks.CROPS);
     }

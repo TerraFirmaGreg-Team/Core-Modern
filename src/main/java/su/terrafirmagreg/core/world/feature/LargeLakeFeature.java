@@ -129,6 +129,8 @@ public class LargeLakeFeature extends Feature<LargeLakeConfig> {
                 barrierState = rockData.getRock(pos).hardened().defaultBlockState();
             }
 
+            final boolean isEncased = config.isEncased();
+
             for (int x = 0; x < maxSizeX; ++x) {
                 for (int z = 0; z < maxSizeZ; ++z) {
                     for (int y = 0; y < maxSizeY; ++y) {
@@ -140,11 +142,10 @@ public class LargeLakeFeature extends Feature<LargeLakeConfig> {
                                         || y < maxSizeY - 1 && array[(x * maxSizeX + z) * maxSizeY + y + 1]
                                         || y > 0 && array[(x * maxSizeX + z) * maxSizeY + (y - 1)]);
 
-                        if (flag2 && (y < depth || random.nextInt(2) != 0)) {
-
+                        if (flag2 && (y < depth || isEncased)) {
                             BlockState stateAt = level.getBlockState(pos.offset(x, y, z));
 
-                            if (stateAt.isSolid() && !stateAt.is(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE)) {
+                            if ((isEncased || stateAt.isSolid()) && !stateAt.is(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE)) {
                                 BlockPos offsetPos = pos.offset(x, y, z);
                                 level.setBlock(offsetPos, barrierState, Block.UPDATE_CLIENTS);
                                 this.markAboveForPostProcessing(level, offsetPos);

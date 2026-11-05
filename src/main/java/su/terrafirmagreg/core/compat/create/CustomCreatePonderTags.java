@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.compat.create;
 
+import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -10,6 +11,8 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+
+import su.terrafirmagreg.core.compat.create.display_source.TFGDisplaySources;
 
 public class CustomCreatePonderTags {
 
@@ -25,8 +28,10 @@ public class CustomCreatePonderTags {
                 //.add(FLBlocks.CURED_OVEN_TOP.get(BRICK).get())
                 //.add(FLBlocks.CURED_OVEN_BOTTOM.get(BRICK).get())
                 //.add(FLBlocks.CURED_OVEN_HOPPER.get(BRICK).get())
-                .add(PartAbility.ROTOR_HOLDER.getAllBlocks().stream().findAny().get());
+                .add(PartAbility.ROTOR_HOLDER.getAllBlocks().stream().findAny().get())
+                .add(FLBlocks.LARGE_PLANTER.get());
 
+        TFGDisplaySources.register(helper);
     }
 
 }

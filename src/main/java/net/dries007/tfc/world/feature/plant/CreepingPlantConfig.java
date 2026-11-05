@@ -13,12 +13,13 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 
 import net.dries007.tfc.world.Codecs;
 
-public record CreepingPlantConfig(Block block, int radius, int height, float integrity) implements FeatureConfiguration
+public record CreepingPlantConfig(Block block, int radius, int height, int heightAboveTide, float integrity) implements FeatureConfiguration
 {
     public static final Codec<CreepingPlantConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.BLOCK.fieldOf("block").forGetter(c -> c.block),
         Codec.INT.fieldOf("radius").forGetter(c -> c.radius),
         Codec.INT.fieldOf("height").forGetter(c -> c.height),
+		Codec.INT.fieldOf("tide_height").forGetter(c -> c.heightAboveTide),
         Codec.FLOAT.optionalFieldOf("integrity", 1f).forGetter(c -> c.integrity)
     ).apply(instance, CreepingPlantConfig::new));
 }

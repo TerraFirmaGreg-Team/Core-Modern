@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class DHChunkLoaderMixin
 {
     @Inject(
-        method = "read",
         target = @Desc(value = "read", args={WorldGenLevel.class, ChunkPos.class, CompoundTag.class}, ret= LevelChunk.class),
         at = @At("RETURN"),
         require = 0

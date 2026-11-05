@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.world.phys.Vec3;
 
+import su.terrafirmagreg.core.client.renderer.CloudRendererHelper;
+
 // No sun/moon, skybox is fog color, but less close than the nether, and with clouds.
 // Fog color depends on the time of day.
 
@@ -30,5 +32,10 @@ public class VenusEffects extends DimensionSpecialEffects {
     @Nullable
     public float[] getSunriseColor(float timeOfDay, float partialTicks) {
         return null;
+    }
+
+    @Override
+    public float getCloudHeight() {
+        return super.getCloudHeight() + CloudRendererHelper.currentYOffset;
     }
 }

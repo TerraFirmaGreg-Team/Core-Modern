@@ -18,7 +18,13 @@
         "tfg:earth/ice_sheet_oceanic",
         "tfg:earth/ice_sheet_shore",
         "tfg:earth/guano_island",
-        "tfg:earth/tower_karst_bay"
+        "tfg:earth/tower_karst_bay",
+        "tfg:earth/oceanic_volcanic_arc",
+        "tfg:earth/ocean_atolls",
+        "tfg:earth/deep_ocean_atolls",
+        "tfg:earth/ocean_ridge",
+        "tfg:earth/volcanic_mountain_islands",
+        "tfg:earth/volcanic_island"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

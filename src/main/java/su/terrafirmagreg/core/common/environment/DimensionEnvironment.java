@@ -25,6 +25,9 @@ public record DimensionEnvironment(
         short temperature,
         float pressure) {
 
+    /** Hot Temperature for Ad Astra, vanilla is 70 */
+    public static final int HOT_TEMPERATURE_THRESHOLD = 150;
+
     /** Pressure threshold below which decompression events occur (low pressure -> air rushes out) */
     public static final float DECOMPRESSION_THRESHOLD = 0.5f;
 
