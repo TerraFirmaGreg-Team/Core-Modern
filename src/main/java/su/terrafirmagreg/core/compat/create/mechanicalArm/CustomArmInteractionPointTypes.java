@@ -1,14 +1,13 @@
-package su.terrafirmagreg.core.compat.create;
+package su.terrafirmagreg.core.compat.create.mechanicalArm;
 
+import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.OvenHopperBlock;
 import com.eerussianguy.firmalife.common.blocks.VatBlock;
-import com.eerussianguy.firmalife.common.blocks.greenhouse.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.simibubi.create.Create;
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
-
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.CrucibleBlock;
@@ -21,9 +20,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.RegisterEvent;
+
+import javax.annotation.Nullable;
 
 public final class CustomArmInteractionPointTypes {
     static {
@@ -35,8 +35,8 @@ public final class CustomArmInteractionPointTypes {
         register("vat", new VatType());
 
         register("rotor_holder", new RotorHolderBlockType());
-        //register("single_planter", new SinglePlanterBlockType());
-        //register("quad_planter", new QuadPlanterBlockType());
+        register("single_planter", new SinglePlanterType());
+        register("multi_planter", new MultiPlanterType());
     }
 
     private static <T extends ArmInteractionPointType> void register(String name, T type) {
@@ -138,15 +138,16 @@ public final class CustomArmInteractionPointTypes {
             return Direction.UP;
         }
 
+        @SuppressWarnings("DataFlowIssue")
         @Override
+        @Nullable
         protected IItemHandler getHandler() {
             if (!cachedHandler.isPresent()) {
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be == null) {
                     return null;
                 }
-                LazyOptional<IItemHandler> handler = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
-                cachedHandler = handler;
+                cachedHandler = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
             }
             return cachedHandler.orElse(null);
         }
@@ -188,35 +189,33 @@ public final class CustomArmInteractionPointTypes {
             return new ArmInteractionPoint(this, level, pos, state);
         }
     }
-    /* All the ones using Firmalife stuff don't work
-    public static class SinglePlanterBlockType extends ArmInteractionPointType{
+
+    public static class SinglePlanterType extends ArmInteractionPointType {
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
-            if (state.getBlock() instanceof LargePlanterBlock) return true;
-            else if(state.getBlock() instanceof HangingPlanterBlock) return true;
-            else if(state.getBlock() instanceof BonsaiPlanterBlock) return true;
-            else return state.getBlock() instanceof TrellisPlanterBlock;
+            return state.is(FLBlocks.LARGE_PLANTER.get())
+                    || state.is(FLBlocks.BONSAI_PLANTER.get())
+                    || state.is(FLBlocks.HANGING_PLANTER.get())
+                    || state.is(FLBlocks.TRELLIS_PLANTER.get());
         }
-    
+
         @Override
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
-            return new ArmInteractionPoint(this, level, pos, state);
+            return new PlanterPoint.SinglePlanterPoint(this, level, pos, state);
         }
-    
     }
-    
-    public static class QuadPlanterBlockType extends ArmInteractionPointType{
+
+    public static class MultiPlanterType extends ArmInteractionPointType {
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
-            if (state.getBlock() instanceof QuadPlanterBlock) return true;
-            else return state.getBlock() instanceof HydroponicPlanterBlock;
-    
+            return state.is(FLBlocks.QUAD_PLANTER.get())
+                    || state.is(FLBlocks.HYDROPONIC_PLANTER.get());
         }
-    
+
         @Override
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
-            return new ArmInteractionPoint(this, level, pos, state);
+            return new PlanterPoint.MultiPlanterPoint(this, level, pos, state);
         }
-    }*/
+    }
 
 }
