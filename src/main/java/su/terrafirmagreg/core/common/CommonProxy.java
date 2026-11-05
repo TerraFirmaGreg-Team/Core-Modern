@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.common;
 
-import appeng.core.definitions.AEItems;
-import appeng.core.localization.GuiText;
+import static appeng.api.upgrades.Upgrades.add;
+
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
-import de.mari_023.ae2wtlib.AE2wtlib;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -19,6 +19,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DataPackRegistryEvent;
+
+import appeng.core.definitions.AEItems;
+import appeng.core.localization.GuiText;
+import de.mari_023.ae2wtlib.AE2wtlib;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
@@ -43,8 +48,6 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.utils.TFGHelpers;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
 import su.terrafirmagreg.core.world.*;
-
-import static appeng.api.upgrades.Upgrades.add;
 
 public class CommonProxy {
 

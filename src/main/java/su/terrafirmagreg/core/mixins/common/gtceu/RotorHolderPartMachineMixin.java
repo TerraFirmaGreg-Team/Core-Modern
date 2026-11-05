@@ -1,8 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
+import org.spongepowered.asm.mixin.Mixin;
+
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
-import org.spongepowered.asm.mixin.Mixin;
 
 /**
  * @author TomPlop
