@@ -36,6 +36,7 @@ import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
 import su.terrafirmagreg.core.compat.create.mechanicalArm.CustomArmInteractionPointTypes;
+import su.terrafirmagreg.core.compat.create.display_source.TFGDisplaySources;
 import su.terrafirmagreg.core.compat.grappling_hook.GrapplehookCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
@@ -92,6 +93,7 @@ public class CommonProxy {
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
 
+        TFGDisplaySources.init(bus);
         AdAstraCompat.RegisterEvents();
         AE2Compat.registerEvents();
         EnvironmentSystem.init();
