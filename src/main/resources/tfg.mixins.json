@@ -1,5 +1,6 @@
 {
     "mixins": [
+        "client.afc.TapBlockEntityProviderMixin",
         "client.create.ChainConveyorRendererMixin",
         "client.gtceu.GTForgeClientEventListenerMixin",
         "client.minecraft.AbstractContainerScreenMixin",
@@ -28,6 +29,7 @@
         "common.ae2.InitP2PAttunementsMixin",
         "common.ae2.StorageHelperMixin",
         "common.ae2.WirelessTerminalMenuHostMixin",
+        "common.afc.TapBlockEntityMixin",
         "common.arthropocolypse.IceCrawlerMixin",
         "common.arthropocolypse.MealwormBeetleMixin",
         "common.arthropocolypse.PlaterodrilusMixin",
@@ -100,8 +102,11 @@
         "common.firmalife.ClimateStationOxygenatedMixin",
         "common.firmalife.CompostTumblerBlockEntityMixin",
         "common.firmalife.CompostTumblerBlockMixin",
+        "common.firmalife.FLBeehiveBlockEntityMixin",
+        "common.firmalife.FLBeehiveBlockMixin",
         "common.firmalife.FLInteractionManagerMixin",
         "common.firmalife.HydroponicPlanterBlockEntityMixin",
+        "common.firmalife.LargePlanterBlockEntityLightMixin",
         "common.firmalife.LargePlanterBlockEntityOxygenMixin",
         "common.firmalife.MixinFoodShelfBlockEntity",
         "common.firmalife.MixinGreenhousePortBlock",
