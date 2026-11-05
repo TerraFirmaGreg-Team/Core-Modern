@@ -3,14 +3,14 @@
   "loader": "gtceu:machine",
   "machine": "tfg:ore_sifter",
   "texture_overrides": {
-    "all": "tfg:block/casings/unique/secure_maceration_red_casing"
+    "all": "tfg:block/casings/machine_casing_maldonite"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top",
@@ -22,7 +22,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top",
@@ -34,7 +34,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_active_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top_active",
@@ -46,7 +46,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_active_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top_active",
@@ -58,7 +58,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top",
@@ -70,7 +70,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top",
@@ -82,7 +82,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_active_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top_active",
@@ -94,7 +94,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/unique/secure_maceration_red_casing",
+          "all": "tfg:block/casings/machine_casing_maldonite",
           "overlay_front": "gtceu:block/machines/sifter/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/sifter/overlay_front_active_emissive",
           "overlay_top": "gtceu:block/machines/sifter/overlay_top_active",

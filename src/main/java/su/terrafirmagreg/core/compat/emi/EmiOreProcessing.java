@@ -9,6 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 
+import su.terrafirmagreg.core.TFGCore;
+
 public class EmiOreProcessing extends ModularEmiRecipe<TFGOreByProductWidget> {
 
     final Material material;
@@ -25,7 +27,8 @@ public class EmiOreProcessing extends ModularEmiRecipe<TFGOreByProductWidget> {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return material.getResourceLocation();
+        ResourceLocation loc = material.getResourceLocation();
+        return TFGCore.id("/ore_processing_diagram/" + loc.getNamespace() + "/" + loc.getPath());
     }
 
     @Override

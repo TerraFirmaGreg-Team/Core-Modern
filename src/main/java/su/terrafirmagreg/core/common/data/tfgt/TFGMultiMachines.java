@@ -1715,7 +1715,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition ORE_SIFTER = REGISTRATE
             .multiblock("ore_sifter", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .appearanceBlock(TFGBlocks_Casings.SECURE_PULVERIZATION_CASING)
+            .appearanceBlock(TFGBlocks_Casings.MALDONITE_CASING)
             .recipeTypes(TFGTRecipeTypes.TFG_SIFTER_RECIPES)
             .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
             .pattern(definition -> FactoryBlockPattern.start()
@@ -1723,18 +1723,18 @@ public class TFGMultiMachines {
                     .aisle("AAA", "EDE", "EDE", "CDC", "EDE")
                     .aisle("AAA", "EXE", "EEE", "CCC", "EEE")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
-                    .where('A', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('A', Predicates.blocks(TFGBlocks_Casings.STERLING_SILVER_CASING.get()))
                     .where('B', Predicates.blocks(GTBlocks.CASING_TEMPERED_GLASS.get()))
                     .where('C', Predicates.blocks(TFGBlocks_Casings.STERLING_SILVER_CASING.get()))
                     .where('D', Predicates.blocks(GTBlocks.CASING_GRATE.get()))
-                    .where('E', Predicates.blocks(TFGBlocks_Casings.SECURE_PULVERIZATION_CASING.get()).setMinGlobalLimited(8)
+                    .where('E', Predicates.blocks(TFGBlocks_Casings.MALDONITE_CASING.get()).setMinGlobalLimited(8)
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .build())
             .workableCasingModel(
-                    TFGCore.id("block/casings/unique/secure_maceration_red_casing"),
+                    TFGCore.id("block/casings/machine_casing_maldonite"),
                     GTCEu.id("block/machines/sifter"))
             .register();
 
