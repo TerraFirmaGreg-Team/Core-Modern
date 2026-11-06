@@ -1324,7 +1324,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE
             .multiblock("oxygen_distributor",
                     holder -> new OxygenDistributorMultiblock(holder))
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .recipeModifier(OxygenDistributorMultiblock::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_TURBINE)
@@ -1354,7 +1354,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition HIGGS_EMITTER = REGISTRATE
             .multiblock("higgs_emitter",
                     HiggsEmitterMultiblock::new)
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.GRAVITY_EMISSION)
             .recipeModifier(HiggsEmitterMultiblock::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.AE2_CASING)
@@ -1383,7 +1383,7 @@ public class TFGMultiMachines {
 
     public static final MultiblockMachineDefinition HEAT_PUMP = REGISTRATE
             .multiblock("heat_pump", HeatPumpMultiblock::new)
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.SPACE_HEATING)
             .recipeModifier(HeatPumpMultiblock::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.PRESSURE_CASING_DARK)
