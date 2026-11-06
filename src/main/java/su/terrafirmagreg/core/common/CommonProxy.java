@@ -110,6 +110,7 @@ public class CommonProxy {
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
         TFGModifyMaterials.modify();
+        TFGToolTypes.modify();
     }
 
     @SubscribeEvent
