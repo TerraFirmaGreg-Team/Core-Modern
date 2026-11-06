@@ -45,4 +45,19 @@ repositories {
             includeGroup('com.tterrag.registrate')
         }
     }
+    maven {
+        name('Expandium')
+        url('https://repo.expandium.net/releases')
+        content {
+            includeGroup('de.mari_023')
+        }
+    }
+    // migrate this before a full release
+    maven {
+        name('Expandium Snapshots')
+        url('https://repo.expandium.net/snapshots')
+        content {
+            includeGroup('appeng')
+        }
+    }
 }

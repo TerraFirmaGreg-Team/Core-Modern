@@ -1,0 +1,15 @@
+{
+  "$schema": "../schema.json",
+  "includes": ["../craft_amount.json"],
+  "text": {
+    "dialog_title": {
+      "text": {
+        "translate": "gui.tfg.order_terminal.amount"
+      },
+      "position": {
+        "left": 8,
+        "top": 6
+      }
+    }
+  }
+}

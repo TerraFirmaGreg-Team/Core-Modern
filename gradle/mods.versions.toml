@@ -52,8 +52,8 @@ sacksNSuch = "1.2.6"
 
 # AE2
 guideme = "20.1.13"
-ae2 = "9092015" # cf: appliedenergistics2-forge-15.5.5-uelm.jar
-ae2WirelessTerminals = "15.3.0-forge"
+ae2 = "15.5.8-uelm-sha.d91e554-SNAPSHOT" # cf: appliedenergistics2-forge-15.5.5-uelm.jar
+ae2WirelessTerminals = "15.4.0-SNAPSHOT"
 
 # ComputerCraft
 ccTweaked = "1.111.0-forge,1.20.1"
@@ -169,8 +169,8 @@ sacksNSuch = { module = "maven.modrinth:sacks-n-such", version.ref = "sacksNSuch
 
 # AE2 (UELM fork)
 guideme = { module = "maven.modrinth:guideme", version.ref = "guideme" }
-ae2 = { module = "curse.maven:ae2-uelm-1624366", version.ref = "ae2" }
-ae2WirelessTerminals = { module = "maven.modrinth:applied-energistics-2-wireless-terminals", version.ref = "ae2WirelessTerminals" }
+ae2 = { module = "appeng:appliedenergistics2-forge", version.ref = "ae2" }
+ae2WirelessTerminals = { module = "de.mari_023:ae2wtlib", version.ref = "ae2WirelessTerminals" }
 
 # ComputerCraft
 ccTweakedCoreApi = { module = "cc.tweaked:cc-tweaked-1.20.1-core-api", version.ref = "cctweaked" }
