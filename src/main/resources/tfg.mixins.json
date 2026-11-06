@@ -58,6 +58,7 @@
         "common.create.CreatePonderPluginMixin",
         "common.create.CreateStressMixin",
         "common.create.DepotBehaviorMixin",
+        "common.create.DivingHelmetItemMixin",
         "common.create.FluidDrainingBehaviourMixin",
         "common.create.FluidFillingBehaviourMixin",
         "common.create.FluidPropagatorMixin",
