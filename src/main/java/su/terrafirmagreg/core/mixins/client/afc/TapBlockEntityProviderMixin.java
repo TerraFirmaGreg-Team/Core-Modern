@@ -1,18 +1,22 @@
 package su.terrafirmagreg.core.mixins.client.afc;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.therighthon.afc.compat.jade.TapBlockEntityProvider;
-import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.therighthon.afc.compat.jade.TapBlockEntityProvider;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
+
 import su.terrafirmagreg.core.common.environment.IGreenhouseReceiver;
 
 @Mixin(value = TapBlockEntityProvider.class, remap = false)

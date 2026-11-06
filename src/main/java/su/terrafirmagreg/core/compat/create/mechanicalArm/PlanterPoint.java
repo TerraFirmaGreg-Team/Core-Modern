@@ -1,11 +1,14 @@
 package su.terrafirmagreg.core.compat.create.mechanicalArm;
 
+import javax.annotation.Nullable;
+
 import com.eerussianguy.firmalife.common.blockentities.LargePlanterBlockEntity;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.LargePlanterBlock;
 import com.eerussianguy.firmalife.common.util.Plantable;
 import com.simibubi.create.content.kinetics.mechanicalArm.AllArmInteractionPointTypes;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
+
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -14,8 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.IItemHandler;
-
-import javax.annotation.Nullable;
 
 public abstract class PlanterPoint extends AllArmInteractionPointTypes.DepositOnlyArmInteractionPoint {
     protected PlanterPoint(ArmInteractionPointType type, Level level, BlockPos pos, BlockState state) {

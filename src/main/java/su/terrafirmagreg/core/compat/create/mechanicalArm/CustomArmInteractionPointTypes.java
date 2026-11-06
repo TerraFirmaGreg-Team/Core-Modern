@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.compat.create.mechanicalArm;
 
+import javax.annotation.Nullable;
+
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.OvenHopperBlock;
 import com.eerussianguy.firmalife.common.blocks.VatBlock;
@@ -8,6 +10,7 @@ import com.simibubi.create.Create;
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
+
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.CrucibleBlock;
@@ -22,8 +25,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.RegisterEvent;
-
-import javax.annotation.Nullable;
 
 public final class CustomArmInteractionPointTypes {
     static {
