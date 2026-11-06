@@ -21,7 +21,7 @@ public abstract class DivingHelmetItemMixin {
     @Inject(method = "breatheUnderwater", at = @At("HEAD"), cancellable = true)
     private static void tfg$disableDivingGear(LivingBreatheEvent event, CallbackInfo ci) {
         LivingEntity entity = event.getEntity();
-        if (!DivingHelmetItem.isWornBy(entity) || HypoxiaHandler.isDivingGearDisabled(entity)) {
+        if (!DivingHelmetItem.isWornBy(entity) || HypoxiaHandler.canUseDivingGear(entity)) {
             return;
         }
         if (entity.level().isClientSide()) {

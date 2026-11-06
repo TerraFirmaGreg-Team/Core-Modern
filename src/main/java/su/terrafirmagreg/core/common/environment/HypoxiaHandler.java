@@ -100,13 +100,13 @@ public final class HypoxiaHandler {
         return OxygenApi.API.hasOxygen(player);
     }
 
-    public static boolean isDivingGearDisabled(LivingEntity entity) {
+    public static boolean canUseDivingGear(LivingEntity entity) {
         BlockPos eyePos = BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ());
-        return !(EnvironmentSystem.getPressure(entity.level(), eyePos) < ARMSTRONG_LIMIT) || EnvironmentSystem.hasOxygen(entity.level(), eyePos);
+        return EnvironmentSystem.getPressure(entity.level(), eyePos) >= ARMSTRONG_LIMIT || EnvironmentSystem.hasOxygen(entity.level(), eyePos);
     }
 
     private static boolean isDivingWithAir(Player player) {
-        return player.isEyeInFluid(FluidTags.WATER) && DivingHelmetItem.isWornBy(player) && isDivingGearDisabled(player) && !BacktankUtil.getAllWithAir(player).isEmpty();
+        return player.isEyeInFluid(FluidTags.WATER) && DivingHelmetItem.isWornBy(player) && canUseDivingGear(player) && !BacktankUtil.getAllWithAir(player).isEmpty();
     }
 
     public static boolean isSuffocating(Player player) {
