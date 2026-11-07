@@ -219,7 +219,7 @@ public class TFGBlocks_Wood {
         var properties = ExtendedProperties.of(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? wood.woodColor() : wood.barkColor()).strength(8f).sound(SoundType.WOOD)
                 .instrument(NoteBlockInstrument.BASS).requiresCorrectToolForDrops().flammableLikeLogs();
 
-        return TFGCore.REGISTRATE.block("wood/wood/" + wood.serializedName, p -> new LogBlock(properties, blocks.get(Wood.BlockType.STRIPPED_LOG)))
+        return TFGCore.REGISTRATE.block("wood/wood/" + wood.serializedName, p -> new LogBlock(properties, blocks.get(Wood.BlockType.STRIPPED_WOOD)))
                 .blockstate((ctx, prov) -> {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log/" + wood.serializedName));
                 })

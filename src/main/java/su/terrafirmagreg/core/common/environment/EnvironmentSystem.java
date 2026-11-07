@@ -106,6 +106,23 @@ public final class EnvironmentSystem {
     }
 
     /**
+     * Gets the average temperature at a position. Used for Ad Astra's temperature checks.
+     * Returns heat pump temperature if present, otherwise the dimension's average temperature.
+     */
+    public static float getAverageTemperature(Level level, BlockPos pos) {
+        if (!(level instanceof ServerLevel)) {
+            return DimensionEnvironment.get(level.dimension()).temperature();
+        }
+
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager == null) {
+            return DimensionEnvironment.get(level.dimension()).temperature();
+        }
+
+        return manager.getAverageTemperature(pos);
+    }
+
+    /**
      * Get a position's target temperature from a machine bubble (server-side only).
      *
      * @param level The level to check in
@@ -331,6 +348,14 @@ public final class EnvironmentSystem {
         DimEnvManager manager = managers.get(level.dimension());
         if (manager != null) {
             manager.onBlockStateChange(pos, oldState, newState);
+        }
+    }
+
+    /** Dispatches a block change at the given position to all machines listening in that chunk. */
+    public static void dispatchToMachines(ServerLevel level, BlockPos pos) {
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager != null) {
+            manager.dispatchToMachines(pos);
         }
     }
 
