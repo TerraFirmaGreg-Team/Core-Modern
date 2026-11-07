@@ -3,35 +3,35 @@
     "type": "tfg:mapped_rivulet",
     "config": {"states": [
         {
-            "with": "tfc:ore/sulfur/andesite",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/raw/andesite"
         },
         {
-            "with": "tfc:ore/sulfur/dacite",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/raw/dacite"
         },
         {
-            "with": "tfc:ore/sulfur/basalt",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/raw/basalt"
         },
         {
-            "with": "tfc:ore/sulfur/rhyolite",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/raw/rhyolite"
         },
         {
-            "with": "tfc:ore/sulfur/andesite",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/hardened/andesite"
         },
         {
-            "with": "tfc:ore/sulfur/dacite",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/hardened/dacite"
         },
         {
-            "with": "tfc:ore/sulfur/basalt",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/hardened/basalt"
         },
         {
-            "with": "tfc:ore/sulfur/rhyolite",
+            "with": "gtceu:sulfur_ore",
             "replace": "tfc:rock/hardened/rhyolite"
         }
     ]}

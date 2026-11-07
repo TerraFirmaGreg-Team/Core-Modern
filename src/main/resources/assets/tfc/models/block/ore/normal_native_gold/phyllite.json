@@ -1,8 +1,0 @@
-{
-    "parent": "tfc:block/ore",
-    "textures": {
-        "all": "tfc:block/rock/raw/phyllite",
-        "overlay": "tfc:block/ore/normal_native_gold"
-    },
-    "__comment__": "This file was automatically created by mcresources"
-}

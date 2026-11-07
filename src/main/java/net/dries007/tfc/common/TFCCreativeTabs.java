@@ -279,17 +279,6 @@ public final class TFCCreativeTabs
         {
             TFCBlocks.ORE_DEPOSITS.values().forEach(map -> accept(out, map, deposit));
         }
-        for (Ore ore : Ore.values())
-        {
-            if (ore.isGraded())
-            {
-                TFCBlocks.GRADED_ORES.values().forEach(map -> map.get(ore).values().forEach(reg -> accept(out, reg)));
-            }
-            else
-            {
-                TFCBlocks.ORES.values().forEach(map -> accept(out, map, ore));
-            }
-        }
     }
 
     private static void fillRocksTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output out)
