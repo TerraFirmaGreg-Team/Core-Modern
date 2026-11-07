@@ -31,7 +31,7 @@ public enum AnnotateBiomeAltitude implements RegionTask
 		final RandomSource random = context.random;
 		final BitSet explored = new BitSet(region.size());
 		final IntArrayFIFOQueue queue = new IntArrayFIFOQueue();
-		final int foothillWidth = WorldgenData.MOUNTAIN_SCALING.foothillWidth();
+		final int foothillWidth = WorldgenData.currentOrDefaultMountainScaling().foothillWidth();
 
 		for (final var point : region.points())
 		{

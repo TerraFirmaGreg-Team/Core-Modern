@@ -273,7 +273,7 @@ public final class Region
 		public boolean volcanic() { return (flags & FLAG_VOLCANIC) != 0; }
 		public boolean barrierIsland() { return (flags & FLAG_BARRIER_ISLAND) != 0; }
 
-		public int discreteBiomeAltitude() { return Math.floorDiv(biomeAltitude, WorldgenData.MOUNTAIN_SCALING.foothillWidth()); }
+		public int discreteBiomeAltitude() { return Math.floorDiv(biomeAltitude, WorldgenData.currentOrDefaultMountainScaling().foothillWidth()); }
 
 		public void setLand() { flags |= FLAG_LAND; }
 		public void setIsland() { flags |= FLAG_ISLAND; }

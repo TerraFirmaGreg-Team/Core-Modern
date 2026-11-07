@@ -8,6 +8,7 @@ package net.dries007.tfc.common.blocks.plant;
 
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
+import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -102,13 +103,19 @@ public abstract class CreepingPlantBlock extends PlantBlock implements Direction
             Direction direction = Direction.getRandom(random);
             if (direction == Direction.DOWN)
                 direction = Direction.UP;
+
             final BlockPos newPos = random.nextFloat() < 0.2f ? pos.relative(direction).above() : pos.relative(direction);
-            if (level.getBlockState(newPos).isAir())
+			final BlockState targetState = level.getBlockState(newPos);
+			if (FluidHelpers.isAirOrEmptyFluid(targetState))
             {
-                final BlockState newState = updateStateFromSides(level, newPos, state);
-                if (!newState.isAir())
+				final BlockState filledState = FluidHelpers.fillWithFluid(state, targetState.getFluidState().getType());
+				if (filledState != null)
                 {
-                    level.setBlockAndUpdate(newPos, newState);
+					final BlockState newState = updateStateFromSides(level, newPos, filledState);
+					if (!newState.isAir())
+					{
+						level.setBlockAndUpdate(newPos, newState);
+					}
                 }
             }
         }
@@ -173,7 +180,7 @@ public abstract class CreepingPlantBlock extends PlantBlock implements Direction
         for (Direction direction : UPDATE_SHAPE_ORDER)
         {
             mutablePos.setWithOffset(pos, direction);
-            boolean ground = block.canCreepOn(level, pos, level.getBlockState(mutablePos), direction);
+            boolean ground = block.canCreepOn(level, mutablePos, level.getBlockState(mutablePos), direction);
 
             state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), ground);
             hasEarth |= ground;

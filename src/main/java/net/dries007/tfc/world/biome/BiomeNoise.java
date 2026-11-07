@@ -964,12 +964,7 @@ public final class BiomeNoise
 	 */
 	public static Noise2D ridgeMountains(long seed, double baseHeight, double scaleHeight, float spreadFactor, int cliffStartHeight, int cliffStartVariance)
 	{
-		var mountainScaling = WorldgenData.MOUNTAIN_SCALING;
-		if (mountainScaling == null)
-		{
-			TerraFirmaCraft.LOGGER.error("Error in BiomeNoise.ridgeMountains: MOUNTAIN_SCALING is null! Using default as fallback");
-			mountainScaling = WorldgenData.MOUNTAIN_SCALING_NEW_WORLD_DEFAULT;
-		}
+		var mountainScaling = WorldgenData.currentOrDefaultMountainScaling();
 
 		final double mountainHeightScale = mountainScaling.mountainHeightScale();
 		final double mountainHorizontalScale = mountainScaling.mountainHorizontalScale();

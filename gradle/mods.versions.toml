@@ -1,7 +1,7 @@
 [versions]
 create = "6.0.8-289"
 flywheel = "1.0.5"
-cctweaked = "1.111.0"
+cctweaked = "1.121.0"
 
 # Core / API libraries delivered as mods
 
@@ -56,7 +56,7 @@ ae2 = "9092015" # cf: appliedenergistics2-forge-15.5.5-uelm.jar
 ae2WirelessTerminals = "15.3.0-forge"
 
 # ComputerCraft
-ccTweaked = "1.111.0-forge,1.20.1"
+ccTweaked = "1.121.0-forge,1.20.1"
 
 # FTB
 ftbTeams = "7499810"

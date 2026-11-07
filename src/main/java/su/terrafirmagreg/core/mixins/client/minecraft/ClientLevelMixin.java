@@ -43,6 +43,10 @@ public abstract class ClientLevelMixin extends Level {
 
     @Inject(method = "getCloudColor", at = @At("RETURN"), cancellable = true)
     private void tfg$getCloudColor(float partialTick, CallbackInfoReturnable<Vec3> cir) {
+        // The cloud color is never set when shaders are enabled
+        if (CloudRendererHelper.currentCloudColor == null)
+            return;
+
         cir.setReturnValue(CloudRendererHelper.tintClouds(CloudRendererHelper.currentCloudColor, cir.getReturnValue()));
     }
 }

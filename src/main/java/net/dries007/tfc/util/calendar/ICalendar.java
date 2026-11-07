@@ -16,6 +16,7 @@ import net.dries007.tfc.util.Helpers;
 /**
  * @see Calendars
  */
+@SuppressWarnings({"NoTranslation", "unused"})
 public interface ICalendar
 {
     /* Constants */
@@ -118,6 +119,12 @@ public interface ICalendar
         return Month.valueOf((int) ((time / ticksInMonth) % MONTHS_IN_YEAR));
     }
 
+    static int getMonthNumberOfYear(long time, long daysInMonth)
+    {
+        long ticksInMonth = daysInMonth * TICKS_IN_DAY;
+        return (int) ((time / ticksInMonth) % MONTHS_IN_YEAR);
+    }
+
     /* Format Methods */
 
     static MutableComponent getTimeAndDate(long time, long daysInMonth)
@@ -128,6 +135,72 @@ public interface ICalendar
     static MutableComponent getTimeAndDate(int hour, int minute, Month month, int day, long years)
     {
         return Component.translatable("tfc.tooltip.calendar_hour_minute_month_day_year", String.format("%d:%02d", hour, minute), Helpers.translateEnum(month), day, years);
+    }
+
+    static MutableComponent getTimeAndDate12(long time, long daysInMonth)
+    {
+        return ICalendar.getTimeAndDate12(ICalendar.getHourOfDay(time), ICalendar.getMinuteOfHour(time), ICalendar.getMonthOfYear(time, daysInMonth), ICalendar.getDayOfMonth(time, daysInMonth), ICalendar.getTotalYears(time, daysInMonth));
+    }
+
+    static MutableComponent getTimeAndDate12(int hour, int minute, Month month, int day, long years)
+    {
+        String timeString;
+        int displayHour = hour % 12;
+        if (displayHour == 0) displayHour = 12;
+        String amPm = (hour < 12) ? "AM" : "PM";
+        timeString = String.format("%d:%02d%s", displayHour, minute, amPm);
+
+        return Component.translatable("tfc.tooltip.calendar_hour_minute_month_day_year", timeString, Helpers.translateEnum(month), day, years);
+    }
+
+    static MutableComponent getWeekDayAndDate(long time, long daysInMonth)
+    {
+        return ICalendar.getWeekDayAndDate(Day.getDayName(ICalendar.getTotalDays(time), ICalendar.getMonthOfYear(time, daysInMonth), ICalendar.getDayOfMonth(time, daysInMonth)), ICalendar.getMonthOfYear(time, daysInMonth), ICalendar.getDayOfMonth(time, daysInMonth), ICalendar.getTotalYears(time, daysInMonth));
+    }
+
+    static MutableComponent getWeekDayAndDate(MutableComponent weekDay, Month month, int day, long years)
+    {
+        return Component.translatable("tfg.tooltip.calendar_weekday_month_day_year", weekDay, Helpers.translateEnum(month), day, years);
+    }
+
+    static MutableComponent getDateUS(long time, long daysInMonth)
+    {
+        return ICalendar.getDateUS(ICalendar.getMonthNumberOfYear(time, daysInMonth), ICalendar.getDayOfMonth(time, daysInMonth), ICalendar.getTotalYears(time, daysInMonth));
+    }
+
+    static MutableComponent getDateUS(long month, int day, long years)
+    {
+        return Component.translatable("tfg.tooltip.calendar_standard_date", month, day, years);
+    }
+
+    static MutableComponent getDateEU(long time, long daysInMonth)
+    {
+        return ICalendar.getDateEU(ICalendar.getMonthNumberOfYear(time, daysInMonth), ICalendar.getDayOfMonth(time, daysInMonth), ICalendar.getTotalYears(time, daysInMonth));
+    }
+
+    static MutableComponent getDateEU(long month, int day, long years)
+    {
+        return Component.translatable("tfg.tooltip.calendar_standard_date", day, month, years);
+    }
+
+    static MutableComponent getDateISO(long time, long daysInMonth)
+    {
+        return ICalendar.getDateISO(ICalendar.getMonthNumberOfYear(time, daysInMonth), ICalendar.getDayOfMonth(time, daysInMonth), ICalendar.getTotalYears(time, daysInMonth));
+    }
+
+    static MutableComponent getDateISO(long month, int day, long years)
+    {
+        return Component.translatable("tfg.tooltip.calendar_iso_date", years, month, day);
+    }
+
+    static MutableComponent getMonthAndDay(long time, long daysInMonth)
+    {
+        return ICalendar.getMonthAndDay(ICalendar.getMonthOfYear(time, daysInMonth), ICalendar.getDayOfMonth(time, daysInMonth));
+    }
+
+    static MutableComponent getMonthAndDay(Month month, int day)
+    {
+        return Component.translatable("tfg.tooltip.calendar_month_and_day", Helpers.translateEnum(month), day);
     }
 
     static MutableComponent getTimeDelta(long ticks, int daysInMonth)
@@ -341,6 +414,54 @@ public interface ICalendar
     default MutableComponent getCalendarTimeAndDate()
     {
         return ICalendar.getTimeAndDate(getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    /**
+     * @return A formatted component for displaying an exact time stamp. Like "00:00AM January 1, 1000"
+     */
+    default MutableComponent getCalendarTimeAndDate12()
+    {
+        return ICalendar.getTimeAndDate12(getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    /**
+     * @return A formatted component for displaying an exact date. Like "Wednesday-January 1, 1000"
+     */
+    default MutableComponent getCalendarWeekdayAndDate()
+    {
+        return ICalendar.getWeekDayAndDate(getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    /**
+     * @return A formatted component for displaying an exact date mm/dd/yyyy.
+     */
+    default MutableComponent getCalendarDateUS()
+    {
+        return ICalendar.getDateUS(getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    /**
+     * @return A formatted component for displaying an exact date dd/mm/yyyy.
+     */
+    default MutableComponent getCalendarDateEU()
+    {
+        return ICalendar.getDateEU(getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    /**
+     * @return A formatted component for displaying an exact date yyyy-mm-dd.
+     */
+    default MutableComponent getCalendarDateISO()
+    {
+        return ICalendar.getDateISO(getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    /**
+     * @return A formatted component for displaying an exact date month-dd.
+     */
+    default MutableComponent getCalendarMonthAndDay()
+    {
+        return ICalendar.getMonthAndDay(getCalendarTicks(), getCalendarDaysInMonth());
     }
 
     /**

@@ -16,6 +16,14 @@
         {
             "heightmap": "WORLD_SURFACE_WG",
             "type": "minecraft:heightmap"
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": -64},
+                "max_inclusive": {"absolute": 120},
+                "type": "minecraft:uniform"
+            }
         }
     ],
     "__comment__": "This file was automatically created by mcresources"

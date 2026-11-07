@@ -17,6 +17,7 @@ import com.eerussianguy.firmalife.common.FLTags;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.IMachineBlock;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
@@ -1324,7 +1325,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE
             .multiblock("oxygen_distributor",
                     holder -> new OxygenDistributorMultiblock(holder))
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .recipeModifier(OxygenDistributorMultiblock::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_TURBINE)
@@ -1354,7 +1355,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition HIGGS_EMITTER = REGISTRATE
             .multiblock("higgs_emitter",
                     HiggsEmitterMultiblock::new)
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.GRAVITY_EMISSION)
             .recipeModifier(HiggsEmitterMultiblock::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.AE2_CASING)
@@ -1383,7 +1384,7 @@ public class TFGMultiMachines {
 
     public static final MultiblockMachineDefinition HEAT_PUMP = REGISTRATE
             .multiblock("heat_pump", HeatPumpMultiblock::new)
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.SPACE_HEATING)
             .recipeModifier(HeatPumpMultiblock::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.PRESSURE_CASING_DARK)
@@ -1576,6 +1577,59 @@ public class TFGMultiMachines {
                 shapeInfos.add(spatialCopy.build());
 
                 return shapeInfos;
+            })
+            .register();
+
+    public static final MultiblockMachineDefinition PYROLYSE_OVEN = REGISTRATE
+            .multiblock("pyrolyse_oven", CoilWorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.PYROLYSE_RECIPES)
+            .recipeModifiers(GTRecipeModifiers::pyrolyseOvenOverclock, GTRecipeModifiers.BATCH_MODE)
+            .appearanceBlock(TFGBlocks_Casings.MALDONITE_CASING)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("XXX", "XXX", "XXX")
+                    .aisle("CCC", "C#C", "CCC")
+                    .aisle("CCC", "C#C", "CCC")
+                    .aisle("XXX", "XSX", "XXX")
+                    .where('S', Predicates.controller(blocks(definition.get())))
+                    .where('X',
+                            blocks(TFGBlocks_Casings.MALDONITE_CASING.get()).setMinGlobalLimited(6)
+                                    .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                                    .or(Predicates.autoAbilities(true, true, false)))
+                    .where('C', Predicates.heatingCoils())
+                    .where('#', Predicates.air())
+                    .build())
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                        .aisle("IXO", "XSX", "FMD")
+                        .aisle("CCC", "C#C", "CCC")
+                        .aisle("CCC", "C#C", "CCC")
+                        .aisle("EEX", "XHX", "XXX")
+                        .where('S', definition, Direction.NORTH)
+                        .where('X', TFGBlocks_Casings.MALDONITE_CASING.getDefaultState())
+                        .where('E', GTMachines.ENERGY_INPUT_HATCH[GTValues.LV], Direction.SOUTH)
+                        .where('I', GTMachines.ITEM_IMPORT_BUS[GTValues.LV], Direction.NORTH)
+                        .where('O', GTMachines.ITEM_EXPORT_BUS[GTValues.LV], Direction.NORTH)
+                        .where('F', GTMachines.FLUID_IMPORT_HATCH[GTValues.LV], Direction.NORTH)
+                        .where('D', GTMachines.FLUID_EXPORT_HATCH[GTValues.LV], Direction.NORTH)
+                        .where('H', GTMachines.MUFFLER_HATCH[GTValues.LV], Direction.SOUTH)
+                        .where('M', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
+                        .where('#', Blocks.AIR.defaultBlockState());
+                    GTCEuAPI.HEATING_COILS.entrySet().stream()
+                        .sorted(Comparator.comparingInt(entry -> entry.getKey().getTier()))
+                        .forEach(
+                                coil -> shapeInfo.add(builder.shallowCopy().where('C', coil.getValue().get()).build()));
+                return shapeInfo;
+            })
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_maldonite"),
+                    GTCEu.id("block/multiblock/pyrolyse_oven"))
+            .tooltips(Component.translatable("gtceu.machine.pyrolyse_oven.tooltip.1"))
+            .additionalDisplay((controller, components) -> {
+                if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
+                    components.add(Component.translatable("gtceu.multiblock.pyrolyse_oven.speed",
+                            coilMachine.getCoilTier() == 0 ? 75 : 50 * (coilMachine.getCoilTier() + 1)));
+                }
             })
             .register();
 

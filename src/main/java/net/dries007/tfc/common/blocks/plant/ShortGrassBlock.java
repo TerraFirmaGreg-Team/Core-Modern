@@ -11,6 +11,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
@@ -71,13 +72,19 @@ public abstract class ShortGrassBlock extends PlantBlock implements ISpecialPile
         super.randomTick(state, level, pos, random);
         if (PlantRegrowth.canSpread(level, random))
         {
-            final BlockPos newPos = PlantRegrowth.spreadSelf(state, level, pos, random, 2, 2, 4);
-            if (newPos != null)
-            {
-                level.setBlockAndUpdate(newPos, updateStateWithCurrentMonth(state.setValue(AGE, 0)));
-            }
+			spread(state, level, pos, random);
         }
     }
+
+	protected void spread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	{
+		IntegerProperty stageProp = getPlant().getStageProperty();
+		final BlockPos newPos = PlantRegrowth.spreadSelf(state, level, pos, random, 2, 2, 4);
+		if (stageProp != null && newPos != null)
+		{
+			level.setBlockAndUpdate(newPos, Helpers.setProperty(state, stageProp, 0));
+		}
+	}
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)

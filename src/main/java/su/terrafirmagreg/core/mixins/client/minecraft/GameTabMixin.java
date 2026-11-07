@@ -42,7 +42,7 @@ public abstract class GameTabMixin {
                             WorldgenData.MOUNTAIN_SCALING = condition;
                             button.setTooltip(Tooltip.create(WorldgenData.createTooltipText(condition)));
                         }));
-        mountainCycleButton.setValue(WorldgenData.createCycleButtonValue());
+        mountainCycleButton.setValue(WorldgenData.currentOrDefaultMountainScaling());
         mountainCycleButton.setTooltip(Tooltip.create(WorldgenData.createTooltipText(WorldgenData.MOUNTAIN_SCALING)));
     }
 
