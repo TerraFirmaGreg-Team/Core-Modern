@@ -48,8 +48,11 @@ public class ServerConfig
     public final ForgeConfigSpec.BooleanValue enableDirtToMudCreation;
     // Blocks - Snow
     public final ForgeConfigSpec.BooleanValue enableSnowSlowEntities;
-    public final ForgeConfigSpec.IntValue snowAccumulateChance;
-    public final ForgeConfigSpec.IntValue snowMeltChance;
+	public final ForgeConfigSpec.IntValue snowAccumulateChance;
+	public final ForgeConfigSpec.IntValue snowMeltChance;
+	public final ForgeConfigSpec.IntValue snowMaxAccumulationOnUpdate;
+	public final ForgeConfigSpec.IntValue ticksPerSnowAccumulation;
+	public final ForgeConfigSpec.IntValue snowMeltMultiplier;
     // Blocks - Leaves
     public final ForgeConfigSpec.DoubleValue leavesMovementModifier;
     // Blocks - Plants
@@ -321,8 +324,11 @@ public class ServerConfig
         builder.swap("snow");
 
         enableSnowSlowEntities = builder.comment("[Requires MC Restart] If snow will slow players that move on top of it similar to soul sand or honey.").define("enableSnowSlowEntities", true);
-        snowAccumulateChance = builder.comment("The chance that snow will accumulate during a storm. Lower values = faster snow accumulation, but also more block updates (aka lag).").define("snowAccumulateChance", 20, 1, Integer.MAX_VALUE);
-        snowMeltChance = builder.comment("The chance that snow will melt during a storm. Lower values = faster snow melting, but also more block updates (aka lag).").define("snowMeltChance", 36, 1, Integer.MAX_VALUE);
+		snowAccumulateChance = builder.comment("The chance that snow will accumulate during a storm. Lower values = faster snow accumulation, but also more block updates (aka lag).").define("snowAccumulateChance", 20, 1, Integer.MAX_VALUE);
+		snowMeltChance = builder.comment("The chance that snow will melt during a storm. Lower values = faster snow melting, but also more block updates (aka lag).").define("snowMeltChance", 36, 1, Integer.MAX_VALUE);
+		snowMaxAccumulationOnUpdate = builder.comment("[Requires MC Restart] The maximum number of snow blocks that can be placed when entering an unloaded chunk. Lower values = matches nearby loaded chunks better, but more lag when entering these chunks.").define("snowMaxAccumulationOnUpdate", 64, 0, 256);
+		ticksPerSnowAccumulation = builder.comment("[Requires MC Restart] The number of game ticks between attempts at snow accumulation. Lower = faster accumulation, but more lag. Default: 80 Vanilla: 16").define("ticksPerSnowAccumulation", 80, 1, Integer.MAX_VALUE);
+		snowMeltMultiplier = builder.comment("[Requires MC Restart] How many times faster snow should melt than accumulate. Default: 3").define("snowMeltMultiplier", 3, 1, Integer.MAX_VALUE);
 
         builder.swap("plants");
 

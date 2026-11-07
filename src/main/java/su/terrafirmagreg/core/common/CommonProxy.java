@@ -86,8 +86,6 @@ public class CommonProxy {
         TFGBrain.SENSOR_TYPES.register(bus);
         TFGBrain.POI_TYPES.register(bus);
 
-        TFGPoiTypes.TYPES.register(bus);
-
         TFGFoodTraits.init();
 
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
