@@ -1,0 +1,8 @@
+{
+    "parent": "ae2:part/pattern_provider_base",
+    "textures": {
+        "sides": "tfg:part/storage_provider_sides",
+        "back": "tfg:part/storage_provider_back",
+        "front": "tfg:block/storage_provider"
+    }
+}

@@ -126,6 +126,9 @@ public class CommonProxy {
             addUpgrades(AE2wtlib.PATTERN_ENCODING_TERMINAL);
             addUpgrades(AE2wtlib.PATTERN_ACCESS_TERMINAL);
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
+            addUpgrades(TFGItems.WIRELESS_ORDER_TERMINAL.get());
+            add(AEItems.ENERGY_CARD, TFGItems.WIRELESS_ORDER_TERMINAL.get(), 2, GuiText.WirelessTerminals.getTranslationKey());
+            add(AE2wtlib.QUANTUM_BRIDGE_CARD, TFGItems.WIRELESS_ORDER_TERMINAL.get(), 1, GuiText.WirelessTerminals.getTranslationKey());
 
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
