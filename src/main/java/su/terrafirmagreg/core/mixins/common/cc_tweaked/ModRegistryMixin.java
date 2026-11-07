@@ -13,7 +13,7 @@ import dan200.computercraft.shared.turtle.items.TurtleItem;
 @Mixin(value = ModRegistry.class, remap = false)
 public class ModRegistryMixin {
 
-    @Inject(method = "addTurtle", at = @At(value = "INVOKE", target = "dan200/computercraft/impl/TurtleUpgrades.getVanillaUpgrades ()Ljava/util/stream/Stream;"), cancellable = true)
+    @Inject(method = "addTurtle", at = @At("HEAD"), cancellable = true)
     private static void tfg$removeTurtleStream(CreativeModeTab.Output out, TurtleItem turtle, CallbackInfo ci) {
         ci.cancel();
     }
