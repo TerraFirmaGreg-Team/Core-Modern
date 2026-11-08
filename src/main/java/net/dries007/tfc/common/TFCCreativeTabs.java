@@ -28,7 +28,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.blocks.DecorationBlockRegistryObject;
-import net.dries007.tfc.common.blocks.Gem;
 import net.dries007.tfc.common.blocks.OreDeposit;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.crop.Crop;
@@ -270,11 +269,6 @@ public final class TFCCreativeTabs
                 accept(out, TFCItems.ORES, ore);
             }
         }
-        for (Gem gem : Gem.values())
-        {
-            accept(out, TFCItems.GEMS, gem);
-            accept(out, TFCItems.GEM_DUST, gem);
-        }
         for (OreDeposit deposit : OreDeposit.values())
         {
             TFCBlocks.ORE_DEPOSITS.values().forEach(map -> accept(out, map, deposit));
@@ -391,12 +385,6 @@ public final class TFCCreativeTabs
         accept(out, TFCItems.SILT_MUD_BRICK);
 
         TFCItems.POWDERS.values().forEach(p -> accept(out, p));
-        TFCItems.ORE_POWDERS.values().forEach(p -> accept(out, p));
-        for (Gem gem : Gem.values())
-        {
-            accept(out, TFCItems.GEMS, gem);
-            accept(out, TFCItems.GEM_DUST, gem);
-        }
 
         accept(out, TFCItems.BLUBBER);
         for (HideItemType type : HideItemType.values())

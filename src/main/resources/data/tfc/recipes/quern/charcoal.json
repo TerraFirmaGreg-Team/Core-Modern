@@ -1,6 +1,6 @@
 {
     "result": {
-        "item": "tfc:powder/charcoal",
+        "item": "gtceu:small_charcoal_dust",
         "count": 4
     },
     "ingredient": {"item": "minecraft:charcoal"},
