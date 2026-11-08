@@ -13,13 +13,13 @@ import lombok.Getter;
 
 public class Cellular3DDensityFunction implements DensityFunction.SimpleFunction {
 
-    private Cellular3D cellularNoise;
+    private final Cellular3D cellularNoise;
     @Getter
     private final double scaleFactor;
 
     public Cellular3DDensityFunction(double scaleFactor) {
         this.scaleFactor = scaleFactor;
-        this.cellularNoise = new Cellular3D(678965856).spread(scaleFactor);
+        this.cellularNoise = new Cellular3D(54354355).spread(scaleFactor);
     }
 
     public static final KeyDispatchDataCodec<Cellular3DDensityFunction> CODEC = KeyDispatchDataCodec.of(

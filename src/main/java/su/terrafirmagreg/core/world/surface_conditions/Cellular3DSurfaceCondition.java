@@ -16,6 +16,8 @@ import su.terrafirmagreg.core.mixins.common.minecraft.SurfaceRulesContextAccesso
 public class Cellular3DSurfaceCondition implements SurfaceRules.ConditionSource {
 
     private final Cellular3D cellularNoise;
+	@Getter
+	private final double scaleFactor;
     @Getter
     private final double minThreshold;
     @Getter
@@ -25,14 +27,16 @@ public class Cellular3DSurfaceCondition implements SurfaceRules.ConditionSource 
             RecordCodecBuilder.create(
                     inst -> inst.group(
                             Codec.DOUBLE.fieldOf("min_threshold").forGetter(Cellular3DSurfaceCondition::getMinThreshold),
-                            Codec.DOUBLE.fieldOf("max_threshold").forGetter(Cellular3DSurfaceCondition::getMaxThreshold))
+                            Codec.DOUBLE.fieldOf("max_threshold").forGetter(Cellular3DSurfaceCondition::getMaxThreshold),
+							Codec.DOUBLE.fieldOf("scale_factor").forGetter(Cellular3DSurfaceCondition::getScaleFactor))
                             .apply(inst, Cellular3DSurfaceCondition::new)));
 
-    public Cellular3DSurfaceCondition(double minThreshold, double maxThreshold) {
+    public Cellular3DSurfaceCondition(double minThreshold, double maxThreshold, double scaleFactor) {
         this.minThreshold = minThreshold;
         this.maxThreshold = maxThreshold;
+		this.scaleFactor = scaleFactor;
 
-        this.cellularNoise = new Cellular3D(678965856).spread(0.03);
+        this.cellularNoise = new Cellular3D(678965856).spread(this.scaleFactor);
     }
 
     @Override
