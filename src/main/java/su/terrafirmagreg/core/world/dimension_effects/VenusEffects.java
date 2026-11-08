@@ -15,7 +15,7 @@ import su.terrafirmagreg.core.client.renderer.CloudRendererHelper;
 public class VenusEffects extends DimensionSpecialEffects {
 
     public VenusEffects() {
-        super(150f, true, SkyType.NORMAL, false, false);
+        super(130f, true, SkyType.NORMAL, false, false);
     }
 
     @Override
