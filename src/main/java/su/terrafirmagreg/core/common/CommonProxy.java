@@ -73,6 +73,7 @@ public class CommonProxy {
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGSurfaceConditions.SURFACE_CONDITIONS.register(bus);
+        TFGDensityFunctions.DENSITY_FUNCTIONS.register(bus);
         TFGContainers.CONTAINERS.register(bus);
         TFGEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(bus);
         TFGEffects.EFFECTS.register(bus);
