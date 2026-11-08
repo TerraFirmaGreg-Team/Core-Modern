@@ -22,7 +22,7 @@
             "settings": "tfg:mercury_noise",
             "biome_source": {
                 "biomes": [{
-                    "biome": "ad_astra:mercury_deltas",
+                    "biome": "ad_astra:orbit",
                     "parameters": {
                         "depth": 0,
                         "offset": 0,

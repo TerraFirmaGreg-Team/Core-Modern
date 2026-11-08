@@ -1,7 +1,7 @@
 {
     "piglin_safe": true,
     "natural": true,
-    "ambient_light": 0,
+    "ambient_light": 15,
     "monster_spawn_block_light_limit": 15,
     "infiniburn": "#minecraft:infiniburn_overworld",
     "respawn_anchor_works": false,
