@@ -1,0 +1,19 @@
+{
+    "piglin_safe": true,
+    "natural": true,
+    "ambient_light": 0,
+    "monster_spawn_block_light_limit": 15,
+    "infiniburn": "#minecraft:infiniburn_overworld",
+    "respawn_anchor_works": false,
+    "has_skylight": true,
+    "bed_works": true,
+    "effects": "ad_astra:mercury",
+    "has_raids": false,
+    "coordinate_scale": 1,
+    "logical_height": 256,
+    "min_y": 0,
+    "monster_spawn_light_level": 7,
+    "has_ceiling": false,
+    "ultrawarm": true,
+    "height": 256
+}

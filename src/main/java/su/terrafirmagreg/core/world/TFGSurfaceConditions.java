@@ -9,6 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.world.surface_conditions.AllOfCondition;
 import su.terrafirmagreg.core.world.surface_conditions.AnyOfCondition;
+import su.terrafirmagreg.core.world.surface_conditions.MercurySurfaceCondition;
 import su.terrafirmagreg.core.world.surface_conditions.Noise3DThresholdSurfaceConditionSource;
 
 public class TFGSurfaceConditions {
@@ -20,5 +21,6 @@ public class TFGSurfaceConditions {
         SURFACE_CONDITIONS.register("noise3d_threshold", Noise3DThresholdSurfaceConditionSource.CODEC::codec);
         SURFACE_CONDITIONS.register("any_of", AnyOfCondition.CODEC::codec);
         SURFACE_CONDITIONS.register("all_of", AllOfCondition.CODEC::codec);
+        SURFACE_CONDITIONS.register("mercury_surface_condition", MercurySurfaceCondition.CODEC::codec);
     }
 }

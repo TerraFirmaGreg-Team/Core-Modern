@@ -1,0 +1,44 @@
+{
+    "generator": {
+        "settings": {
+            "spawn_distance": 0,
+            "rainfall_scale": 2500,
+            "rock_layer_settings": {
+                "rocks": {"basalt": "tfc:basalt"},
+                "uplift": ["bottom"],
+                "bottom": ["basalt"],
+                "ocean_floor": ["bottom"],
+                "layers": [],
+                "land": ["bottom"],
+                "volcanic": ["bottom"]
+            },
+            "temperature_scale": 2500,
+            "spawn_center_x": 0,
+            "flat_bedrock": false,
+            "spawn_center_z": 0,
+            "continentalness": -0.5
+        },
+        "generator": {
+            "settings": "tfg:mercury_noise",
+            "biome_source": {
+                "biomes": [{
+                    "biome": "ad_astra:mercury_deltas",
+                    "parameters": {
+                        "depth": 0,
+                        "offset": 0,
+                        "weirdness": 0,
+                        "temperature": 0,
+                        "erosion": 0,
+                        "humidity": 0,
+                        "continentalness": 0
+                    }
+                }],
+                "type": "minecraft:multi_noise"
+            },
+            "type": "minecraft:noise"
+        },
+        "type": "kubejs_tfc:wrapped",
+        "event_key": "mercury"
+    },
+    "type": "tfg:mercury"
+}
