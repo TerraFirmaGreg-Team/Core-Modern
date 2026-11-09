@@ -61,7 +61,8 @@ public class Cellular3DSurfaceCondition implements SurfaceRules.ConditionSource 
 
             @Override
             protected boolean compute() {
-                double noiseVal = cellularNoise.noise(access.tfg$getBlockX(), access.tfg$getBlockY(), access.tfg$getBlockZ());
+                var cell = cellularNoise.cell(access.tfg$getBlockX(), access.tfg$getBlockY(), access.tfg$getBlockZ());
+                double noiseVal = cell.f2() - cell.f1();
                 return noiseVal >= minThreshold && noiseVal <= maxThreshold;
             }
         }
