@@ -176,7 +176,7 @@ public class TFGEntities {
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(SilkMoth::createMobAttributes)
             .renderer(() -> SilkMothRenderer::new)
-            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SilkMoth::checkAnimalSpawnRules)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SilkMoth::spawnRules)
             .register();
 
     public static final EntityEntry<Dragonfly> DRAGONFLY = TFGCore.REGISTRATE.entity("dragonfly", Dragonfly::new, MobCategory.AMBIENT)
@@ -184,7 +184,7 @@ public class TFGEntities {
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(Dragonfly::createMobAttributes)
             .renderer(() -> DragonflyRenderer::new)
-            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Dragonfly::checkAnimalSpawnRules)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Dragonfly::spawnRules)
             .register();
 
     public static final EntityEntry<Rocket> TIER_1_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_1_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)

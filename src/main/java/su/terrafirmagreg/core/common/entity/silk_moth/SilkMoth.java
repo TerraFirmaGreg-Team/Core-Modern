@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -23,6 +26,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
@@ -31,13 +35,16 @@ import net.minecraft.world.phys.Vec3;
 
 public class SilkMoth extends Animal implements FlyingAnimal {
 
-    public SilkMoth(EntityType<? extends SilkMoth> entityType, Level world) {
+    public SilkMoth(EntityType<SilkMoth> entityType, Level world) {
         super(entityType, world);
         this.moveControl = new FlyingMoveControl(this, 20, true);
         this.lookControl = new MothLookControl(this);
         this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
-        this.xpReward = 1;
+    }
+
+    public static boolean spawnRules(EntityType<?> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
+        return level.getBlockState(pos).isAir();
     }
 
     public static AttributeSupplier.@NotNull Builder createMobAttributes() {
@@ -109,6 +116,16 @@ public class SilkMoth extends Animal implements FlyingAnimal {
     @Override
     public boolean isNoGravity() {
         return true;
+    }
+
+    @Override
+    public SoundEvent getAmbientSound() {
+        return SoundEvents.BEE_LOOP;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.3f;
     }
 
     @Override

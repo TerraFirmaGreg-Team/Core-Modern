@@ -37,6 +37,7 @@ import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.particle.*;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;
+import su.terrafirmagreg.core.world.dimension_effects.MercuryEffects;
 import su.terrafirmagreg.core.world.dimension_effects.VenusEffects;
 
 public class ClientProxy extends CommonProxy {
@@ -183,5 +184,6 @@ public class ClientProxy extends CommonProxy {
     public void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
         event.register(TFGCore.id("beneath_effects"), new BeneathEffects());
         event.register(TFGCore.id("venus_effects"), new VenusEffects());
+        event.register(TFGCore.id("mercury_effects"), new MercuryEffects());
     }
 }
