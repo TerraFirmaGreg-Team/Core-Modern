@@ -28,12 +28,16 @@ import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import appeng.api.util.AEColor;
+import appeng.client.render.StaticItemColor;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelRenderer;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
@@ -130,6 +134,8 @@ public class ForgeClientEventListener {
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
 
         AsphaltRoadColorHandlers.registerItems(event);
+
+        event.register(new StaticItemColor(AEColor.TRANSPARENT), TFGItems.ORDER_TERMINAL.get());
     }
 
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {

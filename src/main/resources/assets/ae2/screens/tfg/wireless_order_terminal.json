@@ -1,0 +1,7 @@
+{
+  "$schema": "../schema.json",
+  "includes": [
+    "order_terminal.json",
+    "../wtlib/universal_terminal_no_viewcells.json"
+  ]
+}
