@@ -69,6 +69,10 @@ public class TFGBlockEntities {
             .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
             .register();
 
+    public static final BlockEntityEntry<TierLockedAcidBlockEntity> TIER_LOCKED_ACID_BLOCK_ENTITY = TFGCore.REGISTRATE.blockEntity("tier_locked_acid_block", TierLockedAcidBlockEntity::new)
+            .validBlock(TFGBlocks_Venus.VENUS_HORNFELS)
+            .register();
+
     @SuppressWarnings("unchecked")
     public static final BlockEntityEntry<BerryBushBlockEntity> FRUIT_TREE_BERRY_BUSH = TFGCore.REGISTRATE
             .<BerryBushBlockEntity>blockEntity("fruit_tree_berry_bush", (type, pos, state) -> new TFGBerryBushBlockEntity(pos, state))
