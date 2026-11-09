@@ -52,8 +52,8 @@ sacksNSuch = "1.2.6"
 
 # AE2
 guideme = "20.1.13"
-ae2 = "15.5.8-uelm-sha.d91e554-SNAPSHOT" # cf: appliedenergistics2-forge-15.5.5-uelm.jar
-ae2WirelessTerminals = "15.4.0-SNAPSHOT"
+ae2 = "15.5.9-uelm"
+ae2WirelessTerminals = "15.4.1"
 
 # ComputerCraft
 ccTweaked = "1.121.0-forge,1.20.1"
