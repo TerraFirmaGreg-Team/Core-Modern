@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.simibubi.create.AllFluids;
 
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -122,7 +123,7 @@ public class TierLockedAcidBlock extends ParticleEmitterBlock {
     }
 
     public static boolean isTouchingLiquid(Level level, BlockPos pos) {
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : Helpers.DIRECTIONS_NOT_DOWN) {
             // TODO: Change to proper liquid
             // TODO: also check for both flowing and source fluid blocks
             if (level.getFluidState(pos.relative(direction)).is(AllFluids.HONEY.get())) {
