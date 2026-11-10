@@ -1,35 +1,34 @@
 package su.terrafirmagreg.core.common.blockentity;
 
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.rock.Rock;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.block.TierLockedAcidBlock;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Venus;
 
 public class TierLockedAcidBlockEntity extends TickerBlockEntity {
-    private static final int NEUTRALIZATION_DURATION = 9600;
+    private static final int NEUTRALIZATION_DURATION = 20 * 60 * 8;
     private long neutralizationStartTime = -1L;
-    private int tickCount = 0;
 
     public TierLockedAcidBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TierLockedAcidBlockEntity be) {
-        if (level.isClientSide || be.neutralizationStartTime < 0 || ++be.tickCount < 10) {
+        if (level.isClientSide || be.neutralizationStartTime < 0) {
             return;
-        } else {
-            be.tickCount = 0;
         }
 
-        if (Calendars.SERVER.getTicks() - be.neutralizationStartTime >= NEUTRALIZATION_DURATION) {
-            // TODO: Change to proper block
-            level.setBlockAndUpdate(pos, TFCBlocks.ROCK_BLOCKS.get(Rock.ANDESITE).get(Rock.BlockType.RAW).get().defaultBlockState());
+        long ticks = Calendars.SERVER.getTicks();
+        if (ticks % 10 == 0 && ticks - be.neutralizationStartTime >= NEUTRALIZATION_DURATION) {
+            level.setBlockAndUpdate(pos, TFGBlocks_Venus.VENUS_NEUTRALIZED_HORNFELS.get().defaultBlockState());
+            Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
         }
     }
 

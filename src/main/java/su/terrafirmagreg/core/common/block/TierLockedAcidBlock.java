@@ -8,7 +8,6 @@ import com.simibubi.create.AllFluids;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +24,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.blockentity.TierLockedAcidBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.TFGParticles;
 
 @SuppressWarnings("deprecation")
 public class TierLockedAcidBlock extends ParticleEmitterBlock {
@@ -63,14 +63,14 @@ public class TierLockedAcidBlock extends ParticleEmitterBlock {
                 properties,
                 DEFAULT_SHAPE,
                 null,
-                ParticleTypes.SMOKE::getType,
-                0.5, 0.5, 0.5,
+                TFGParticles.LARGE_SMOKE,
+                0.5, 1.0, 0.5,
                 0.4, 0, 0.4,
                 0, 0.1, 0,
                 5,
                 false,
                 false,
-                1, 1, 1, 1,
+                1, 1, 0, 1,
                 false,
                 10);
     }
@@ -97,17 +97,13 @@ public class TierLockedAcidBlock extends ParticleEmitterBlock {
         }
     }
 
+    @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (!level.isClientSide)
+        if (type != TFGBlockEntities.TIER_LOCKED_ACID_BLOCK_ENTITY.get())
             return null;
 
-        return type == TFGBlockEntities.TIER_LOCKED_ACID_BLOCK_ENTITY.get()
-                ? (lvl, p, s, be) -> {
-                    if (be instanceof TierLockedAcidBlockEntity hornfel)
-                        TierLockedAcidBlockEntity.serverTick(lvl, p, s, hornfel);
-                }
-                : null;
+        return (lvl, p, s, be) -> TierLockedAcidBlockEntity.serverTick(lvl, p, s, (TierLockedAcidBlockEntity) be);
     }
 
     @Override
@@ -128,6 +124,7 @@ public class TierLockedAcidBlock extends ParticleEmitterBlock {
     public static boolean isTouchingLiquid(Level level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
             // TODO: Change to proper liquid
+			// TODO: also check for both flowing and source fluid blocks
             if (level.getFluidState(pos.relative(direction)).is(AllFluids.HONEY.get())) {
                 return true;
             }
