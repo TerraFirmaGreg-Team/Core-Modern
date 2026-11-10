@@ -124,7 +124,7 @@ public class TierLockedAcidBlock extends ParticleEmitterBlock {
     public static boolean isTouchingLiquid(Level level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
             // TODO: Change to proper liquid
-			// TODO: also check for both flowing and source fluid blocks
+            // TODO: also check for both flowing and source fluid blocks
             if (level.getFluidState(pos.relative(direction)).is(AllFluids.HONEY.get())) {
                 return true;
             }

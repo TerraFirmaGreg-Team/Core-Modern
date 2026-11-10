@@ -130,7 +130,7 @@ public class TFGBlocks_Venus {
             .properties(p -> p
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.NETHER_BRICKS)
-					.strength(0.5F)
+                    .strength(0.5F)
                     .requiresCorrectToolForDrops())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
