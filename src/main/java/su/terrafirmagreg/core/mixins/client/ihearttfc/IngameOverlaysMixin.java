@@ -27,7 +27,7 @@ public class IngameOverlaysMixin {
 
     @ModifyExpressionValue(method = "renderTemperature", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/client/ClimateRenderCache;getTemperature()F", ordinal = 0), remap = false)
     private static float tfg$replaceCurrentTempWithPlayerTemp(float currentTemp, @Local(name = "player") Player player) {
-        return player.getCapability(TemperatureCapability.CAPABILITY).map(TemperatureCapability::getTemperature).orElseThrow();
+        return player.getCapability(TemperatureCapability.CAPABILITY).map(TemperatureCapability::getTemperature).orElse(15.0f);
     }
 
     // avoid needing to reference mojang obfuscated method, instead inject at end of renderTemperature which is functionally the same thing
