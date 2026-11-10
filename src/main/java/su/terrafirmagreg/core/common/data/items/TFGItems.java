@@ -25,6 +25,7 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
 
 import appeng.api.upgrades.Upgrades;
+import appeng.items.parts.PartItem;
 import de.mennomax.astikorcarts.item.CartItem;
 import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
@@ -37,6 +38,9 @@ import su.terrafirmagreg.core.common.item.*;
 import su.terrafirmagreg.core.common.item.wearable.FlippersItem;
 import su.terrafirmagreg.core.common.item.wearable.SnorkelItem;
 import su.terrafirmagreg.core.common.item.wearable.SnowshoesItem;
+import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderPart;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalPart;
+import su.terrafirmagreg.core.compat.ae2.terminal.WOTItem;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings("unused")
@@ -183,6 +187,24 @@ public class TFGItems {
             .model(ModelUtils.layeredItemModel(TFGCore.id("item/wireless_card/wireless_card_base"),
                     TFGCore.id("item/wireless_card/wireless_card_layer1"),
                     TFGCore.id("item/wireless_card/wireless_card_layer2")))
+            .register();
+
+    public static final ItemEntry<PartItem<StorageProviderPart>> CABLE_STORAGE_PROVIDER = TFGCore.REGISTRATE.item("cable_storage_provider",
+            p -> new PartItem<>(p, StorageProviderPart.class, StorageProviderPart::new))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<PartItem<OrderTerminalPart>> ORDER_TERMINAL = TFGCore.REGISTRATE.item("order_terminal",
+            p -> new PartItem<>(p, OrderTerminalPart.class, OrderTerminalPart::new))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<WOTItem> WIRELESS_ORDER_TERMINAL = TFGCore.REGISTRATE.item("wireless_order_terminal", p -> new WOTItem())
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .onRegister(WOTItem::onRegister)
             .register();
 
     public static final ItemEntry<CartItem> RNR_PLOW = TFGCore.REGISTRATE.item("rnr_plow", CartItem::new)

@@ -22,6 +22,8 @@ spotless {
 
     json {
         target 'src/main/resources/**/*.json'
+        // let screen jsons keep the native AE2 layout/style
+        targetExclude 'src/main/resources/assets/ae2/screens/**'
         simple()
         leadingTabsToSpaces(2)
         endWithNewline()

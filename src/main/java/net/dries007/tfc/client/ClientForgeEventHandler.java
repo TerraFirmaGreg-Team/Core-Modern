@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.adastra.api.planets.Planet;
+import net.dries007.tfc.common.capabilities.player.PlayerDataCapability;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -437,6 +438,8 @@ public class ClientForgeEventHandler
             ClimateRenderCache.INSTANCE.onClientTick();
             tickWind();
 
+			// Save whether or not the sprint key is down, so we can check for ctrl+shift for various interactions
+			// (like ingot pile stacking)
             final Minecraft mc = Minecraft.getInstance();
             if (mc.player != null)
             {
@@ -444,8 +447,11 @@ public class ClientForgeEventHandler
                 if (isDown != lastSprintKeyState)
                 {
                     lastSprintKeyState = isDown;
-                    PlayerData.get(mc.player).setSprintKeyDown(isDown);
-                    PacketHandler.send(PacketDistributor.SERVER.noArg(), new SprintKeyPacket(isDown));
+					var playerData = mc.player.getCapability(PlayerDataCapability.CAPABILITY);
+					if (playerData.isPresent()) {
+						PlayerData.get(mc.player).setSprintKeyDown(isDown);
+						PacketHandler.send(PacketDistributor.SERVER.noArg(), new SprintKeyPacket(isDown));
+					}
                 }
             }
         }

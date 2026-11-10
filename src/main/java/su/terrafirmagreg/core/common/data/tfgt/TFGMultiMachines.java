@@ -1427,6 +1427,7 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.me_assembler_2"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_3"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_4"),
+                    Component.translatable("tfg.tooltip.machine.no_oc"),
                     Component.translatable("tfg.tooltip.machine.one_energy_hatch"),
                     Component.translatable("tfg.tooltip.machine.subtick"))
             .workableCasingModel(
