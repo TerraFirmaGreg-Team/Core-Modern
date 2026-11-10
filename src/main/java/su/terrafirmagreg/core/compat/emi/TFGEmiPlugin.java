@@ -38,7 +38,6 @@ import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
 import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
-import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
