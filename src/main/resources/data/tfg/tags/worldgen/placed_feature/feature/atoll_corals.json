@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfg:earth/atoll_coral_tree",
+        "tfg:earth/atoll_coral_mushroom",
+        "tfg:earth/atoll_coral_claw"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

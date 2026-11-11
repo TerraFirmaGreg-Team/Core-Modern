@@ -1,6 +1,0 @@
-{
-    "result": {"item": "minecraft:green_dye"},
-    "ingredients": [{"item": "tfc:powder/malachite"}],
-    "__comment__": "This file was automatically created by mcresources",
-    "type": "minecraft:crafting_shapeless"
-}

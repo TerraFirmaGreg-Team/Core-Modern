@@ -18,9 +18,9 @@ plugins {
     id 'java'
     id 'java-library'
     id 'idea'
-    id 'net.neoforged.moddev.legacyforge' version "${mdg_legacy_version}"
-    id 'com.diffplug.spotless' version "${spotless_version}"
-    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
+    alias libs.plugins.moddevLegacyforge
+    alias libs.plugins.spotless
+    alias libs.plugins.manifestClasspath
 }
 
 
@@ -47,7 +47,7 @@ idea {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(java_version.toInteger())
     }
 
 }
@@ -75,6 +75,12 @@ sourceSets {
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
 
+    // Client runs: dev plus client-only mods, which would crash a dedicated server (see dependencies.gradle)
+    clientDev {
+        compileClasspath += sourceSets.dev.compileClasspath
+        runtimeClasspath += sourceSets.dev.output + sourceSets.dev.runtimeClasspath
+    }
+
     test {
         compileClasspath += main.output + main.compileClasspath
         runtimeClasspath += main.output + main.runtimeClasspath
@@ -85,6 +91,11 @@ configurations {
     testCompileClasspath.extendsFrom(compileClasspath)
     testRuntimeClasspath.extendsFrom(runtimeClasspath)
     testAnnotationProcessor.extendsFrom(annotationProcessor)
+}
+
+// Adds modClientDevRuntimeOnly, for client-only mods
+obfuscation {
+    createRemappingConfiguration(configurations.clientDevRuntimeOnly)
 }
 
 mixin {
@@ -131,14 +142,14 @@ legacyForge {
         client {
             client()
             ideName = "Client"
-            sourceSet = sourceSets.dev
+            sourceSet = sourceSets.clientDev
             gameDirectory = project.file('run/client')
         }
 
         client2 {
             client()
             ideName = "Client2"
-            sourceSet = sourceSets.dev
+            sourceSet = sourceSets.clientDev
             programArgument '--username'
             programArgument 'Dev2'
             gameDirectory = project.file('run/client2')
@@ -163,7 +174,9 @@ legacyForge {
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
-            programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
+            if (instancePath) {
+                programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
+            }
 
             String[] existingMods = new String[]{
                     "tfg", "gtceu", "tfc", "firmalife", "species",
@@ -223,6 +236,8 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xlint:-removal"
     options.compilerArgs << "-Aquiet=true" // Suppress mixin notes
 
+    // javac runs in a forked worker (toolchain JDK), which defaults to -Xmx512m regardless of org.gradle.jvmargs
+    options.forkOptions.memoryMaximumSize = "4g"
 }
 
 if (enableCopyToInstance) {

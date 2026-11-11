@@ -54,10 +54,11 @@ public class PestFeastBehavior extends MoveOntoBlockBehavior<Pest>
                         return;
                     }
                 }
-                // we did not find anything smelly, stop trying
-                mob.getBrain().eraseMemory(TFCBrain.SMELLY_POS.get());
             });
         }
+
+		// we did not find anything smelly, stop trying
+		mob.getBrain().eraseMemory(TFCBrain.SMELLY_POS.get());
     }
 
     @Override

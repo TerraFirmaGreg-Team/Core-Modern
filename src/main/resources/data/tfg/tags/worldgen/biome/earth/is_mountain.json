@@ -18,7 +18,15 @@
         "tfg:earth/glaciated_mountains",
         "tfg:earth/glaciated_oceanic_mountains",
         "tfg:earth/glacially_carved_mountains",
-        "tfg:earth/glacially_carved_oceanic_mountains"
+        "tfg:earth/glacially_carved_oceanic_mountains",
+        "tfg:earth/collisional_mountains",
+        "tfg:earth/volcanic_mountain_islands",
+        "tfg:earth/ice_sheet_volcanic_mountains",
+        "tfg:earth/ice_sheet_volcanic_oceanic_mountains",
+        "tfg:earth/glaciated_volcanic_mountains",
+        "tfg:earth/glaciated_volcanic_oceanic_mountains",
+        "tfg:earth/glacially_carved_volcanic_mountains",
+        "tfg:earth/glacially_carved_volcanic_oceanic_mountains"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

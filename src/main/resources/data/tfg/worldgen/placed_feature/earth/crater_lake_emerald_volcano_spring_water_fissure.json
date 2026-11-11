@@ -1,0 +1,17 @@
+{
+    "feature": "tfg:earth/emerald_volcano_spring_water_fissure",
+    "placement": [
+        {
+            "center": true,
+            "variant": "crater_lake",
+            "hash_min": 0.8,
+            "type": "tfc:stratovolcano",
+            "use_offset_center": true
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

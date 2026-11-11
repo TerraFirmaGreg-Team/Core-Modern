@@ -136,11 +136,6 @@ public class TrowelItem extends Item {
 
         level.playSound(null, placePos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
 
-        // Decreases item count unless in creative.
-        if (!player.isCreative()) {
-            randomStack.shrink(1);
-        }
-
         return result;
     }
 

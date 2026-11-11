@@ -1,6 +1,0 @@
-{
-    "result": {"item": "minecraft:red_dye"},
-    "ingredients": [{"item": "tfc:powder/hematite"}],
-    "__comment__": "This file was automatically created by mcresources",
-    "type": "minecraft:crafting_shapeless"
-}

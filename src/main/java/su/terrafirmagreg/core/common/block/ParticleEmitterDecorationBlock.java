@@ -5,12 +5,12 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -101,9 +101,9 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
      */
     public ParticleEmitterDecorationBlock(
             Properties properties,
-            VoxelShape shape,
+            @Nullable VoxelShape shape,
             Supplier<Item> itemSupplier,
-            Supplier<SimpleParticleType> particleType,
+            @Nullable Supplier<SimpleParticleType> particleType,
             double posX, double posY, double posZ,
             double rangeX, double rangeY, double rangeZ,
             double velocityX, double velocityY, double velocityZ,
@@ -120,7 +120,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
                 .setValue(FACING, Direction.NORTH)
                 .setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
-        this.particleType = particleType != null ? particleType : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+        this.particleType = particleType != null ? particleType : TFCParticles.SMOKE_2;
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;

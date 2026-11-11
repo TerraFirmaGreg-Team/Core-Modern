@@ -25,9 +25,85 @@ import net.dries007.tfc.common.container.AnvilContainer;
 import net.dries007.tfc.common.recipes.AnvilRecipe;
 import net.dries007.tfc.util.Helpers;
 
+@SuppressWarnings("unused")
 public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContainer>
 {
     public static final ResourceLocation BACKGROUND = Helpers.identifier("textures/gui/anvil.png");
+
+    public static void drawRule(GuiGraphics graphics, ForgeRule rule, int x, int y, @Nullable ForgeSteps steps)
+    {
+        // The rule icon
+        drawRuleIcon(graphics, rule, x + 5, y + 3);
+
+        // The overlay
+        if (steps != null)
+        {
+            if (rule.matches(steps))
+            {
+                RenderSystem.setShaderColor(0f, 0.6f, 0.2f, 1f); // Green
+            }
+            else
+            {
+                RenderSystem.setShaderColor(1f, 0.4f, 0, 1f); // Red
+            }
+        }
+
+        graphics.blit(BACKGROUND, x, y, 198, rule.overlayY(), 20, 22);
+
+        if (steps != null)
+        {
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        }
+    }
+
+    public static void drawRule(GuiGraphics graphics, ForgeRule rule, int x, int y)
+    {
+        drawRule(graphics, rule, x, y, null);
+    }
+
+    public static void drawRules(GuiGraphics graphics, ForgeRule[] rules, int x, int y, @Nullable ForgeSteps steps)
+    {
+        for (int i = 0; i < rules.length; i++)
+        {
+            final ForgeRule rule = rules[i];
+            if (rule != null)
+            {
+                drawRule(graphics, rule, x + i * 19, y, steps);
+            }
+        }
+    }
+
+    public static void drawRules(GuiGraphics graphics, ForgeRule[] rules, int x, int y)
+    {
+        drawRules(graphics, rules, x, y, null);
+    }
+
+    public static void drawRuleIcon(GuiGraphics graphics, ForgeRule rule, int x, int y)
+    {
+        graphics.blit(BACKGROUND, x, y, 10, 10, rule.iconX(), rule.iconY(), 32, 32, 256, 256);
+    }
+
+    public static void drawStepIcon(GuiGraphics graphics, ForgeStep step, int x, int y)
+    {
+        graphics.blit(BACKGROUND, x, y, 10, 10, step.iconX(), step.iconY(), 32, 32, 256, 256);
+    }
+
+    public static @Nullable ForgeRule getHoveredRule(ForgeRule[] rules, int x, int y, double mouseX, double mouseY)
+    {
+        for (int i = 0; i < rules.length; i++)
+        {
+            final ForgeRule rule = rules[i];
+            if (rule != null)
+            {
+                final int ruleX = x + i * 19;
+                if (mouseX >= ruleX && mouseX < ruleX + 20 && mouseY >= y && mouseY < y + 22)
+                {
+                    return rule;
+                }
+            }
+        }
+        return null;
+    }
 
     public AnvilScreen(AnvilContainer container, Inventory playerInventory, Component name)
     {
@@ -77,31 +153,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
             final AnvilRecipe recipe = forging.getRecipe(level);
             if (recipe != null)
             {
-                final ForgeRule[] rules = recipe.getRules();
-                for (int i = 0; i < rules.length; i++)
-                {
-                    final ForgeRule rule = rules[i];
-                    if (rule != null)
-                    {
-                        final int xOffset = i * 19;
-
-                        // The rule icon
-                        graphics.blit(texture, guiLeft + 64 + xOffset, guiTop + 10, 10, 10, rule.iconX(), rule.iconY(), 32, 32, 256, 256);
-
-                        // The overlay
-                        if (rule.matches(steps))
-                        {
-                            RenderSystem.setShaderColor(0f, 0.6f, 0.2f, 1f); // Green
-                        }
-                        else
-                        {
-                            RenderSystem.setShaderColor(1f, 0.4f, 0, 1f); // Red
-                        }
-
-                        graphics.blit(texture, guiLeft + 59 + xOffset, guiTop + 7, 198, rule.overlayY(), 20, 22);
-                        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-                    }
-                }
+                drawRules(graphics, recipe.getRules(), guiLeft + 59, guiTop + 7, steps);
             }
 
             // Draw step icons
@@ -111,8 +163,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                 final ForgeStep step = stepSequence[i];
                 if (step != null)
                 {
-                    final int xOffset = i * 19;
-                    graphics.blit(texture, guiLeft + 64 + xOffset, guiTop + 31, 10, 10, step.iconX(), step.iconY(), 32, 32, 256, 256);
+                    drawStepIcon(graphics, step, guiLeft + 64 + i * 19, guiTop + 31);
                 }
             }
         }
@@ -130,20 +181,10 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
             final AnvilRecipe recipe = forging.getRecipe(level);
             if (recipe != null)
             {
-                final ForgeRule[] rules = recipe.getRules();
-                for (int i = 0; i < rules.length; i++)
+                final ForgeRule rule = getHoveredRule(recipe.getRules(), getGuiLeft() + 59, getGuiTop() + 7, mouseX, mouseY);
+                if (rule != null)
                 {
-                    final ForgeRule rule = rules[i];
-                    if (rule != null)
-                    {
-                        final int xOffset = i * 19;
-                        final int x = getGuiLeft() + 64 + xOffset;
-                        final int y = getGuiTop() + 10;
-                        if (mouseX > x && mouseX < x + 10 && mouseY > y && mouseY < y + 10)
-                        {
-                            graphics.renderTooltip(font, rule.getDescriptionId(), mouseX, mouseY);
-                        }
-                    }
+                    graphics.renderTooltip(font, rule.getDescriptionId(), mouseX, mouseY);
                 }
             }
         }

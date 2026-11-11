@@ -42,6 +42,9 @@ import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamel;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
 import su.terrafirmagreg.core.common.entity.camels.TFCDromedaryCamel;
+import su.terrafirmagreg.core.common.entity.dragonfly.Dragonfly;
+import su.terrafirmagreg.core.common.entity.dragonfly.DragonflyModel;
+import su.terrafirmagreg.core.common.entity.dragonfly.DragonflyRenderer;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxCollarLayer;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxModel;
@@ -52,7 +55,9 @@ import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamRenderer;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbitRenderer;
 import su.terrafirmagreg.core.common.entity.rocket.RocketHelper;
-import su.terrafirmagreg.core.common.entity.slime.*;
+import su.terrafirmagreg.core.common.entity.silk_moth.SilkMoth;
+import su.terrafirmagreg.core.common.entity.silk_moth.SilkMothModel;
+import su.terrafirmagreg.core.common.entity.silk_moth.SilkMothRenderer;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSnifferRenderer;
 import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
@@ -77,15 +82,6 @@ public class TFGEntities {
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCBactrianCamel::createAttributes)
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCBactrianCamel::spawnRules)
-            .register();
-
-    public static final EntityEntry<TFGSlime> TFG_SLIME = TFGCore.REGISTRATE.entity("slime", TFGSlime::new, MobCategory.AMBIENT)
-            .properties(p -> p.sized(1F, 1F).clientTrackingRange(8))
-            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
-            .tag(TFGTags.Entities.Genderless)
-            .attributes(TFGSlime::createAttributes)
-            .renderer(() -> TFGSlimeRenderer::new)
-            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFGSlime::spawnRules)
             .register();
 
     public static final EntityEntry<TFGFox> TFG_FOX = TFGCore.REGISTRATE.entity("fox", TFGFox::new, MobCategory.CREATURE)
@@ -175,6 +171,22 @@ public class TFGEntities {
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCMongoose::spawnRules)
             .register();
 
+    public static final EntityEntry<SilkMoth> SILK_MOTH = TFGCore.REGISTRATE.entity("silk_moth", SilkMoth::new, MobCategory.AMBIENT)
+            .properties(p -> p.sized(0.6f, 0.6f).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(SilkMoth::createMobAttributes)
+            .renderer(() -> SilkMothRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SilkMoth::spawnRules)
+            .register();
+
+    public static final EntityEntry<Dragonfly> DRAGONFLY = TFGCore.REGISTRATE.entity("dragonfly", Dragonfly::new, MobCategory.AMBIENT)
+            .properties(p -> p.sized(0.6f, 0.5f).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(Dragonfly::createMobAttributes)
+            .renderer(() -> DragonflyRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Dragonfly::spawnRules)
+            .register();
+
     public static final EntityEntry<Rocket> TIER_1_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_1_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
             .properties(p -> p.sized(1.1f, 4.6f).clientTrackingRange(10).fireImmune())
             .renderer(() -> RocketHelper::makeRocketRendererT1)
@@ -213,10 +225,9 @@ public class TFGEntities {
         event.registerLayerDefinition(TFCWolfModel.LAYER_LOCATION, TFCWolfModel::createBodyLayer);
         event.registerLayerDefinition(TFGFoxModel.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(CubeDeformation.NONE), 48, 32));
         event.registerLayerDefinition(TFGFoxCollarLayer.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(new CubeDeformation(0.01f)), 48, 32));
-        event.registerLayerDefinition(TFGSlimeModel.LAYER_LOCATION, TFGSlimeModel::createInnerBodyLayer);
-        event.registerLayerDefinition(TFGSlimeOuterLayer.LAYER_LOCATION, TFGSlimeModel::createOuterBodyLayer);
-        event.registerLayerDefinition(TFGSlimeFaceLayer.LAYER_LOCATION, TFGSlimeModel::createFaceLayer);
         event.registerLayerDefinition(new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("tfc", "dromedary_camel"), "main"), CamelModel::createBodyLayer);
         event.registerLayerDefinition(TFCBactrianCamelModel.LAYER_LOCATION, TFCBactrianCamelModel::createBodyLayer);
+        event.registerLayerDefinition(SilkMothModel.LAYER_LOCATION, SilkMothModel::getTexturedModelData);
+        event.registerLayerDefinition(DragonflyModel.LAYER_LOCATION, DragonflyModel::getTexturedModelData);
     }
 }

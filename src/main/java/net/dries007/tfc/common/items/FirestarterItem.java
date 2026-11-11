@@ -8,7 +8,8 @@ package net.dries007.tfc.common.items;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import net.dries007.tfc.compat.vivecraft.VivecraftIntegration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
@@ -147,7 +148,11 @@ public class FirestarterItem extends Item
     @Override
     public UseAnim getUseAnimation(ItemStack stack)
     {
-        return UseAnim.BOW;
+		if (VivecraftIntegration.isVREnabled())
+		{
+			return UseAnim.NONE;
+		}
+		return UseAnim.BOW;
     }
 
     @Override

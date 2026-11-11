@@ -13,6 +13,6 @@ public class RoverMixin {
 
     @ModifyConstant(method = "<init>", constant = @Constant(floatValue = 1.0f, ordinal = 0), remap = false)
     public float tfg$increaseStepHeight(float constant) {
-        return 1.2f;
+        return 1.5f;
     }
 }

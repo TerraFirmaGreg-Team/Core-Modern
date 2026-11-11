@@ -8,55 +8,55 @@
         "decoration": {
             "blocks": [
                 {
-                    "with": [{"block": "tfc:ore/topaz/rhyolite"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/rhyolite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/basalt"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/basalt"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/andesite"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/andesite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/dacite"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/dacite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/granite"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/granite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/diorite"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/diorite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/gabbro"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/gabbro"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/quartzite"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/quartzite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/slate"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/slate"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/phyllite"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/phyllite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/schist"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/schist"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/gneiss"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/gneiss"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/topaz/marble"}],
+                    "with": [{"block": "gtceu:topaz_ore"}],
                     "replace": ["tfc:rock/raw/marble"]
                 }
             ],

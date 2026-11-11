@@ -30,7 +30,6 @@ import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
@@ -38,6 +37,7 @@ import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.particle.*;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;
+import su.terrafirmagreg.core.world.dimension_effects.MercuryEffects;
 import su.terrafirmagreg.core.world.dimension_effects.VenusEffects;
 
 public class ClientProxy extends CommonProxy {
@@ -66,6 +66,7 @@ public class ClientProxy extends CommonProxy {
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
         // environmental
         event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
+        event.registerSpriteSet(TFGParticles.LARGE_SMOKE.get(), LargeSmokeProvider::new);
         // Decompression event
         event.registerSpriteSet(TFGParticles.DECOMPRESSION.get(), DecompressionParticle.Provider::new);
         // for machines
@@ -183,5 +184,6 @@ public class ClientProxy extends CommonProxy {
     public void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
         event.register(TFGCore.id("beneath_effects"), new BeneathEffects());
         event.register(TFGCore.id("venus_effects"), new VenusEffects());
+        event.register(TFGCore.id("mercury_effects"), new MercuryEffects());
     }
 }

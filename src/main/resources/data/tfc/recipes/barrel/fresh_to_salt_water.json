@@ -7,7 +7,7 @@
         "amount": 125,
         "fluid": "tfc:salt_water"
     },
-    "input_item": {"ingredient": {"item": "tfc:powder/salt"}},
+    "input_item": {"ingredient": {"item": "gtceu:small_salt_dust"}},
     "__comment__": "This file was automatically created by mcresources",
     "type": "tfc:barrel_instant"
 }

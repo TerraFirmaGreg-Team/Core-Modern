@@ -25,6 +25,7 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
 
 import appeng.api.upgrades.Upgrades;
+import appeng.items.parts.PartItem;
 import de.mennomax.astikorcarts.item.CartItem;
 import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
@@ -37,6 +38,9 @@ import su.terrafirmagreg.core.common.item.*;
 import su.terrafirmagreg.core.common.item.wearable.FlippersItem;
 import su.terrafirmagreg.core.common.item.wearable.SnorkelItem;
 import su.terrafirmagreg.core.common.item.wearable.SnowshoesItem;
+import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderPart;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalPart;
+import su.terrafirmagreg.core.compat.ae2.terminal.WOTItem;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings("unused")
@@ -105,6 +109,8 @@ public class TFGItems {
     public static final ItemEntry<ForgeSpawnEggItem> MONGOOSE_SPAWN_EGG = registerSpawnEgg(TFGEntities.MONGOOSE, 0x8C7355, 0x3D2B1A);
     public static final ItemEntry<ForgeSpawnEggItem> BACTRIAN_CAMEL_SPAWN_EGG = registerSpawnEgg(TFGEntities.BACTRIAN_CAMEL, 0x8C7355, 0x3D2B1A);
     public static final ItemEntry<ForgeSpawnEggItem> DROMEDARY_CAMEL_SPAWN_EGG = registerSpawnEgg(TFGEntities.DROMEDARY_CAMEL, 0x8C7355, 0x3D2B1A);
+    public static final ItemEntry<ForgeSpawnEggItem> SILK_MOTH_SPAWN_EGG = registerSpawnEgg(TFGEntities.SILK_MOTH, 0xc68acc, 0xf2dcec);
+    public static final ItemEntry<ForgeSpawnEggItem> DRAGONFLY_SPAWN_EGG = registerSpawnEgg(TFGEntities.DRAGONFLY, 0x202ab0, 0x73e1f9);
 
     @SuppressWarnings("deprecation")
     public static final ItemEntry<BucketItem> MARS_WATER_BUCKET = TFGCore.REGISTRATE.item("semiheavy_ammoniacal_water_bucket",
@@ -183,6 +189,24 @@ public class TFGItems {
                     TFGCore.id("item/wireless_card/wireless_card_layer2")))
             .register();
 
+    public static final ItemEntry<PartItem<StorageProviderPart>> CABLE_STORAGE_PROVIDER = TFGCore.REGISTRATE.item("cable_storage_provider",
+            p -> new PartItem<>(p, StorageProviderPart.class, StorageProviderPart::new))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<PartItem<OrderTerminalPart>> ORDER_TERMINAL = TFGCore.REGISTRATE.item("order_terminal",
+            p -> new PartItem<>(p, OrderTerminalPart.class, OrderTerminalPart::new))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<WOTItem> WIRELESS_ORDER_TERMINAL = TFGCore.REGISTRATE.item("wireless_order_terminal", p -> new WOTItem())
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .onRegister(WOTItem::onRegister)
+            .register();
+
     public static final ItemEntry<CartItem> RNR_PLOW = TFGCore.REGISTRATE.item("rnr_plow", CartItem::new)
             .defaultModel()
             .properties(p -> p.stacksTo(1))
@@ -215,6 +239,11 @@ public class TFGItems {
     public static ItemEntry<ComponentItem> COVER_ROTTEN_VOIDING = TFGCore.REGISTRATE
             .item("rotten_voiding_cover", ComponentItem::create)
             .onRegister(item -> item.attachComponents(new CoverPlaceBehavior(TFGCovers.ITEM_VOIDING_ROTTEN)))
+            .register();
+
+    public static final ItemEntry<ElectricFlaskItem> ELECTRIC_FLASK = TFGCore.REGISTRATE.item("electric_flask", ElectricFlaskItem::new)
+            .properties(p -> p.durability(-1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
     public static ItemEntry<Item> ALFISOL_MUD_BRICK = TFGCore.REGISTRATE.item("mud_brick/alfisol", Item::new).defaultModel().register();

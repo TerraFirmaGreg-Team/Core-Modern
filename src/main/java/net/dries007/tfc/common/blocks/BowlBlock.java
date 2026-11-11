@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.common.blocks;
 
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -32,8 +34,6 @@ import net.dries007.tfc.common.capabilities.food.FoodTraits;
 import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.capabilities.glass.GlassOperation;
 import net.dries007.tfc.common.capabilities.glass.GlassWorkData;
-import net.dries007.tfc.common.items.Powder;
-import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Helpers;
 
 public class BowlBlock extends DeviceBlock
@@ -70,7 +70,7 @@ public class BowlBlock extends DeviceBlock
                     if (op != null)
                     {
                         GlassWorkData.apply(held, op);
-                        inv.getStackInSlot(0).shrink(1);
+						inv.extractItem(0, 1, false);
                         Helpers.playSound(level, pos, SoundEvents.SAND_PLACE);
                         player.getCooldowns().addCooldown(held.getItem(), 10);
                         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -89,7 +89,7 @@ public class BowlBlock extends DeviceBlock
                     Helpers.playSound(level, pos, SoundEvents.SAND_PLACE);
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
-                if (Helpers.isItem(held, TFCTags.Items.CAN_BE_SALTED) && Helpers.isItem(current, TFCItems.POWDERS.get(Powder.SALT).get()))
+                if (Helpers.isItem(held, TFCTags.Items.CAN_BE_SALTED) && ChemicalHelper.getMaterialStack(current).material() == GTMaterials.Salt)
                 {
                     final @Nullable IFood food = FoodCapability.get(held);
                     if (food != null && !food.hasTrait(FoodTraits.SALTED))
@@ -98,7 +98,7 @@ public class BowlBlock extends DeviceBlock
                         final ItemStack salted = held.split(toSalt);
                         FoodCapability.applyTrait(salted, FoodTraits.SALTED);
                         ItemHandlerHelper.giveItemToPlayer(player, salted);
-                        inv.getStackInSlot(0).shrink(toSalt);
+						inv.extractItem(0, toSalt, false);
                         Helpers.playSound(level, pos, SoundEvents.SAND_PLACE);
                         return InteractionResult.sidedSuccess(level.isClientSide);
                     }

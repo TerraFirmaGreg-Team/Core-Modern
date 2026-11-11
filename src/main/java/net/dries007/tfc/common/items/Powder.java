@@ -8,16 +8,9 @@ package net.dries007.tfc.common.items;
 
 public enum Powder
 {
-    CHARCOAL,
-    COKE,
     FLUX,
-    GRAPHITE,
     KAOLINITE,
     LIME,
-    SALT,
-    SALTPETER,
-    SODA_ASH,
-    SULFUR,
-    SYLVITE,
+	SULFUR,
     WOOD_ASH
 }

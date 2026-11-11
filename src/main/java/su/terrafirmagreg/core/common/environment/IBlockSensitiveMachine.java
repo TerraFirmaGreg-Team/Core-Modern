@@ -42,6 +42,9 @@ public interface IBlockSensitiveMachine {
     default void setLastValidationTick(long tick) {
     }
 
+    default void prepareValidation() {
+    }
+
     /** Called when a finished validation is dirty and needs re-requesting. Override for cooldown logic. */
     default void requestRevalidation() {
         EnvironmentSystem.requestValidation(this, 0);

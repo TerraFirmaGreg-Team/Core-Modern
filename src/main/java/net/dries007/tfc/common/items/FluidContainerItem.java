@@ -120,13 +120,19 @@ public class FluidContainerItem extends Item
     @Override
     public ItemStack getCraftingRemainingItem(ItemStack stack)
     {
+        final IFluidHandlerItem handler = Helpers.getCapability(stack.copyWithCount(1), Capabilities.FLUID_ITEM);
+        if (handler != null)
+        {
+            handler.drain(FluidHelpers.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+            return handler.getContainer();
+        }
         return new ItemStack(this);
     }
 
     @Override
     public boolean hasCraftingRemainingItem(ItemStack stack)
     {
-        return stack.getCapability(Capabilities.FLUID_ITEM).map(cap -> !cap.getFluidInTank(0).isEmpty()).orElse(false);
+        return stack.getCapability(Capabilities.FLUID_ITEM).map(cap -> !cap.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE).isEmpty()).orElse(false);
     }
 
     @Nullable

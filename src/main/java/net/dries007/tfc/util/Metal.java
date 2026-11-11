@@ -15,6 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import com.google.gson.JsonObject;
+import lombok.Getter;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -77,6 +78,7 @@ import net.dries007.tfc.common.items.ToolItem;
 import net.dries007.tfc.network.DataManagerSyncPacket;
 import net.dries007.tfc.util.registry.RegistryMetal;
 
+@SuppressWarnings("deprecation")
 public final class Metal
 {
     public static final ResourceLocation UNKNOWN_ID = Helpers.identifier("unknown");
@@ -177,14 +179,22 @@ public final class Metal
         return new Metal(id, tier, fluid, meltTemperature, specificHeatCapacity, ingots, doubleIngots, sheets);
     }
 
+    @Getter
     private final int tier;
+    @Getter
     private final Fluid fluid;
+    @Getter
     private final float meltTemperature;
+    @Getter
     private final float specificHeatCapacity;
 
+    @Getter
     private final ResourceLocation id;
+    @Getter
     private final ResourceLocation textureId;
+    @Getter
     private final ResourceLocation softTextureId;
+    @Getter
     private final String translationKey;
 
     @Nullable
@@ -227,36 +237,6 @@ public final class Metal
         Helpers.encodeNullable(sheets, buffer, Ingredient::toNetwork);
     }
 
-    public ResourceLocation getId()
-    {
-        return id;
-    }
-
-    public ResourceLocation getTextureId()
-    {
-        return textureId;
-    }
-
-    public ResourceLocation getSoftTextureId()
-    {
-        return softTextureId;
-    }
-
-    public int getTier()
-    {
-        return tier;
-    }
-
-    public Fluid getFluid()
-    {
-        return fluid;
-    }
-
-    public float getMeltTemperature()
-    {
-        return meltTemperature;
-    }
-
     /**
      * @return The Specific Heat Capacity of the metal. Units of Energy / °C
      * @see IHeat#getHeatCapacity()
@@ -266,22 +246,9 @@ public final class Metal
         return getSpecificHeatCapacity() * mB;
     }
 
-    /**
-     * @return The Specific Heat Capacity of the metal. Units of Energy / (°C * mB)
-     */
-    public float getSpecificHeatCapacity()
-    {
-        return specificHeatCapacity;
-    }
-
     public MutableComponent getDisplayName()
     {
         return Component.translatable(translationKey);
-    }
-
-    public String getTranslationKey()
-    {
-        return translationKey;
     }
 
     public boolean isIngot(ItemStack stack)
@@ -328,11 +295,14 @@ public final class Metal
      * T3 - Wrought Iron - Work T3, Weld T4
      * T4 - Steel - Work T4, Weld T5
      * T5 - Black Steel - Work T5, Weld T6
-     * T6 - Red Steel / Blue Steel - Work T6, Weld T6
+     * T6 - Red Steel / Blue Steel - Work T6, Weld T7
+     * T7 - Vanadium Steel - Work T7, Weld T8
+     * T8 - Stainless Steel - Work T8, Weld T9
+     * T9 - Tungsten - Work T9, Weld T9
      */
     public enum Tier
     {
-        TIER_0, TIER_I, TIER_II, TIER_III, TIER_IV, TIER_V, TIER_VI;
+        TIER_0, TIER_I, TIER_II, TIER_III, TIER_IV, TIER_V, TIER_VI, TIER_VII, TIER_VIII, TIER_IX;
 
         private static final Tier[] VALUES = values();
 
@@ -343,7 +313,7 @@ public final class Metal
 
         public Tier next()
         {
-            return this == TIER_VI ? TIER_VI : VALUES[this.ordinal() + 1];
+            return this == TIER_IX ? TIER_IX : VALUES[this.ordinal() + 1];
         }
 
         public Tier previous()
@@ -400,7 +370,9 @@ public final class Metal
         @Nullable private final net.minecraft.world.item.Tier toolTier;
         @Nullable private final ArmorMaterial armorTier;
         private final MapColor mapColor;
+        @Getter
         private final Rarity rarity;
+        @Getter
         private final int color;
 
         Default(int color, MapColor mapColor, Rarity rarity, boolean parts, boolean armor, boolean utility)
@@ -427,16 +399,6 @@ public final class Metal
         public String getSerializedName()
         {
             return serializedName;
-        }
-
-        public int getColor()
-        {
-            return color;
-        }
-
-        public Rarity getRarity()
-        {
-            return rarity;
         }
 
         public boolean hasParts()

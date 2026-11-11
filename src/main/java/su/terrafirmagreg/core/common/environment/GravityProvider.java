@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.environment;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Lightweight gravity provider that uses a sphere (bubble) around the machine.
@@ -23,28 +25,36 @@ public class GravityProvider {
     @Getter
     private final int radius;
 
+    @Getter
+    @Setter
+    private float gravity;
+
     private final int radiusSq;
 
     @Nullable
     private IEnvironmentMachine attachedMachine;
 
-    public GravityProvider(BlockPos machinePos, int radius) {
+    public GravityProvider(BlockPos machinePos, int radius, float gravity) {
         this.machinePos = machinePos;
         this.radius = radius;
+        this.gravity = gravity;
         this.radiusSq = radius * radius;
     }
 
     /**
-     * Checks if this provider supplies normal gravity to the given position.
+     * Gets the gravity this provider supplies to the given position.
      * Works even when the machine is unloaded — assumes working when unloaded.
      */
-    public boolean hasNormalGravity(BlockPos pos) {
+    public Optional<Float> getGravity(BlockPos pos) {
         if (attachedMachine != null && !attachedMachine.isWorking()) {
-            return false;
+            return Optional.empty();
         }
 
         // Machine is either working or unloaded (assumed working)
-        return machinePos.distSqr(pos) <= radiusSq;
+        if (machinePos.distSqr(pos) <= radiusSq) {
+            return Optional.of(gravity);
+        }
+        return Optional.empty();
     }
 
     public boolean isMachineLoaded() {
@@ -95,11 +105,13 @@ public class GravityProvider {
     public void save(CompoundTag tag) {
         tag.putLong("pos", machinePos.asLong());
         tag.putInt("radius", radius);
+        tag.putFloat("gravity", gravity);
     }
 
     public static GravityProvider load(CompoundTag tag) {
         BlockPos pos = BlockPos.of(tag.getLong("pos"));
         int radius = tag.getInt("radius");
-        return new GravityProvider(pos, radius);
+        float gravity = tag.getFloat("gravity");
+        return new GravityProvider(pos, radius, gravity);
     }
 }

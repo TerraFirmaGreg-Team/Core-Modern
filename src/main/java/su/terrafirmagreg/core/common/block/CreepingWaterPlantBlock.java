@@ -28,7 +28,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -109,7 +108,7 @@ public abstract class CreepingWaterPlantBlock extends CreepingPlantBlock impleme
     public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         FluidHelpers.tickFluid(level, currentPos, state);
         state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), canCreepOn(level, facingPos, facingState, direction));
-        return isEmptyContents(state) ? Blocks.AIR.defaultBlockState() : state;
+        return isEmptyContents(state) ? state.getFluidState().createLegacyBlock() : state;
     }
 
     private static boolean isEmptyContents(BlockState state) {

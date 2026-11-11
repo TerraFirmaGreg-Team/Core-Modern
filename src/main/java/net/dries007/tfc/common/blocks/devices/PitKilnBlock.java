@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.blocks.devices;
 
 import java.util.Random;
+
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -79,7 +81,7 @@ public class PitKilnBlock extends DeviceBlock
             double z = pos.getZ() + random.nextFloat();
             for (int i = 0; i < random.nextInt(3); i++)
             {
-                level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0, 0.1f + random.nextFloat() / 8, 0);
+                level.addAlwaysVisibleParticle(TFCParticles.SMOKE_3.get(), x, y, z, 0, 0.1f + random.nextFloat() / 8, 0);
             }
         }
     }

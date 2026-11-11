@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -17,10 +16,17 @@ import net.minecraft.world.level.ChunkPos;
  */
 public class TemperatureProvider {
 
-    /** The target ambiental temperature. */
-    public static final float FRONT_TARGET_TEMP = 15f;
+    /** Default target ambiental temperature. */
+    public static final float DEFAULT_TARGET_TEMPERATURE = 15f;
+
+    /** Ad Astra liveable temperature range. */
+    public static final float MIN_TARGET_TEMPERATURE = -50f;
+    public static final float MAX_TARGET_TEMPERATURE = 70f;
 
     private final BlockPos machinePos;
+
+    /** The target temperature (°C) this heat pump maintains inside its bubble. */
+    private float targetTemperature = DEFAULT_TARGET_TEMPERATURE;
 
     /** The sealed heated-space scan from the front of the machine. */
     private RoomScan frontScan = RoomScan.empty();
@@ -28,14 +34,14 @@ public class TemperatureProvider {
     /** The scan from behind the machine, used only to detect a trapped exhaust. */
     private RoomScan backScan = RoomScan.empty();
 
-    /** Anchor of the proximity exhaust heat field (centre of the machine's back). */
-    private BlockPos exhaustAnchor = BlockPos.ZERO;
-
-    /** Radius (blocks) of the proximity exhaust heat field. */
-    private int exhaustRadius = 0;
-
     /** Whether the exhaust is trapped (back region sealed), making the machine unable to work. */
     private boolean blocked = false;
+
+    /** Oxygen providers whose region the temperature provider is inheriting. */
+    @Nullable
+    private OxygenProvider inheritedFront;
+    @Nullable
+    private OxygenProvider inheritedBack;
 
     /** Cached chunk footprint. */
     private Set<ChunkPos> affectedChunks = Set.of();
@@ -55,85 +61,59 @@ public class TemperatureProvider {
      * Called on the main thread by the machine driver.
      */
     public void setRegions(RoomScan frontScan, RoomScan backScan, boolean blocked,
-            BlockPos exhaustAnchor, int exhaustRadius) {
+            @Nullable OxygenProvider inheritedFront, @Nullable OxygenProvider inheritedBack) {
         this.frontScan = frontScan == null ? RoomScan.empty() : frontScan;
         this.backScan = backScan == null ? RoomScan.empty() : backScan;
         this.blocked = blocked;
-        this.exhaustAnchor = exhaustAnchor == null ? machinePos : exhaustAnchor;
-        this.exhaustRadius = exhaustRadius;
+        this.inheritedFront = inheritedFront;
+        this.inheritedBack = inheritedBack;
         this.affectedChunks = computeAffectedChunks();
     }
 
     private Set<ChunkPos> computeAffectedChunks() {
-        Set<ChunkPos> chunks = new HashSet<>(frontScan.touchedChunks());
-        chunks.addAll(backScan.touchedChunks());
-
-        int r = Math.max(0, exhaustRadius);
-        int minCX = (exhaustAnchor.getX() - r) >> 4;
-        int maxCX = (exhaustAnchor.getX() + r) >> 4;
-        int minCZ = (exhaustAnchor.getZ() - r) >> 4;
-        int maxCZ = (exhaustAnchor.getZ() + r) >> 4;
-        for (int cx = minCX; cx <= maxCX; cx++) {
-            for (int cz = minCZ; cz <= maxCZ; cz++) {
-                chunks.add(new ChunkPos(cx, cz));
-            }
-        }
+        Set<ChunkPos> chunks = new HashSet<>(getFrontScan().touchedChunks());
+        chunks.addAll(getBackScan().touchedChunks());
         return chunks;
     }
 
     public RoomScan getFrontScan() {
-        return frontScan;
+        return inheritedFront != null ? inheritedFront.getRoomScan() : frontScan;
     }
 
     public RoomScan getBackScan() {
-        return backScan;
-    }
-
-    public BlockPos getExhaustAnchor() {
-        return exhaustAnchor;
+        return inheritedBack != null ? inheritedBack.getRoomScan() : backScan;
     }
 
     public boolean isBlocked() {
+        if (inheritedBack != null)
+            return inheritedBack.getRoomScan().isSealed();
         return blocked;
     }
 
-    /**
-     * Checks if this provider supplies safe temperature to the given position.
-     */
-    public boolean hasTemperature(BlockPos pos) {
-        if (blocked)
-            return false;
-        if (attachedMachine != null && !attachedMachine.isWorking()) {
-            return false;
-        }
-        return frontScan.isSealed() && frontScan.containsEnvelope(pos);
+    public float getTargetTemperature() {
+        return targetTemperature;
+    }
+
+    /** Sets the target temperature. */
+    public void setTargetTemperature(float temperature) {
+        this.targetTemperature = temperature;
     }
 
     /**
-     * Checks the target temperature this provider supplies to the given position.
+     * Gets the temperature this provider supplies to the given position.
      */
-    public Optional<Float> getTargetTemperature(BlockPos pos) {
-        if (blocked)
+    public Optional<Float> getTemperature(BlockPos pos) {
+        if (isBlocked())
             return Optional.empty();
         if (attachedMachine != null && !attachedMachine.isWorking()) {
             return Optional.empty();
         }
 
-        if (frontScan.isSealed() && frontScan.containsEnvelope(pos)) {
-            return Optional.of(FRONT_TARGET_TEMP);
-        }
-
-        if (frontScan.isSealed() && level != null && isWithinExhaust(pos)) {
-            float climate = Climate.getTemperature(level, pos);
-            double dist = Math.sqrt(pos.distSqr(exhaustAnchor));
-            float falloff = (float) Math.max(0.0, 1.0 - dist / exhaustRadius);
-            return Optional.of(climate + (FRONT_TARGET_TEMP - climate) * falloff);
+        RoomScan front = getFrontScan();
+        if (front.isSealed() && front.containsEnvelope(pos)) {
+            return Optional.of(targetTemperature);
         }
         return Optional.empty();
-    }
-
-    private boolean isWithinExhaust(BlockPos pos) {
-        return exhaustRadius > 0 && pos.distSqr(exhaustAnchor) <= (double) exhaustRadius * exhaustRadius;
     }
 
     public boolean isMachineLoaded() {
@@ -169,9 +149,8 @@ public class TemperatureProvider {
 
     public void save(CompoundTag tag) {
         tag.putLong("pos", machinePos.asLong());
+        tag.putFloat("targetTemperature", targetTemperature);
         tag.putBoolean("blocked", blocked);
-        tag.putLong("exhaustAnchor", exhaustAnchor.asLong());
-        tag.putInt("exhaustRadius", exhaustRadius);
         tag.putLongArray("chunks", chunkPosToLongs(affectedChunks));
     }
 
@@ -179,9 +158,8 @@ public class TemperatureProvider {
         BlockPos pos = BlockPos.of(tag.getLong("pos"));
         TemperatureProvider provider = new TemperatureProvider(pos);
 
+        provider.targetTemperature = tag.getFloat("targetTemperature");
         provider.blocked = tag.getBoolean("blocked");
-        provider.exhaustAnchor = BlockPos.of(tag.getLong("exhaustAnchor"));
-        provider.exhaustRadius = tag.getInt("exhaustRadius");
         provider.affectedChunks = longsToChunkSet(tag.getLongArray("chunks"));
         return provider;
     }

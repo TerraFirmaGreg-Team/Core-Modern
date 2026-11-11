@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blocks;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -107,7 +108,7 @@ public class MoltenBlock extends ExtendedBlock
             final double x = pos.getX() + 0.5D;
             final double y = pos.getY() + 1.1D;
             final double z = pos.getZ() + 0.5D;
-            level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, Helpers.triangle(random) * 0.1D, 0.2D, Helpers.triangle(random) * 0.1D);
+            level.addParticle(TFCParticles.SMOKE_1.get(), x, y, z, Helpers.triangle(random) * 0.1D, 0.2D, Helpers.triangle(random) * 0.1D);
             if (random.nextInt(10) == 0)
             {
                 level.addParticle(ParticleTypes.LAVA, x, y, z, Helpers.triangle(random) * 0.1D, 0.5D, Helpers.triangle(random) * 0.1D);

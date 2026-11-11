@@ -1,5 +1,5 @@
-name: "Project Build"
-run-name: "[📦]: Project Build #${{ github.run_number }}"
+name: "Build"
+run-name: "[📦]: Build #${{ github.run_number }}"
 on:
   push:
     branches:
@@ -23,228 +23,56 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ !github.event.repository.fork }}
     outputs:
-      name: ${{ steps.check.outputs.name }}
-      version: ${{ steps.check.outputs.version }}
-      version_type: ${{ steps.check.outputs.version_type }}
-      full_name: ${{ steps.check.outputs.name }}-${{ steps.check.outputs.version }}
-
-      loaders: ${{ steps.check.outputs.loaders }}
-      game_versions: ${{ steps.check.outputs.game_versions }}
-      java_version: ${{ steps.check.outputs.java_version }}
-
-      make_release: ${{ steps.check.outputs.make_release }}
-
+      name: ${{ steps.info.outputs.name }}
+      version: ${{ steps.info.outputs.version }}
+      version_type: ${{ steps.info.outputs.version_type }}
+      full_name: ${{ steps.info.outputs.full_name }}
+      loaders: ${{ steps.info.outputs.loaders }}
+      game_versions: ${{ steps.info.outputs.game_versions }}
+      java_version: ${{ steps.info.outputs.java_version }}
+      make_release: ${{ steps.info.outputs.make_release }}
     steps:
-      - name: "[📦] Checkout"
-        uses: actions/checkout@v7
+      - name: Collect info
+        id: info
+        uses: TerraFirmaGreg-Team/Actions/mod/info@main
         with:
-          fetch-depth: 0
-
-      - name: "[🔍] Check required files and folders"
-        uses: andstor/file-existence-action@v3.1.0
-        with:
-          fail: true
-          ignore_case: true
-          files: "gradle.properties, build.gradle, LICENSE, README.md, src"
-
-      - name: "[📥] Get Project Info"
-        id: project_info
-        uses: madhead/read-java-properties@latest
-        with:
-          file: gradle.properties
-          all: true
-
-      - name: "[🔍] Check if tag exists"
-        uses: mukunku/tag-exists-action@v1.7.0
-        id: tag_check
-        with:
-          tag: ${{ steps.project_info.outputs.mod_version }}
-
-      - name: "[🔍] Check"
-        id: check
-        shell: bash
-        run: |
-
-          # Get data from previous steps
-          TAG_EXISTS="${{ steps.tag_check.outputs.exists }}"
-          PROJECT_NAME="${{ steps.project_info.outputs.mod_name }}-${{ steps.project_info.outputs.mod_name_suffix }}"
-          GAME_VERSIONS="${{ steps.project_info.outputs.minecraft_version }}"
-          JAVA_VERSION="${{ steps.project_info.outputs.java_version }}"
-          LOADERS="${{ steps.project_info.outputs.loader }}"
-          LOADERS_VERSION="${{ steps.project_info.outputs.forge_version }}"
-
-          # Preparation
-          IS_RELEASE_CANDIDATE="false"
-          if [[ "$TAG_EXISTS" == "false" && -n "${{ steps.project_info.outputs.mod_version }}" ]]; then
-            IS_RELEASE_CANDIDATE="true"
-          fi
-
-          if [[ "$IS_RELEASE_CANDIDATE" == "true" ]]; then
-            PROJECT_VERSION="${{ steps.project_info.outputs.mod_version }}"
-            PROJECT_VERSION_TYPE="${{ steps.project_info.outputs.mod_version_type }}"
-          else
-            PROJECT_VERSION="${{ steps.project_info.outputs.mod_version }}-build-${{ github.run_number }}"
-            PROJECT_VERSION_TYPE="Unreleased"
-          fi
-
-          # Save values for next steps
-          echo "game_version=$GAME_VERSIONS" >> $GITHUB_OUTPUT
-          echo "java_version=$JAVA_VERSION" >> $GITHUB_OUTPUT
-          echo "loaders=$LOADERS" >> $GITHUB_OUTPUT
-          echo "loaders_version=$LOADERS_VERSION" >> $GITHUB_OUTPUT
-          echo "name=$PROJECT_NAME" >> $GITHUB_OUTPUT
-          echo "version=$PROJECT_VERSION" >> $GITHUB_OUTPUT
-          echo "version_type=$PROJECT_VERSION_TYPE" >> $GITHUB_OUTPUT
-          echo "exists=$TAG_EXISTS" >> $GITHUB_OUTPUT
-          echo "make_release=$IS_RELEASE_CANDIDATE" >> $GITHUB_OUTPUT
-
-      - name: "[📝] Generate Build Summary"
-        uses: WcAServices/markdown-template-action@v1.1.1
-        with:
-          template: |
-            ## 📊 Build Information
-
-            ### Project Info
-            | Parameter | Value |
-            |-----------|-------|
-            | 📃 **Name** | `${{ steps.check.outputs.name }}` |
-            | 📃 **Version** | `${{ steps.check.outputs.version }}` |
-            | 📃 **Release Type** | `${{ steps.check.outputs.version_type }}` |
-            | 📃 **Game Versions** | `${{ steps.check.outputs.game_version }}` |
-            | 📃 **Loaders** | `${{ steps.check.outputs.loaders }}` |
-            | 📃 **Loaders Version** | `${{ steps.check.outputs.loaders_version }}` |
-
-            ### Build Decision
-            | Parameter | Value |
-            |-----------|-------|
-            | 📃 **Tag Exists** | `${{ steps.check.outputs.exists }}` |
-            | 📃 **Make Release** | `${{ steps.check.outputs.make_release }}` |
+          required_files: "gradle.properties, build.gradle, LICENSE, README.md, src"
 
   build:
-    name: "[📦] Build Project"
-    needs: [ info ]
+    name: "[📦] Project Build"
+    needs: [info]
     runs-on: ubuntu-latest
     steps:
-      - name: "[📦] Checkout"
-        uses: actions/checkout@v7
-
-      - name: "[🔄] Replace"
-        shell: bash
-        run: |
-          VERSION="${{ needs.info.outputs.version }}"
-          if [ ! -f gradle.properties ]; then
-            echo "::error::gradle.properties not found"
-            exit 1
-          fi
-          sed -i "s/^mod_version[[:space:]]*=.*/mod_version = ${VERSION}/g" gradle.properties
-
-      - name: "[📁] Setup Java"
-        uses: actions/setup-java@v6.0.1
+      - name: Build
+        uses: TerraFirmaGreg-Team/Actions/mod/build@main
         with:
-          distribution: 'temurin'
-          java-version: ${{ needs.info.outputs.java_version }}
-          cache: 'gradle'
-
-      - name: "[📁] Prepare artifact"
-        run: |
-          chmod +x gradlew
-          ./gradlew build -x spotlessCheck -x spotlessApply -x spotlessJava -x spotlessJson
-          ls -la build/libs/
-
-      - name: "[🚀] Upload Artifact"
-        uses: actions/upload-artifact@v7.0.1
-        with:
-          name: ${{ needs.info.outputs.full_name }}
-          path: build/libs/${{ needs.info.outputs.full_name }}.jar
-          if-no-files-found: error
+          version: ${{ needs.info.outputs.version }}
+          replace_version: true
+          java_version: ${{ needs.info.outputs.java_version }}
+          gradle_args: build -x spotlessCheck -x spotlessApply -x spotlessJava -x spotlessJson
+          artifact_name: ${{ needs.info.outputs.full_name }}
+          artifact_path: build/libs/${{ needs.info.outputs.full_name }}.jar
 
   release:
-    name: "[🚀] Release"
-    needs: [ info, build ]
+    name: "[🚀] Project Release"
+    needs: [info, build]
     runs-on: ubuntu-latest
     if: ${{ needs.info.outputs.make_release == 'true' }}
-
     steps:
-      - name: "[📦] Debug make_release"
-        run: |
-          echo "make_release = '${{ needs.info.outputs.make_release }}'"
-          echo "Comparison result: ${{ needs.info.outputs.make_release == 'true' }}"
-
-      - name: "[📦] Download artifact"
-        uses: actions/download-artifact@v8
-
-      - name: "[🔒] Verify"
-        shell: bash
-        run: |
-          echo "=== Token Verification ==="
-          
-          if [ -z "${{ secrets.MODRINTH_TOKEN }}" ]; then
-            echo "::error::MODRINTH_TOKEN not found"
-            exit 1
-          fi
-          echo "✅ MODRINTH_TOKEN: OK"
-          
-          if [ -z "${{ secrets.CURSEFORGE_TOKEN }}" ]; then
-            echo "::error::CURSEFORGE_TOKEN not found"
-            exit 1
-          fi
-          echo "✅ CURSEFORGE_TOKEN: OK"
-          
-          echo ""
-          echo "=== ID Verification ==="
-          
-          if [ -z "${{ vars.MODRINTH_ID }}" ]; then
-            echo "::error::MODRINTH_ID not found"
-            exit 1
-          fi
-          echo "✅ MODRINTH_ID: OK"
-          
-          if [ -z "${{ vars.CURSEFORGE_ID }}" ]; then
-            echo "::error::CURSEFORGE_ID not found"
-            exit 1
-          fi
-          echo "✅ CURSEFORGE_ID: OK"
-          
-          echo ""
-          echo "=== Artifact Verification ==="
-          
-          if [ ! -f "${{ needs.info.outputs.full_name }}.jar" ]; then
-            echo "::error::Artifact not found"
-            ls -la
-            exit 1
-          fi
-          
-          echo "✅ Artifact: OK"
-          echo ""
-
-      - name: "[🚀] Release"
-        uses: Xikaro/game-publish@3.4.0
+      - name: Publish
+        uses: TerraFirmaGreg-Team/Actions/mod/release@main
         with:
-          modrinth-id: ${{ vars.MODRINTH_ID }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
-          curseforge-id: ${{ vars.CURSEFORGE_ID }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-
-          github-name: ${{ needs.info.outputs.version }}
-          github-tag: ${{ needs.info.outputs.version }}
-          github-generate-changelog: true
-          github-draft: false
-          github-prerelease: ${{ needs.info.outputs.version_type != 'release' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-          files: ${{ needs.info.outputs.full_name }}.jar
-
-          name: ${{ needs.info.outputs.full_name }}
+          full_name: ${{ needs.info.outputs.full_name }}
           version: ${{ needs.info.outputs.version }}
-          version-type: ${{ needs.info.outputs.version_type }}
-
-          # changelog: ${{ needs.info.outputs.changelog }}
+          version_type: ${{ needs.info.outputs.version_type }}
+          files: ${{ needs.info.outputs.full_name }}.jar
+          github_name: ${{ needs.info.outputs.version }}
+          github_prerelease: ${{ needs.info.outputs.version_type != 'release' }}
           loaders: ${{ needs.info.outputs.loaders }}
-          game-versions: ${{ needs.info.outputs.game_versions }}
-          game-version-filter: none
-          environment: client | server
+          game_versions: ${{ needs.info.outputs.game_versions }}
           java: ${{ needs.info.outputs.java_version }}
-          retry-attempts: 2
-          retry-delay: 10000
-          fail-mode: fail
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          modrinth_id: ${{ vars.MODRINTH_ID }}
+          modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge_id: ${{ vars.CURSEFORGE_ID }}
+          curseforge_token: ${{ secrets.CURSEFORGE_TOKEN }}

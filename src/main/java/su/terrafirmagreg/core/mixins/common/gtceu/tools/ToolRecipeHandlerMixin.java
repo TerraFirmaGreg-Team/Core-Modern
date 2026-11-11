@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.mixins.common.gtceu.tools;
 
+import java.util.function.Consumer;
+
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -9,6 +12,8 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.data.recipe.generated.ToolRecipeHandler;
 import com.llamalad7.mixinextras.sugar.Local;
+
+import net.minecraft.data.recipes.FinishedRecipe;
 
 import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialFlags;
 
@@ -41,5 +46,10 @@ public class ToolRecipeHandlerMixin {
     @Redirect(method = "processElectricTool", at = @At(value = "INVOKE", ordinal = 5, target = "Lcom/gregtechceu/gtceu/api/data/chemical/material/properties/ToolProperty;hasType(Lcom/gregtechceu/gtceu/api/item/tool/GTToolType;)Z"), remap = false)
     private static boolean tfg$processElectricScrewdriver(ToolProperty property, GTToolType toolType, @Local(argsOnly = true) Material material) {
         return material.hasFlag(TFGMaterialFlags.GENERATE_SCREWDRIVER_HEAD);
+    }
+
+    @Redirect(method = "processTool", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/data/recipe/generated/ToolRecipeHandler;addToolRecipe(Ljava/util/function/Consumer;Lcom/gregtechceu/gtceu/api/data/chemical/material/Material;Lcom/gregtechceu/gtceu/api/item/tool/GTToolType;Z[Ljava/lang/Object;)V"), remap = false)
+    private static void tfg$processTool(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material, @NotNull GTToolType tool, boolean mirrored, Object[] recipe) {
+        // Disable all of GT's default tool recipes
     }
 }

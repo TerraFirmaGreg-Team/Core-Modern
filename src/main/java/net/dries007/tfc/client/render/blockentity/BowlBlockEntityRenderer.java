@@ -9,6 +9,7 @@ package net.dries007.tfc.client.render.blockentity;
 import java.util.HashMap;
 import java.util.Map;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,9 +40,17 @@ public class BowlBlockEntityRenderer implements BlockEntityRenderer<BowlBlockEnt
         final ResourceLocation texture = TEXTURES.computeIfAbsent(item.getItem(), i -> {
             final ResourceLocation key = BuiltInRegistries.ITEM.getKey(item.getItem());
             String path = key.getPath();
-            if (!path.contains("powder/"))
-                path = "powder/" + path;
-            return Helpers.resourceLocation(key.getNamespace(), "block/" + path);
+			if (path.contains("_dust"))
+			{
+				path = path.substring("gtceu:".length(), path.indexOf("_dust"));
+				return Helpers.resourceLocation(TerraFirmaCraft.MOD_ID, "block/powder/" + path);
+			}
+			else
+			{
+				if (!path.contains("powder/"))
+					path = "powder/" + path;
+				return Helpers.resourceLocation(key.getNamespace(), "block/" + path);
+			}
         });
 
         final float y = Mth.map(item.getCount(), 0, BowlBlockEntity.MAX_POWDER, 0.5f, 2f);

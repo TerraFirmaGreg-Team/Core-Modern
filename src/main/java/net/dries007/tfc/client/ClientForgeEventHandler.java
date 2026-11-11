@@ -12,12 +12,15 @@ import java.util.stream.Collectors;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.adastra.api.planets.Planet;
+import net.dries007.tfc.common.capabilities.player.PlayerDataCapability;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.resources.sounds.AmbientSoundHandler;
@@ -141,6 +144,7 @@ public class ClientForgeEventHandler
         bus.addListener(ClientForgeEventHandler::onToast);
         bus.addListener(ClientForgeEventHandler::onEffectRender);
         bus.addListener(IngameOverlays::checkGuiOverlays);
+		bus.addListener(ClientForgeEventHandler::onScreenOpen);
     }
 
     public static void onRenderGameOverlayText(CustomizeGuiOverlayEvent.DebugText event)
@@ -189,7 +193,7 @@ public class ClientForgeEventHandler
                 if (server != null && server.overworld().getChunkSource().getGenerator() instanceof ChunkGeneratorExtension ex)
                 {
                     final int approxSurfaceY = mc.level.getHeight(Heightmap.Types.MOTION_BLOCKING, pos.getX(), pos.getZ());
-                    ex.chunkDataProvider().generator().displayDebugInfo(tooltip, pos, approxSurfaceY);
+                    ex.chunkDataGenerator().displayDebugInfo(tooltip, pos, approxSurfaceY);
                 }
             }
         }
@@ -420,7 +424,6 @@ public class ClientForgeEventHandler
         if (event.getPlayer() != null)
         {
             Calendars.CLIENT.resetToDefault();
-            IndirectHashCollection.clearAllCaches();
         }
     }
 
@@ -435,6 +438,8 @@ public class ClientForgeEventHandler
             ClimateRenderCache.INSTANCE.onClientTick();
             tickWind();
 
+			// Save whether or not the sprint key is down, so we can check for ctrl+shift for various interactions
+			// (like ingot pile stacking)
             final Minecraft mc = Minecraft.getInstance();
             if (mc.player != null)
             {
@@ -442,8 +447,11 @@ public class ClientForgeEventHandler
                 if (isDown != lastSprintKeyState)
                 {
                     lastSprintKeyState = isDown;
-                    PlayerData.get(mc.player).setSprintKeyDown(isDown);
-                    PacketHandler.send(PacketDistributor.SERVER.noArg(), new SprintKeyPacket(isDown));
+					var playerData = mc.player.getCapability(PlayerDataCapability.CAPABILITY);
+					if (playerData.isPresent()) {
+						PlayerData.get(mc.player).setSprintKeyDown(isDown);
+						PacketHandler.send(PacketDistributor.SERVER.noArg(), new SprintKeyPacket(isDown));
+					}
                 }
             }
         }
@@ -658,4 +666,12 @@ public class ClientForgeEventHandler
     {
         event.addHorizontalOffset(TFCConfig.CLIENT.effectHorizontalAdjustment.get());
     }
+
+	private static void onScreenOpen(ScreenEvent.Opening event)
+	{
+		if (event.getScreen() instanceof TitleScreen || event.getScreen() instanceof JoinMultiplayerScreen)
+		{
+			IndirectHashCollection.clearAllCaches();
+		}
+	}
 }

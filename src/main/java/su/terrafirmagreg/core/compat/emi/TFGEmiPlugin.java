@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.compat.emi;
 
 import java.util.Arrays;
-import java.util.Set;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.util.Plantable;
@@ -37,7 +36,8 @@ import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
-import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
+import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -155,6 +155,8 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addCategory(ITEM_REPAIR);
         emiRegistry.addWorkstation(ITEM_REPAIR, EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
         emiRegistry.addRecipeHandler(MenuType.CRAFTING, new ItemRepairCraftingRecipeHandler());
+        emiRegistry.addRecipeHandler(OrderTerminalMenu.TYPE, new OrderTerminalRecipeHandler());
+        emiRegistry.addRecipeHandler(WOTMenu.TYPE, new OrderTerminalRecipeHandler());
         for (ItemRepairRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream()
                 .filter(r -> r instanceof ItemRepairRecipe)
                 .map(r -> (ItemRepairRecipe) r)
@@ -166,12 +168,7 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addCategory(FLUID_VEIN_INFO);
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_HV));
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
-        GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().stream().filter(entry -> {
-            boolean legacyVein = LEGACY_FLUID_VEINS.contains(entry.getKey());
-            //Effectively this
-            // return onLegacyWorldgen() ? legacyVein : !legacyVein;
-            return onLegacyWorldgen() == legacyVein;
-        }).forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+        GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
 
         //Greenhouse Plantable
         emiRegistry.addCategory(GREENHOUSE_PLANTABLE);
@@ -180,13 +177,6 @@ public class TFGEmiPlugin implements EmiPlugin {
             emiRegistry.addRecipe(new GreenhousePlantableEmiRecipe(plantable));
         }
     }
-
-    private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
-            TFGCore.id("old_gen_heavy_oil_deposit"),
-            TFGCore.id("old_gen_light_oil_deposit"),
-            TFGCore.id("old_gen_natural_gas_deposit"),
-            TFGCore.id("old_gen_oil_deposit"),
-            TFGCore.id("old_gen_raw_oil_deposit"));
 
     private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
             "textures/gui/emi/arrow.png");
@@ -222,9 +212,5 @@ public class TFGEmiPlugin implements EmiPlugin {
         };
         widget.drawBack(false);
         holder.add(widget);
-    }
-
-    private boolean onLegacyWorldgen() {
-        return WorldgenVersionData.OVERWORLD_VERSION != WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
     }
 }

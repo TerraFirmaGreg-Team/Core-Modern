@@ -7,11 +7,15 @@
 package net.dries007.tfc.world.chunkdata;
 
 import java.util.Map;
+import java.util.Random;
+
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +30,7 @@ import net.dries007.tfc.world.ChunkGeneratorExtension;
  * In order to query chunk data during world generation, <strong>always</strong> go through {@link ChunkDataProvider}, which can be
  * accessed through {@link ChunkGeneratorExtension} - either accessed directly, i.e. in feature generation, or through the level.
  */
+@SuppressWarnings("deprecation")
 public class ChunkData
 {
     public static final ChunkData EMPTY = new Immutable();
@@ -85,17 +90,60 @@ public class ChunkData
     }
 
     @Nullable private final ChunkDataGenerator generator;
-    private final ChunkPos pos;
+    @Getter
+	private final ChunkPos pos;
 
     private Status status;
 
-    private final RockData rockData;
+	/**
+	 * -- GETTER --
+	 *  Returns the
+	 *  for this chunk data. This is only valid on logical server.
+	 */
+	@Getter
+	private final RockData rockData;
     @Nullable private LerpFloatLayer rainfallLayer;
     @Nullable private LerpFloatLayer temperatureLayer;
     private int @Nullable [] aquiferSurfaceHeight;
-    private ForestType forestType;
-    private float forestWeirdness;
-    private float forestDensity;
+    /**
+     * Local acquifer cache
+     */
+    @Nullable private net.dries007.tfc.world.TFCAquifer generationAquifer;
+    /**
+     * The per-column salt/fresh choices of {@link #generationAquifer}.
+     */
+    private long @Nullable [] generationFluidChoices;
+    @Getter
+	private ForestType forestType;
+	private final byte[] shuffledBlockPositions = getShuffledByteArray();
+    @Getter
+	private float forestWeirdness;
+    @Getter
+	private float forestDensity;
+
+	@Getter
+	private long lastRandomTick;
+	private byte nextSnowPosition;
+
+    @Nullable
+    public net.dries007.tfc.world.TFCAquifer getGenerationAquifer()
+    {
+        return generationAquifer;
+    }
+
+    public void setGenerationAquifer(@Nullable net.dries007.tfc.world.TFCAquifer aquifer)
+    {
+        this.generationAquifer = aquifer;
+        if (aquifer == null)
+        {
+            this.generationFluidChoices = null;
+        }
+    }
+
+    public long @Nullable [] getGenerationFluidChoices()
+    {
+        return generationFluidChoices;
+    }
 
     public ChunkData(ChunkPos pos)
     {
@@ -109,22 +157,11 @@ public class ChunkData
         this.status = Status.EMPTY;
         this.rockData = new RockData(generator);
         this.forestType = ForestType.NONE;
+		this.lastRandomTick = Integer.MIN_VALUE;
+		this.nextSnowPosition = 0;
     }
 
-    public ChunkPos getPos()
-    {
-        return pos;
-    }
-
-    /**
-     * Returns the {@link RockData} for this chunk data. This is only valid on logical server.
-     */
-    public RockData getRockData()
-    {
-        return rockData;
-    }
-
-    public int[] getAquiferSurfaceHeight()
+	public int[] getAquiferSurfaceHeight()
     {
         return aquiferSurfaceHeight == null ? new int[4 * 4] : aquiferSurfaceHeight;
     }
@@ -149,25 +186,34 @@ public class ChunkData
         return temperatureLayer == null ? UNKNOWN_TEMPERATURE : temperatureLayer.getValue((x & 15) / 16f, (z & 15) / 16f);
     }
 
-    public ForestType getForestType()
-    {
-        return forestType;
-    }
-
-    public float getForestWeirdness()
-    {
-        return forestWeirdness;
-    }
-
-    public float getForestDensity()
-    {
-        return forestDensity;
-    }
-
-    public Status status()
+	public Status status()
     {
         return status;
     }
+
+	public void setLastRandomTick(ChunkAccess chunk, long lastRandomTick)
+	{
+		this.lastRandomTick = lastRandomTick;
+		chunk.setUnsaved(true); // Flag the chunk, since we need to re-save the data
+	}
+
+	public BlockPos getNextSnowPos(ChunkPos chunkPos)
+	{
+		// Convert byte into local coordinates x, z = [0, 15]
+		byte b = shuffledBlockPositions[nextSnowPosition - Byte.MIN_VALUE];
+		final byte mask = 15; // 0000 1111
+		int x = b & mask;
+		int z = b >> 4 & mask;
+
+		return new BlockPos(chunkPos.getMinBlockX() + x, 0, chunkPos.getMinBlockZ() + z);
+	}
+
+	public void iterateSnowPos(ChunkAccess chunk)
+	{
+		// Iterate to the next snow position
+		nextSnowPosition++;
+		chunk.setUnsaved(true); // Flag the chunk, since we need to re-save the data
+	}
 
     /**
      * Generate the chunk data from empty to {@link Status#PARTIAL}. Populated lazily on first creation, and guaranteed to be done by structure stage.
@@ -244,6 +290,12 @@ public class ChunkData
             nbt.putFloat("forestWeirdness", forestWeirdness);
             nbt.putFloat("forestDensity", forestDensity);
         }
+
+        final long[] fluidChoices = generationAquifer != null ? generationAquifer.baseBlockSource().saveFluidChoices() : generationFluidChoices;
+        if (fluidChoices != null)
+        {
+            nbt.putLongArray("generationFluidChoices", fluidChoices);
+        }
         return nbt;
     }
 
@@ -264,6 +316,11 @@ public class ChunkData
             forestType = ForestType.valueOf(nbt.getByte("forestType"));
             forestWeirdness = nbt.getFloat("forestWeirdness");
             forestDensity = nbt.getFloat("forestDensity");
+        }
+        if (nbt.contains("generationFluidChoices", net.minecraft.nbt.Tag.TAG_LONG_ARRAY))
+        {
+            final long[] fluidChoices = nbt.getLongArray("generationFluidChoices");
+            generationFluidChoices = fluidChoices.length == 4 ? fluidChoices : null;
         }
     }
 
@@ -313,6 +370,9 @@ public class ChunkData
         public void deserializeNBT(CompoundTag nbt) { error(); }
 
         @Override
+        public void setGenerationAquifer(@Nullable net.dries007.tfc.world.TFCAquifer aquifer) { if (aquifer != null) error(); }
+
+        @Override
         public Status status()
         {
             return Status.INVALID;
@@ -329,4 +389,21 @@ public class ChunkData
             throw new UnsupportedOperationException("Tried to modify immutable chunk data");
         }
     }
+
+	// Returns an array of length 256 containing every byte in a random order
+	private byte[] getShuffledByteArray() {
+		byte[] arr = new byte[256];
+		for (int i = 0; i < 256; i++) {
+			arr[i] = (byte) (i - 128); // -128 to 127
+		}
+		// Fisher-Yates shuffle
+		Random rand = new Random();
+		for (int i = arr.length - 1; i > 0; i--) {
+			int j = rand.nextInt(i + 1);
+			byte tmp = arr[i];
+			arr[i] = arr[j];
+			arr[j] = tmp;
+		}
+		return arr;
+	}
 }

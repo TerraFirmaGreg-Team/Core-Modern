@@ -16,6 +16,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 
+import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
+
 @Mixin(value = ShapedEnergyTransferRecipe.class, remap = true)
 public class ShapedEnergyTransferRecipeMixin {
 
@@ -35,7 +37,8 @@ public class ShapedEnergyTransferRecipeMixin {
                     || tp == TagPrefix.toolHeadChainsaw
                     || tp == TagPrefix.toolHeadScrewdriver
                     || tp == TagPrefix.toolHeadWireCutter
-                    || tp == TagPrefix.toolHeadWrench) {
+                    || tp == TagPrefix.toolHeadWrench
+                    || tp == TFGTagPrefix.toolHeadScythe) {
 
                 // Get the tool head's NBT and copy the forging bonus onto the output power tool
                 final CompoundTag tag = craftingItem.getTag();

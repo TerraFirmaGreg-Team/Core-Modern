@@ -16,6 +16,8 @@ import earth.terrarium.adastra.api.planets.Planet;
  * <p>Pressure is in atmospheres (atm): Earth = 1.0, vacuum = 0.0, Venus = 90.0.
  * Pressure determines whether decompression/compression events occur when a
  * sealed room is breached, and how much extra oxygen is consumed during breach.
+ * 
+ * Dimension temperature is currently unused.
  */
 public record DimensionEnvironment(
         boolean hasOxygen,
@@ -23,25 +25,16 @@ public record DimensionEnvironment(
         short temperature,
         float pressure) {
 
+    /** Hot Temperature for Ad Astra, vanilla is 70 */
+    public static final int HOT_TEMPERATURE_THRESHOLD = 150;
+
     /** Pressure threshold below which decompression events occur (low pressure -> air rushes out) */
     public static final float DECOMPRESSION_THRESHOLD = 0.5f;
 
-    /** Earth-normalized gravity (1.0 = Earth). Used by Ad Astra's gravity system. */
-    public static final float EARTH_GRAVITY = 1.0f;
+    /** Earth's gravity in m/s^2. */
+    public static final float EARTH_GRAVITY = 9.807f;
 
-    /** Ad Astra liveable range: -50°C to 70°C */
-    public static final short MIN_LIVEABLE_TEMPERATURE = -50;
-    public static final short MAX_LIVEABLE_TEMPERATURE = 70;
-
-    public boolean hasNormalGravity() {
-        return gravity == EARTH_GRAVITY;
-    }
-
-    public boolean hasNormalTemperature() {
-        return temperature >= MIN_LIVEABLE_TEMPERATURE && temperature <= MAX_LIVEABLE_TEMPERATURE;
-    }
-
-    public static final DimensionEnvironment EARTH_LIKE = new DimensionEnvironment(true, 1.0f, (short) 15, 1.0f);
+    public static final DimensionEnvironment EARTH_LIKE = new DimensionEnvironment(true, EARTH_GRAVITY, (short) 15, 1.0f);
     public static final DimensionEnvironment VACUUM = new DimensionEnvironment(false, 0.0f, (short) -270, 0.0f);
 
     private static final Map<ResourceKey<Level>, DimensionEnvironment> REGISTRY = new HashMap<>();
@@ -50,11 +43,11 @@ public record DimensionEnvironment(
         REGISTRY.put(Level.OVERWORLD, EARTH_LIKE);
         REGISTRY.put(Level.NETHER, EARTH_LIKE);
 
-        REGISTRY.put(Planet.MOON, VACUUM);
-        REGISTRY.put(Planet.MARS, new DimensionEnvironment(false, 0.379f, (short) -65, 0.006f));
-        REGISTRY.put(Planet.VENUS, new DimensionEnvironment(false, 0.904f, (short) 464, 90.0f));
+        REGISTRY.put(Planet.MOON, new DimensionEnvironment(false, 1.625f, (short) -173, 0.0f));
+        REGISTRY.put(Planet.MARS, new DimensionEnvironment(false, 3.721f, (short) -65, 0.006f));
+        REGISTRY.put(Planet.VENUS, new DimensionEnvironment(false, 8.87f, (short) 464, 90.0f));
         REGISTRY.put(Planet.MERCURY, VACUUM);
-        REGISTRY.put(Planet.GLACIO, new DimensionEnvironment(false, 0.379f, (short) -20, 0.0f));
+        REGISTRY.put(Planet.GLACIO, new DimensionEnvironment(false, 3.721f, (short) -20, 0.0f));
 
         REGISTRY.put(Planet.EARTH_ORBIT, VACUUM);
         REGISTRY.put(Planet.MOON_ORBIT, VACUUM);
@@ -69,5 +62,9 @@ public record DimensionEnvironment(
      */
     public static DimensionEnvironment get(ResourceKey<Level> dimension) {
         return REGISTRY.getOrDefault(dimension, EARTH_LIKE);
+    }
+
+    public static boolean isRegistered(ResourceKey<Level> dimension) {
+        return REGISTRY.containsKey(dimension);
     }
 }

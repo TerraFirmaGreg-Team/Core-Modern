@@ -17,6 +17,7 @@ import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.common.blockentities.*;
 import net.dries007.tfc.common.blocks.*;
 import net.dries007.tfc.common.blocks.devices.*;
+import net.dries007.tfc.common.recipes.ScrapingRecipe;
 import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.util.tracker.WeatherHelpers;
 import net.minecraft.ChatFormatting;
@@ -114,6 +115,7 @@ public final class BlockEntityTooltips
 		callback.register("thermometer", THERMOMETER, ThermometerBlock.class);
 		callback.register("anemometer", ANEMOMETER, AnemometerBlock.class);
 		callback.register("vane", VANE, VaneBlock.class);
+		callback.register("scraping", SCRAPING, ScrapingBlock.class);
     }
 
     public static final BlockEntityTooltip HOT_POURED_GLASS = (level, state, pos, entity, tooltip) -> {
@@ -197,6 +199,18 @@ public final class BlockEntityTooltips
 		if (entity instanceof VaneBlockEntity vane)
 		{
 			tooltip.accept(Component.translatable("tfc.tooltip.vane_direction", WeatherHelpers.windGranularCardinal(ClimateRenderCache.INSTANCE.getWind())));
+		}
+	};
+
+	public static final BlockEntityTooltip SCRAPING = (level, state, pos, entity, tooltip) -> {
+		if (entity instanceof ScrapingBlockEntity scraping && !scraping.isComplete())
+		{
+			final ItemStack stack = scraping.getInventory().getStackInSlot(0);
+			final ScrapingRecipe recipe = scraping.getRecipe(stack);
+			if (recipe != null)
+			{
+				tooltip.accept(Component.empty().append(stack.getHoverName()).append(" > ").append(recipe.getResultItem(level.registryAccess()).getHoverName()));
+			}
 		}
 	};
 
