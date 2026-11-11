@@ -84,7 +84,7 @@ public abstract class GTRecipeTypesMixin {
 
         AUTOCLAVE_RECIPES.setMaxIOSize(2, 2, 2, 1);
 
-        CRACKING_RECIPES.setMaxIOSize(2, 1, 2, 2);
+        CRACKING_RECIPES.setMaxIOSize(2, 2, 2, 2);
 
         MIXER_RECIPES.setMaxIOSize(9, 1, 2, 1);
     }
