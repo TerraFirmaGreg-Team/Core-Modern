@@ -10,6 +10,9 @@ import su.terrafirmagreg.core.TFGCore;
 
 public class TFGMedicalConditions {
 
+    public static void init() {
+    }
+
     public static final Symptom GLOWING = Symptom.ofEffect("symptom.tfg.glowing", 5, 1.f, 1.f, MobEffects.GLOWING);
 
     public static final MedicalCondition RADIOACTIVE = GTMedicalConditions.register(TFGCore.id("radioactive"), 0x00ff00, 2000,

@@ -263,8 +263,8 @@ public class TFGMultiMachines {
 
     public static final MultiblockMachineDefinition NUCLEAR_TURBINE = REGISTRATE
             .multiblock("nuclear_turbine", (holder) -> new NuclearLargeTurbineMachine(holder, GTValues.EV))
-			.rotationState(RotationState.NON_Y_AXIS)
-			.allowExtendedFacing(false)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .allowExtendedFacing(false)
             .recipeType(TFGTRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(NuclearLargeTurbineMachine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
@@ -675,10 +675,10 @@ public class TFGMultiMachines {
                     .where('X', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
                     .where('P', blocks(GTBlocks.CASING_BRONZE_PIPE.get())
-							.or(blocks(GTBlocks.CASING_STEEL_PIPE.get()))
-							.or(blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
-							.or(blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
-							.or(blocks(GTBlocks.CASING_TUNGSTENSTEEL_PIPE.get())))
+                            .or(blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                            .or(blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+                            .or(blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+                            .or(blocks(GTBlocks.CASING_TUNGSTENSTEEL_PIPE.get())))
                     .where('B', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
@@ -1004,11 +1004,11 @@ public class TFGMultiMachines {
                     .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
                     .where('C', blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
                     .where('R', blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.HV, GTValues.EV).toArray(Block[]::new))
-                                    .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
-                                    .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
-                                            VN[GTValues.HV]))
-                                    .setExactLimit(1)
-                                    .or(abilities(PartAbility.OUTPUT_ENERGY)).setExactLimit(1))
+                            .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
+                            .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
+                                    VN[GTValues.HV]))
+                            .setExactLimit(1)
+                            .or(abilities(PartAbility.OUTPUT_ENERGY)).setExactLimit(1))
                     .where('H', blocks(GTBlocks.CASING_STEEL_TURBINE.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes(), false, false, true, true, true, true))
                             .or(Predicates.autoAbilities(true, false, false))) // needsMuffler = false
@@ -1077,7 +1077,7 @@ public class TFGMultiMachines {
                     .where('S', controller(definition))
                     .where('A', Predicates.any())
                     .where('B', Predicates.blocks(GTBlocks.STEEL_HULL.get()))
-					.where('C', Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
+                    .where('C', Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
                     .where('E', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where('F', Predicates.blockTag(BlockTags.DIRT)
                             .or(Predicates.blockTag(TFCTags.Blocks.GRASS)))
@@ -1100,7 +1100,7 @@ public class TFGMultiMachines {
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.ore_proc_beneath_1"),
                     Component.translatable("tfg.tooltip.machine.ore_proc_beneath_2"),
-					Component.translatable("tfg.tooltip.machine.ore_proc_beneath_3"),
+                    Component.translatable("tfg.tooltip.machine.ore_proc_beneath_3"),
                     Component.translatable("tfg.tooltip.machine.two_energy_hatches"))
             .workableCasingModel(
                     GTCEu.id("block/casings/gcym/industrial_steam_casing"),
@@ -1131,41 +1131,43 @@ public class TFGMultiMachines {
     // I made this beautiful and well-designed multiblock that looks aesthetically perfect especially for Tom
     public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE
             .multiblock("oxygen_distributor", OxygenDistributorMultiblock::new)
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .recipeModifier(OxygenDistributorMultiblock::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_TURBINE)
-			.tooltips(
-				Component.translatable("tfg.tooltip.machine.oxygen_distributor_1"),
-				Component.translatable("tfg.tooltip.machine.oxygen_distributor_2"),
-				Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.oxygen_distributor_1"),
+                    Component.translatable("tfg.tooltip.machine.oxygen_distributor_2"),
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
             .workableCasingModel(
                     GTCEu.id("block/casings/mechanic/machine_casing_turbine_stainless_steel"),
-					GTCEu.id("block/multiblock/implosion_compressor"))
+                    GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
-                    .slice("AAA", "APA", " A ")
-                    .slice("AAA", "PPP", "APA")
-                    .slice("AXA", "APA", " A ")
+                    .slice("APA", "AAA")
+                    .slice("PPP", "ARA")
+                    .slice("AXA", "AAA")
                     .where('X', Predicates.controller(definition))
                     .where('A', Predicates.blocks(GTBlocks.CASING_STAINLESS_TURBINE.get())
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('P', Predicates.blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+                    .where('R', Predicates.blocks(TFGMachines.ROTOR_VENT.getBlock())
+                            .addTooltips(Component.translatable("tfg.multiblock.pattern.rotor_vent")))
                     .build())
             .register();
 
     public static final MultiblockMachineDefinition HIGGS_EMITTER = REGISTRATE
             .multiblock("higgs_emitter",
                     HiggsEmitterMultiblock::new)
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.GRAVITY_EMISSION)
             .recipeModifier(HiggsEmitterMultiblock::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.AE2_CASING)
-			.tooltips(
-				Component.translatable("tfg.tooltip.machine.higgs_emitter_1"),
-				Component.translatable("tfg.tooltip.machine.higgs_emitter_2"),
-				Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.higgs_emitter_1"),
+                    Component.translatable("tfg.tooltip.machine.higgs_emitter_2"),
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_ae2"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
@@ -1183,31 +1185,37 @@ public class TFGMultiMachines {
                     .where('G', Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.block, GTMaterials.EnderPearl)))
                     .build())
             .register();
+
     public static final MultiblockMachineDefinition HEAT_PUMP = REGISTRATE
             .multiblock("heat_pump", HeatPumpMultiblock::new)
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .recipeType(TFGTRecipeTypes.SPACE_HEATING)
             .recipeModifier(HeatPumpMultiblock::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.PRESSURE_CASING_DARK)
-			.tooltips(
-				Component.translatable("tfg.tooltip.machine.heat_pump_1"),
-				Component.translatable("tfg.tooltip.machine.heat_pump_2"),
-				Component.translatable("tfg.tooltip.machine.heat_pump_3"),
-				Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.heat_pump_1"),
+                    Component.translatable("tfg.tooltip.machine.heat_pump_2"),
+                    Component.translatable("tfg.tooltip.machine.heat_pump_3"),
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_pressure_dark"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
-            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
-                    .slice("SSS", "SVS", "SSS")
-                    .slice("   ", " P ", "   ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.BACK)
+                    .slice("SXS", "VFV", "SSS")
                     .slice("SSS", "SPS", "SSS")
-                    .slice("SXS", "VVV", "SSS")
+                    .sliceRepeatable(1, 10, "   ", " P ", "   ")
+                    .slice("SSS", "SBS", "SSS")
                     .where('X', controller(definition))
                     .where('S', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('P', Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
-				    .where('V', Predicates.blocks(ModBlocks.VENT.get()))
+                    .where('V', Predicates.blocks(ModBlocks.VENT.get()))
+                    // GTm8 no longer has a MatchContext: HeatPumpMultiblock finds the front/back vents itself in formStructure
+                    .where('F', Predicates.blocks(ModBlocks.VENT.get())
+                            .addTooltips(Component.translatable("tfg.multiblock.pattern.heat_pump.front_vent")))
+                    .where('B', Predicates.blocks(TFGMachines.ROTOR_VENT.getBlock())
+                            .addTooltips(Component.translatable("tfg.multiblock.pattern.heat_pump.back_vent")))
                     .build())
             .register();
 
@@ -1223,6 +1231,7 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.me_assembler_2"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_3"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_4"),
+                    Component.translatable("tfg.tooltip.machine.no_oc"),
                     Component.translatable("tfg.tooltip.machine.one_energy_hatch"),
                     Component.translatable("tfg.tooltip.machine.subtick"))
             .workableCasingModel(
@@ -1301,6 +1310,43 @@ public class TFGMultiMachines {
                         .where('F', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
                         .build();
+            })
+            .register();
+
+    public static final MultiblockMachineDefinition PYROLYSE_OVEN = REGISTRATE
+            .multiblock("pyrolyse_oven", CoilWorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.PYROLYSE_RECIPES)
+            .recipeModifiers(GTRecipeModifiers::pyrolyseOvenOverclock, GTRecipeModifiers.BATCH_MODE)
+            .appearanceBlock(TFGBlocks_Casings.MALDONITE_CASING)
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
+                    .slice("XXX", "XXX", "XXX")
+                    .slice("CCC", "C#C", "CCC")
+                    .slice("CCC", "C#C", "CCC")
+                    .slice("XXX", "XSX", "XXX")
+                    .where('S', Predicates.controller(definition))
+                    .where('X',
+                            blocks(TFGBlocks_Casings.MALDONITE_CASING.get()).setMinGlobalLimited(6)
+                                    .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                                    .or(Predicates.autoAbilities(true, true, false)))
+                    .where('C', Predicates.heatingCoils())
+                    .where('#', Predicates.air())
+                    .build())
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_maldonite"),
+                    GTCEu.id("block/multiblock/pyrolyse_oven"))
+            .tooltips(Component.translatable("gtceu.machine.pyrolyse_oven.tooltip.1"))
+            .additionalDisplay((controller, syncManager) -> {
+                if (!(controller instanceof CoilWorkableElectricMultiblockMachine coilMachine))
+                    return Collections.emptyList();
+                BooleanSyncValue isFormed = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
+                        () -> new BooleanSyncValue(controller::isFormed));
+                IntSyncValue coilTier = syncManager.getOrCreateSyncHandler("coilTier", IntSyncValue.class,
+                        () -> new IntSyncValue(coilMachine::getCoilTier));
+
+                return Collections.singletonList(Text
+                        .dynamic(() -> Component.translatable("gtceu.multiblock.pyrolyse_oven.speed",
+                                coilTier.getIntValue() == 0 ? 75 : 50 * (coilTier.getIntValue() + 1)))
+                        .asWidget().setEnabledIf(w -> isFormed.getBoolValue()));
             })
             .register();
 

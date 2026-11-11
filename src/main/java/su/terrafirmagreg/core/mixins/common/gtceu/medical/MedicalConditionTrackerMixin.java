@@ -55,7 +55,7 @@ public abstract class MedicalConditionTrackerMixin {
             Map.entry(GTMedicalConditions.CARBON_MONOXIDE_POISONING, TFGEffects.CARBON_MONOXIDE_POISONING_WARNING.get()),
             Map.entry(TFGMedicalConditions.RADIOACTIVE, TFGEffects.RADIOACTIVE_WARNING.get()));
 
-    @Inject(method = "updateActiveSymptoms", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;getFloat(Ljava/lang/Object;)F"), remap = false)
+    @Inject(method = "updateActiveSymptoms", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Reference2FloatOpenHashMap;getFloat(Ljava/lang/Object;)F"), remap = false)
     private void tfg$updateActiveSymptoms(CallbackInfo ci, @Local MedicalCondition condition) {
         Player player = getPlayer();
         if (player.level().getGameTime() % 20 == 0) {
@@ -76,7 +76,9 @@ public abstract class MedicalConditionTrackerMixin {
         getPlayer().removeEffect(tfg$warningEffects.get(condition));
     }
 
-    @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD", target = "Lcom/gregtechceu/gtceu/api/data/medicalcondition/MedicalCondition;idleProgressionRate:F", opcode = Opcodes.GETFIELD), remap = false)
+    // GTm8: tick() now reads idleProgressionRate twice (the "== 0" skip check, then the addTo); only the second
+    // one is the progression, and `multiplier` isn't in scope yet at the first one
+    @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD", target = "Lcom/gregtechceu/gtceu/api/data/medicalcondition/MedicalCondition;idleProgressionRate:F", opcode = Opcodes.GETFIELD, ordinal = 1), remap = false)
     private float tfg$modifyTickProgressionRate(float original, @Local(name = "multiplier") int multiplier) {
         if (multiplier == 1) {
             return original * NutrientEffectsHandler.getMedicalConditionProgressionModifier(getPlayer().getUUID());

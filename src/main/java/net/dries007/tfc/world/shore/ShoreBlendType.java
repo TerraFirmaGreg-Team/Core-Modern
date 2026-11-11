@@ -4,12 +4,11 @@
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-package su.terrafirmagreg.core.world.new_ow_wg.shores;
+package net.dries007.tfc.world.shore;
 
 import java.util.function.Function;
 
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.ShoreNoise;
+import net.dries007.tfc.world.Seed;
 
 public enum ShoreBlendType {
     NONE(seed -> ShoreNoiseSampler.NONE),

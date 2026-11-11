@@ -67,6 +67,7 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
 
     @Override
     public void formStructure(String substructureName) {
+        super.formStructure(substructureName);
         if (substructureName.equals(DEFAULT_STRUCTURE) && getLevel() instanceof ServerLevel sLvl) {
             machine.onLoad(sLvl);
         }
@@ -100,7 +101,10 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
 
     @Override
     public void setShowTraceButton(boolean show) {
-        showTraceButton = show;
+        if (showTraceButton != show) {
+            showTraceButton = show;
+            getSyncDataHolder().markClientSyncFieldDirty("showTraceButton");
+        }
     }
 
     /** Scales energy consumption based on the room's volume. */

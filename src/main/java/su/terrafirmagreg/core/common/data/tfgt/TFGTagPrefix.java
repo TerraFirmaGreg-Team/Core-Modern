@@ -43,7 +43,6 @@ public final class TFGTagPrefix {
     public static final TagPrefix richRawOre;
     public static final TagPrefix oreSmall;
     public static final TagPrefix budIndicator;
-    public static final TagPrefix powder;
 
     public static final TagPrefix dustyRawOre;
 
@@ -281,13 +280,6 @@ public final class TFGTagPrefix {
                 .unformattedTagPath("bud_indicators")
                 .materialAmount(GTValues.M / 4);
 
-        powder = new TagPrefix("powder")
-                .idPattern("%s_powder")
-                .defaultTagPath("powders/%s")
-                .unformattedTagPath("powders")
-                .materialAmount(GTValues.M / 4)
-                .unificationEnabled(false);
-
         dustyRawOre = new TagPrefix("dusty_raw", true)
                 .idPattern("dusty_raw_%s")
                 .defaultTagPath("dusty_raw_materials/%s")
@@ -365,6 +357,7 @@ public final class TFGTagPrefix {
         TagPrefix.toolHeadChainsaw.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_CHAINSAW_HEAD));
         TagPrefix.toolHeadWrench.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WRENCH_HEAD));
         TagPrefix.toolHeadWireCutter.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WIRE_CUTTER_HEAD));
+        TFGTagPrefix.toolHeadScythe.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_SCYTHE_HEAD));
 
         // Has to be handled specially because otherwise some recipes crash on startup because of missing recipe inputs
         TagPrefix.toolHeadBuzzSaw.generationCondition(TagPrefix.toolHeadBuzzSaw.generationCondition()

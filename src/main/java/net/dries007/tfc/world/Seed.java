@@ -4,7 +4,7 @@
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-package su.terrafirmagreg.core.world.new_ow_wg;
+package net.dries007.tfc.world;
 
 import org.jetbrains.annotations.Nullable;
 

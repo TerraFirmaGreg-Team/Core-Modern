@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.world.new_ow_wg;
+package net.dries007.tfc.world.surface;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;

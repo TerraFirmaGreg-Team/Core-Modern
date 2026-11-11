@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -14,8 +15,11 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.common.mui.GTMultiblockTextUtil;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -26,6 +30,10 @@ import net.minecraft.world.level.Level;
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.value.sync.SyncHandlers;
+import brachy.modularui.widgets.layout.Flow;
+import brachy.modularui.widgets.textfield.TextFieldWidget;
+import lombok.Getter;
 
 import su.terrafirmagreg.core.common.environment.*;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.EnvironmentRecipeLogic;
@@ -34,6 +42,13 @@ import su.terrafirmagreg.core.common.tfgt.machine.trait.EnvironmentRecipeLogic;
  * Higgs Emitter multiblock that creates a sphere of normal gravity around itself based on the provided hatch.
  */
 public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine implements IEnvironmentMachine {
+
+    public static final float MAX_TARGET_GRAVITY = 100f;
+
+    @SaveField
+    @SyncToClient
+    @Getter
+    private float targetGravity = DimensionEnvironment.EARTH_GRAVITY;
 
     @Nullable
     private GravityProvider provider;
@@ -51,18 +66,15 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
         return (int) Math.round(voltage * 0.5);
     }
 
-    /** If a higgs emitter with an HV hatch were to be placed in the middle of a sphere that is being supplied by an air distributor that takes 0.5A@HV it will provide a gravity sphere of the exact same size as the sphere. */
-    public static int radiusForEUt(double eut) {
-        if (eut <= 0) {
-            return 4;
-        }
-        double volume = EnclosedRoomEnergyCurve.volumeForEut(eut);
-        return Math.max(4, (int) Math.ceil(Math.cbrt(3.0 * volume / (4.0 * Math.PI))));
-    }
-
     /** @return the current bubble radius, derived from the energy the hatch supports. */
     public int getRadius() {
-        return radiusForEUt(computeEnergyPerTick());
+        EnergyContainerList energy = getEnergyContainer();
+        if (energy == null) {
+            return 0;
+        }
+        long voltage = energy.getHighestInputVoltage();
+        int tier = GTUtil.getFloorTierByVoltage(voltage);
+        return 16 * (tier + 1);
     }
 
     // ==================== Recipe ====================
@@ -92,6 +104,19 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
 
         widgets.add(GTMultiblockTextUtil.addWorkingStatusLine(this, syncManager, () -> Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN)));
 
+        widgets.add(Flow.row()
+                .coverChildren()
+                .childPadding(4)
+                .child(Text.lang("tfg.machine.higgs_emitter.gravity").asWidget())
+                .child(new TextFieldWidget()
+                        .size(74, 14)
+                        .setNumbersDouble(v -> Math.max(0, Math.min(v, MAX_TARGET_GRAVITY)))
+                        .setDefaultNumber(DimensionEnvironment.EARTH_GRAVITY)
+                        .value(SyncHandlers.doubleNumber(() -> targetGravity, v -> setTargetGravity((float) v))
+                                .allowC2S())
+                        .tooltip(t -> t.addLine(Component.translatable("tfg.machine.higgs_emitter.gravity.tooltip",
+                                String.format(Locale.ROOT, "%.3f", DimensionEnvironment.EARTH_GRAVITY))))));
+
         widgets.add(Text.lang("tfg.machine.higgs_emitter.radius",
                 FormattingUtil.formatNumbers(getRadius())).withStyle(ChatFormatting.AQUA).asWidget());
         widgets.add(Text.lang("tfg.machine.oxygen_distributor.energy",
@@ -104,6 +129,23 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     private long getEnergyInputPerSec() {
         EnergyContainerList energy = getEnergyContainer();
         return energy != null ? Math.max(0, energy.getInputPerSec()) : 0;
+    }
+
+    private void setTargetGravity(float value) {
+        targetGravity = value;
+        if (!isRemote()) {
+            getSyncDataHolder().markClientSyncFieldDirty("targetGravity");
+            applyGravityToProvider();
+        }
+    }
+
+    private void applyGravityToProvider() {
+        if (manager == null) {
+            if (!(getLevel() instanceof ServerLevel serverLevel))
+                return;
+            manager = EnvironmentSystem.getManager(serverLevel);
+        }
+        manager.setGravityProviderValue(getPos(), targetGravity);
     }
 
     // ==================== Lifecycle ====================
@@ -121,10 +163,11 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
 
         manager = EnvironmentSystem.getManager(serverLevel);
         int radius = getRadius();
+        float gravity = targetGravity;
         if (manager.getGravityProviders().containsKey(getPos())) {
-            provider = manager.updateGravityProvider(getPos(), radius);
+            provider = manager.updateGravityProvider(getPos(), radius, gravity);
         } else {
-            provider = manager.getOrCreateGravityProvider(getPos(), radius);
+            provider = manager.getOrCreateGravityProvider(getPos(), radius, gravity);
         }
         provider.attach(this);
     }
@@ -140,6 +183,7 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
 
     @Override
     public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
         if (DEFAULT_STRUCTURE.equals(name)) {
             removeProvider();
         }

@@ -20,7 +20,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import electrolyte.greate.content.gtceu.material.GreatePropertyKeys;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
 import electrolyte.greate.registry.GreateMaterials;
 
@@ -40,11 +39,8 @@ public class WaterWheelBlockEntityMixin extends GeneratingKineticBlockEntity imp
         }
 
         var tierMaterial = (Object) this instanceof LargeWaterWheelBlockEntity ? GTMaterials.Steel : GreateMaterials.AndesiteAlloy;
-        float capacity = tierMaterial.getProperty(GreatePropertyKeys.KINETIC).getMaxCapacity();
-
-        Lang.builder("greate").translate("tooltip.capacity").style(ChatFormatting.GRAY).forGoggles(tooltip);
-        Lang.builder("greate").add(CreateLang.number(capacity).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
-                .add(CreateLang.text("at current shaft tier").style(ChatFormatting.DARK_GRAY))).forGoggles(tooltip, 1);
+        // Greate (GTm8): tiers now cap the speed (RPM) instead of the stress capacity
+        addToGoggleTooltip(tooltip, tierMaterial, getSpeed());
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);
         CreateLang.number(stress).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space().add(CreateLang.text("consumed").style(ChatFormatting.DARK_GRAY)).space()
