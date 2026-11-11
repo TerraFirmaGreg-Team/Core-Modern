@@ -52,7 +52,6 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         for (var entry : GTRegistries.RECIPE_TYPES.entries()) {
             event.register(entry.getKey(), TFGRecipeSchema.SCHEMA);
         }
-        event.register(ResourceLocation.parse("gtceu:greenhouse"), TFGRecipeSchema.SCHEMA);
         event.register(TFGCore.id("item_repair"), ItemRepairRecipeSchema.SCHEMA);
         event.register(TFGCore.id("gas_burner_fuel"), GasBurnerFuelRecipeSchema.SCHEMA);
     }
