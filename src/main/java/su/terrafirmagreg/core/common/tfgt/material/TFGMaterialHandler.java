@@ -33,6 +33,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
 import earth.terrarium.adastra.common.registry.ModBlocks;
 import earth.terrarium.adastra.common.registry.ModItems;
 import electrolyte.greate.registry.GreateMaterials;
@@ -171,6 +173,20 @@ public final class TFGMaterialHandler {
         var kaolinite = TFGHelpers.getMaterial("kaolinite");
         if (kaolinite != null) {
             dust.setIgnored(kaolinite, () -> TFCItems.POWDERS.get(Powder.KAOLINITE).get());
+        }
+
+        // AE2 materials
+        dust.setIgnored(CertusQuartz, AEItems.CERTUS_QUARTZ_DUST);
+        gem.setIgnored(CertusQuartz, AEItems.CERTUS_QUARTZ_CRYSTAL);
+        block.setIgnored(CertusQuartz, AEBlocks.QUARTZ_BLOCK);
+
+        dust.setIgnored(EnderPearl, AEItems.ENDER_DUST);
+
+        var fluix = TFGHelpers.getMaterial("fluix");
+        if (fluix != null) {
+            block.setIgnored(fluix, AEBlocks.FLUIX_BLOCK);
+            dust.setIgnored(fluix, AEItems.FLUIX_DUST);
+            gem.setIgnored(fluix, AEItems.FLUIX_CRYSTAL);
         }
 
         //Holder Materials
