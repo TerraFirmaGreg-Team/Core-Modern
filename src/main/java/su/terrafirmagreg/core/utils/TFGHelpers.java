@@ -5,16 +5,18 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.ItemMaterialData;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
+import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import dev.ftb.mods.ftbquests.quest.QuestObjectBase;
@@ -37,9 +40,9 @@ public final class TFGHelpers {
     public static boolean isMaterialRegistrationFinished;
 
     public static Material getMaterial(@NotNull String materialName) {
-        var material = GTCEuAPI.materialManager.getMaterial(materialName);
+        var material = GTRegistries.MATERIALS.get(materialName);
         if (material == null) {
-            material = GTCEuAPI.materialManager.getMaterial(TFGCore.MOD_ID + ":" + materialName);
+            material = GTRegistries.MATERIALS.get(TFGCore.MOD_ID + ":" + materialName);
         }
 
         return material;
@@ -113,6 +116,10 @@ public final class TFGHelpers {
         } else {
             return duration;
         }
+    }
+
+    public static Vec2 getOverworldWind(Level level, BlockPos pos, long calendarTime, float seaLevel) {
+        return OverworldClimateModel.getOverworldWindVector(level, pos, calendarTime, 8008135, seaLevel);
     }
 
     /**

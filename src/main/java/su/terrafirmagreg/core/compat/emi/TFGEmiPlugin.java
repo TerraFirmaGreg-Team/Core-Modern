@@ -1,13 +1,18 @@
 package su.terrafirmagreg.core.compat.emi;
 
 import java.util.Arrays;
-import java.util.Set;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.util.Plantable;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
@@ -26,6 +31,10 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import electrolyte.greate.compat.gtceu.common.data.machines.GreateMachines;
+import electrolyte.greate.registry.CrushingWheels;
+import electrolyte.greate.registry.EncasedFans;
+import electrolyte.greate.registry.MechanicalPresses;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
@@ -39,7 +48,6 @@ import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
 import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
-import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -70,6 +78,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory GREENHOUSE_PLANTABLE = new EmiRecipeCategory(TFGCore.id("greenhouse_plantable"),
             EmiStack.of(FLBlocks.LARGE_PLANTER.get()));
+
+    public static final EmiRecipeCategory ORE_PROCESSING_DIAGRAM = new EmiRecipeCategory(TFGCore.id("ore_processing_diagram"),
+            EmiStack.of(ChemicalHelper.get(TagPrefix.crushed, GTMaterials.Hematite)));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -170,12 +181,25 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addCategory(FLUID_VEIN_INFO);
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_HV));
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
-        GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().stream().filter(entry -> {
-            boolean legacyVein = LEGACY_FLUID_VEINS.contains(entry.getKey());
-            //Effectively this
-            // return onLegacyWorldgen() ? legacyVein : !legacyVein;
-            return onLegacyWorldgen() == legacyVein;
-        }).forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+        GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+
+        // Ore Processing
+        emiRegistry.addCategory(ORE_PROCESSING_DIAGRAM);
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_GRINDER.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_BATH.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_THERMAL_CENTRIFUGE.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_CENTRIFUGE.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(TFGMultiMachines.ORE_SIFTER.asStack()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(CrushingWheels.CRUSHING_WHEELS[1].get().asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(EncasedFans.FANS[1].get().asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(MechanicalPresses.MECHANICAL_PRESSES[1].get().asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(GreateMachines.MILLSTONES[1].asStack()));
+
+        for (Material mat : GTRegistries.MATERIALS) {
+            if (mat.hasProperty(PropertyKey.ORE) && !mat.hasFlag(MaterialFlags.NO_ORE_PROCESSING_TAB)) {
+                emiRegistry.addRecipe(new EmiOreProcessing(mat));
+            }
+        }
 
         //Greenhouse Plantable
         emiRegistry.addCategory(GREENHOUSE_PLANTABLE);
@@ -184,13 +208,6 @@ public class TFGEmiPlugin implements EmiPlugin {
             emiRegistry.addRecipe(new GreenhousePlantableEmiRecipe(plantable));
         }
     }
-
-    private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
-            TFGCore.id("old_gen_heavy_oil_deposit"),
-            TFGCore.id("old_gen_light_oil_deposit"),
-            TFGCore.id("old_gen_natural_gas_deposit"),
-            TFGCore.id("old_gen_oil_deposit"),
-            TFGCore.id("old_gen_raw_oil_deposit"));
 
     private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
             "textures/gui/emi/arrow.png");
@@ -226,9 +243,5 @@ public class TFGEmiPlugin implements EmiPlugin {
         };
         widget.drawBack(false);
         holder.add(widget);
-    }
-
-    private boolean onLegacyWorldgen() {
-        return WorldgenVersionData.OVERWORLD_VERSION != WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
     }
 }

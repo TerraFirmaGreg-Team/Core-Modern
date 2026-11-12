@@ -14,7 +14,17 @@
         "tfg:earth/ice_sheet_tuyas",
         "tfg:earth/ice_sheet_tuyas_edge",
         "tfg:earth/glaciated_shield_volcano",
-        "tfg:earth/tuyas"
+        "tfg:earth/tuyas",
+        "tfg:earth/oceanic_volcanic_arc",
+        "tfg:earth/ocean_ridge",
+        "tfg:earth/volcanic_mountain_islands",
+        "tfg:earth/volcanic_island",
+        "tfg:earth/ice_sheet_volcanic_mountains",
+        "tfg:earth/ice_sheet_volcanic_oceanic_mountains",
+        "tfg:earth/glaciated_volcanic_mountains",
+        "tfg:earth/glaciated_volcanic_oceanic_mountains",
+        "tfg:earth/glacially_carved_volcanic_mountains",
+        "tfg:earth/glacially_carved_volcanic_oceanic_mountains"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

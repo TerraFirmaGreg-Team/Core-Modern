@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.mojang.serialization.Codec;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.recipe.condition.*;
 
 /**
@@ -25,6 +26,9 @@ public class TFGRecipeConditions {
     public static RecipeConditionType<AnimalPresentCondition> ANIMAL_PRESENT;
 
     public static void init() {
+    }
+
+    static {
         OXYGENATED = register("oxygenated", OxygenatedCondition::new, OxygenatedCondition.CODEC);
         MONTHS = register("months", MonthCondition::new, MonthCondition.CODEC);
         SEASONS = register("seasons", SeasonCondition::new, SeasonCondition.CODEC);
@@ -38,6 +42,6 @@ public class TFGRecipeConditions {
             String name,
             RecipeConditionType.ConditionFactory<T> factory,
             Codec<T> codec) {
-        return GTRegistries.RECIPE_CONDITIONS.register(name, new RecipeConditionType<>(factory, codec));
+        return GTRegistries.RECIPE_CONDITIONS.register(TFGCore.id(name), new RecipeConditionType<>(factory, codec));
     }
 }

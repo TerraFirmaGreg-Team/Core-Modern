@@ -23,7 +23,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 
 import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;
@@ -36,7 +36,7 @@ public abstract class MedicalConditionTrackerMixin {
     public abstract Player getPlayer();
 
     @Shadow
-    public abstract Object2FloatMap<MedicalCondition> getMedicalConditions();
+    public abstract Reference2FloatOpenHashMap<MedicalCondition> getMedicalConditions();
 
     @Shadow
     @Final
@@ -51,13 +51,11 @@ public abstract class MedicalConditionTrackerMixin {
             Map.entry(GTMedicalConditions.CARCINOGEN, TFGEffects.CARCINOGEN_WARNING.get()),
             Map.entry(GTMedicalConditions.ASBESTOSIS, TFGEffects.ASBESTOSIS_WARNING.get()),
             Map.entry(GTMedicalConditions.ARSENICOSIS, TFGEffects.ARSENICOSIS_WARNING.get()),
-            Map.entry(GTMedicalConditions.SILICOSIS, TFGEffects.SILICOSIS_WARNING.get()),
-            Map.entry(GTMedicalConditions.BERYLLIOSIS, TFGEffects.BERYLLIOSIS_WARNING.get()),
             Map.entry(GTMedicalConditions.METHANOL_POISONING, TFGEffects.METHANOL_POISONING_WARNING.get()),
             Map.entry(GTMedicalConditions.CARBON_MONOXIDE_POISONING, TFGEffects.CARBON_MONOXIDE_POISONING_WARNING.get()),
             Map.entry(TFGMedicalConditions.RADIOACTIVE, TFGEffects.RADIOACTIVE_WARNING.get()));
 
-    @Inject(method = "updateActiveSymptoms", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;getFloat(Ljava/lang/Object;)F"), remap = false)
+    @Inject(method = "updateActiveSymptoms", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Reference2FloatOpenHashMap;getFloat(Ljava/lang/Object;)F"), remap = false)
     private void tfg$updateActiveSymptoms(CallbackInfo ci, @Local MedicalCondition condition) {
         Player player = getPlayer();
         if (player.level().getGameTime() % 20 == 0) {
@@ -78,7 +76,9 @@ public abstract class MedicalConditionTrackerMixin {
         getPlayer().removeEffect(tfg$warningEffects.get(condition));
     }
 
-    @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD", target = "Lcom/gregtechceu/gtceu/api/data/medicalcondition/MedicalCondition;idleProgressionRate:F", opcode = Opcodes.GETFIELD), remap = false)
+    // GTm8: tick() now reads idleProgressionRate twice (the "== 0" skip check, then the addTo); only the second
+    // one is the progression, and `multiplier` isn't in scope yet at the first one
+    @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD", target = "Lcom/gregtechceu/gtceu/api/data/medicalcondition/MedicalCondition;idleProgressionRate:F", opcode = Opcodes.GETFIELD, ordinal = 1), remap = false)
     private float tfg$modifyTickProgressionRate(float original, @Local(name = "multiplier") int multiplier) {
         if (multiplier == 1) {
             return original * NutrientEffectsHandler.getMedicalConditionProgressionModifier(getPlayer().getUUID());

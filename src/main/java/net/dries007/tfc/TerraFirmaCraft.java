@@ -7,9 +7,11 @@
 package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
+import net.dries007.tfc.common.TFCPoiTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeMod;
@@ -84,12 +86,17 @@ import net.dries007.tfc.world.placement.TFCPlacements;
 import net.dries007.tfc.world.settings.RockSettings;
 import net.dries007.tfc.world.stateprovider.TFCStateProviders;
 
+@SuppressWarnings("removal")
 @Mod(TerraFirmaCraft.MOD_ID)
 public final class TerraFirmaCraft
 {
     public static final String MOD_ID = "tfc";
     public static final String MOD_NAME = "TerraFirmaCraft";
     public static final Logger LOGGER = LogUtils.getLogger();
+
+	public static ResourceLocation id(String name) {
+		return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
+	}
 
     public static final ResourceKey<WorldPreset> PRESET = ResourceKey.create(Registries.WORLD_PRESET, Helpers.identifier("overworld"));
 
@@ -125,6 +132,7 @@ public final class TerraFirmaCraft
         TFCLoot.CONDITIONS.register(bus);
         TFCLoot.NUMBER_PROVIDERS.register(bus);
         TFCLoot.LOOT_FUNCTIONS.register(bus);
+		TFCPoiTypes.TYPES.register(bus);
 
         TFCBlockPredicates.BLOCK_PREDICATES.register(bus);
         TFCPlacements.PLACEMENT_MODIFIERS.register(bus);

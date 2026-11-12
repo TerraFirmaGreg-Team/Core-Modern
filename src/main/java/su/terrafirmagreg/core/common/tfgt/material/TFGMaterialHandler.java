@@ -23,7 +23,6 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.therighthon.rnr.common.item.RNRItems;
 
-import net.dries007.tfc.common.blocks.Gem;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.fluids.TFCFluids;
@@ -34,6 +33,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
 import earth.terrarium.adastra.common.registry.ModBlocks;
 import earth.terrarium.adastra.common.registry.ModItems;
 import electrolyte.greate.registry.GreateMaterials;
@@ -172,6 +173,20 @@ public final class TFGMaterialHandler {
         var kaolinite = TFGHelpers.getMaterial("kaolinite");
         if (kaolinite != null) {
             dust.setIgnored(kaolinite, () -> TFCItems.POWDERS.get(Powder.KAOLINITE).get());
+        }
+
+        // AE2 materials
+        dust.setIgnored(CertusQuartz, AEItems.CERTUS_QUARTZ_DUST);
+        gem.setIgnored(CertusQuartz, AEItems.CERTUS_QUARTZ_CRYSTAL);
+        block.setIgnored(CertusQuartz, AEBlocks.QUARTZ_BLOCK);
+
+        dust.setIgnored(EnderPearl, AEItems.ENDER_DUST);
+
+        var fluix = TFGHelpers.getMaterial("fluix");
+        if (fluix != null) {
+            block.setIgnored(fluix, AEBlocks.FLUIX_BLOCK);
+            dust.setIgnored(fluix, AEItems.FLUIX_DUST);
+            gem.setIgnored(fluix, AEItems.FLUIX_CRYSTAL);
         }
 
         //Holder Materials
@@ -326,36 +341,6 @@ public final class TFGMaterialHandler {
         oreSmall.setIgnored(Gold, () -> TFCBlocks.SMALL_ORES.get(Ore.NATIVE_GOLD).get());
         oreSmall.setIgnored(Silver, () -> TFCBlocks.SMALL_ORES.get(Ore.NATIVE_SILVER).get());
         oreSmall.setIgnored(Chromite, FLBlocks.SMALL_CHROMITE);
-
-        powder.setIgnored(Bismuth, () -> TFCItems.ORE_POWDERS.get(Ore.BISMUTHINITE).get());
-        powder.setIgnored(Cassiterite, () -> TFCItems.ORE_POWDERS.get(Ore.CASSITERITE).get());
-        powder.setIgnored(Garnierite, () -> TFCItems.ORE_POWDERS.get(Ore.GARNIERITE).get());
-        powder.setIgnored(Hematite, () -> TFCItems.ORE_POWDERS.get(Ore.HEMATITE).get());
-        powder.setIgnored(Limonite, () -> TFCItems.ORE_POWDERS.get(Ore.LIMONITE).get());
-        powder.setIgnored(Magnetite, () -> TFCItems.ORE_POWDERS.get(Ore.MAGNETITE).get());
-        powder.setIgnored(Malachite, () -> TFCItems.ORE_POWDERS.get(Ore.MALACHITE).get());
-        powder.setIgnored(Sphalerite, () -> TFCItems.ORE_POWDERS.get(Ore.SPHALERITE).get());
-        powder.setIgnored(Tetrahedrite, () -> TFCItems.ORE_POWDERS.get(Ore.TETRAHEDRITE).get());
-        powder.setIgnored(Copper, () -> TFCItems.ORE_POWDERS.get(Ore.NATIVE_COPPER).get());
-        powder.setIgnored(Gold, () -> TFCItems.ORE_POWDERS.get(Ore.NATIVE_GOLD).get());
-        powder.setIgnored(Silver, () -> TFCItems.ORE_POWDERS.get(Ore.NATIVE_SILVER).get());
-        powder.setIgnored(Coke, () -> TFCItems.POWDERS.get(Powder.COKE).get());
-        powder.setIgnored(Charcoal, () -> TFCItems.POWDERS.get(Powder.CHARCOAL).get());
-        powder.setIgnored(Graphite, () -> TFCItems.POWDERS.get(Powder.GRAPHITE).get());
-        powder.setIgnored(Salt, () -> TFCItems.POWDERS.get(Powder.SALT).get());
-        powder.setIgnored(Saltpeter, () -> TFCItems.POWDERS.get(Powder.SALTPETER).get());
-        powder.setIgnored(Sulfur, () -> TFCItems.POWDERS.get(Powder.SULFUR).get());
-        powder.setIgnored(RockSalt, () -> TFCItems.POWDERS.get(Powder.SYLVITE).get());
-        powder.setIgnored(SodaAsh, () -> TFCItems.POWDERS.get(Powder.SODA_ASH).get());
-        powder.setIgnored(Amethyst, () -> TFCItems.GEM_DUST.get(Gem.AMETHYST).get());
-        powder.setIgnored(Diamond, () -> TFCItems.GEM_DUST.get(Gem.DIAMOND).get());
-        powder.setIgnored(Emerald, () -> TFCItems.GEM_DUST.get(Gem.EMERALD).get());
-        powder.setIgnored(Lapis, () -> TFCItems.GEM_DUST.get(Gem.LAPIS_LAZULI).get());
-        powder.setIgnored(Opal, () -> TFCItems.GEM_DUST.get(Gem.OPAL).get());
-        powder.setIgnored(Pyrite, () -> TFCItems.GEM_DUST.get(Gem.PYRITE).get());
-        powder.setIgnored(Ruby, () -> TFCItems.GEM_DUST.get(Gem.RUBY).get());
-        powder.setIgnored(Sapphire, () -> TFCItems.GEM_DUST.get(Gem.SAPPHIRE).get());
-        powder.setIgnored(Topaz, () -> TFCItems.GEM_DUST.get(Gem.TOPAZ).get());
 
         var weakSteel = TFGHelpers.getMaterial("weak_steel");
         if (weakSteel != null) {

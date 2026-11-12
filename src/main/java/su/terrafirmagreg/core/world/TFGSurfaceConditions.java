@@ -7,7 +7,7 @@ import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraftforge.registries.DeferredRegister;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.world.surface_conditions.Noise3DThresholdSurfaceConditionSource;
+import su.terrafirmagreg.core.world.surface_conditions.*;
 
 public class TFGSurfaceConditions {
 
@@ -16,5 +16,9 @@ public class TFGSurfaceConditions {
 
     static {
         SURFACE_CONDITIONS.register("noise3d_threshold", Noise3DThresholdSurfaceConditionSource.CODEC::codec);
+        SURFACE_CONDITIONS.register("cellular_3d", Cellular3DSurfaceCondition.CODEC::codec);
+        SURFACE_CONDITIONS.register("cellular_2d", Cellular2DSurfaceCondition.CODEC::codec);
+        SURFACE_CONDITIONS.register("any_of", AnyOfCondition.CODEC::codec);
+        SURFACE_CONDITIONS.register("all_of", AllOfCondition.CODEC::codec);
     }
 }

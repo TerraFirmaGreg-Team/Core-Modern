@@ -28,7 +28,7 @@
             "type": "uniform",
             "value": {
                 "min_inclusive": 2,
-                "max_exclusive": 2.5
+                "max_exclusive": 3.5
             }
         },
         "floor_level": {
@@ -42,7 +42,7 @@
             "type": "uniform",
             "value": {
                 "min_inclusive": 2,
-                "max_exclusive": 2.5
+                "max_exclusive": 3.5
             }
         }
     }

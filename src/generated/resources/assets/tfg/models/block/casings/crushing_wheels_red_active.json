@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "tfg:block/casings/unique/crushing_wheels_red_active"
+  }
+}

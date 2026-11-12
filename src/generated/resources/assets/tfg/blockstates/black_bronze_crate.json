@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/machine/black_bronze_crate"
+    }
+  }
+}

@@ -8,14 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.TieredWorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
@@ -23,17 +21,17 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
 import lombok.Getter;
 
-public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
-        implements ITieredMachine, ITurbineMachine {
+public class LargeSteamTurbine extends TieredWorkableElectricMultiblockMachine {
 
     public static final int MIN_DURABILITY_TO_WARN = 10;
 
@@ -41,72 +39,17 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
     @Getter
     private final int tier;
 
-    public LargeSteamTurbine(IMachineBlockEntity holder, int tier) {
-        super(holder);
+    public LargeSteamTurbine(BlockEntityCreationInfo info, int tier) {
+        super(info, tier);
         this.tier = tier;
         this.BASE_EU_OUTPUT = GTValues.V[EV];
+        recipeLogic.setRegressWhenWaiting(false);
     }
 
     @Nullable
-    private BlockPos getRotorHolderPos() {
-        IRotorHolderMachine holder = getRotorHolder();
-        if (holder instanceof MetaMachine meta) {
-            return meta.getPos();
-        }
-        return null;
-    }
-    /*
-    private boolean isIntakesObstructed() {
-        BlockPos rotorPos = getRotorHolderPos();
-        if (rotorPos == null)
-            return false;
-    
-        Level level = getLevel();
-        Direction front = getFrontFacing();
-        Direction right = front.getClockWise();
-    
-        boolean obstructed = false;
-    
-        // Vérifie les deux couches sous le rotor (-1 et -2)
-        for (int yOffset = -1; yOffset >= -2; yOffset--) {
-            BlockPos planeOrigin = rotorPos.offset(0, yOffset, 0);
-    
-            for (int z = -2; z <= 2; z++) {
-                for (int x = -2; x <= 2; x++) {
-    
-                    // Coins (X) ignorés
-                    if (Math.abs(x) == 2 && Math.abs(z) == 2) {
-                        continue;
-                    }
-    
-                    BlockPos pos = planeOrigin
-                            .relative(right, x)
-                            .relative(front, z);
-    
-                    if (!level.getBlockState(pos).isAir()) {
-                        obstructed = true;
-                    }
-                }
-            }
-        }
-    
-        // Vérifie les blocs uniques au-dessus du rotor (+5 à +8)
-        for (int y = 5; y <= 8; y++) {
-            BlockPos pos = rotorPos.above(y);
-            if (!level.getBlockState(pos).isAir()) {
-                return true;
-            }
-        }
-    
-        return obstructed;
-    
-    
-    }*/
-
-    @Nullable
-    private IRotorHolderMachine getRotorHolder() {
-        for (IMultiPart part : getParts()) {
-            if (part instanceof IRotorHolderMachine rotorHolder) {
+    private RotorHolderPartMachine getRotorHolder() {
+        for (MultiblockPartMachine part : getParts()) {
+            if (part instanceof RotorHolderPartMachine rotorHolder) {
                 return rotorHolder;
             }
         }
@@ -136,13 +79,11 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
         return 0;
     }
 
-    @Override
     public boolean hasRotor() {
         var rotorHolder = getRotorHolder();
         return rotorHolder != null && rotorHolder.hasRotor();
     }
 
-    @Override
     public int getRotorSpeed() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {
@@ -151,7 +92,6 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
         return 0;
     }
 
-    @Override
     public int getMaxRotorHolderSpeed() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {
@@ -160,7 +100,6 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
         return 0;
     }
 
-    @Override
     public int getTotalEfficiency() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {
@@ -169,18 +108,33 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
         return -1;
     }
 
-    @Override
     public long getCurrentProduction() {
         return isActive() && recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
     }
 
-    @Override
     public int getRotorDurabilityPercent() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {
             return rotorHolder.getRotorDurabilityPercent();
         }
         return -1;
+    }
+
+    private boolean isIntakesObstructed() {
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                // Skip the controller block itself
+                if (i == 0 && j == 0)
+                    continue;
+                var blockPos = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(),
+                        isFlipped(),
+                        i, j, 1);
+                var blockState = this.getLevel().getBlockState(blockPos);
+                if (!blockState.isAir())
+                    return true;
+            }
+        }
+        return false;
     }
 
     //////////////////////////////////////
@@ -202,9 +156,9 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
         if (!(machine instanceof LargeSteamTurbine turbineMachine)) {
             return RecipeModifier.nullWrongType(LargeSteamTurbine.class, machine);
         }
-        //if (turbineMachine.isIntakesObstructed()) {
-        //    return ModifierFunction.NULL;
-        //}
+        if (turbineMachine.isIntakesObstructed()) {
+            return ModifierFunction.NULL;
+        }
         var rotorHolder = turbineMachine.getRotorHolder();
         if (rotorHolder == null)
             return ModifierFunction.NULL;
@@ -231,11 +185,6 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
     }
 
     @Override
-    public boolean regressWhenWaiting() {
-        return false;
-    }
-
-    @Override
     public boolean canVoidRecipeOutputs(RecipeCapability<?> capability) {
         return true;
     }
@@ -245,51 +194,38 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
     //////////////////////////////////////
 
     @Override
-    public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        var widgets = super.getWidgetsForDisplay(syncManager);
 
-        textList.removeIf(component -> component.getString().contains("Max Recipe Tier"));
+        if (!isFormed())
+            return widgets;
 
-        if (isFormed()) {
-            var rotorHolder = getRotorHolder();
+        var rotorHolder = getRotorHolder();
+        if (rotorHolder != null && rotorHolder.getRotorEfficiency() > 0) {
+            widgets.add(Text.lang("gtceu.multiblock.turbine.rotor_speed",
+                    FormattingUtil.formatNumbers(rotorHolder.getRotorSpeed()),
+                    FormattingUtil.formatNumbers(rotorHolder.getMaxRotorHolderSpeed())).asWidget());
+            widgets.add(Text.lang("gtceu.multiblock.turbine.efficiency",
+                    rotorHolder.getTotalEfficiency()).asWidget());
 
-            if (rotorHolder != null && rotorHolder.getRotorEfficiency() > 0) {
-                textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_speed",
-                        FormattingUtil.formatNumbers(rotorHolder.getRotorSpeed()),
-                        FormattingUtil.formatNumbers(rotorHolder.getMaxRotorHolderSpeed())));
-                textList.add(Component.translatable("gtceu.multiblock.turbine.efficiency",
-                        rotorHolder.getTotalEfficiency()));
+            long maxProduction = getOverclockVoltage();
+            long currentProduction = getCurrentProduction();
 
-                long maxProduction = getOverclockVoltage();
-                long currentProduction = getCurrentProduction();
+            if (isActive()) {
+                widgets.add(3, Text.lang("gtceu.multiblock.turbine.energy_per_tick",
+                        FormattingUtil.formatNumbers(currentProduction),
+                        FormattingUtil.formatNumbers(maxProduction)).asWidget());
+            }
 
-                if (isActive()) {
-                    textList.add(3, Component.translatable("gtceu.multiblock.turbine.energy_per_tick",
-                            FormattingUtil.formatNumbers(currentProduction),
-                            FormattingUtil.formatNumbers(maxProduction)));
-                }
-
-                int rotorDurability = rotorHolder.getRotorDurabilityPercent();
-                if (rotorDurability > MIN_DURABILITY_TO_WARN) {
-                    textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_durability", rotorDurability));
-                } else {
-                    textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_durability", rotorDurability)
-                            .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-                }
+            int rotorDurability = rotorHolder.getRotorDurabilityPercent();
+            if (rotorDurability > MIN_DURABILITY_TO_WARN) {
+                widgets.add(Text.lang("gtceu.multiblock.turbine.rotor_durability", rotorDurability).asWidget());
+            } else {
+                widgets.add(Text.lang("gtceu.multiblock.turbine.rotor_durability", rotorDurability)
+                        .withStyle(ChatFormatting.RED).asWidget());
             }
         }
+
+        return widgets;
     }
-    /*
-    @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        super.attachTooltips(tooltipsPanel);
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.INDICATOR_NO_STEAM.get(false),
-                () -> List.of(Component.translatable("tfg.multiblock.turbine.obstructed")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                this::isIntakesObstructed,
-                () -> null));
-    }
-    
-     */
 }

@@ -1,11 +1,8 @@
 package su.terrafirmagreg.core.common.tfgt.interdim_logistics;
 
-import com.gregtechceu.gtceu.api.gui.widget.EnumSelectorWidget;
-import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
-
 import net.minecraft.nbt.CompoundTag;
 
+import brachy.modularui.drawable.UITexture;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +17,7 @@ public class NetworkReceiverConfigEntry {
     @Setter
     private int currentCooldown;
 
-    public enum LogicMode implements EnumSelectorWidget.SelectableEnum {
+    public enum LogicMode {
         COOLDOWN("Cooldown after receiving (seconds)", "transfer_any"),
         REDSTONE_ENABLE("Enable when receiving redstone signal", "transfer_any"),
         REDSTONE_DISABLE("Disable when receiving redstone signal", "transfer_any");
@@ -28,11 +25,11 @@ public class NetworkReceiverConfigEntry {
         @Getter
         public final String tooltip;
         @Getter
-        public final IGuiTexture icon;
+        public final UITexture icon;
 
         LogicMode(String tooltip, String textureName) {
             this.tooltip = tooltip;
-            this.icon = new ResourceTexture("gtceu:textures/gui/icon/transfer_mode/" + textureName + ".png");
+            this.icon = UITexture.fullImage("gtceu:textures/gui/icon/transfer_mode/" + textureName + ".png");
         }
 
     }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/machine/bismuth_bronze_crate"
+    }
+  }
+}

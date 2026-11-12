@@ -24,14 +24,21 @@ public abstract class AlloyRecipeCategoryMixin {
         Material resultMaterial = ChemicalHelper.getMaterial(recipe.getResult().getFluid());
         Material inputMaterial = ChemicalHelper.getMaterial(fluid);
 
+        if (resultMaterial == null || inputMaterial == null) {
+            return new FluidStack(fluid, amount);
+        }
+
         if (inputMaterial.equals(TFGHelpers.getMaterial("aluminium_silicate"))) {
             inputMaterial = GTMaterials.Aluminium;
         }
 
-        for (MaterialStack component : resultMaterial.getMaterialComponents()) {
-            if (component.material().equals(inputMaterial)) {
-                amount = (int) component.amount();
-                break;
+        var components = resultMaterial.getMaterialComponents();
+        if (components != null) {
+            for (MaterialStack component : components) {
+                if (component.material().equals(inputMaterial)) {
+                    amount = (int) component.amount();
+                    break;
+                }
             }
         }
 
@@ -41,8 +48,11 @@ public abstract class AlloyRecipeCategoryMixin {
     @Redirect(method = "setRecipe", at = @At(value = "NEW", target = "net/minecraftforge/fluids/FluidStack", ordinal = 1))
     private FluidStack tfg$modifyOutputFluidStack(Fluid fluid, int amount, @Local(argsOnly = true) AlloyRecipe recipe) {
         Material resultMaterial = ChemicalHelper.getMaterial(recipe.getResult().getFluid());
-        int totalAmount = 0;
+        if (resultMaterial == null || resultMaterial.getMaterialComponents() == null) {
+            return new FluidStack(fluid, amount);
+        }
 
+        int totalAmount = 0;
         for (MaterialStack component : resultMaterial.getMaterialComponents()) {
             totalAmount += (int) component.amount();
         }

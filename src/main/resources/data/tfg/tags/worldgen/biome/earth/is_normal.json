@@ -29,7 +29,10 @@
         "tfg:earth/cenote_rolling_hills",
         "tfg:earth/cenote_highlands",
         "tfg:earth/cenote_plateau",
-        "tfg:earth/extreme_doline_plateau"
+        "tfg:earth/extreme_doline_plateau",
+        "tfg:earth/rift_lake",
+        "tfg:earth/rift_valley",
+        "tfg:earth/river_valley"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

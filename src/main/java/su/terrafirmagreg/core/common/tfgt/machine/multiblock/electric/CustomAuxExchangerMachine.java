@@ -1,56 +1,192 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
-import com.gregtechceu.gtceu.api.capability.IParallelHatch;
-import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.*;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IVoidable;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
-import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.gregtechceu.gtceu.utils.GTUtil;
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.entity.player.Player;
 
-import fi.dea.mc.deafission.common.data.machine.AuxExchangerMachine;
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.screen.RichTooltip;
+import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.IntSyncValue;
+import brachy.modularui.value.sync.LongSyncValue;
+import brachy.modularui.value.sync.PanelSyncManager;
 import fi.dea.mc.deafission.common.data.machine.hb.HeatHatchMachine;
 import fi.dea.mc.deafission.common.data.recipe.HeatIngredient;
 import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
-import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
 
+/**
+ * Heat-consuming multiblock (Ostrum Linear Accelerator).
+ * <p>
+ * GTm8: Dea's Fission's AuxExchangerMachine is an empty subclass of WorkableMultiblockMachine, so we extend
+ * WorkableElectricMultiblockMachine directly to get energy handling, tier and the standard MUI display for free,
+ * and only add the heat lines on top.
+ */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CustomAuxExchangerMachine extends WorkableElectricMultiblockMachine {
+
+    @Nullable
+    protected HeatHatchMachine cachedHeatHatch;
+
+    public CustomAuxExchangerMachine(BlockEntityCreationInfo info) {
+        super(info);
+    }
+
+    @Override
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
+        this.cachedHeatHatch = getParts().stream()
+                .filter(HeatHatchMachine.class::isInstance)
+                .map(HeatHatchMachine.class::cast)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void invalidateStructure(@NotNull String substructureName) {
+        super.invalidateStructure(substructureName);
+        this.cachedHeatHatch = null;
+    }
+
+    @Override
+    public void onPartUnload() {
+        super.onPartUnload();
+        this.cachedHeatHatch = null;
+    }
+
+    @Nullable
+    private HeatIngredient currentHeatIngredient() {
+        GTRecipe recipe = getRecipeLogic().getLastRecipe();
+        if (recipe == null)
+            return null;
+        try {
+            var heatInputs = recipe.inputs.get(HeatRecipeCapability.CAP);
+            if (heatInputs == null || heatInputs.isEmpty())
+                return null;
+            return (HeatIngredient) heatInputs.get(0).content();
+        } catch (ClassCastException e) {
+            TFGCore.LOGGER.warn("Unexpected heat input content in recipe {}", recipe.id, e);
+            return null;
+        }
+    }
+
+    private long totalHeat() {
+        return cachedHeatHatch == null ? 0 : (long) cachedHeatHatch.heatHandler.getTotalContentAmount();
+    }
+
+    private int recipeTemperature() {
+        HeatIngredient heat = currentHeatIngredient();
+        return heat == null ? 0 : (int) heat.temperature;
+    }
+
+    private long heatRequired() {
+        HeatIngredient heat = currentHeatIngredient();
+        return heat == null ? 0 : (long) heat.heat;
+    }
+
+    private int batteryTemperature() {
+        GTRecipe recipe = getRecipeLogic().getLastRecipe();
+        if (recipe == null || cachedHeatHatch == null)
+            return 0;
+        return (int) cachedHeatHatch.heatHandler.getMinimumParticipantTemperature(recipe);
+    }
+
+    @Override
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
+
+        BooleanSyncValue hasHatch = syncManager.getOrCreateSyncHandler("tfgAuxHasHeatHatch", BooleanSyncValue.class,
+                () -> new BooleanSyncValue(() -> isFormed() && cachedHeatHatch != null));
+        BooleanSyncValue hasHeatRecipe = syncManager.getOrCreateSyncHandler("tfgAuxHasHeatRecipe",
+                BooleanSyncValue.class, () -> new BooleanSyncValue(() -> currentHeatIngredient() != null));
+        LongSyncValue totalHeat = syncManager.getOrCreateSyncHandler("tfgAuxTotalHeat", LongSyncValue.class,
+                () -> new LongSyncValue(this::totalHeat, ignored -> {
+                }));
+        IntSyncValue recipeTemp = syncManager.getOrCreateSyncHandler("tfgAuxRecipeTemp", IntSyncValue.class,
+                () -> new IntSyncValue(this::recipeTemperature));
+        IntSyncValue batteryTemp = syncManager.getOrCreateSyncHandler("tfgAuxBatteryTemp", IntSyncValue.class,
+                () -> new IntSyncValue(this::batteryTemperature));
+        LongSyncValue heatRequired = syncManager.getOrCreateSyncHandler("tfgAuxHeatRequired", LongSyncValue.class,
+                () -> new LongSyncValue(this::heatRequired, ignored -> {
+                }));
+
+        BooleanSupplier showHeat = hasHatch::getBoolValue;
+        BooleanSupplier showRecipe = () -> hasHatch.getBoolValue() && hasHeatRecipe.getBoolValue();
+
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.aux_exchanger.heat.title")
+                .withStyle(ChatFormatting.GOLD))
+                .asWidget()
+                .setEnabledIf(w -> showHeat.getAsBoolean()));
+
+        widgets.add(labeledValue("tfg.machine.aux_exchanger.recipe_temperature",
+                () -> Component.literal(FormattingUtil.formatNumbers(recipeTemp.getIntValue()) + "°")
+                        .withStyle(ChatFormatting.GOLD),
+                "tfg.machine.aux_exchanger.recipe_temperature.desc", showRecipe));
+
+        widgets.add(labeledValue("tfg.machine.aux_exchanger.battery_temperature",
+                () -> Component.literal(FormattingUtil.formatNumbers(batteryTemp.getIntValue()) + "°")
+                        .withStyle(ChatFormatting.YELLOW),
+                "tfg.machine.aux_exchanger.battery_temperature.desc", showRecipe));
+
+        widgets.add(labeledValue("tfg.machine.aux_exchanger.hu_consumed",
+                () -> Component.literal(FormattingUtil.formatNumbers(heatRequired.getLongValue()) + " HU/recipe")
+                        .withStyle(ChatFormatting.RED),
+                "tfg.machine.aux_exchanger.hu_consumed.desc", showRecipe));
+
+        widgets.add(labeledValue("tfg.machine.aux_exchanger.total_hu",
+                () -> Component.literal(FormattingUtil.formatNumbers(totalHeat.getLongValue()) + " HU")
+                        .withStyle(ChatFormatting.AQUA),
+                "tfg.machine.aux_exchanger.total_hu.desc", showHeat));
+
+        widgets.add(labeledValue("tfg.machine.aux_exchanger.speed_modifier",
+                () -> {
+                    int tempRecipe = recipeTemp.getIntValue();
+                    double ratio = tempRecipe > 0 ? (double) batteryTemp.getIntValue() / tempRecipe : 0;
+                    // duration multiplier = 1 / 2^ratio  ->  speed = 2^ratio
+                    int speedPercent = (int) Math.round(Math.pow(2, ratio) * 100);
+                    return Component.literal(speedPercent + "%")
+                            .withStyle(speedPercent >= 100 ? ChatFormatting.GREEN : ChatFormatting.RED);
+                },
+                "tfg.machine.aux_exchanger.speed_modifier.desc",
+                () -> showRecipe.getAsBoolean() && recipeTemp.getIntValue() > 0));
+
+        return widgets;
+    }
+
+    private static IWidget labeledValue(String labelKey, Supplier<Component> value, String hoverKey,
+            BooleanSupplier enabled) {
+        return Text.dynamic(() -> Component.translatable(labelKey)
+                .withStyle(ChatFormatting.WHITE)
+                .append(value.get()))
+                .asWidget()
+                .tooltip(new RichTooltip().add(Component.translatable(hoverKey).withStyle(ChatFormatting.GRAY)))
+                .setEnabledIf(w -> enabled.getAsBoolean());
+    }
+}
+
+/*
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CustomAuxExchangerMachine extends AuxExchangerMachine
-        implements IDisplayUIMachine, ITieredMachine {
-
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(CustomAuxExchangerMachine.class, AuxExchangerMachine.MANAGED_FIELD_HOLDER);
+        implements ITieredMachine {
 
     protected EnergyContainerList energyContainer;
 
@@ -60,22 +196,13 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
     @Getter
     protected int tier;
 
-    public CustomAuxExchangerMachine(IMachineBlockEntity holder) {
-        super(holder);
+    public CustomAuxExchangerMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    //////////////////////////////////////
-    // *** Multiblock Lifecycle ***//
-    //////////////////////////////////////
-
-    @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         this.energyContainer = getEnergyContainer();
         this.tier = GTUtil.getFloorTierByVoltage(getMaxVoltage());
 
@@ -87,8 +214,8 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(@NotNull String substructureName) {
+        super.invalidateStructure(substructureName);
         this.energyContainer = null;
         this.cachedHeatHatch = null;
         this.tier = 0;
@@ -101,10 +228,6 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
         this.cachedHeatHatch = null;
         this.tier = 0;
     }
-
-    //////////////////////////////////////
-    // ********** GUI ***********//
-    //////////////////////////////////////
 
     @Override
     public void addDisplayText(List<Component> textList) {
@@ -241,9 +364,6 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
                 Component.translatable(hoverKey).withStyle(ChatFormatting.GRAY))));
     }
 
-    //////////////////////////////////////
-    // ********** UI ***********//
-
     @Override
     public ModularUI createUI(Player entityPlayer) {
         return super.createUI(entityPlayer);
@@ -253,8 +373,6 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
     public boolean hasPlayerInventory() {
         return true;
     }
-
-    //////////////////////////////////////
 
     @Override
     public Widget createUIWidget() {
@@ -322,3 +440,4 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
         return highestVoltage;
     }
 }
+*/

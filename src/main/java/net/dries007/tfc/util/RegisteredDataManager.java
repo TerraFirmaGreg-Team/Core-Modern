@@ -74,12 +74,18 @@ public class RegisteredDataManager<T> extends DataManager<RegisteredDataManager.
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> elements, ResourceManager resourceManager, ProfilerFiller profiler)
     {
-        types.values().forEach(e -> e.value = null);
+
+		types.values().forEach(e -> e.value = null);
 
         int valid = 0;
         for (Map.Entry<ResourceLocation, JsonElement> entry : elements.entrySet())
         {
             final ResourceLocation name = entry.getKey();
+			if (typeName.equals("TFCGenViewer Biome") && name.getNamespace().equals("tfc"))
+			{
+				continue;
+			}
+
             final Entry<T> typeEntry = types.get(name);
             if (typeEntry == null)
             {
@@ -106,6 +112,11 @@ public class RegisteredDataManager<T> extends DataManager<RegisteredDataManager.
         for (Map.Entry<ResourceLocation, Entry<T>> entry : types.entrySet())
         {
             final ResourceLocation id = entry.getKey();
+			if (typeName.equals("TFCGenViewer Biome") && id.getNamespace().equals("tfc"))
+			{
+				continue;
+			}
+
             final Entry<T> typeEntry = entry.getValue();
             if (typeEntry.value == null)
             {

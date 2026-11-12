@@ -3,10 +3,9 @@ package su.terrafirmagreg.core.common.data.blocks;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
-import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
@@ -43,12 +42,9 @@ public class TFGBlocks_Buds {
     public static void generateBudIndicators() {
         BUD_BLOCKS_BUILDER = ImmutableMap.builder();
 
-        for (MaterialRegistry registry : GTCEuAPI.materialManager.getRegistries()) {
-            GTRegistrate registrate = registry.getRegistrate();
-            for (Material material : registry.getAllMaterials()) {
-                if (material.hasProperty(PropertyKey.ORE) && material.hasProperty(PropertyKey.GEM)) {
-                    registerBudIndicator(material, registrate, BUD_BLOCKS_BUILDER);
-                }
+        for (Material material : GTRegistries.MATERIALS) {
+            if (material.hasProperty(PropertyKey.ORE) && material.hasProperty(PropertyKey.GEM)) {
+                registerBudIndicator(material, GTRegistrate.createIgnoringListenerErrors(material.getModid()), BUD_BLOCKS_BUILDER);
             }
         }
         BUD_BLOCKS = BUD_BLOCKS_BUILDER.build();

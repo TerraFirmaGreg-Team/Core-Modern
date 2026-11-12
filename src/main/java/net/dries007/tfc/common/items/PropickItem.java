@@ -36,8 +36,6 @@ import net.minecraftforge.network.PacketDistributor;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.ProspectedPacket;
 import net.dries007.tfc.util.Helpers;
@@ -74,11 +72,7 @@ public class PropickItem extends ToolItem
 
     public static void registerDefaultRepresentativeBlocks()
     {
-        TFCBlocks.GRADED_ORES.forEach((rock, ores) -> ores.forEach((ore, blocks) -> registerRepresentative(
-            blocks.get(Ore.Grade.NORMAL).get(),
-            blocks.get(Ore.Grade.RICH).get(),
-            blocks.get(Ore.Grade.POOR).get()
-        )));
+
     }
 
     public static Object2IntMap<Block> scanAreaFor(Level level, BlockPos center, int radius, TagKey<Block> tag)

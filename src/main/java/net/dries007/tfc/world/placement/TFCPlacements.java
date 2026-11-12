@@ -30,12 +30,18 @@ public final class TFCPlacements
     public static final RegistryObject<PlacementModifierType<UndergroundPlacement>> UNDERGROUND = register("underground", () -> UndergroundPlacement.PLACEMENT_CODEC);
     public static final RegistryObject<PlacementModifierType<BoundedCarvingMaskPlacement>> CARVING_MASK = register("carving_mask", () -> BoundedCarvingMaskPlacement.PLACEMENT_CODEC);
     public static final RegistryObject<PlacementModifierType<ClimatePlacement>> CLIMATE = register("climate", () -> ClimatePlacement.PLACEMENT_CODEC);
-    public static final RegistryObject<PlacementModifierType<VolcanoPlacement>> VOLCANO = register("volcano", () -> VolcanoPlacement.PLACEMENT_CODEC);
+	public static final RegistryObject<PlacementModifierType<IntertidalPlacement>> INTERTIDAL = register("intertidal", () -> IntertidalPlacement.PLACEMENT_CODEC);
+    public static final RegistryObject<PlacementModifierType<CinderConePlacement>> VOLCANO = register("volcano", () -> CinderConePlacement.PLACEMENT_CODEC);
+	public static final RegistryObject<PlacementModifierType<TuffRingPlacement>> TUFF_RING = register("tuff_cone", () -> TuffRingPlacement.PLACEMENT_CODEC);
+	public static final RegistryObject<PlacementModifierType<TuyaPlacement>> TUYA = register("tuya", () -> TuyaPlacement.PLACEMENT_CODEC);
+	public static final RegistryObject<PlacementModifierType<StratovolcanoPlacement>> STRATOVOLCANO = register("stratovolcano", () -> StratovolcanoPlacement.PLACEMENT_CODEC);
+	public static final RegistryObject<PlacementModifierType<AtollPlacement>> ATOLL = register("atoll", () -> AtollPlacement.PLACEMENT_CODEC);
     public static final RegistryObject<PlacementModifierType<NearFluidPlacement>> NEAR_FLUID = register("near_fluid", () -> NearFluidPlacement.PLACEMENT_CODEC);
     public static final RegistryObject<PlacementModifierType<ShallowWaterPlacement>> SHALLOW_WATER = register("shallow_water", () -> ShallowWaterPlacement.PLACEMENT_CODEC);
     public static final RegistryObject<PlacementModifierType<OnTopPlacement>> ON_TOP = register("on_top", () -> OnTopPlacement.PLACEMENT_CODEC);
     public static final RegistryObject<PlacementModifierType<BiomePlacement>> BIOME = register("biome", () -> BiomePlacement.PLACEMENT_CODEC);
-    public static final RegistryObject<PlacementModifierType<NoSolidNeighborsPlacement>> NO_SOLID_NEIGHBORS = register("no_solid_neighbors", ()-> NoSolidNeighborsPlacement.PLACEMENT_CODEC);
+    public static final RegistryObject<PlacementModifierType<NoSolidNeighborsPlacement>> NO_SOLID_NEIGHBORS = register("no_solid_neighbors", () -> NoSolidNeighborsPlacement.PLACEMENT_CODEC);
+	public static final RegistryObject<PlacementModifierType<OceanRidgePlacement>> OCEAN_RIDGE = register("ocean_ridge", () -> OceanRidgePlacement.PLACEMENT_CODEC);
 
     private static <C extends PlacementModifier> RegistryObject<PlacementModifierType<C>> register(String name, PlacementModifierType<C> codec)
     {

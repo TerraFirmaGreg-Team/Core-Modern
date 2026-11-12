@@ -262,14 +262,15 @@ public final class ForgeCommonEventListener {
         event.getAllMappings(Registries.BLOCK).forEach(ForgeCommonEventListener::remapBlocks);
         event.getAllMappings(Registries.ITEM).forEach(ForgeCommonEventListener::remapItems);
         event.getAllMappings(Registries.BLOCK_ENTITY_TYPE).forEach(ForgeCommonEventListener::remapBlockEntities);
+        event.getAllMappings(Registries.BIOME).forEach(ForgeCommonEventListener::remapBiomes);
     }
 
     private static void remapBlocks(MissingMappingsEvent.Mapping<Block> mapping) {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlock());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlock());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlock());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlock());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
@@ -283,8 +284,8 @@ public final class ForgeCommonEventListener {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getItem());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getItem());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getItem());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getItem());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
@@ -297,13 +298,32 @@ public final class ForgeCommonEventListener {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlockEntityType());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlockEntityType());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlockEntityType());
+    }
+
+    private static void remapBiomes(MissingMappingsEvent.Mapping<Biome> mapping) {
+        if (!mapping.getKey().getNamespace().equals("tfc"))
+            return;
+
+        String path = mapping.getKey().getPath();
+        // This biome no longer exists
+        if (path.equals("inverted_badlands"))
+            path = "hoodoos";
+
+        var found = mapping.getRegistry().getValue(TFGCore.id("earth/" + path));
+        if (found != null) {
+            mapping.remap(found);
+        } else {
+            // Fallback
+            TFGCore.LOGGER.warn("Failed to remap old TFC biome: {}, using tfg:earth/ocean as a fallback", mapping.getKey());
+            mapping.remap(mapping.getRegistry().getValue(TFGCore.id("earth/ocean")));
+        }
     }
 }

@@ -11,7 +11,7 @@ ferriteCore = "6.0.1-forge,1.20.1"
 tmrv = "0.9.0+mc.20.1"
 
 # EMI
-emi = "1.1.22+1.20.1+forge"
+emi = "1.1.24+1.20.1+forge"
 
 # Create
 ponder = "1.0.91"
@@ -25,8 +25,8 @@ greate = "0.0.81"
 strutYourStuff = "1.1.1+mc1.20.1-forge,1.20.1"
 
 # GregTech
-gtceu = "mc1.20.1-7.5.3"
-ldlib = "mc1.20.1-1.0.40.b-forge"
+gtceu = "8.0.0-SNAPSHOT"
+modularui = "3.3.1-SNAPSHOT"
 gtmUtils = "2.9.2"
 
 # KubeJS
@@ -78,6 +78,9 @@ species = "3.5"
 simplyStackedDimensions = "7657445"
 jellies = "0.1.6"
 arthropocolypse = "5397648"
+opposingForce = "1.20.1-2.0.3"
+aliencraftKepler = "8896274"
+primitiveCreatures = "7287434"
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = "11.1.136+forge"
@@ -142,8 +145,8 @@ greate = { module = "maven.modrinth:greate", version.ref = "greate" }
 strutYourStuff = { module = "maven.modrinth:strut-your-stuff", version.ref = "strutYourStuff" }
 
 # GregTech
-gtceu = { module = "maven.modrinth:gregtechceu-modern", version.ref = "gtceu" }
-ldlib = { module = "maven.modrinth:ldlib", version.ref = "ldlib" }
+gtceu = { module = "com.gregtechceu.gtceu:gtceu-1.20.1", version.ref = "gtceu" }
+modularui = { module = "brachy.modularui:modularui-mc1.20.1", version.ref = "modularui" }
 gtmUtils = { module = "maven.modrinth:gregtech-modern-utilities", version.ref = "gtmUtils" }
 
 # KubeJS
@@ -197,6 +200,9 @@ species = { module = "maven.modrinth:species", version.ref = "species" }
 simplyStackedDimensions = { module = "curse.maven:simply-stacked-dimensions-523416", version.ref = "simplyStackedDimensions" }
 jellies = { module = "maven.modrinth:jellies", version.ref = "jellies" }
 arthropocolypse = { module = "curse.maven:arthropocolypse-1018606", version.ref = "arthropocolypse" }
+opposingForce = { module = "maven.modrinth:opposing-force", version.ref = "opposingForce" }
+aliencraftKepler = { module = "curse.maven:aliencraft-kepler-22b-1444616", version.ref = "aliencraftKepler" }
+primitiveCreatures = { module = "curse.maven:primitive-creatures-1218288", version.ref = "primitiveCreatures" }
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = { module = "maven.modrinth:cloth-config", version.ref = "clothConfig" }

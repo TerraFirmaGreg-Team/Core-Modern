@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.machine.trait;
+package su.terrafirmagreg.core.common.tfgt.machine.trait;
 
 import java.util.Iterator;
 import java.util.List;
@@ -8,8 +8,7 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
@@ -41,16 +40,16 @@ public class EnvironmentRecipeLogic extends RecipeLogic {
     @Nullable
     private FluidIngredient drainIngredient;
 
-    public EnvironmentRecipeLogic(IRecipeLogicMachine machine) {
-        super(machine);
+    public EnvironmentRecipeLogic() {
+        super();
     }
 
     // ========================= Recipe Search =========================
 
     @Override
     public @NotNull Iterator<GTRecipe> searchRecipe() {
-        return machine.getRecipeType().getCategories().stream()
-                .flatMap(cat -> machine.getRecipeType().getRecipesInCategory(cat).stream())
+        return getRLMachine().getRecipeType().getCategories().stream()
+                .flatMap(cat -> getRLMachine().getRecipeType().getRecipesInCategory(cat).stream())
                 .iterator();
     }
 
@@ -103,10 +102,10 @@ public class EnvironmentRecipeLogic extends RecipeLogic {
         // Deep-copy tickInputs so mutations to drainIngredient don't alias back to recipe
         recipeDrainFluids = recipe.copy();
         List<Content> fluids = recipeDrainFluids.getTickInputContents(FluidRecipeCapability.CAP);
-        if (!fluids.isEmpty() && fluids.get(0).getContent() instanceof FluidIngredient ingredient) {
+        if (!fluids.isEmpty() && fluids.get(0).content() instanceof FluidIngredient ingredient) {
             drainIngredient = ingredient.copy();
             List<Content> mutable = new java.util.ArrayList<>(fluids);
-            mutable.set(0, new Content(drainIngredient, fluids.get(0).chance, fluids.get(0).maxChance, fluids.get(0).tierChanceBoost));
+            mutable.set(0, new Content(drainIngredient, fluids.get(0).chance(), fluids.get(0).maxChance()));
             recipeDrainFluids.tickInputs.put(FluidRecipeCapability.CAP, mutable);
         } else {
             drainIngredient = null;
@@ -120,10 +119,10 @@ public class EnvironmentRecipeLogic extends RecipeLogic {
         if (!fluidInputs.isEmpty()) {
             List<Content> minimized = new java.util.ArrayList<>();
             for (Content content : fluidInputs) {
-                if (content.getContent() instanceof FluidIngredient ingredient) {
+                if (content.content() instanceof FluidIngredient ingredient) {
                     FluidIngredient min = ingredient.copy();
                     min.setAmount(1);
-                    minimized.add(new Content(min, content.chance, content.maxChance, content.tierChanceBoost));
+                    minimized.add(new Content(min, content.chance(), content.maxChance()));
                 }
             }
             copy.tickInputs.put(FluidRecipeCapability.CAP, minimized);

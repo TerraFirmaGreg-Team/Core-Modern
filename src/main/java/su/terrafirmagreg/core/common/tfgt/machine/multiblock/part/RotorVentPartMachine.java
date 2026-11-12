@@ -2,11 +2,11 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.part;
 
 import javax.annotation.Nullable;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IWorkableMultiController;
-import com.gregtechceu.gtceu.common.item.TurbineRotorBehaviour;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
+import com.gregtechceu.gtceu.common.item.behavior.TurbineRotorBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
+import com.gregtechceu.gtceu.utils.ISubscription;
 
 import net.minecraft.network.chat.Component;
 
@@ -27,8 +27,8 @@ public class RotorVentPartMachine extends RotorHolderPartMachine {
     @Nullable
     private ISubscription wakeSubs;
 
-    public RotorVentPartMachine(IMachineBlockEntity holder, int tier) {
-        super(holder, tier);
+    public RotorVentPartMachine(BlockEntityCreationInfo info, int tier) {
+        super(info, tier);
         inventory.setFilter(stack -> TurbineRotorBehaviour.getBehaviour(stack) != null);
     }
 
@@ -50,13 +50,13 @@ public class RotorVentPartMachine extends RotorHolderPartMachine {
     }
 
     private void wakeController() {
-        if (isFormed() && getControllers().first() instanceof IWorkableMultiController workable) {
+        if (isFormed() && getControllers().first() instanceof WorkableMultiblockMachine workable) {
             workable.getRecipeLogic().updateTickSubscription();
         }
     }
 
     @Override
-    public boolean onWorking(IWorkableMultiController controller) {
+    public boolean onWorking(WorkableMultiblockMachine controller) {
         if (!hasRotor())
             return false;
 

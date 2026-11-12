@@ -19,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import electrolyte.greate.content.gtceu.material.GreatePropertyKeys;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
 
 @Mixin(value = WindmillBearingBlockEntity.class, remap = false)
@@ -43,9 +42,8 @@ public class WindmillBearingBlockEntityMixin extends GeneratingKineticBlockEntit
         Lang.builder("tfg").translate("greate.windmill_hint_2").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
         Lang.builder("tfg").translate("greate.windmill_hint_3").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
 
-        Lang.builder("greate").translate("tooltip.capacity").style(ChatFormatting.GRAY).forGoggles(tooltip);
-        Lang.builder("greate").add(CreateLang.number(GTMaterials.Steel.getProperty(GreatePropertyKeys.KINETIC).getMaxCapacity()).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
-                .add(CreateLang.text("at current shaft tier").style(ChatFormatting.DARK_GRAY))).forGoggles(tooltip, 1);
+        // Greate (GTm8): tiers now cap the speed (RPM) instead of the stress capacity
+        addToGoggleTooltip(tooltip, GTMaterials.Steel, getSpeed());
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);
         CreateLang.number(stress).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space().add(CreateLang.text("consumed").style(ChatFormatting.DARK_GRAY)).space()

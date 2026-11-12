@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import com.bawnorton.mixinsquared.adjuster.MixinAnnotationAdjusterRegistrar;
+
 /** Config to modify the mixins at load and application time */
 // Normally this only works on our own mixins, but with a generous sprinkling of reflection, we get more freedom.
 public class TFGMixinPlugin implements IMixinConfigPlugin {
@@ -21,6 +23,9 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     private static final String AAAPARTICLES_MIXIN_JSON = "aaa_particles.mixins.json";
     private static final String AAAPARTICLES_GAME_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinGameRenderer";
     private static final String AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinItemInHandRenderer";
+
+    private static final String GREGTECH_MIXIN_JSON = "gtceu.mixins.json";
+    private static final String GREGTECH_ITEMSTACK_MIXIN = "com.gregtechceu.gtceu.core.mixins.ItemStackMixin";
 
     /**
      * acceptTargets fires once after all configs have been collected but before any have been applied,
@@ -50,6 +55,12 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
                     currentMixin = AAAPARTICLES_GAME_RENDERER_MIXIN;
                     removeMixin(config, currentMixin);
                     currentMixin = AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN;
+                    removeMixin(config, currentMixin);
+                }
+
+                if (GREGTECH_MIXIN_JSON.equals(currentConfig)) {
+                    // Removes spoilage
+                    currentMixin = GREGTECH_ITEMSTACK_MIXIN;
                     removeMixin(config, currentMixin);
                 }
             }
@@ -92,11 +103,15 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
                 .values().forEach(list -> list.removeIf(m -> className.equals(m.getClassName())));
     }
 
+    @Override
+    public void onLoad(String mixinPackage) {
+        MixinAnnotationAdjusterRegistrar.register(new TFGMixinAnnotationAdjuster());
+    }
+
     // No-op event handlers that need implementation for an IMixinConfigPlugin
 
     // spotless:off
     @Override public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {return true;}
-    @Override public void onLoad(String mixinPackage) {}
     @Override public String getRefMapperConfig() {return null;}
     @Override public List<String> getMixins() {return null;}
     @Override public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
