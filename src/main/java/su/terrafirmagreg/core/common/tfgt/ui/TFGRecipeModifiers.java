@@ -13,7 +13,7 @@ import brachy.modularui.widgets.layout.Flow;
 
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 
-public class TFGReipeUIModifiers {
+public class TFGRecipeModifiers {
 
     public static final RecipeUIModifier ME_ASSEMBLER = (recipe, widget) -> {
 
@@ -43,5 +43,7 @@ public class TFGReipeUIModifiers {
         row.child(RecipeViewerSlotWidget.create(ItemStack.class)
                 .recipeSlotRole(RecipeSlotRole.RENDER_ONLY)
                 .value(block.asItem().getDefaultInstance()));
+
+        widget.textComponents.child(row);
     };
 }

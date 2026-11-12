@@ -18,7 +18,7 @@ import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGSounds;
-import su.terrafirmagreg.core.common.tfgt.ui.TFGReipeUIModifiers;
+import su.terrafirmagreg.core.common.tfgt.ui.TFGRecipeModifiers;
 
 public class TFGTRecipeTypes {
 
@@ -237,7 +237,7 @@ public class TFGTRecipeTypes {
                     .setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER)
                     .addRecipeUIModifier(((recipe, widget) -> widget.textComponents.child(
                             Text.lang("tfg.recipe.me_assembler.budding_hint").asWidget())))
-                    .addRecipeUIModifier(TFGReipeUIModifiers.ME_ASSEMBLER));
+                    .addRecipeUIModifier(TFGRecipeModifiers.ME_ASSEMBLER));
 
     public static final GTRecipeType BUDDING_CHARGE_RECIPES = GTRecipeTypes
             .register(TFGCore.id("budding_charger"), GTRecipeTypes.MULTIBLOCK)
@@ -246,5 +246,5 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.COMPRESSOR)
             .UI(builder -> builder
                     .setProgressBar(GTGuiTextures.PROGRESS_ARROW)
-                    .addRecipeUIModifier(TFGReipeUIModifiers.BUDDING_CHARGER));
+                    .addRecipeUIModifier(TFGRecipeModifiers.BUDDING_CHARGER));
 }

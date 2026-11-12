@@ -4,6 +4,7 @@ import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.MOLYBDENUM_DISILICIDE_COIL_BLOCK;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.ALL_FIREBOXES;
+import static fi.dea.mc.deafission.common.data.FissionMachines.HeatPortEv;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.*;
@@ -69,6 +70,10 @@ import brachy.modularui.api.drawable.Text;
 import brachy.modularui.value.sync.BooleanSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
 import earth.terrarium.adastra.common.registry.ModBlocks;
+import fi.dea.mc.deafission.common.data.FissionGtRecipeTypes;
+import fi.dea.mc.deafission.common.data.FissionTags;
+import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
+import fi.dea.mc.deafission.common.data.machine.hb.HbMachine;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
@@ -447,7 +452,6 @@ public class TFGMultiMachines {
                     .build())
             .register();
 
-    /* TODO once fission ported to 8.0
     public static final MultiblockMachineDefinition OSTRUM_LINEAR_ACCELERATOR = REGISTRATE
             .multiblock("ostrum_linear_accelerator", CustomAuxExchangerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -485,7 +489,7 @@ public class TFGMultiMachines {
                         .where(' ', Predicates.any())
                         .build();
             })
-            .register();*/
+            .register();
 
     public static final MultiblockMachineDefinition SMR_GENERATOR = REGISTRATE
             .multiblock("smr_generator", (holder) -> new SMRGenerator2(holder, GTValues.EV))
@@ -808,7 +812,6 @@ public class TFGMultiMachines {
                     GTCEu.id("gtceu:block/machines/fluid_heater"))
             .register();
 
-    /* TODO once fission ported to 8.0
     public static final MultiblockMachineDefinition HEAT_BATTERY_MK_1 = REGISTRATE
             .multiblock("heat_battery_mk1", HbMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -845,7 +848,6 @@ public class TFGMultiMachines {
                             .and(Predicates.air()))
                     .build())
             .register();
-     */
     public static final MultiblockMachineDefinition PRECISION_FABRICATOR = REGISTRATE
             .multiblock("high_temp_precision_fabricator", CoilWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -1098,9 +1100,9 @@ public class TFGMultiMachines {
                     OreProcessingBeneathMachine::recipeModifier)
             .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
             .tooltips(
-                    Component.translatable("tfg.tooltip.machine.ande_proc_beneath_1"),
-                    Component.translatable("tfg.tooltip.machine.ande_proc_beneath_2"),
-                    Component.translatable("tfg.tooltip.machine.ande_proc_beneath_3"),
+                    Component.translatable("tfg.tooltip.machine.ore_proc_beneath_1"),
+                    Component.translatable("tfg.tooltip.machine.ore_proc_beneath_2"),
+                    Component.translatable("tfg.tooltip.machine.ore_proc_beneath_3"),
                     Component.translatable("tfg.tooltip.machine.two_energy_hatches"))
             .workableCasingModel(
                     GTCEu.id("block/casings/gcym/industrial_steam_casing"),
