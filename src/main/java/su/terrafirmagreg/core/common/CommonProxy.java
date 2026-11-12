@@ -3,8 +3,8 @@ package su.terrafirmagreg.core.common;
 import static appeng.api.upgrades.Upgrades.add;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
-import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
+import com.gregtechceu.gtceu.api.data.medicalcondition.MedicalCondition;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
@@ -32,6 +32,7 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
@@ -74,6 +75,7 @@ public class CommonProxy {
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGSurfaceConditions.SURFACE_CONDITIONS.register(bus);
+        TFGDensityFunctions.DENSITY_FUNCTIONS.register(bus);
         TFGContainers.CONTAINERS.register(bus);
         TFGEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(bus);
         TFGEffects.EFFECTS.register(bus);
@@ -87,14 +89,13 @@ public class CommonProxy {
         TFGBrain.SENSOR_TYPES.register(bus);
         TFGBrain.POI_TYPES.register(bus);
 
-        TFGPoiTypes.TYPES.register(bus);
-
         TFGFoodTraits.init();
 
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
+        bus.addGenericListener(MedicalCondition.class, this::registerMedicalConditions);
 
         TFGDisplaySources.init(bus);
         AdAstraCompat.RegisterEvents();
@@ -103,16 +104,12 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
-    public void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
-        TFGCore.MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(TFGCore.MOD_ID);
-    }
-
-    @SubscribeEvent
     public void onPostRegisterMaterials(final PostMaterialEvent event) {
         TFGToolTypes.init();
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
         TFGModifyMaterials.modify();
+        TFGToolTypes.modify();
     }
 
     @SubscribeEvent
@@ -125,6 +122,9 @@ public class CommonProxy {
             addUpgrades(AE2wtlib.PATTERN_ENCODING_TERMINAL);
             addUpgrades(AE2wtlib.PATTERN_ACCESS_TERMINAL);
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
+            addUpgrades(TFGItems.WIRELESS_ORDER_TERMINAL.get());
+            add(AEItems.ENERGY_CARD, TFGItems.WIRELESS_ORDER_TERMINAL.get(), 2, GuiText.WirelessTerminals.getTranslationKey());
+            add(AE2wtlib.QUANTUM_BRIDGE_CARD, TFGItems.WIRELESS_ORDER_TERMINAL.get(), 1, GuiText.WirelessTerminals.getTranslationKey());
 
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
@@ -175,5 +175,9 @@ public class CommonProxy {
 
     public void registerSounds(GTCEuAPI.RegisterEvent<ResourceLocation, SoundEntry> event) {
         TFGSounds.init();
+    }
+
+    public void registerMedicalConditions(GTCEuAPI.RegisterEvent<ResourceLocation, MedicalCondition> event) {
+        TFGMedicalConditions.init();
     }
 }

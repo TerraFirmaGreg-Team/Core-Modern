@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
@@ -60,11 +59,9 @@ public abstract class GTRecipeTypesMixin {
 
         // Добавляет новый слот под микросхему
         LASER_ENGRAVER_RECIPES.setMaxIOSize(3, 1, 0, 0);
-        LASER_ENGRAVER_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
 
         // Добавляет новый слот под микросхему
         CHEMICAL_RECIPES.setMaxIOSize(3, 2, 3, 2);
-        CHEMICAL_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
 
         ARC_FURNACE_RECIPES.setMaxIOSize(2, 9, 1, 0);
 
@@ -73,18 +70,16 @@ public abstract class GTRecipeTypesMixin {
         CHEMICAL_BATH_RECIPES.setMaxIOSize(2, 6, 1, 1);
 
         CENTRIFUGE_RECIPES.setMaxIOSize(3, 6, 1, 6);
-        CENTRIFUGE_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
 
         IMPLOSION_RECIPES.setMaxIOSize(6, 2, 0, 0);
 
         FERMENTING_RECIPES.setMaxIOSize(2, 1, 1, 1);
-        FERMENTING_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
 
         PYROLYSE_RECIPES.setMaxIOSize(3, 2, 1, 1);
 
         AUTOCLAVE_RECIPES.setMaxIOSize(2, 2, 2, 1);
 
-        CRACKING_RECIPES.setMaxIOSize(1, 1, 2, 2);
+        CRACKING_RECIPES.setMaxIOSize(2, 2, 2, 2);
 
         MIXER_RECIPES.setMaxIOSize(9, 1, 2, 1);
     }

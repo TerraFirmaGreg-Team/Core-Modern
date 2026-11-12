@@ -3,6 +3,7 @@
     "tfg:carbonate_hornfels",
     "tfg:pelitic_hornfels",
     "tfg:mafic_hornfels",
-    "tfg:venus_hornfels"
+    "tfg:venus_hornfels",
+    "tfg:venus_neutralized_hornfels"
   ]
 }

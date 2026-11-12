@@ -45,6 +45,8 @@ import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
+import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -165,6 +167,8 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addCategory(ITEM_REPAIR);
         emiRegistry.addWorkstation(ITEM_REPAIR, EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
         emiRegistry.addRecipeHandler(MenuType.CRAFTING, new ItemRepairCraftingRecipeHandler());
+        emiRegistry.addRecipeHandler(OrderTerminalMenu.TYPE, new OrderTerminalRecipeHandler());
+        emiRegistry.addRecipeHandler(WOTMenu.TYPE, new OrderTerminalRecipeHandler());
         for (ItemRepairRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream()
                 .filter(r -> r instanceof ItemRepairRecipe)
                 .map(r -> (ItemRepairRecipe) r)

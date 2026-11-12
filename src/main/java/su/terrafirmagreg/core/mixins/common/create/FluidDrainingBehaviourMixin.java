@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.gregtechceu.gtceu.api.fluids.forge.GTFluidImpl;
+import com.gregtechceu.gtceu.api.fluids.GTFluid;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -37,7 +37,7 @@ public class FluidDrainingBehaviourMixin {
     @ModifyReturnValue(method = "getDrainableFluid", at = @At("RETURN"), remap = false)
     private FluidStack tfg$getDrainableFluid(FluidStack original) {
         if (original.getFluid() instanceof FlowingFluid flowingFluid
-                && flowingFluid.getFlowing() instanceof GTFluidImpl
+                && flowingFluid.getFlowing() instanceof GTFluid
                 && flowingFluid.getBucket() instanceof BucketItem bucket) {
 
             return new FluidStack(bucket.getFluid(), original.getAmount());

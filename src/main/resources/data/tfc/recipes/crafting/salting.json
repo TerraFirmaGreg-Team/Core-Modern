@@ -15,7 +15,7 @@
             },
             "type": "tfc:not_rotten"
         },
-        {"item": "tfc:powder/salt"}
+        {"item": "gtceu:small_salt_dust"}
     ],
     "__comment__": "This file was automatically created by mcresources",
     "type": "tfc:advanced_shapeless_crafting",

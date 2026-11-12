@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -7,25 +8,18 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
+import com.gregtechceu.gtceu.common.mui.GTMultiblockTextUtil;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
-import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -33,38 +27,37 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.value.sync.SyncHandlers;
+import brachy.modularui.widgets.layout.Flow;
+import brachy.modularui.widgets.textfield.TextFieldWidget;
 import lombok.Getter;
 
-import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
 import su.terrafirmagreg.core.common.environment.*;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.EnvironmentRecipeLogic;
 
 /**
  * Higgs Emitter multiblock that creates a sphere of normal gravity around itself based on the provided hatch.
  */
-public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine implements IEnvironmentMachine, IMachineLife {
-
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            HiggsEmitterMultiblock.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
+public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine implements IEnvironmentMachine {
 
     public static final float MAX_TARGET_GRAVITY = 100f;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     @Getter
     private float targetGravity = DimensionEnvironment.EARTH_GRAVITY;
 
     @Nullable
     private GravityProvider provider;
 
-    private DimEnvManager manager;
+    private @Nullable DimEnvManager manager;
 
-    public HiggsEmitterMultiblock(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public HiggsEmitterMultiblock(BlockEntityCreationInfo info) {
+        super(info, new EnvironmentRecipeLogic());
+        recipeLogic.setRegressWhenWaiting(false);
     }
 
     public int computeEnergyPerTick() {
@@ -73,35 +66,22 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
         return (int) Math.round(voltage * 0.5);
     }
 
-    /** If a higgs emitter with an HV hatch were to be placed in the middle of a sphere that is being supplied by an air distributor that takes 0.5A@HV it will provide a gravity sphere of the exact same size as the sphere. */
-    public static int radiusForEUt(double eut) {
-        if (eut <= 0) {
-            return 4;
-        }
-        double volume = EnclosedRoomEnergyCurve.volumeForEut(eut);
-        return Math.max(4, (int) Math.ceil(Math.cbrt(3.0 * volume / (4.0 * Math.PI))));
-    }
-
     /** @return the current bubble radius, derived from the energy the hatch supports. */
     public int getRadius() {
-        return radiusForEUt(computeEnergyPerTick());
+        EnergyContainerList energy = getEnergyContainer();
+        if (energy == null) {
+            return 0;
+        }
+        long voltage = energy.getHighestInputVoltage();
+        int tier = GTUtil.getFloorTierByVoltage(voltage);
+        return 16 * (tier + 1);
     }
 
     // ==================== Recipe ====================
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new EnvironmentRecipeLogic(this);
-    }
-
-    @Override
     public boolean isWorking() {
-        return recipeLogic != null && recipeLogic.isWorking();
-    }
-
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
+        return recipeLogic.isWorking();
     }
 
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
@@ -119,43 +99,42 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     // ==================== UI ====================
 
     @Override
-    public Widget createUIWidget() {
-        int width = 180;
-        int height = 64;
-        var group = new WidgetGroup(0, 0, width, height);
-        group.setBackground(ResourceBorderTexture.BORDERED_BACKGROUND);
-        group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
-                .setMaxWidthLimit(width - 8));
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        List<IWidget> widgets = new ArrayList<>();
 
-        group.addWidget(new LabelWidget(6, 45,
-                () -> Component.translatable("tfg.machine.higgs_emitter.gravity").getString()));
-        var gravityField = new TextFieldWidget(100, 44, 74, 14,
-                null,
-                s -> setTargetGravity(parseTargetGravity(s)));
-        gravityField.setNumbersOnly(0f, MAX_TARGET_GRAVITY);
-        gravityField.setCurrentString(formatTargetGravity());
-        gravityField.setHoverTooltips(Component.translatable("tfg.machine.higgs_emitter.gravity.tooltip",
-                String.format(Locale.ROOT, "%.3f", DimensionEnvironment.EARTH_GRAVITY)));
-        group.addWidget(gravityField);
+        widgets.add(GTMultiblockTextUtil.addWorkingStatusLine(this, syncManager, () -> Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN)));
 
-        return group;
+        widgets.add(Flow.row()
+                .coverChildren()
+                .childPadding(4)
+                .child(Text.lang("tfg.machine.higgs_emitter.gravity").asWidget())
+                .child(new TextFieldWidget()
+                        .size(74, 14)
+                        .setNumbersDouble(v -> Math.max(0, Math.min(v, MAX_TARGET_GRAVITY)))
+                        .setDefaultNumber(DimensionEnvironment.EARTH_GRAVITY)
+                        .value(SyncHandlers.doubleNumber(() -> targetGravity, v -> setTargetGravity((float) v))
+                                .allowC2S())
+                        .tooltip(t -> t.addLine(Component.translatable("tfg.machine.higgs_emitter.gravity.tooltip",
+                                String.format(Locale.ROOT, "%.3f", DimensionEnvironment.EARTH_GRAVITY))))));
+
+        widgets.add(Text.lang("tfg.machine.higgs_emitter.radius",
+                FormattingUtil.formatNumbers(getRadius())).withStyle(ChatFormatting.AQUA).asWidget());
+        widgets.add(Text.lang("tfg.machine.oxygen_distributor.energy",
+                String.format("%,d", computeEnergyPerTick()))
+                .withStyle(ChatFormatting.AQUA).asWidget());
+
+        return widgets;
     }
 
-    private String formatTargetGravity() {
-        return String.format(Locale.ROOT, "%.3f", targetGravity);
-    }
-
-    private float parseTargetGravity(String value) {
-        try {
-            return Float.parseFloat(value);
-        } catch (NumberFormatException e) {
-            return targetGravity;
-        }
+    private long getEnergyInputPerSec() {
+        EnergyContainerList energy = getEnergyContainer();
+        return energy != null ? Math.max(0, energy.getInputPerSec()) : 0;
     }
 
     private void setTargetGravity(float value) {
         targetGravity = value;
         if (!isRemote()) {
+            getSyncDataHolder().markClientSyncFieldDirty("targetGravity");
             applyGravityToProvider();
         }
     }
@@ -169,35 +148,6 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
         manager.setGravityProviderValue(getPos(), targetGravity);
     }
 
-    private void addStatusText(List<Component> textList) {
-        if (!isFormed()) {
-            textList.add(Component.translatable("tfg.machine.unformed").withStyle(ChatFormatting.GRAY));
-            return;
-        }
-        if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
-        } else if (getEnergyInputPerSec() < computeEnergyPerTick()) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy").withStyle(ChatFormatting.RED));
-        } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
-            for (Component reason : recipeLogic.getFailureReasons()) {
-                textList.add(reason.copy().withStyle(ChatFormatting.RED));
-            }
-        } else {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
-        }
-
-        textList.add(Component.translatable("tfg.machine.higgs_emitter.radius",
-                FormattingUtil.formatNumbers(getRadius())).withStyle(ChatFormatting.AQUA));
-        textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
-                String.format("%,d", computeEnergyPerTick()))
-                .withStyle(ChatFormatting.AQUA));
-    }
-
-    private long getEnergyInputPerSec() {
-        EnergyContainerList energy = getEnergyContainer();
-        return energy != null ? Math.max(0, energy.getInputPerSec()) : 0;
-    }
-
     // ==================== Lifecycle ====================
 
     @Override
@@ -206,8 +156,8 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         if (!(getLevel() instanceof ServerLevel serverLevel))
             return;
 
@@ -232,9 +182,11 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
-        removeProvider();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
+        if (DEFAULT_STRUCTURE.equals(name)) {
+            removeProvider();
+        }
     }
 
     @Override
@@ -244,7 +196,7 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     }
 
     @Override
-    public void onMachineRemoved() {
+    public void onMachineDestroyed() {
         removeProvider();
     }
 
@@ -266,7 +218,7 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
 
     @Override
     public BlockPos getPos() {
-        return super.getPos();
+        return super.getBlockPos();
     }
 
     @Override

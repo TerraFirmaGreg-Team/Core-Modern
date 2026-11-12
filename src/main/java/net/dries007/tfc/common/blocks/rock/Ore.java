@@ -34,25 +34,7 @@ public enum Ore
     SPHALERITE(true),
     TETRAHEDRITE(true),
     BITUMINOUS_COAL(false),
-    LIGNITE(false),
-    GYPSUM(false),
-    GRAPHITE(false),
-    SULFUR(false),
-    CINNABAR(false),
-    CRYOLITE(false),
-    SALTPETER(false),
-    SYLVITE(false),
-    BORAX(false),
-    HALITE(false),
-    AMETHYST(false),
-    DIAMOND(false),
-    EMERALD(false),
-    LAPIS_LAZULI(false),
-    OPAL(false),
-    PYRITE(false),
-    RUBY(false),
-    SAPPHIRE(false),
-    TOPAZ(false);
+    LIGNITE(false);
 
     private final boolean graded;
 

@@ -24,6 +24,9 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     private static final String AAAPARTICLES_GAME_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinGameRenderer";
     private static final String AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinItemInHandRenderer";
 
+    private static final String GREGTECH_MIXIN_JSON = "gtceu.mixins.json";
+    private static final String GREGTECH_ITEMSTACK_MIXIN = "com.gregtechceu.gtceu.core.mixins.ItemStackMixin";
+
     /**
      * acceptTargets fires once after all configs have been collected but before any have been applied,
      * so we can safely modify the mixin configs at this point.
@@ -52,6 +55,12 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
                     currentMixin = AAAPARTICLES_GAME_RENDERER_MIXIN;
                     removeMixin(config, currentMixin);
                     currentMixin = AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN;
+                    removeMixin(config, currentMixin);
+                }
+
+                if (GREGTECH_MIXIN_JSON.equals(currentConfig)) {
+                    // Removes spoilage
+                    currentMixin = GREGTECH_ITEMSTACK_MIXIN;
                     removeMixin(config, currentMixin);
                 }
             }

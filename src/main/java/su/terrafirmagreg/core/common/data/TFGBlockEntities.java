@@ -18,6 +18,7 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.world.level.block.Block;
 
+import appeng.blockentity.AEBaseBlockEntity;
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
 import electrolyte.greate.content.kinetics.base.TieredSingleAxisRotatingVisual;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -30,11 +31,20 @@ import su.terrafirmagreg.core.common.block.create.CombustionEngineBlockEntity;
 import su.terrafirmagreg.core.common.block.create.CombustionEngineRenderer;
 import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
+import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderBlockEntity;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 
 public class TFGBlockEntities {
     public static void init() {
     }
+
+    public static final BlockEntityEntry<StorageProviderBlockEntity> STORAGE_PROVIDER = TFGCore.REGISTRATE.blockEntity("storage_provider", StorageProviderBlockEntity::new)
+            .validBlock(TFGBlocks.STORAGE_PROVIDER)
+            .onRegister(type -> {
+                TFGBlocks.STORAGE_PROVIDER.get().setBlockEntity(StorageProviderBlockEntity.class, type, null, null);
+                AEBaseBlockEntity.registerBlockEntityItem(type, TFGBlocks.STORAGE_PROVIDER.asItem());
+            })
+            .register();
 
     public static final BlockEntityEntry<GTGreenhousePortBlockEntity> GT_GREENHOUSE_PORT = TFGCore.REGISTRATE.blockEntity("gt_greenhouse_port", GTGreenhousePortBlockEntity::new)
             .validBlocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.STAINLESS_STEEL).get(Greenhouse.BlockType.PORT)::get,
@@ -67,6 +77,10 @@ public class TFGBlockEntities {
 
     public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)
             .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
+            .register();
+
+    public static final BlockEntityEntry<TierLockedAcidBlockEntity> TIER_LOCKED_ACID_BLOCK_ENTITY = TFGCore.REGISTRATE.blockEntity("tier_locked_acid_block", TierLockedAcidBlockEntity::new)
+            .validBlock(TFGBlocks_Venus.VENUS_HORNFELS)
             .register();
 
     @SuppressWarnings("unchecked")

@@ -32,7 +32,7 @@ public class GTRepairHelper {
                 continue;
 
             MaterialEntry entry = ChemicalHelper.getMaterialEntry(stack.getItem());
-            if (entry != null && !entry.isEmpty() && entry.tagPrefix() == TFGTagPrefix.repairKit) {
+            if (entry != null && entry.tagPrefix() == TFGTagPrefix.repairKit) {
                 hasRepairKit = true;
                 repairPercent = stack.hasTag() && stack.getTag().contains("RepairPercent")
                         ? sanitizeRepairPercent(stack.getTag().getFloat("RepairPercent"))

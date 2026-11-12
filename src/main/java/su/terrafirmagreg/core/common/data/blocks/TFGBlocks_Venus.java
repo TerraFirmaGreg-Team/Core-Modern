@@ -17,8 +17,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.Tags;
 
-import earth.terrarium.adastra.common.tags.ModBlockTags;
-
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.TierLockedAcidBlock;
 import su.terrafirmagreg.core.common.data.TFGTags;
@@ -122,7 +120,19 @@ public class TFGBlocks_Venus {
                     .explosionResistance(1200)
                     .requiresCorrectToolForDrops()
                     .pushReaction(PushReaction.IGNORE))
-            .tag(ModBlockTags.VENUS_STONE_REPLACEABLES, BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE, CustomTags.NEEDS_NEUTRONIUM_TOOL)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE, CustomTags.NEEDS_NEUTRONIUM_TOOL)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<Block> VENUS_NEUTRALIZED_HORNFELS = TFGCore.REGISTRATE.block("venus_neutralized_hornfels", Block::new)
+            .properties(p -> p
+                    .mapColor(MapColor.COLOR_YELLOW)
+                    .sound(SoundType.NETHER_BRICKS)
+                    .strength(0.5F)
+                    .requiresCorrectToolForDrops())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .build()

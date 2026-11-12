@@ -8,55 +8,55 @@
         "decoration": {
             "blocks": [
                 {
-                    "with": [{"block": "tfc:ore/sapphire/rhyolite"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/rhyolite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/basalt"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/basalt"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/andesite"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/andesite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/dacite"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/dacite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/granite"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/granite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/diorite"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/diorite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/gabbro"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/gabbro"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/quartzite"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/quartzite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/slate"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/slate"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/phyllite"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/phyllite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/schist"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/schist"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/gneiss"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/gneiss"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/sapphire/marble"}],
+                    "with": [{"block": "gtceu:sapphire_ore"}],
                     "replace": ["tfc:rock/raw/marble"]
                 }
             ],

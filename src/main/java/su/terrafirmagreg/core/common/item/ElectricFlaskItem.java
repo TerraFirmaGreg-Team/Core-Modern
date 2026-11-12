@@ -8,11 +8,10 @@ import org.labellum.mc.waterflasks.item.FlaskItem;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.CombinedCapabilityProvider;
+import com.gregtechceu.gtceu.api.capability.GTCapability;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
-import com.gregtechceu.gtceu.api.capability.forge.GTCapability;
 import com.gregtechceu.gtceu.api.item.capability.ElectricItem;
-import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
@@ -95,7 +94,7 @@ public class ElectricFlaskItem extends FlaskItem {
         super.appendHoverText(stack, level, tooltip, flag);
         final IElectricItem electric = GTCapabilityHelper.getElectricItem(stack);
         if (electric != null) {
-            ElectricStats.addCurrentChargeTooltip(tooltip, electric.getCharge(), electric.getMaxCharge(), electric.getTier(), false);
+            IElectricItem.addCurrentChargeTooltip(tooltip, electric.getCharge(), electric.getMaxCharge(), electric.getTier(), false);
         }
     }
 }

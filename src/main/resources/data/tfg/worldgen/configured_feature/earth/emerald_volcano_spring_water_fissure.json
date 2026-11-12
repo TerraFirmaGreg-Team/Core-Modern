@@ -8,55 +8,55 @@
         "decoration": {
             "blocks": [
                 {
-                    "with": [{"block": "tfc:ore/emerald/rhyolite"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/rhyolite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/basalt"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/basalt"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/andesite"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/andesite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/dacite"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/dacite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/granite"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/granite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/diorite"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/diorite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/gabbro"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/gabbro"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/quartzite"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/quartzite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/slate"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/slate"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/phyllite"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/phyllite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/schist"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/schist"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/gneiss"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/gneiss"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/emerald/marble"}],
+                    "with": [{"block": "minecraft:emerald_ore"}],
                     "replace": ["tfc:rock/raw/marble"]
                 }
             ],

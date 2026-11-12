@@ -22,7 +22,7 @@ import su.terrafirmagreg.core.common.environment.IGreenhouseReceiver;
 @Mixin(value = TapBlockEntityProvider.class, remap = false)
 public abstract class TapBlockEntityProviderMixin {
 
-    @Inject(method = "appendServerData(Lnet/minecraft/nbt/CompoundTag;Lsnownee/jade/api/BlockAccessor;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;putFloat(Ljava/lang/String;F)V", ordinal = 3))
+    @Inject(method = "appendServerData(Lnet/minecraft/nbt/CompoundTag;Lsnownee/jade/api/BlockAccessor;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;putFloat(Ljava/lang/String;F)V", ordinal = 3, remap = true))
     private void tfg$injectGreenhouseValidityOnAppendServer(CompoundTag tag, BlockAccessor accessor, CallbackInfo ci, @Local(name = "compound") CompoundTag compound) {
         compound.putBoolean("inValidGreenhouse", accessor.getBlockEntity() instanceof IGreenhouseReceiver receiver && receiver.tfg$isInsideValidGreenhouse());
     }

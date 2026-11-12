@@ -1,6 +1,13 @@
 repositories {
     mavenLocal()
     mavenCentral()
+    flatDir {
+        name('Local libs')
+        dirs(rootProject.file('libs'))
+        content {
+            includeGroup('local')
+        }
+    }
     maven {
         name('Mixin maven')
         url('https://maven.bawnorton.com/releases')
@@ -24,7 +31,7 @@ repositories {
     }
     maven {
         name('Squiddev maven')
-        url('https://squiddev.cc/maven')
+        url('https://maven.squiddev.cc')
         content {
             includeGroup('cc.tweaked')
         }
@@ -43,6 +50,22 @@ repositories {
         url('https://modmaven.dev')
         content {
             includeGroup('com.tterrag.registrate')
+        }
+    }
+    maven {
+        name('GTCEu Maven')
+        url('https://maven.gtceu.com')
+        content {
+            includeGroup('com.gregtechceu.gtceu')
+            includeGroup('brachy.modularui')
+        }
+    }
+    maven {
+        name('Expandium')
+        url('https://repo.expandium.net/releases')
+        content {
+            includeGroup('appeng')
+            includeGroup('de.mari_023')
         }
     }
 }

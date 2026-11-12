@@ -6,8 +6,6 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
-import net.minecraft.resources.ResourceLocation;
-
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
@@ -52,7 +50,6 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         for (var entry : GTRegistries.RECIPE_TYPES.entries()) {
             event.register(entry.getKey(), TFGRecipeSchema.SCHEMA);
         }
-        event.register(ResourceLocation.parse("gtceu:greenhouse"), TFGRecipeSchema.SCHEMA);
         event.register(TFGCore.id("item_repair"), ItemRepairRecipeSchema.SCHEMA);
         event.register(TFGCore.id("gas_burner_fuel"), GasBurnerFuelRecipeSchema.SCHEMA);
     }

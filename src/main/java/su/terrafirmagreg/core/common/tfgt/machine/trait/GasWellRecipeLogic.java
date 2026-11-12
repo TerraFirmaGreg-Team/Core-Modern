@@ -57,11 +57,11 @@ public class GasWellRecipeLogic {
     public void tick() {
         if (!(machine.getLevel() instanceof ServerLevel serverLevel))
             return;
-        if (!machine.isFormed() || machine.getMultiblockState().hasError())
+        if (!machine.isFormed() || machine.getDefaultPatternState().hasErrors())
             return;
 
-        int chunkX = SectionPos.blockToSectionCoord(machine.getPos().getX());
-        int chunkZ = SectionPos.blockToSectionCoord(machine.getPos().getZ());
+        int chunkX = SectionPos.blockToSectionCoord(machine.getBlockPos().getX());
+        int chunkZ = SectionPos.blockToSectionCoord(machine.getBlockPos().getZ());
 
         var savedData = getSavedData(serverLevel);
         var entry = savedData.getFluidVeinWorldEntry(chunkX, chunkZ);

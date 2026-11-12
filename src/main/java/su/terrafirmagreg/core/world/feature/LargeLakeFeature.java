@@ -20,7 +20,6 @@ public class LargeLakeFeature extends Feature<LargeLakeConfig> {
     private final int maxSizeX = 24;
     private final int maxSizeY = 12;
     private final int maxSizeZ = 24;
-    private final int depth = 6;
 
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
@@ -34,6 +33,7 @@ public class LargeLakeFeature extends Feature<LargeLakeConfig> {
         WorldGenLevel level = context.level();
         RandomSource random = context.random();
         LargeLakeConfig config = context.config();
+        final int depth = config.depth();
 
         if (pos.getY() <= level.getMinBuildHeight() + depth) {
             return false;
@@ -105,14 +105,14 @@ public class LargeLakeFeature extends Feature<LargeLakeConfig> {
                             if (this.canReplaceBlock(level.getBlockState(offsetPos))) {
 
                                 boolean isAboveFluidLevel = y >= depth;
-                                level.setBlock(offsetPos, isAboveFluidLevel ? AIR : fluidState, Block.UPDATE_CLIENTS);
+                                level.setBlock(offsetPos, isAboveFluidLevel ? AIR : fluidState, Block.UPDATE_ALL);
 
                                 if (isAboveFluidLevel) {
                                     // check if the block above needs hardening
                                     BlockPos abovePos = pos.offset(x, y + 1, z);
                                     BlockState aboveState = level.getBlockState(abovePos);
                                     if (!aboveState.isAir()) {
-                                        level.setBlock(abovePos, rockData.getRock(pos).hardened().defaultBlockState(), Block.UPDATE_CLIENTS);
+                                        level.setBlock(abovePos, rockData.getRock(pos).hardened().defaultBlockState(), Block.UPDATE_ALL);
                                     }
 
                                     level.scheduleTick(offsetPos, AIR.getBlock(), 0);
@@ -147,7 +147,7 @@ public class LargeLakeFeature extends Feature<LargeLakeConfig> {
 
                             if ((isEncased || stateAt.isSolid()) && !stateAt.is(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE)) {
                                 BlockPos offsetPos = pos.offset(x, y, z);
-                                level.setBlock(offsetPos, barrierState, Block.UPDATE_CLIENTS);
+                                level.setBlock(offsetPos, barrierState, Block.UPDATE_ALL);
                                 this.markAboveForPostProcessing(level, offsetPos);
                             }
                         }
