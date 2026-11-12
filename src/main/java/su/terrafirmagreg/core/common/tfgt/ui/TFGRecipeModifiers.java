@@ -34,7 +34,7 @@ public class TFGRecipeModifiers {
 
         widget.textComponents.child(Text.lang("tfg.recipe.budding_charge", charge).asWidget());
 
-        Flow row = Flow.row();
+        Flow row = Flow.row().coverChildren().childPadding(2);
         row.child(Text.lang("tfg.recipe.budding_max_tier_label",
                 Component.translatable("tfg.budding_tier." + tier)).asWidget());
 

@@ -342,7 +342,6 @@ public final class TFGBlocks {
 
     public static final BlockEntry<StorageProviderBlock> STORAGE_PROVIDER = TFGCore.REGISTRATE.block("storage_provider", p -> new StorageProviderBlock())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();

@@ -208,6 +208,7 @@ public class TFGMachines {
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
             .machine("railgun_ammo_loader", TFGMachineInstanceFactories.RAILGUN_AMMO_LOADER)
+            .tier(GTValues.ULV)
             .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
                     GTCEu.id("block/overlay/machine/" + GTMachineModels.OVERLAY_ITEM_HATCH_INPUT))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
@@ -296,7 +297,7 @@ public class TFGMachines {
                             FormattingUtil
                                     .formatNumbers(EnergyHatchPartMachine.getHatchEnergyCapacity(GTValues.HV, 4))),
                     Component.translatable("gtceu.machine.energy_hatch.output_hi_amp.tooltip"))
-            .overlayTieredHullModel("energy_output_hatch_4a")
+            .overlayTieredHullModel(GTCEu.id("block/machine/part/energy_output_hatch_4a"))
             .tier(GTValues.HV)
             .register();
 
@@ -313,7 +314,7 @@ public class TFGMachines {
                             FormattingUtil
                                     .formatNumbers(EnergyHatchPartMachine.getHatchEnergyCapacity(GTValues.HV, 16))),
                     Component.translatable("gtceu.machine.energy_hatch.output_hi_amp.tooltip"))
-            .overlayTieredHullModel("energy_output_hatch_16a")
+            .overlayTieredHullModel(GTCEu.id("block/machine/part/energy_output_hatch_16a"))
             .tier(GTValues.HV)
             .register();
 

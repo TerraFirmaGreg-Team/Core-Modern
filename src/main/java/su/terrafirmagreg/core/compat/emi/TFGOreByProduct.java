@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.compat.emi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableList;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -15,23 +16,26 @@ import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidEntryList;
-import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidStackList;
-import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidTagList;
-import com.gregtechceu.gtceu.integration.xei.entry.item.ItemEntryList;
-import com.gregtechceu.gtceu.integration.xei.entry.item.ItemStackList;
-import com.gregtechceu.gtceu.integration.xei.entry.item.ItemTagList;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 
+import brachy.modularui.integration.recipeviewer.entry.fluid.FluidEntryList;
+import brachy.modularui.integration.recipeviewer.entry.fluid.FluidStackList;
+import brachy.modularui.integration.recipeviewer.entry.fluid.FluidTagList;
+import brachy.modularui.integration.recipeviewer.entry.item.ItemEntryList;
+import brachy.modularui.integration.recipeviewer.entry.item.ItemStackList;
+import brachy.modularui.integration.recipeviewer.entry.item.ItemTagList;
+import brachy.modularui.screen.RichTooltip;
 import electrolyte.greate.registry.EncasedFans;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
+import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
@@ -43,8 +47,11 @@ public class TFGOreByProduct {
     private static ImmutableList<ItemStack> ALWAYS_MACHINES;
 
     private final Int2ObjectMap<Content> chances = new Int2ObjectOpenHashMap<>();
+    @Getter
     protected final List<ItemEntryList> itemInputs = new ArrayList<>();
+    @Getter
     protected final NonNullList<ItemStack> itemOutputs = NonNullList.create();
+    @Getter
     protected final List<FluidEntryList> fluidInputs = new ArrayList<>();
     private boolean hasDirectSmelt = false;
     private boolean hasChemBath = false;
@@ -89,9 +96,9 @@ public class TFGOreByProduct {
         List<Material> separatedInto = property.getSeparatedInto();
 
         ItemTagList oreStacks = new ItemTagList();
-        oreStacks.add(ChemicalHelper.getTag(TFGTagPrefix.poorRawOre, material), 1, null);
-        oreStacks.add(ChemicalHelper.getTag(TagPrefix.rawOre, material), 1, null);
-        oreStacks.add(ChemicalHelper.getTag(TFGTagPrefix.richRawOre, material), 1, null);
+        addOreTag(oreStacks, TFGTagPrefix.poorRawOre, material);
+        addOreTag(oreStacks, TagPrefix.rawOre, material);
+        addOreTag(oreStacks, TFGTagPrefix.richRawOre, material);
         itemInputs.add(oreStacks);
 
         // set up machines as inputs
@@ -113,7 +120,7 @@ public class TFGOreByProduct {
         itemInputs.add(ItemStackList.of(simpleWashers));
         itemInputs.add(ItemStackList.of(simpleWashers));
 
-        if (!washedIn.first().isNull()) {
+        if (property.hasWashedInFluid()) {
             hasChemBath = true;
             addToInputs(TFGMultiMachines.ORE_BATH.asStack());
         } else {
@@ -133,7 +140,8 @@ public class TFGOreByProduct {
         }
 
         for (TagPrefix prefix : IN_PROCESSING_STEPS) {
-            itemInputs.add(ItemTagList.of(ChemicalHelper.getTag(prefix, material), 1, null));
+            TagKey<Item> tag = ChemicalHelper.getTag(prefix, material);
+            itemInputs.add(tag != null ? ItemTagList.of(tag, 1, null) : ItemStackList.of(ItemStack.EMPTY));
         }
         // total number of inputs added
         currentSlot += 21;
@@ -144,7 +152,7 @@ public class TFGOreByProduct {
         // direct smelt
         if (hasDirectSmelt) {
             ItemStack smeltingResult;
-            Material smeltingMaterial = property.getDirectSmeltResult().isNull() ? material : property.getDirectSmeltResult();
+            Material smeltingMaterial = property.getDirectSmeltResult() == null ? material : property.getDirectSmeltResult();
             if (smeltingMaterial.hasProperty(PropertyKey.INGOT)) {
                 smeltingResult = ChemicalHelper.get(TagPrefix.ingot, smeltingMaterial);
             } else if (smeltingMaterial.hasProperty(PropertyKey.GEM)) {
@@ -165,22 +173,22 @@ public class TFGOreByProduct {
         } else {
             addToOutputs(byproducts[0], TagPrefix.dust, 1);
         }
-        addChance(1400, 0);
+        addChance(1400);
 
         // macerate crushed -> impure
         addToOutputs(material, TagPrefix.dustImpure, 1);
         addToOutputs(byproducts[0], TagPrefix.dust, byproductMultiplier);
-        addChance(1400, 0);
+        addChance(1400);
 
         // centrifuge impure -> dust
         addToOutputs(material, TagPrefix.dust, 1);
         addToOutputs(byproducts[0], TagPrefix.dust, 1);
-        addChance(1111, 0);
+        addChance(1111);
 
         // ore wash crushed -> crushed purified
         addToOutputs(material, TagPrefix.crushedPurified, 1);
         addToOutputs(byproducts[0], TagPrefix.dust, 1);
-        addChance(3333, 0);
+        addChance(3333);
         FluidTagList tagList = new FluidTagList();
         tagList.add(GTMaterials.Water.getFluidTag(), 1000, null);
         tagList.add(GTMaterials.DistilledWater.getFluidTag(), 100, null);
@@ -189,22 +197,22 @@ public class TFGOreByProduct {
         // TC crushed/crushed purified -> centrifuged
         addToOutputs(material, TagPrefix.crushedRefined, 1);
         addToOutputs(byproducts[1], TagPrefix.dust, byproductMultiplier);
-        addChance(3333, 0);
+        addChance(3333);
 
         // macerate centrifuged -> dust
         addToOutputs(material, TagPrefix.dust, 1);
         addToOutputs(byproducts[2], TagPrefix.dust, 1);
-        addChance(1400, 0);
+        addChance(1400);
 
         // macerate crushed purified -> purified
         addToOutputs(material, TagPrefix.dustPure, 1);
         addToOutputs(byproducts[1], TagPrefix.dust, 1);
-        addChance(1400, 0);
+        addChance(1400);
 
         // centrifuge purified -> dust
         addToOutputs(material, TagPrefix.dust, 1);
         addToOutputs(byproducts[1], TagPrefix.dust, 1);
-        addChance(1111, 0);
+        addChance(1111);
 
         // cauldron/simple washer
         addToOutputs(material, TagPrefix.crushed, 1);
@@ -220,7 +228,8 @@ public class TFGOreByProduct {
         if (hasChemBath) {
             addToOutputs(material, TagPrefix.crushedPurified, 1);
             addToOutputs(byproducts[3], TagPrefix.dust, byproductMultiplier);
-            addChance(7000, 0);
+            addChance(7000);
+            // noinspection DataFlowIssue (hasWashedInFluid() guarantees non-null)
             fluidInputs.add(FluidTagList.of(washedIn.first().getFluidTag(), washedIn.secondInt(), null));
         } else {
             addEmptyOutputs(2);
@@ -237,9 +246,9 @@ public class TFGOreByProduct {
 
             addToOutputs(material, TagPrefix.dust, 1);
             addToOutputs(separatedInto.get(0), TagPrefix.dust, 1);
-            addChance(1000, 0);
+            addChance(1000);
             addToOutputs(separatedStack2);
-            addChance(prefix == TagPrefix.dust ? 500 : 2000, 0);
+            addChance(prefix == TagPrefix.dust ? 500 : 2000);
         } else {
             addEmptyOutputs(3);
         }
@@ -251,23 +260,23 @@ public class TFGOreByProduct {
             ItemStack chippedStack = ChemicalHelper.get(TagPrefix.gemChipped, material);
 
             addToOutputs(material, TagPrefix.gemExquisite, 1);
-            addGemChance(300, 0, 500, 0, highOutput);
+            addGemChance(300, 500, highOutput);
             addToOutputs(material, TagPrefix.gemFlawless, 1);
-            addGemChance(1000, 0, 1500, 0, highOutput);
+            addGemChance(1000, 1500, highOutput);
             addToOutputs(material, TagPrefix.gem, 1);
-            addGemChance(3500, 0, 5000, 0, highOutput);
+            addGemChance(3500, 5000, highOutput);
             addToOutputs(material, TagPrefix.dustPure, 1);
-            addGemChance(5000, 0, 2500, 0, highOutput);
+            addGemChance(5000, 2500, highOutput);
 
             if (!flawedStack.isEmpty()) {
                 addToOutputs(flawedStack);
-                addGemChance(2500, 0, 2000, 0, highOutput);
+                addGemChance(2500, 2000, highOutput);
             } else {
                 addEmptyOutputs(1);
             }
             if (!chippedStack.isEmpty()) {
                 addToOutputs(chippedStack);
-                addGemChance(3500, 0, 3000, 0, highOutput);
+                addGemChance(3500, 3000, highOutput);
             } else {
                 addEmptyOutputs(1);
             }
@@ -276,18 +285,14 @@ public class TFGOreByProduct {
         }
     }
 
-    public void getTooltip(int slotIndex, List<Component> tooltips) {
-        if (chances.containsKey(slotIndex)) {
-            Content entry = chances.get(slotIndex);
-            float chance = 100 * (float) entry.chance / entry.maxChance;
-            if (entry.tierChanceBoost != 0) {
-                float boost = entry.tierChanceBoost / 100.0f;
-                tooltips.add(FormattingUtil.formatPercentage2Places("gtceu.gui.content.chance_base", chance));
-                tooltips.add(FormattingUtil.formatPercentage2Places("gtceu.gui.content.chance_tier_boost_plus", boost));
-            } else {
-                tooltips.add(FormattingUtil.formatPercentage2Places("gtceu.gui.content.chance_no_boost", chance));
+    public Consumer<RichTooltip> getTooltip(int slotIndex) {
+        return tooltip -> {
+            if (chances.containsKey(slotIndex)) {
+                Content entry = chances.get(slotIndex);
+                float chance = 100 * (float) entry.chance() / entry.maxChance();
+                tooltip.addLine(FormattingUtil.formatPercentage2Places("gtceu.gui.content.chance_no_boost", chance));
             }
-        }
+        };
     }
 
     public Content getChance(int slot) {
@@ -329,18 +334,20 @@ public class TFGOreByProduct {
         itemInputs.add(ItemStackList.of(stack));
     }
 
-    private void addChance(int base, int tier) {
+    private void addChance(int base) {
         // this is solely for the chance overlay and tooltip, neither of which care about the ItemStack
         chances.put(currentSlot - 1,
-                new Content(ItemStack.EMPTY, base, ChanceLogic.getMaxChancedValue(), tier));
+                new Content(ItemStack.EMPTY, base, ChanceLogic.getMaxChancedValue()));
     }
 
     // make the code less :weary:
-    private void addGemChance(int baseLow, int tierLow, int baseHigh, int tierHigh, boolean high) {
-        if (high) {
-            addChance(baseHigh, tierHigh);
-        } else {
-            addChance(baseLow, tierLow);
-        }
+    private void addGemChance(int baseLow, int baseHigh, boolean high) {
+        addChance(high ? baseHigh : baseLow);
+    }
+
+    private static void addOreTag(ItemTagList list, TagPrefix prefix, Material material) {
+        TagKey<Item> tag = ChemicalHelper.getTag(prefix, material);
+        if (tag != null)
+            list.add(tag, 1, null);
     }
 }

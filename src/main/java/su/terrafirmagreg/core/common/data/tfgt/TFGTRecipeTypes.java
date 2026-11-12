@@ -7,8 +7,8 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.gui.ProgressBarTextureSet;
 import com.gregtechceu.gtceu.api.recipe.gui.RecipeUIModifier;
-import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.api.sound.ExistingSoundEntry;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 import com.gregtechceu.gtceu.common.recipe.gui.GTRecipeUIModifiers;
@@ -131,9 +131,7 @@ public class TFGTRecipeTypes {
             .setMaxSize(IO.OUT, HeatRecipeCapability.CAP, 1)
             .UI(builder -> builder
                     .setProgressBar(GTGuiTextures.PROGRESS_CRACKING)
-                    .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.ATOMIC_OVERLAY_1)
-                    .addRecipeUIModifier(RecipeUIModifier.textLine(Text.lang("tfg.nuclear.skip"))
-                            .then(TFGRecipeModifiers.HEAT_INFO)))
+                    .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.ATOMIC_OVERLAY_1))
             .setSound(GTSoundEntries.BATH);
 
     public static final GTRecipeType SMR_GENERATOR = GTRecipeTypes

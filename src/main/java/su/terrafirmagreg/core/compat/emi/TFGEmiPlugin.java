@@ -4,15 +4,16 @@ import java.util.Arrays;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.util.Plantable;
-import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 
-import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,10 +31,10 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import electrolyte.greate.compat.gtceu.common.data.machines.GreateMachines;
 import electrolyte.greate.registry.CrushingWheels;
 import electrolyte.greate.registry.EncasedFans;
 import electrolyte.greate.registry.MechanicalPresses;
-import electrolyte.greate.registry.Millstones;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
@@ -78,8 +79,8 @@ public class TFGEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory GREENHOUSE_PLANTABLE = new EmiRecipeCategory(TFGCore.id("greenhouse_plantable"),
             EmiStack.of(FLBlocks.LARGE_PLANTER.get()));
 
-    public static final EmiRecipeCategory ORE_PROCESSING_DIAGRAM = new EmiRecipeCategory(
-            TFGCore.id("ore_processing_diagram"), EmiStack.of(TFCItems.ORE_POWDERS.get(Ore.HEMATITE).get()));
+    public static final EmiRecipeCategory ORE_PROCESSING_DIAGRAM = new EmiRecipeCategory(TFGCore.id("ore_processing_diagram"),
+            EmiStack.of(ChemicalHelper.get(TagPrefix.crushed, GTMaterials.Hematite)));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -192,9 +193,9 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(CrushingWheels.CRUSHING_WHEELS[1].get().asItem()));
         emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(EncasedFans.FANS[1].get().asItem()));
         emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(MechanicalPresses.MECHANICAL_PRESSES[1].get().asItem()));
-        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(Millstones.MILLSTONES[1].get().asItem()));
+        emiRegistry.addWorkstation(ORE_PROCESSING_DIAGRAM, EmiStack.of(GreateMachines.MILLSTONES[1].asStack()));
 
-        for (Material mat : GTCEuAPI.materialManager.getRegisteredMaterials()) {
+        for (Material mat : GTRegistries.MATERIALS) {
             if (mat.hasProperty(PropertyKey.ORE) && !mat.hasFlag(MaterialFlags.NO_ORE_PROCESSING_TAB)) {
                 emiRegistry.addRecipe(new EmiOreProcessing(mat));
             }
