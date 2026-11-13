@@ -592,7 +592,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     }
 
     @Override
-    public boolean tfg$isInsideValidCellar() {
+    public boolean isInsideValidCellar() {
         return insideValidCellar;
     }
 

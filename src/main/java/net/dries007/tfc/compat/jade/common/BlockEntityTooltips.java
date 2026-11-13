@@ -226,7 +226,7 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip BARREL = (level, state, pos, entity, tooltip) -> {
         if (state.getBlock() instanceof BarrelBlock && entity instanceof BarrelBlockEntity barrel)
         {
-            if (barrel.tfg$isInsideValidCellar())
+            if (barrel.isInsideValidCellar())
             {
                 tooltip.accept(Component.translatable("firmalife.cellar.valid_block").withStyle(ChatFormatting.GREEN));
             }

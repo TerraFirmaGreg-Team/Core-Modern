@@ -162,10 +162,6 @@ public class BarrelBlock extends SealableDeviceBlock
     @Override
     protected void addExtraInfo(List<Component> tooltip, CompoundTag inventoryTag)
     {
-//        if (inventoryTag.getBoolean("insideValidCellar"))
-//        {
-//            tooltip.add(Component.translatable("tfg.tooltip.firmalife_inside_valid_cellar").withStyle(ChatFormatting.GREEN));
-//        }
         final FluidTank tank = new FluidTank(TFCConfig.SERVER.barrelCapacity.get());
         tank.readFromNBT(inventoryTag.getCompound("tank"));
         if (!tank.isEmpty())

@@ -10,5 +10,5 @@ import com.eerussianguy.firmalife.common.blockentities.ClimateReceiver;
  *  </u></p>
  */
 public interface ICellarReceiver extends ClimateReceiver {
-    boolean tfg$isInsideValidCellar();
+    boolean isInsideValidCellar();
 }
