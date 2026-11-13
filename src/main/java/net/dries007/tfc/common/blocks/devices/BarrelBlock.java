@@ -253,9 +253,12 @@ public class BarrelBlock extends SealableDeviceBlock
     @Override
     protected void beforeRemove(InventoryBlockEntity<?> entity) {
         // If the barrel is sealed and its contained food item has the CELLARED trait, remove it when the barrel is broken
-        if (entity instanceof BarrelBlockEntity barrel && barrel.getBlockState().getValue(SEALED))
+        if (entity instanceof BarrelBlockEntity barrel)
         {
-            barrel.removeCellaredTrait();
+            if (barrel.getBlockState().getValue(SEALED))
+                barrel.removeCellaredTrait();
+
+            barrel.insideValidCellar = false;
         }
         super.beforeRemove(entity);
     }
