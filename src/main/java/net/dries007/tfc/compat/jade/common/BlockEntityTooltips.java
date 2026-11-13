@@ -6,45 +6,17 @@
 
 package net.dries007.tfc.compat.jade.common;
 
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import javax.annotation.Nullable;
-
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.common.blockentities.*;
-import net.dries007.tfc.common.blocks.*;
-import net.dries007.tfc.common.blocks.devices.*;
-import net.dries007.tfc.common.recipes.ScrapingRecipe;
-import net.dries007.tfc.config.TemperatureDisplayStyle;
-import net.dries007.tfc.util.tracker.WeatherHelpers;
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FireBlock;
-import net.minecraft.world.level.block.state.BlockState;
-
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
+import net.dries007.tfc.common.blocks.*;
 import net.dries007.tfc.common.blocks.crop.CropBlock;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
+import net.dries007.tfc.common.blocks.devices.*;
 import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
-import net.dries007.tfc.common.blocks.rotation.AbstractShaftAxleBlock;
-import net.dries007.tfc.common.blocks.rotation.ClutchBlock;
-import net.dries007.tfc.common.blocks.rotation.CrankshaftBlock;
-import net.dries007.tfc.common.blocks.rotation.EncasedAxleBlock;
-import net.dries007.tfc.common.blocks.rotation.GearBoxBlock;
-import net.dries007.tfc.common.blocks.rotation.HandWheelBlock;
-import net.dries007.tfc.common.blocks.rotation.WaterWheelBlock;
-import net.dries007.tfc.common.blocks.rotation.WindmillBlock;
+import net.dries007.tfc.common.blocks.rotation.*;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.common.blocks.wood.TFCLoomBlock;
 import net.dries007.tfc.common.blocks.wood.TFCSaplingBlock;
@@ -59,12 +31,35 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.common.recipes.BarrelRecipe;
 import net.dries007.tfc.common.recipes.BloomeryRecipe;
 import net.dries007.tfc.common.recipes.LoomRecipe;
+import net.dries007.tfc.common.recipes.ScrapingRecipe;
 import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.util.LampFuel;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.rotation.Rotation;
+import net.dries007.tfc.util.tracker.WeatherHelpers;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Common tooltips that can be displayed for various block entities via external sources.
@@ -231,6 +226,10 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip BARREL = (level, state, pos, entity, tooltip) -> {
         if (state.getBlock() instanceof BarrelBlock && entity instanceof BarrelBlockEntity barrel)
         {
+            if (barrel.isInsideValidCellar())
+            {
+                tooltip.accept(Component.translatable("firmalife.cellar.valid_block").withStyle(ChatFormatting.GREEN));
+            }
             if (state.getValue(BarrelBlock.SEALED))
             {
                 final long tickLeft = barrel.getRemainingTicks();

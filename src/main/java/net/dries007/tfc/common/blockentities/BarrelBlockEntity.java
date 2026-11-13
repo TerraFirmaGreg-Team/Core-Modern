@@ -6,9 +6,29 @@
 
 package net.dries007.tfc.common.blockentities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.eerussianguy.firmalife.common.blockentities.ClimateType;
+import net.dries007.tfc.client.TFCSounds;
+import net.dries007.tfc.client.particle.FluidParticleOption;
+import net.dries007.tfc.client.particle.TFCParticles;
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blocks.devices.BarrelBlock;
+import net.dries007.tfc.common.capabilities.*;
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.size.IItemSize;
+import net.dries007.tfc.common.capabilities.size.ItemSizeManager;
+import net.dries007.tfc.common.capabilities.size.Size;
+import net.dries007.tfc.common.capabilities.size.Weight;
+import net.dries007.tfc.common.container.BarrelContainer;
+import net.dries007.tfc.common.fluids.FluidHelpers;
+import net.dries007.tfc.common.recipes.BarrelRecipe;
+import net.dries007.tfc.common.recipes.SealedBarrelRecipe;
+import net.dries007.tfc.common.recipes.TFCRecipeTypes;
+import net.dries007.tfc.common.recipes.inventory.EmptyInventory;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.CalendarTransaction;
+import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -38,38 +58,14 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import su.terrafirmagreg.core.common.data.TFGFoodTraits;
+import su.terrafirmagreg.core.common.environment.ICellarReceiver;
 
-import net.dries007.tfc.client.TFCSounds;
-import net.dries007.tfc.client.particle.FluidParticleOption;
-import net.dries007.tfc.client.particle.TFCParticles;
-import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blocks.devices.BarrelBlock;
-import net.dries007.tfc.common.capabilities.Capabilities;
-import net.dries007.tfc.common.capabilities.DelegateFluidHandler;
-import net.dries007.tfc.common.capabilities.DelegateItemHandler;
-import net.dries007.tfc.common.capabilities.FluidTankCallback;
-import net.dries007.tfc.common.capabilities.InventoryFluidTank;
-import net.dries007.tfc.common.capabilities.InventoryItemHandler;
-import net.dries007.tfc.common.capabilities.PartialFluidHandler;
-import net.dries007.tfc.common.capabilities.PartialItemHandler;
-import net.dries007.tfc.common.capabilities.SidedHandler;
-import net.dries007.tfc.common.capabilities.size.IItemSize;
-import net.dries007.tfc.common.capabilities.size.ItemSizeManager;
-import net.dries007.tfc.common.capabilities.size.Size;
-import net.dries007.tfc.common.capabilities.size.Weight;
-import net.dries007.tfc.common.container.BarrelContainer;
-import net.dries007.tfc.common.fluids.FluidHelpers;
-import net.dries007.tfc.common.recipes.BarrelRecipe;
-import net.dries007.tfc.common.recipes.SealedBarrelRecipe;
-import net.dries007.tfc.common.recipes.TFCRecipeTypes;
-import net.dries007.tfc.common.recipes.inventory.EmptyInventory;
-import net.dries007.tfc.config.TFCConfig;
-import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.calendar.CalendarTransaction;
-import net.dries007.tfc.util.calendar.Calendars;
-import net.dries007.tfc.util.calendar.ICalendarTickable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback, IRecipeTimer
+public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback, IRecipeTimer, ICellarReceiver
 {
     public static final int SLOT_FLUID_CONTAINER_IN = 0;
     public static final int SLOT_FLUID_CONTAINER_OUT = 1;
@@ -128,6 +124,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
                 if (knownRecipe != null)
                 {
                     knownRecipe.onSealed(barrel.inventory); // We're in a sequential recipe, so apply sealed affects to the new recipe
+                    barrel.applyCellaredTrait(); // apply cellar effects to the new recipe if applicable
                 }
             }
         }
@@ -192,6 +189,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     private long recipeTick; // The tick this barrel started working on the current recipe
     private int soundCooldownTicks = 0;
     @Nullable private BlockPos pourPos = null;
+    public boolean insideValidCellar = false;
 
     private boolean needsInstantRecipeUpdate; // If the instant recipe needs to be checked again
 
@@ -310,6 +308,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
                 return;
             }
             knownRecipe.onSealed(inventory); // We're in a sequential recipe, so apply sealed affects to the new recipe
+            applyCellaredTrait();
             if (knownRecipe.isInfinite())
             {
                 return; // No more simulation can occur
@@ -324,6 +323,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         nbt.putLong("lastUpdateTick", lastUpdateTick);
         nbt.putLong("sealedTick", sealedTick);
         nbt.putLong("recipeTick", recipeTick);
+        nbt.putBoolean("insideValidCellar", insideValidCellar);
         if (recipe != null)
         {
             // Recipe saved to sync to client
@@ -342,6 +342,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         lastUpdateTick = nbt.getLong("lastUpdateTick");
         sealedTick = nbt.getLong("sealedTick");
         recipeTick = nbt.getLong("recipeTick");
+        insideValidCellar = nbt.getBoolean("insideValidCellar");
 
         recipe = null;
         recipeName = null;
@@ -470,6 +471,10 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         if (recipe != null)
         {
             recipe.onSealed(inventory);
+
+            applyCellaredTrait();
+
+
             recipeTick = sealedTick;
         }
         markForSync();
@@ -483,6 +488,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         if (recipe != null)
         {
             recipe.onUnsealed(inventory);
+            this.removeCellaredTrait();
         }
         updateRecipe();
         markForSync();
@@ -569,6 +575,45 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
             }
         }
         return 0;
+    }
+
+    // sets climate receiver validity
+    @Override
+    public void setValid(Level level, BlockPos blockPos, boolean valid, int i, ClimateType climateType) {
+
+        if (this.insideValidCellar && !valid) // remove trait if we are no longer in a valid cellar
+            this.removeCellaredTrait();
+
+        if (climateType == ClimateType.CELLAR) {
+            this.insideValidCellar = valid;
+        }
+        this.applyCellaredTrait();
+        this.markForSync();
+    }
+
+    @Override
+    public boolean isInsideValidCellar() {
+        return insideValidCellar;
+    }
+
+    private void applyCellaredTrait()
+    {
+        if (recipe == null || !recipe.getId().equals(Helpers.identifier("barrel/preserved_in_vinegar")) || !insideValidCellar) return;
+
+        inventory.whileMutable(() -> {
+            final ItemStack stack = Helpers.removeStack(inventory, SLOT_ITEM);
+            if (!stack.isEmpty())
+            {
+                inventory.insertItem(SLOT_ITEM, FoodCapability.applyTrait(stack, TFGFoodTraits.CELLARED), false);
+            }
+        });
+    }
+
+    public void removeCellaredTrait() {
+        inventory.whileMutable(() -> {
+            final ItemStack stack = Helpers.removeStack(inventory, SLOT_ITEM);
+            inventory.insertItem(SLOT_ITEM, FoodCapability.removeTrait(stack, TFGFoodTraits.CELLARED), false);
+        });
     }
 
     public static class BarrelInventory implements DelegateItemHandler, DelegateFluidHandler, INBTSerializable<CompoundTag>, EmptyInventory, FluidTankCallback, net.dries007.tfc.common.recipes.inventory.BarrelInventory
