@@ -899,7 +899,6 @@ public class TFGMultiMachines {
             })
             .register();
 
-    // Remplace tout le bloc LARGE_BOILER_BRONZE ... jusqu'à la fin de largeBoilerBackModulePattern (supprimée).
 
     public static final MultiblockMachineDefinition LARGE_BOILER_BRONZE = REGISTRATE
             .multiblock("large_bronze_boiler",
@@ -941,7 +940,8 @@ public class TFGMultiMachines {
                     2))
             .pattern(TFGLargeBoilerMachine.CATALYST, definition -> largeBoilerModulePattern(
                     TFGPredicates.catalystCores(),
-                    TFGPredicates.boilerModuleCasings(),
+                    TFGPredicates.boilerModuleCasings()
+                            .and(abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1).setMaxGlobalLimited(2)),
                     -2))
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(

@@ -70,6 +70,9 @@ public class TFGEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(TFGCore.id("large_boiler_booster"),
             EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
 
+    public static final EmiRecipeCategory LARGE_BOILER_CATALYST = new EmiRecipeCategory(TFGCore.id("large_boiler_catalyst"),
+            EmiStack.of(GTBlocks.CASING_STEEL_GEARBOX.asItem()));
+
     public static final EmiRecipeCategory ITEM_REPAIR = new EmiRecipeCategory(TFGCore.id("item_repair"),
             EmiStack.of(Items.ANVIL));
 
@@ -147,7 +150,12 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(LARGE_BOILER_BOOSTER,
                 EmiStack.of(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock().asItem()));
         TFGLargeBoilerMachine.getBoosters().forEach(booster -> emiRegistry.addRecipe(new LargeBoilerBoosterRecipe(booster)));
-
+/*
+        emiRegistry.addCategory(LARGE_BOILER_CATALYST);
+        emiRegistry.addWorkstation(LARGE_BOILER_CATALYST,
+                EmiStack.of(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock().asItem()));
+        TFGLargeBoilerMachine.getCatalysts().forEach(catalyst -> emiRegistry.addRecipe(new LargeBoilerCatalystRecipe(catalyst)));
+*/
         //Artisan Table
         emiRegistry.addCategory(ARTISAN_TABLE);
         emiRegistry.addWorkstation(ARTISAN_TABLE, EmiStack.of(TFGBlocks.ARTISAN_TABLE.get().asItem()));
