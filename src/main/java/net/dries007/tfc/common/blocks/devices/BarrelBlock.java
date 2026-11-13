@@ -6,8 +6,17 @@
 
 package net.dries007.tfc.common.blocks.devices;
 
-import java.util.List;
-
+import net.dries007.tfc.common.blockentities.BarrelBlockEntity;
+import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.capabilities.Capabilities;
+import net.dries007.tfc.common.fluids.FluidHelpers;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.Tooltips;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +24,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,17 +33,11 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.NoteBlock;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -47,16 +49,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.common.blockentities.BarrelBlockEntity;
-import net.dries007.tfc.common.blockentities.TFCBlockEntities;
-import net.dries007.tfc.common.blocks.ExtendedProperties;
-import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.capabilities.Capabilities;
-import net.dries007.tfc.common.fluids.FluidHelpers;
-import net.dries007.tfc.config.TFCConfig;
-import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.Tooltips;
+import java.util.List;
 
 public class BarrelBlock extends SealableDeviceBlock
 {
@@ -169,6 +162,10 @@ public class BarrelBlock extends SealableDeviceBlock
     @Override
     protected void addExtraInfo(List<Component> tooltip, CompoundTag inventoryTag)
     {
+//        if (inventoryTag.getBoolean("insideValidCellar"))
+//        {
+//            tooltip.add(Component.translatable("tfg.tooltip.firmalife_inside_valid_cellar").withStyle(ChatFormatting.GREEN));
+//        }
         final FluidTank tank = new FluidTank(TFCConfig.SERVER.barrelCapacity.get());
         tank.readFromNBT(inventoryTag.getCompound("tank"));
         if (!tank.isEmpty())
@@ -251,6 +248,16 @@ public class BarrelBlock extends SealableDeviceBlock
                 case Z -> rack ? SHAPE_Z_RACK : SHAPE_Z;
                 case Y -> super.getShape(state, level, pos, context);
             };
+    }
+
+    @Override
+    protected void beforeRemove(InventoryBlockEntity<?> entity) {
+        // If the barrel is sealed and its contained food item has the CELLARED trait, remove it when the barrel is broken
+        if (entity instanceof BarrelBlockEntity barrel && barrel.getBlockState().getValue(SEALED))
+        {
+            barrel.removeCellaredTrait();
+        }
+        super.beforeRemove(entity);
     }
 
     @Override
