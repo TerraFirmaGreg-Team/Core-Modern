@@ -84,7 +84,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
 
         inventorySize = INVENTORY_SIZE(tier);
 
-        inventory = new RefrigeratedStorage(inventorySize);
+        inventory = attachTrait(new RefrigeratedStorage(inventorySize));
         currentlyWorking = false;
     }
 

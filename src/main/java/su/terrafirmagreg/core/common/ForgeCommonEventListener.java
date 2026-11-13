@@ -276,7 +276,9 @@ public final class ForgeCommonEventListener {
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
-            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlock());
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
+        if (mapping.getKey().equals(TFGCore.id("large_steel_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
 
     }
 
@@ -291,7 +293,9 @@ public final class ForgeCommonEventListener {
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
-            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getItem());
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
+        if (mapping.getKey().equals(TFGCore.id("large_steel_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
     }
 
     private static void remapBlockEntities(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
@@ -305,7 +309,9 @@ public final class ForgeCommonEventListener {
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
-            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlockEntityType());
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
+        if (mapping.getKey().equals(TFGCore.id("large_steel_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
     }
 
     private static void remapBiomes(MissingMappingsEvent.Mapping<Biome> mapping) {

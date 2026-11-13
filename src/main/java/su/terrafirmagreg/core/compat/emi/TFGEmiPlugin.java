@@ -146,8 +146,6 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addCategory(LARGE_BOILER_BOOSTER);
         emiRegistry.addWorkstation(LARGE_BOILER_BOOSTER,
                 EmiStack.of(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock().asItem()));
-        emiRegistry.addWorkstation(LARGE_BOILER_BOOSTER,
-                EmiStack.of(TFGMultiMachines.LARGE_STEEL_BOILER.getBlock().asItem()));
         TFGLargeBoilerMachine.getBoosters().forEach(booster -> emiRegistry.addRecipe(new LargeBoilerBoosterRecipe(booster)));
 
         //Artisan Table

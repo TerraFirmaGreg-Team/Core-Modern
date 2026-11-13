@@ -19,6 +19,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 
 public class LargeBoilerBoosterRecipe implements EmiRecipe {
@@ -26,14 +27,14 @@ public class LargeBoilerBoosterRecipe implements EmiRecipe {
     private final Fluid FLUID;
     private final int FLUID_AMOUNT_MB;
     private final int TEMPERATURE_BONUS;
-    private final int MIN_BOILER_TEMPERATURE;
+    private final int MIN_BOOSTER_TIER;
     private final String TRANSLATION_KEY;
 
     public LargeBoilerBoosterRecipe(TFGLargeBoilerMachine.BoosterFluid booster) {
         this.FLUID = booster.fluid().get();
         this.FLUID_AMOUNT_MB = booster.fluidAmountMb();
         this.TEMPERATURE_BONUS = booster.temperatureBonus();
-        this.MIN_BOILER_TEMPERATURE = booster.minBoilerTemperature();
+        this.MIN_BOOSTER_TIER = booster.minBoosterTier();
         this.TRANSLATION_KEY = booster.translationKey();
     }
 
@@ -56,9 +57,7 @@ public class LargeBoilerBoosterRecipe implements EmiRecipe {
     @Override
     public int getDisplayHeight() {
         Font font = Minecraft.getInstance().font;
-        int lines = 2; // Bonus Temp + mB/s
-        if (MIN_BOILER_TEMPERATURE > 0)
-            lines++; // Temp Boiler required
+        int lines = 3; // Bonus Temp + booster module tier + fluid name
         return 20 + 6 + (font.lineHeight * lines) + 6;
     }
 
@@ -95,14 +94,13 @@ public class LargeBoilerBoosterRecipe implements EmiRecipe {
                 2, offsetY, 0xFF5555, true);
         offsetY += lineHeight;
 
-        // Min Temp required if > 0
-        if (MIN_BOILER_TEMPERATURE > 0) {
-            holder.addText(
-                    Component.translatable("tfg.emi.large_boiler_booster.min_boiler",
-                            (MIN_BOILER_TEMPERATURE) + "PU"),
-                    2, offsetY, 0xFFAA00, true);
-            offsetY += lineHeight;
-        }
+        // Booster module tier required
+        holder.addText(
+                Component.translatable("tfg.emi.large_boiler_booster.min_tier",
+                        "T" + MIN_BOOSTER_TIER,
+                        TFGPredicates.getBoilerModuleCasingForTier(MIN_BOOSTER_TIER).getName()),
+                2, offsetY, 0xFFAA00, true);
+        offsetY += lineHeight;
 
         // Fluid name
         holder.addText(
