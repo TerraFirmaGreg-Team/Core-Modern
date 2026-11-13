@@ -1,5 +1,24 @@
 {
   "variants": {
+    "facing=down,upwards_facing=east": {
+      "gtceu:z": 90,
+      "model": "tfg:block/machine/heat_pump",
+      "x": 90
+    },
+    "facing=down,upwards_facing=north": {
+      "model": "tfg:block/machine/heat_pump",
+      "x": 90
+    },
+    "facing=down,upwards_facing=south": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/heat_pump",
+      "x": 90
+    },
+    "facing=down,upwards_facing=west": {
+      "gtceu:z": 270,
+      "model": "tfg:block/machine/heat_pump",
+      "x": 90
+    },
     "facing=east,upwards_facing=east": {
       "gtceu:z": 270,
       "model": "tfg:block/machine/heat_pump",
@@ -52,6 +71,25 @@
       "gtceu:z": 90,
       "model": "tfg:block/machine/heat_pump",
       "y": 180
+    },
+    "facing=up,upwards_facing=east": {
+      "gtceu:z": 90,
+      "model": "tfg:block/machine/heat_pump",
+      "x": 270
+    },
+    "facing=up,upwards_facing=north": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/heat_pump",
+      "x": 270
+    },
+    "facing=up,upwards_facing=south": {
+      "model": "tfg:block/machine/heat_pump",
+      "x": 270
+    },
+    "facing=up,upwards_facing=west": {
+      "gtceu:z": 270,
+      "model": "tfg:block/machine/heat_pump",
+      "x": 270
     },
     "facing=west,upwards_facing=east": {
       "gtceu:z": 270,

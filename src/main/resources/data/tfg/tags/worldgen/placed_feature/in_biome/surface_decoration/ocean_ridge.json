@@ -1,0 +1,8 @@
+{
+    "values": [
+        "#tfg:feature/ocean_plants",
+        "#tfc:feature/ocean_decorations"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

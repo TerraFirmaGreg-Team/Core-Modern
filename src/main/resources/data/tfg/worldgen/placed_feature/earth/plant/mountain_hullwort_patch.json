@@ -18,6 +18,14 @@
             "min_rainfall": 270,
             "min_forest": "none",
             "min_temperature": 15.8
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 85},
+                "max_inclusive": {"absolute": 320},
+                "type": "minecraft:uniform"
+            }
         }
     ],
     "__comment__": "This file was automatically created by mcresources"

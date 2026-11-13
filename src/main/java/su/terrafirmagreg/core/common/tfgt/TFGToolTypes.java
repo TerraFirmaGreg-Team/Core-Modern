@@ -12,11 +12,13 @@ import com.gregtechceu.gtceu.common.item.tool.behavior.HarvestCropsBehavior;
 import com.gregtechceu.gtceu.common.item.tool.behavior.HoeGroundBehavior;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.common.ToolActions;
 import net.neganote.gtutilities.common.tools.UtilToolHelper;
+import net.neganote.gtutilities.common.tools.UtilToolType;
 
 /**
  * Custom electric tool types using Modern Utilities
@@ -58,5 +60,15 @@ public final class TFGToolTypes {
                 .toolClasses(GTToolType.HOE)
                 .defaultActions(ToolActions.HOE_DIG)
                 .build();
+    }
+
+    // Tool Type Modifications
+    public static final GTToolType[] BUZZSAWS = { GTToolType.BUZZSAW, UtilToolType.BUZZSAW_MV, UtilToolType.BUZZSAW_HV, UtilToolType.BUZZSAW_EV, UtilToolType.BUZZSAW_IV, UtilToolType.BUZZSAW_LuV,
+            UtilToolType.BUZZSAW_ZPM };
+
+    public static void modify() {
+        for (GTToolType buzzsaw : BUZZSAWS) {
+            buzzsaw.harvestTags.add(TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW);
+        }
     }
 }

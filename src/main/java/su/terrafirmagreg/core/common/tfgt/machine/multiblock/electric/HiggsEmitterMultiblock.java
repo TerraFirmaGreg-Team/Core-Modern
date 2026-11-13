@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.GTUtil;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
@@ -73,18 +74,15 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
         return (int) Math.round(voltage * 0.5);
     }
 
-    /** If a higgs emitter with an HV hatch were to be placed in the middle of a sphere that is being supplied by an air distributor that takes 0.5A@HV it will provide a gravity sphere of the exact same size as the sphere. */
-    public static int radiusForEUt(double eut) {
-        if (eut <= 0) {
-            return 4;
-        }
-        double volume = EnclosedRoomEnergyCurve.volumeForEut(eut);
-        return Math.max(4, (int) Math.ceil(Math.cbrt(3.0 * volume / (4.0 * Math.PI))));
-    }
-
-    /** @return the current bubble radius, derived from the energy the hatch supports. */
+    /** @return the current bubble radius based on the highest hatch voltage tier. */
     public int getRadius() {
-        return radiusForEUt(computeEnergyPerTick());
+        EnergyContainerList energy = getEnergyContainer();
+        if (energy == null) {
+            return 0;
+        }
+        long voltage = energy.getHighestInputVoltage();
+        int tier = GTUtil.getFloorTierByVoltage(voltage);
+        return 16 * (tier + 1);
     }
 
     // ==================== Recipe ====================

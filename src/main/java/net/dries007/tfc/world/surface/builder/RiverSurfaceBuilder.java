@@ -6,18 +6,20 @@
 
 package net.dries007.tfc.world.surface.builder;
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
 
-public class RiverSurfaceBuilder extends ShoreSurfaceBuilder
+public class RiverSurfaceBuilder implements SurfaceBuilder
 {
     public static final SurfaceBuilderFactory INSTANCE = RiverSurfaceBuilder::new;
+    final Seed seed;
 
-    protected RiverSurfaceBuilder(long seed)
+    protected RiverSurfaceBuilder(Seed seed)
     {
-        super(seed);
+        this.seed = seed;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class RiverSurfaceBuilder extends ShoreSurfaceBuilder
         final BiomeExtension biome = context.originalBiome();
         if (biome.isShore())
         {
-            super.buildSurface(context, startY, endY);
+            biome.createSurfaceBuilder(seed).buildSurface(context, startY, endY);
         }
         else if (!biome.hasSandyRiverShores())
         {
@@ -37,13 +39,13 @@ public class RiverSurfaceBuilder extends ShoreSurfaceBuilder
             SurfaceState state = SurfaceStates.GRAVEL;
             if (context.getSlope() < 2)
             {
-                state = SurfaceStates.GRASS;
+                state = SurfaceStates.TOP_GRASS_TO_GRAVEL;
             }
             else if (context.getSlope() < 5)
             {
                 state = SurfaceStates.RIVER_SAND;
             }
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.SANDSTONE_OR_GRAVEL);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL);
         }
     }
 }

@@ -44,7 +44,6 @@ public final class TFGTagPrefix {
     public static final TagPrefix richRawOre;
     public static final TagPrefix oreSmall;
     public static final TagPrefix budIndicator;
-    public static final TagPrefix powder;
 
     public static final TagPrefix dustyRawOre;
 
@@ -303,13 +302,6 @@ public final class TFGTagPrefix {
                 .defaultTagPath("bud_indicators/%s")
                 .unformattedTagPath("bud_indicators")
                 .materialAmount(GTValues.M / 4);
-
-        powder = new TagPrefix("powder")
-                .idPattern("%s_powder")
-                .defaultTagPath("powders/%s")
-                .unformattedTagPath("powders")
-                .materialAmount(GTValues.M / 4)
-                .unificationEnabled(false);
 
         dustyRawOre = new TagPrefix("dusty_raw", true)
                 .idPattern("dusty_raw_%s")

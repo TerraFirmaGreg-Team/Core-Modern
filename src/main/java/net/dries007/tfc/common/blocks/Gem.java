@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blocks;
 
+// No longer used, but kept so TFC addons don't crash
 public enum Gem
 {
     AMETHYST,

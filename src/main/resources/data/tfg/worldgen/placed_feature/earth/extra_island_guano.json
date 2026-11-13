@@ -22,7 +22,7 @@
         {
             "min_elevation": 1,
             "max_elevation": 32,
-            "type": "tfg:intertidal"
+            "type": "tfc:intertidal"
         },
         {
             "predicate": {

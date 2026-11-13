@@ -1,0 +1,68 @@
+package su.terrafirmagreg.core.compat.create.display_source;
+
+import com.gregtechceu.gtceu.common.data.GTItems;
+import com.simibubi.create.api.behaviour.display.DisplaySource;
+import com.simibubi.create.api.registry.CreateRegistries;
+import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
+
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
+
+import appeng.core.definitions.AEBlocks;
+import earth.terrarium.adastra.common.registry.ModBlocks;
+
+import su.terrafirmagreg.core.TFGCore;
+
+public class TFGDisplaySources {
+    public static final DeferredRegister<DisplaySource> DISPLAY_SOURCES = DeferredRegister.create(CreateRegistries.DISPLAY_SOURCE, TFGCore.MOD_ID);
+
+    public static final RegistryObject<ThermometerDisplaySource> THERMOMETER = TFGDisplaySources.DISPLAY_SOURCES.register("thermometer", ThermometerDisplaySource::new);
+    public static final RegistryObject<CalendarClockDisplaySource> CALENDAR_CLOCK = TFGDisplaySources.DISPLAY_SOURCES.register("calendar_clock", CalendarClockDisplaySource::new);
+    public static final RegistryObject<AnemometerDisplaySource> ANEMOMETER = TFGDisplaySources.DISPLAY_SOURCES.register("anemometer", AnemometerDisplaySource::new);
+    public static final RegistryObject<EnvironmentApiDisplaySource> ENVIRONMENT = TFGDisplaySources.DISPLAY_SOURCES.register("environment", EnvironmentApiDisplaySource::new);
+    public static final RegistryObject<MEControllerDisplaySource> ME_CONTROLLER = TFGDisplaySources.DISPLAY_SOURCES.register("me_network", MEControllerDisplaySource::new);
+
+    public static void init(IEventBus modEventBus) {
+        DISPLAY_SOURCES.register(modEventBus);
+        modEventBus.addListener(TFGDisplaySources::onCommonSetup);
+    }
+
+    private static void onCommonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            DisplaySource.BY_BLOCK.add(TFCBlocks.THERMOMETER.get(), THERMOMETER.get());
+            DisplaySource.BY_BLOCK.add(TFCBlocks.CALENDAR_CLOCK.get(), CALENDAR_CLOCK.get());
+            DisplaySource.BY_BLOCK.add(TFCBlocks.ANEMOMETER.get(), ANEMOMETER.get());
+            DisplaySource.BY_BLOCK.add(TFCBlocks.VANE.get(), ANEMOMETER.get());
+            DisplaySource.BY_BLOCK.add(ModBlocks.OXYGEN_SENSOR.get(), ENVIRONMENT.get());
+            DisplaySource.BY_BLOCK.add(AEBlocks.CONTROLLER.block(), ME_CONTROLLER.get());
+            DisplaySource.BY_BLOCK.add(AEBlocks.COLORABLE_CONTROLLER.block(), ME_CONTROLLER.get());
+        });
+    }
+
+    public static void register(PonderTagRegistrationHelper<ResourceLocation> helper) {
+        PonderTagRegistrationHelper<ItemLike> itemHelper = helper.withKeyFunction(
+                CatnipServices.REGISTRIES::getKeyOrThrow);
+
+        // Add items to the display sources tag.
+        itemHelper.addToTag(AllCreatePonderTags.DISPLAY_SOURCES)
+                .add(GTItems.COVER_SCREEN.get())
+                .add(TFCBlocks.THERMOMETER.get())
+                .add(TFCBlocks.CALENDAR_CLOCK.get())
+                .add(TFCBlocks.ANEMOMETER.get())
+                .add(TFCBlocks.VANE.get())
+                .add(ModBlocks.OXYGEN_SENSOR.get())
+                .add(AEBlocks.CONTROLLER.block())
+                .add(AEBlocks.COLORABLE_CONTROLLER.block());
+
+        // Add items to the display targets tag.
+        itemHelper.addToTag(AllCreatePonderTags.DISPLAY_TARGETS)
+                .add(GTItems.COVER_SCREEN.get());
+    }
+}

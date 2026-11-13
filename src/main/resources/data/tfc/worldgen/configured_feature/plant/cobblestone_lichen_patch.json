@@ -4,6 +4,7 @@
     "config": {
         "integrity": 0.4,
         "block": "tfc:plant/cobblestone_lichen",
+        "tide_height": 2,
         "radius": 5,
         "height": 5
     }

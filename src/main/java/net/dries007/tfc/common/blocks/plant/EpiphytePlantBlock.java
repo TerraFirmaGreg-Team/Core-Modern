@@ -76,7 +76,7 @@ public abstract class EpiphytePlantBlock extends PlantBlock
     public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
         // Must be attached to a log
-        if (direction.getOpposite() == state.getValue(FACING) && !Helpers.isBlock(facingState, BlockTags.LOGS))
+        if (direction.getOpposite() == state.getValue(FACING) && !canSurvive(state, level, currentPos))
         {
             return Blocks.AIR.defaultBlockState();
         }

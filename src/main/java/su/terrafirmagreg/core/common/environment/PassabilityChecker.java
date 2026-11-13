@@ -15,10 +15,14 @@ import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import appeng.api.parts.IFacadeContainer;
+import appeng.api.parts.IFacadePart;
+import appeng.api.parts.IPartHost;
 import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
 
@@ -308,15 +312,16 @@ public final class PassabilityChecker {
     }
 
     /**
-     * Overlays GT facade covers onto a CHECK_FACADES passInfo.
-     * For each face with an occluding facade cover, marks that face as full (sealed).
+     * Overlays facade data onto a CHECK_FACADES passInfo.
+     * For each face with an occluding facade (GT facade cover or AE2 facade part), marks that face as full (sealed).
      * If any faces are sealed, promotes to COLLISION so direction checks apply.
      */
     private static PassInfo overlayFacades(AsyncBlockReader reader, BlockPos blockPos, PassInfo base) {
 
         byte facadeFaces = 0;
+        BlockEntity blockEntity = reader.getBlockEntity(blockPos);
 
-        if (reader.getBlockEntity(blockPos) instanceof IPipeNode<?, ?> pipe) {
+        if (blockEntity instanceof IPipeNode<?, ?> pipe) {
             ICoverable coverable = pipe.getCoverContainer();
             if (coverable != null) {
 
@@ -328,13 +333,22 @@ public final class PassabilityChecker {
                         facadeFaces |= dir2byte(side);
                     }
                 }
-                // Floodfill uses direction of travel, not direction from center of target block
-                facadeFaces = mirrorDirs(facadeFaces);
+            }
+        } else if (blockEntity instanceof IPartHost host) {
+            IFacadeContainer facadeContainer = host.getFacadeContainer();
+            for (Direction side : DIRECTIONS) {
+                IFacadePart facade = facadeContainer.getFacade(side);
+                if (facade != null && !facade.getBlockState().is(TFGTags.Blocks.AtmospherePassable)) {
+                    facadeFaces |= dir2byte(side);
+                }
             }
         }
 
+        // Floodfill uses direction of travel, not direction from center of target block
+        facadeFaces = mirrorDirs(facadeFaces);
+
         if (facadeFaces == 0b0) {
-            // No sealing facades, esolve CHECK_FACADES to the underlying type
+            // No sealing facades, resolve CHECK_FACADES to the underlying type
             return new PassInfo(base.fullFaces() == 0b0 && base.fullSilhouettes() == 0b0 ? EMPTY : COLLISION,
                     base.fullFaces(), base.fullSilhouettes(), base.emptyFaces());
         }

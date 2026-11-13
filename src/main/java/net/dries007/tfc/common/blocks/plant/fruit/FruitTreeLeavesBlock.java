@@ -210,7 +210,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         {
             TFCLeavesBlock.doParticles(server, currentPos.getX() + level.getRandom().nextFloat(), currentPos.getY() + level.getRandom().nextFloat(), currentPos.getZ() + level.getRandom().nextFloat(), 1);
         }
-        return Blocks.AIR.defaultBlockState();
+        return state.getFluidState().createLegacyBlock();
     }
 
     @Override

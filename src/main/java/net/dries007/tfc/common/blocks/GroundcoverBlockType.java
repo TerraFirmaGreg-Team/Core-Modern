@@ -9,8 +9,11 @@ package net.dries007.tfc.common.blocks;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import net.dries007.tfc.common.items.Powder;
-import net.dries007.tfc.common.items.TFCItems;
+import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.world.item.BlockItem;
@@ -34,7 +37,7 @@ public enum GroundcoverBlockType
     PINECONE(GroundcoverBlock.SMALL),
     PUMICE(GroundcoverBlock.SMALL),
     ROTTEN_FLESH(GroundcoverBlock.FLAT, () -> Items.ROTTEN_FLESH),
-    SALT_LICK(GroundcoverBlock.PIXEL_HIGH, TFCItems.POWDERS.get(Powder.SALT)),
+    SALT_LICK(GroundcoverBlock.PIXEL_HIGH, () -> ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "small_salt_dust"))),
     SEAWEED(GroundcoverBlock.FLAT),
     SEA_URCHIN(GroundcoverBlock.MEDIUM),
     STICK(GroundcoverBlock.FLAT, () -> Items.STICK);

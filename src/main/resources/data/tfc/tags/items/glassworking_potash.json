@@ -1,7 +1,7 @@
 {
     "values": [
-        "tfc:powder/soda_ash",
-        "tfc:powder/saltpeter"
+        "gtceu:small_soda_ash_dust",
+        "gtceu:small_saltpeter_dust"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

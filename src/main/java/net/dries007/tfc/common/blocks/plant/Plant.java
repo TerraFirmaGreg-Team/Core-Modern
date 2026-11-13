@@ -71,13 +71,13 @@ public enum Plant implements RegistryPlant
     // Other Plants
     ALLIUM(BlockType.STANDARD, 1.0F, new int[] {6, 6, 7, 0, 1, 1, 2, 2, 3, 4, 5, 6}),
     ANTHURIUM(BlockType.STANDARD, 1.0F, new int[] {0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1}),
-    ARROWHEAD(BlockType.TALL_WATER_FRESH, 0.6F),
+    ARROWHEAD(BlockType.TALL_WATER_MUDDY, 0.6F),
     BADDERLOCKS(BlockType.TALL_WATER, 0.8F),
     BARREL_CACTUS(BlockType.CACTUS, 0F, new int[] {0, 0, 0, 0, 1, 2, 2, 2, 2, 3, 3, 0}),
     BLOOD_LILY(BlockType.STANDARD, 1.0F, new int[] {3, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2}),
     BLUE_GINGER(BlockType.STANDARD, 1.0F, new int[] {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1}),
     BLUE_ORCHID(BlockType.STANDARD, 1.0F, new int[] {2, 2, 2, 0, 1, 1, 1, 2, 2, 2, 2, 2}),
-    BUR_REED(BlockType.TALL_WATER_FRESH, 0.6F, new int[] {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}),
+    BUR_REED(BlockType.TALL_WATER_MUDDY, 0.6F, new int[] {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}),
     BUTTERFLY_MILKWEED(BlockType.STANDARD, 1.0F, new int[] {6, 6, 6, 0, 1, 2, 3, 3, 3, 3, 4, 5}),
     BLACK_ORCHID(BlockType.STANDARD, 1.0F, new int[] {2, 2, 2, 0, 1, 1, 1, 2, 2, 2, 2, 2}),
     CALENDULA(BlockType.STANDARD, 1F, new int[] {6, 6, 6, 0, 1, 2, 3, 3, 3, 3, 4, 5}),
@@ -86,7 +86,7 @@ public enum Plant implements RegistryPlant
     COONTAIL(BlockType.GRASS_WATER_FRESH, 0.8F, new int[] {3, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2}),
     CORDGRASS(BlockType.TALL_WATER, 0.6F, new int[] {0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0}),
     DANDELION(BlockType.STANDARD, 1F, new int[] {9, 9, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8}),
-    DEAD_BUSH(BlockType.DRY, 0.7F),
+    DEAD_BUSH(BlockType.DEAD_BUSH, 0.7F),
     DESERT_FLAME(BlockType.STANDARD, 1F, new int[] {1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1}),
     DUCKWEED(BlockType.FLOATING_FRESH, 0.7F),
     EEL_GRASS(BlockType.GRASS_WATER_FRESH, 0.8F, new int[] {3, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2}),
@@ -111,7 +111,7 @@ public enum Plant implements RegistryPlant
     LILAC(BlockType.TALL_GRASS, 0.6F, new int[] {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0}),
     LOTUS(BlockType.FLOATING_FRESH, 0.7F, new int[] {0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 0, 0}),
     MAIDEN_PINK(BlockType.FLOWERBED, 1f),
-    MARIGOLD(BlockType.TALL_WATER_FRESH, 0.6F),
+    MARIGOLD(BlockType.TALL_WATER_MUDDY, 0.6F),
     MEADS_MILKWEED(BlockType.STANDARD, 1F, new int[] {6, 6, 6, 0, 1, 2, 3, 3, 3, 3, 4, 5}),
     MILFOIL(BlockType.WATER_FRESH, 0.8F),
     MORNING_GLORY(BlockType.CREEPING, 0.8F, new int[] {2, 2, 2, 0, 0, 1, 1, 1, 1, 1, 2, 2}),
@@ -120,8 +120,8 @@ public enum Plant implements RegistryPlant
     NASTURTIUM(BlockType.STANDARD, 1F, new int[] {4, 4, 4, 0, 1, 2, 2, 2, 2, 2, 3, 3}),
     OSTRICH_FERN(BlockType.TALL_GRASS, 0.6F, new int[] {0, 0, 0, 0, 1, 2, 3, 3, 3, 3, 4, 0}),
     OXEYE_DAISY(BlockType.STANDARD, 0.9F, new int[] {5, 5, 5, 0, 1, 2, 3, 3, 3, 4, 4, 5}),
-    PHRAGMITE(BlockType.TALL_WATER_FRESH, 0.6F, new int[] {0, 0, 0, 1, 1, 1, 2, 2, 3, 1, 1, 0}),
-    PICKERELWEED(BlockType.TALL_WATER_FRESH, 0.6F, new int[] {0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 0, 0}),
+    PHRAGMITE(BlockType.TALL_WATER_MUDDY, 0.6F, new int[] {0, 0, 0, 1, 1, 1, 2, 2, 3, 1, 1, 0}),
+    PICKERELWEED(BlockType.TALL_WATER_MUDDY, 0.6F, new int[] {0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 0, 0}),
     PISTIA(BlockType.FLOATING_FRESH, 0.8F),
     POPPY(BlockType.STANDARD, 1F, new int[] {4, 4, 4, 0, 1, 2, 2, 3, 3, 3, 3, 4}),
     PRIMROSE(BlockType.STANDARD, 1F, new int[] {0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2}),
@@ -158,7 +158,7 @@ public enum Plant implements RegistryPlant
     VRIESEA(BlockType.EPIPHYTE, 1F, new int[] {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}),
     WATER_CANNA(BlockType.FLOATING_FRESH, 0.8F, new int[] {0, 0, 0, 0, 0, 1, 2, 3, 3, 3, 3, 0}),
     WATER_LILY(BlockType.FLOATING_FRESH, 0.7F, new int[] {5, 5, 6, 0, 1, 2, 2, 2, 2, 3, 4, 5}),
-    WATER_TARO(BlockType.TALL_WATER_FRESH, 0.6F),
+    WATER_TARO(BlockType.TALL_WATER_MUDDY, 0.6F),
     YUCCA(BlockType.DRY, 0.8F, new int[] {0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 3}),
 
     // Unique
@@ -278,7 +278,7 @@ public enum Plant implements RegistryPlant
 
     public boolean hasFlowerPot()
     {
-        return type == BlockType.STANDARD || type == BlockType.FLOWERBED || type == BlockType.DRY || type == BlockType.CACTUS_FLOWER || SPECIAL_POTTED_PLANTS.contains(this);
+        return type == BlockType.STANDARD || type == BlockType.FLOWERBED || type == BlockType.DRY || type == BlockType.DEAD_BUSH || type == BlockType.CACTUS_FLOWER || SPECIAL_POTTED_PLANTS.contains(this);
     }
 
     /**
@@ -327,6 +327,7 @@ public enum Plant implements RegistryPlant
         CACTUS_FLOWER((plant, type) -> PlantBlock.createCactusFlower(plant, fire(nonSolid(plant)).sound(SoundType.CROP))),
         CACTUS((plant, type) -> TFCCactusBlock.create(plant, fire(solid().strength(0.25F).sound(SoundType.WOOL)).pathType(BlockPathTypes.DAMAGE_OTHER))),
         DRY((plant, type) -> PlantBlock.createDry(plant, fire(nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)))),
+		DEAD_BUSH((plant, type) -> PlantBlock.createDeadBush(plant, fire(nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)))),
         CREEPING((plant, type) -> CreepingPlantBlock.create(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))), // Post process ensures shape is updated after world gen
         CREEPING_STONE((plant, type) -> CreepingPlantBlock.createStone(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))),
         EPIPHYTE((plant, type) -> EpiphytePlantBlock.create(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))),
@@ -350,11 +351,12 @@ public enum Plant implements RegistryPlant
         FLOATING((plant, type) -> FloatingWaterPlantBlock.create(plant, TFCFluids.SALT_WATER.source(), nonSolid(plant)), PlaceOnWaterBlockItem::new),
         FLOATING_FRESH((plant, type) -> FloatingWaterPlantBlock.create(plant, () -> Fluids.WATER, nonSolid(plant)), PlaceOnWaterBlockItem::new),
         TALL_WATER((plant, type) -> TallWaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, nonSolid(plant))),
-        TALL_WATER_FRESH((plant, type) -> TallWaterPlantBlock.create(plant, TFCBlockStateProperties.FRESH_WATER, nonSolid(plant))),
+		TALL_WATER_MUDDY((plant, type) -> TallWaterPlantBlock.create(plant, TFCBlockStateProperties.MUDDY_WATER, nonSolid(plant))),
+		TALL_WATER_FRESH((plant, type) -> TallWaterPlantBlock.create(plant, TFCBlockStateProperties.FRESH_WATER, nonSolid(plant))),
         WATER((plant, type) -> WaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ))),
-        WATER_FRESH((plant, type) -> WaterPlantBlock.create(plant, TFCBlockStateProperties.FRESH_WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ))),
+        WATER_FRESH((plant, type) -> WaterPlantBlock.create(plant, TFCBlockStateProperties.MUDDY_WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ))),
         GRASS_WATER((plant, type) -> TFCSeagrassBlock.create(plant, TFCBlockStateProperties.SALT_WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ))),
-        GRASS_WATER_FRESH((plant, type) -> TFCSeagrassBlock.create(plant, TFCBlockStateProperties.FRESH_WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)));
+        GRASS_WATER_FRESH((plant, type) -> TFCSeagrassBlock.create(plant, TFCBlockStateProperties.MUDDY_WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)));
 
         private static final EnumSet<BlockType> NO_ITEM_TYPES = EnumSet.of(WEEPING, TWISTING_SOLID, KELP, KELP_TREE, TWISTING, BRANCHING_CACTUS);
         private static final EnumSet<BlockType> FOLIAGE_TYPES = EnumSet.of(WEEPING, WEEPING_TOP, FLOATING_FRESH, FLOATING, WATER_FRESH, GRASS_WATER_FRESH, GRASS_WATER);

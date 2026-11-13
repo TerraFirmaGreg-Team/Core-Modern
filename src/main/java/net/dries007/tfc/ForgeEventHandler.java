@@ -8,6 +8,7 @@ package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
 import earth.terrarium.adastra.api.planets.Planet;
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 import net.dries007.tfc.world.region.Units;
@@ -224,6 +225,7 @@ import net.dries007.tfc.util.tracker.WeatherHelpers;
 import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.util.tracker.WorldTrackerCapability;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
+import net.dries007.tfc.world.FluidPostProcess;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
 import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
@@ -309,7 +311,7 @@ public final class ForgeEventHandler
 			ChunkPos chunkPos = null;
 			RandomSource random = new XoroshiroRandomSource(level.getSeed());
 
-			RegionGenerator regionGen = new RegionGenerator(extension.settings(), random);
+			RegionGenerator regionGen = new RegionGenerator(extension.settings(), Seed.of(level.getSeed()));
 
 			var condition = CustomSpawnHelper.getFromConfig();
 
@@ -602,7 +604,7 @@ public final class ForgeEventHandler
     public static void onExplosionDetonate(ExplosionEvent event)
     {
         final Level level = event.getLevel();
-        if (!level.isClientSide)
+        if (!level.isClientSide && TFCConfig.SERVER.enableExplosionCollapsing.get() && TFCConfig.SERVER.enableBlockCollapsing.get())
         {
             WorldTracker.get(level).addCollapsePositions(BlockPos.containing(event.getExplosion().getPosition()), event.getExplosion().getToBlow());
         }
@@ -678,6 +680,11 @@ public final class ForgeEventHandler
         if (state.getBlock() instanceof AqueductBlock)
         {
             event.setResult(Event.Result.DENY); // Waterlogged aqueducts do not count as the source when creating source blocks
+        }
+
+        if (FluidPostProcess.inPostProcess)
+        {
+            return; // Worldgen never places sluices to my knowledge
         }
 
         for (Direction direction : Direction.Plane.HORIZONTAL)

@@ -2,7 +2,7 @@
     "result": {"item": "tfc:pink_kaolin_clay"},
     "ingredients": [
         {"item": "tfc:white_kaolin_clay"},
-        {"item": "tfc:powder/hematite"}
+        {"item": "gtceu:small_hematite_dust"}
     ],
     "__comment__": "This file was automatically created by mcresources",
     "type": "minecraft:crafting_shapeless"

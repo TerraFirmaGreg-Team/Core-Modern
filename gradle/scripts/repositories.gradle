@@ -24,7 +24,7 @@ repositories {
     }
     maven {
         name('Squiddev maven')
-        url('https://squiddev.cc/maven')
+        url('https://maven.squiddev.cc')
         content {
             includeGroup('cc.tweaked')
         }
@@ -43,6 +43,14 @@ repositories {
         url('https://modmaven.dev')
         content {
             includeGroup('com.tterrag.registrate')
+        }
+    }
+    maven {
+        name('Expandium')
+        url('https://repo.expandium.net/releases')
+        content {
+            includeGroup('appeng')
+            includeGroup('de.mari_023')
         }
     }
 }

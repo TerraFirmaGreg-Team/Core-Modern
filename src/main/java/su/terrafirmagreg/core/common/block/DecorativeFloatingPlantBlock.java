@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import su.terrafirmagreg.core.common.data.TFGFluids;
+
 public class DecorativeFloatingPlantBlock extends DecorativePlantBlock {
 
     public DecorativeFloatingPlantBlock(ExtendedProperties properties, VoxelShape shape, @Nullable MobEffect effect) {
@@ -21,7 +23,8 @@ public class DecorativeFloatingPlantBlock extends DecorativePlantBlock {
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         FluidState fluid = level.getFluidState(pos.below());
-        return fluid.is(TFCTags.Fluids.WATER_LIKE) || fluid.is(TFCTags.Fluids.LAVA_LIKE);
+        return fluid.is(TFCTags.Fluids.WATER_LIKE) || fluid.is(TFCTags.Fluids.LAVA_LIKE)
+                || fluid.is(TFGFluids.SULFUR_FUMES.getSource()) || fluid.is(TFGFluids.GEYSER_SLURRY.getSource());
     }
 
     @Override

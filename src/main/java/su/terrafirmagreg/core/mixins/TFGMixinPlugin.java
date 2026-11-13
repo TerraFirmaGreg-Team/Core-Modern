@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import com.bawnorton.mixinsquared.adjuster.MixinAnnotationAdjusterRegistrar;
+
 /** Config to modify the mixins at load and application time */
 // Normally this only works on our own mixins, but with a generous sprinkling of reflection, we get more freedom.
 public class TFGMixinPlugin implements IMixinConfigPlugin {
@@ -92,11 +94,15 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
                 .values().forEach(list -> list.removeIf(m -> className.equals(m.getClassName())));
     }
 
+    @Override
+    public void onLoad(String mixinPackage) {
+        MixinAnnotationAdjusterRegistrar.register(new TFGMixinAnnotationAdjuster());
+    }
+
     // No-op event handlers that need implementation for an IMixinConfigPlugin
 
     // spotless:off
     @Override public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {return true;}
-    @Override public void onLoad(String mixinPackage) {}
     @Override public String getRefMapperConfig() {return null;}
     @Override public List<String> getMixins() {return null;}
     @Override public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}

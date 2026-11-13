@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.utils;
 
+import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
+
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -9,6 +11,8 @@ import earth.terrarium.adastra.api.planets.Planet;
 import earth.terrarium.adastra.api.planets.PlanetApi;
 import earth.terrarium.adastra.api.systems.PlanetData;
 import earth.terrarium.adastra.client.utils.ClientData;
+
+import su.terrafirmagreg.core.common.environment.IGreenhouseReceiver;
 
 public class ClientClimateHelpers {
     /**
@@ -30,6 +34,12 @@ public class ClientClimateHelpers {
             if (localData != null && localData.oxygen()) {
                 return localData.temperature();
             }
+        }
+
+        // makes beehives show the correct temperature in its tooltip when inside a greenhouse
+        var hive = level.getBlockEntity(pos, FLBlockEntities.BEEHIVE.get());
+        if (hive.isPresent() && ((IGreenhouseReceiver) hive.get()).tfg$isInsideValidGreenhouse()) {
+            return 15.0f;
         }
 
         return Climate.getTemperature(level, pos);

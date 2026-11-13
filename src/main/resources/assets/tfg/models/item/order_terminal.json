@@ -1,0 +1,9 @@
+{
+    "parent": "ae2:item/display_base",
+    "textures": {
+        "front_dark": "tfg:part/order_terminal_dark",
+        "front_bright": "tfg:part/order_terminal_bright",
+        "front": "tfg:part/order_terminal",
+        "front_medium": "tfg:part/order_terminal_medium"
+    }
+}

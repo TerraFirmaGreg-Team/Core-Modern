@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -35,12 +34,6 @@ public class TemperatureProvider {
     /** The scan from behind the machine, used only to detect a trapped exhaust. */
     private RoomScan backScan = RoomScan.empty();
 
-    /** Anchor of the proximity exhaust heat field (centre of the machine's back). */
-    private BlockPos exhaustAnchor = BlockPos.ZERO;
-
-    /** Radius (blocks) of the proximity exhaust heat field. */
-    private int exhaustRadius = 0;
-
     /** Whether the exhaust is trapped (back region sealed), making the machine unable to work. */
     private boolean blocked = false;
 
@@ -68,13 +61,10 @@ public class TemperatureProvider {
      * Called on the main thread by the machine driver.
      */
     public void setRegions(RoomScan frontScan, RoomScan backScan, boolean blocked,
-            BlockPos exhaustAnchor, int exhaustRadius,
             @Nullable OxygenProvider inheritedFront, @Nullable OxygenProvider inheritedBack) {
         this.frontScan = frontScan == null ? RoomScan.empty() : frontScan;
         this.backScan = backScan == null ? RoomScan.empty() : backScan;
         this.blocked = blocked;
-        this.exhaustAnchor = exhaustAnchor == null ? machinePos : exhaustAnchor;
-        this.exhaustRadius = exhaustRadius;
         this.inheritedFront = inheritedFront;
         this.inheritedBack = inheritedBack;
         this.affectedChunks = computeAffectedChunks();
@@ -83,17 +73,6 @@ public class TemperatureProvider {
     private Set<ChunkPos> computeAffectedChunks() {
         Set<ChunkPos> chunks = new HashSet<>(getFrontScan().touchedChunks());
         chunks.addAll(getBackScan().touchedChunks());
-
-        int r = Math.max(0, exhaustRadius);
-        int minCX = (exhaustAnchor.getX() - r) >> 4;
-        int maxCX = (exhaustAnchor.getX() + r) >> 4;
-        int minCZ = (exhaustAnchor.getZ() - r) >> 4;
-        int maxCZ = (exhaustAnchor.getZ() + r) >> 4;
-        for (int cx = minCX; cx <= maxCX; cx++) {
-            for (int cz = minCZ; cz <= maxCZ; cz++) {
-                chunks.add(new ChunkPos(cx, cz));
-            }
-        }
         return chunks;
     }
 
@@ -103,10 +82,6 @@ public class TemperatureProvider {
 
     public RoomScan getBackScan() {
         return inheritedBack != null ? inheritedBack.getRoomScan() : backScan;
-    }
-
-    public BlockPos getExhaustAnchor() {
-        return exhaustAnchor;
     }
 
     public boolean isBlocked() {
@@ -138,18 +113,7 @@ public class TemperatureProvider {
         if (front.isSealed() && front.containsEnvelope(pos)) {
             return Optional.of(targetTemperature);
         }
-
-        if (front.isSealed() && level != null && isWithinExhaust(pos)) {
-            float climate = Climate.getTemperature(level, pos);
-            double dist = Math.sqrt(pos.distSqr(exhaustAnchor));
-            float falloff = (float) Math.max(0.0, 1.0 - dist / exhaustRadius);
-            return Optional.of(climate + (targetTemperature - climate) * falloff);
-        }
         return Optional.empty();
-    }
-
-    private boolean isWithinExhaust(BlockPos pos) {
-        return exhaustRadius > 0 && pos.distSqr(exhaustAnchor) <= (double) exhaustRadius * exhaustRadius;
     }
 
     public boolean isMachineLoaded() {
@@ -187,8 +151,6 @@ public class TemperatureProvider {
         tag.putLong("pos", machinePos.asLong());
         tag.putFloat("targetTemperature", targetTemperature);
         tag.putBoolean("blocked", blocked);
-        tag.putLong("exhaustAnchor", exhaustAnchor.asLong());
-        tag.putInt("exhaustRadius", exhaustRadius);
         tag.putLongArray("chunks", chunkPosToLongs(affectedChunks));
     }
 
@@ -198,8 +160,6 @@ public class TemperatureProvider {
 
         provider.targetTemperature = tag.getFloat("targetTemperature");
         provider.blocked = tag.getBoolean("blocked");
-        provider.exhaustAnchor = BlockPos.of(tag.getLong("exhaustAnchor"));
-        provider.exhaustRadius = tag.getInt("exhaustRadius");
         provider.affectedChunks = longsToChunkSet(tag.getLongArray("chunks"));
         return provider;
     }

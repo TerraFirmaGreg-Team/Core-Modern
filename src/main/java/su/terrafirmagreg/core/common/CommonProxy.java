@@ -26,7 +26,8 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.blocks.*;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
@@ -39,7 +40,8 @@ import su.terrafirmagreg.core.common.tfgt.TFGToolTypes;
 import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
-import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
+import su.terrafirmagreg.core.compat.create.display_source.TFGDisplaySources;
+import su.terrafirmagreg.core.compat.create.mechanicalArm.CustomArmInteractionPointTypes;
 import su.terrafirmagreg.core.compat.grappling_hook.GrapplehookCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
@@ -71,21 +73,19 @@ public class CommonProxy {
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGSurfaceConditions.SURFACE_CONDITIONS.register(bus);
+        TFGDensityFunctions.DENSITY_FUNCTIONS.register(bus);
         TFGContainers.CONTAINERS.register(bus);
         TFGEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(bus);
         TFGEffects.EFFECTS.register(bus);
         TFGRecipeTypes.RECIPE_TYPES.register(bus);
         TFGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
         TFGEvents.register();
-        TFGCarvers.CARVERS.register(bus);
         TFGStructureProcessors.STRUCTURE_PROCESSORS.register(bus);
         TFGLootConditions.LOOT_CONDITIONS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
         TFGBrain.POI_TYPES.register(bus);
-
-        TFGPoiTypes.TYPES.register(bus);
 
         TFGFoodTraits.init();
 
@@ -94,6 +94,7 @@ public class CommonProxy {
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
 
+        TFGDisplaySources.init(bus);
         AdAstraCompat.RegisterEvents();
         AE2Compat.registerEvents();
         EnvironmentSystem.init();
@@ -110,6 +111,7 @@ public class CommonProxy {
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
         TFGModifyMaterials.modify();
+        TFGToolTypes.modify();
     }
 
     @SubscribeEvent
@@ -122,6 +124,9 @@ public class CommonProxy {
             addUpgrades(AE2wtlib.PATTERN_ENCODING_TERMINAL);
             addUpgrades(AE2wtlib.PATTERN_ACCESS_TERMINAL);
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
+            addUpgrades(TFGItems.WIRELESS_ORDER_TERMINAL.get());
+            add(AEItems.ENERGY_CARD, TFGItems.WIRELESS_ORDER_TERMINAL.get(), 2, GuiText.WirelessTerminals.getTranslationKey());
+            add(AE2wtlib.QUANTUM_BRIDGE_CARD, TFGItems.WIRELESS_ORDER_TERMINAL.get(), 1, GuiText.WirelessTerminals.getTranslationKey());
 
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();

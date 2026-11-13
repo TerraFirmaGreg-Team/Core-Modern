@@ -1,7 +1,7 @@
 [versions]
 create = "6.0.8-289"
 flywheel = "1.0.5"
-cctweaked = "1.111.0"
+cctweaked = "1.121.0"
 
 # Core / API libraries delivered as mods
 
@@ -52,11 +52,11 @@ sacksNSuch = "1.2.6"
 
 # AE2
 guideme = "20.1.13"
-ae2 = "9092015" # cf: appliedenergistics2-forge-15.5.5-uelm.jar
-ae2WirelessTerminals = "15.3.0-forge"
+ae2 = "15.5.9-uelm"
+ae2WirelessTerminals = "15.4.1"
 
 # ComputerCraft
-ccTweaked = "1.111.0-forge,1.20.1"
+ccTweaked = "1.121.0-forge,1.20.1"
 
 # FTB
 ftbTeams = "7499810"
@@ -78,6 +78,9 @@ species = "3.5"
 simplyStackedDimensions = "7657445"
 jellies = "0.1.6"
 arthropocolypse = "5397648"
+opposingForce = "1.20.1-2.0.3"
+aliencraftKepler = "8896274"
+primitiveCreatures = "7287434"
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = "11.1.136+forge"
@@ -169,8 +172,8 @@ sacksNSuch = { module = "maven.modrinth:sacks-n-such", version.ref = "sacksNSuch
 
 # AE2 (UELM fork)
 guideme = { module = "maven.modrinth:guideme", version.ref = "guideme" }
-ae2 = { module = "curse.maven:ae2-uelm-1624366", version.ref = "ae2" }
-ae2WirelessTerminals = { module = "maven.modrinth:applied-energistics-2-wireless-terminals", version.ref = "ae2WirelessTerminals" }
+ae2 = { module = "appeng:appliedenergistics2-forge", version.ref = "ae2" }
+ae2WirelessTerminals = { module = "de.mari_023:ae2wtlib", version.ref = "ae2WirelessTerminals" }
 
 # ComputerCraft
 ccTweakedCoreApi = { module = "cc.tweaked:cc-tweaked-1.20.1-core-api", version.ref = "cctweaked" }
@@ -197,6 +200,9 @@ species = { module = "maven.modrinth:species", version.ref = "species" }
 simplyStackedDimensions = { module = "curse.maven:simply-stacked-dimensions-523416", version.ref = "simplyStackedDimensions" }
 jellies = { module = "maven.modrinth:jellies", version.ref = "jellies" }
 arthropocolypse = { module = "curse.maven:arthropocolypse-1018606", version.ref = "arthropocolypse" }
+opposingForce = { module = "maven.modrinth:opposing-force", version.ref = "opposingForce" }
+aliencraftKepler = { module = "curse.maven:aliencraft-kepler-22b-1444616", version.ref = "aliencraftKepler" }
+primitiveCreatures = { module = "curse.maven:primitive-creatures-1218288", version.ref = "primitiveCreatures" }
 
 # Grappling Hook (needs cloth-config at runtime)
 clothConfig = { module = "maven.modrinth:cloth-config", version.ref = "clothConfig" }

@@ -7,55 +7,55 @@
         "decoration": {
             "blocks": [
                 {
-                    "with": [{"block": "tfc:ore/diamond/rhyolite"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/rhyolite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/basalt"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/basalt"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/andesite"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/andesite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/dacite"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/dacite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/granite"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/granite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/diorite"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/diorite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/gabbro"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/gabbro"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/quartzite"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/quartzite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/slate"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/slate"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/phyllite"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/phyllite"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/schist"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/schist"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/gneiss"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/gneiss"]
                 },
                 {
-                    "with": [{"block": "tfc:ore/diamond/marble"}],
+                    "with": [{"block": "minecraft:diamond_ore"}],
                     "replace": ["tfc:rock/raw/marble"]
                 }
             ],

@@ -81,8 +81,12 @@ public class ElectricFlaskItem extends FlaskItem {
             return;
         }
 
+        final boolean wasSprinting = player.isSprinting();
         electric.discharge(EU_PER_DRINK, TIER, true, false, false);
         drinkable.onDrink(player, handler.drain(DEFAULT_DRINK, IFluidHandler.FluidAction.EXECUTE).getAmount());
+        if (wasSprinting) {
+            player.setSprinting(true);
+        }
         level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 0.5f, 1.0f);
     }
 
