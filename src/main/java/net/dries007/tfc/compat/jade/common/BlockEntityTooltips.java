@@ -228,7 +228,7 @@ public final class BlockEntityTooltips
         {
             if (barrel.tfg$isInsideValidCellar())
             {
-                tooltip.accept(Component.translatable("tfg.tooltip.firmalife_inside_valid_greenhouse").withStyle(ChatFormatting.GREEN));
+                tooltip.accept(Component.translatable("tfg.tooltip.firmalife_inside_valid_cellar").withStyle(ChatFormatting.GREEN));
             }
             if (state.getValue(BarrelBlock.SEALED))
             {
