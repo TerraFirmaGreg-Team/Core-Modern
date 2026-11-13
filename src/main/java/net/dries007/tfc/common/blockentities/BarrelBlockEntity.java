@@ -124,6 +124,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
                 if (knownRecipe != null)
                 {
                     knownRecipe.onSealed(barrel.inventory); // We're in a sequential recipe, so apply sealed affects to the new recipe
+                    barrel.applyCellaredTrait(); // apply cellar effects to the new recipe if applicable
                 }
             }
         }
@@ -188,7 +189,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     private long recipeTick; // The tick this barrel started working on the current recipe
     private int soundCooldownTicks = 0;
     @Nullable private BlockPos pourPos = null;
-    protected boolean insideValidCellar = false;
+    public boolean insideValidCellar = false;
 
     private boolean needsInstantRecipeUpdate; // If the instant recipe needs to be checked again
 
@@ -307,6 +308,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
                 return;
             }
             knownRecipe.onSealed(inventory); // We're in a sequential recipe, so apply sealed affects to the new recipe
+            applyCellaredTrait();
             if (knownRecipe.isInfinite())
             {
                 return; // No more simulation can occur
@@ -470,14 +472,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         {
             recipe.onSealed(inventory);
 
-            if (recipe.getId().equals(Helpers.identifier("preserved_in_vinegar")) && this.insideValidCellar)
-            {
-                // this is here instead of in SealedBarrelRecipe because cellar trait should be handled by the barrel and not the recipe
-                inventory.whileMutable(() -> {
-                    final ItemStack stack = Helpers.removeStack(inventory, SLOT_ITEM);
-                    inventory.insertItem(SLOT_ITEM, FoodCapability.applyTrait(stack, TFGFoodTraits.CELLARED), false);
-                });
-            }
+            applyCellaredTrait();
 
 
             recipeTick = sealedTick;
@@ -585,15 +580,33 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     // sets climate receiver validity
     @Override
     public void setValid(Level level, BlockPos blockPos, boolean valid, int i, ClimateType climateType) {
+
+        if (this.insideValidCellar && !valid) // remove trait if we are no longer in a valid cellar
+            this.removeCellaredTrait();
+
         if (climateType == ClimateType.CELLAR) {
             this.insideValidCellar = valid;
         }
+        this.applyCellaredTrait();
         this.markForSync();
     }
 
     @Override
     public boolean tfg$isInsideValidCellar() {
         return insideValidCellar;
+    }
+
+    private void applyCellaredTrait()
+    {
+        if (recipe == null || !recipe.getId().equals(Helpers.identifier("barrel/preserved_in_vinegar")) || !insideValidCellar) return;
+
+        inventory.whileMutable(() -> {
+            final ItemStack stack = Helpers.removeStack(inventory, SLOT_ITEM);
+            if (!stack.isEmpty())
+            {
+                inventory.insertItem(SLOT_ITEM, FoodCapability.applyTrait(stack, TFGFoodTraits.CELLARED), false);
+            }
+        });
     }
 
     public void removeCellaredTrait() {
