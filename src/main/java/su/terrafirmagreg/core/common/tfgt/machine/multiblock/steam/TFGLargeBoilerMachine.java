@@ -23,6 +23,7 @@ import com.gregtechceu.gtceu.api.multiblock.pattern.PatternState;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
+import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
@@ -45,6 +46,9 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
 
 import brachy.modularui.api.drawable.Text;
@@ -58,7 +62,6 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 
-import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -127,15 +130,35 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                     3,
                     "material.tfg.radioactive_effluent"));
 
+    public record CatalystItem(
+            Supplier<Item> item,
+            int burnSeconds,
+            double durationMultiplier, // fuel burn time multiplier (efficiency)
+            int minCatalystTier) { // tier of the catalyst module substructure required
+    }
+
+    // Every Catalysts available - 1 item every burnSeconds while working, in order of !durationMultiplier!
+    // TODO: placeholders
+    private static final List<CatalystItem> CATALYSTS = List.of(
+            new CatalystItem(
+                    () -> BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("tfc", "powder/flux")),
+                    20, 1.25,
+                    1),
+            new CatalystItem(
+                    () -> BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("gtceu", "nickel_dust")),
+                    60, 1.5,
+                    2),
+            new CatalystItem(
+                    () -> BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("gtceu", "platinum_dust")),
+                    300, 2.0,
+                    3));
+
     //#region Substructures
 
     // Booster Module is used to input the booster and boost the initial max PU
     public static final String BOOSTER = "booster";
     // Catalyst module is used to increase efficiency (lengthen recipe duration)
     public static final String CATALYST = "catalyst";
-
-    // This is temporary the catalyst will become a list too
-    private static final double[] CATALYST_DURATION_MULTIPLIERS = { 1.0, 1.25, 1.5, 2.0 };
 
     // Booster Module also gives a bonus to max PU to imitate the old Boilers
     private static final int[] BOOSTER_TEMPERATURE_BONUS = { 0, 320, 800, 1320 };
@@ -145,6 +168,11 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     // Boosters list for EMI
     public static List<BoosterFluid> getBoosters() {
         return BOOSTERS;
+    }
+
+    // Catalysts list for EMI
+    public static List<CatalystItem> getCatalysts() {
+        return CATALYSTS;
     }
 
     // Steam output boost depending on the water
@@ -201,8 +229,19 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     // the controller capabilities so booster hatches stay dedicated to boosters
     private final Set<RecipeHandlerList> boosterHandlerLists = Collections.newSetFromMap(new IdentityHashMap<>());
 
+    // Same for the Item Input Buses of the Catalyst Module
+    private final List<IRecipeHandler<?>> catalystInputs = new ArrayList<>();
+    private final Set<RecipeHandlerList> catalystHandlerLists = Collections.newSetFromMap(new IdentityHashMap<>());
+
     private List<BoosterFluid> compatibleBoosters = List.of();
     private int bestBonusPossible = 0;
+
+    private List<CatalystItem> compatibleCatalysts = List.of();
+
+    @SaveField
+    private int activeCatalystIndex = -1;
+    @SaveField
+    private int catalystSecondsLeft = 0;
 
     // Cache for getBestAvailableBooster()
     @Nullable
@@ -232,8 +271,14 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         return baseMaxTemperature + BOOSTER_TEMPERATURE_BONUS[getEffectiveBoosterTier()];
     }
 
+    @Nullable
+    public CatalystItem getActiveCatalyst() {
+        return activeCatalystIndex < 0 ? null : CATALYSTS.get(activeCatalystIndex);
+    }
+
     public double getCatalystDurationMultiplier() {
-        return CATALYST_DURATION_MULTIPLIERS[getEffectiveCatalystTier()];
+        CatalystItem active = getActiveCatalyst();
+        return active != null ? active.durationMultiplier() : 1.0;
     }
 
     private void refreshCompatibleBoosters() {
@@ -245,6 +290,20 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         bestBonusPossible = compatibleBoosters.isEmpty() ? 0 : compatibleBoosters.get(0).temperatureBonus();
         boosterCacheTimer = -1L;
         cachedBooster = null;
+    }
+
+    private void refreshCompatibleCatalysts() {
+        int tier = getEffectiveCatalystTier();
+        compatibleCatalysts = CATALYSTS.stream()
+                .filter(c -> tier >= c.minCatalystTier())
+                .sorted(Comparator.comparingDouble(CatalystItem::durationMultiplier).reversed())
+                .toList();
+
+        CatalystItem active = getActiveCatalyst();
+        if (active != null && !compatibleCatalysts.contains(active)) {
+            activeCatalystIndex = -1;
+            catalystSecondsLeft = 0;
+        }
     }
 
     @Override
@@ -260,13 +319,16 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     // will do the same for catalyst
     @Override
     public void formStructure(@NotNull String substructureName) {
-        refreshBoosterHandlerLists();
+        collectModuleHandlerLists(BOOSTER, boosterHandlerLists);
+        collectModuleHandlerLists(CATALYST, catalystHandlerLists);
         boosterTanks.clear();
+        catalystInputs.clear();
         super.formStructure(substructureName);
         if (isModule(substructureName)) {
             readModuleTier(substructureName);
         }
         refreshCompatibleBoosters();
+        refreshCompatibleCatalysts();
         scheduleSteamSubscriptionUpdate();
     }
 
@@ -274,10 +336,12 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     public void invalidateStructure(@NotNull String substructureName) {
         super.invalidateStructure(substructureName);
         boosterTanks.clear();
+        catalystInputs.clear();
         if (isModule(substructureName)) {
             setModuleTier(substructureName, 0);
         }
         refreshCompatibleBoosters();
+        refreshCompatibleCatalysts();
         scheduleSteamSubscriptionUpdate();
     }
 
@@ -286,6 +350,12 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         if (boosterHandlerLists.contains(handlerList)) {
             if (handlerList.getHandlerIO().support(IO.IN)) {
                 boosterTanks.addAll(handlerList.getCapability(FluidRecipeCapability.CAP));
+            }
+            return;
+        }
+        if (catalystHandlerLists.contains(handlerList)) {
+            if (handlerList.getHandlerIO().support(IO.IN)) {
+                catalystInputs.addAll(handlerList.getCapability(ItemRecipeCapability.CAP));
             }
             return;
         }
@@ -302,14 +372,14 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         }
     }
 
-    private void refreshBoosterHandlerLists() {
-        boosterHandlerLists.clear();
-        PatternState state = getPatternState(BOOSTER);
+    private void collectModuleHandlerLists(String substructureName, Set<RecipeHandlerList> into) {
+        into.clear();
+        PatternState state = getPatternState(substructureName);
         if (!state.getState().isValid())
             return;
         for (BlockInfo info : state.getCache().values()) {
             if (info.getBlockEntity() instanceof MultiblockPartMachine part) {
-                boosterHandlerLists.addAll(part.getRecipeHandlers());
+                into.addAll(part.getRecipeHandlers());
             }
         }
     }
@@ -434,6 +504,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             // Update the recipe duration + drain booster every 20 ticks
             if (getOffsetTimer() % 20 == 0) {
                 tryDrainBoostFluid();
+                if (recipeLogic.isWorking())
+                    tickCatalyst();
                 getRecipeLogic().refreshDurationForTemperature();
             }
 
@@ -565,6 +637,31 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         return 0;
     }
 
+    private void tickCatalyst() {
+        if (catalystSecondsLeft > 0) {
+            catalystSecondsLeft--;
+            return;
+        }
+        activeCatalystIndex = -1;
+        for (CatalystItem catalyst : compatibleCatalysts) {
+            if (consumeCatalyst(catalyst, true) && consumeCatalyst(catalyst, false)) {
+                activeCatalystIndex = CATALYSTS.indexOf(catalyst);
+                catalystSecondsLeft = catalyst.burnSeconds();
+                return;
+            }
+        }
+    }
+
+    private boolean consumeCatalyst(CatalystItem catalyst, boolean simulate) {
+        List<Ingredient> left = new ArrayList<>(List.of(SizedIngredient.create(new ItemStack(catalyst.item().get()))));
+        for (IRecipeHandler<?> input : catalystInputs) {
+            left = (List<Ingredient>) input.handleRecipe(IO.IN, null, left, simulate);
+            if (left.isEmpty())
+                return true;
+        }
+        return false;
+    }
+
     public int getEffectiveMaxTemperature(@Nullable BoosterFluid best) {
         return getMaxTemperature() + (best != null ? best.temperatureBonus() : 0);
     }
@@ -634,10 +731,14 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         IntSyncValue catalystTierSync = new IntSyncValue(this::getEffectiveCatalystTier);
         IntSyncValue maxTemperatureSync = new IntSyncValue(this::getMaxTemperature);
         IntSyncValue waterDrainedSync = new IntSyncValue(() -> lastWaterDrained);
+        IntSyncValue activeCatalystSync = new IntSyncValue(() -> activeCatalystIndex);
+        IntSyncValue catalystSecondsLeftSync = new IntSyncValue(() -> catalystSecondsLeft);
         syncManager.syncValue("boosterTier", boosterTierSync);
         syncManager.syncValue("catalystTier", catalystTierSync);
         syncManager.syncValue("maxTemperature", maxTemperatureSync);
         syncManager.syncValue("waterDrained", waterDrainedSync);
+        syncManager.syncValue("activeCatalyst", activeCatalystSync);
+        syncManager.syncValue("catalystSecondsLeft", catalystSecondsLeftSync);
 
         if (!isFormed())
             return widgets;
@@ -680,8 +781,20 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                         .withStyle(ChatFormatting.GRAY);
             }
             return Text.lang("tfg.multiblock.large_boiler.catalyst_module",
-                    Component.literal("T" + tier).withStyle(ChatFormatting.GOLD),
-                    Component.literal("x" + CATALYST_DURATION_MULTIPLIERS[tier]).withStyle(ChatFormatting.GREEN));
+                    Component.literal("T" + tier).withStyle(ChatFormatting.GOLD));
+        }).asWidget());
+
+        widgets.add(Text.dynamic(() -> {
+            int index = activeCatalystSync.getIntValue();
+            if (index < 0) {
+                return Text.lang("tfg.multiblock.large_boiler.catalyst_none")
+                        .withStyle(ChatFormatting.GRAY);
+            }
+            CatalystItem catalyst = CATALYSTS.get(index);
+            return Text.lang("tfg.multiblock.large_boiler.catalyst_active",
+                    catalyst.item().get().getDescription().copy().withStyle(ChatFormatting.GREEN),
+                    Component.literal("x" + catalyst.durationMultiplier()).withStyle(ChatFormatting.GREEN),
+                    Component.literal(catalystSecondsLeftSync.getIntValue() + "s").withStyle(ChatFormatting.GRAY));
         }).asWidget());
 
         widgets.add(Text.dynamic(() -> {
@@ -703,8 +816,10 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                 .tooltip(t -> t.add(Text.lang("tfg.multiblock.large_boiler.water_consumption.tooltip"))));
 
         widgets.add(Text.dynamic(() -> {
+            int index = activeCatalystSync.getIntValue();
+            double catalystMultiplier = index < 0 ? 1.0 : CATALYSTS.get(index).durationMultiplier();
             int efficiencyPercent = (int) Math.round(getTemperatureMultiplier(currentTempSync.getIntValue())
-                    * CATALYST_DURATION_MULTIPLIERS[catalystTierSync.getIntValue()] * 100);
+                    * catalystMultiplier * 100);
             return Text.lang("tfg.multiblock.large_boiler.fuel_efficiency",
                     ChatFormatting.YELLOW.toString() + efficiencyPercent + "%");
         }).asWidget());
@@ -720,14 +835,14 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
 
     private static double getTemperatureMultiplier(int currentTemperature) {
         final int THRESHOLD = 480;
-        final double MAX_REDUCTION = 0.6; // x2.5 max (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
+        final double MAX_REDUCTION = 0.8; // x2.5 max (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
 
         if (currentTemperature <= THRESHOLD)
             return 1.0;
 
         double t = (currentTemperature - THRESHOLD) / 1000.0;
         // logarithm : start fast then slow down until it reaches its cap
-        double reduction = MAX_REDUCTION * (1.0 - Math.exp(-0.8 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
+        double reduction = MAX_REDUCTION * (1.0 - Math.exp(-0.6 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
         return 1.0 - reduction;
     }
 
