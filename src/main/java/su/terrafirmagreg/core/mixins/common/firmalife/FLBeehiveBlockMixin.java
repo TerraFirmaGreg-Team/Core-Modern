@@ -24,7 +24,7 @@ public abstract class FLBeehiveBlockMixin {
     private static void addGreenhouseInfo(List<Component> text, Level level, BlockPos pos, FLBeehiveBlockEntity hive, CallbackInfo ci) {
         if (((IGreenhouseReceiver) hive).tfg$isInsideValidGreenhouse()) {
             //            text.add(Component.literal("Inside a valid greenhouse").withStyle(ChatFormatting.GREEN));
-            text.add(Component.translatable("tfg.tooltip.firmalife_inside_valid_greenhouse").withStyle(ChatFormatting.GREEN));
+            text.add(Component.translatable("firmalife.greenhouse.valid_generic").withStyle(ChatFormatting.GREEN));
         }
     }
 }
