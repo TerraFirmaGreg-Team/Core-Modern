@@ -40,6 +40,9 @@ dependencies {
     // Create: Vintage Improvements
     modImplementation(mods.vintageImprovements.get()) { transitive = false }
 
+    // Create: Deco
+    modImplementation(mods.createDeco.get()) { transitive = false }
+
     // Greate
     modRuntimeOnly(mods.copycats)
     modRuntimeOnly(mods.createRepair)

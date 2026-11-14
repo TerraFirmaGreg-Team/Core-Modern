@@ -62,6 +62,7 @@
         "common.create.FluidDrainingBehaviourMixin",
         "common.create.FluidFillingBehaviourMixin",
         "common.create.FluidPropagatorMixin",
+        "common.create.ItemVaultBlockEntityMixin",
         "common.create.KineticBlockEntityStressMixin",
         "common.create.KineticStatsMixin",
         "common.create.MechanicalCrafterBlockMixin",
