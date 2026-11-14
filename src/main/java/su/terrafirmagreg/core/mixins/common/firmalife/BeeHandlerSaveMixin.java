@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.eerussianguy.firmalife.common.capabilities.bee.BeeHandler;
 
-
 /**
  * Fixes bees not getting diseases. Mixin implementation of <a href="https://github.com/eerussianguy/firmalife/pull/297">this FirmaLife PR</a>
  * @author Zippity
