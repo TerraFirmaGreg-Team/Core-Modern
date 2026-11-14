@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.blocks.crop;
 
 import java.util.function.Supplier;
+
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -103,7 +105,8 @@ public abstract class PickableCropBlock extends DefaultCropBlock
 
     private ItemStack yieldItemStack(Item item, float yield, RandomSource random)
     {
-        return new ItemStack(item, Mth.floor(Mth.lerp(yield, 1f, 5f) + random.nextInt(2)));
+		ItemStack stack = new ItemStack(item, Mth.floor(Mth.lerp(yield, 1f, 5f) + random.nextInt(2)));
+		return Helpers.initFoodCapability(stack);
     }
 
 }
