@@ -397,6 +397,36 @@ public class TFGMachines {
         };
     }
 
+    public static final MachineDefinition[] BATTERY_DYNAMO_HATCH = GTMachineUtils.registerTieredMachines(REGISTRATE,
+            "battery_dynamo_hatch",
+            (holder, tier) -> new BatteryDynamoHatchPartMachine(holder, tier, 4),
+            (tier, builder) -> builder
+                    .langValue(GTValues.VNF[tier] + " Battery Dynamo Hatch")
+                    .rotationState(RotationState.ALL)
+                    .abilities(PartAbility.OUTPUT_ENERGY)
+                    .modelProperty(IS_FORMED, false)
+                    .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
+                            FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]),
+                            Component.translatable("gtceu.universal.tooltip.amperage_out_till", 4),
+                            Component.translatable("tfg.machine.battery_dynamo_hatch.tooltip", 4,
+                                    GTValues.VNF[tier]),
+                            Component.translatable("gtceu.machine.energy_hatch.output_hi_amp.tooltip"))
+                    // Model is copied from the 4x Battery Buffer with a change of texture for the io_emissive
+                    .model((ctx, prov, b) -> {
+                        BlockModelBuilder model = prov.models().nested()
+                                .parent(prov.models().getExistingFile(TRANSFORMER_LIKE))
+                                .texture("overlay_in_io", GTCEu.id("block/overlay/machine/overlay_energy_4a_out"))
+                                .texture("overlay_in_tinted", GTCEu.id("block/overlay/machine/overlay_energy_4a_tinted"))
+                                .texture("overlay_in_io_emissive",
+                                        TFGCore.id("block/machines/battery_dynamo_hatch/overlay_battery_dynamo_emissive"))
+                                .texture("overlay_out_io", GTCEu.id("block/void"))
+                                .texture("overlay_out_io_emissive", GTCEu.id("block/void"));
+                        tieredHullTextures(model, b.getOwner().getTier());
+                        b.partialState().setModel(model);
+                    })
+                    .register(),
+            GTValues.tiersBetween(GTValues.LV, GTValues.UV));
+
     // Copy directly from GTm
     private static void rotorState(MachineModelBuilder<BlockModelBuilder> builder, BlockModelProvider models,
             ResourceLocation model, boolean spinning, boolean emissive) {
