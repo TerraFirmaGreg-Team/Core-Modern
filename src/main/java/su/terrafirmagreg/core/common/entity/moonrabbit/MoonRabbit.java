@@ -88,9 +88,9 @@ public class MoonRabbit extends TFCRabbit {
     @Override
     public void createGenes(@NotNull CompoundTag tag, @NotNull TFCAnimalProperties male) {
         super.createGenes(tag, male);
-        tag.putString("variant1", getMoonVariant().getSerializedName());
+        tag.putInt("variant1", getVariant().id());
         if (male instanceof MoonRabbit rabbit) {
-            tag.putString("variant2", getMoonVariant().getSerializedName());
+            tag.putInt("variant2", rabbit.getVariant().id());
         }
     }
 
