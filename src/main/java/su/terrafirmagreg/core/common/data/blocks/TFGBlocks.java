@@ -321,7 +321,6 @@ public final class TFGBlocks {
                     }
                 }
             })
-
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
             .loot((lt, block) -> lt.add(block, LootTable.lootTable()
                     .withPool(LootPool.lootPool()
@@ -339,8 +338,6 @@ public final class TFGBlocks {
 
     public static final BlockEntry<StorageProviderBlock> STORAGE_PROVIDER = TFGCore.REGISTRATE.block("storage_provider", p -> new StorageProviderBlock())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
-            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
