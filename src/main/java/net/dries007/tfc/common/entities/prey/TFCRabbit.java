@@ -150,9 +150,9 @@ public class TFCRabbit extends Rabbit implements MammalProperties
     public void createGenes(CompoundTag tag, TFCAnimalProperties male)
     {
         MammalProperties.super.createGenes(tag, male);
-        tag.putString("variant1", getVariant().getSerializedName());
+		tag.putInt("variant1", getVariant().id());
         if (male instanceof TFCRabbit rabbit)
-            tag.putString("variant2", rabbit.getVariant().getSerializedName());
+			tag.putInt("variant2", rabbit.getVariant().id());
     }
 
     @Override
