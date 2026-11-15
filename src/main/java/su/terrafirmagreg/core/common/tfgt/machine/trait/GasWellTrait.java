@@ -1,12 +1,20 @@
 package su.terrafirmagreg.core.common.tfgt.machine.trait;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.FluidVeinWorldEntry;
+import com.gregtechceu.gtceu.api.machine.TickableSubscription;
+import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -15,25 +23,43 @@ import lombok.Getter;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachine;
 
-@Getter
-public class GasWellRecipeLogic {
+public class GasWellTrait extends MachineTrait {
 
     public static final int FLUID_CONSUMPTION_PER_TICK = 10;
     public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 240;
 
-    private final GasWellMachine machine;
-
+    @Getter
+    @SaveField
     private int timer = 0;
+    @SaveField
     private boolean hasConsumedExplosive = false;
+    @Getter
     private boolean outputBlocked = false;
+    @Nullable
     private BedrockFluidVeinSavedData cachedSavedData = null;
+    @Nullable
+    private TickableSubscription tickSubscription = null;
 
-    public GasWellRecipeLogic(GasWellMachine machine) {
-        this.machine = machine;
+    @Override
+    protected List<Class<?>> validMachineClasses() {
+        return List.of(GasWellMachine.class);
+    }
+
+    public GasWellMachine getGasWell() {
+        return (GasWellMachine) getMachine();
     }
 
     public boolean isActive() {
         return hasConsumedExplosive;
+    }
+
+    public void start() {
+        tickSubscription = subscribeServerTick(tickSubscription, this::tick);
+    }
+
+    public void stop() {
+        unsubscribe(tickSubscription);
+        tickSubscription = null;
     }
 
     public void reset() {
@@ -42,8 +68,10 @@ public class GasWellRecipeLogic {
         outputBlocked = false;
     }
 
-    public void resetFull() {
-        reset();
+    @Override
+    public void onMachineUnload() {
+        super.onMachineUnload();
+        tickSubscription = null;
         cachedSavedData = null;
     }
 
@@ -54,7 +82,34 @@ public class GasWellRecipeLogic {
         return cachedSavedData;
     }
 
-    public void tick() {
+    @Nullable
+    public FluidVeinWorldEntry getVeinEntry() {
+        if (!(getLevel() instanceof ServerLevel serverLevel))
+            return null;
+        int chunkX = SectionPos.blockToSectionCoord(getBlockPos().getX());
+        int chunkZ = SectionPos.blockToSectionCoord(getBlockPos().getZ());
+        var entry = getSavedData(serverLevel).getFluidVeinWorldEntry(chunkX, chunkZ);
+        return entry != null && entry.getDefinition() != null ? entry : null;
+    }
+
+    @Nullable
+    public Fluid getVeinFluid() {
+        var entry = getVeinEntry();
+        return entry == null ? null : entry.getDefinition().getStoredFluid().get();
+    }
+
+    public int getFluidToProduce() {
+        var entry = getVeinEntry();
+        return entry == null ? 0 : getFluidToProduce(entry);
+    }
+
+    public int getVeinPercent() {
+        var entry = getVeinEntry();
+        return entry == null ? 0 : entry.getOperationsRemaining() * 100 / BedrockFluidVeinSavedData.MAXIMUM_VEIN_OPERATIONS;
+    }
+
+    private void tick() {
+        var machine = getGasWell();
         if (!(machine.getLevel() instanceof ServerLevel serverLevel))
             return;
         if (!machine.isFormed() || machine.getDefaultPatternState().hasErrors())
@@ -120,7 +175,7 @@ public class GasWellRecipeLogic {
     }
 
     private boolean consumeExplosive() {
-        var itemHandler = machine.getInputItemHandler();
+        var itemHandler = getGasWell().getInputItemHandler();
         if (itemHandler == null)
             return false;
 
@@ -138,7 +193,7 @@ public class GasWellRecipeLogic {
     }
 
     private boolean consumeFluid() {
-        var inputTank = machine.getInputFluidTank();
+        var inputTank = getGasWell().getInputFluidTank();
         if (inputTank == null)
             return false;
 
@@ -164,14 +219,14 @@ public class GasWellRecipeLogic {
     }
 
     private boolean canOutputFluid(FluidStack fluid) {
-        var outputTank = machine.getOutputFluidTank();
+        var outputTank = getGasWell().getOutputFluidTank();
         if (outputTank == null)
             return false;
         return outputTank.fillInternal(fluid, IFluidHandler.FluidAction.SIMULATE) >= fluid.getAmount();
     }
 
     private void outputFluid(FluidStack fluid) {
-        var outputTank = machine.getOutputFluidTank();
+        var outputTank = getGasWell().getOutputFluidTank();
         if (outputTank == null)
             return;
         outputTank.fillInternal(fluid, IFluidHandler.FluidAction.EXECUTE);

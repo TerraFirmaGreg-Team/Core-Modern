@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.compat.jade;
 
+import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
+
 import net.minecraft.resources.ResourceLocation;
 
 import snownee.jade.api.*;
@@ -9,6 +11,7 @@ import su.terrafirmagreg.core.common.block.GasBurnerBlock;
 import su.terrafirmagreg.core.common.block.TierLockedAcidBlock;
 import su.terrafirmagreg.core.common.block.TierLockedBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmClusterBlock;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachine;
 
 @WailaPlugin
 public class TFGJadePlugin implements IWailaPlugin {
@@ -22,5 +25,11 @@ public class TFGJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(TierLockedAcidProvider.INSTANCE, TierLockedAcidBlock.class);
         registration.registerBlockComponent(DynamicAgeProvider.INSTANCE, PalmClusterBlock.class);
         registration.registerBlockComponent(GasBurnerProvider.INSTANCE, GasBurnerBlock.class);
+        registration.registerBlockComponent(GasWellProvider.INSTANCE, MetaMachineBlock.class);
+    }
+
+    @Override
+    public void register(IWailaCommonRegistration registration) {
+        registration.registerBlockDataProvider(GasWellProvider.INSTANCE, GasWellMachine.class);
     }
 }

@@ -86,7 +86,7 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.*;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
-import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellTrait;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.ISPOutputRecipeLogic;
 import su.terrafirmagreg.core.common.tfgt.recipe.modifier.AnimalProductModifier;
 
@@ -1035,7 +1035,7 @@ public class TFGMultiMachines {
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.gas_well_1"),
                     Component.translatable("tfg.tooltip.machine.gas_well_2",
-                            GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL))
+                            GasWellTrait.EXPLOSIVE_CONSUMPTION_INTERVAL))
             .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAA", "FXF")
                     .slice("AAA", "XBX")
