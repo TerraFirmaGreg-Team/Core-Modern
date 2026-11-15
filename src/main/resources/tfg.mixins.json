@@ -140,7 +140,6 @@
         "common.grappling_hook.ForcefieldControllerMixin",
         "common.grappling_hook.GrappleControllerMixin",
         "common.grappling_hook.GrapplehookItemMixin",
-        "common.greate.GreateRecipeTypeMixin",
         "common.greate.TieredBasinCategoryMixin",
         "common.greate.TieredMillingRecipeMixin",
         "common.gtceu.CleanroomConditionMixin",
