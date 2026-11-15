@@ -105,6 +105,8 @@
         "common.create.greate_tiering.WaterWheelBlockMixin",
         "common.create.greate_tiering.WindmillBearingBlockEntityMixin",
         "common.create.greate_tiering.WindmillBearingBlockMixin",
+        "common.create_addition.RollingMillBlockEntityMixin",
+        "common.create_addition.RollingMillBlockMixin",
         "common.create_connected.KineticBridgeDestinationBlockEntityMixin",
         "common.emi.ItemEmiStackMixin",
         "common.emi.JemiUtilMixin",

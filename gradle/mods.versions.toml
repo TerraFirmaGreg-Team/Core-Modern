@@ -24,6 +24,7 @@ createSteamPowered = "1.20.1-3.1.0"
 greate = "0.0.81"
 strutYourStuff = "1.1.1+mc1.20.1-forge,1.20.1"
 createDeco = "6373226"
+createAdditions = "7208610"
 
 # GregTech
 gtceu = "8.0.0-SNAPSHOT"
@@ -145,6 +146,7 @@ createSteamPowered = { module = "maven.modrinth:create-steam-powered", version.r
 greate = { module = "maven.modrinth:greate", version.ref = "greate" }
 strutYourStuff = { module = "maven.modrinth:strut-your-stuff", version.ref = "strutYourStuff" }
 createDeco = { module = "curse.maven:create-deco-509285", version.ref = "createDeco" }
+createAdditions = { module = "curse.maven:createaddition-439890", version.ref = "createAdditions" }
 
 # GregTech
 gtceu = { module = "com.gregtechceu.gtceu:gtceu-1.20.1", version.ref = "gtceu" }
