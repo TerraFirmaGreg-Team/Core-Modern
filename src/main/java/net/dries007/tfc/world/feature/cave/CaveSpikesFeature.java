@@ -11,7 +11,6 @@ import earth.terrarium.adastra.api.planets.Planet;
 import earth.terrarium.adastra.common.tags.ModBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -63,7 +62,7 @@ public class CaveSpikesFeature extends Feature<NoneFeatureConfiguration>
         {
             // Switch directions and try again
             direction = direction.getOpposite();
-            wallState = level.getBlockState(pos.relative(direction));
+			wallState = level.getBlockState(pos.relative(direction.getOpposite()));
             wallRock = rockSettings.getRock(wallState.getBlock());
             if (wallRock != null && wallRock.isRawOrHardened(wallState))
             {
@@ -104,12 +103,11 @@ public class CaveSpikesFeature extends Feature<NoneFeatureConfiguration>
 			blockTag = Tags.Blocks.STONE;
 		}
 
-        // Replace the block above from raw -> hardened, if necessary
-        final BlockPos above = pos.above();
-        final BlockState stateAbove = level.getBlockState(pos.above());
-        if (Helpers.isBlock(stateAbove, blockTag))
+		// Replace the wall block from raw -> hardened, if necessary
+		final BlockPos wall = pos.relative(direction.getOpposite());
+		if (Helpers.isBlock(level.getBlockState(wall), blockTag))
         {
-            level.setBlock(above, raw, 2);
+            level.setBlock(wall, raw, 2);
         }
 
         // Build a spike starting downwards from the target block
