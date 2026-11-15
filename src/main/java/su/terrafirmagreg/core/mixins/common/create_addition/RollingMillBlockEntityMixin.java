@@ -55,9 +55,9 @@ public abstract class RollingMillBlockEntityMixin extends KineticBlockEntity imp
                 .space()
                 .add(CreateLang.number(GreateValues.getMaxSpeedFromMaterial(GTMaterials.Steel)).style(ChatFormatting.AQUA))
                 .space()
-                .add(CreateLang.translate("create.generic.unit.rpm"))
+                .add(CreateLang.translate("generic.unit.rpm"))
                 .space()
-                .add(CreateLang.translate("greate.tooltip.current_shaft_tier").style(ChatFormatting.DARK_GRAY)).forGoggles(tooltip, 1);
+                .add(Component.translatable("greate.tooltip.current_shaft_tier").withStyle(ChatFormatting.DARK_GRAY)).forGoggles(tooltip, 1);
 
         return true;
     }
