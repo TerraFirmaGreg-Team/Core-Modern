@@ -832,6 +832,21 @@ public final class Helpers
         return inventory.extractItem(slot, Integer.MAX_VALUE, false);
     }
 
+	/**
+	 * Initializes the Food Capability of {@code stack}
+	 */
+	public static ItemStack initFoodCapability(ItemStack stack)
+	{
+		if (!stack.isEmpty() && !FoodCapability.CACHE.getAll(stack.getItem()).isEmpty())
+		{
+			if (!FoodCapability.has(stack))
+			{
+				FoodCapability.updateFoodDecayOnCreate(stack);
+			}
+		}
+		return stack;
+	}
+
     /**
      * Inserts {@code stack} into the inventory ignoring any difference in creation date.
      *
