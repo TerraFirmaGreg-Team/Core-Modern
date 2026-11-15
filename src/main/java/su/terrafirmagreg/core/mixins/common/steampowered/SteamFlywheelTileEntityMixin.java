@@ -36,7 +36,6 @@ public class SteamFlywheelTileEntityMixin extends GeneratingKineticBlockEntity i
             CreateLang.translate("gui.goggles.kinetic_stats").forGoggles(tooltip);
         }
 
-        // Greate (GTm8): tiers now cap the speed (RPM) instead of the stress capacity
         addToGoggleTooltip(tooltip, ((ITieredBlock) getBlockState().getBlock()).getMaterial(), getSpeed());
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);

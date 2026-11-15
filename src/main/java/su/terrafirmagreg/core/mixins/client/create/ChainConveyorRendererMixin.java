@@ -45,9 +45,7 @@ public class ChainConveyorRendererMixin {
         Material connection = cgtbe.getConnectionMaterial(blockPos);
         if (connection != null) {
             String matPath = connection.getResourceLocation().getPath();
-            // TODO: Perhaps this could be adapted to use a white chain texture png, and simply modified colour-wise
-            tfg$tempChainTextureResource = ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID,
-                    "textures/block/metal/chain/" + matPath + ".png");
+            tfg$tempChainTextureResource = TerraFirmaCraft.id("textures/block/metal/chain/" + matPath + ".png");
         } else {
             tfg$tempChainTextureResource = null;
         }

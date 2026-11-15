@@ -48,8 +48,8 @@ public abstract class ChainConveyorConnectionPacketMixin
     private ItemStack tfg$applySettings$placeItemBackInInventory(ItemStack pStack,
             @Local(ordinal = 0, argsOnly = true) ChainConveyorBlockEntity be) {
         BlockPos localPos = targetPos.subtract(be.getBlockPos());
-        ChainGTMaterialInterface be_GTMaterialInterface = (ChainGTMaterialInterface) be;
-        Item chainItem = be_GTMaterialInterface.getConnectionChainItem(localPos);
+        ChainGTMaterialInterface cgtinstance = (ChainGTMaterialInterface) be;
+        Item chainItem = cgtinstance.getConnectionChainItem(localPos);
         return new ItemStack(chainItem, pStack.getCount());
     }
 }

@@ -21,6 +21,7 @@ public abstract class KineticBridgeDestinationBlockEntityMixin extends Generatin
 
     @Override
     public float getMaxSpeedFromBlock(Block block) {
+        // TODO: check if we still need this mixin
         return Float.MAX_VALUE;
     }
 }
