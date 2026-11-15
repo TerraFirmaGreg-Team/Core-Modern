@@ -21,11 +21,8 @@ import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntit
 @Mixin(value = SteamFlywheelTileEntity.class, remap = false)
 public class SteamFlywheelTileEntityMixin extends GeneratingKineticBlockEntity implements ITieredKineticBlockEntity {
 
-    private int tier;
-
     public SteamFlywheelTileEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        tier = ((ITieredBlock) state.getBlock()).getTier();
     }
 
     @Override
@@ -44,9 +41,5 @@ public class SteamFlywheelTileEntityMixin extends GeneratingKineticBlockEntity i
                 .add(CreateLang.text("su").space().add(CreateLang.text("generated").style(ChatFormatting.DARK_GRAY))).forGoggles(tooltip, 1);
 
         return true;
-    }
-
-    public int getTier() {
-        return tier;
     }
 }

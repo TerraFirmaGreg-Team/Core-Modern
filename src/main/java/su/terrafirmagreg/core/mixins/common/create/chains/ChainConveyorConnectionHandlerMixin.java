@@ -1,11 +1,14 @@
 package su.terrafirmagreg.core.mixins.common.create.chains;
 
-import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorConnectionHandler;
-import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorConnectionHandler;
+
+import net.minecraft.world.item.ItemStack;
+
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mixin(value = ChainConveyorConnectionHandler.class, remap = false)
