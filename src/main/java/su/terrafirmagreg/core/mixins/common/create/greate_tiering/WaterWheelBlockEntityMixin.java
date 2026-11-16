@@ -32,14 +32,14 @@ public class WaterWheelBlockEntityMixin extends GeneratingKineticBlockEntity imp
 
     // Ignore the warning, Create Picky Waterwheels adds its own Override to this method, which then our mixin
     // injects into at runtime
-    @Inject(method = "addToGoggleTooltip", at = @At("HEAD"), remap = false)
+    @Inject(method = "addToGoggleTooltip", at = @At("HEAD"), remap = false, require = 0)
     public void tfg$addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, CallbackInfoReturnable<Boolean> cir) {
         if (!tooltip.isEmpty()) {
             CreateLang.builder().space();
         }
 
         var tierMaterial = (Object) this instanceof LargeWaterWheelBlockEntity ? GTMaterials.Steel : GreateMaterials.AndesiteAlloy;
-        // Greate (GTm8): tiers now cap the speed (RPM) instead of the stress capacity
+
         addToGoggleTooltip(tooltip, tierMaterial, getSpeed());
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);

@@ -49,6 +49,12 @@ public abstract class GTRecipeTypesMixin {
     @Shadow
     @Final
     public static GTRecipeType MIXER_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType WELDER_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType SPOOLING_RECIPES;
 
     /**
      * Нужно для того, чтобы настроить доп. рецепты. Расширяет кол-во слотов в некоторых машинах.
@@ -82,5 +88,9 @@ public abstract class GTRecipeTypesMixin {
         CRACKING_RECIPES.setMaxIOSize(2, 2, 2, 2);
 
         MIXER_RECIPES.setMaxIOSize(9, 1, 2, 1);
+
+        WELDER_RECIPES.setMaxIOSize(5, 1, 1, 0);
+
+        SPOOLING_RECIPES.setMaxIOSize(6, 1, 1, 0);
     }
 }
