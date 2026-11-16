@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.part;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
@@ -98,7 +101,7 @@ public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine implem
                 if (getEnergyStored() >= getOutputVoltage() && getOutputVoltage() > 0 && getOutputAmperage() > 0) {
                     long outputVoltage = getOutputVoltage();
                     long outputAmperes = Math.min(getEnergyStored() / outputVoltage, getOutputAmperage());
-                    outputAmperes = Math.min(outputAmperes, getChargedBatteryCount());
+                    outputAmperes = Math.min(outputAmperes, getNonEmptyBatteries().size());
                     if (outputAmperes == 0)
                         return;
                     long amperesUsed = 0;
@@ -126,21 +129,85 @@ public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine implem
         return container;
     }
 
-    // Same rule as BatteryBufferMachine#getNonEmptyBatteries 1A out per battery that still has charge.
-    private long getChargedBatteryCount() {
-        long count = 0;
+    // Same as BatteryBufferMachine#getNonFullBatteries (GT items only)
+    private List<IElectricItem> getNonFullBatteries() {
+        List<IElectricItem> batteries = new ArrayList<>();
+        for (int i = 0; i < batteryInventory.getSlots(); i++) {
+            IElectricItem battery = GTCapabilityHelper.getElectricItem(batteryInventory.getStackInSlot(i));
+            if (battery != null && battery.getCharge() < battery.getMaxCharge())
+                batteries.add(battery);
+        }
+        return batteries;
+    }
+
+    // Same as BatteryBufferMachine#getNonEmptyBatteries: also gives the output amperage, 1A per battery with charge.
+    private List<IElectricItem> getNonEmptyBatteries() {
+        List<IElectricItem> batteries = new ArrayList<>();
         for (int i = 0; i < batteryInventory.getSlots(); i++) {
             IElectricItem battery = GTCapabilityHelper.getElectricItem(batteryInventory.getStackInSlot(i));
             if (battery != null && battery.canProvideChargeExternally() && battery.getCharge() > 0)
-                count++;
+                batteries.add(battery);
         }
-        return count;
+        return batteries;
     }
 
     /**
      * Battery logic - This is how we transfer energy from the buffer to the batteries depending on the amount of
      * energy in the Part buffer.
      */
+
+    private void balanceEnergy() {
+        long stored = energyContainer.getEnergyStored();
+        long target = energyContainer.getEnergyCapacity() / 2;
+
+        if (stored > target) {
+            long charged = chargeBatteries(stored - target);
+            if (charged > 0)
+                energyContainer.removeEnergy(charged);
+        } else if (stored < target) {
+            long discharged = dischargeBatteries(target - stored);
+            if (discharged > 0)
+                energyContainer.addEnergy(discharged);
+        }
+    }
+
+    // Same as EnergyBatteryTrait#acceptEnergyFromNetwork: energy split evenly between the non-full batteries,
+    // each one capped at AMPS_PER_BATTERY of its own tier.
+    private long chargeBatteries(long energy) {
+        List<IElectricItem> batteries = getNonFullBatteries();
+        if (batteries.isEmpty())
+            return 0;
+
+        long distributed = energy / batteries.size();
+        long charged = 0;
+        for (IElectricItem battery : batteries) {
+            charged += battery.charge(
+                    Math.min(distributed, GTValues.V[battery.getTier()] * AMPS_PER_BATTERY), tier, true, false);
+        }
+
+        if (charged > 0)
+            markAsChanged();
+        return charged;
+    }
+
+    // Same as EnergyBatteryTrait#removeEnergy: energy split evenly between the non-empty batteries,
+    // each one limited by its own transfer limit (1A of its tier).
+    private long dischargeBatteries(long energy) {
+        List<IElectricItem> batteries = getNonEmptyBatteries();
+        if (batteries.isEmpty())
+            return 0;
+
+        long distributed = energy / batteries.size();
+        long discharged = 0;
+        for (IElectricItem battery : batteries) {
+            discharged += battery.discharge(distributed, tier, false, true, false);
+        }
+
+        if (discharged > 0)
+            markAsChanged();
+        return discharged;
+    }
+
     private boolean isValidBattery(ItemStack stack) {
         IElectricItem item = GTCapabilityHelper.getElectricItem(stack);
         return item != null && item.canProvideChargeExternally() && item.getTier() <= tier;
@@ -152,39 +219,6 @@ public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine implem
                 return true;
         }
         return false;
-    }
-
-    private void balanceEnergy() {
-        long stored = energyContainer.getEnergyStored();
-        long target = energyContainer.getEnergyCapacity() / 2;
-
-        if (stored > target) {
-            long charged = transferToBatteries(stored - target, true);
-            if (charged > 0)
-                energyContainer.removeEnergy(charged);
-        } else if (stored < target) {
-            long discharged = transferToBatteries(target - stored, false);
-            if (discharged > 0)
-                energyContainer.addEnergy(discharged);
-        }
-    }
-
-    private long transferToBatteries(long amount, boolean charge) {
-        long perBattery = GTValues.V[tier] * AMPS_PER_BATTERY;
-        long moved = 0;
-
-        for (int i = 0; i < batteryInventory.getSlots() && moved < amount; i++) {
-            IElectricItem battery = GTCapabilityHelper.getElectricItem(batteryInventory.getStackInSlot(i));
-            if (battery == null)
-                continue;
-
-            long request = Math.min(amount - moved, perBattery);
-            moved += charge ? battery.charge(request, tier, true, false) : battery.discharge(request, tier, true, true, false);
-        }
-
-        if (moved > 0)
-            markAsChanged();
-        return moved;
     }
 
     private long getBatteryCharge() {

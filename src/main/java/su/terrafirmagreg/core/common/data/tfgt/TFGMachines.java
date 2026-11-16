@@ -403,7 +403,7 @@ public class TFGMachines {
             (tier, builder) -> builder
                     .langValue(GTValues.VNF[tier] + " Battery Dynamo Hatch")
                     .rotationState(RotationState.ALL)
-                    .abilities(PartAbility.OUTPUT_ENERGY)
+                    .abilities(PartAbility.OUTPUT_ENERGY, TFGPartAbility.BATTERY_DYNAMO)
                     .modelProperty(IS_FORMED, false)
                     .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
                             FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]),
