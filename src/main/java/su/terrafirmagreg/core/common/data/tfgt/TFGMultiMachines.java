@@ -10,6 +10,8 @@ import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 import java.util.*;
 import java.util.function.Supplier;
 
+import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
+import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import org.joml.Vector3f;
 
 import com.eerussianguy.firmalife.common.FLTags;
