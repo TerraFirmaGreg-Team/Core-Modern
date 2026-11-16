@@ -42,7 +42,6 @@ public class WindmillBearingBlockEntityMixin extends GeneratingKineticBlockEntit
         Lang.builder("tfg").translate("greate.windmill_hint_2").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
         Lang.builder("tfg").translate("greate.windmill_hint_3").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
 
-        // Greate (GTm8): tiers now cap the speed (RPM) instead of the stress capacity
         addToGoggleTooltip(tooltip, GTMaterials.Steel, getSpeed());
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);

@@ -1,0 +1,48 @@
+package su.terrafirmagreg.core.mixins.common.vintageimprovements;
+
+import java.util.List;
+
+import org.spongepowered.asm.mixin.Mixin;
+
+import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.negodya1.vintageimprovements.content.kinetics.coiling.CoilingBlockEntity;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.foundation.utility.CreateLang;
+
+import net.createmod.catnip.lang.Lang;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+
+import electrolyte.greate.GreateValues;
+import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
+
+@Mixin(value = CoilingBlockEntity.class, remap = false)
+public abstract class CoilingBlockEntityMixin extends KineticBlockEntity implements ITieredKineticBlockEntity {
+    public CoilingBlockEntityMixin(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
+        super(typeIn, pos, state);
+    }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        CreateLang.translate("gui.goggles.kinetic_stats").forGoggles(tooltip);
+
+        addStressImpactStats(tooltip, calculateStressApplied());
+
+        Lang.builder("greate")
+                .add(CreateLang.number(Mth.abs(getSpeed())).style(ChatFormatting.AQUA))
+                .space()
+                .add(CreateLang.text("/").style(ChatFormatting.DARK_GRAY))
+                .space()
+                .add(CreateLang.number(GreateValues.getMaxSpeedFromMaterial(GTMaterials.Steel)).style(ChatFormatting.AQUA))
+                .space()
+                .add(CreateLang.translate("generic.unit.rpm"))
+                .space()
+                .add(Component.translatable("greate.tooltip.current_shaft_tier").withStyle(ChatFormatting.DARK_GRAY)).forGoggles(tooltip, 1);
+
+        return true;
+    }
+}
