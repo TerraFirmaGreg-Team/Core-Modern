@@ -141,7 +141,6 @@
         "common.grappling_hook.GrappleControllerMixin",
         "common.grappling_hook.GrapplehookItemMixin",
         "common.greate.TieredBasinCategoryMixin",
-        "common.greate.TieredMillingRecipeMixin",
         "common.gtceu.CleanroomConditionMixin",
         "common.gtceu.ConverterTraitMixin",
         "common.gtceu.EntityDamageUtilMixin",
