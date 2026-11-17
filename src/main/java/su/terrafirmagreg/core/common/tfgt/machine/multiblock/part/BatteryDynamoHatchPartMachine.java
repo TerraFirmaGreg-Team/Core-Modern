@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.part;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
+import com.gregtechceu.gtceu.api.capability.IEnergyInfoProvider;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
@@ -33,18 +35,23 @@ import brachy.modularui.value.sync.PanelSyncManager;
 import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widgets.ProgressWidget;
 import brachy.modularui.widgets.layout.Flow;
+import lombok.Getter;
 
 /**
  * Dynamo Hatch with battery slots. The Generators consider the Part as a normal Dynamo Hatch and fills ins internal
  * buffer while every tick the buffer is filled or emptied to cover the deficit using the batteries.
  */
 
-public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine implements IMuiMachine {
+public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine
+        implements IMuiMachine, IEnergyInfoProvider {
 
     public static final long AMPS_PER_BATTERY = 2L;
 
     private final int inventorySize;
 
+    private long chargedThisSec, dischargedThisSec, lastChargedPerSec, lastDischargedPerSec;
+
+    @Getter
     @SaveField
     protected final CustomItemStackHandler batteryInventory;
 
@@ -123,6 +130,17 @@ public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine implem
                     }
                 }
             }
+
+            @Override
+            public void updateTick() {
+                if (getMachine().getOffsetTimer() % 20 == 0) {
+                    lastChargedPerSec = chargedThisSec;
+                    lastDischargedPerSec = dischargedThisSec;
+                    chargedThisSec = 0;
+                    dischargedThisSec = 0;
+                }
+                super.updateTick();
+            }
         };
         container.setSideOutputCondition(s -> s == getFrontFacing() && isWorkingEnabled());
         container.setCapabilityValidator(s -> s == null || s == getFrontFacing());
@@ -162,12 +180,16 @@ public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine implem
 
         if (stored > target) {
             long charged = chargeBatteries(stored - target);
-            if (charged > 0)
+            if (charged > 0) {
                 energyContainer.removeEnergy(charged);
+                chargedThisSec += charged;
+            }
         } else if (stored < target) {
             long discharged = dischargeBatteries(target - stored);
-            if (discharged > 0)
+            if (discharged > 0) {
                 energyContainer.addEnergy(discharged);
+                dischargedThisSec += discharged;
+            }
         }
     }
 
@@ -239,6 +261,28 @@ public class BatteryDynamoHatchPartMachine extends EnergyHatchPartMachine implem
                 total += battery.getMaxCharge();
         }
         return total;
+    }
+
+    @Override
+    public EnergyInfo getEnergyInfo() {
+        return new EnergyInfo(
+                BigInteger.valueOf(getBatteryCapacity() + energyContainer.getEnergyCapacity()),
+                BigInteger.valueOf(getBatteryCharge() + energyContainer.getEnergyStored()));
+    }
+
+    @Override
+    public boolean supportsBigIntEnergyValues() {
+        return false;
+    }
+
+    @Override
+    public long getInputPerSec() {
+        return Math.max(0, energyContainer.getInputPerSec() - lastDischargedPerSec);
+    }
+
+    @Override
+    public long getOutputPerSec() {
+        return Math.max(0, energyContainer.getOutputPerSec() - lastChargedPerSec);
     }
 
     // Gui borrowed from GTm Battery Buffer, update it if they change it because I guess it could look better.
