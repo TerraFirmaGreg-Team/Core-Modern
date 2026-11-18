@@ -43,6 +43,9 @@ dependencies {
     // Create: Deco
     modImplementation(mods.createDeco.get()) { transitive = false }
 
+    // Create Crafts & Additions
+    modImplementation(mods.createAdditions.get()) { transitive = false }
+
     // Greate
     modRuntimeOnly(mods.copycats)
     modRuntimeOnly(mods.createRepair)

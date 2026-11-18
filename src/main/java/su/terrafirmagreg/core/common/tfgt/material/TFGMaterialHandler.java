@@ -48,8 +48,6 @@ public final class TFGMaterialHandler {
 
     public static void postInit() {
 
-        // Metal things
-
         bell.setIgnored(Gold, Blocks.BELL);
         bell.setIgnored(Brass, TFCBlocks.BRASS_BELL);
         bell.setIgnored(Bronze, TFCBlocks.BRONZE_BELL);
@@ -102,6 +100,9 @@ public final class TFGMaterialHandler {
         block.setIgnored(Zinc, () -> AllBlocks.ZINC_BLOCK);
         block.setIgnored(Brass, () -> AllBlocks.BRASS_BLOCK);
         block.setIgnored(Steel, ModBlocks.STEEL_BLOCK);
+        block.setIgnored(Stone, Blocks.STONE);
+        block.setIgnored(Sulfur, () -> VintageBlocks.SULFUR_BLOCK);
+        block.setIgnored(GreateMaterials.RoseQuartz, () -> AllBlocks.ROSE_QUARTZ_BLOCK);
 
         crushedPurified.setIgnored(Gold, () -> AllItems.CRUSHED_GOLD);
         crushedPurified.setIgnored(Copper, () -> AllItems.CRUSHED_COPPER);
@@ -110,9 +111,8 @@ public final class TFGMaterialHandler {
         crushedPurified.setIgnored(Tin, () -> AllItems.CRUSHED_TIN);
         crushedPurified.setIgnored(Lead, () -> AllItems.CRUSHED_LEAD);
 
-        // Misc
+        // Gems
 
-        block.setIgnored(Stone, Blocks.STONE);
         gem.setIgnored(Coal, () -> TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
 
         var lignite = TFGHelpers.getMaterial("lignite");
@@ -124,10 +124,6 @@ public final class TFGMaterialHandler {
         if (anthracite != null) {
             gem.setIgnored(anthracite, BeneathItems.CURSECOAL::get);
         }
-
-        // Create materials
-
-        block.setIgnored(GreateMaterials.RoseQuartz, () -> AllBlocks.ROSE_QUARTZ_BLOCK);
 
         // Ad astra materials
 
