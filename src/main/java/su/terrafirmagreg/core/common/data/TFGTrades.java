@@ -45,27 +45,27 @@ public class TFGTrades {
         // Earth wandering trader
 
         List<VillagerTrades.ItemListing> earthTrades = new ArrayList<>();
-        addItemTrades(earthTrades, TFCItems.CROP_SEEDS.values(), "Copper", 3, 4);
+        addItemTrades(earthTrades, TFCItems.CROP_SEEDS.values(), "Copper", 2, 1);
         addBlockTrades(earthTrades, TFCBlocks.PLANTS.values(), "Copper", 1, 4);
         addBlockTrades(earthTrades, TFCBlocks.GROUNDCOVER.values(), "Copper", 1, 4);
-        addBlockTrades(earthTrades, TFCBlocks.GLAZED_LARGE_VESSELS.values(), "Copper", 3, 1);
+        addBlockTrades(earthTrades, TFCBlocks.GLAZED_LARGE_VESSELS.values(), "Copper", 2, 1);
         addItemTrades(earthTrades, FLItems.SPICES.values(), "Copper", 3, 4);
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(FLItems.RED_GRAPE_SEEDS.get(), 4), 3, 4));
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(FLItems.WHITE_GRAPE_SEEDS.get(), 4), 3, 4));
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("flax_seeds")), 4), 3, 4));
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("sunflower_seeds")), 4), 3, 4));
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("rapeseed_seeds")), 4), 3, 4));
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("cucumber_seeds")), 4), 3, 4));
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("lentil_seeds")), 4), 3, 4));
-        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("radish_seeds")), 4), 3, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(FLItems.RED_GRAPE_SEEDS.get(), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(FLItems.WHITE_GRAPE_SEEDS.get(), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("flax_seeds")), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("sunflower_seeds")), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("rapeseed_seeds")), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("cucumber_seeds")), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("lentil_seeds")), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("radish_seeds")), 1), 2, 4));
 
-		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BOW, 1), 3, 1));
-		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.ARROW, 16), 1, 10));
-		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.LADDER, 16), 1, 10));
-		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.FLOWER_POT, 1), 1, 4));
-		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BAMBOO, 1), 3, 4));
-		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BOOK, 1), 1, 4));
-		earthTrades.add(new TFGItemListing("Copper", new ItemStack(TFCItems.BLUBBER.get(), 1), 2, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BOW, 1), 3, 1));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.ARROW, 16), 1, 10));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.LADDER, 16), 1, 10));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.FLOWER_POT, 1), 1, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BAMBOO, 1), 3, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BOOK, 1), 1, 4));
+        earthTrades.add(new TFGItemListing("Copper", new ItemStack(TFCItems.BLUBBER.get(), 1), 2, 4));
 
         for (var entry : TFCBlocks.WOODS.entrySet()) {
             earthTrades.add(new TFGItemListing("Copper", new ItemStack(entry.getValue().get(Wood.BlockType.LOG).get(), 8), 1, 1));
@@ -83,8 +83,8 @@ public class TFGTrades {
         addBlockTrades(earthTrades, FLBlocks.FRUIT_TREE_SAPLINGS.values(), "Gold", 6, 1);
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(TFCBlocks.CRANBERRY_BUSH.get(), 1), 3, 4));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(TFCBlocks.BANANA_SAPLING.get(), 1), 3, 4));
-		earthTrades.add(new TFGItemListing("Gold", new ItemStack(ForgeRegistries.BLOCKS.getValue(TFGCore.id("palm_tree/coconut_sapling")), 1), 3, 4));
-		earthTrades.add(new TFGItemListing("Gold", new ItemStack(ForgeRegistries.BLOCKS.getValue(TFGCore.id("palm_tree/date_sapling")), 1), 3, 4));
+        earthTrades.add(new TFGItemListing("Gold", new ItemStack(ForgeRegistries.BLOCKS.getValue(TFGCore.id("palm_tree/coconut_sapling")), 1), 3, 4));
+        earthTrades.add(new TFGItemListing("Gold", new ItemStack(ForgeRegistries.BLOCKS.getValue(TFGCore.id("palm_tree/date_sapling")), 1), 3, 4));
 
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(TFCItems.HIDES.get(HideItemType.RAW).get(HideItemType.Size.SMALL).get(), 1), 1, 2));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(TFCItems.HIDES.get(HideItemType.RAW).get(HideItemType.Size.MEDIUM).get(), 1), 2, 2));
@@ -102,7 +102,7 @@ public class TFGTrades {
         earthTrades.add(new TFGItemListing("Industrial Iron", new ItemStack(TFCTextileItems.POLAR_BEAR_FUR.get(), 1), 6, 1));
         earthTrades.add(new TFGItemListing("Industrial Iron", new ItemStack(TFCTextileItems.SABERTOOTH_FUR.get(), 1), 6, 1));
         earthTrades.add(new TFGItemListing("Industrial Iron", new ItemStack(TFCTextileItems.TIGER_FUR.get(), 1), 6, 1));
-		earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.PAINTING, 1), 6, 1));
+        earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.PAINTING, 1), 6, 1));
 
         for (var entry : DyeColor.values()) {
             earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.BLOCKS.getValue(TFGCore.id("decorative_vase/" + entry.getName())).asItem(), 1), 3, 4));
@@ -201,20 +201,20 @@ public class TFGTrades {
         spaceTrades.add(new TFGItemListing("Netherite", new ItemStack(FLItems.FOODS.get(FLFood.HARDTACK).get(), 4), 1, 10));
         spaceTrades.add(new TFGItemListing("Netherite", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("food/calorie_paste")), 4), 2, 10));
 
-		List<VillagerTrades.ItemListing> spaceMedicineTrades = new ArrayList<>();
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.ANTIPOISON_TABLET, 1), 2, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.HASTE_TABLET, 1), 4, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.NIGHT_VISION_TABLET, 1), 4, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.REGENERATION_TABLET, 1), 6, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.SPEED_TABLET, 1), 4, 4));
+        List<VillagerTrades.ItemListing> spaceMedicineTrades = new ArrayList<>();
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.ANTIPOISON_TABLET, 1), 2, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.HASTE_TABLET, 1), 4, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.NIGHT_VISION_TABLET, 1), 4, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.REGENERATION_TABLET, 1), 6, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.SPEED_TABLET, 1), 4, 4));
 
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.PARASITICIDE_CAPSULE, 1), 18, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.DETOX_CAPSULE, 1), 18, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.NANOFILTRATION_CAPSULE, 1), 18, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.PARACETAMOL_PILL, 1), 36, 4));
-		spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.RAD_AWAY_PILL, 1), 64, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.PARASITICIDE_CAPSULE, 1), 18, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.DETOX_CAPSULE, 1), 18, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.NANOFILTRATION_CAPSULE, 1), 18, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.PARACETAMOL_PILL, 1), 36, 4));
+        spaceMedicineTrades.add(new TFGItemListing("Netherite", new ItemStack(TFGItems_Medicines.RAD_AWAY_PILL, 1), 64, 4));
 
-		LunarianMerchantOffer.WANDERING_TRADER_TRADES.clear();
+        LunarianMerchantOffer.WANDERING_TRADER_TRADES.clear();
         LunarianMerchantOffer.WANDERING_TRADER_TRADES.put(1, spaceTrades.toArray(VillagerTrades.ItemListing[]::new));
         LunarianMerchantOffer.WANDERING_TRADER_TRADES.put(2, spaceMedicineTrades.toArray(VillagerTrades.ItemListing[]::new));
     }
