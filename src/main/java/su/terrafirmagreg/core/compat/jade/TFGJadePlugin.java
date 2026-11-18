@@ -27,6 +27,7 @@ public class TFGJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(TierLockedAcidProvider.INSTANCE, TierLockedAcidBlock.class);
         registration.registerBlockComponent(DynamicAgeProvider.INSTANCE, PalmClusterBlock.class);
         registration.registerBlockComponent(GasBurnerProvider.INSTANCE, GasBurnerBlock.class);
+        GTJadePlugin.register(registration, new BatteryDynamoHatchInfoProvider());
         registration.registerBlockComponent(GasWellProvider.INSTANCE, MetaMachineBlock.class);
     }
 
