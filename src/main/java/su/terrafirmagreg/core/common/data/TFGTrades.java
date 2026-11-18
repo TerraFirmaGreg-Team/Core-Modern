@@ -8,6 +8,7 @@ import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLFood;
 import com.eerussianguy.firmalife.common.items.FLItems;
 import com.github.talrey.createdeco.ItemRegistry;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.therighthon.afc.common.blocks.AFCBlocks;
 
@@ -34,6 +35,7 @@ import earth.terrarium.adastra.common.registry.ModItems;
 import lombok.SneakyThrows;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.data.items.TFGItems_Medicines;
 import su.terrafirmagreg.tfc_textile.item.TFCTextileItems;
 
@@ -47,9 +49,23 @@ public class TFGTrades {
         List<VillagerTrades.ItemListing> earthTrades = new ArrayList<>();
         addItemTrades(earthTrades, TFCItems.CROP_SEEDS.values(), "Copper", 2, 1);
         addBlockTrades(earthTrades, TFCBlocks.PLANTS.values(), "Copper", 1, 4);
-        addBlockTrades(earthTrades, TFCBlocks.GROUNDCOVER.values(), "Copper", 1, 4);
-        addBlockTrades(earthTrades, TFCBlocks.GLAZED_LARGE_VESSELS.values(), "Copper", 2, 1);
-        addItemTrades(earthTrades, FLItems.SPICES.values(), "Copper", 3, 4);
+		addBlockTrades(earthTrades, TFCBlocks.GLAZED_LARGE_VESSELS.values(), "Copper", 2, 1);
+		addItemTrades(earthTrades, FLItems.SPICES.values(), "Copper", 3, 4);
+
+		for (var entry : DyeColor.values()) {
+			earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.BLOCKS.getValue(TFGCore.id("decorative_vase/" + entry.getName())).asItem(), 1), 3, 4));
+		}
+		for	(var entry : TFCBlocks.GROUNDCOVER.values()) {
+			// Not all groundcover has an item
+			var item = entry.get().asItem();
+			if (item != Items.AIR) {
+				earthTrades.add(new TFGItemListing("Copper", new ItemStack(item, 4), 1, 4));
+			}
+		}
+		for (var entry : TFGBlocks_Earth.PLANTS.values()) {
+			earthTrades.add(new TFGItemListing("Copper", new ItemStack(entry.get().asItem(), 4), 1, 4));
+		}
+
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(FLItems.RED_GRAPE_SEEDS.get(), 1), 2, 4));
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(FLItems.WHITE_GRAPE_SEEDS.get(), 1), 2, 4));
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("flax_seeds")), 1), 2, 4));
@@ -65,6 +81,8 @@ public class TFGTrades {
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.FLOWER_POT, 1), 1, 4));
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BAMBOO, 1), 3, 4));
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.BOOK, 1), 1, 4));
+		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.FEATHER, 4), 1, 4));
+		earthTrades.add(new TFGItemListing("Copper", new ItemStack(Items.FLINT, 4), 1, 4));
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(TFCItems.BLUBBER.get(), 1), 2, 4));
 
         for (var entry : TFCBlocks.WOODS.entrySet()) {
@@ -103,12 +121,13 @@ public class TFGTrades {
         earthTrades.add(new TFGItemListing("Industrial Iron", new ItemStack(TFCTextileItems.SABERTOOTH_FUR.get(), 1), 6, 1));
         earthTrades.add(new TFGItemListing("Industrial Iron", new ItemStack(TFCTextileItems.TIGER_FUR.get(), 1), 6, 1));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.PAINTING, 1), 6, 1));
-
-        for (var entry : DyeColor.values()) {
-            earthTrades.add(new TFGItemListing("Copper", new ItemStack(ForgeRegistries.BLOCKS.getValue(TFGCore.id("decorative_vase/" + entry.getName())).asItem(), 1), 3, 4));
-        }
-
         earthTrades.add(new TFGItemListing("Copper", new ItemStack(FLItems.FOODS.get(FLFood.HARDTACK).get(), 1), 2, 4));
+		earthTrades.add(new TFGItemListing("Industrial Iron", new ItemStack(Items.FLINT_AND_STEEL, 1), 6, 1));
+		earthTrades.add(new TFGItemListing("Iron", new ItemStack(GTItems.DYNAMITE, 4), 6, 4));
+		earthTrades.add(new TFGItemListing("Iron", new ItemStack(GTItems.TOOL_MATCHBOX, 1), 1, 1));
+		earthTrades.add(new TFGItemListing("Iron", new ItemStack(GTItems.TOOL_LIGHTER_INVAR, 1), 4, 1));
+		earthTrades.add(new TFGItemListing("Industrial Iron", new ItemStack(GTItems.TOOL_LIGHTER_PLATINUM, 1), 4, 1));
+		earthTrades.add(new TFGItemListing("Gold", new ItemStack(GTItems.TOOL_MATCHES, 4), 1, 4));
 
         List<VillagerTrades.ItemListing> medicineTrades = new ArrayList<>();
 
