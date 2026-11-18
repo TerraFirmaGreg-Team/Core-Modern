@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.api.pattern;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.api.multiblock.predicates.PredicateBuilder;
@@ -55,5 +56,13 @@ public class TFGPredicates {
                 .candidates(getBuddingTiers().keySet().stream()
                         .map(b -> BlockInfo.fromBlockState(b.defaultBlockState())))
                 .build();
+    }
+
+    public static int getCasingTier(Map<Integer, ? extends Supplier<? extends Block>> casings, Block block) {
+        for (var entry : casings.entrySet()) {
+            if (entry.getValue().get() == block)
+                return entry.getKey();
+        }
+        return -1;
     }
 }

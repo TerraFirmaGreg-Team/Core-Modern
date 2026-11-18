@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.compat.jade;
 
+import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
+
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 
 import net.minecraft.resources.ResourceLocation;
@@ -31,5 +33,6 @@ public class TFGJadePlugin implements IWailaPlugin {
     @Override
     public void register(IWailaCommonRegistration registration) {
         registration.registerBlockDataProvider(GasWellProvider.INSTANCE, GasWellMachine.class);
+        GTJadePlugin.register(registration, new BatteryDynamoHatchInfoProvider());
     }
 }
