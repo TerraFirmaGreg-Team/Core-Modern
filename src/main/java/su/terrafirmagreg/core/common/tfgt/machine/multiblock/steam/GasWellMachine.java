@@ -10,15 +10,14 @@ import org.jetbrains.annotations.Nullable;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
-import com.gregtechceu.gtceu.api.machine.TickableSubscription;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
@@ -26,20 +25,26 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.material.Fluid;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.utils.serialization.network.ByteBufAdapters;
+import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.GenericSyncValue;
+import brachy.modularui.value.sync.IntSyncValue;
 import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widget.ParentWidget;
 import lombok.Getter;
 
-import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellTrait;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GasWellMachine extends MultiblockControllerMachine {
+public class GasWellMachine extends MultiblockControllerMachine implements IMuiMachine {
 
     @Nullable
     private NotifiableFluidTank inputFluidTank;
@@ -47,12 +52,12 @@ public class GasWellMachine extends MultiblockControllerMachine {
     private NotifiableFluidTank outputFluidTank;
 
     @Getter
-    private final GasWellRecipeLogic logic;
-    private TickableSubscription tickSubscription;
+    @SaveField
+    private final GasWellTrait logic;
 
     public GasWellMachine(BlockEntityCreationInfo info) {
         super(info);
-        this.logic = new GasWellRecipeLogic(this);
+        this.logic = attachTrait(new GasWellTrait());
     }
 
     @Override
@@ -60,52 +65,40 @@ public class GasWellMachine extends MultiblockControllerMachine {
         super.formStructure(substructureName);
         inputFluidTank = null;
         outputFluidTank = null;
-        setActive(false);
 
         for (MultiblockPartMachine part : getParts()) {
             for (var handlerList : part.getRecipeHandlers()) {
                 var fluidCap = handlerList.getCapability(FluidRecipeCapability.CAP);
-                var itemCap = handlerList.getCapability(ItemRecipeCapability.CAP);
+                if (fluidCap.isEmpty() || !(fluidCap.get(0) instanceof NotifiableFluidTank tank))
+                    continue;
 
-                if (!fluidCap.isEmpty()) {
-                    if (handlerList.getHandlerIO().support(IO.IN) && inputFluidTank == null) {
-                        inputFluidTank = (NotifiableFluidTank) fluidCap.get(0);
-                    } else if (handlerList.getHandlerIO().support(IO.OUT) && outputFluidTank == null) {
-                        outputFluidTank = (NotifiableFluidTank) fluidCap.get(0);
-                    }
+                if (handlerList.getHandlerIO().support(IO.IN) && inputFluidTank == null) {
+                    inputFluidTank = tank;
+                } else if (handlerList.getHandlerIO().support(IO.OUT) && outputFluidTank == null) {
+                    outputFluidTank = tank;
                 }
             }
         }
 
-        tickSubscription = subscribeServerTick(logic::tick);
+        setActive(logic.isActive());
+        logic.start();
     }
 
     @Override
     public void invalidateStructure(@NotNull String substructureName) {
         super.invalidateStructure(substructureName);
-        resetState();
+        stopLogic();
+        logic.reset();
     }
 
     @Override
     public void onPartUnload() {
         super.onPartUnload();
-        resetState();
+        stopLogic();
     }
 
-    @Override
-    public void onUnload() {
-        super.onUnload();
-        logic.resetFull();
-        unsubscribe(tickSubscription);
-        tickSubscription = null;
-        inputFluidTank = null;
-        outputFluidTank = null;
-    }
-
-    private void resetState() {
-        unsubscribe(tickSubscription);
-        tickSubscription = null;
-        logic.reset();
+    private void stopLogic() {
+        logic.stop();
         inputFluidTank = null;
         outputFluidTank = null;
         setActive(false);
@@ -146,90 +139,93 @@ public class GasWellMachine extends MultiblockControllerMachine {
     }
 
     @Override
+    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager,
+            UISettings settings) {
+        mainWidget.child(getMainTextPanel(syncManager).margin(4, 2));
+    }
+
+    @Override
     public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
         List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
+
+        BooleanSyncValue activeSync = new BooleanSyncValue(logic::isActive);
+        BooleanSyncValue outputBlockedSync = new BooleanSyncValue(logic::isOutputBlocked);
+        IntSyncValue timerSync = new IntSyncValue(logic::getTimer);
+        BooleanSyncValue hasVeinSync = new BooleanSyncValue(() -> logic.getVeinFluid() != null);
+        GenericSyncValue<Component> veinFluidSync = GenericSyncValue.builder(Component.class)
+                .adapter(ByteBufAdapters.COMPONENT)
+                .getter(() -> {
+                    Fluid fluid = logic.getVeinFluid();
+                    if (fluid == null)
+                        return Component.translatable("gtceu.multiblock.fluid_rig.no_fluid_in_area")
+                                .withStyle(ChatFormatting.RED);
+                    var naturalGas = GTMaterials.NaturalGas.getFluid();
+                    boolean isPumpable = naturalGas != null && fluid.isSame(naturalGas);
+                    return fluid.getFluidType().getDescription().copy()
+                            .withStyle(isPumpable ? ChatFormatting.GREEN : ChatFormatting.RED);
+                }).build();
+        IntSyncValue producedSync = new IntSyncValue(logic::getFluidToProduce);
+        IntSyncValue veinPercentSync = new IntSyncValue(logic::getVeinPercent);
+        syncManager.syncValue("active", activeSync);
+        syncManager.syncValue("outputBlocked", outputBlockedSync);
+        syncManager.syncValue("timer", timerSync);
+        syncManager.syncValue("hasVein", hasVeinSync);
+        syncManager.syncValue("veinFluid", veinFluidSync);
+        syncManager.syncValue("produced", producedSync);
+        syncManager.syncValue("veinPercent", veinPercentSync);
 
         if (!isFormed())
             return widgets;
 
-        if (logic.isActive()) {
-            widgets.add(Text.lang("tfg.machine.gas_well.active")
-                    .withStyle(ChatFormatting.GREEN).asWidget());
-        } else {
-            widgets.add(Text.lang("tfg.machine.gas_well.waiting_explosive").withStyle(ChatFormatting.RED).asWidget()
-                    .tooltip(t -> t.addLine(Text.lang("tfg.machine.gas_well.waiting_explosive.tooltip")
-                            .withStyle(ChatFormatting.GRAY))));
-        }
+        widgets.add(Text.lang("tfg.machine.gas_well.active").withStyle(ChatFormatting.GREEN).asWidget()
+                .setEnabledIf(w -> activeSync.getBoolValue()));
 
-        if (logic.isActive() && logic.isOutputBlocked()) {
-            widgets.add(Text.lang("tfg.machine.gas_well.output_full").withStyle(ChatFormatting.RED).asWidget()
-                    .tooltip(t -> t.addLine(Text.lang("tfg.machine.gas_well.output_full.tooltip")
-                            .withStyle(ChatFormatting.GRAY))));
+        widgets.add(Text.lang("tfg.machine.gas_well.waiting_explosive").withStyle(ChatFormatting.RED).asWidget()
+                .tooltip(t -> t.addLine(Text.lang("tfg.machine.gas_well.waiting_explosive.tooltip")
+                        .withStyle(ChatFormatting.GRAY)))
+                .setEnabledIf(w -> !activeSync.getBoolValue()));
 
-            Component waterInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK + " mB/t")
-                    .withStyle(ChatFormatting.BLUE);
-            Component steamInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK * 2 + " mB/t")
-                    .withStyle(ChatFormatting.BLUE);
+        widgets.add(Text.lang("tfg.machine.gas_well.output_full").withStyle(ChatFormatting.RED).asWidget()
+                .tooltip(t -> t.addLine(Text.lang("tfg.machine.gas_well.output_full.tooltip")
+                        .withStyle(ChatFormatting.GRAY)))
+                .setEnabledIf(w -> activeSync.getBoolValue() && outputBlockedSync.getBoolValue()));
 
-            widgets.add(Text.lang("tfg.machine.gas_well.fluid_consumption", waterInfo, steamInfo)
-                    .withStyle(ChatFormatting.GRAY).asWidget());
+        Component waterInfo = Component.literal(GasWellTrait.FLUID_CONSUMPTION_PER_TICK + " mB/t")
+                .withStyle(ChatFormatting.BLUE);
+        Component steamInfo = Component.literal(GasWellTrait.FLUID_CONSUMPTION_PER_TICK * 2 + " mB/t")
+                .withStyle(ChatFormatting.BLUE);
+        widgets.add(Text.lang("tfg.machine.gas_well.fluid_consumption", waterInfo, steamInfo)
+                .withStyle(ChatFormatting.GRAY).asWidget()
+                .setEnabledIf(w -> activeSync.getBoolValue()));
 
-            if (logic.isActive()) {
-                int remaining = (GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL * 20) - logic.getTimer();
-                Component timeInfo = Component.literal(remaining / 20 + "s")
-                        .withStyle(ChatFormatting.AQUA);
-                widgets.add(Text.lang("tfg.machine.gas_well.next_explosive", timeInfo)
-                        .withStyle(ChatFormatting.GRAY).asWidget());
-            }
-        }
+        widgets.add(Text.dynamic(() -> {
+            int remaining = GasWellTrait.EXPLOSIVE_CONSUMPTION_INTERVAL * 20 - timerSync.getIntValue();
+            return Text.lang("tfg.machine.gas_well.next_explosive",
+                    Component.literal(remaining / 20 + "s").withStyle(ChatFormatting.AQUA))
+                    .withStyle(ChatFormatting.GRAY);
+        }).asWidget()
+                .setEnabledIf(w -> activeSync.getBoolValue()));
 
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            int chunkX = SectionPos.blockToSectionCoord(getBlockPos().getX());
-            int chunkZ = SectionPos.blockToSectionCoord(getBlockPos().getZ());
-            var savedData = logic.getSavedData(serverLevel);
-            var entry = savedData.getFluidVeinWorldEntry(chunkX, chunkZ);
+        widgets.add(Text.dynamic(() -> Text.lang("gtceu.multiblock.fluid_rig.drilled_fluid",
+                veinFluidSync.getValue())).asWidget()
+                .tooltip(t -> t.addLine(Text.lang("tfg.machine.gas_well.fluid.tooltip")
+                        .withStyle(ChatFormatting.GRAY))));
 
-            if (entry != null && entry.getDefinition() != null) {
-                var veinFluid = entry.getDefinition().getStoredFluid().get();
-                if (veinFluid != null) {
-                    var naturalGas = GTMaterials.NaturalGas.getFluid();
-                    boolean isPumpable = naturalGas != null && veinFluid.isSame(naturalGas);
+        widgets.add(Text.dynamic(() -> Text.lang("gtceu.multiblock.fluid_rig.fluid_amount",
+                Component.literal(FormattingUtil.formatNumbers(producedSync.getIntValue()) + " mB/s")
+                        .withStyle(ChatFormatting.BLUE))
+                .withStyle(ChatFormatting.GRAY)).asWidget()
+                .setEnabledIf(w -> hasVeinSync.getBoolValue()));
 
-                    Component fluidTooltip = Text.lang("tfg.machine.gas_well.fluid.tooltip")
-                            .withStyle(ChatFormatting.GRAY);
-                    Component fluidInfo = veinFluid.getFluidType().getDescription().copy()
-                            .withStyle(isPumpable ? ChatFormatting.GREEN : ChatFormatting.RED);
-                    widgets.add(Text.lang("gtceu.multiblock.fluid_rig.drilled_fluid", fluidInfo).asWidget()
-                            .tooltip(t -> t.addLine(fluidTooltip)));
-
-                    int produced = Math.max(
-                            entry.getDefinition().getDepletedYield(),
-                            entry.getFluidYield() * entry.getOperationsRemaining() /
-                                    BedrockFluidVeinSavedData.MAXIMUM_VEIN_OPERATIONS);
-                    Component amountInfo = Component.literal(FormattingUtil.formatNumbers(produced) + " mB/s")
-                            .withStyle(ChatFormatting.BLUE);
-                    widgets.add(Text.lang("gtceu.multiblock.fluid_rig.fluid_amount", amountInfo)
-                            .withStyle(ChatFormatting.GRAY).asWidget());
-                }
-
-                int remainingOps = entry.getOperationsRemaining();
-                int maxOps = BedrockFluidVeinSavedData.MAXIMUM_VEIN_OPERATIONS;
-                int percent = remainingOps * 100 / maxOps;
-                Component veinInfo = Component.literal(percent + "%")
-                        .withStyle(percent > 50 ? ChatFormatting.GREEN
-                                : percent > 20 ? ChatFormatting.YELLOW : ChatFormatting.RED);
-                widgets.add(Text.lang("tfg.machine.gas_well.vein_remaining", veinInfo)
-                        .withStyle(ChatFormatting.GRAY).asWidget());
-            } else {
-                Component noFluid = Component.translatable("gtceu.multiblock.fluid_rig.no_fluid_in_area")
-                        .withStyle(ChatFormatting.RED);
-                widgets.add(Text.lang("gtceu.multiblock.fluid_rig.drilled_fluid", noFluid)
-                        .withStyle(ChatFormatting.GRAY).asWidget());
-            }
-        }
+        widgets.add(Text.dynamic(() -> {
+            int percent = veinPercentSync.getIntValue();
+            return Text.lang("tfg.machine.gas_well.vein_remaining",
+                    Component.literal(percent + "%").withStyle(percent > 50 ? ChatFormatting.GREEN
+                            : percent > 20 ? ChatFormatting.YELLOW : ChatFormatting.RED))
+                    .withStyle(ChatFormatting.GRAY);
+        }).asWidget()
+                .setEnabledIf(w -> hasVeinSync.getBoolValue()));
 
         return widgets;
-
     }
-
 }
