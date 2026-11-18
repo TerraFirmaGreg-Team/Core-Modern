@@ -149,39 +149,87 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             return (int) getDripstoneHeight(distance, this.radius, this.scale, this.bluntness);
         }
 
-        private void placeBlocks(WorldGenLevel level, RandomSource random, LargeDripstoneFeature.WindOffsetter windOffsetter) {
-            for (int x = -this.radius; x <= this.radius; x++) {
-                for (int z = -this.radius; z <= this.radius; z++) {
+        /** Pre-computes height(x,z) with the random factor **/
+        private int[][] buildHeightMap(RandomSource random) {
+            final int r = this.radius;
+            final int size = r * 2 + 1;
+            int[][] map = new int[size][size];
 
+            for (int x = -r; x <= r; x++) {
+                for (int z = -r; z <= r; z++) {
                     float rootDistance = Mth.sqrt((float) (x * x + z * z));
+                    int height = 0;
+                    if (rootDistance > (float) r) {
+                        map[x + r][z + r] = 0;
+                        continue;
+                    }
+                    height = this.getHeightAtRadius(rootDistance);
+                    if (height < 0) {
+                        height = 0;
+                    } else if (random.nextFloat() < 0.2F) {
+                        height = (int) (height * Mth.randomBetween(random, 0.8F, 1.0F));
+                    }
+                    map[x + r][z + r] = height;
+                }
+            }
+            return map;
+        }
 
-                    if (!(rootDistance > (float) this.radius)) {
-                        int height = this.getHeightAtRadius(rootDistance);
-                        if (height > 0) {
-                            if (random.nextFloat() < 0.2) {
-                                height = (int) (height * Mth.randomBetween(random, 0.8F, 1.0F));
+        private void placeBlocks(WorldGenLevel level, RandomSource random,
+                LargeDripstoneFeature.WindOffsetter windOffsetter) {
+            final int r = this.radius;
+            final int size = r * 2 + 1;
+
+            // --- 1. Pre-computed, random-adjusted height per column ---
+            int[][] heightMap = this.buildHeightMap(random);
+
+            // --- 2. Placement pass ---
+            for (int x = -r; x <= r; x++) {
+                for (int z = -r; z <= r; z++) {
+                    int height = heightMap[x + r][z + r];
+                    if (height <= 0)
+                        continue; // automatically checks for root-distance due to it being baked into the map
+
+                    BlockPos.MutableBlockPos pos = this.root.offset(x, 0, z).mutable();
+                    boolean placedBlock = false;
+                    int maxY = this.pointingUp
+                            ? level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX(), pos.getZ())
+                            : Integer.MAX_VALUE;
+
+                    for (int y = 0; y < height && pos.getY() < maxY; y++) {
+                        BlockPos dripstonePos = windOffsetter.offset(pos);
+
+                        if (EnvironmentHelpers.isWorldgenReplaceable(level, dripstonePos)) {
+
+                            // Recover the un-offset column under the current dripstone
+                            BlockPos underPos = dripstonePos.below();
+                            BlockPos reversed = windOffsetter.reverse_offset(underPos);
+
+                            int ix = reversed.getX() - this.root.getX();
+                            int iz = reversed.getZ() - this.root.getZ();
+
+                            int heightAtReversed = 0;
+                            if (ix >= -r && ix <= r && iz >= -r && iz <= r) {
+                                heightAtReversed = heightMap[ix + r][iz + r];
                             }
+                            int hardenedLevels = 2;
 
-                            BlockPos.MutableBlockPos pos = this.root.offset(x, 0, z).mutable();
-                            boolean placedBlock = false;
-                            int maxY = this.pointingUp ? level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX(), pos.getZ()) : Integer.MAX_VALUE;
+                            boolean hardened = y > heightAtReversed - hardenedLevels;
 
-                            for (int y = 0; y < height && pos.getY() < maxY; y++) {
-                                BlockPos dripstonePos = windOffsetter.offset(pos);
-                                if (EnvironmentHelpers.isWorldgenReplaceable(level, dripstonePos)) {
-                                    if (!placedBlock && !this.pointingUp) {
-                                        level.setBlock(dripstonePos, rockData.getRock(dripstonePos).hardened().defaultBlockState(), Block.UPDATE_CLIENTS);
-                                    } else {
-                                        level.setBlock(dripstonePos, rockData.getRock(dripstonePos).raw().defaultBlockState(), Block.UPDATE_CLIENTS);
-                                    }
-                                    placedBlock = true;
-                                } else if (placedBlock && level.getBlockState(dripstonePos).is(BlockTags.NETHER_CARVER_REPLACEABLES)) {
-                                    break;
-                                }
+                            level.setBlock(
+                                    dripstonePos,
+                                    hardened
+                                            ? rockData.getRock(dripstonePos).hardened().defaultBlockState()
+                                            : rockData.getRock(dripstonePos).raw().defaultBlockState(),
+                                    Block.UPDATE_CLIENTS);
+                            placedBlock = true;
 
-                                pos.move(this.pointingUp ? Direction.UP : Direction.DOWN);
-                            }
+                        } else if (placedBlock
+                                && level.getBlockState(dripstonePos).is(BlockTags.NETHER_CARVER_REPLACEABLES)) {
+                            break;
                         }
+
+                        pos.move(this.pointingUp ? Direction.UP : Direction.DOWN);
                     }
                 }
             }
@@ -254,6 +302,15 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
                 Vec3 scaled = this.windSpeed.scale(offset);
                 return pos.offset(Mth.floor(scaled.x), 0, Mth.floor(scaled.z));
             }
+        }
+
+        // in principle for linear wind there's no need for that function,
+        // but in case of nonlinear funny wind that changes Y - you'd need one
+        BlockPos reverse_offset(BlockPos pos) {
+            BlockPos fwd = offset(pos);
+            int dx = fwd.getX() - pos.getX();
+            int dz = fwd.getZ() - pos.getZ();
+            return pos.offset(-dx, 0, -dz);
         }
     }
 }
