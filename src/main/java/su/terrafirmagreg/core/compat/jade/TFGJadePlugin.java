@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.compat.jade;
 
+import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
+
 import net.minecraft.resources.ResourceLocation;
 
 import snownee.jade.api.*;
@@ -22,5 +24,11 @@ public class TFGJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(TierLockedAcidProvider.INSTANCE, TierLockedAcidBlock.class);
         registration.registerBlockComponent(DynamicAgeProvider.INSTANCE, PalmClusterBlock.class);
         registration.registerBlockComponent(GasBurnerProvider.INSTANCE, GasBurnerBlock.class);
+        GTJadePlugin.register(registration, new BatteryDynamoHatchInfoProvider());
+    }
+
+    @Override
+    public void register(IWailaCommonRegistration registration) {
+        GTJadePlugin.register(registration, new BatteryDynamoHatchInfoProvider());
     }
 }

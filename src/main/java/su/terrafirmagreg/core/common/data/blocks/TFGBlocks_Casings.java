@@ -1,10 +1,10 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.registry.registrate.provider.GTBlockstateProvider;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
@@ -167,6 +167,9 @@ public class TFGBlocks_Casings {
     public static final BlockEntry<Block> ROBUST_BLUE_STEEL_CASING = createCasingBlock("casings/machine_casing_robust_blue_steel",
             GTModels.cubeAllModel(TFGCore.id("block/casings/robust_blue_steel")));
 
+    public static final BlockEntry<Block> BLACK_STEEL_CASING = createCasingBlock("casings/machine_casing_black_steel",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_black_steel")));
+
     public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_blue_solar_panel",
             (ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
                     GTCEu.id("block/casings/steam/steel/side"),
@@ -259,6 +262,22 @@ public class TFGBlocks_Casings {
     public static final BlockEntry<ActiveBlock> VACUUM_ENGINE_INTAKE = createActiveCasingBlock("casings/machine_casing_vacuum_engine_intake",
             ModelUtils.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")),
             SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, true);
+
+    public static final Map<Integer, BlockEntry<ActiveBlock>> GAS_EXHAUST_CASING = createTieredGeneratorCasings("gas_exhaust", GTValues.HV);
+    public static final Map<Integer, BlockEntry<ActiveBlock>> COMBUSTION_EXHAUST_CASING = createTieredGeneratorCasings("combustion_exhaust", GTValues.HV);
+    public static final Map<Integer, BlockEntry<ActiveBlock>> STEAM_EXHAUST_CASING = createTieredGeneratorCasings("steam_exhaust", GTValues.MV);
+
+    private static Map<Integer, BlockEntry<ActiveBlock>> createTieredGeneratorCasings(String name,
+            int maxTier) {
+        Map<Integer, BlockEntry<ActiveBlock>> casings = new LinkedHashMap<>();
+        for (int tier = GTValues.LV; tier <= maxTier; tier++) {
+            String tierName = GTValues.VN[tier].toLowerCase(Locale.ROOT);
+            casings.put(tier, createActiveCasingBlock("casings/" + name + "_" + tierName,
+                    ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/" + name + "/" + tierName)),
+                    SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, true));
+        }
+        return Collections.unmodifiableMap(casings);
+    }
 
     public static final BlockEntry<ActiveBlock> CRUSHING_WHEELS_RED = createActiveCasingBlock("casings/crushing_wheels_red",
             ModelUtils.createActiveModel(TFGCore.id("block/casings/unique/crushing_wheels_red")),
