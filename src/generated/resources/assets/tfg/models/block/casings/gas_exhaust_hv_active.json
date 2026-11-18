@@ -1,0 +1,7 @@
+{
+  "parent": "gtceu:block/cube_2_layer/all",
+  "textures": {
+    "bot_all": "tfg:block/casings/gas_exhaust/hv_active",
+    "top_all": "tfg:block/casings/gas_exhaust/hv_active_emissive"
+  }
+}

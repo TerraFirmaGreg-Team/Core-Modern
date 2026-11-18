@@ -20,6 +20,7 @@ import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -82,6 +83,7 @@ import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryItemLauncherMachine;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryItemReceiverMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.*;
@@ -1464,6 +1466,100 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id("block/casings/robust_blue_steel"),
                     GTCEu.id("block/machines/centrifuge"))
+            .register();
+
+    // Multiblock Generator
+
+    public static final MultiblockMachineDefinition LARGE_COMBUSTION_GENERATOR = REGISTRATE
+            .multiblock("large_combustion_generator",
+                    holder -> new TFGTieredGeneratorMachine(holder, TFGBlocks_Casings.COMBUSTION_EXHAUST_CASING))
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.BLACK_STEEL_CASING)
+            .recipeType(GTRecipeTypes.COMBUSTION_GENERATOR_FUELS)
+            .generator(true)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.large_combustion_generator"),
+                    Component.translatable("tfg.tooltip.machine.large_generator_1"),
+                    Component.translatable("tfg.tooltip.machine.large_generator_2"))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
+                    .slice("AAA", "BXB", "AAA")
+                    .slice("AAA", "A#A", "AAA")
+                    .slice("AAA", "BEB", "AAA")
+                    .where('X', controller(definition))
+                    .where('A', blocks(TFGBlocks_Casings.BLACK_STEEL_CASING.get()).setMinGlobalLimited(16)
+                            .and(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .and(ability(TFGPartAbility.BATTERY_DYNAMO, LV, MV, HV).setExactLimit(1).setPreviewCount(1))
+                            .and(ability(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('B', blocks(AllBlocks.METAL_GIRDER.get()))
+                    .where('E', blocks(TFGBlocks_Casings.COMBUSTION_EXHAUST_CASING.values().stream()
+                            .map(Supplier::get).toArray(Block[]::new)))
+                    .where('#', Predicates.air())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_black_steel"),
+                    TFGCore.id("block/machines/combustion_generator"))
+            .register();
+
+    public static final MultiblockMachineDefinition LARGE_GAS_GENERATOR = REGISTRATE
+            .multiblock("large_gas_generator",
+                    holder -> new TFGTieredGeneratorMachine(holder, TFGBlocks_Casings.GAS_EXHAUST_CASING))
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.BLACK_STEEL_CASING)
+            .recipeType(GTRecipeTypes.GAS_TURBINE_FUELS)
+            .generator(true)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.large_gas_generator"),
+                    Component.translatable("tfg.tooltip.machine.large_generator_1"),
+                    Component.translatable("tfg.tooltip.machine.large_generator_2"))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
+                    .slice("AAA", "BXB", "AAA")
+                    .slice("AAA", "A#A", "AAA")
+                    .slice("AAA", "BEB", "AAA")
+                    .where('X', controller(definition))
+                    .where('A', blocks(TFGBlocks_Casings.BLACK_STEEL_CASING.get()).setMinGlobalLimited(16)
+                            .and(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .and(ability(TFGPartAbility.BATTERY_DYNAMO, LV, MV, HV).setExactLimit(1).setPreviewCount(1))
+                            .and(ability(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('B', blocks(TFGBlocks_Girders.BRASS_BEAM.get()))
+                    .where('E', blocks(TFGBlocks_Casings.GAS_EXHAUST_CASING.values().stream()
+                            .map(Supplier::get).toArray(Block[]::new)))
+                    .where('#', Predicates.air())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_black_steel"),
+                    TFGCore.id("block/machines/gas_generator"))
+            .register();
+
+    public static final MultiblockMachineDefinition LARGE_STEAM_GENERATOR = REGISTRATE
+            .multiblock("large_steam_generator",
+                    holder -> new TFGTieredGeneratorMachine(holder, TFGBlocks_Casings.STEAM_EXHAUST_CASING))
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(TFGBlocks_Casings.BLACK_STEEL_CASING)
+            .recipeType(GTRecipeTypes.STEAM_TURBINE_FUELS)
+            .addOutputLimit(FluidRecipeCapability.CAP, 0)
+            .generator(true)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.large_steam_generator_1"),
+                    Component.translatable("tfg.tooltip.machine.large_steam_generator_2"),
+                    Component.translatable("tfg.tooltip.machine.large_generator_1"),
+                    Component.translatable("tfg.tooltip.machine.large_generator_2"))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
+                    .slice("AAA", "BXB", "AAA")
+                    .slice("AAA", "A#A", "AAA")
+                    .slice("AAA", "BEB", "AAA")
+                    .where('X', controller(definition))
+                    .where('A', blocks(TFGBlocks_Casings.BLACK_STEEL_CASING.get()).setMinGlobalLimited(16)
+                            .and(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .and(ability(TFGPartAbility.BATTERY_DYNAMO, LV, MV).setExactLimit(1).setPreviewCount(1))
+                            .and(ability(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('B', blocks(TFGBlocks_Girders.WROUGHT_IRON_BEAM.get()))
+                    .where('E', blocks(TFGBlocks_Casings.STEAM_EXHAUST_CASING.values().stream()
+                            .map(Supplier::get).toArray(Block[]::new)))
+                    .where('#', Predicates.air())
+                    .build())
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_black_steel"),
+                    TFGCore.id("block/machines/steam_generator"))
             .register();
 
     // spotless:on
