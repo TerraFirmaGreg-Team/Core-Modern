@@ -214,7 +214,8 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 }
 
                 unifiedRotationAngle = state.currentAngle;
-            } else if (appliance instanceof MixingBowlBlockEntity mixingBowl) {
+            }
+            if (appliance instanceof MixingBowlBlockEntity mixingBowl && mixingBowl.isManualMixing()) {
                 unifiedRotationAngle = mixingBowl.getRotationAngle(partialTicks);
             }
 

@@ -84,10 +84,13 @@ public record MixerAttachment(@Nullable Float minRpm, @Nullable Integer circuit)
             if (!mixer.running) {
                 mixer.startProcessingBasin();
                 mixer.sendData();
-            }
-            if (mixer.runningTicks >= 20) {
-                mixer.runningTicks = 20;
+            } else if (mixer.runningTicks > 20) {
+                mixer.runningTicks = Math.max(0, 40 - mixer.runningTicks);
+                mixer.processingTicks = -1;
+                mixer.sendData();
+            } else if (mixer.runningTicks == 20 && mixer.processingTicks != 20) {
                 mixer.processingTicks = 20;
+                mixer.sendData();
             }
         }
     }

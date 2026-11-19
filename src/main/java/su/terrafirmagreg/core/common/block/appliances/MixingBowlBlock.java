@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.block.appliances;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
 
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import net.dries007.tfc.client.IHighlightHandler;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.capabilities.size.IItemSize;
@@ -37,6 +38,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import su.terrafirmagreg.core.client.renderer.CookingApplianceBlockEntityRenderer;
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.MixingBowlBlockEntity;
+import su.terrafirmagreg.core.common.recipe.attachment.MixerAttachment;
 
 public class MixingBowlBlock extends CookingApplianceBlock implements IItemSize, IHighlightHandler {
 
@@ -77,6 +79,10 @@ public class MixingBowlBlock extends CookingApplianceBlock implements IItemSize,
             Direction facing = state.hasProperty(FACING) ? state.getValue(FACING) : Direction.NORTH;
             int index = facing.get2DDataValue();
             if (!bowl.getToolStack().isEmpty() && TOOL_AABBS[index].move(pos).contains(hitLoc)) {
+                MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(bowl);
+                if (mixer != null && mixer.running) {
+                    return InteractionResult.PASS;
+                }
                 if (bowl.isManualMixing()) {
                     return InteractionResult.sidedSuccess(level.isClientSide());
                 }
@@ -105,6 +111,10 @@ public class MixingBowlBlock extends CookingApplianceBlock implements IItemSize,
     public boolean drawHighlight(Level level, BlockPos pos, Player player, BlockHitResult rayTrace, PoseStack stack, MultiBufferSource buffers, Vec3 rendererPosition) {
         if (level.getBlockEntity(pos) instanceof MixingBowlBlockEntity bowl) {
             if (!bowl.getToolStack().isEmpty() && bowl.getCookingTicks() <= 0 && !bowl.isManualMixing()) {
+                MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(bowl);
+                if (mixer != null && mixer.running) {
+                    return false;
+                }
                 BlockState state = level.getBlockState(pos);
                 Direction facing = state.hasProperty(FACING) ? state.getValue(FACING) : Direction.NORTH;
                 int index = facing.get2DDataValue();
@@ -133,7 +143,7 @@ public class MixingBowlBlock extends CookingApplianceBlock implements IItemSize,
 
             if (mixTime > 0 && (maxCookTime - mixTime) > 0) {
                 if (rand.nextFloat() > 0) {
-                    level.playLocalSound(x, y, z, SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 0.1F + rand.nextFloat(), rand.nextFloat() + 0.3F, false);
+                    level.playLocalSound(x, y, z, SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 0.1F + (rand.nextFloat() * 0.2f), rand.nextFloat() + 0.3F, false);
                 }
             }
         }
