@@ -1,0 +1,7 @@
+{
+    "terminalBName": "order",
+    "terminalAName": "crafting",
+    "type": "ae2wtlib:combine",
+    "terminalB": {"item": "tfg:wireless_order_terminal"},
+    "terminalA": {"item": "ae2:wireless_crafting_terminal"}
+}

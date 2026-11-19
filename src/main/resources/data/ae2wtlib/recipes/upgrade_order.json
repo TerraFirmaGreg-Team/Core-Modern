@@ -1,0 +1,5 @@
+{
+    "terminalName": "order",
+    "terminal": {"item": "tfg:wireless_order_terminal"},
+    "type": "ae2wtlib:upgrade"
+}

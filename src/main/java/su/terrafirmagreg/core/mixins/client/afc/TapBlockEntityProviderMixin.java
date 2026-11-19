@@ -22,7 +22,7 @@ import su.terrafirmagreg.core.common.environment.IGreenhouseReceiver;
 @Mixin(value = TapBlockEntityProvider.class, remap = false)
 public abstract class TapBlockEntityProviderMixin {
 
-    @Inject(method = "appendServerData(Lnet/minecraft/nbt/CompoundTag;Lsnownee/jade/api/BlockAccessor;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;putFloat(Ljava/lang/String;F)V", ordinal = 3))
+    @Inject(method = "appendServerData(Lnet/minecraft/nbt/CompoundTag;Lsnownee/jade/api/BlockAccessor;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;putFloat(Ljava/lang/String;F)V", ordinal = 3, remap = true))
     private void tfg$injectGreenhouseValidityOnAppendServer(CompoundTag tag, BlockAccessor accessor, CallbackInfo ci, @Local(name = "compound") CompoundTag compound) {
         compound.putBoolean("inValidGreenhouse", accessor.getBlockEntity() instanceof IGreenhouseReceiver receiver && receiver.tfg$isInsideValidGreenhouse());
     }
@@ -30,7 +30,7 @@ public abstract class TapBlockEntityProviderMixin {
     @WrapOperation(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lsnownee/jade/api/ITooltip;add(Lnet/minecraft/network/chat/Component;)V", ordinal = 5))
     private static void tfg$overrideTooltip(ITooltip tooltip, Component component, Operation<Void> original, @Local(name = "treeTapData") CompoundTag treeTapData) {
         if (treeTapData.getBoolean("inValidGreenhouse")) {
-            tooltip.add(Component.translatable("tfg.tooltip.firmalife_inside_valid_greenhouse").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("firmalife.greenhouse.valid_generic").withStyle(ChatFormatting.GREEN));
         } else {
             original.call(tooltip, component);
         }

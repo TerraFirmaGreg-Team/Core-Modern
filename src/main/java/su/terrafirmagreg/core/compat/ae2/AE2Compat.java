@@ -20,6 +20,8 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.networking.events.GridSpatialEvent;
 import appeng.api.networking.spatial.ISpatialService;
+import appeng.api.parts.PartModels;
+import appeng.items.parts.PartModelsHelper;
 import dev.ftb.mods.ftbchunks.api.ChunkTeamData;
 import dev.ftb.mods.ftbchunks.api.ClaimedChunk;
 import dev.ftb.mods.ftbchunks.api.ClaimedChunkManager;
@@ -28,6 +30,12 @@ import dev.ftb.mods.ftbchunks.api.FTBChunksProperties;
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.ftb.mods.ftbteams.api.Team;
 import dev.ftb.mods.ftbteams.api.property.PrivacyMode;
+
+import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderPart;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderAmountMenu;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalPart;
+import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
 
 /**
  * Prevent Spatial IO events from affecting claimed chunks
@@ -38,6 +46,11 @@ public class AE2Compat {
 
     public static void registerEvents() {
         GridHelper.addEventHandler(GridSpatialEvent.class, AE2Compat::onGridSpatialEvent);
+        OrderTerminalMenu.init();
+        WOTMenu.init();
+        OrderAmountMenu.init();
+        PartModels.registerModels(PartModelsHelper.createModels(StorageProviderPart.class));
+        PartModels.registerModels(PartModelsHelper.createModels(OrderTerminalPart.class));
     }
 
     private static void onGridSpatialEvent(IGrid grid, GridSpatialEvent event) {

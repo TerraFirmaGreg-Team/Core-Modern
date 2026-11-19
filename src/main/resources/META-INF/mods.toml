@@ -135,6 +135,13 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies."${mod_id}"]]
+modId = "ae2wtlib"
+mandatory = true
+versionRange = "[15.4,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
 modId = "gtceu"
 mandatory = true
 versionRange = "1.6.4"

@@ -108,6 +108,13 @@ public class TFGNetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         INSTANCE.registerMessage(
                 id(),
+                OrderDestinationsPacket.class,
+                OrderDestinationsPacket::encode,
+                OrderDestinationsPacket::decode,
+                OrderDestinationsPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        INSTANCE.registerMessage(
+                id(),
                 EnvironmentQueryPacket.class,
                 EnvironmentQueryPacket::encode,
                 EnvironmentQueryPacket::decode,

@@ -51,6 +51,7 @@ import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.item.GasBurnerBlockItem;
+import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderBlock;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings({ "unused" })
@@ -218,17 +219,18 @@ public final class TFGBlocks {
             .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0x734B26))
             .register();
 
-    public static final BlockEntry<LiquidBlock> SULFUR_FUMES = TFGCore.REGISTRATE.block("fluid/sulfur_fumes",
-            p -> new LiquidBlock(TFGFluids.SULFUR_FUMES.source(), p))
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+    public static final BlockEntry<LiquidBlock> SULFUR_FUMES = TFGCore.REGISTRATE.block("fluid/sulfur_fumes", p -> new LiquidBlock(TFGFluids.SULFUR_FUMES.source(), p))
             .initialProperties(() -> Blocks.WATER)
-            .properties(p -> p.mapColor(MapColor.NONE).noLootTable().noCollission())
+            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/fluid/sulfur_fumes")))
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_WHITE).noLootTable().noCollission())
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xe8e8d8))
             .register();
 
     public static final BlockEntry<LiquidBlock> GEYSER_SLURRY = TFGCore.REGISTRATE.block("fluid/geyser_slurry", p -> new LiquidBlock(TFGFluids.GEYSER_SLURRY.source(), p))
             .initialProperties(() -> Blocks.WATER)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable())
+            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/fluid/geyser_slurry")))
+            .properties(p -> p.mapColor(MapColor.GLOW_LICHEN).noLootTable())
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0xa3c0cc))
             .register();
 
     ///// Misc blocks
@@ -320,7 +322,6 @@ public final class TFGBlocks {
                     }
                 }
             })
-
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
             .loot((lt, block) -> lt.add(block, LootTable.lootTable()
                     .withPool(LootPool.lootPool()
@@ -334,6 +335,11 @@ public final class TFGBlocks {
             .item(GasBurnerBlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/" + ctx.getName() + "/gas_burner_0_unlit")))
             .build()
+            .register();
+
+    public static final BlockEntry<StorageProviderBlock> STORAGE_PROVIDER = TFGCore.REGISTRATE.block("storage_provider", p -> new StorageProviderBlock())
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {

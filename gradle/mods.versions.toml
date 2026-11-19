@@ -23,6 +23,7 @@ createPickyWaterwheels = "1.20.1-6.0.8-6"
 createSteamPowered = "1.20.1-3.1.0"
 greate = "0.0.81"
 strutYourStuff = "1.1.1+mc1.20.1-forge,1.20.1"
+createDeco = "6373226"
 
 # GregTech
 gtceu = "mc1.20.1-7.5.3"
@@ -52,8 +53,8 @@ sacksNSuch = "1.2.6"
 
 # AE2
 guideme = "20.1.13"
-ae2 = "9092015" # cf: appliedenergistics2-forge-15.5.5-uelm.jar
-ae2WirelessTerminals = "15.3.0-forge"
+ae2 = "15.5.9-uelm"
+ae2WirelessTerminals = "15.4.1"
 
 # ComputerCraft
 ccTweaked = "1.121.0-forge,1.20.1"
@@ -140,6 +141,7 @@ createPickyWaterwheels = { module = "maven.modrinth:create-picky-wheels", versio
 createSteamPowered = { module = "maven.modrinth:create-steam-powered", version.ref = "createSteamPowered" }
 greate = { module = "maven.modrinth:greate", version.ref = "greate" }
 strutYourStuff = { module = "maven.modrinth:strut-your-stuff", version.ref = "strutYourStuff" }
+createDeco = { module = "curse.maven:create-deco-509285", version.ref = "createDeco" }
 
 # GregTech
 gtceu = { module = "maven.modrinth:gregtechceu-modern", version.ref = "gtceu" }
@@ -169,8 +171,8 @@ sacksNSuch = { module = "maven.modrinth:sacks-n-such", version.ref = "sacksNSuch
 
 # AE2 (UELM fork)
 guideme = { module = "maven.modrinth:guideme", version.ref = "guideme" }
-ae2 = { module = "curse.maven:ae2-uelm-1624366", version.ref = "ae2" }
-ae2WirelessTerminals = { module = "maven.modrinth:applied-energistics-2-wireless-terminals", version.ref = "ae2WirelessTerminals" }
+ae2 = { module = "appeng:appliedenergistics2-forge", version.ref = "ae2" }
+ae2WirelessTerminals = { module = "de.mari_023:ae2wtlib", version.ref = "ae2WirelessTerminals" }
 
 # ComputerCraft
 ccTweakedCoreApi = { module = "cc.tweaked:cc-tweaked-1.20.1-core-api", version.ref = "cctweaked" }

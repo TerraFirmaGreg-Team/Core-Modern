@@ -1,0 +1,7 @@
+{
+    "terminalBName": "order",
+    "terminalAName": "pattern_access",
+    "type": "ae2wtlib:combine",
+    "terminalB": {"item": "tfg:wireless_order_terminal"},
+    "terminalA": {"item": "ae2wtlib:wireless_pattern_access_terminal"}
+}

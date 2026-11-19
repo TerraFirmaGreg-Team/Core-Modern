@@ -8,6 +8,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import appeng.init.client.InitScreens;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.overlay.AirLevelOverlay;
 import su.terrafirmagreg.core.client.overlay.GlassblowingOverlay;
@@ -16,8 +18,14 @@ import su.terrafirmagreg.core.client.renderer.SprayCanHudOverlay;
 import su.terrafirmagreg.core.client.screen.ArtisanTableScreen;
 import su.terrafirmagreg.core.client.screen.GasBurnerScreen;
 import su.terrafirmagreg.core.client.screen.LargeNestBoxScreen;
+import su.terrafirmagreg.core.client.screen.ae2.OrderAmountScreen;
+import su.terrafirmagreg.core.client.screen.ae2.OrderTerminalScreen;
+import su.terrafirmagreg.core.client.screen.ae2.WOTScreen;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowScreen;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderAmountMenu;
+import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
+import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class TFGClientScreens {
@@ -31,6 +39,9 @@ public final class TFGClientScreens {
             MenuScreens.register(TFGContainers.LARGE_NEST_BOX.get(), LargeNestBoxScreen::new);
             MenuScreens.register(TFGContainers.ARTISAN_TABLE.get(), ArtisanTableScreen::new);
             MenuScreens.register(TFGContainers.GAS_BURNER.get(), GasBurnerScreen::new);
+            InitScreens.register(OrderTerminalMenu.TYPE, OrderTerminalScreen::new, "/screens/tfg/order_terminal.json");
+            InitScreens.register(WOTMenu.TYPE, WOTScreen::new, "/screens/tfg/wireless_order_terminal.json");
+            InitScreens.register(OrderAmountMenu.TYPE, OrderAmountScreen::new, "/screens/tfg/order_amount.json");
         });
     }
 

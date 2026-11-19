@@ -206,6 +206,12 @@ public final class Helpers
         return new ResourceLocation(domain, path);
     }
 
+	// Used by Firmaciv, see tfg#5206
+	public static boolean isJEIEnabled()
+	{
+		return true;
+	}
+
     @SuppressWarnings("ConstantConditions")
     public static <T> Capability<T> capability(CapabilityToken<T> token)
     {
@@ -825,6 +831,21 @@ public final class Helpers
     {
         return inventory.extractItem(slot, Integer.MAX_VALUE, false);
     }
+
+	/**
+	 * Initializes the Food Capability of {@code stack}
+	 */
+	public static ItemStack initFoodCapability(ItemStack stack)
+	{
+		if (!stack.isEmpty() && !FoodCapability.CACHE.getAll(stack.getItem()).isEmpty())
+		{
+			if (!FoodCapability.has(stack))
+			{
+				FoodCapability.updateFoodDecayOnCreate(stack);
+			}
+		}
+		return stack;
+	}
 
     /**
      * Inserts {@code stack} into the inventory ignoring any difference in creation date.

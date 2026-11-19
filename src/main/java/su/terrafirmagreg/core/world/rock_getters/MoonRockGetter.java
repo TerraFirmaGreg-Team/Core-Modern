@@ -15,6 +15,6 @@ public record MoonRockGetter(LayeredArea rockLayer, OpenSimplex2D depthRockNoise
     // Doesn't do anything, but prevents rhino lag
     @Override
     public @Nullable RockSettings generate(int x, int y, int z, int surfaceY, @Nullable ChunkRockDataCache cache, RockLayerSettings rockSettings) {
-        return rockSettings.sampleAtLayer(0, 0);
+        return null;
     }
 }
