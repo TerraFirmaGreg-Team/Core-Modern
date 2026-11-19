@@ -172,6 +172,12 @@ public class WildAnimal extends AgeableMob implements GenderedRenderAnimal
         this.playSound(step.get(), 0.15F, 1.0F);
     }
 
+	@Override
+	protected SoundEvent getAmbientSound()
+	{
+		return ambient.get();
+	}
+
     @Override
     protected SoundEvent getHurtSound(DamageSource src)
     {

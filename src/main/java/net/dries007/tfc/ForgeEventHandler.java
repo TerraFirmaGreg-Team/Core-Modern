@@ -682,10 +682,10 @@ public final class ForgeEventHandler
             event.setResult(Event.Result.DENY); // Waterlogged aqueducts do not count as the source when creating source blocks
         }
 
-        if (FluidPostProcess.inPostProcess)
-        {
-            return; // Worldgen never places sluices to my knowledge
-        }
+		if (!Helpers.isFluid(state.getFluidState(), TFCTags.Fluids.USABLE_IN_SLUICE))
+		{
+			return; // Sluices only output fresh water, so this cannot be a sluice output
+		}
 
         for (Direction direction : Direction.Plane.HORIZONTAL)
         {
@@ -1082,6 +1082,12 @@ public final class ForgeEventHandler
         final LivingEntity entity = event.getEntity();
         final LevelAccessor level = event.getLevel();
         final MobSpawnType spawn = event.getSpawnType();
+
+		if (!(event.getLevel().getLevel().getChunkSource().getGenerator() instanceof ChunkGeneratorExtension))
+		{
+			return;
+		}
+
         // we only care about "natural" spawns
         if (spawn == MobSpawnType.NATURAL || spawn == MobSpawnType.CHUNK_GENERATION || spawn == MobSpawnType.REINFORCEMENT)
         {
