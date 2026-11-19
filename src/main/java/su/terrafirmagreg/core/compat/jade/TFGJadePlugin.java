@@ -1,8 +1,7 @@
 package su.terrafirmagreg.core.compat.jade;
 
-import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
-
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
+import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
 
 import net.minecraft.resources.ResourceLocation;
 
