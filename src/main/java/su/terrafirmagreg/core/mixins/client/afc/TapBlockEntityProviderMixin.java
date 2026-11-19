@@ -30,7 +30,7 @@ public abstract class TapBlockEntityProviderMixin {
     @WrapOperation(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lsnownee/jade/api/ITooltip;add(Lnet/minecraft/network/chat/Component;)V", ordinal = 5))
     private static void tfg$overrideTooltip(ITooltip tooltip, Component component, Operation<Void> original, @Local(name = "treeTapData") CompoundTag treeTapData) {
         if (treeTapData.getBoolean("inValidGreenhouse")) {
-            tooltip.add(Component.translatable("tfg.tooltip.firmalife_inside_valid_greenhouse").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("firmalife.greenhouse.valid_generic").withStyle(ChatFormatting.GREEN));
         } else {
             original.call(tooltip, component);
         }
