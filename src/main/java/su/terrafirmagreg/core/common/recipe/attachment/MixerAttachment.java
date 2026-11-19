@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import electrolyte.greate.content.kinetics.base.ICircuitHolder;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.MixingBowlBlockEntity;
 
 /**
  * Cooking appliance attachment for mixers.
@@ -68,6 +69,9 @@ public record MixerAttachment(@Nullable Float minRpm, @Nullable Integer circuit)
     @Override
     public CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
         if (!matches(appliance, appliance.getLevel())) {
+            if (appliance instanceof MixingBowlBlockEntity mbbe && !mbbe.getToolStack().isEmpty()) {
+                return CookingApplianceBlockEntity.CookingError.NONE;
+            }
             return CookingApplianceBlockEntity.CookingError.INSUFFICIENT_MIXER;
         }
         return CookingApplianceBlockEntity.CookingError.NONE;

@@ -1,11 +1,15 @@
 package su.terrafirmagreg.core.client.renderer;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.minecraft.client.Minecraft;
@@ -29,6 +33,16 @@ import su.terrafirmagreg.core.common.recipe.attachment.MixerAttachment;
 
 @SuppressWarnings({ "unused", "UnnecessaryLocalVariable" })
 public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlockEntity> implements BlockEntityRenderer<T> {
+
+    private static final Map<CookingApplianceBlockEntity, SpinState> SPIN_STATES = new WeakHashMap<>();
+
+    private static class SpinState {
+        float lastRenderTime = -1.0F;
+        float currentAngle = 0.0F;
+        float currentSpeed = 0.0F;
+        float lastRunningSpeed = 0.0F;
+        int lastDirection = 1;
+    }
 
     public CookingApplianceBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -138,20 +152,77 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             }
 
             int currentRenderIndex = 0;
-
             int cookTime = appliance.getCookingTicks();
             float rpm = 0;
 
             MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(appliance);
-            if (mixer != null && mixer.running && mixer.runningTicks >= 20) {
-                rpm = mixer.getSpeed();
+            boolean hasMixerAttached = mixer != null;
+
+            // Determine target angular velocity.
+            float targetSpeed = 0.0F;
+            if (hasMixerAttached) {
+                if (mixer.running && mixer.runningTicks >= 20) {
+                    float headRpm = mixer.getRenderedHeadRotationSpeed(partialTicks);
+                    targetSpeed = headRpm * 3.0F / 10.0F;
+                }
+            } else if (appliance instanceof MixingBowlBlockEntity mixingBowl) {
+                // Manual bowl mixing.
+                float bowlAngle = mixingBowl.getRotationAngle(partialTicks);
+                SpinState state = SPIN_STATES.computeIfAbsent(appliance, k -> new SpinState());
+                state.currentAngle = bowlAngle;
+                state.currentSpeed = 0.0F;
+                state.lastRenderTime = AnimationTickHolder.getRenderTime(appliance.getLevel());
+            }
+
+            float unifiedRotationAngle = 0.0F;
+            if (hasMixerAttached) {
+                SpinState state = SPIN_STATES.computeIfAbsent(appliance, k -> new SpinState());
+                float now = AnimationTickHolder.getRenderTime(appliance.getLevel());
+
+                if (state.lastRenderTime < 0.0F || now < state.lastRenderTime) {
+                    state.lastRenderTime = now;
+                }
+
+                float dt = Math.min(now - state.lastRenderTime, 2.0F);
+                state.lastRenderTime = now;
+
+                if (targetSpeed != 0.0F) {
+                    state.lastDirection = targetSpeed > 0.0F ? 1 : -1;
+                    state.lastRunningSpeed = targetSpeed;
+
+                    float lerpFactor = 1.0F - (float) Math.pow(0.85F, dt);
+                    state.currentSpeed = Mth.lerp(lerpFactor, state.currentSpeed, targetSpeed);
+                    state.currentAngle = (state.currentAngle + state.currentSpeed * dt) % 360.0F;
+                    if (state.currentAngle < 0.0F) {
+                        state.currentAngle += 360.0F;
+                    }
+                } else if (state.currentAngle != 0.0F || state.currentSpeed != 0.0F) {
+                    float desiredReturnSpeed = getDesiredReturnSpeed(state);
+                    float lerpFactor = 1.0F - (float) Math.pow(0.80F, dt);
+                    state.currentSpeed = Mth.lerp(lerpFactor, state.currentSpeed, desiredReturnSpeed);
+                    float nextAngle = state.currentAngle + state.currentSpeed * dt;
+
+                    if (state.lastDirection > 0 && nextAngle >= 360.0F) {
+                        state.currentAngle = 0.0F;
+                        state.currentSpeed = 0.0F;
+                    } else if (state.lastDirection < 0 && nextAngle <= 0.0F) {
+                        state.currentAngle = 0.0F;
+                        state.currentSpeed = 0.0F;
+                    } else {
+                        state.currentAngle = nextAngle;
+                    }
+                }
+
+                unifiedRotationAngle = state.currentAngle;
+            } else if (appliance instanceof MixingBowlBlockEntity mixingBowl) {
+                unifiedRotationAngle = mixingBowl.getRotationAngle(partialTicks);
             }
 
             // Render inputs
             for (int i = 0; i < appliance.getItemInputCount(); i++) {
                 ItemStack item = cap.getStackInSlot(i);
                 if (!item.isEmpty()) {
-                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm, partialTicks);
+                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, unifiedRotationAngle);
                     currentRenderIndex++;
                 }
             }
@@ -161,7 +232,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 int slot = appliance.getItemOutputStartSlot() + i;
                 ItemStack item = cap.getStackInSlot(slot);
                 if (!item.isEmpty()) {
-                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm, partialTicks);
+                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, unifiedRotationAngle);
                     currentRenderIndex++;
                 }
             }
@@ -251,9 +322,8 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 poseStack.mulPose(Axis.YP.rotationDegrees(corner));
                 poseStack.mulPose(Axis.YP.rotationDegrees(-horizontalAngle));
 
-                if (appliance instanceof MixingBowlBlockEntity mixingBowl) {
-                    float toolRotation = mixingBowl.getRotationAngle(partialTicks);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(toolRotation));
+                if (unifiedRotationAngle != 0.0F) {
+                    poseStack.mulPose(Axis.YP.rotationDegrees(unifiedRotationAngle));
                 }
 
                 poseStack.translate(-0.5F, -0.5F, -0.5F);
@@ -276,6 +346,24 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 poseStack.popPose();
             }
         });
+    }
+
+    private static float getDesiredReturnSpeed(SpinState state) {
+        float remaining = state.lastDirection > 0
+                ? (360.0F - state.currentAngle)
+                : state.currentAngle;
+
+        float decelWindow = 90.0F;
+        float idleCreepSpeed = 1.0F * state.lastDirection;
+
+        float desiredReturnSpeed;
+        if (remaining > decelWindow) {
+            desiredReturnSpeed = state.lastRunningSpeed;
+        } else {
+            float progress = Mth.clamp(remaining / decelWindow, 0.0F, 1.0F);
+            desiredReturnSpeed = Mth.lerp(progress, idleCreepSpeed, state.lastRunningSpeed);
+        }
+        return desiredReturnSpeed;
     }
 
     /**
@@ -323,8 +411,6 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
      * @param posSeed The position seed for rendering.
      * @param slot The slot index for rendering.
      * @param totalCount The total number of items to render. Controls the radius of the circular formation.
-     * @param spinTicks Time to spin the items for.
-     * @param rpm The revolutions per minute of the spinning item.
      */
     private void renderFloatingItem(
             PoseStack poseStack,
@@ -336,27 +422,19 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             long posSeed,
             int slot,
             int totalCount,
-            int spinTicks,
-            float rpm,
-            float partialTicks) {
+            float rotationAngle) {
 
         float angleStep = 360.0F / Math.max(1, totalCount);
         float currentAngleDegrees = slot * angleStep;
-
-        float degreesPerTick = (360.0F * rpm) / 1200.0F;
-        float spinAngle = spinTicks * degreesPerTick;
-        if (appliance instanceof MixingBowlBlockEntity mixingBowl && rpm == 0) {
-            spinAngle = mixingBowl.getRotationAngle(partialTicks);
-        }
 
         float orbitAngleDegrees;
         float rotY;
 
         if (totalCount == 1) {
             orbitAngleDegrees = currentAngleDegrees;
-            rotY = currentAngleDegrees + spinAngle;
+            rotY = currentAngleDegrees + rotationAngle;
         } else {
-            orbitAngleDegrees = currentAngleDegrees - spinAngle;
+            orbitAngleDegrees = currentAngleDegrees - rotationAngle;
             rotY = currentAngleDegrees;
         }
 
