@@ -7,6 +7,9 @@ package su.terrafirmagreg.core.common.block.create;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.sound.AutoReleasedSound;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.simibubi.create.content.contraptions.bearing.WindmillBearingBlockEntity;
@@ -39,6 +42,7 @@ import earth.terrarium.adastra.api.systems.OxygenApi;
 import earth.terrarium.adastra.api.systems.PlanetData;
 import earth.terrarium.adastra.client.utils.ClientData;
 import electrolyte.greate.GreateValues;
+import electrolyte.greate.compat.gtceu.material.GreatePropertyKeys;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
 import lombok.Getter;
 
@@ -122,9 +126,19 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         targetDirection.setValue(Math.max(-1, Math.min(1, targetDirection.getValue())));
     }
 
+    // I put random balues from Greate here
+    private static final float[] LEGACY_TIER_CAPACITY = { 8, 32, 128, 512, 2048, 8192, 32768, 131072, 524288, 2097152 };
+
+    private static float legacyTierCapacity(@Nullable Material material) {
+        if (material == null || !material.hasProperty(GreatePropertyKeys.KINETIC))
+            return Float.MAX_VALUE;
+        int tier = material.getProperty(GreatePropertyKeys.KINETIC).getTier();
+        return tier >= 0 && tier < LEGACY_TIER_CAPACITY.length ? LEGACY_TIER_CAPACITY[tier] : Float.MAX_VALUE;
+    }
+
     @Override
     public float calculateAddedStressCapacity() {
-        float capacity = GreateValues.getMaxCapacityFromMaterial(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
+        float capacity = legacyTierCapacity(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
         lastCapacityProvided = capacity;
         return capacity;
     }
@@ -152,7 +166,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
                         .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);
 
-        ITieredKineticBlockEntity.super.addToGoggleTooltip(tooltip, isPlayerSneaking, GreateValues.TM[tier], capacity, stress);
+        ITieredKineticBlockEntity.super.addToGoggleTooltip(tooltip, GreateValues.TM[tier], getSpeed());
         return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
     }
 

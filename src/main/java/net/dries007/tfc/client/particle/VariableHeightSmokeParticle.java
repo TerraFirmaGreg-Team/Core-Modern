@@ -30,9 +30,9 @@ public class VariableHeightSmokeParticle extends TextureSheetParticle
 
         final Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
         final float windStrength = wind.length();
-        xd = xSpeed + (wind.x * windStrength * 0.05f);
+        xd = xSpeed + (wind.x * windStrength * 0.1f);
         yd = ySpeed + (double) (random.nextFloat() / 500.0F);
-        zd = zSpeed + (wind.y * windStrength * 0.05f);
+        zd = zSpeed + (wind.y * windStrength * 0.1f);
     }
 
     @Override

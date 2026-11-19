@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.mixin;
 
+import net.dries007.tfc.util.tracker.WeatherHelpers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -43,6 +44,9 @@ public abstract class ServerLevelMixin
         {
             final ServerLevel level = (ServerLevel) (Object) this;
             EnvironmentHelpers.tickChunk(level, chunk, level.getProfiler());
+
+			// Handle rain effects via the climate model
+			WeatherHelpers.onTickChunk(level, chunk);
         }
     }
 }

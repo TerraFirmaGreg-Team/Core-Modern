@@ -3,7 +3,6 @@ package su.terrafirmagreg.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +25,6 @@ public final class TFGCore {
 
     public static final boolean IS_APRIL_FIRST = java.time.LocalDate.now().getMonthValue() == 4 && java.time.LocalDate.now().getDayOfMonth() == 1;
 
-    public static MaterialRegistry MATERIAL_REGISTRY;
     public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);
 
     public static ResourceLocation id(String name) {

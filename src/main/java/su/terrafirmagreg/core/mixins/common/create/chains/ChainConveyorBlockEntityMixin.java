@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -34,6 +33,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
 import su.terrafirmagreg.core.compat.create.ChainGTMaterialInterface;
 
 @Mixin(value = ChainConveyorBlockEntity.class, remap = false)
@@ -69,7 +69,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity
     @Unique
     public Item getConnectionChainItem(BlockPos connection) {
         Material chainMat = tfg$connectionMaterialStats.get(connection);
-        return ChemicalHelper.get(TagPrefix.get("chain"), (chainMat != null) ? chainMat : GTMaterials.Copper).getItem();
+        return ChemicalHelper.get(TFGTagPrefix.chain, (chainMat != null) ? chainMat : GTMaterials.Copper).getItem();
     }
 
     @Inject(method = "removeConnectionTo(Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;notifyUpdate()V"), remap = false)

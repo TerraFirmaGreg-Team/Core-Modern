@@ -5,6 +5,7 @@ import java.util.function.Function;
 import com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration;
 import com.mojang.serialization.Codec;
 
+import net.dries007.tfc.world.feature.BlockStateMapConfig;
 import net.dries007.tfc.world.feature.HotSpringConfig;
 import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
 import net.minecraft.core.registries.Registries;
@@ -62,15 +63,18 @@ public class TFGFeatures {
     // Modification of a TFC 1.21 feature backport
     public static final RegistryObject<CreepingUnderwaterPlantFeature> CREEPING_UNDERWATER_PLANT = register(
             "creeping_underwater_plant", CreepingUnderwaterPlantFeature::new, CreepingPlantConfig.CODEC);
+    // TFC 1.21 feature backport
+    public static final RegistryObject<MappedRivuletFeature> MAPPED_RIVULET = register(
+            "mapped_rivulet", MappedRivuletFeature::new, BlockStateMapConfig.CODEC);
 
-    public static final RegistryObject<FluidPlugFeature> FLUID_PLUG = register(
-            "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);
     // A copy of minecraft:lake but bigger and deeper
     public static final RegistryObject<LargeLakeFeature> LARGE_LAKE = register(
             "large_lake", LargeLakeFeature::new, LargeLakeConfig.CODEC);
     // A copy of minecraft:large_dripstone but uses the local tfc rock block
     public static final RegistryObject<LargeDripstoneFeature> LARGE_DRIPSTONE = register(
             "large_dripstone", LargeDripstoneFeature::new, LargeDripstoneConfig.CODEC);
+    public static final RegistryObject<SurfaceSpikeFeature> SURFACE_SPIKE = register(
+            "surface_spike", SurfaceSpikeFeature::new, SurfaceSpikeConfig.CODEC);
     // A copy of minecraft:waterlogged_vegetation_patch but with an arbitrary fluid
     public static final RegistryObject<FluidloggedVegetationPatchFeature> FLUIDLOGGED_VEGETATION_PATCH = register(
             "fluidlogged_vegetation_patch", FluidloggedVegetationPatchFeature::new, FluidloggedVegetationPatchConfig.CODEC);

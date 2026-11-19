@@ -3,10 +3,10 @@ package su.terrafirmagreg.core.mixins.common.gtceu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
-import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
+import com.gregtechceu.gtceu.common.module.AutoEatModule;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
@@ -18,22 +18,21 @@ import net.minecraft.world.item.ItemStack;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
-@Mixin(value = QuarkTechSuite.class)
+@Mixin(value = AutoEatModule.class, remap = false)
 public class QuarkTechSuiteMixin {
 
-    // Cancel QuarkTech helmet feeding when player is in PlayerRevive bleeding state
+    // Cancel auto-feeding when the player is in PlayerRevive bleeding state
     // This prevents food from being consumed without effect
-    @SuppressWarnings("resource") // Don't want to close player.level() in a `finally` clause
-    @Inject(method = "supplyFood", at = @At("HEAD"), remap = false, cancellable = true)
-    private void tfg$preventQuarkFeedingWhenBleeding(IElectricItem item, Player player, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "supplyFood", at = @At("HEAD"), cancellable = true)
+    private static void tfg$preventQuarkFeedingWhenBleeding(IElectricItem item, Player player, long energyPerUse, CallbackInfo ci) {
         if (player.getPersistentData().getBoolean("playerrevive:bleeding")) {
-            cir.setReturnValue(false);
+            ci.cancel();
         }
     }
 
     // Only eat food, don't eat blacklisted food
-    @WrapOperation(method = "supplyFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getFoodProperties(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/food/FoodProperties;"), remap = false)
-    private FoodProperties tfg$checkFoodTag(ItemStack stack, LivingEntity player, Operation<FoodProperties> original) {
+    @WrapOperation(method = "supplyFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getFoodProperties(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/food/FoodProperties;"))
+    private static FoodProperties tfg$checkFoodTag(ItemStack stack, LivingEntity player, Operation<FoodProperties> original) {
         if (stack.is(TFCTags.Items.FOODS) && !stack.is(TFGTags.Items.AutoEatBlacklist)) {
             return original.call(stack, player);
         }

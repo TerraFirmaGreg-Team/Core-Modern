@@ -1,6 +1,13 @@
 repositories {
     mavenLocal()
     mavenCentral()
+    flatDir {
+        name('Local libs')
+        dirs(rootProject.file('libs'))
+        content {
+            includeGroup('local')
+        }
+    }
     maven {
         name('Mixin maven')
         url('https://maven.bawnorton.com/releases')
@@ -43,6 +50,14 @@ repositories {
         url('https://modmaven.dev')
         content {
             includeGroup('com.tterrag.registrate')
+        }
+    }
+    maven {
+        name('GTCEu Maven')
+        url('https://maven.gtceu.com')
+        content {
+            includeGroup('com.gregtechceu.gtceu')
+            includeGroup('brachy.modularui')
         }
     }
     maven {

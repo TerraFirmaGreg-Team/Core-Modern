@@ -9,7 +9,7 @@
     "type": "minecraft:crafting_shaped",
     "key": {
         "X": {"item": "tfc:powder/kaolinite"},
-        "Y": {"item": "tfc:powder/graphite"},
+        "Y": {"item": "gtceu:small_graphite_dust"},
         "Z": {"item": "minecraft:clay_ball"}
     }
 }

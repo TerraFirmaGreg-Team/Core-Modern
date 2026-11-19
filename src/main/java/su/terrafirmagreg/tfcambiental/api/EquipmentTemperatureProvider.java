@@ -114,18 +114,17 @@ public interface EquipmentTemperatureProvider {
         }).orElse(ItemStack.EMPTY);
     }
 
+    // GTm8 merged the advanced Nano/Quantum chestplates into the regular ones (old IDs are remapped)
     static final java.util.Set<Item> ADVANCED_ARMOR = java.util.Set.of(
             GTItems.NANO_HELMET.get(),
             GTItems.NANO_CHESTPLATE.get(),
             GTItems.NANO_LEGGINGS.get(),
             GTItems.NANO_BOOTS.get(),
-            GTItems.NANO_CHESTPLATE_ADVANCED.get(),
 
             GTItems.QUANTUM_HELMET.get(),
             GTItems.QUANTUM_CHESTPLATE.get(),
             GTItems.QUANTUM_LEGGINGS.get(),
             GTItems.QUANTUM_BOOTS.get(),
-            GTItems.QUANTUM_CHESTPLATE_ADVANCED.get(),
 
             ModItems.SPACE_HELMET.get(),
             ModItems.SPACE_SUIT.get(),

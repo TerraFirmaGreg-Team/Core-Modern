@@ -32,7 +32,6 @@ import net.minecraftforge.registries.RegistryObject;
 import net.dries007.tfc.common.TFCCreativeTabs;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.TFCTiers;
-import net.dries007.tfc.common.blocks.Gem;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.crop.Crop;
 import net.dries007.tfc.common.blocks.plant.coral.Coral;
@@ -74,10 +73,6 @@ public final class TFCItems
         Helpers.mapOfKeys(Ore.Grade.class, grade ->
             register("ore/" + grade.name() + '_' + ore.name())
         )
-    );
-
-    public static final Map<Gem, RegistryObject<Item>> GEMS = Helpers.mapOfKeys(Gem.class, gem ->
-        register("gem/" + gem.name())
     );
 
     // Rock Stuff
@@ -171,9 +166,7 @@ public final class TFCItems
         )
     );
 
-    public static final Map<Gem, RegistryObject<Item>> GEM_DUST = Helpers.mapOfKeys(Gem.class, gem -> register("powder/" + gem.name()));
     public static final Map<Powder, RegistryObject<Item>> POWDERS = Helpers.mapOfKeys(Powder.class, powder -> register("powder/" + powder.name()));
-    public static final Map<Ore, RegistryObject<Item>> ORE_POWDERS = Helpers.mapOfKeys(Ore.class, Ore::isGraded, ore -> register("powder/" + ore.name()));
 
     public static final RegistryObject<Item> CERAMIC_BLOWPIPE = register("ceramic_blowpipe", () -> new BlowpipeItem(new Item.Properties()));
     public static final RegistryObject<Item> BLOWPIPE = register("blowpipe", () -> new BlowpipeItem(new Item.Properties()));

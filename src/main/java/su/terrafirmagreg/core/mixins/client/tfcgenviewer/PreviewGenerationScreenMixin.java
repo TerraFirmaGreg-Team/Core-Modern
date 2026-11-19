@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.notenoughmail.tfcgenviewer.screen.PreviewGenerationScreen;
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.chunkdata.RegionChunkDataGenerator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -17,14 +18,7 @@ import net.minecraft.world.level.levelgen.WorldOptions;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
-import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 
-/**
- * Create-world preview does not use {@link com.notenoughmail.tfcgenviewer.network.packets.ViewerResponsePacket}; clear any
- * leftover viewer session from a previous in-world session so {@link TfgClientPreviewState#useTfgOverworldPipeline()}
- * follows config / unresolved-session inference instead of stale {@code active}.
- */
 @Mixin(value = PreviewGenerationScreen.class, remap = false)
 public class PreviewGenerationScreenMixin {
 
@@ -33,11 +27,6 @@ public class PreviewGenerationScreenMixin {
 
     @Shadow(remap = false)
     private OptionInstance<Boolean> spawnOverlay;
-
-    @Inject(method = "<init>", at = @At(value = "RETURN"), remap = false)
-    private void tfg$afterInit(CallbackInfo ci) {
-        TfgClientPreviewState.leave();
-    }
 
     /**
      * Matches {@link WorldOptions#parseSeed(String)} parsing in {@link PreviewGenerationScreen} before allocating {@link net.dries007.tfc.world.region.RegionGenerator}.
@@ -49,7 +38,7 @@ public class PreviewGenerationScreenMixin {
 
     /**
      * {@code applyUpdates(false)} pushes preview settings into Create World. When TFCGenViewer Spawn Overlay is ON, enable
-     * viewer spawn preset so {@link su.terrafirmagreg.core.mixins.common.tfc.ForgeEventHandlerMixin#onCreateWorldSpawn} honors
+     * viewer spawn preset so {@link net.dries007.tfc.ForgeEventHandler#onCreateWorldSpawn} honors
      * preview center without climate retries. When overlay is OFF, keep the Game Tab spawn preset; clear a stale viewer id.
      */
     @Inject(method = "applyUpdates(Z)V", at = @At("TAIL"), remap = false)

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "tfg:block/casings/combustion_exhaust_hv"
+    },
+    "active=true": {
+      "model": "tfg:block/casings/combustion_exhaust_hv_active"
+    }
+  }
+}

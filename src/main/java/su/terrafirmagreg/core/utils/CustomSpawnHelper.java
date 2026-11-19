@@ -328,7 +328,7 @@ public class CustomSpawnHelper {
 
     /**
      * Applied when TFCGenViewer Save runs with Spawn Overlay ON. Climate ranges are unused — viewer spawn skips
-     * {@link su.terrafirmagreg.core.mixins.common.tfc.ForgeEventHandlerMixin#onCreateWorldSpawn} climate matching.
+     * {@link net.dries007.tfc.ForgeEventHandler::onCreateWorldSpawn} climate matching.
      */
     public static final CustomSpawnCondition VIEWER_SPAWN = new CustomSpawnCondition(
             VIEWER_SPAWN_ID,

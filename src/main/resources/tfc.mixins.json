@@ -50,7 +50,9 @@
         "accessor.ItemAccessor",
         "accessor.OcelotAccessor",
         "accessor.PlayerAccessor",
+        "accessor.PoiSectionAccessor",
         "accessor.RecipeManagerAccessor",
+        "accessor.SectionStorageAccessor",
         "accessor.StructureTemplateAccessor",
         "compat.DHChunkLoaderMixin"
     ],

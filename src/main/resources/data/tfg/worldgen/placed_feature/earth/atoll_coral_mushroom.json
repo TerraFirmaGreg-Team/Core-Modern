@@ -1,0 +1,27 @@
+{
+    "feature": "tfg:earth/atoll_coral_mushroom",
+    "placement": [
+        {
+            "max_temperature": 50,
+            "type": "tfc:climate",
+            "min_temperature": 12
+        },
+        {
+            "noise_offset": 1,
+            "noise_factor": 160,
+            "noise_to_count_ratio": 7,
+            "type": "minecraft:noise_based_count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_easing": 0.42,
+            "min_easing": 0.3,
+            "type": "tfc:atoll"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

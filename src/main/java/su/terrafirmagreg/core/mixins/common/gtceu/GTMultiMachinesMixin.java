@@ -10,19 +10,19 @@ import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 public class GTMultiMachinesMixin {
 
     // WOODEN_MULTIBLOCK_TANK
-    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 0), index = 2)
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Lcom/gregtechceu/gtceu/api/registry/registrate/GTRegistrate;Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 0), index = 3)
     private static int patchWoodenTankCapacity(int original) {
         return 1_000_000;
     }
 
     // BRONZE_MULTIBLOCK_TANK
-    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 1), index = 2)
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Lcom/gregtechceu/gtceu/api/registry/registrate/GTRegistrate;Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 1), index = 3)
     private static int patchBronzeTankCapacity(int original) {
         return 4_000_000;
     }
 
     // STEEL_MULTIBLOCK_TANK
-    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 2), index = 2)
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Lcom/gregtechceu/gtceu/api/registry/registrate/GTRegistrate;Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 2), index = 3)
     private static int patchSteelTankCapacity(int original) {
         return 8_000_000;
     }
