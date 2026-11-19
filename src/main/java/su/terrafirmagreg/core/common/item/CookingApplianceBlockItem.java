@@ -127,13 +127,25 @@ public class CookingApplianceBlockItem extends BlockItem {
         return itemHandler;
     }
 
-    private static class CookingApplianceItemStackFluidHandler implements ICapabilityProvider, IFluidHandlerItem {
+    protected static class CookingApplianceItemStackFluidHandler implements ICapabilityProvider, IFluidHandlerItem {
         private final LazyOptional<IFluidHandlerItem> capability;
         private final ItemStack stack;
+        private final int inputCount;
+        private final int outputCount;
+        private final int inputCapacity;
+        private final int outputCapacity;
 
-        CookingApplianceItemStackFluidHandler(ItemStack stack) {
+        public CookingApplianceItemStackFluidHandler(ItemStack stack) {
+            this(stack, CopperPotBlockEntity.FLUID_INPUTS, CopperPotBlockEntity.FLUID_OUTPUTS, CopperPotBlockEntity.FLUID_INPUT_CAPACITY, CopperPotBlockEntity.FLUID_OUTPUT_CAPACITY);
+        }
+
+        public CookingApplianceItemStackFluidHandler(ItemStack stack, int inputCount, int outputCount, int inputCapacity, int outputCapacity) {
             this.capability = LazyOptional.of(() -> this);
             this.stack = stack;
+            this.inputCount = inputCount;
+            this.outputCount = outputCount;
+            this.inputCapacity = inputCapacity;
+            this.outputCapacity = outputCapacity;
         }
 
         private List<FluidTank> getAllTanks() {
@@ -152,12 +164,10 @@ public class CookingApplianceBlockItem extends BlockItem {
                 }
             }
 
-            int inputCount = CopperPotBlockEntity.FLUID_INPUTS;
-            int outputCount = CopperPotBlockEntity.FLUID_OUTPUTS;
             int totalTanks = inputCount + outputCount;
 
             for (int i = 0; i < totalTanks; i++) {
-                int capacity = i < inputCount ? CopperPotBlockEntity.FLUID_INPUT_CAPACITY : CopperPotBlockEntity.FLUID_OUTPUT_CAPACITY;
+                int capacity = i < inputCount ? inputCapacity : outputCapacity;
                 FluidTank tank = new FluidTank(capacity);
                 if (tanksTag != null && i < tanksTag.size()) {
                     tank.readFromNBT(tanksTag.getCompound(i));
@@ -281,7 +291,7 @@ public class CookingApplianceBlockItem extends BlockItem {
                 return FluidStack.EMPTY;
             }
             List<FluidTank> tanks = getAllTanks();
-            int outputStart = CopperPotBlockEntity.FLUID_INPUTS;
+            int outputStart = inputCount;
             for (int i = outputStart; i < tanks.size(); i++) {
                 FluidStack drained = tanks.get(i).drain(resource, action);
                 if (!drained.isEmpty()) {
@@ -310,7 +320,7 @@ public class CookingApplianceBlockItem extends BlockItem {
                 return FluidStack.EMPTY;
             }
             List<FluidTank> tanks = getAllTanks();
-            int outputStart = CopperPotBlockEntity.FLUID_INPUTS;
+            int outputStart = inputCount;
             for (int i = outputStart; i < tanks.size(); i++) {
                 FluidStack drained = tanks.get(i).drain(maxDrain, action);
                 if (!drained.isEmpty()) {

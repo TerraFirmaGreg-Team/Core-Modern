@@ -319,7 +319,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         }
 
         for (RecipeAttachment attachment : this.attachments) {
-            if (!attachment.matchesInputs(appliance)) {
+            if (!appliance.supportsAttachment(attachment) || !attachment.matchesInputs(appliance)) {
                 return false;
             }
         }
@@ -387,7 +387,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
         }
 
         for (RecipeAttachment attachment : this.attachments) {
-            if (!attachment.matches(appliance, level)) {
+            if (!appliance.supportsAttachment(attachment) || !attachment.matches(appliance, level)) {
                 return false;
             }
         }
@@ -524,8 +524,11 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
     }
 
     public boolean areAttachmentsPresent(CookingApplianceBlockEntity appliance) {
+        if (!this.attachments.isEmpty() && !appliance.supportsAttachments()) {
+            return false;
+        }
         for (RecipeAttachment attachment : this.attachments) {
-            if (!attachment.isPresent(appliance)) {
+            if (!appliance.supportsAttachment(attachment) || !attachment.isPresent(appliance)) {
                 return false;
             }
         }

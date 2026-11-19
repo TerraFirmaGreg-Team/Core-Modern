@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.Mod;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
 import su.terrafirmagreg.core.common.block.appliances.CondenserBlock;
+import su.terrafirmagreg.core.common.block.appliances.MixingBowlBlock;
 import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
@@ -155,6 +156,11 @@ public class TFGItemTooltipHelpers {
         // Skillet
         if (block instanceof SkilletBlock) {
             tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.skillet.flavor_text")));
+        }
+
+        // Mixing Bowl
+        if (block instanceof MixingBowlBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.mixing_bowl.flavor_text")));
         }
     }
 

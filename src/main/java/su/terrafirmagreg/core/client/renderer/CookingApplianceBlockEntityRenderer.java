@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.MixingBowlBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.SkilletBlockEntity;
 import su.terrafirmagreg.core.common.recipe.attachment.MixerAttachment;
 
@@ -43,6 +44,12 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
 
     public static class Skillet extends CookingApplianceBlockEntityRenderer<SkilletBlockEntity> {
         public Skillet(BlockEntityRendererProvider.Context context) {
+            super(context);
+        }
+    }
+
+    public static class MixingBowl extends CookingApplianceBlockEntityRenderer<MixingBowlBlockEntity> {
+        public MixingBowl(BlockEntityRendererProvider.Context context) {
             super(context);
         }
     }
@@ -91,14 +98,14 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
 
                 float spacing = 1 / 16F;
 
-                float minX = 2 / 16F;
+                float minX = appliance instanceof MixingBowlBlockEntity ? 3 / 16F : 2 / 16F;
                 float maxX = 13 / 16F;
 
                 float minZ = 3 / 16F;
                 float maxZ = 13 / 16F;
 
                 float minY = (2 / 16F) + (i * spacing);
-                float maxY = (14 / 16F) + (i * spacing);
+                float maxY = (appliance instanceof MixingBowlBlockEntity ? 6 / 16F : 14 / 16F) + (i * spacing);
                 float fluidY = Mth.map(fluidLevel, 0, fluidToRenderCapacity, minY, maxY);
 
                 RenderHelpers.renderFluidFace(poseStack, fluidToRender, buffer, minX, minZ, maxX, maxZ, fluidY, combinedOverlay, combinedLight);
@@ -144,7 +151,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             for (int i = 0; i < appliance.getItemInputCount(); i++) {
                 ItemStack item = cap.getStackInSlot(i);
                 if (!item.isEmpty()) {
-                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm);
+                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm, partialTicks);
                     currentRenderIndex++;
                 }
             }
@@ -154,7 +161,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 int slot = appliance.getItemOutputStartSlot() + i;
                 ItemStack item = cap.getStackInSlot(slot);
                 if (!item.isEmpty()) {
-                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm);
+                    renderFloatingItem(poseStack, buffer, combinedLight, combinedOverlay, appliance, item, posSeed, currentRenderIndex, totalItemsToRender, cookTime, rpm, partialTicks);
                     currentRenderIndex++;
                 }
             }
@@ -208,6 +215,23 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 rotZ = skilletRotZ;
             }
 
+            // Mixing Bowl Translations
+            float bowlTranX = 0.65F;
+            float bowlTranY = 0.4F;
+            float bowlTranZ = 0.65F;
+            float bowlRotX = 45.0F;
+            float bowlRotY = 45.0F;
+            float bowlRotZ = 110.0F;
+
+            if (appliance instanceof MixingBowlBlockEntity) {
+                tranX = bowlTranX;
+                tranY = bowlTranY;
+                tranZ = bowlTranZ;
+                rotX = bowlRotX;
+                rotY = bowlRotY;
+                rotZ = bowlRotZ;
+            }
+
             // Render Tool
             if (!tool.isEmpty()) {
                 BlockState state = appliance.getBlockState();
@@ -226,6 +250,11 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
                 poseStack.translate(0.5F, 0.5F, 0.5F);
                 poseStack.mulPose(Axis.YP.rotationDegrees(corner));
                 poseStack.mulPose(Axis.YP.rotationDegrees(-horizontalAngle));
+
+                if (appliance instanceof MixingBowlBlockEntity mixingBowl) {
+                    float toolRotation = mixingBowl.getRotationAngle(partialTicks);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(toolRotation));
+                }
 
                 poseStack.translate(-0.5F, -0.5F, -0.5F);
                 poseStack.translate(tranX, tranY, tranZ);
@@ -255,7 +284,7 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
      */
     public static float getHighestFluidLevel(CookingApplianceBlockEntity appliance) {
         float minY = 2 / 16F;
-        float maxY = 14 / 16F;
+        float maxY = appliance instanceof MixingBowlBlockEntity ? 7 / 16F : 14 / 16F;
         float highestLevel = minY;
         boolean foundInOutput = false;
 
@@ -308,13 +337,17 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
             int slot,
             int totalCount,
             int spinTicks,
-            float rpm) {
+            float rpm,
+            float partialTicks) {
 
         float angleStep = 360.0F / Math.max(1, totalCount);
         float currentAngleDegrees = slot * angleStep;
 
         float degreesPerTick = (360.0F * rpm) / 1200.0F;
         float spinAngle = spinTicks * degreesPerTick;
+        if (appliance instanceof MixingBowlBlockEntity mixingBowl && rpm == 0) {
+            spinAngle = mixingBowl.getRotationAngle(partialTicks);
+        }
 
         float orbitAngleDegrees;
         float rotY;

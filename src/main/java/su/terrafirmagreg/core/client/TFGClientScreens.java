@@ -15,14 +15,10 @@ import su.terrafirmagreg.core.client.overlay.AirLevelOverlay;
 import su.terrafirmagreg.core.client.overlay.GlassblowingOverlay;
 import su.terrafirmagreg.core.client.overlay.VignetteOverlay;
 import su.terrafirmagreg.core.client.renderer.SprayCanHudOverlay;
-import su.terrafirmagreg.core.client.screen.ArtisanTableScreen;
-import su.terrafirmagreg.core.client.screen.CopperPotScreen;
-import su.terrafirmagreg.core.client.screen.GasBurnerScreen;
-import su.terrafirmagreg.core.client.screen.LargeNestBoxScreen;
+import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.client.screen.ae2.OrderAmountScreen;
 import su.terrafirmagreg.core.client.screen.ae2.OrderTerminalScreen;
 import su.terrafirmagreg.core.client.screen.ae2.WOTScreen;
-import su.terrafirmagreg.core.client.screen.SkilletScreen;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowScreen;
 import su.terrafirmagreg.core.compat.ae2.terminal.OrderAmountMenu;
@@ -46,6 +42,7 @@ public final class TFGClientScreens {
             InitScreens.register(OrderAmountMenu.TYPE, OrderAmountScreen::new, "/screens/tfg/order_amount.json");
             MenuScreens.register(TFGContainers.COPPER_POT.get(), CopperPotScreen::new);
             MenuScreens.register(TFGContainers.SKILLET.get(), SkilletScreen::new);
+            MenuScreens.register(TFGContainers.MIXING_BOWL.get(), MixingBowlScreen::new);
         });
     }
 

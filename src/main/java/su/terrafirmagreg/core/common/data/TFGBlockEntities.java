@@ -31,10 +31,7 @@ import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpr
 import su.terrafirmagreg.core.common.block.create.CombustionEngineBlockEntity;
 import su.terrafirmagreg.core.common.block.create.CombustionEngineRenderer;
 import su.terrafirmagreg.core.common.blockentity.*;
-import su.terrafirmagreg.core.common.blockentity.appliances.CondenserBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.SkilletBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderBlockEntity;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
@@ -159,6 +156,12 @@ public class TFGBlockEntities {
     public static final BlockEntityEntry<CondenserBlockEntity> CONDENSER = TFGCore.REGISTRATE
             .blockEntity("condenser", CondenserBlockEntity::new)
             .validBlock(TFGBlocks.CONDENSER)
+            .register();
+
+    public static final BlockEntityEntry<MixingBowlBlockEntity> MIXING_BOWL = TFGCore.REGISTRATE
+            .blockEntity("mixing_bowl", MixingBowlBlockEntity::new)
+            .validBlock(TFGBlocks.MIXING_BOWL)
+            .renderer(() -> CookingApplianceBlockEntityRenderer.MixingBowl::new)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();

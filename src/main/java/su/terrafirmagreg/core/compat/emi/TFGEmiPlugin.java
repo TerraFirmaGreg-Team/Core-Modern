@@ -43,6 +43,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
+import su.terrafirmagreg.core.common.recipe.MixingBowlRecipe;
 import su.terrafirmagreg.core.common.recipe.SkilletRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
@@ -86,6 +87,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory SKILLET = new EmiRecipeCategory(TFGCore.id("skillet"),
             EmiStack.of(TFGBlocks.SKILLET.get()));
+
+    public static final EmiRecipeCategory MIXING_BOWL = new EmiRecipeCategory(TFGCore.id("mixing_bowl"),
+            EmiStack.of(TFGBlocks.MIXING_BOWL.get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -206,6 +210,12 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(SKILLET, EmiStack.of(TFGBlocks.SKILLET.get().asItem()));
         for (SkilletRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.SKILLET.get())) {
             emiRegistry.addRecipe(new SkilletEmiRecipe(recipe));
+        }
+
+        emiRegistry.addCategory(MIXING_BOWL);
+        emiRegistry.addWorkstation(MIXING_BOWL, EmiStack.of(TFGBlocks.MIXING_BOWL.get().asItem()));
+        for (MixingBowlRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.MIXING_BOWL.get())) {
+            emiRegistry.addRecipe(new MixingBowlEmiRecipe(recipe));
         }
     }
 

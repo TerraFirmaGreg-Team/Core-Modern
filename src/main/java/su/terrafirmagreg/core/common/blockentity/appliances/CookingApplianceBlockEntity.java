@@ -78,6 +78,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.recipe.CookingApplianceRecipe;
 import su.terrafirmagreg.core.common.recipe.attachment.MixerAttachment;
 import su.terrafirmagreg.core.common.recipe.attachment.PressAttachment;
+import su.terrafirmagreg.core.common.recipe.attachment.RecipeAttachment;
 import su.terrafirmagreg.core.common.recipe.attachment.VacuumChamberAttachment;
 import su.terrafirmagreg.core.mixins.common.vintageimprovements.VacuumChamberBlockEntityAccessor;
 
@@ -184,6 +185,11 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         return true;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean supportsAttachment(RecipeAttachment attachment) {
+        return supportsAttachments();
+    }
+
     public int getCatalystSlot() {
         return getItemInputCount();
     }
@@ -239,19 +245,27 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
     // Handle effects from attachments.
     public static void clientTick(Level level, BlockPos pos, BlockState state, CookingApplianceBlockEntity appliance) {
+        // Manual mixing bowl particles.
+        if (appliance instanceof MixingBowlBlockEntity mixingBowl && mixingBowl.isManualMixing()) {
+            appliance.renderMixingBowlParticles(pos);
+        }
+
         if (!appliance.supportsAttachments()) {
             return;
         }
         MechanicalPressBlockEntity press = PressAttachment.getPress(appliance);
         if (appliance.cookingTicks > 0 && appliance.recipeError == CookingError.NONE) {
+            // Mixer Particles
             MechanicalMixerBlockEntity mixer = MixerAttachment.getMixer(appliance);
             if (mixer != null && mixer.running && mixer.runningTicks >= 20) {
                 appliance.renderMixerParticles(mixer);
             }
+            // Vacuum Chamber Particles
             VacuumChamberBlockEntity chamber = VacuumChamberAttachment.getChamber(appliance);
             if (chamber != null && chamber.running && chamber.runningTicks >= 20) {
                 appliance.renderVacuumChamberParticles(chamber);
             }
+
             if (press != null && press.getPressingBehaviour().running) {
                 var behaviour = press.getPressingBehaviour();
                 if (behaviour.runningTicks >= 120 || behaviour.runningTicks == -120) {
@@ -311,44 +325,93 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         }
     }
 
+    // Manual mixing bowl particles.
+    public void renderMixingBowlParticles(BlockPos pos) {
+        if (this.level == null || !this.level.isClientSide) {
+            return;
+        }
+
+        if (this.level.getGameTime() % 6 != 0) {
+            return;
+        }
+
+        float speed = 0.1f;
+        double radius = 0.2;
+        int particleCount = 1;
+
+        // Render item particles.
+        for (int i = 0; i < getItemInputCount(); i++) {
+            ItemStack stack = getItemInputStack(i);
+            spawnSwirlItemParticles(this.level, pos, stack, 0, speed, radius, particleCount, 0.3);
+        }
+
+        // Render fluid particles.
+        for (InventoryFluidTank tank : inventory.tanks) {
+            FluidStack fluid = tank.getFluid();
+            spawnSwirlFluidParticles(this.level, pos, fluid, 0, speed, radius, particleCount, 0.3);
+        }
+    }
+
     // Copy mechanical mixer particle stuff.
     public void renderMixerParticles(MechanicalMixerBlockEntity mixer) {
         if (this.level == null || !this.level.isClientSide) {
             return;
         }
+
         float speed = mixer.getSpeed();
         if (speed == 0) {
             return;
         }
 
-        // Render item particles from appliance input slots.
+        BlockPos mixerPos = mixer.getBlockPos();
+        double radius = 0.25;
+        int particleCount = 1;
+
+        // Render item particles.
         for (int i = 0; i < getItemInputCount(); i++) {
             ItemStack stack = getItemInputStack(i);
-            if (!stack.isEmpty()) {
-                spillMixerParticle(mixer, new ItemParticleOption(ParticleTypes.ITEM, stack), speed);
-            }
+            spawnSwirlItemParticles(this.level, mixerPos, stack, 1.75, speed, radius, particleCount, 1);
         }
 
-        // Render fluid particles from appliance fluid tanks.
+        // Render fluid particles.
         for (InventoryFluidTank tank : inventory.tanks) {
             FluidStack fluid = tank.getFluid();
-            if (!fluid.isEmpty()) {
-                spillMixerParticle(mixer, FluidFX.getFluidParticle(fluid), speed);
-            }
+            spawnSwirlFluidParticles(this.level, mixerPos, fluid, 1.75, speed, radius, particleCount, 1);
         }
     }
 
-    private void spillMixerParticle(MechanicalMixerBlockEntity mixer, ParticleOptions data, float speed) {
-        if (level == null) {
+    public static void spawnSwirlItemParticles(Level level, BlockPos pos, ItemStack stack, double yOffset, float speed, double radius, int count, double velocityScale) {
+        if (stack.isEmpty()) {
             return;
         }
-        float angle = level.random.nextFloat() * 360.0F;
-        Vec3 offset = new Vec3(0.0, 0.0, 0.25);
-        offset = VecHelper.rotate(offset, angle, Direction.Axis.Y);
-        Vec3 target = VecHelper.rotate(offset, speed > 0.0F ? 25.0 : -25.0, Direction.Axis.Y).add(0.0, 0.25, 0.0);
-        Vec3 center = offset.add(VecHelper.getCenterOf(mixer.getBlockPos()));
-        target = VecHelper.offsetRandomly(target.subtract(offset), level.random, 0.0078125F);
-        level.addParticle(data, center.x, center.y - 1.75, center.z, target.x, target.y, target.z);
+        spawnSwirlParticles(level, VecHelper.getCenterOf(pos), new ItemParticleOption(ParticleTypes.ITEM, stack), yOffset, speed, radius, count, velocityScale);
+    }
+
+    public static void spawnSwirlFluidParticles(Level level, BlockPos pos, FluidStack fluid, double yOffset, float speed, double radius, int count, double velocityScale) {
+        if (fluid.isEmpty()) {
+            return;
+        }
+        spawnSwirlParticles(level, VecHelper.getCenterOf(pos), FluidFX.getFluidParticle(fluid), yOffset, speed, radius, count, velocityScale);
+    }
+
+    public static void spawnSwirlParticles(Level level, Vec3 origin, ParticleOptions data, double yOffset, float speed, double radius, int count, double velocityScale) {
+        if (level == null || !level.isClientSide || speed == 0 || count <= 0) {
+            return;
+        }
+
+        for (int i = 0; i < count; i++) {
+            float angle = level.random.nextFloat() * 360.0F;
+
+            Vec3 offset = new Vec3(0.0, 0.0, radius);
+            offset = VecHelper.rotate(offset, angle, Direction.Axis.Y);
+            Vec3 target = VecHelper.rotate(offset, speed > 0.0F ? 25.0 : -25.0, Direction.Axis.Y).add(0.0, 0.25, 0.0);
+            Vec3 spawnPos = offset.add(origin);
+
+            Vec3 velocity = VecHelper.offsetRandomly(target.subtract(offset), level.random, 0.0078125F)
+                    .scale(velocityScale);
+
+            level.addParticle(data, spawnPos.x, spawnPos.y - yOffset, spawnPos.z, velocity.x, velocity.y, velocity.z);
+        }
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, CookingApplianceBlockEntity appliance) {

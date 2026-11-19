@@ -23,12 +23,9 @@ import su.terrafirmagreg.core.common.blockentity.ArtisanTableBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.MixingBowlBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.SkilletBlockEntity;
-import su.terrafirmagreg.core.common.container.ArtisanTableContainer;
-import su.terrafirmagreg.core.common.container.CopperPotContainer;
-import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
-import su.terrafirmagreg.core.common.container.LargeNestBoxContainer;
-import su.terrafirmagreg.core.common.container.SkilletContainer;
+import su.terrafirmagreg.core.common.container.*;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowContainer;
 
 public class TFGContainers {
@@ -61,6 +58,10 @@ public class TFGContainers {
     public static final RegistryObject<MenuType<SkilletContainer>> SKILLET = TFGContainers
             .<SkilletBlockEntity, SkilletContainer>registerBlockEntityContainer("skillet",
                     TFGBlockEntities.SKILLET, SkilletContainer::create);
+
+    public static final RegistryObject<MenuType<MixingBowlContainer>> MIXING_BOWL = TFGContainers
+            .<MixingBowlBlockEntity, MixingBowlContainer>registerBlockEntityContainer("mixing_bowl",
+                    TFGBlockEntities.MIXING_BOWL, MixingBowlContainer::create);
 
     public static <T extends InventoryBlockEntity<?>, C extends BlockEntityContainer<T>> RegistryObject<MenuType<C>> registerBlockEntityContainer(
             String name, Supplier<BlockEntityType<T>> type, BlockEntityContainer.Factory<T, C> factory) {
