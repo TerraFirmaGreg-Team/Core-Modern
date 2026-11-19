@@ -131,6 +131,7 @@ public class CommonProxy {
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
             registerFlowerPots();
+            TFGTrades.init();
         });
     }
 

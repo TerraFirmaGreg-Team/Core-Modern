@@ -174,18 +174,22 @@ public abstract class CreepingPlantBlock extends PlantBlock implements Direction
 
     public static BlockState updateStateFromSides(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        final CreepingPlantBlock block = (CreepingPlantBlock) state.getBlock();
-        final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        boolean hasEarth = false;
-        for (Direction direction : UPDATE_SHAPE_ORDER)
-        {
-            mutablePos.setWithOffset(pos, direction);
-            boolean ground = block.canCreepOn(level, mutablePos, level.getBlockState(mutablePos), direction);
+		if (state.getBlock() instanceof CreepingPlantBlock block) {
+			final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+			boolean hasEarth = false;
+			for (Direction direction : UPDATE_SHAPE_ORDER) {
+				mutablePos.setWithOffset(pos, direction);
+				boolean ground = block.canCreepOn(level, mutablePos, level.getBlockState(mutablePos), direction);
 
-            state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), ground);
-            hasEarth |= ground;
-        }
-        return hasEarth ? state : Blocks.AIR.defaultBlockState();
+				state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), ground);
+				hasEarth |= ground;
+			}
+			return hasEarth ? state : Blocks.AIR.defaultBlockState();
+		}
+		else
+		{
+			return state;
+		}
     }
 
     private boolean isEmpty(BlockState state)
