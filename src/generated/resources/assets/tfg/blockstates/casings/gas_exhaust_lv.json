@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "tfg:block/casings/gas_exhaust_lv"
+    },
+    "active=true": {
+      "model": "tfg:block/casings/gas_exhaust_lv_active"
+    }
+  }
+}

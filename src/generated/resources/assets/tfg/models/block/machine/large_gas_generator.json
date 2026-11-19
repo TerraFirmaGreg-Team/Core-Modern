@@ -1,0 +1,46 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "tfg:large_gas_generator",
+  "texture_overrides": {
+    "all": "tfg:block/casings/machine_casing_black_steel"
+  },
+  "variants": {
+    "recipe_logic_status=idle": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_black_steel",
+          "overlay_front": "tfg:block/machines/gas_generator/overlay_front"
+        }
+      }
+    },
+    "recipe_logic_status=suspend": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_black_steel",
+          "overlay_front": "tfg:block/machines/gas_generator/overlay_front"
+        }
+      }
+    },
+    "recipe_logic_status=waiting": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_black_steel",
+          "overlay_front": "tfg:block/machines/gas_generator/overlay_front_active"
+        }
+      }
+    },
+    "recipe_logic_status=working": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_black_steel",
+          "overlay_front": "tfg:block/machines/gas_generator/overlay_front_active"
+        }
+      }
+    }
+  }
+}
