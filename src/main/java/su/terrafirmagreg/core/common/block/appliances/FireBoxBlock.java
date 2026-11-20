@@ -82,7 +82,7 @@ public class FireBoxBlock extends DeviceBlock implements IBellowsConsumer, IItem
 
         Direction facing = state.getValue(FACING);
         BlockPos posFront = pos.relative(facing);
-        BlockPos posBack = pos.relative(facing);
+        BlockPos posBack = pos.relative(facing.getOpposite());
         BlockPos posChimney = posBack.above();
 
         boolean isFrontOpen = level.getBlockState(posFront).isAir();
