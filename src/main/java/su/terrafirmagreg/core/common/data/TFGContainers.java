@@ -64,6 +64,10 @@ public class TFGContainers {
             .<FireBoxBlockEntity, FireBoxContainer>registerBlockEntityContainer("fire_box",
                     TFGBlockEntities.FIRE_BOX, FireBoxContainer::create);
 
+    public static final RegistryObject<MenuType<FireBoxTopOvenContainer>> FIRE_BOX_TOP_OVEN = TFGContainers
+            .<FireBoxTopOvenBlockEntity, FireBoxTopOvenContainer>registerBlockEntityContainer("fire_box_top_oven",
+                    TFGBlockEntities.FIRE_BOX_TOP_OVEN, FireBoxTopOvenContainer::create);
+
     public static <T extends InventoryBlockEntity<?>, C extends BlockEntityContainer<T>> RegistryObject<MenuType<C>> registerBlockEntityContainer(
             String name, Supplier<BlockEntityType<T>> type, BlockEntityContainer.Factory<T, C> factory) {
         return registerContainer(name, (windowId, playerInventory, buffer) -> {

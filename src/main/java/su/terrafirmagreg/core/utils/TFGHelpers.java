@@ -132,7 +132,7 @@ public final class TFGHelpers {
      * @return Formatted timer tooltip component with ██░░░ pips.
      */
     public static Component formattedPipTimer(int currentTick, int maxTick, int maxPips, ChatFormatting color) {
-        int filledPips = maxTick > 0 ? Math.min(maxPips, Math.max(0, (currentTick * maxPips) / maxTick)) : 0;
+        int filledPips = maxTick > 0 ? Math.min(maxPips, Math.max(0, Math.round((float) (currentTick * maxPips) / maxTick))) : 0;
         String emptyPip = "░";
         String filledPip = "█";
         return Component.literal(filledPip.repeat(filledPips) + emptyPip.repeat(maxPips - filledPips)).withStyle(color);

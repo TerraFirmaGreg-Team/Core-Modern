@@ -25,6 +25,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.renderer.CookingApplianceBlockEntityRenderer;
+import su.terrafirmagreg.core.client.renderer.FireBoxTopOvenBlockEntityRenderer;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelInstance;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelRenderer;
 import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
@@ -167,6 +168,12 @@ public class TFGBlockEntities {
     public static final BlockEntityEntry<FireBoxBlockEntity> FIRE_BOX = TFGCore.REGISTRATE
             .blockEntity("fire_box", FireBoxBlockEntity::new)
             .validBlock(TFGBlocks.FIRE_BOX)
+            .register();
+
+    public static final BlockEntityEntry<FireBoxTopOvenBlockEntity> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
+            .blockEntity("fire_box_top_oven", FireBoxTopOvenBlockEntity::new)
+            .validBlock(TFGBlocks.FIRE_BOX_TOP_OVEN)
+            .renderer(() -> FireBoxTopOvenBlockEntityRenderer::new)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();

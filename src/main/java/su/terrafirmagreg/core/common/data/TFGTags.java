@@ -109,6 +109,8 @@ public final class TFGTags {
         public static final TagKey<Item> APPLIANCE_CATALYSTS = createItemTag("appliance_catalysts");
         public static final TagKey<Item> APPLIANCE_TOOLS = createItemTag("appliance_tools");
 
+        public static final TagKey<Item> OVEN_BLACKLISTED = createItemTag("oven_blacklisted");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }

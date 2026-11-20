@@ -35,6 +35,7 @@ import net.dries007.tfc.common.container.ISlotCallback;
 import net.dries007.tfc.common.recipes.ingredients.FluidStackIngredient;
 import net.dries007.tfc.util.IntArrayBuilder;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -112,7 +113,7 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         }
 
         public Component getTooltipComponent() {
-            return Component.translatable(this.translationKey).withStyle(net.minecraft.ChatFormatting.RED);
+            return Component.translatable(this.translationKey).withStyle(ChatFormatting.RED);
         }
     }
 

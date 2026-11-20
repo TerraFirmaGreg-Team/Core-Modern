@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.eerussianguy.firmalife.common.FLTags;
-import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
-import com.eerussianguy.firmalife.common.blockentities.OvenTopBlockEntity;
-import com.eerussianguy.firmalife.common.blocks.OvenTopBlock;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -519,14 +516,14 @@ public final class TFGBlocks {
             .build()
             .register();
 
-    public static final BlockEntry<OvenTopBlock> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
-            .block("fire_box_top_oven", p -> new OvenTopBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
+    public static final BlockEntry<FireBoxTopOvenBlock> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
+            .block("fire_box_top_oven", p -> new FireBoxTopOvenBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
                     .sound(SoundType.NETHERITE_BLOCK)
                     .strength(3.0f, 6.0f)
                     .noOcclusion()
                     .mapColor(MapColor.COLOR_BLACK)
-                    .blockEntity(FLBlockEntities.OVEN_TOP)
-                    .serverTicks(OvenTopBlockEntity::serverTick), null))
+                    .blockEntity(TFGBlockEntities.FIRE_BOX_TOP_OVEN)
+                    .serverTicks(FireBoxTopOvenBlockEntity::serverTick)))
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
                 int variantCount = 8;
@@ -539,7 +536,7 @@ public final class TFGBlocks {
                 }
 
                 for (Direction dir : Direction.Plane.HORIZONTAL) {
-                    var stateBuilder = builder.partialState().with(OvenTopBlock.FACING, dir);
+                    var stateBuilder = builder.partialState().with(FireBoxTopOvenBlock.FACING, dir);
                     models.forEach(m -> stateBuilder.addModels(new ConfiguredModel(m, 0, (int) dir.getOpposite().toYRot(), false)));
                 }
             })
