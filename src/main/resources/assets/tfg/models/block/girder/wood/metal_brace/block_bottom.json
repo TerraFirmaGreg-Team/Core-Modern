@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/wood/block_bottom",
+  "textures": {
+    "0": "tfg:block/girder/wood/metal_brace",
+    "particle": "tfg:block/girder/wood/metal_brace"
+  }
+}

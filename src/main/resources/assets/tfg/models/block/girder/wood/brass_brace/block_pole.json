@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/wood/block_pole",
+  "textures": {
+    "2": "tfg:block/girder/pole/brass_brace",
+    "particle": "tfg:block/girder/wood/brass_brace"
+  }
+}
