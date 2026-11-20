@@ -111,6 +111,11 @@ public final class TFGTags {
         public static final TagKey<Item> FLUORAPATITE_SANDSTONE = createItemTag("fluorapatite_sandstone");
         public static final TagKey<Item> SULFIE_FOOD = createItemTag("sulfie_food");
 
+        public static final TagKey<Item> APPLIANCE_CATALYSTS = createItemTag("appliance_catalysts");
+        public static final TagKey<Item> APPLIANCE_TOOLS = createItemTag("appliance_tools");
+
+        public static final TagKey<Item> OVEN_BLACKLISTED = createItemTag("oven_blacklisted");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }
@@ -184,6 +189,7 @@ public final class TFGTags {
         public static final TagKey<Fluid> SMR_FLUIDS = createFluidTag("smr_fluids");
         public static final TagKey<Fluid> GT_OILS = createFluidTag("oils");
         public static final TagKey<Fluid> OreProcGas = createFluidTag("ore_proc_gas");
+        public static final TagKey<Fluid> CONDENSER_COOLANTS = createFluidTag("condenser_coolants");
 
         private static TagKey<Fluid> createFluidTag(String path) {
             return createFluidTag(TFGCore.id(path));

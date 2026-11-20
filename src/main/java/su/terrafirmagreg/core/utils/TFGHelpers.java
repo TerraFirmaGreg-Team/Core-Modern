@@ -18,6 +18,7 @@ import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -32,7 +33,7 @@ import dev.ftb.mods.ftbquests.quest.QuestObjectBase;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "NoTranslation" })
 public final class TFGHelpers {
 
     public static final Random RANDOM = new Random();
@@ -120,6 +121,64 @@ public final class TFGHelpers {
 
     public static Vec2 getOverworldWind(Level level, BlockPos pos, long calendarTime, float seaLevel) {
         return OverworldClimateModel.getOverworldWindVector(level, pos, calendarTime, 8008135, seaLevel);
+    }
+
+    /**
+     * Helper method to format a timer countdown tooltip using ██░░░ icons.
+     * @param currentTick Current tick count.
+     * @param maxTick Maximum tick count.
+     * @param maxPips Maximum number of pips.
+     * @param color Color of the tooltip.
+     * @return Formatted timer tooltip component with ██░░░ pips.
+     */
+    public static Component formattedPipTimer(int currentTick, int maxTick, int maxPips, ChatFormatting color) {
+        int filledPips = maxTick > 0 ? Math.min(maxPips, Math.max(0, Math.round((float) (currentTick * maxPips) / maxTick))) : 0;
+        String emptyPip = "░";
+        String filledPip = "█";
+        return Component.literal(filledPip.repeat(filledPips) + emptyPip.repeat(maxPips - filledPips)).withStyle(color);
+    }
+
+    /**
+     * Helper method to format a timer countdown tooltip.
+     * @param currentTick Current tick count.
+     * @param maxTick Maximum tick count.
+     * @return Formatted timer tooltip component with days to seconds after passing 24k ticks.
+     */
+    public static Component formattedTimer(int currentTick, int maxTick) {
+        int remainingTicks = Math.max(0, maxTick - currentTick);
+        float remainingSeconds = (float) remainingTicks / 20.0f;
+        float remainingDays = remainingTicks / 24000.0f;
+
+        Component timerText;
+        Component daysText = Component.translatable("tfc.tooltip.time_delta_days", String.format("%.1f", remainingDays));
+        MutableComponent timerIcon = ((int) remainingSeconds % 2 != 0) ? Component.literal("⏳ ") : Component.literal("⌛ ");
+
+        if (remainingDays >= 1.0F) {
+            timerText = timerIcon.append(daysText);
+        } else {
+            timerText = timerIcon.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
+        }
+        return timerText;
+    }
+
+    /**
+     * Helper method to format time ticks into seconds or days.
+     * @param timeTicks Ticks.
+     * @return Formatted time component with days to seconds after passing 24k ticks.
+     */
+    public static Component formatTime(int timeTicks) {
+        float remainingSeconds = (float) timeTicks / 20.0f;
+        float remainingDays = timeTicks / 24000.0f;
+
+        MutableComponent timerText = Component.literal("⏳ ");
+        Component daysText = Component.translatable("tfc.tooltip.time_delta_days", String.format("%.1f", remainingDays));
+
+        if (remainingDays >= 1.0F) {
+            timerText.append(daysText);
+        } else {
+            timerText.append(Component.translatable("tfg.tooltip.unit.seconds", String.format("%.1f", remainingSeconds)));
+        }
+        return timerText;
     }
 
     /**

@@ -7,7 +7,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.CookingApplianceRecipe;
+import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
+import su.terrafirmagreg.core.common.recipe.MixingBowlRecipe;
+import su.terrafirmagreg.core.common.recipe.SkilletRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipeSerializer;
 
 public class TFGRecipeSerializers {
@@ -17,4 +21,10 @@ public class TFGRecipeSerializers {
     public static final RegistryObject<ArtisanRecipe.Serializer> ARTISAN = RECIPE_SERIALIZERS.register("artisan", ArtisanRecipe.Serializer::new);
     public static final RegistryObject<ItemRepairRecipeSerializer> ITEM_REPAIR = RECIPE_SERIALIZERS.register("item_repair", ItemRepairRecipeSerializer::new);
     public static final RegistryObject<GasBurnerFuelRecipe.Serializer> GAS_BURNER_FUEL = RECIPE_SERIALIZERS.register("gas_burner_fuel", GasBurnerFuelRecipe.Serializer::new);
+    public static final RegistryObject<CookingApplianceRecipe.Serializer<CopperPotRecipe>> COPPER_POT = RECIPE_SERIALIZERS.register("copper_pot",
+            () -> new CookingApplianceRecipe.Serializer<>(CopperPotRecipe::new));
+    public static final RegistryObject<CookingApplianceRecipe.Serializer<SkilletRecipe>> SKILLET = RECIPE_SERIALIZERS.register("skillet",
+            () -> new CookingApplianceRecipe.Serializer<>(SkilletRecipe::new));
+    public static final RegistryObject<CookingApplianceRecipe.Serializer<MixingBowlRecipe>> MIXING_BOWL = RECIPE_SERIALIZERS.register("mixing_bowl",
+            () -> new CookingApplianceRecipe.Serializer<>(MixingBowlRecipe::new));
 }

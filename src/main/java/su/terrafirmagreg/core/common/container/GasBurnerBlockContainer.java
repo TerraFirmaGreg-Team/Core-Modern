@@ -8,7 +8,7 @@ import net.dries007.tfc.common.container.CallbackSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 
 @SuppressWarnings("UnnecessaryLocalVariable")
