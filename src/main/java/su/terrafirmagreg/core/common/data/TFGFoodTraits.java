@@ -13,4 +13,7 @@ public class TFGFoodTraits {
 
     public static final FoodTrait FREEZE_DRIED = FoodTrait.register(TFGCore.id("freeze_dried"),
             new FoodTrait(0.02f, "tfg.tooltip.foodtrait.freeze_dried"));
+
+    public static final FoodTrait FIRE_BOX_BAKED = FoodTrait.register(TFGCore.id("fire_box_baked"),
+            new FoodTrait(0.6f, "tfg.tooltip.foodtrait.fire_box_baked"));
 }

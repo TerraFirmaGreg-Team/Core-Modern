@@ -3,9 +3,9 @@ package su.terrafirmagreg.core.common.blockentity.appliances;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.eerussianguy.firmalife.common.items.FLFoodTraits;
 import com.eerussianguy.firmalife.common.recipes.WrappedHeatingRecipe;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.TickableInventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.PartialItemHandler;
@@ -18,14 +18,19 @@ import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
 import net.dries007.tfc.util.IntArrayBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
@@ -33,7 +38,10 @@ import net.minecraftforge.items.ItemStackHandler;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.appliances.FireBoxTopOvenBlock;
+import su.terrafirmagreg.core.common.data.TFGFoodTraits;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements IHeatable, IHeatBlock {
 
@@ -50,7 +58,6 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
     protected float targetTemperature;
     protected int targetTemperatureStabilityTicks;
 
-    @SuppressWarnings("unchecked")
     protected final WrappedHeatingRecipe[] cachedRecipes = new WrappedHeatingRecipe[9];
 
     @Getter
@@ -95,8 +102,8 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
         }
 
         // Heat spread
-        if (oven.temperature > 300.0f) {
-            float spreadTemp = oven.temperature - 300.0f;
+        if (oven.temperature > TFGConfig.SERVER.fireBoxTopOvenHeatLoss.get()) {
+            float spreadTemp = oven.temperature - TFGConfig.SERVER.fireBoxTopOvenHeatLoss.get();
             HeatCapability.provideHeatTo(level, pos.above(), spreadTemp);
             for (Direction dir : Direction.Plane.HORIZONTAL) {
                 BlockEntity be = level.getBlockEntity(pos.relative(dir));
@@ -117,7 +124,15 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
             IHeat inputHeat = HeatCapability.get(inputStack);
             if (inputHeat != null) {
                 if (inputHeat.getTemperature() < oven.temperature) {
-                    float modifier = FoodCapability.hasTrait(inputStack, FLFoodTraits.OVEN_BAKED) ? 1.1F : 1.4F;
+                    // Base Speed
+                    float modifier = 5.0F;
+                    if (FoodCapability.hasTrait(inputStack, TFGFoodTraits.FIRE_BOX_BAKED)) {
+                        // Already baked items continue to heat up much slower.
+                        modifier = 1.1F;
+                    } else if (FoodCapability.has(inputStack)) {
+                        // Food items heat up slower than metals.
+                        modifier = 1.4F;
+                    }
                     HeatCapability.addTemp(inputHeat, oven.temperature, modifier);
                 }
 
@@ -131,16 +146,50 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
                     if (oven.inventory.getStackInSlot(SLOT_OUTPUT_START + slot).isEmpty()) {
                         ItemStackInventory recipeInv = new ItemStackInventory(inputStack);
                         ItemStack output = recipe.assemble(recipeInv, level.registryAccess());
-                        HeatCapability.setTemperature(output, inputHeat.getTemperature());
-                        FoodCapability.applyTrait(output, FLFoodTraits.OVEN_BAKED);
-                        FoodCapability.setCreationDate(output, FoodCapability.getRoundedCreationDate());
+                        boolean burnt = output.isEmpty();
+
+                        if (!burnt) {
+                            HeatCapability.setTemperature(output, inputHeat.getTemperature());
+                            FoodCapability.applyTrait(output, TFGFoodTraits.FIRE_BOX_BAKED);
+                            FoodCapability.setCreationDate(output, FoodCapability.getRoundedCreationDate());
+                        }
+
                         oven.inventory.setStackInSlot(slot, ItemStack.EMPTY);
                         oven.inventory.setStackInSlot(SLOT_OUTPUT_START + slot, output);
                         oven.cachedRecipes[slot] = null;
                         oven.markForSync();
+
+                        fanFareEffects(level, pos, state, slot, burnt);
                     }
                 }
             }
+        }
+    }
+
+    private static void fanFareEffects(Level level, BlockPos pos, BlockState state, int slot, boolean burnt) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        Direction facing = state.hasProperty(FireBoxTopOvenBlock.FACING)
+                ? state.getValue(FireBoxTopOvenBlock.FACING)
+                : Direction.NORTH;
+        Vec3 center = FireBoxTopOvenBlock.SLOT_CENTERS[facing.get2DDataValue()][slot];
+
+        double x = pos.getX() + center.x;
+        double y = pos.getY() + center.y + 0.05D;
+        double z = pos.getZ() + center.z;
+
+        if (burnt) {
+            // Burnt Up
+            serverLevel.playSound(null, x, y, z, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.2F, 1.0F);
+            serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, x, y, z, 4, 0.06D, 0.05D, 0.06D, 0.01D);
+            serverLevel.sendParticles(ParticleTypes.ASH, x, y, z, 6, 0.08D, 0.06D, 0.08D, 0.01D);
+        } else {
+            // Recipe Success
+            serverLevel.playSound(null, x, y, z, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 0.5F, 0.2F);
+            serverLevel.sendParticles(TFCParticles.STEAM.get(), x, y, z, 3, 0.08D, 0.05D, 0.08D, 0.01D);
+            serverLevel.sendParticles(ParticleTypes.SMOKE, x, y, z, 3, 0.08D, 0.05D, 0.08D, 0.01D);
         }
     }
 

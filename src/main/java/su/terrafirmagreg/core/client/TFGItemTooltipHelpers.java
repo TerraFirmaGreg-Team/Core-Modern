@@ -43,10 +43,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
-import su.terrafirmagreg.core.common.block.appliances.CondenserBlock;
-import su.terrafirmagreg.core.common.block.appliances.CopperPotBlock;
-import su.terrafirmagreg.core.common.block.appliances.MixingBowlBlock;
-import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
+import su.terrafirmagreg.core.common.block.appliances.*;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
@@ -167,6 +164,16 @@ public class TFGItemTooltipHelpers {
         // Mixing Bowl
         if (block instanceof MixingBowlBlock) {
             tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.mixing_bowl.flavor_text")));
+        }
+
+        // Fire Box
+        if (block instanceof FireBoxBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.fire_box.flavor_text")));
+        }
+
+        // Fire Box Top Oven
+        if (block instanceof FireBoxTopOvenBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.fire_box_top_oven.flavor_text")));
         }
     }
 

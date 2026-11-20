@@ -71,7 +71,7 @@ public class FireBoxTopOvenProvider implements IBlockComponentProvider {
                                 line = Component.translatable("firmalife.jade.cook_left_temp", stack.getHoverName(), String.format("%s%%", tempPercentage), tempComponent);
 
                                 // Add "- Danger!!" tooltip if near recipe temp and there is no output (Item Burning).
-                                if (recipe != null && temp > recipe.temperature() * 0.9f && recipe.assemble(new ItemStackInventory(stack), accessor.getLevel().registryAccess()).isEmpty()) {
+                                if (recipe != null && itemTemp > (recipe.temperature() * 0.8f) && recipe.assemble(new ItemStackInventory(stack), accessor.getLevel().registryAccess()).isEmpty()) {
                                     line.append(Component.translatable("tfc.tooltip.danger").withStyle(ChatFormatting.WHITE));
                                 }
                                 tooltip.add(line);

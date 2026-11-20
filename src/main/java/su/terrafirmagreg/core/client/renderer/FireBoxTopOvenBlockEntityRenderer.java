@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.client.renderer;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
@@ -14,7 +16,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.common.block.appliances.FireBoxTopOvenBlock;
 import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxTopOvenBlockEntity;
 

@@ -355,7 +355,7 @@ public class CopperPotEmiRecipe implements EmiRecipe {
 
             // Render Press
             if (attachment instanceof PressAttachment pressAttachment) {
-                TFGEmiPlugin.createBasinlessPressWidget(holder, EmiIngredient.of(getAttachment(pressAttachment)), ATTACHMENT_X, attachmentY, 1, true);
+                TFGEmiPlugin.createBasinlessPressWidget(holder, EmiIngredient.of(getAttachment(pressAttachment)), ATTACHMENT_X, attachmentY, 0, true);
                 if (pressAttachment.circuit() != null) {
                     circuit = pressAttachment.circuit();
                 }

@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.block.appliances;
 
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,6 +10,9 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.devices.DeviceBlock;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
+import net.dries007.tfc.common.capabilities.size.IItemSize;
+import net.dries007.tfc.common.capabilities.size.Size;
+import net.dries007.tfc.common.capabilities.size.Weight;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
@@ -19,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -55,7 +58,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxTopOvenBlockEntity;
 
 @SuppressWarnings("deprecation")
-public class FireBoxTopOvenBlock extends DeviceBlock implements IHighlightHandler {
+public class FireBoxTopOvenBlock extends DeviceBlock implements IHighlightHandler, IItemSize {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -203,7 +206,7 @@ public class FireBoxTopOvenBlock extends DeviceBlock implements IHighlightHandle
                     return InteractionResult.sidedSuccess(level.isClientSide());
                 }
             } else {
-                // Outside zone: if holding item, try to fill all empty slots with the held stack.
+                // If holding item, try to fill all empty slots with the held stack.
                 if (!heldItem.isEmpty()) {
                     boolean insertedAny = false;
                     for (int i = 0; i < 9 && !heldItem.isEmpty(); i++) {
@@ -354,6 +357,16 @@ public class FireBoxTopOvenBlock extends DeviceBlock implements IHighlightHandle
                 }
             }
         }
+    }
+
+    @Override
+    public Size getSize(ItemStack stack) {
+        return Size.LARGE;
+    }
+
+    @Override
+    public Weight getWeight(ItemStack stack) {
+        return Weight.MEDIUM;
     }
 
     @Override

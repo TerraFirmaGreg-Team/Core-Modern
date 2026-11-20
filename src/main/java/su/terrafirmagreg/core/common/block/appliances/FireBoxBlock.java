@@ -9,6 +9,9 @@ import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.devices.DeviceBlock;
 import net.dries007.tfc.common.blocks.devices.IBellowsConsumer;
 import net.dries007.tfc.common.capabilities.Capabilities;
+import net.dries007.tfc.common.capabilities.size.IItemSize;
+import net.dries007.tfc.common.capabilities.size.Size;
+import net.dries007.tfc.common.capabilities.size.Weight;
 import net.dries007.tfc.util.Fuel;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
@@ -47,7 +50,7 @@ import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
 @SuppressWarnings("deprecation")
-public class FireBoxBlock extends DeviceBlock implements IBellowsConsumer {
+public class FireBoxBlock extends DeviceBlock implements IBellowsConsumer, IItemSize {
     public static final IntegerProperty HEAT = TFCBlockStateProperties.HEAT_LEVEL;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -282,6 +285,16 @@ public class FireBoxBlock extends DeviceBlock implements IBellowsConsumer {
     @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
         return rotate(state, mirror.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    public Size getSize(ItemStack stack) {
+        return Size.LARGE;
+    }
+
+    @Override
+    public Weight getWeight(ItemStack stack) {
+        return Weight.MEDIUM;
     }
 
     @Override

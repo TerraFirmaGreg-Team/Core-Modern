@@ -64,6 +64,7 @@ public final class ServerConfig {
     public final ForgeConfigSpec.DoubleValue fireBoxEfficiencyMultiplier;
     public final ForgeConfigSpec.DoubleValue fireBoxHeatDelta;
     public final ForgeConfigSpec.DoubleValue fireBoxCoolDelta;
+    public final ForgeConfigSpec.IntValue fireBoxTopOvenHeatLoss;
 
     public final ForgeConfigSpec.IntValue HARVEST_BASKET_RANGE;
 
@@ -321,6 +322,9 @@ public final class ServerConfig {
         fireBoxCoolDelta = builder
                 .comment("\nHow quickly the fire box lowers in temperature. Default: 2.0, min: 0.1, max: intMax")
                 .defineInRange("Fire Box Cool Delta", 2.0, 0.1, Integer.MAX_VALUE);
+        fireBoxTopOvenHeatLoss = builder
+                .comment("\nHow much heat is lost when fire box top ovens spread their heat to other blocks (in C). Default: 300, min: 100, max: intMax")
+                .defineInRange("Fire Box Top Oven Heat Loss", 300, 100, Integer.MAX_VALUE);
 
         builder.pop();
     }
