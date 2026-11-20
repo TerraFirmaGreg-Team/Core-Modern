@@ -366,6 +366,7 @@ public class TFGEmiPlugin implements EmiPlugin {
     public static EmiIngredient heatSources() {
         List<EmiStack> heatersList = new ArrayList<>();
         heatersList.add(EmiStack.of(TFGBlocks.GAS_BURNER.get().asItem()));
+        heatersList.add(EmiStack.of(TFGBlocks.FIRE_BOX.get().asItem()));
         for (OvenType type : OvenType.values()) {
             heatersList.add(EmiStack.of(FLBlocks.CURED_OVEN_BOTTOM.get(type).get().asItem()));
             heatersList.add(EmiStack.of(FLBlocks.INSULATED_OVEN_BOTTOM.get(type).get().asItem()));

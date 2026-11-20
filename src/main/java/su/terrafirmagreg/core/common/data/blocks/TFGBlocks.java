@@ -48,10 +48,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
 import su.terrafirmagreg.core.common.block.appliances.*;
-import su.terrafirmagreg.core.common.blockentity.appliances.CondenserBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.MixingBowlBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.*;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.item.CookingApplianceBlockItem;
@@ -354,6 +351,7 @@ public final class TFGBlocks {
             .block("copper_pot", p -> new CopperPotBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
                     .blockEntity(TFGBlockEntities.COPPER_POT)
                     .strength(3.0f, 6.0f)
+                    .mapColor(MapColor.COLOR_ORANGE)
                     .noOcclusion()
                     .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
             .blockstate((ctx, prov) -> {
@@ -395,6 +393,7 @@ public final class TFGBlocks {
                     .strength(3.0f, 6.0f)
                     .noOcclusion()
                     .blockEntity(TFGBlockEntities.CONDENSER)
+                    .mapColor(MapColor.COLOR_ORANGE)
                     .serverTicks(CondenserBlockEntity::serverTick)))
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
@@ -420,6 +419,7 @@ public final class TFGBlocks {
                     .sound(SoundType.NETHERITE_BLOCK)
                     .blockEntity(TFGBlockEntities.SKILLET)
                     .strength(3.0f, 7.0f)
+                    .mapColor(MapColor.COLOR_BLACK)
                     .noOcclusion()
                     .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
             .blockstate((ctx, prov) -> {
@@ -447,7 +447,8 @@ public final class TFGBlocks {
             .block("mixing_bowl", p -> new MixingBowlBlock(ExtendedProperties.of(Blocks.CRAFTING_TABLE)
                     .sound(SoundType.SCAFFOLDING)
                     .blockEntity(TFGBlockEntities.MIXING_BOWL)
-                    .strength(2.0f, 5.0f)
+                    .strength(5, 10)
+                    .mapColor(MapColor.WOOD)
                     .noOcclusion()
                     .ticks(MixingBowlBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
             .blockstate((ctx, prov) -> {
@@ -474,6 +475,39 @@ public final class TFGBlocks {
                                             .copy("inventory", "BlockEntityTag.inventory", CopyNbtFunction.MergeStrategy.REPLACE)))
                             .when(ExplosionCondition.survivesExplosion()))))
             .item(MixingBowlItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName())))
+            .build()
+            .register();
+
+    public static final BlockEntry<FireBoxBlock> FIRE_BOX = TFGCore.REGISTRATE
+            .block("fire_box", p -> new FireBoxBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .strength(3.0f, 6.0f)
+                    .noOcclusion()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .blockEntity(TFGBlockEntities.FIRE_BOX)
+                    .lightLevel(state -> state.getValue(GasBurnerBlock.LIT) ? 12 : 0)
+                    .serverTicks(FireBoxBlockEntity::serverTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                for (boolean lit : FireBoxBlock.LIT.getPossibleValues()) {
+                    String litString = lit ? "_lit" : "";
+
+                    var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + litString,
+                            TFGCore.id("block/" + ctx.getName() + litString + "_parent"));
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+                        builder.partialState()
+                                .with(FireBoxBlock.LIT, lit)
+                                .with(FireBoxBlock.FACING, dir)
+                                .modelForState()
+                                .modelFile(model)
+                                .rotationY((int) dir.getOpposite().toYRot())
+                                .addModel();
+                    }
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
+            .item(BlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName())))
             .build()
             .register();

@@ -228,7 +228,9 @@ import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.FluidPostProcess;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
+import su.terrafirmagreg.core.common.block.appliances.FireBoxBlock;
 import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
+import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
@@ -920,6 +922,11 @@ public final class ForgeEventHandler
         else if (blockEntity instanceof GasBurnerBlockEntity burner && state.getValue(GasBurnerBlock.LIT))
         {
             burner.extinguish(state);
+            event.setCanceled(true);
+        }
+        else if (blockEntity instanceof FireBoxBlockEntity fireBox && state.getValue(FireBoxBlock.LIT))
+        {
+            fireBox.extinguish(state);
             event.setCanceled(true);
         }
         else if (blockEntity instanceof CrucibleBlockEntity crucible)

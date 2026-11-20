@@ -256,6 +256,9 @@ public class SkilletEmiRecipe implements EmiRecipe {
                             BeneathBlocks.HELLFORGE.get().defaultBlockState().setValue(HellforgeBlock.HEAT, 3),
                             heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
                     new EmiBlockWidget(
+                            TFGBlocks.FIRE_BOX.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, 3).setValue(GasBurnerBlock.LIT, true),
+                            heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
+                    new EmiBlockWidget(
                             TFGBlocks.GAS_BURNER.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, 3).setValue(GasBurnerBlock.LIT, true),
                             heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
                     new EmiBlockWidget(

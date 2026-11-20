@@ -291,6 +291,9 @@ public class CopperPotEmiRecipe implements EmiRecipe {
                             BeneathBlocks.HELLFORGE.get().defaultBlockState().setValue(HellforgeBlock.HEAT, 3),
                             heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
                     new EmiBlockWidget(
+                            TFGBlocks.FIRE_BOX.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, 3).setValue(GasBurnerBlock.LIT, true),
+                            heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
+                    new EmiBlockWidget(
                             TFGBlocks.GAS_BURNER.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, 3).setValue(GasBurnerBlock.LIT, true),
                             heatSourceX, heatSourceY, heatSourceZ, renderScale, renderRotX, renderRotY),
                     new EmiBlockWidget(
@@ -338,7 +341,7 @@ public class CopperPotEmiRecipe implements EmiRecipe {
 
             // Render Mixer
             if (attachment instanceof MixerAttachment mixerAttachment) {
-                TFGEmiPlugin.createBasinlessMixerWidget(holder, EmiIngredient.of(getAttachment(mixerAttachment)), ATTACHMENT_X, attachmentY, 1, true);
+                TFGEmiPlugin.createBasinlessMixerWidget(holder, EmiIngredient.of(getAttachment(mixerAttachment)), ATTACHMENT_X, attachmentY, 0, true);
                 if (mixerAttachment.minRpm() != null) {
                     rpm = mixerAttachment.minRpm();
                 }

@@ -12,7 +12,6 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Tooltips;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -33,7 +32,6 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
-import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
 import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
 
 /**
@@ -88,13 +86,6 @@ public class CookingApplianceBlockItem extends BlockItem {
             }
         }
 
-        if (level != null) {
-            if (Screen.hasShiftDown()) {
-                tooltip.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.copper_pot.flavor_text")));
-            } else {
-                tooltip.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
-            }
-        }
     }
 
     @Override

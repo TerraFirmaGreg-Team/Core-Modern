@@ -43,6 +43,7 @@ import net.minecraftforge.registries.MissingMappingsEvent;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
+import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
@@ -77,6 +78,17 @@ public final class ForgeCommonEventListener {
         } else if (level.getBlockState(pos.below()).is(TFGBlocks.GAS_BURNER.get())) {
             BlockEntity entity = level.getBlockEntity(pos.below());
             if (entity instanceof GasBurnerBlockEntity burner && burner.light(level.getBlockState(pos.below()))) {
+                event.setCanceled(true);
+            }
+        }
+        if (state.is(TFGBlocks.FIRE_BOX.get())) {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity instanceof FireBoxBlockEntity fireBox && fireBox.light(state)) {
+                event.setCanceled(true);
+            }
+        } else if (level.getBlockState(pos.below()).is(TFGBlocks.FIRE_BOX.get())) {
+            BlockEntity entity = level.getBlockEntity(pos.below());
+            if (entity instanceof FireBoxBlockEntity fireBox && fireBox.light(level.getBlockState(pos.below()))) {
                 event.setCanceled(true);
             }
         }

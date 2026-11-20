@@ -21,10 +21,7 @@ import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.ArtisanTableBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.LargeNestBoxBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.MixingBowlBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.appliances.SkilletBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.*;
 import su.terrafirmagreg.core.common.container.*;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowContainer;
 
@@ -62,6 +59,10 @@ public class TFGContainers {
     public static final RegistryObject<MenuType<MixingBowlContainer>> MIXING_BOWL = TFGContainers
             .<MixingBowlBlockEntity, MixingBowlContainer>registerBlockEntityContainer("mixing_bowl",
                     TFGBlockEntities.MIXING_BOWL, MixingBowlContainer::create);
+
+    public static final RegistryObject<MenuType<FireBoxContainer>> FIRE_BOX = TFGContainers
+            .<FireBoxBlockEntity, FireBoxContainer>registerBlockEntityContainer("fire_box",
+                    TFGBlockEntities.FIRE_BOX, FireBoxContainer::create);
 
     public static <T extends InventoryBlockEntity<?>, C extends BlockEntityContainer<T>> RegistryObject<MenuType<C>> registerBlockEntityContainer(
             String name, Supplier<BlockEntityType<T>> type, BlockEntityContainer.Factory<T, C> factory) {

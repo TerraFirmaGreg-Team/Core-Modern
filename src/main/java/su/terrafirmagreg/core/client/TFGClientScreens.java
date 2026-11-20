@@ -43,6 +43,7 @@ public final class TFGClientScreens {
             MenuScreens.register(TFGContainers.COPPER_POT.get(), CopperPotScreen::new);
             MenuScreens.register(TFGContainers.SKILLET.get(), SkilletScreen::new);
             MenuScreens.register(TFGContainers.MIXING_BOWL.get(), MixingBowlScreen::new);
+            MenuScreens.register(TFGContainers.FIRE_BOX.get(), FireBoxScreen::new);
         });
     }
 

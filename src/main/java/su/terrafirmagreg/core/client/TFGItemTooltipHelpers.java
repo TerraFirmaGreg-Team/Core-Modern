@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.Mod;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
 import su.terrafirmagreg.core.common.block.appliances.CondenserBlock;
+import su.terrafirmagreg.core.common.block.appliances.CopperPotBlock;
 import su.terrafirmagreg.core.common.block.appliances.MixingBowlBlock;
 import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
@@ -146,6 +147,11 @@ public class TFGItemTooltipHelpers {
                     .append(Component.literal(": ")
                             .append(Component.translatable("tfc.tooltip.time_delta_days", daysToGrow)
                                     .withStyle(ChatFormatting.ITALIC, dynamicColor))));
+        }
+
+        // Copper Pot
+        if (block instanceof CopperPotBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.copper_pot.flavor_text")));
         }
 
         // Condenser

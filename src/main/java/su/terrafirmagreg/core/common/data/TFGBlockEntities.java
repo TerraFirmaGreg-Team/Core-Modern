@@ -164,6 +164,11 @@ public class TFGBlockEntities {
             .renderer(() -> CookingApplianceBlockEntityRenderer.MixingBowl::new)
             .register();
 
+    public static final BlockEntityEntry<FireBoxBlockEntity> FIRE_BOX = TFGCore.REGISTRATE
+            .blockEntity("fire_box", FireBoxBlockEntity::new)
+            .validBlock(TFGBlocks.FIRE_BOX)
+            .register();
+
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
 
     public static void addValidBEBlock(Supplier<?> type, Block block) {

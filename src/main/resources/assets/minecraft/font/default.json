@@ -1,0 +1,16 @@
+{"providers": [
+    {
+        "file": "tfg:font/wind_icon.png",
+        "ascent": 7,
+        "type": "bitmap",
+        "chars": ["༄"],
+        "height": 8
+    },
+    {
+        "file": "tfg:font/leaf_icon.png",
+        "ascent": 7,
+        "type": "bitmap",
+        "chars": ["🍂"],
+        "height": 8
+    }
+]}

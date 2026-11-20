@@ -2,8 +2,8 @@ package su.terrafirmagreg.core.common.block.appliances;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
-
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
+
 import net.dries007.tfc.client.IHighlightHandler;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.capabilities.size.IItemSize;

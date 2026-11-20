@@ -102,7 +102,7 @@ public class GasBurnerFuelEmiRecipe implements EmiRecipe {
         final MutableComponent unitHeatValue = heatUnit.formatRange(temp);
         Font font = Minecraft.getInstance().font;
         int burnerCapacity = GasBurnerBlockEntity.CAPACITY;
-        String daysPerTank = String.valueOf(recipe.getDuration() * burnerCapacity / 24000);
+        String daysPerTank = String.format("%.2f", (float) recipe.getDuration() * burnerCapacity / recipe.getFluid().amount() / 24000);
 
         int offset = 6;
         int slotSize = 18;

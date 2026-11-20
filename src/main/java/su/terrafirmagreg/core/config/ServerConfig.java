@@ -61,6 +61,10 @@ public final class ServerConfig {
     public final ForgeConfigSpec.DoubleValue gasBurnerHeatDelta;
     public final ForgeConfigSpec.DoubleValue gasBurnerCoolDelta;
 
+    public final ForgeConfigSpec.DoubleValue fireBoxEfficiencyMultiplier;
+    public final ForgeConfigSpec.DoubleValue fireBoxHeatDelta;
+    public final ForgeConfigSpec.DoubleValue fireBoxCoolDelta;
+
     public final ForgeConfigSpec.IntValue HARVEST_BASKET_RANGE;
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
@@ -306,6 +310,17 @@ public final class ServerConfig {
         atmosphereRevalidationBaseTicks = builder
                 .comment("\nBase delay (in ticks) between room revalidation checks. Larger rooms get longer delays.")
                 .defineInRange("revalidationBaseTicks", 10, 1, 100);
+
+        builder.pop().push("Fire Box");
+        fireBoxEfficiencyMultiplier = builder
+                .comment("\nHow efficiently the fire box uses fuel and air ticks. Default: 1.5, min: 0.1, max: intMax")
+                .defineInRange("Fire Box Efficiency Multiplier", 1.5, 0.1, Integer.MAX_VALUE);
+        fireBoxHeatDelta = builder
+                .comment("\nHow quickly the fire box raises in temperature. Default: 3.0, min: 0.1, max: intMax")
+                .defineInRange("Fire Box Heat Delta", 3.0, 0.1, Integer.MAX_VALUE);
+        fireBoxCoolDelta = builder
+                .comment("\nHow quickly the fire box lowers in temperature. Default: 2.0, min: 0.1, max: intMax")
+                .defineInRange("Fire Box Cool Delta", 2.0, 0.1, Integer.MAX_VALUE);
 
         builder.pop();
     }

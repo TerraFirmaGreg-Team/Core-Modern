@@ -2,6 +2,7 @@
   "values": [
     "tfg:gas_burner",
     "tfg:copper_pot",
-    "tfg:skillet"
+    "tfg:skillet",
+    "tfg:fire_box"
   ]
 }
