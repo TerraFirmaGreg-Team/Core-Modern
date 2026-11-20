@@ -210,7 +210,4 @@ dependencies {
 
     // Primitive Creatures
     modCompileOnly(mods.primitiveCreatures)
-
-    // FirmaCivPlus
-    modImplementation(mods.firmaCivPlus)
 }

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
-import com.nebby1999.firmacivplus.WatercraftMaterial;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
@@ -16,7 +15,6 @@ import net.minecraftforge.network.NetworkConstants;
 
 import su.terrafirmagreg.core.client.ClientProxy;
 import su.terrafirmagreg.core.common.CommonProxy;
-import su.terrafirmagreg.core.common.data.TFGWatercraftMaterial;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mod(TFGCore.MOD_ID)
@@ -38,9 +36,6 @@ public final class TFGCore {
     public TFGCore() {
         setupFixForGlobalServerConfig();
         TFGConfig.init();
-
-        //Adding our WatercraftMaterial values to FirmaCivPlus will handle everything by itself, it bypasses registrate given that i have no idea how registrate works, sorry!
-        WatercraftMaterial.addMaterials(TFGWatercraftMaterial.values());
 
         DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     }
