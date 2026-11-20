@@ -227,6 +227,7 @@
         "common.minecraft.SnowLayerBlockSnowshoesMixin",
         "common.minecraft.StructurePieceMixin",
         "common.minecraft.SurfaceRulesContextAccessor",
+        "common.minecraft.WanderingTraderMixin",
         "common.minecraft.entities.AxolotlMixin",
         "common.minecraft.entities.BatMixin",
         "common.minecraft.entities.BlazeMixin",

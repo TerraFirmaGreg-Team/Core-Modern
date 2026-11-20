@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,10 +26,10 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import dev.emi.emi.registry.EmiTags;
 import dev.emi.emi.runtime.EmiDrawContext;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class OreVeinInfoRecipe implements EmiRecipe {
     public record WeightedBlock(String ore, int weightPercent) {
@@ -99,7 +100,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
                 var normalTag = itemTagRegistry.getTag(itemTagRegistry
                         .createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "raw_materials/" + ore.ore)));
                 normalTag.forEach(v -> {
-                    if (!itemTagRegistry.getTag(itemTagRegistry.createTagKey(EmiTags.HIDDEN_FROM_RECIPE_VIEWERS)).contains(v))
+                    if (!Helpers.isItem(v, TFGTags.Items.HIDDEN))
                         validRawOres.add(v);
                 });
 
@@ -108,7 +109,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
                     normalTag = itemTagRegistry.getTag(itemTagRegistry
                             .createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "gems/" + ore.ore)));
                     normalTag.forEach(v -> {
-                        if (!itemTagRegistry.getTag(itemTagRegistry.createTagKey(EmiTags.HIDDEN_FROM_RECIPE_VIEWERS)).contains(v))
+                        if (!Helpers.isItem(v, TFGTags.Items.HIDDEN))
                             validRawOres.add(v);
                     });
                 }

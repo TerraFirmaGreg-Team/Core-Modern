@@ -175,6 +175,11 @@ public class MineshaftHelpers {
     public static Block getRuinedBrick(BlockPos blockPos, LevelReader levelReader, RandomSource random, boolean mossy) {
         Rock rock = ROCK_ACCESOR_MAP.get(getRockType(blockPos, levelReader).raw());
 
+        if (rock == null) {
+            // use dacite as a fallback
+            rock = Rock.DACITE;
+        }
+
         int i = random.nextInt(0, 11);
         if (i <= 7) {
             return rock.getBlock(Rock.BlockType.BRICKS).get();
