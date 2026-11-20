@@ -168,3 +168,10 @@ mandatory = true
 versionRange = "3.2.14"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId="ad_astra"
+mandatory=true
+versionRange="1.15.21-forge,1.20.1"
+ordering="AFTER"
+side="BOTH"
