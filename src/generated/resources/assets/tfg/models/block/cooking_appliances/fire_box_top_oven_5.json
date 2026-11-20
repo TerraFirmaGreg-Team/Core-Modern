@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/fire_box_top_oven_parent",
+  "textures": {
+    "4": "tfg:block/cooking_appliances/fire_box_oven_back_5"
+  }
+}

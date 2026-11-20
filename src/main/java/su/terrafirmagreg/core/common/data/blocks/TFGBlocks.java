@@ -1,9 +1,14 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.eerussianguy.firmalife.common.FLTags;
+import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
+import com.eerussianguy.firmalife.common.blockentities.OvenTopBlockEntity;
+import com.eerussianguy.firmalife.common.blocks.OvenTopBlock;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -42,6 +47,8 @@ import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -509,6 +516,36 @@ public final class TFGBlocks {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
             .item(BlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName())))
+            .build()
+            .register();
+
+    public static final BlockEntry<OvenTopBlock> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
+            .block("fire_box_top_oven", p -> new OvenTopBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .strength(3.0f, 6.0f)
+                    .noOcclusion()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .blockEntity(FLBlockEntities.OVEN_TOP)
+                    .serverTicks(OvenTopBlockEntity::serverTick), null))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                int variantCount = 8;
+
+                List<ModelFile> models = new ArrayList<>(variantCount);
+                for (int variant = 0; variant <= variantCount - 1; variant++) {
+                    var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + "_" + variant, TFGCore.id("block/" + ctx.getName() + "_parent"))
+                            .texture("4", TFGCore.id("block/cooking_appliances/fire_box_oven_back_" + variant));
+                    models.add(model);
+                }
+
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    var stateBuilder = builder.partialState().with(OvenTopBlock.FACING, dir);
+                    models.forEach(m -> stateBuilder.addModels(new ConfiguredModel(m, 0, (int) dir.getOpposite().toYRot(), false)));
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_0")))
             .build()
             .register();
 

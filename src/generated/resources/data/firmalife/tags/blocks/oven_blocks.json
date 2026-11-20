@@ -1,6 +1,7 @@
 {
   "values": [
     "tfg:gas_burner",
-    "tfg:fire_box"
+    "tfg:fire_box",
+    "tfg:fire_box_top_oven"
   ]
 }
