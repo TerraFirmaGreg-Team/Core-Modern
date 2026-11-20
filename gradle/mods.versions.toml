@@ -50,6 +50,7 @@ tfcgenviewer = "1.5.1"
 waterFlasks = "3.0.10"
 ihearttfc = "5901425"
 sacksNSuch = "1.2.6"
+firmaCivPlus = "6491888" #1.0.1-1.20.1
 
 # AE2
 guideme = "20.1.13"
@@ -171,6 +172,7 @@ tfcgenviewer = { module = "maven.modrinth:tfcgenviewer", version.ref = "tfcgenvi
 waterFlasks = { module = "maven.modrinth:water-flasks", version.ref = "waterFlasks" }
 ihearttfc = { module = "curse.maven:ihearttfc-1118578", version.ref = "ihearttfc" } # MR has no 1.1.3 for forge/1.20.1; unfiltered coord resolves a Java 21 build
 sacksNSuch = { module = "maven.modrinth:sacks-n-such", version.ref = "sacksNSuch" }
+firmaCivPlus = { module = "curse.maven:firmacivplus-1243743", version.ref = "firmaCivPlus" }
 
 # AE2 (UELM fork)
 guideme = { module = "maven.modrinth:guideme", version.ref = "guideme" }

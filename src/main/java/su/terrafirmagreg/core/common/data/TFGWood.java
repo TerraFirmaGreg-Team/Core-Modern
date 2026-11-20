@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Wood;
@@ -25,18 +26,22 @@ public enum TFGWood implements RegistryWood {
     GLACIAN(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
+            "ad_astra",
             MapColor.NONE),
     STROPHAR(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
+            "ad_astra",
             MapColor.NONE),
     AERONOS(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
+            "ad_astra",
             MapColor.NONE),
     GINKGO(ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
+            "wan_ancient_beasts",
             MapColor.NONE);
 
     public static final TFGWood[] VALUES = values();
@@ -54,6 +59,7 @@ public enum TFGWood implements RegistryWood {
     public final ResourceLocation plankTexture;
     public final ResourceLocation logTexture;
     public final ResourceLocation strippedLogTexture;
+    private final String modNamespace;
 
     TFGWood(MapColor woodColor, MapColor barkColor, int daysToGrow, int autumnIndex) {
         this.generateWood = true;
@@ -69,9 +75,10 @@ public enum TFGWood implements RegistryWood {
         this.plankTexture = TFGCore.id("block/wood/planks/" + serializedName);
         this.logTexture = TFGCore.id("block/wood/log/" + serializedName);
         this.strippedLogTexture = TFGCore.id("block/wood/stripped_log/" + serializedName);
+        this.modNamespace = "";
     }
 
-    TFGWood(ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor) {
+    TFGWood(ResourceLocation plankTexture, ResourceLocation logTexture, ResourceLocation stripped_logTexture, String modNamespace, MapColor mapColor) {
         this.generateWood = false;
         this.serializedName = this.name().toLowerCase(Locale.ROOT);
         this.woodColor = mapColor;
@@ -81,9 +88,10 @@ public enum TFGWood implements RegistryWood {
         this.daysToGrow = 0;
         this.blockSet = new BlockSetType(serializedName);
         this.woodType = new WoodType(TFGCore.id(serializedName).toString(), blockSet);
-        this.plankTexture = plank;
-        this.logTexture = log;
-        this.strippedLogTexture = stripped_log;
+        this.plankTexture = plankTexture;
+        this.logTexture = logTexture;
+        this.strippedLogTexture = stripped_logTexture;
+        this.modNamespace = modNamespace;
     }
 
     @Override
@@ -103,7 +111,14 @@ public enum TFGWood implements RegistryWood {
 
     @Override
     public Supplier<Block> getBlock(Wood.BlockType type) {
-        return () -> TFGBlocks_Wood.WOODS.get(this).get(type).get();
+        return () -> {
+            if (generateWood) {
+                return TFGBlocks_Wood.WOODS.get(this).get(type).get();
+            } else {
+                //No way this works
+                return ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(this.modNamespace, getSerializedName() + "_" + type.name().toLowerCase()));
+            }
+        };
     }
 
     @Override
