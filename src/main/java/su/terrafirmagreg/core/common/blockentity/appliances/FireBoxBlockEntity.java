@@ -193,6 +193,7 @@ public class FireBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         maxBurnTicks = nbt.contains("maxBurnTicks") ? nbt.getInt("maxBurnTicks") : 10;
         burnTemperature = nbt.getFloat("burnTemperature");
         lastPlayerTick = nbt.getLong("lastPlayerTick");
+        isRedstoneIgnited = nbt.getBoolean("isRedstoneIgnited");
         super.loadAdditional(nbt);
     }
 
@@ -204,6 +205,7 @@ public class FireBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         nbt.putInt("maxBurnTicks", maxBurnTicks);
         nbt.putFloat("burnTemperature", burnTemperature);
         nbt.putLong("lastPlayerTick", lastPlayerTick);
+        nbt.putBoolean("isRedstoneIgnited", isRedstoneIgnited);
         super.saveAdditional(nbt);
     }
 
