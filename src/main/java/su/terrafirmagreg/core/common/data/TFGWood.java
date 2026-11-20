@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Wood;
@@ -54,6 +55,7 @@ public enum TFGWood implements RegistryWood {
     public final ResourceLocation plankTexture;
     public final ResourceLocation logTexture;
     public final ResourceLocation strippedLogTexture;
+    public final String baseModNamespace;
 
     TFGWood(MapColor woodColor, MapColor barkColor, int daysToGrow, int autumnIndex) {
         this.generateWood = true;
@@ -69,6 +71,7 @@ public enum TFGWood implements RegistryWood {
         this.plankTexture = TFGCore.id("block/wood/planks/" + serializedName);
         this.logTexture = TFGCore.id("block/wood/log/" + serializedName);
         this.strippedLogTexture = TFGCore.id("block/wood/stripped_log/" + serializedName);
+        this.baseModNamespace = "";
     }
 
     TFGWood(ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor) {
@@ -84,6 +87,7 @@ public enum TFGWood implements RegistryWood {
         this.plankTexture = plank;
         this.logTexture = log;
         this.strippedLogTexture = stripped_log;
+        this.baseModNamespace = plank.getNamespace();
     }
 
     @Override
@@ -103,7 +107,18 @@ public enum TFGWood implements RegistryWood {
 
     @Override
     public Supplier<Block> getBlock(Wood.BlockType type) {
-        return () -> TFGBlocks_Wood.WOODS.get(this).get(type).get();
+        return () -> {
+            //If we do have our own block for this wood type, get it
+            if (TFGBlocks_Wood.WOODS.get(this).containsKey(type)) {
+                return TFGBlocks_Wood.WOODS.get(this).get(type).get();
+            } else { //Otherwise, use the forge registry to get the "equivalent" block. There's probably a better way of doing this, but if we ask for the Stairs block of the Aeronos TFGWood it should return the Aeronos stair from Ad Astra.
+                TFGCore.LOGGER.info("Penis!");
+                if (type == Wood.BlockType.STRIPPED_LOG) {
+
+                }
+                return ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(baseModNamespace, getSerializedName() + "_" + type.name().toLowerCase()));
+            }
+        };
     }
 
     @Override
