@@ -48,7 +48,7 @@ public abstract class CliffHangerMixin extends Hanger {
                 && levelAccessor.getDifficulty() != Difficulty.PEACEFUL;
     }
 
-    @Inject(method = "hurt", at = @At("TAIL"), remap = true)
+    @Inject(method = "hurt", at = @At("HEAD"), remap = true)
     private void tfg$hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         setTarget(null);
         deactivateTongue();

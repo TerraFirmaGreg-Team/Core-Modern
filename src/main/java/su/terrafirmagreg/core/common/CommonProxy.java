@@ -129,6 +129,7 @@ public class CommonProxy {
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
             registerFlowerPots();
+            TFGTrades.init();
 
             for (MachineDefinition def : GTMultiMachines.LARGE_MINER) {
                 if (def == null)

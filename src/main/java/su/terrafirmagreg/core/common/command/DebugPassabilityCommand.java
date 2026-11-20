@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -18,8 +19,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -39,9 +38,6 @@ import su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo.Pas
  * /tfg debug passcache              : dump entire passability cache
  */
 public class DebugPassabilityCommand {
-
-    private static final TagKey<Item> HIDDEN_TAG = TagKey.create(
-            ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
 
     public static void register(LiteralArgumentBuilder<CommandSourceStack> debug) {
         debug.then(literal("passability")
@@ -208,7 +204,7 @@ public class DebugPassabilityCommand {
 
             // Skip blocks hidden from recipe viewers — typically uncraftable/creative-only
             var item = block.asItem();
-            if (item != net.minecraft.world.item.Items.AIR && item.builtInRegistryHolder().is(HIDDEN_TAG)) {
+            if (item != net.minecraft.world.item.Items.AIR && Helpers.isBlock(block, TFGTags.Blocks.HIDDEN)) {
                 continue;
             }
 

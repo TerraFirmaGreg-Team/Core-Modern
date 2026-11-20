@@ -9,16 +9,21 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import dev.emi.emi.registry.EmiTags;
+
 import su.terrafirmagreg.core.TFGCore;
 
 public final class TFGTags {
 
     public static final class Items {
 
-        public static final TagKey<Item> HIDDEN = createItemTag(ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
+        public static final TagKey<Item> HIDDEN = createItemTag(EmiTags.HIDDEN_FROM_RECIPE_VIEWERS);
 
         public static final TagKey<Item> Casings = createItemTag("casings");
-
+        public static final TagKey<Item> Medicine = createItemTag("medicine");
+        public static final TagKey<Item> MedicinePowders = createItemTag("medicine/powders");
+        public static final TagKey<Item> MedicinePills = createItemTag("medicine/pills");
+        public static final TagKey<Item> MedicineTablets = createItemTag("medicine/tablets");
         public static final TagKey<Item> Chains = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "chains"));
         public static final TagKey<Item> Harvester = createItemTag("harvester");
 
@@ -118,7 +123,7 @@ public final class TFGTags {
     }
 
     public static final class Blocks {
-        public static final TagKey<Block> HIDDEN = createBlockTag(ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
+        public static final TagKey<Block> HIDDEN = createBlockTag(EmiTags.HIDDEN_FROM_RECIPE_VIEWERS);
 
         public static final TagKey<Block> Casings = createBlockTag("casings");
         public static final TagKey<Block> HarvesterHarvestable = createBlockTag("harvester_harvestable");
