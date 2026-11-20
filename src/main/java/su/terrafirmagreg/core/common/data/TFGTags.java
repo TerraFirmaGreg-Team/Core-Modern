@@ -91,6 +91,8 @@ public final class TFGTags {
 
         public static final TagKey<Item> DYNAMIC_COLOR = createItemTag("dynamic_color");
 
+        public static final TagKey<Item> WirelessChargerBoosted = createItemTag("wireless_charger/boosted");
+
         // Used in an interface mixin, which can't have local fields, so they live here instead
         public static final TagKey<Item> RICH_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "rich_raw_materials"));
         public static final TagKey<Item> POOR_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "poor_raw_materials"));

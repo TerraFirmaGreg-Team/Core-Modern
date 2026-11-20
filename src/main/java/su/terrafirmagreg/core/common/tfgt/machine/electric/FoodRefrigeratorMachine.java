@@ -9,24 +9,40 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
+import com.gregtechceu.gtceu.api.machine.mui.MachineUIPanelBuilder;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.ISubscription;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.IFood;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.drawable.UITexture;
+import brachy.modularui.drawable.progress.ProgressDrawable;
 import brachy.modularui.factory.PosGuiData;
 import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.DoubleSyncValue;
+import brachy.modularui.value.sync.LongSyncValue;
 import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.value.sync.SyncHandlers;
 import brachy.modularui.widget.ParentWidget;
+import brachy.modularui.widgets.ProgressWidget;
+import brachy.modularui.widgets.ToggleButton;
+import brachy.modularui.widgets.layout.Flow;
+import brachy.modularui.widgets.slot.ItemSlot;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
@@ -119,18 +135,6 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
         }
     }
 
-    @Override
-    public void onMachineDestroyed() {
-        if (!isRemote() && getLevel() instanceof ServerLevel serverLevel) {
-            var pos = getBlockPos();
-            for (ItemStack drop : inventory.drainAllForDrop()) {
-                if (!drop.isEmpty()) {
-                    net.minecraft.world.Containers.dropItemStack(serverLevel, pos.getX(), pos.getY(), pos.getZ(), drop);
-                }
-            }
-        }
-    }
-
     /**
      * Update subscription.
      * <p>
@@ -209,7 +213,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
     // #region Capabilities
 
     @SaveField
-    private boolean workingEnabled;
+    private boolean workingEnabled = true;
 
     @Override
     public boolean isWorkingEnabled() {
@@ -254,90 +258,64 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
 
     // #region GUI
 
+    private static final int SLOTS_PER_ROW = 9;
+    private static final UITexture UNIFY_ON = UITexture.fullImage("tfg:textures/gui/widgets/unify_dates_on.png");
+    private static final UITexture UNIFY_OFF = UITexture.fullImage("tfg:textures/gui/widgets/unify_dates_off.png");
+
     @Override
-    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
-        IMuiMachine.super.buildMainUI(mainWidget, guiData, syncManager, settings);
+    public MachineUIPanelBuilder getPanelBuilder(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        return MachineUIPanelBuilder.panelBuilder(this)
+                .rightConfigurators(flow -> flow.child(new ToggleButton()
+                        .value(new BooleanSyncValue(this::isUnifyDatesEnabled, this::setUnifyDatesEnabled).allowC2S())
+                        .overlay(true, UNIFY_ON)
+                        .overlay(false, UNIFY_OFF)
+                        .addTooltipLine(Text.lang("tfg.gui.refrigerator.unify_dates"))));
     }
 
-    /*
     @Override
-    public Widget createUIWidget() {
-        /*
-          Energy bar aligned with the size of the inventory automatically.
-          Essentially multiplies the rows of the inventory by the pixel size of slots and adjusts to fit
-          Anchored to the bottom of the sort button.
-    
-        int perRow = 9;
-        int slots = inventory.getSlots();
-        int perCol = Math.max(1, (slots + perRow - 1) / perRow);
-    
-        var template = new WidgetGroup(0, 0, 18 * perRow + 8, 18 * perCol + 8);
-        template.setBackground(GuiTextures.BACKGROUND_INVERSE);
-    
-        for (int i = 0; i < slots; i++) {
-            int x = i % perRow;
-            int y = i / perRow;
-            template.addWidget(new SlotWidget(inventory, i, 4 + x * 18, 4 + y * 18, true, true));
+    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager,
+            UISettings settings) {
+        int rows = (inventorySize + SLOTS_PER_ROW - 1) / SLOTS_PER_ROW;
+
+        DoubleSyncValue energyFill = new DoubleSyncValue(this::getEnergyFill);
+        LongSyncValue energyStored = new LongSyncValue(energyContainer::getEnergyStored);
+        syncManager.syncValue("energyFill", energyFill);
+        syncManager.syncValue("energyStored", energyStored);
+
+        syncManager.registerSlotGroup("fridge_inv", SLOTS_PER_ROW);
+        ParentWidget<?> slots = new ParentWidget<>();
+        slots.size(18 * SLOTS_PER_ROW, 18 * rows);
+        for (int i = 0; i < inventorySize; i++) {
+            slots.child(new ItemSlot()
+                    .slot(SyncHandlers.itemSlot(inventory, i).slotGroup("fridge_inv"))
+                    .left(18 * (i % SLOTS_PER_ROW))
+                    .top(18 * (i / SLOTS_PER_ROW)));
         }
-    
-        var editableUI = createEnergyBar();
-        var energyBar = editableUI.createDefault();
-    
-        int energyBarX = 3, toggleY = 2, toggleH = 18;
-        int energyBarY = toggleY + toggleH + 4;
-    
-        int gridHeight = template.getSize().height;
-        int energyBarHeight = Math.max(0, gridHeight - 20);
-        energyBar.setSize(energyBar.getSize().width, energyBarHeight);
-    
-        int groupWidth = Math.max(energyBar.getSize().width + template.getSize().width + 4 + 8, 172);
-        int groupHeight = Math.max(template.getSize().height + 8, energyBarY + energyBar.getSize().height + 8);
-        var group = new WidgetGroup(0, 0, groupWidth, groupHeight);
-    
-        energyBar.setSelfPosition(new Position(energyBarX, energyBarY));
-    
-        var size = group.getSize();
-        int templateX = (size.width - energyBar.getSize().width - 4 - template.getSize().width) / 2
-                + 2 + energyBar.getSize().width + 2;
-        int templateY = (size.height - template.getSize().height) / 2;
-        template.setSelfPosition(new Position(templateX, templateY));
-    
-        group.addWidget(energyBar);
-        group.addWidget(template);
-    
-        {
-            IGuiTexture overlayOn = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_on.png");
-            IGuiTexture overlayOff = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_off.png");
-    
-            var toggle = new ToggleButtonWidget(3, 2, 18, 18,
-                    this::isUnifyDatesEnabled,
-                    this::setUnifyDatesEnabled) {
-                private void refreshTooltip() {
-                    String base = "tfg.gui.refrigerator.unify_dates";
-                    setTooltipText(Component.translatable(base).getString());
-                }
-    
-                {
-                    IGuiTexture backDisabled = GuiTextures.TOGGLE_BUTTON_BACK.getSubTexture(0, 0, 1, 0.5);
-                    IGuiTexture backEnabled = GuiTextures.TOGGLE_BUTTON_BACK.getSubTexture(0, 0.5, 1, 0.5);
-                    setTexture(new GuiTextureGroup(backDisabled, overlayOff),
-                            new GuiTextureGroup(backEnabled, overlayOn));
-                    refreshTooltip();
-                }
-    
-                @Override
-                public void drawInForeground(net.minecraft.client.gui.@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-                    refreshTooltip();
-                    super.drawInForeground(graphics, mouseX, mouseY, partialTicks);
-                }
-            };
-    
-            group.addWidget(toggle);
-        }
-    
-        editableUI.setupUI(group, this);
-        return group;
-    }*/
+
+        var energyBar = new ProgressWidget()
+                .texture(GTGuiTextures.PROGRESS_BAR_BOILER_EMPTY_STEEL,
+                        GTGuiTextures.PROGRESS_BAR_BOILER_HEAT, ProgressDrawable.Direction.UP)
+                .value(energyFill)
+                .size(10, 18 * rows)
+                .tooltipAutoUpdate(true)
+                .tooltipDynamic(r -> {
+                    r.addLine(Component.literal(FormattingUtil.formatNumbers(energyStored.getLongValue()) + " / " +
+                            FormattingUtil.formatNumbers(energyContainer.getEnergyCapacity()) + " EU"));
+                    r.addLine(Component.literal(FormattingUtil.formatNumbers(getEnergyAmount()) + " EU/t"));
+                });
+
+        mainWidget.child(Flow.row()
+                .coverChildren()
+                .margin(5)
+                .childPadding(4)
+                .child(energyBar)
+                .child(slots));
+    }
+
+    private double getEnergyFill() {
+        long capacity = energyContainer.getEnergyCapacity();
+        return capacity == 0 ? 0 : (double) energyContainer.getEnergyStored() / capacity;
+    }
 
     // #endregion
 
@@ -704,6 +682,16 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
             }
 
             RefrigeratedStorage.super.setStackInSlot(slot, stack);
+        }
+
+        @Override
+        public void onMachineDestroyed() {
+            if (!(FoodRefrigeratorMachine.this.getLevel() instanceof ServerLevel serverLevel))
+                return;
+            var pos = FoodRefrigeratorMachine.this.getBlockPos();
+            for (ItemStack drop : drainAllForDrop()) {
+                Containers.dropItemStack(serverLevel, pos.getX(), pos.getY(), pos.getZ(), drop);
+            }
         }
 
         public java.util.List<ItemStack> drainAllForDrop() {

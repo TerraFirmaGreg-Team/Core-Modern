@@ -1,10 +1,12 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -12,32 +14,34 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
-import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.TieredWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
+import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.gregtechceu.gtceu.utils.GTMath;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
-import brachy.modularui.value.sync.PanelSyncManager;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.utils.serialization.network.ByteBufAdapters;
+import brachy.modularui.value.sync.*;
+import brachy.modularui.widget.ParentWidget;
 
 import su.terrafirmagreg.core.utils.TFGHelpers;
 
@@ -47,91 +51,116 @@ public class SMRGenerator2 extends TieredWorkableElectricMultiblockMachine {
 
     // TODO: CosmicCore Lubricants for efficiency bonus
 
-    private long lubricantAmountForDisplay = 0;
-    private GTRecipe lastUsedRecipe = null;
-
-    private FluidStack currentLubricant;
-    private FluidStack currentBooster;
-    // Probably a bad idea, most likely a better way to do this
-    private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
-    private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
-    private int runningTimer = 0;
-
-    static {
-        var ozone = TFGHelpers.getMaterial("ozone");
-        var cyclohex_diperoxide = TFGHelpers.getMaterial("cyclohex_diperoxide");
-        var booster_t3 = TFGHelpers.getMaterial("booster_t3");
-        var polyalkylene_lubricant = TFGHelpers.getMaterial("polyalkylene_lubricant");
-
-        if (ozone != null)
-            boostingTiers.put(ozone.getFluid(1), 1);
-        if (cyclohex_diperoxide != null)
-            boostingTiers.put(cyclohex_diperoxide.getFluid(1), 4);
-        if (booster_t3 != null)
-            boostingTiers.put(booster_t3.getFluid(1), 8);
-
-        lubricantTiers.put(GTMaterials.Lubricant.getFluid(1), 2);
-        if (polyalkylene_lubricant != null)
-            lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
+    public record FluidBonus(int tier, int tickCycle) {
     }
+
+    @Nullable
+    private static Map<Fluid, FluidBonus> boosters;
+    @Nullable
+    private static Map<Fluid, FluidBonus> lubricants;
+
+    @Nullable
+    private FluidStack currentLubricant;
+    @Nullable
+    private FluidStack currentBooster;
+    @Nullable
+    private FluidStack activeBooster;
+    @Nullable
+    private GTRecipe lastUsedRecipe;
+    private int runningTimer = 0;
 
     public SMRGenerator2(BlockEntityCreationInfo info, int tier) {
         super(info, tier);
         recipeLogic.setRegressWhenWaiting(false);
     }
 
-    private boolean isIntakesObstructed() {
-        var dir = this.getFrontFacing();
-        boolean mutableXZ = dir.getAxis() == Direction.Axis.Z;
-        var centerPos = this.getBlockPos().relative(dir);
-        for (int x = -1; x < 2; x++) {
-            for (int y = -1; y < 2; y++) {
-                if (x == 0 && y == 0)
+    public static Map<Fluid, FluidBonus> getBoosters() {
+        if (boosters == null) {
+            Map<Fluid, FluidBonus> map = new HashMap<>();
+            putBonus(map, "ozone", 1, 144);
+            putBonus(map, "cyclohex_diperoxide", 4, 36);
+            putBonus(map, "booster_t3", 8, 36);
+            boosters = map;
+        }
+        return boosters;
+    }
+
+    public static Map<Fluid, FluidBonus> getLubricants() {
+        if (lubricants == null) {
+            Map<Fluid, FluidBonus> map = new HashMap<>();
+            map.put(GTMaterials.Lubricant.getFluid(), new FluidBonus(2, 72));
+            putBonus(map, "polyalkylene_lubricant", 4, 144);
+            lubricants = map;
+        }
+        return lubricants;
+    }
+
+    private static void putBonus(Map<Fluid, FluidBonus> map, String materialName, int tier, int tickCycle) {
+        Material material = TFGHelpers.getMaterial(materialName);
+        if (material != null && material.hasFluid())
+            map.put(material.getFluid(), new FluidBonus(tier, tickCycle));
+    }
+
+    @Nullable
+    private static FluidBonus getBonus(@Nullable FluidStack stack, Map<Fluid, FluidBonus> bonuses) {
+        if (stack == null || stack.isEmpty())
+            return null;
+        return bonuses.get(stack.getFluid());
+    }
+
+    @Nullable
+    private FluidStack findBest(Map<Fluid, FluidBonus> bonuses) {
+        FluidStack best = null;
+        int bestTier = 0;
+        for (IRecipeHandler<?> handler : getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP)) {
+            for (Object content : handler.getContents()) {
+                if (!(content instanceof FluidStack stack) || stack.isEmpty())
                     continue;
-                var blockPos = centerPos.offset(mutableXZ ? x : 0, y, mutableXZ ? 0 : x);
-                var blockState = this.getLevel().getBlockState(blockPos);
-                if (!blockState.isAir())
-                    return true;
+                FluidBonus bonus = bonuses.get(stack.getFluid());
+                if (bonus != null && bonus.tier() > bestTier) {
+                    best = stack;
+                    bestTier = bonus.tier();
+                }
             }
         }
+        return best;
+    }
+
+    private long getStoredAmount(@Nullable FluidStack reference) {
+        if (reference == null || reference.isEmpty())
+            return 0;
+        long total = 0;
+        for (IRecipeHandler<?> handler : getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP)) {
+            for (Object content : handler.getContents()) {
+                if (content instanceof FluidStack stack && stack.isFluidEqual(reference))
+                    total += stack.getAmount();
+            }
+        }
+        return total;
+    }
+
+    private boolean hasLubricant() {
+        return findBest(getLubricants()) != null;
+    }
+
+    @Override
+    public boolean isRecipeLogicAvailable() {
+        if (super.isRecipeLogicAvailable() && hasLubricant())
+            return true;
+
+        if (recipeLogic.isActive())
+            recipeLogic.interruptRecipe();
         return false;
     }
 
     private void updateFluids() {
+        currentBooster = findBest(getBoosters());
+        currentLubricant = findBest(getLubricants());
+    }
 
-        if (currentBooster != null && currentBooster.isEmpty()) {
-            currentBooster = null;
-        }
-
-        if (currentLubricant != null && currentLubricant.isEmpty()) {
-            currentLubricant = null;
-        }
-
-        var fluidHolders = Objects
-                .requireNonNullElseGet(getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP),
-                        Collections::<IRecipeHandler<?>>emptyList)
-                .stream()
-                .map(container -> container.getContents().stream().filter(FluidStack.class::isInstance)
-                        .map(FluidStack.class::cast).toList())
-                .filter(container -> !container.isEmpty())
-                .toList();
-
-        currentBooster = null;
-        currentLubricant = null;
-
-        for (var fluidHolder : fluidHolders) {
-            for (var fluidStack : fluidHolder) {
-                if (boostingTiers.containsKey(fluidStack)) {
-                    if (currentBooster == null || boostingTiers.getInt(fluidStack) > boostingTiers.getInt(currentBooster)) {
-                        currentBooster = fluidStack;
-                    }
-                } else if (lubricantTiers.containsKey(fluidStack)) {
-                    if (currentLubricant == null || lubricantTiers.getInt(fluidStack) > lubricantTiers.getInt(currentLubricant)) {
-                        currentLubricant = fluidStack;
-                    }
-                }
-            }
-        }
+    private boolean consume(FluidStack fluid, int amount) {
+        GTRecipe drain = GTRecipeBuilder.ofRaw().inputFluids(new FluidStack(fluid, amount)).buildRawRecipe();
+        return RecipeHelper.handleRecipeIO(this, drain, IO.IN, recipeLogic.getChanceCaches()).isSuccess();
     }
 
     @Override
@@ -139,68 +168,35 @@ public class SMRGenerator2 extends TieredWorkableElectricMultiblockMachine {
         return GTValues.V[getTier()];
     }
 
-    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (!(machine instanceof SMRGenerator2 engineMachine)) {
+    public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
+        if (!(machine instanceof SMRGenerator2 smr)) {
             return RecipeModifier.nullWrongType(SMRGenerator2.class, machine);
         }
-        long EUt = recipe.getOutputEUt().voltage();
-        if (EUt * recipe.duration < 1) {
+        EnergyStack EUt = recipe.getOutputEUt();
+        if (EUt.isEmpty()) {
             return ModifierFunction.NULL;
         }
-        var fluidHolders = Objects
-                .requireNonNullElseGet(engineMachine.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP),
-                        Collections::<IRecipeHandler<?>>emptyList)
-                .stream()
-                .map(container -> container.getContents().stream().filter(FluidStack.class::isInstance)
-                        .map(FluidStack.class::cast).toList())
-                .filter(container -> !container.isEmpty())
-                .toList();
 
-        for (var fluidHolder : fluidHolders) {
-            for (var fluidStack : fluidHolder) {
-                if (boostingTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty() ||
-                            boostingTiers.getInt(fluidStack) > boostingTiers.getInt(engineMachine.currentBooster)) {
-                        engineMachine.currentBooster = fluidStack;
-                    }
-                } else if (lubricantTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentLubricant == null || engineMachine.currentLubricant.isEmpty() ||
-                            lubricantTiers.getInt(fluidStack) > lubricantTiers.getInt(engineMachine.currentLubricant)) {
-                        engineMachine.currentLubricant = fluidStack;
-                    }
-                }
-            }
+        smr.updateFluids();
+        FluidBonus lubricant = getBonus(smr.currentLubricant, getLubricants());
+        if (lubricant == null) {
+            return ModifierFunction
+                    .cancel(Component.translatable("gtceu.multiblock.large_combustion_engine.no_lubricant"));
         }
 
-        // Has a variant of lubricant
-        if (EUt > 0 &&
-                engineMachine.currentLubricant != null &&
-                !engineMachine.currentLubricant.isEmpty()) {
+        int maxParallel = (int) (smr.getOverclockVoltage() / EUt.getTotalEU());
+        int actualParallel = ParallelLogic.getParallelAmount(smr, recipe, maxParallel);
+        FluidBonus booster = getBonus(smr.currentBooster, getBoosters());
+        smr.activeBooster = booster == null ? null : new FluidStack(smr.currentBooster, 1);
+        double eutMultiplier = booster == null ? actualParallel : actualParallel * booster.tier() * 2.0;
 
-            int maxParallel = (int) (engineMachine.getOverclockVoltage() / EUt);
-            int actualParallel = ParallelLogic.getParallelAmount(engineMachine, recipe, maxParallel);
-            int tier = lubricantTiers.getInt(engineMachine.currentLubricant);
-            float durationModifier = (lubricantTiers.getInt(engineMachine.currentLubricant) / 2.0F);
-            double eutMultiplier = 1;
-            int consumptionMult = 1;
-            if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
-                eutMultiplier = actualParallel;
-            } else {
-                consumptionMult = 1;
-                //boostingTiers.getInt(engineMachine.currentBooster); - AJOUTER SI BESOIN QUE LE GENERATEUR CONSOMME PLUS
-                eutMultiplier = actualParallel * (boostingTiers.getInt(engineMachine.currentBooster) * 2);
-            }
-
-            return ModifierFunction.builder()
-                    .inputModifier(ContentModifier.multiplier(consumptionMult * actualParallel))
-                    .outputModifier(ContentModifier.multiplier(consumptionMult * actualParallel))
-                    .durationMultiplier(durationModifier)
-                    .eutMultiplier(eutMultiplier)
-                    .parallels(actualParallel)
-                    .build();
-
-        }
-        return ModifierFunction.NULL;
+        return ModifierFunction.builder()
+                .inputModifier(ContentModifier.multiplier(actualParallel))
+                .outputModifier(ContentModifier.multiplier(actualParallel))
+                .durationMultiplier(lubricant.tier() / 2.0)
+                .eutMultiplier(eutMultiplier)
+                .parallels(actualParallel)
+                .build();
     }
 
     @Override
@@ -212,55 +208,19 @@ public class SMRGenerator2 extends TieredWorkableElectricMultiblockMachine {
         if (recipe != null) {
             lastUsedRecipe = recipe;
         }
-        if (currentBooster != null && !currentBooster.isEmpty()) {
-            int consumptionRate = -1;
-            int tickCycle = -1;
-            if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("ozone").getFluid(1))) {
-                consumptionRate = 1;
-                tickCycle = 144;
-            } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
-                consumptionRate = 1;
-                tickCycle = 36;
-            } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
-                consumptionRate = 1;
-                tickCycle = 36;
-            }
-            if (tickCycle != -1 && runningTimer % tickCycle == 0) {
-                if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
-                    currentBooster.shrink(consumptionRate);
-                }
-            }
-        }
-        // Currently all lubricants are the same, however this may change, so assume this is left this way intentionally
-        // (Anyone else who reads this)
-        if (currentLubricant != null && !currentLubricant.isEmpty()) {
-            int consumptionRate = -1;
-            int tickCycle = -1;
-            if (currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1))) {
-                tickCycle = 72; // 72000 ticks per hour divide by tickCycle to know how much is getting consummed
-                consumptionRate = 1; // 1000/hr
-            } else if (currentLubricant.containsFluid(
-                    (TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1)))) {
-                tickCycle = 144;
-                consumptionRate = 1; // 500/hr
-            } else if (currentLubricant.containsFluid(
-                    (TFGHelpers.getMaterial("uranium_waste").getFluid(1)))) {
-                tickCycle = 288;
-                consumptionRate = 1; // 250/hr
-            }
-            if (tickCycle != -1 && runningTimer % tickCycle == 0) {
-                if (consumptionRate != -1 && currentLubricant.getAmount() >= consumptionRate) {
-                    currentLubricant.shrink(consumptionRate);
-                } else {
-                    recipeLogic.interruptRecipe();
-                }
-            }
-        } else if (currentLubricant != null) {
+
+        FluidBonus lubricant = getBonus(currentLubricant, getLubricants());
+        if (lubricant == null || (runningTimer % lubricant.tickCycle() == 0 && !consume(currentLubricant, 1))) {
             recipeLogic.interruptRecipe();
+            return false;
         }
 
-        // Met à jour l'affichage côté GUI
-        lubricantAmountForDisplay = (currentLubricant != null && !currentLubricant.isEmpty()) ? currentLubricant.getAmount() : 0;
+        FluidBonus booster = getBonus(activeBooster, getBoosters());
+        if (booster != null && runningTimer % booster.tickCycle() == 0 && !consume(activeBooster, 1)) {
+            activeBooster = null;
+            recipeLogic.interruptRecipe();
+            return false;
+        }
 
         runningTimer++;
         if (runningTimer > 72000)
@@ -269,206 +229,142 @@ public class SMRGenerator2 extends TieredWorkableElectricMultiblockMachine {
         return value;
     }
 
+    private int getBoosterTier() {
+        FluidBonus booster = getBonus(currentBooster, getBoosters());
+        return booster == null ? 0 : booster.tier();
+    }
+
+    private int getLubricantTier() {
+        FluidBonus lubricant = getBonus(currentLubricant, getLubricants());
+        return lubricant == null ? 0 : lubricant.tier();
+    }
+
+    private long getRemainingTicks(@Nullable FluidStack stack, Map<Fluid, FluidBonus> bonuses) {
+        FluidBonus bonus = getBonus(stack, bonuses);
+        return bonus == null ? 0 : getStoredAmount(stack) * bonus.tickCycle();
+    }
+
+    private long getCurrentProduction() {
+        GTRecipe recipe = recipeLogic.getLastRecipe();
+        return isActive() && isWorkingEnabled() && recipe != null ? recipe.getOutputEUt().getTotalEU() : 0;
+    }
+
+    private long getFluidPerCycle() {
+        if (lastUsedRecipe == null)
+            return 0;
+        List<FluidStack> inputs = RecipeHelper.getInputFluids(lastUsedRecipe);
+        return inputs.isEmpty() ? 0 : inputs.get(0).getAmount();
+    }
+
+    @Override
+    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager,
+            UISettings settings) {
+        mainWidget.child(getMainTextPanel(syncManager, 260, 190).margin(4, 2));
+    }
+
     @Override
     public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
         var widgets = super.getWidgetsForDisplay(syncManager);
 
-        long rawVoltage = getOverclockVoltage();
-        int baseTier = GTUtil.getFloorTierByVoltage(rawVoltage);
-        long baseVoltage = GTValues.VEX[baseTier];
+        BooleanSyncValue isFormedSync = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
+                () -> new BooleanSyncValue(this::isFormed));
+        LongSyncValue overclockVoltageSync = new LongSyncValue(this::getOverclockVoltage);
+        IntSyncValue boosterTierSync = new IntSyncValue(this::getBoosterTier);
+        IntSyncValue lubricantTierSync = new IntSyncValue(this::getLubricantTier);
+        LongSyncValue boosterTicksSync = new LongSyncValue(() -> getRemainingTicks(currentBooster, getBoosters()));
+        LongSyncValue lubricantTicksSync = new LongSyncValue(() -> getRemainingTicks(currentLubricant, getLubricants()));
+        LongSyncValue euOutputSync = new LongSyncValue(this::getCurrentProduction);
+        LongSyncValue fluidPerCycleSync = new LongSyncValue(this::getFluidPerCycle);
+        IntSyncValue cycleDurationSync = new IntSyncValue(() -> lastUsedRecipe == null ? 0 : lastUsedRecipe.duration);
+        GenericSyncValue<Component> boosterNameSync = componentSync(
+                () -> currentBooster == null ? Component.empty() : currentBooster.getDisplayName());
+        GenericSyncValue<Component> lubricantNameSync = componentSync(
+                () -> currentLubricant == null ? Component.empty() : currentLubricant.getDisplayName());
 
-        int amperage = 1;
+        syncManager.syncValue("smrOverclockVoltage", overclockVoltageSync);
+        syncManager.syncValue("smrBoosterTier", boosterTierSync);
+        syncManager.syncValue("smrLubricantTier", lubricantTierSync);
+        syncManager.syncValue("smrBoosterTicks", boosterTicksSync);
+        syncManager.syncValue("smrLubricantTicks", lubricantTicksSync);
+        syncManager.syncValue("smrEuOutput", euOutputSync);
+        syncManager.syncValue("smrFluidPerCycle", fluidPerCycleSync);
+        syncManager.syncValue("smrCycleDuration", cycleDurationSync);
+        syncManager.syncValue("smrBoosterName", boosterNameSync);
+        syncManager.syncValue("smrLubricantName", lubricantNameSync);
 
-        if (currentBooster != null && !currentBooster.isEmpty()) {
-            int tier = boostingTiers.getInt(currentBooster);
-            if (tier > 0)
-                amperage = tier * 2;
-        }
+        widgets.add(Text.dynamic(() -> computeMaxEnergyLine(overclockVoltageSync.getLongValue(),
+                boosterTierSync.getIntValue())).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue()));
 
-        long totalEUt = rawVoltage * amperage;
+        widgets.add(Text.dynamic(() -> Component.literal("Energy Output: ").withStyle(ChatFormatting.WHITE)
+                .append(Component.literal(FormattingUtil.formatNumbers(euOutputSync.getLongValue()))
+                        .withStyle(ChatFormatting.GREEN))
+                .append(Component.literal(" EU/t").withStyle(ChatFormatting.WHITE))).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && euOutputSync.getLongValue() > 0));
 
-        int displayTier = GTUtil.getFloorTierByVoltage(totalEUt);
-        long displayVoltage = GTValues.VEX[displayTier];
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.gui.consumes")
+                .append(Component.literal(FormattingUtil.formatNumbers(fluidPerCycleSync.getLongValue()) + " mB ")
+                        .withStyle(ChatFormatting.RED))
+                .append(Component.translatable("tfg.gui.per_cycle").withStyle(ChatFormatting.GRAY))).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && fluidPerCycleSync.getLongValue() > 0));
 
-        amperage = (int) (totalEUt / displayVoltage);
-        if (amperage < 1) {
-            amperage = 1;
-        }
+        widgets.add(Text.dynamic(() -> {
+            int duration = cycleDurationSync.getIntValue();
+            return Component.translatable("tfg.gui.cycle_duration")
+                    .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))
+                    .append(Component.literal(" (≈" + String.format("%.2f", duration / 20.0) + " s)")
+                            .withStyle(ChatFormatting.GREEN));
+        }).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && cycleDurationSync.getIntValue() > 0));
 
-        final int amperageFinal = amperage;
-        final long displayVoltageFinal = displayVoltage;
-        final Component voltageNameFinal = Component.literal(GTValues.VNF[displayTier]);
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.gui.smr_generator.booster_used",
+                boosterNameSync.getValue()).withStyle(ChatFormatting.AQUA)).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && boosterTierSync.getIntValue() > 0));
+        widgets.add(Text.dynamic(() -> Component.literal("[Boost: x" + (boosterTierSync.getIntValue() * 2)
+                + ", Lasts: " + formatTicks(boosterTicksSync.getLongValue()) + "]")
+                .withStyle(ChatFormatting.AQUA)).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && boosterTierSync.getIntValue() > 0));
 
-        if (recipeLogic.isSuspend()) {
-            return widgets;
-        }
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.gui.smr_generator.lubricant_used",
+                lubricantNameSync.getValue()).withStyle(ChatFormatting.YELLOW)).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && lubricantTierSync.getIntValue() > 0));
+        widgets.add(Text.dynamic(() -> Component.literal("[Boost: x" + (lubricantTierSync.getIntValue() / 2)
+                + ", Lasts: " + formatTicks(lubricantTicksSync.getLongValue()) + "]")
+                .withStyle(ChatFormatting.YELLOW)).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && lubricantTierSync.getIntValue() > 0));
 
-        var combined = Component.empty();
-
-        Component prefix = Component.translatable("tfg.gui.max_energy_per_tick_amps.prefix")
-                .withStyle(ChatFormatting.WHITE);
-
-        Component middle = Component.literal(
-                FormattingUtil.formatNumbers(displayVoltageFinal * amperageFinal)
-                        + " (" + amperageFinal + "A ")
-                .withStyle(ChatFormatting.GRAY);
-
-        Component suffix = Component.literal(")").withStyle(ChatFormatting.GRAY);
-
-        combined.append(prefix)
-                .append(Component.literal(" "))
-                .append(middle)
-                .append(voltageNameFinal)
-                .append(suffix);
-
-        widgets.add(Text.of(combined).asWidget());
-
-        // EU Generation if active with EU in green
-
-        if (isActive() && isWorkingEnabled()) {
-            long euOutput = recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
-
-            MutableComponent text = Component.literal("Energy Output: ").withStyle(ChatFormatting.WHITE);
-            Component euValue = Component.literal(FormattingUtil.formatNumbers(euOutput)).withStyle(ChatFormatting.GREEN);
-            Component unit = Component.literal(" EU/t").withStyle(ChatFormatting.WHITE);
-            text.append(euValue).append(unit);
-
-            widgets.add(Text.of(text).asWidget());
-        }
-
-        // Consumes working
-
-        GTRecipe recipe = lastUsedRecipe; // <-- utilise la dernière recette mémorisée
-        if (recipe == null)
-            return widgets;
-
-        FluidStack requiredFluid = RecipeHelper.getInputFluids(recipe).isEmpty()
-                ? FluidStack.EMPTY
-                : RecipeHelper.getInputFluids(recipe).get(0);
-        if (requiredFluid.isEmpty())
-            return widgets;
-
-        long EUt = recipe.getOutputEUt().voltage();
-        long maxVoltage = getMaxVoltage();
-        int maxParallel = (int) Math.max(1, maxVoltage / EUt);
-        int actualParallel = ParallelLogic.getParallelAmount(this, recipe, maxParallel);
-
-        int tier = 1;
-        if (currentLubricant != null && !currentLubricant.isEmpty())
-            tier = lubricantTiers.getInt(currentLubricant);
-
-        float durationMultiplier = tier / 2.0f;
-        long totalFluid = Math.round(requiredFluid.getAmount() * actualParallel * 1F);
-
-        widgets.add(Text.of(Component.translatable("tfg.gui.consumes")
-                .append(Component.literal(FormattingUtil.formatNumbers(totalFluid) + " mB ").withStyle(ChatFormatting.RED))
-                .append(Component.translatable("tfg.gui.per_cycle").withStyle(ChatFormatting.GRAY))).asWidget());
-
-        // How many ticks in a cycle
-
-        int duration = recipe.duration;
-
-        widgets.add(Text.of(Component.translatable("tfg.gui.cycle_duration")
-                .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))
-                .append(Component.literal(" (≈" + String.format("%.2f", duration / 20.0) + " s)").withStyle(ChatFormatting.GREEN))).asWidget());
-
-        // Booster
-
-        long boosterAmountForDisplay = (currentBooster != null && !currentBooster.isEmpty())
-                ? currentBooster.getAmount()
-                : 0;
-
-        if (isFormed && currentBooster != null && !currentBooster.isEmpty()) {
-            int tierBooster = boostingTiers.getInt(currentBooster);
-
-            // Récupération de la consommation réelle (exactement la même logique que onWorking)
-            int consumptionRate = -1;
-            int tickCycle = -1;
-
-            if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("ozone").getFluid(1))) {
-                consumptionRate = 1;
-                tickCycle = 144;
-            } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
-                consumptionRate = 1;
-                tickCycle = 36;
-            } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
-                consumptionRate = 1;
-                tickCycle = 36;
-            }
-
-            // Durée restante
-            long totalTicksRemaining = 0;
-            if (consumptionRate > 0 && tickCycle > 0) {
-                double mB_per_tick = (double) consumptionRate / (double) tickCycle;
-                totalTicksRemaining = (long) (boosterAmountForDisplay / mB_per_tick);
-            }
-
-            long totalSeconds = totalTicksRemaining / 20;
-            long hours = totalSeconds / 3600;
-            long minutes = (totalSeconds % 3600) / 60;
-            String timeFormatted = String.format("%dh %02dm", hours, minutes);
-
-            // Ligne 1 : nom du booster
-            widgets.add(Text.lang("tfg.gui.smr_generator.booster_used",
-                    Component.translatable(currentBooster.getTranslationKey()))
-                    .withStyle(ChatFormatting.AQUA).asWidget());
-
-            // Ligne 2 : détails du booster
-            widgets.add(Text.str("[Boost: x" + tierBooster
-                    + ", Lasts: " + timeFormatted + "]")
-                    .withStyle(ChatFormatting.AQUA).asWidget());
-
-        }
-
-        // Lubricant
-
-        lubricantAmountForDisplay = (currentLubricant != null && !currentLubricant.isEmpty()) ? currentLubricant.getAmount() : 0;
-
-        if (isFormed && currentLubricant != null && !currentLubricant.isEmpty()) {
-            int tierLubricant = lubricantTiers.getInt(currentLubricant);
-
-            int ticksPerUnit = currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1)) ? 72
-                    : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 144
-                            : 1;
-
-            long totalTicksRemaining = lubricantAmountForDisplay * ticksPerUnit;
-
-            long totalSeconds = totalTicksRemaining / 20;
-            long hours = totalSeconds / 3600;
-            long minutes = (totalSeconds % 3600) / 60;
-            String timeFormatted = String.format("%dh %02dm", hours, minutes);
-
-            // Ligne 1 : nom du lubricant
-            widgets.add(Text.lang("tfg.gui.smr_generator.lubricant_used",
-                    Component.translatable(currentLubricant.getTranslationKey()))
-                    .withStyle(ChatFormatting.YELLOW).asWidget());
-
-            // Ligne 2 : détails du lubricant
-            widgets.add(
-                    Text.str("[Boost: x" + (tierLubricant / 2)
-                            + ", Lasts: " + timeFormatted + "]")
-                            .withStyle(ChatFormatting.YELLOW).asWidget());
-
-        }
+        widgets.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.large_combustion_engine.no_lubricant")
+                .withStyle(ChatFormatting.RED)).asWidget()
+                .setEnabledIf($ -> isFormedSync.getBoolValue() && lubricantTierSync.getIntValue() == 0));
 
         return widgets;
     }
 
-    @Nullable
-    public String getRecipeFluidInputInfo() {
-        // Previous Recipe is always null on first world load, so try to acquire a new recipe
-        GTRecipe recipe = recipeLogic.getLastRecipe();
-        if (recipe == null) {
-            Iterator<GTRecipe> iterator = recipeLogic.searchRecipe();
-            recipe = iterator != null && iterator.hasNext() ? iterator.next() : null;
-            if (recipe == null)
-                return null;
-        }
-        FluidStack requiredFluidInput = RecipeHelper.getInputFluids(recipe).get(0);
+    private static Component computeMaxEnergyLine(long rawVoltage, int boosterTier) {
+        int amperage = boosterTier > 0 ? boosterTier * 2 : 1;
+        long totalEUt = rawVoltage * amperage;
+        int displayTier = GTUtil.getFloorTierByVoltage(totalEUt);
+        long displayVoltage = GTValues.VEX[displayTier];
+        int displayAmperage = Math.max(1, (int) (totalEUt / displayVoltage));
 
-        long ocAmount = getMaxVoltage() / recipe.getOutputEUt().voltage();
-        int neededAmount = GTMath.saturatedCast(ocAmount * requiredFluidInput.getAmount());
-        return ChatFormatting.RED + FormattingUtil.formatNumbers(neededAmount) + "mB";
+        return Component.empty()
+                .append(Component.translatable("tfg.gui.max_energy_per_tick_amps.prefix").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal(" "))
+                .append(Component.literal(FormattingUtil.formatNumbers(displayVoltage * displayAmperage)
+                        + " (" + displayAmperage + "A ").withStyle(ChatFormatting.GRAY))
+                .append(Component.literal(GTValues.VNF[displayTier]))
+                .append(Component.literal(")").withStyle(ChatFormatting.GRAY));
     }
 
+    private static String formatTicks(long ticks) {
+        long totalSeconds = ticks / 20;
+        return String.format("%dh %02dm", totalSeconds / 3600, (totalSeconds % 3600) / 60);
+    }
+
+    private static GenericSyncValue<Component> componentSync(Supplier<Component> getter) {
+        return GenericSyncValue.builder(Component.class)
+                .adapter(ByteBufAdapters.COMPONENT)
+                .getter(getter)
+                .build();
+    }
 }

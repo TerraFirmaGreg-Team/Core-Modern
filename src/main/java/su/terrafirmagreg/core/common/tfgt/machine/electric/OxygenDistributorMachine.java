@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.tfgt.machine.electric;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -15,22 +16,25 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 import brachy.modularui.api.drawable.Text;
-import brachy.modularui.factory.PosGuiData;
-import brachy.modularui.screen.UISettings;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.utils.serialization.network.ByteBufAdapters;
+import brachy.modularui.value.sync.BooleanSyncValue;
 import brachy.modularui.value.sync.DoubleSyncValue;
+import brachy.modularui.value.sync.GenericSyncValue;
+import brachy.modularui.value.sync.InteractionSyncHandler;
 import brachy.modularui.value.sync.PanelSyncManager;
-import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widgets.ButtonWidget;
 import brachy.modularui.widgets.ProgressWidget;
-import brachy.modularui.widgets.layout.Flow;
 import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 import earth.terrarium.adastra.common.blocks.properties.SlidingDoorPartProperty;
 import earth.terrarium.adastra.common.items.armor.SpaceSuitItem;
@@ -45,6 +49,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.environment.*;
 import su.terrafirmagreg.core.common.environment.RoomScan.Status;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.EnvironmentRecipeLogic;
+import su.terrafirmagreg.core.common.tfgt.ui.TFGUITextures;
 
 /**
  * Oxygen Distributor machine logic. Maintains a sealed room with breathable atmosphere via flood fill.
@@ -155,62 +160,86 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     // ************* GUI ************** //
     //////////////////////////////////////
 
-    /** Adds the shared widgets (status, find leak, fill suit, progress bar) to an existing group. */
-    public void addSharedWidgets(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
-
-        DoubleSyncValue progressSync = new DoubleSyncValue(host.getRecipeLogic()::getProgressPercent);
-        syncManager.syncValue("progressValue", progressSync);
-
-        var col = Flow.col().coverChildren();
-
-        addStatusText(col, syncManager);
-
-        var buttonRow = Flow.row().coverChildren().childPadding(3);
-
-        buttonRow.child(new ButtonWidget<>()
-                .size(18, 18)
-                .overlay(Text.str("💨"))
-                .onUpdateListener(w -> w.setEnabled(host.showTraceButton()))
-                .onMousePressed((ctx, i) -> {
-                    if (!host.isRemote()) {
-                        requestBreachTrace();
-                        return true;
-                    }
-                    return false;
-                })
-                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.find_leak"))));
-
-        buttonRow.child(new ButtonWidget<>()
-                .size(18, 18)
-                .overlay(Text.str("⛽"))
-                .onMousePressed((ctx, i) -> {
-                    if (!host.isRemote()) {
-                        fillSpaceSuit(guiData.getPlayer());
-                        return true;
-                    }
-                    return false;
-                })
-                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.fill_suit"))));
-
-        col.child(buttonRow);
-
-        col.child(new ProgressWidget()
-                .widthRel(0.8f).height(20)
-                .value(progressSync));
-
-        mainWidget.child(col);
-
-    }
-
-    private void addStatusText(ParentWidget<?> mainWidget, PanelSyncManager syncManager) {
+    public List<IWidget> createStatusWidgets(PanelSyncManager syncManager) {
+        List<IWidget> widgets = new ArrayList<>();
         if (!host.isFormed()) {
-            mainWidget.child(Text.lang("tfg.machine.unformed").withStyle(ChatFormatting.GRAY).asWidget());
-            return;
+            widgets.add(Text.lang("tfg.machine.unformed").withStyle(ChatFormatting.GRAY).asWidget());
+            return widgets;
         }
 
-        RoomScan scan = getRoomScan();
-        boolean elevated = !scan.isSealed();
+        GenericSyncValue<Component> status = componentSync(syncManager, "oxygenStatus", this::computeStatusLine);
+        GenericSyncValue<Component> size = componentSync(syncManager, "oxygenSize", this::computeSizeLine);
+        GenericSyncValue<Component> consumption = componentSync(syncManager, "oxygenConsumption", this::computeConsumptionLine);
+        GenericSyncValue<Component> energy = componentSync(syncManager, "oxygenEnergy", this::computeEnergyLine);
+        GenericSyncValue<Component> activity = componentSync(syncManager, "oxygenActivity", this::computeActivityLine);
+        DoubleSyncValue progressSync = new DoubleSyncValue(host.getRecipeLogic()::getProgressPercent);
+        syncManager.syncValue("oxygenProgress", progressSync);
 
+        widgets.add(dynamicLine(status));
+        widgets.add(dynamicLine(size));
+        widgets.add(dynamicLine(consumption));
+        widgets.add(dynamicLine(energy));
+        widgets.add(dynamicLine(activity));
+        widgets.add(new ProgressWidget()
+                .widthRel(0.8f).height(20)
+                .value(progressSync));
+        return widgets;
+    }
+
+    public IWidget createTraceButton(PanelSyncManager syncManager) {
+        InteractionSyncHandler traceHandler = new InteractionSyncHandler();
+        traceHandler.setOnMousePressed(mouseData -> {
+            if (!mouseData.isClient())
+                requestBreachTrace();
+        });
+        BooleanSyncValue showTraceSync = new BooleanSyncValue(host::showTraceButton);
+        syncManager.syncValue("oxygenShowTrace", showTraceSync);
+
+        return new ButtonWidget<>()
+                .size(18, 18)
+                .overlay(TFGUITextures.BUTTON_FIND_LEAK)
+                .syncHandler(traceHandler)
+                .setEnabledIf(w -> showTraceSync.getBoolValue())
+                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.find_leak")));
+    }
+
+    public IWidget createFillSuitButton(Player player) {
+        InteractionSyncHandler fillHandler = new InteractionSyncHandler();
+        fillHandler.setOnMousePressed(mouseData -> {
+            if (!mouseData.isClient())
+                fillSpaceSuit(player);
+        });
+
+        return new ButtonWidget<>()
+                .size(18, 18)
+                .overlay(TFGUITextures.BUTTON_FILL_SUIT)
+                .syncHandler(fillHandler)
+                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.fill_suit")));
+    }
+
+    private static GenericSyncValue<Component> componentSync(PanelSyncManager syncManager, String key,
+            Supplier<Component> getter) {
+        GenericSyncValue<Component> sync = GenericSyncValue.builder(Component.class)
+                .adapter(ByteBufAdapters.COMPONENT)
+                .getter(getter)
+                .build();
+        syncManager.syncValue(key, sync);
+        return sync;
+    }
+
+    private static IWidget dynamicLine(GenericSyncValue<Component> sync) {
+        return Text.dynamic(() -> {
+            Component value = sync.getValue();
+            return value == null ? Component.empty() : value;
+        }).asWidget()
+                .setEnabledIf(w -> {
+                    Component value = sync.getValue();
+                    return value != null && !value.getString().isEmpty();
+                });
+    }
+
+    private Component computeStatusLine() {
+        RoomScan scan = getRoomScan();
         Component statusText = switch (scan.status()) {
             case SEALED -> Component.translatable("tfg.machine.oxygen_distributor.status.sealed").withStyle(ChatFormatting.GREEN);
             case ESCAPED_BUILD_HEIGHT -> Component.translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.RED);
@@ -225,39 +254,42 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             statusText = Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
         }
 
-        mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.status").append(statusText).asWidget());
+        return Component.translatable("tfg.machine.oxygen_distributor.status").append(statusText);
+    }
 
-        if (scan.isSealed() && scan.interiorSize() > 0) {
-            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.size",
-                    FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA).asWidget());
-        }
+    private Component computeSizeLine() {
+        RoomScan scan = getRoomScan();
+        if (!scan.isSealed() || scan.interiorSize() <= 0)
+            return Component.empty();
+        return Component.translatable("tfg.machine.oxygen_distributor.size",
+                FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA);
+    }
 
+    private Component computeConsumptionLine() {
         String consumptionText = getFluidConsumptionDisplay();
-        if (consumptionText != null) {
-            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.consumption", consumptionText)
-                    .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA).asWidget());
-        }
-        mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.energy",
+        if (consumptionText == null)
+            return Component.empty();
+        return Component.translatable("tfg.machine.oxygen_distributor.consumption", consumptionText)
+                .withStyle(getRoomScan().isSealed() ? ChatFormatting.AQUA : ChatFormatting.RED);
+    }
+
+    private Component computeEnergyLine() {
+        return Component.translatable("tfg.machine.oxygen_distributor.energy",
                 String.format("%,.0f", computeEnergyCostPerTick()))
-                .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA).asWidget());
+                .withStyle(getRoomScan().isSealed() ? ChatFormatting.AQUA : ChatFormatting.RED);
+    }
 
+    private Component computeActivityLine() {
         Component ventProblem = host.getVentProblem();
-        if (isWorking()) {
-            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN).asWidget());
-
-        } else if (ventProblem != null) {
-            mainWidget.child(Text.of(ventProblem.copy().withStyle(ChatFormatting.RED)).asWidget());
-
-        } else if (host.getEnergyInputPerSec() < computeEnergyCostPerTick()) {
-            mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.status.no_energy")
-                    .withStyle(ChatFormatting.RED).asWidget());
-        } else {
-            if (host.getRecipeLogic().isIdle() && host.getRecipeLogic().getBestFailureReason() != null) {
-                mainWidget.child(Text.of(host.getRecipeLogic().getBestFailureReason().copy().withStyle(ChatFormatting.RED)).asWidget());
-            } else {
-                mainWidget.child(Text.lang("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY).asWidget());
-            }
-        }
+        if (isWorking())
+            return Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN);
+        if (ventProblem != null)
+            return ventProblem.copy().withStyle(ChatFormatting.RED);
+        if (host.getEnergyInputPerSec() < computeEnergyCostPerTick())
+            return Component.translatable("tfg.machine.oxygen_distributor.status.no_energy").withStyle(ChatFormatting.RED);
+        if (host.getRecipeLogic().isIdle() && host.getRecipeLogic().getBestFailureReason() != null)
+            return host.getRecipeLogic().getBestFailureReason().copy().withStyle(ChatFormatting.RED);
+        return Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY);
     }
 
     @Nullable
@@ -301,7 +333,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         });
     }
 
-    private void fillSpaceSuit(net.minecraft.world.entity.player.Player player) {
+    private void fillSpaceSuit(Player player) {
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         if (!(chest.getItem() instanceof SpaceSuitItem))
             return;
@@ -579,7 +611,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     }
 
     @Override
-    public net.minecraft.world.level.Level getLevel() {
+    public Level getEnvironmentLevel() {
         return level;
     }
 

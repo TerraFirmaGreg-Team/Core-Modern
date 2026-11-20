@@ -1,9 +1,12 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.mui.MachineUIPanelBuilder;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
@@ -12,10 +15,10 @@ import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.server.level.ServerLevel;
 
+import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.factory.PosGuiData;
 import brachy.modularui.screen.UISettings;
 import brachy.modularui.value.sync.PanelSyncManager;
-import brachy.modularui.widget.ParentWidget;
 
 import su.terrafirmagreg.core.common.tfgt.machine.electric.IOxygenDistributorHost;
 import su.terrafirmagreg.core.common.tfgt.machine.electric.OxygenDistributorMachine;
@@ -51,8 +54,18 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     }
 
     @Override
-    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
-        machine.addSharedWidgets(mainWidget, guiData, syncManager, settings);
+    public MachineUIPanelBuilder getPanelBuilder(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        return super.getPanelBuilder(data, syncManager, settings)
+                .rightConfigurators(flow -> flow
+                        .child(machine.createFillSuitButton(data.getPlayer()))
+                        .child(machine.createTraceButton(syncManager)));
+    }
+
+    @Override
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
+        widgets.addAll(machine.createStatusWidgets(syncManager));
+        return widgets;
     }
 
     //////////////////////////////////////
@@ -82,6 +95,7 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
 
     @Override
     public void onMachineDestroyed() {
+        super.onMachineDestroyed();
         machine.onRemoved();
     }
 
