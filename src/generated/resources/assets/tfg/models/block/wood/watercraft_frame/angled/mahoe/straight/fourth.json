@@ -1,0 +1,6 @@
+{
+  "parent": "alekiships:block/watercraft_frame/angled/template/straight/fourth",
+  "textures": {
+    "plank": "tfg:block/wood/planks/mahoe"
+  }
+}

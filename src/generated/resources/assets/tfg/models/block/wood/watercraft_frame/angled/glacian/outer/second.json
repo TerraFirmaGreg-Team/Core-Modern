@@ -1,0 +1,6 @@
+{
+  "parent": "alekiships:block/watercraft_frame/angled/template/outer/second",
+  "textures": {
+    "plank": "ad_astra:block/glacian_planks"
+  }
+}

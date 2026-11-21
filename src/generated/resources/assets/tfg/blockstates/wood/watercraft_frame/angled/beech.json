@@ -1,0 +1,1979 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/straight",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/first",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/second",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/third",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/fourth",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/first",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/second",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/third",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/fourth",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner",
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first",
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second",
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third",
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth",
+        "y": 90
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer"
+      },
+      "when": {
+        "facing": "north",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth"
+      },
+      "when": {
+        "facing": "north",
+        "frame_processed": "7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/straight"
+      },
+      "when": {
+        "facing": "south",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/first"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/second"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/third"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/fourth"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/first"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/second"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/third"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/fourth"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner",
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first",
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second",
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third",
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth",
+        "y": 270
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner"
+      },
+      "when": {
+        "facing": "south",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth"
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "frame_processed": "7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/straight",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/first",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/second",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/third",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/fourth",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/first",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/second",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/third",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/fourth",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner"
+      },
+      "when": {
+        "facing": "west",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth"
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "frame_processed": "7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/straight",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/first",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/second",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/third",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/straight/fourth",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/first",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "4|5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/second",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "5|6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/third",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "6|7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/straight/fourth",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "7",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner",
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first",
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second",
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "5|6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third",
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "6|7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth",
+        "y": 180
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "7",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/inner",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/first",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/second",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/third",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/inner/fourth",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/first",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "4|5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/second",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "5|6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/third",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "6|7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/inner/fourth",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "7",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer"
+      },
+      "when": {
+        "facing": "east",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "5|6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "6|7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth"
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "7",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/outer",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/first",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "0|1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/second",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "1|2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/third",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "2|3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/wood/watercraft_frame/angled/beech/outer/fourth",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "3|4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/first",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "4|5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/second",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "5|6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/third",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "6|7",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame/angled/bolt/outer/fourth",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "frame_processed": "7",
+        "shape": "outer_right"
+      }
+    }
+  ]
+}
