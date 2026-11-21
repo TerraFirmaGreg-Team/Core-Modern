@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
@@ -11,8 +12,10 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -71,6 +74,21 @@ import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptorRenderer;
 @SuppressWarnings("unused")
 public class TFGEntities {
     public static void init() {
+        for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
+            if (watercraftMaterial.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
+                putCanoeEntity(watercraftMaterial);
+            }
+        }
+    }
+
+    private static void putCanoeEntity(TFGWatercraftMaterial watercraftMaterial) {
+        String name = "dugout_canoe/" + watercraftMaterial.getSerializedName();
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<CanoeEntity> entityType, Level level) -> {
+            return new CanoeEntity(entityType, level, watercraftMaterial);
+        }, MobCategory.MISC)
+                .properties(p -> p.sized(1.125f, 0.625f))
+                .register();
+        CANOES.put(watercraftMaterial, entry);
     }
 
     public static final EntityEntry<TFCDromedaryCamel> DROMEDARY_CAMEL = TFGCore.REGISTRATE.entity("dromedary_camel", TFCDromedaryCamel::new, MobCategory.CREATURE)
@@ -215,7 +233,7 @@ public class TFGEntities {
             .renderer(() -> RNRPlowRenderer::new)
             .register();
 
-    public static final Map<TFGWatercraftMaterial, EntityEntry<CanoeEntity>> CANOES = null;
+    public static final Map<TFGWatercraftMaterial, EntityEntry<CanoeEntity>> CANOES = new HashMap<>();
 
     @SubscribeEvent
     public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {

@@ -182,7 +182,7 @@ public class TFGBlocks_Wood {
 
         return TFGCore.REGISTRATE.block("wood/log/" + wood.serializedName, p -> new LogBlock(properties, blocks.get(Wood.BlockType.STRIPPED_LOG)))
                 .blockstate((ctx, prov) -> {
-                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log_top/" + wood.serializedName));
+                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log/" + wood.serializedName + "_top"));
                 })
                 .tag(BlockTags.LOGS, TFCTags.Blocks.LOGS_THAT_LOG)
                 .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
@@ -200,7 +200,7 @@ public class TFGBlocks_Wood {
                 .instrument(NoteBlockInstrument.BASS).requiresCorrectToolForDrops().flammableLikeLogs();
         return TFGCore.REGISTRATE.block("wood/stripped_log/" + wood.serializedName, p -> new LogBlock(properties, null))
                 .blockstate((ctx, prov) -> {
-                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log_top/" + wood.serializedName));
+                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log/" + wood.serializedName + "_top"));
                 })
                 .tag(BlockTags.LOGS, TFCTags.Blocks.LOGS_THAT_LOG)
                 .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
@@ -445,7 +445,7 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/groundcover/twig"))
                             .texture("side", wood.logTexture)
-                            .texture("top", TFGCore.id("block/wood/log_top/" + wood.serializedName));
+                            .texture("top", TFGCore.id("block/wood/log/" + wood.serializedName + "_top"));
 
                     ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
                 })

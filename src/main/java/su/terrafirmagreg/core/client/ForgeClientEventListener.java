@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.client;
 
+import com.alekiponi.firmaciv.client.render.entity.vehicle.CanoeRenderer;
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
 
 import net.dries007.tfc.client.TFCColors;
@@ -39,6 +40,7 @@ import su.terrafirmagreg.core.client.renderer.SkyboxRenderer;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
+import su.terrafirmagreg.core.common.data.TFGWatercraftMaterial;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
@@ -144,6 +146,14 @@ public class ForgeClientEventListener {
                 .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
         event.registerEntityRenderer(TFGEntities.BACTRIAN_CAMEL.get(),
                 ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
+
+        for (final TFGWatercraftMaterial material : TFGWatercraftMaterial.values()) {
+            if (material.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
+                event.registerEntityRenderer(TFGEntities.CANOES.get(material).get(),
+                        context -> new CanoeRenderer(context,
+                                ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + material.getSerializedName() + ".png")));
+            }
+        }
     }
 
     @SubscribeEvent

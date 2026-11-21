@@ -88,7 +88,7 @@ public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
 
     @Override
     public Optional<EntityType<? extends CanoeEntity>> getCanoeType() {
-        return Optional.empty();
+        return Optional.of(TFGEntities.CANOES.get(this).get());
     }
 
     @Override

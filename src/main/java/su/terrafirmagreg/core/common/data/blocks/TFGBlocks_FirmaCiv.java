@@ -9,6 +9,7 @@ import com.alekiponi.firmaciv.common.block.FirmacivFlatWoodenBoatFrameBlock;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
+import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
@@ -27,9 +28,10 @@ import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGWatercraftMaterial;
 
-//Taken and Modified from FirmaCivPlus, rewritten to use Registrate -Nebby
+//Taken and Modified from FirmaCivPlus, rewritten to use Registrate
+//All of FirmaCiv's OG datagen is done with a Python based framework, so a lot of this code was rewriting that datagen to work with Java datagen. Some things might be a bit silly because of that
+//-Nebby
 public class TFGBlocks_FirmaCiv {
-
     public static final Map<TFGWatercraftMaterial, BlockEntry<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = new HashMap<>();
 
     private static final Map<TFGWatercraftMaterial, BlockEntry<FirmacivAngledWoodenBoatFrameBlock>> _WOODEN_BOAT_FRAME_ANGLED = new HashMap<>();
@@ -68,60 +70,57 @@ public class TFGBlocks_FirmaCiv {
                     .mapColor(watercraftMaterial.getWood().woodColor()).noOcclusion();
             return new SquaredAngleBlock(blockState, properties);
         })
-                .blockstate(woodRoofingBlockState(watercraftMaterial))
+                .blockstate((dataGenContext, blockStateProvider) -> {
+                    var registryWood = watercraftMaterial.getWood();
+                    ResourceLocation planksBlockTexture = blockStateProvider.blockTexture(registryWood.getBlock(Wood.BlockType.PLANKS).get());
+                    var variantBlockStateBuilder = blockStateProvider.getVariantBuilder(dataGenContext.getEntry());
+
+                    SquaredAngleBlock.FACING.getPossibleValues().forEach(facing -> {
+                        SquaredAngleBlock.SHAPE.getPossibleValues().forEach(shape -> {
+                            int yRot = (int) ((switch (shape) {
+                                case INNER_LEFT, OUTER_LEFT -> facing.toYRot();
+                                case INNER_RIGHT, OUTER_RIGHT, STRAIGHT -> facing.toYRot() + 90;
+                            }) % 360);
+
+                            var whenFacingAndShape = variantBlockStateBuilder.partialState()
+                                    .with(SquaredAngleBlock.FACING, facing)
+                                    .with(SquaredAngleBlock.SHAPE, shape);
+
+                            String parentModelShape = null;
+                            switch (shape) {
+                                case INNER_RIGHT, INNER_LEFT -> parentModelShape = "_inner";
+                                case OUTER_LEFT, OUTER_RIGHT -> parentModelShape = "_outer";
+                                case STRAIGHT -> parentModelShape = "";
+                            }
+
+                            String modelName = "block/wood/" + registryWood.getSerializedName() + "_roofing" + parentModelShape;
+                            String parentName = "block/roofing" + parentModelShape;
+
+                            var modelFile = blockStateProvider.models()
+                                    .withExistingParent(modelName, ResourceLocation.fromNamespaceAndPath("alekiroofs", parentName))
+                                    .texture("bottom", planksBlockTexture)
+                                    .texture("top", planksBlockTexture)
+                                    .texture("side", planksBlockTexture);
+
+                            var configuredModel = whenFacingAndShape.modelForState()
+                                    .modelFile(modelFile)
+                                    .rotationY(yRot)
+                                    .uvLock(yRot != 0);
+
+                            configuredModel.addModel();
+                        });
+                    });
+                    blockStateProvider.itemModels().withExistingParent("item/wood/" + registryWood.getSerializedName() + "_roofing",
+                            blockStateProvider.modLoc("block/wood/" + registryWood.getSerializedName() + "_roofing"));
+                })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("alekiroofs", "roofing")))
+                .loot(RegistrateBlockLootTables::dropSelf)
                 .item(BlockItem::new)
                 .tag()
                 .build()
                 .register();
 
         WOOD_ROOFING.put(watercraftMaterial, entry);
-    }
-
-    private static NonNullBiConsumer<DataGenContext<Block, SquaredAngleBlock>, RegistrateBlockstateProvider> woodRoofingBlockState(TFGWatercraftMaterial watercraftMaterial) {
-        return (dataGenContext, blockStateProvider) -> {
-            var registryWood = watercraftMaterial.getWood();
-            ResourceLocation planksBlockTexture = blockStateProvider.blockTexture(registryWood.getBlock(Wood.BlockType.PLANKS).get());
-            var variantBlockStateBuilder = blockStateProvider.getVariantBuilder(dataGenContext.getEntry());
-
-            SquaredAngleBlock.FACING.getPossibleValues().forEach(facing -> {
-                SquaredAngleBlock.SHAPE.getPossibleValues().forEach(shape -> {
-                    int yRot = (int) ((switch (shape) {
-                        case INNER_LEFT, OUTER_LEFT -> facing.toYRot();
-                        case INNER_RIGHT, OUTER_RIGHT, STRAIGHT -> facing.toYRot() + 90;
-                    }) % 360);
-
-                    var whenFacingAndShape = variantBlockStateBuilder.partialState()
-                            .with(SquaredAngleBlock.FACING, facing)
-                            .with(SquaredAngleBlock.SHAPE, shape);
-
-                    String parentModelShape = null;
-                    switch (shape) {
-                        case INNER_RIGHT, INNER_LEFT -> parentModelShape = "_inner";
-                        case OUTER_LEFT, OUTER_RIGHT -> parentModelShape = "_outer";
-                        case STRAIGHT -> parentModelShape = "";
-                    }
-
-                    String modelName = "block/wood/" + registryWood.getSerializedName() + "_roofing" + parentModelShape;
-                    String parentName = "block/roofing" + parentModelShape;
-
-                    var modelFile = blockStateProvider.models()
-                            .withExistingParent(modelName, ResourceLocation.fromNamespaceAndPath("alekiroofs", parentName))
-                            .texture("bottom", planksBlockTexture)
-                            .texture("top", planksBlockTexture)
-                            .texture("side", planksBlockTexture);
-
-                    var configuredModel = whenFacingAndShape.modelForState()
-                            .modelFile(modelFile)
-                            .rotationY(yRot)
-                            .uvLock(yRot != 0);
-
-                    configuredModel.addModel();
-                });
-            });
-            blockStateProvider.itemModels().withExistingParent("item/wood/" + registryWood.getSerializedName() + "_roofing",
-                    blockStateProvider.modLoc("block/wood/" + registryWood.getSerializedName() + "_roofing"));
-        };
     }
 
     private static void putCanoeComponentBlock(TFGWatercraftMaterial watercraftMaterial) {
@@ -135,6 +134,8 @@ public class TFGBlocks_FirmaCiv {
         })
                 .blockstate(canoeComponentBlockState(watercraftMaterial))
                 .tag(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)
+                .loot((registrateBlockLootTables, canoeComponentBlock) -> registrateBlockLootTables.add(canoeComponentBlock,
+                        registrateBlockLootTables.createSingleItemTable(watercraftMaterial.getRailing())))
                 .register();
 
         CANOE_COMPONENT_BLOCKS.put(watercraftMaterial, entry);
@@ -187,7 +188,7 @@ public class TFGBlocks_FirmaCiv {
                         }
 
                         var strippedLogSideTexture = blockStateProvider.blockTexture(Block.byItem(watercraftMaterial.getStrippedLog()));
-                        var strippedLogTopTexture = strippedLogSideTexture;
+                        var strippedLogTopTexture = strippedLogSideTexture.withSuffix("_top");
 
                         String modelName = String.format(Locale.ROOT, "block/wood/canoe_component_block/%s/%s/%s", wood.getSerializedName(), section, step);
                         String parentName = String.format(Locale.ROOT, "block/canoe_component_block/template/%s/%s",
