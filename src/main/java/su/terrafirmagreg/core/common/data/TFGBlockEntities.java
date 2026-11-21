@@ -5,6 +5,8 @@ import static java.util.Arrays.stream;
 import java.util.*;
 import java.util.function.Supplier;
 
+import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
+import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.cake.struts.content.block.StrutBlockEntity;
 import com.cake.struts.content.block.StrutBlockEntityRenderer;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
@@ -17,6 +19,7 @@ import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import appeng.blockentity.AEBaseBlockEntity;
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
@@ -139,6 +142,9 @@ public class TFGBlockEntities {
             .validBlock(TFGBlocks.GAS_BURNER)
             .register();
 
+    //Unsure why i cannot make this be a CanoeComponentBlockEntity but whatever
+    public static final BlockEntityEntry<BlockEntity> CANOE_COMPONENT_BLOCK_ENTITY;
+
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
 
     public static void addValidBEBlock(Supplier<?> type, Block block) {
@@ -165,6 +171,17 @@ public class TFGBlockEntities {
                 addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.GREEN_COCONUT);
             }
         }
+
+        var canoeComponentBlockEntityBuilder = TFGCore.REGISTRATE.blockEntity("canoe_component_block_entity",
+                (blockEntityType, blockPos, blockState) -> new CanoeComponentBlockEntity(blockPos, blockState));
+
+        for (TFGWatercraftMaterial watercraftMaterial : TFGWatercraftMaterial.values()) {
+            if (watercraftMaterial.woodKind != TFGWatercraftMaterial.WoodKind.SOFT) {
+                continue;
+            }
+            canoeComponentBlockEntityBuilder.validBlock(TFGBlocks_FirmaCiv.CANOE_COMPONENT_BLOCKS.get(watercraftMaterial));
+        }
+        CANOE_COMPONENT_BLOCK_ENTITY = canoeComponentBlockEntityBuilder.register();
     }
 
     public static void finaliseBEModification() {
@@ -176,6 +193,14 @@ public class TFGBlockEntities {
             }
             beType.tfg$setValidBlocks(blocks);
         }
+
+        //We need to add our own canoes to the FirmaCivBlockEntity for CanoeComponents, otherwise they wont work.
+        var registry = FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY;
+        var blockEntityType = registry.get();
+        var hashSet = new HashSet<Block>();
+        hashSet.addAll(blockEntityType.validBlocks);
+        hashSet.addAll(CANOE_COMPONENT_BLOCK_ENTITY.get().validBlocks);
+        blockEntityType.validBlocks = hashSet;
     }
 
     public static void registerAllVisuals() {

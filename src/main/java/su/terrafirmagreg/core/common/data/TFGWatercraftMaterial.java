@@ -19,23 +19,37 @@ import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     //Softwoods
-    ARAUCARIA(TFGWood.ARAUCARIA, true),
-    AERONOS(TFGWood.AERONOS, true),
-    STROPHAR(TFGWood.STROPHAR, true),
-    GINKGO(TFGWood.GINKGO, true),
+    ARAUCARIA(TFGWood.ARAUCARIA, TFGWatercraftMaterial.WoodKind.SOFT),
+    GINKGO(TFGWood.GINKGO, WoodKind.SOFT),
     //Hardwoods
-    BEECH(TFGWood.BEECH, false),
-    MAHOE(TFGWood.MAHOE, false),
-    GLACIAN(TFGWood.GLACIAN, false),
+    BEECH(TFGWood.BEECH, WoodKind.HARD),
+    MAHOE(TFGWood.MAHOE, WoodKind.HARD),
+    GLACIAN(TFGWood.GLACIAN, WoodKind.HARD),
+    //None, Aeronos and Strophar don't have RotatedPillarBlocks and as a result they can't be used to make boats, sad!
+    AERONOS(TFGWood.AERONOS, WoodKind.NONE),
+    STROPHAR(TFGWood.STROPHAR, WoodKind.NONE),
     ;
 
-    TFGWatercraftMaterial(TFGWood tfgWood, boolean isSoftWood) {
+    public enum WoodKind {
+        //Makes canoes
+        SOFT(),
+        //Makes Rowboats and Sloops
+        HARD(),
+        //Cant be used for boats
+        NONE();
+
+        WoodKind() {
+
+        }
+    }
+
+    TFGWatercraftMaterial(TFGWood tfgWood, WoodKind woodKind) {
         this.tfgWood = tfgWood;
-        this.isSoftWood = isSoftWood;
+        this.woodKind = woodKind;
     }
 
     private final TFGWood tfgWood;
-    public final boolean isSoftWood;
+    public final WoodKind woodKind;
 
     public Supplier<Block> getWoodBlockType(Wood.BlockType blockType) {
         //If we're generating the wood blocks, get it directly

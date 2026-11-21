@@ -210,4 +210,7 @@ dependencies {
 
     // Primitive Creatures
     modCompileOnly(mods.primitiveCreatures)
+
+    // Alekiroofs
+    modImplementation(mods.alekiroofs)
 }
