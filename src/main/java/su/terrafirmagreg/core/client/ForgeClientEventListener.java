@@ -163,16 +163,16 @@ public class ForgeClientEventListener {
             } else if (material.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
                 event.registerEntityRenderer(TFGEntities.SLOOPS_UNDER_CONSTRUCTION.get(material).get(),
                         context -> new SloopConstructionRenderer(context,
-                                ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop_construction/" + material.getSerializedName())));
+                                ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop_construction/" + material.getSerializedName() + ".png")));
 
                 //Both built rowboats and sloops can be dyed, the dyed texture generation happens on the "registerReloadListeners" method below.
                 event.registerEntityRenderer(TFGEntities.ROWBOATS.get(material).get(),
-                        context -> new RowboatRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/rowboat/" + material.getSerializedName()),
+                        context -> new RowboatRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/rowboat/" + material.getSerializedName() + ".png"),
                                 CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
                                         "textures/entity/watercraft/rowboat/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
 
                 event.registerEntityRenderer(TFGEntities.SLOOPS.get(material).get(),
-                        context -> new SloopRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop/" + material.getSerializedName()),
+                        context -> new SloopRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop/" + material.getSerializedName() + ".png"),
                                 CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
                                         "textures/entity/watercraft/sloop/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
             }

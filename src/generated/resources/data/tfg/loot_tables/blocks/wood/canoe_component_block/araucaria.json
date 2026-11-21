@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfg:fish_roe"
+          "name": "minecraft:air"
         }
       ],
       "rolls": 1.0

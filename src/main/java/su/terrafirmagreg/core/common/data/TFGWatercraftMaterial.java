@@ -9,11 +9,11 @@ import com.alekiponi.firmaciv.util.CanoeMaterial;
 
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
-
-import su.terrafirmagreg.core.common.data.items.TFGItems;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     //Softwoods
@@ -56,7 +56,8 @@ public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     @Override
     public Item getRailing() {
         //TODO handle railing stuff
-        return TFGItems.FISH_ROE.get();
+        ResourceLocation lumberLocation = ResourceLocation.fromNamespaceAndPath("tfg", "wood/lumber/" + getSerializedName());
+        return ForgeRegistries.ITEMS.getValue(lumberLocation);
     }
 
     @Override

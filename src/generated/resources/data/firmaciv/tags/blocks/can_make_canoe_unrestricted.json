@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "wan_ancient_beasts:stripped_ginkgo_log",
+      "id": "tfg:wood/stripped_log/araucaria",
       "required": false
     },
     {
-      "id": "tfg:wood/stripped_log/araucaria",
+      "id": "wan_ancient_beasts:stripped_ginkgo_log",
       "required": false
     }
   ]
