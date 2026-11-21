@@ -1,6 +1,10 @@
 package su.terrafirmagreg.core.client;
 
+import com.alekiponi.alekiships.AlekiShips;
 import com.alekiponi.alekiships.client.render.entity.vehicle.RowboatRenderer;
+import com.alekiponi.alekiships.client.render.entity.vehicle.SloopConstructionRenderer;
+import com.alekiponi.alekiships.client.render.entity.vehicle.SloopRenderer;
+import com.alekiponi.alekiships.client.resources.PaintedTextureGenerator;
 import com.alekiponi.alekiships.util.CommonHelper;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.CanoeRenderer;
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
@@ -155,11 +159,22 @@ public class ForgeClientEventListener {
                 event.registerEntityRenderer(TFGEntities.CANOES.get(material).get(),
                         context -> new CanoeRenderer(context,
                                 ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + material.getSerializedName() + ".png")));
+
             } else if (material.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
+                event.registerEntityRenderer(TFGEntities.SLOOPS_UNDER_CONSTRUCTION.get(material).get(),
+                        context -> new SloopConstructionRenderer(context,
+                                ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop_construction/" + material.getSerializedName())));
+
+                //Both built rowboats and sloops can be dyed, the dyed texture generation happens on the "registerReloadListeners" method below.
                 event.registerEntityRenderer(TFGEntities.ROWBOATS.get(material).get(),
                         context -> new RowboatRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/rowboat/" + material.getSerializedName()),
                                 CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
                                         "textures/entity/watercraft/rowboat/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
+
+                event.registerEntityRenderer(TFGEntities.SLOOPS.get(material).get(),
+                        context -> new SloopRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop/" + material.getSerializedName()),
+                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
+                                        "textures/entity/watercraft/sloop/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
             }
         }
     }
@@ -174,5 +189,20 @@ public class ForgeClientEventListener {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         CloudRendererHelper.onClientTick();
+    }
+
+    public static void registerReloadListeners(final RegisterClientReloadListenersEvent event) {
+        ResourceLocation rowboatPaint = ResourceLocation.fromNamespaceAndPath(AlekiShips.MOD_ID, "entity/watercraft/rowboat/paint");
+        ResourceLocation sloopPaint = ResourceLocation.fromNamespaceAndPath(AlekiShips.MOD_ID, "entity/watercraft/sloop/paint");
+
+        for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
+            if (watercraftMaterial.woodKind != TFGWatercraftMaterial.WoodKind.HARD)
+                continue;
+
+            event.registerReloadListener(
+                    new PaintedTextureGenerator(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "entity/watercraft/rowboat/" + watercraftMaterial.getSerializedName()), rowboatPaint));
+            event.registerReloadListener(
+                    new PaintedTextureGenerator(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "entity/watercraft/sloop/" + watercraftMaterial.getSerializedName()), sloopPaint));
+        }
     }
 }

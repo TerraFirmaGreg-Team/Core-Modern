@@ -78,8 +78,8 @@ public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     public Optional<EntityType<? extends AbstractVehicle>> getEntityType(BoatType boatType) {
         return switch (boatType) {
             case ROWBOAT -> Optional.of(TFGEntities.ROWBOATS.get(this).get());
-            case SLOOP -> Optional.empty();
-            case CONSTRUCTION_SLOOP -> Optional.empty();
+            case SLOOP -> Optional.of(TFGEntities.SLOOPS.get(this).get());
+            case CONSTRUCTION_SLOOP -> Optional.of(TFGEntities.SLOOPS_UNDER_CONSTRUCTION.get(this).get());
         };
     }
 

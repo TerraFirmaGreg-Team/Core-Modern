@@ -50,6 +50,7 @@ public class ClientProxy extends CommonProxy {
         bus.addListener(ForgeClientEventListener::registerColorHandlerBlocks);
         bus.addListener(ForgeClientEventListener::registerColorHandlerItems);
         bus.addListener(ForgeClientEventListener::registerRenderers);
+        bus.addListener(ForgeClientEventListener::registerReloadListeners);
     }
 
     @SubscribeEvent
