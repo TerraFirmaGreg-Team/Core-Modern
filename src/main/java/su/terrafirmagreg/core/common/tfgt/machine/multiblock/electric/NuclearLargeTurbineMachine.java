@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import static com.gregtechceu.gtceu.api.GTValues.IV;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,17 +20,21 @@ import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
+import com.gregtechceu.gtceu.common.mui.GTMultiblockTextUtil;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.IntSyncValue;
+import brachy.modularui.value.sync.LongSyncValue;
 import brachy.modularui.value.sync.PanelSyncManager;
 import lombok.Getter;
 
@@ -56,52 +61,6 @@ public class NuclearLargeTurbineMachine extends TieredWorkableElectricMultiblock
             }
         }
         return null;
-    }
-
-    private boolean isIntakesObstructed() {
-        var rotorHolder = getRotorHolder();
-        if (rotorHolder == null)
-            return true;
-        BlockPos rotorPos = getRotorHolder().getBlockPos();
-
-        Level level = getLevel();
-        Direction front = getFrontFacing();
-        Direction right = front.getClockWise();
-
-        boolean obstructed = false;
-
-        // Vérifie les deux couches sous le rotor (-1 et -2)
-        for (int yOffset = -1; yOffset >= -2; yOffset--) {
-            BlockPos planeOrigin = rotorPos.offset(0, yOffset, 0);
-
-            for (int z = -2; z <= 2; z++) {
-                for (int x = -2; x <= 2; x++) {
-
-                    // Coins (X) ignorés
-                    if (Math.abs(x) == 2 && Math.abs(z) == 2) {
-                        continue;
-                    }
-
-                    BlockPos pos = planeOrigin
-                            .relative(right, x)
-                            .relative(front, z);
-
-                    if (!level.getBlockState(pos).isAir()) {
-                        obstructed = true;
-                    }
-                }
-            }
-        }
-
-        // Vérifie les blocs uniques au-dessus du rotor (+5 à +8)
-        for (int y = 5; y <= 8; y++) {
-            BlockPos pos = rotorPos.above(y);
-            if (!level.getBlockState(pos).isAir()) {
-                return true;
-            }
-        }
-
-        return obstructed;
     }
 
     @Override
@@ -157,7 +116,7 @@ public class NuclearLargeTurbineMachine extends TieredWorkableElectricMultiblock
     }
 
     public long getCurrentProduction() {
-        return isActive() && recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
+        return isActive() && recipeLogic.getLastUnrolledRecipe() != null ? recipeLogic.getLastUnrolledRecipe().getOutputEUt().getTotalEU() : 0;
     }
 
     public int getRotorDurabilityPercent() {
@@ -166,6 +125,33 @@ public class NuclearLargeTurbineMachine extends TieredWorkableElectricMultiblock
             return rotorHolder.getRotorDurabilityPercent();
         }
         return -1;
+    }
+
+    private boolean isIntakesObstructed(RotorHolderPartMachine rotorHolder) {
+        BlockPos rotorPos = rotorHolder.getBlockPos();
+        Level level = getLevel();
+        Direction front = getFrontFacing();
+        Direction right = front.getClockWise();
+
+        // Two layers below the rotor (-1 and -2), corners ignored
+        for (int yOffset = -1; yOffset >= -2; yOffset--) {
+            BlockPos planeOrigin = rotorPos.offset(0, yOffset, 0);
+            for (int z = -2; z <= 2; z++) {
+                for (int x = -2; x <= 2; x++) {
+                    if (Math.abs(x) == 2 && Math.abs(z) == 2)
+                        continue;
+                    if (!level.getBlockState(planeOrigin.relative(right, x).relative(front, z)).isAir())
+                        return true;
+                }
+            }
+        }
+
+        // Single column above the rotor (+5 to +8)
+        for (int y = 5; y <= 8; y++) {
+            if (!level.getBlockState(rotorPos.above(y)).isAir())
+                return true;
+        }
+        return false;
     }
 
     //////////////////////////////////////
@@ -179,7 +165,7 @@ public class NuclearLargeTurbineMachine extends TieredWorkableElectricMultiblock
      * Duration is then multiplied by the holder efficiency.
      * </p>
      *
-     * @param machine a {@link LargeTurbineMachine}
+     * @param machine a {@link NuclearLargeTurbineMachine}
      * @param recipe  recipe
      * @return A {@link ModifierFunction} for the given Turbine Multiblock and recipe
      */
@@ -187,24 +173,25 @@ public class NuclearLargeTurbineMachine extends TieredWorkableElectricMultiblock
         if (!(machine instanceof NuclearLargeTurbineMachine turbineMachine)) {
             return RecipeModifier.nullWrongType(NuclearLargeTurbineMachine.class, machine);
         }
-        if (turbineMachine.isIntakesObstructed()) {
-            return ModifierFunction.NULL;
-        }
         var rotorHolder = turbineMachine.getRotorHolder();
         if (rotorHolder == null)
-            return ModifierFunction.NULL;
+            return ModifierFunction.cancel(Component.translatable("gtceu.multiblock.turbine.no_rotor"));
+        if (turbineMachine.isIntakesObstructed(rotorHolder))
+            return ModifierFunction.cancel(Component.translatable("gtceu.multiblock.turbine.obstructed"));
 
         EnergyStack EUt = recipe.getOutputEUt();
         long turbineMaxVoltage = turbineMachine.getOverclockVoltage();
         double holderEfficiency = rotorHolder.getTotalEfficiency() / 100.0;
 
         if (EUt.isEmpty() || turbineMaxVoltage <= EUt.voltage() || holderEfficiency <= 0)
-            return ModifierFunction.NULL;
+            return ModifierFunction.cancel(Component.translatable("gtceu.multiblock.turbine.no_rotor"));
 
-        // get the amount of parallel required to match the desired output voltage
         int maxParallel = (int) (turbineMaxVoltage / EUt.getTotalEU());
+        if (turbineMaxVoltage % EUt.getTotalEU() != 0)
+            maxParallel++;
+
         int actualParallel = ParallelLogic.getParallelAmountFast(turbineMachine, recipe, maxParallel);
-        double eutMultiplier = turbineMachine.productionBoost() * actualParallel;
+        double eutMultiplier = (maxParallel == actualParallel) ? turbineMachine.productionBoost() * turbineMaxVoltage / EUt.voltage() : turbineMachine.productionBoost() * actualParallel;
 
         return ModifierFunction.builder()
                 .inputModifier(ContentModifier.multiplier(actualParallel))
@@ -224,37 +211,80 @@ public class NuclearLargeTurbineMachine extends TieredWorkableElectricMultiblock
     // ******* GUI ********//
     //////////////////////////////////////
 
+    @Override
     public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
-        var widgets = super.getWidgetsForDisplay(syncManager);
+        BooleanSyncValue isFormed = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
+                () -> new BooleanSyncValue(this::isFormed));
+        BooleanSyncValue isActive = syncManager.getOrCreateSyncHandler("isActive", BooleanSyncValue.class,
+                () -> new BooleanSyncValue(this::isActive));
 
-        if (!isFormed())
-            return widgets;
+        BooleanSyncValue hasRotor = new BooleanSyncValue(this::hasRotor);
+        IntSyncValue rotorSpeed = new IntSyncValue(this::getRotorSpeed);
+        IntSyncValue maxRotorSpeed = new IntSyncValue(this::getMaxRotorHolderSpeed);
+        IntSyncValue efficiency = new IntSyncValue(this::getTotalEfficiency);
+        IntSyncValue rotorDurability = new IntSyncValue(this::getRotorDurabilityPercent);
 
-        var rotorHolder = getRotorHolder();
-        if (rotorHolder != null && rotorHolder.getRotorEfficiency() > 0) {
-            widgets.add(Text.lang("gtceu.multiblock.turbine.rotor_speed",
-                    FormattingUtil.formatNumbers(rotorHolder.getRotorSpeed()),
-                    FormattingUtil.formatNumbers(rotorHolder.getMaxRotorHolderSpeed())).asWidget());
-            widgets.add(Text.lang("gtceu.multiblock.turbine.efficiency",
-                    rotorHolder.getTotalEfficiency()).asWidget());
+        LongSyncValue euOutput = new LongSyncValue(this::getCurrentProduction);
+        LongSyncValue maxOutput = new LongSyncValue(this::getOverclockVoltage);
+        LongSyncValue turbineVoltage = new LongSyncValue(this::getDisplayRecipeVoltage);
 
-            long maxProduction = getOverclockVoltage();
-            long currentProduction = getCurrentProduction();
+        syncManager.syncValue("hasRotor", hasRotor);
+        syncManager.syncValue("rotorSpeed", rotorSpeed);
+        syncManager.syncValue("maxRotorSpeed", maxRotorSpeed);
+        syncManager.syncValue("efficiency", efficiency);
+        syncManager.syncValue("rotorDurability", rotorDurability);
 
-            if (isActive()) {
-                widgets.add(3, Text.lang("gtceu.multiblock.turbine.energy_per_tick",
-                        FormattingUtil.formatNumbers(currentProduction),
-                        FormattingUtil.formatNumbers(maxProduction)).asWidget());
-            }
+        syncManager.syncValue("euOutput", euOutput);
+        syncManager.syncValue("maxOutput", maxOutput);
+        syncManager.syncValue("turbineVoltage", turbineVoltage);
 
-            int rotorDurability = rotorHolder.getRotorDurabilityPercent();
-            if (rotorDurability > MIN_DURABILITY_TO_WARN) {
-                widgets.add(Text.lang("gtceu.multiblock.turbine.rotor_durability", rotorDurability).asWidget());
-            } else {
-                widgets.add(Text.lang("gtceu.multiblock.turbine.rotor_durability", rotorDurability)
-                        .withStyle(ChatFormatting.RED).asWidget());
-            }
-        }
+        var hasNoRotorWarning = Text.lang("gtceu.multiblock.turbine.no_rotor")
+                .withStyle(ChatFormatting.RED)
+                .asWidget()
+                .setEnabledIf(w -> isFormed.getBoolValue() && !hasRotor.getBoolValue());
+        var rotorSpeedDisplay = Text.dynamic(() -> Component.translatable("gtceu.multiblock.turbine.rotor_speed",
+                FormattingUtil.formatNumbers(rotorSpeed.getIntValue()),
+                FormattingUtil.formatNumbers(maxRotorSpeed.getIntValue()))
+                .withStyle(ChatFormatting.WHITE))
+                .asWidget()
+                .setEnabledIf(w -> isFormed.getBoolValue() && hasRotor.getBoolValue());
+        var turbineEfficiencyDisplay = Text.dynamic(() -> Component.translatable("gtceu.multiblock.turbine.efficiency",
+                efficiency.getIntValue())
+                .withStyle(ChatFormatting.WHITE))
+                .asWidget()
+                .setEnabledIf(w -> isFormed.getBoolValue() && hasRotor.getBoolValue());
+        var turbinePowerDisplay = Text.dynamic(() -> Component.translatable("gtceu.multiblock.turbine.energy_per_tick",
+                FormattingUtil.formatNumbers(euOutput.getLongValue()),
+                FormattingUtil.formatNumbers(maxOutput.getLongValue()))
+                .withStyle(ChatFormatting.WHITE))
+                .asWidget()
+                .setEnabledIf(w -> isFormed.getBoolValue() && hasRotor.getBoolValue() && isActive.getBoolValue());
+        var rotorDurabilityDisplay = Text.dynamic(() -> Component.translatable("gtceu.multiblock.turbine.rotor_durability",
+                rotorDurability.getIntValue())
+                .withStyle(rotorDurability.getIntValue() > MIN_DURABILITY_TO_WARN ? ChatFormatting.WHITE : ChatFormatting.RED))
+                .asWidget()
+                .setEnabledIf(w -> isFormed.getBoolValue() && hasRotor.getBoolValue());
+
+        List<IWidget> widgets = new ArrayList<>();
+
+        widgets.add(GTMultiblockTextUtil.addUnformedWarning(this, syncManager));
+        widgets.add(GTMultiblockTextUtil.addEnergyTierLine(this, syncManager));
+
+        widgets.add(GTMultiblockTextUtil.addEnergyUsageExactLine(this, syncManager, euOutput, turbineVoltage, true));
+        widgets.add(GTMultiblockTextUtil.addProgressLine(this, syncManager));
+        widgets.add(GTMultiblockTextUtil.addWorkingStatusLine(this, syncManager));
+        widgets.add(GTMultiblockTextUtil.addRecipeTypeField(this, syncManager));
+
+        widgets.add(hasNoRotorWarning);
+        widgets.add(rotorSpeedDisplay);
+        widgets.add(turbineEfficiencyDisplay);
+        widgets.add(turbinePowerDisplay);
+        widgets.add(rotorDurabilityDisplay);
+
+        widgets.addAll(getDefinition().getAdditionalDisplay().apply(this, syncManager));
+        widgets.add(GTMultiblockTextUtil.addTotalRunsLine(this, syncManager));
+        widgets.add(GTMultiblockTextUtil.addOutputLines(this, syncManager));
+        widgets.addAll(GTMultiblockTextUtil.addRecipeFailReasonLines(this, syncManager));
 
         return widgets;
     }

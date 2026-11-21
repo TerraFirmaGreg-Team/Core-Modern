@@ -126,12 +126,21 @@ public class TemperatureProvider {
 
     public void attach(IEnvironmentMachine machine) {
         this.attachedMachine = machine;
-        this.level = machine.getLevel() instanceof ServerLevel serverLevel ? serverLevel : null;
+        this.level = machine.getEnvironmentLevel() instanceof ServerLevel serverLevel ? serverLevel : null;
     }
 
     public void detach() {
         this.attachedMachine = null;
         this.level = null;
+    }
+
+    public boolean inheritsFrom(OxygenProvider oxygenProvider) {
+        return inheritedFront == oxygenProvider || inheritedBack == oxygenProvider;
+    }
+
+    public void requestMachineRevalidation() {
+        if (attachedMachine instanceof IBlockSensitiveMachine machine)
+            machine.requestRevalidation();
     }
 
     public BlockPos getMachinePos() {

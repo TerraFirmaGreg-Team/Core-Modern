@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.compat.emi;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.util.Plantable;
@@ -45,6 +46,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.SMRGenerator2;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
 import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
@@ -81,6 +83,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory ORE_PROCESSING_DIAGRAM = new EmiRecipeCategory(TFGCore.id("ore_processing_diagram"),
             EmiStack.of(ChemicalHelper.get(TagPrefix.crushed, GTMaterials.Hematite)));
+
+    public static final EmiRecipeCategory SMR_ADDITIVES = new EmiRecipeCategory(TFGCore.id("smr_additives"),
+            EmiStack.of(TFGMultiMachines.SMR_GENERATOR.getBlock().asItem()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -198,6 +203,16 @@ public class TFGEmiPlugin implements EmiPlugin {
                 emiRegistry.addRecipe(new EmiOreProcessing(mat));
             }
         }
+
+        //SMR Lubricants & Boosters
+        emiRegistry.addCategory(SMR_ADDITIVES);
+        emiRegistry.addWorkstation(SMR_ADDITIVES, EmiStack.of(TFGMultiMachines.SMR_GENERATOR.getBlock().asItem()));
+        SMRGenerator2.getLubricants().entrySet().stream()
+                .sorted(Comparator.comparingInt(e -> e.getValue().tier()))
+                .forEach(e -> emiRegistry.addRecipe(new SMRAdditiveEmiRecipe(e.getKey(), e.getValue(), SMRAdditiveEmiRecipe.Type.LUBRICANT)));
+        SMRGenerator2.getBoosters().entrySet().stream()
+                .sorted(Comparator.comparingInt(e -> e.getValue().tier()))
+                .forEach(e -> emiRegistry.addRecipe(new SMRAdditiveEmiRecipe(e.getKey(), e.getValue(), SMRAdditiveEmiRecipe.Type.BOOSTER)));
 
         //Greenhouse Plantable
         emiRegistry.addCategory(GREENHOUSE_PLANTABLE);

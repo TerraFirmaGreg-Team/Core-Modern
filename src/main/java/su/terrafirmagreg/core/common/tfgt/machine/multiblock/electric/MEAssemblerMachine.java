@@ -95,6 +95,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
         buddingTier = TFGPredicates.getTierForBlock(buddingBlock);
         buddingPos = buddingBlockPos;
 
+        redstonePorts.clear();
         for (MultiblockPartMachine part : getParts()) {
             if (part instanceof MEAssemblerRedstonePort port) {
                 redstonePorts.add(port);
@@ -137,10 +138,12 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
     @Override
     public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
         if (DEFAULT_STRUCTURE.equals(name)) {
             for (var port : redstonePorts)
                 port.trySetSignal(0);
             redstonePorts.clear();
+            buddingPos = null;
             buddingCheckSubscription.updateSubscription();
         }
     }
@@ -203,7 +206,8 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
             return widgets;
 
         IntSyncValue buddingTierValue = new IntSyncValue(this::getBuddingTier);
-        IntSyncValue speedBonus = new IntSyncValue(() -> (int) (BUDDING_SPEED_BONUS[buddingTier] * 100));
+        IntSyncValue speedBonus = new IntSyncValue(
+                () -> buddingTier < 0 ? 0 : (int) (BUDDING_SPEED_BONUS[buddingTier] * 100));
         syncManager.syncValue("buddingTier", buddingTierValue);
         syncManager.syncValue("speedBonus", speedBonus);
 
@@ -218,7 +222,8 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
             };
             return Component.translatable("tfg.machine.me_assembler.budding_tier",
                     Component.literal(speedBonus.getIntValue() + "%").withStyle(color));
-        }).asWidget());
+        }).asWidget()
+                .setEnabledIf(w -> buddingTierValue.getIntValue() >= 0));
 
         return widgets;
     }

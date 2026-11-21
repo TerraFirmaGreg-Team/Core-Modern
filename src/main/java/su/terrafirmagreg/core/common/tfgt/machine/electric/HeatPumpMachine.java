@@ -320,7 +320,7 @@ public class HeatPumpMachine implements IBlockSensitiveMachine, IEnvironmentMach
     }
 
     @Override
-    public Level getLevel() {
+    public Level getEnvironmentLevel() {
         return level;
     }
 

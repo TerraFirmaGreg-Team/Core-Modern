@@ -148,6 +148,7 @@
         "common.gtceu.GTCleanroomMixin",
         "common.gtceu.GTForgeCommonEventListenerMixin",
         "common.gtceu.GTMachineUtilsMixin",
+        "common.gtceu.GTMultiblockTextUtilMixin",
         "common.gtceu.GTMultiMachinesMixin",
         "common.gtceu.GTRecipeTypesMixin",
         "common.gtceu.GTUtilMixin",

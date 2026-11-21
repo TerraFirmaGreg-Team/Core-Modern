@@ -274,6 +274,7 @@ public class TFGMultiMachines {
             .allowExtendedFacing(false)
             .recipeType(TFGTRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(NuclearLargeTurbineMachine::recipeModifier, true)
+            .generator(true)
             .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
             .workableCasingModel(
                     GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"),
@@ -312,9 +313,9 @@ public class TFGMultiMachines {
                     TFGCore.id("block/casings/machine_casing_stainless_evaporation"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> {
-                MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X).and(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
-                exportPredicate = exportPredicate.setMaxLayerLimited(1);
-
+                MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X)
+                        .xor(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()))
+                        .setMaxLayerLimited(1);
                 MultiPredicate maint = Predicates.autoAbilities(true, false, false).setMaxGlobalLimited(1);
                 return MultiblockPatternBuilder.start(RelativeDirection.UP, RelativeDirection.BACK, RelativeDirection.RIGHT)
                         .slice("YSY", "YYY", "YYY")
@@ -325,9 +326,8 @@ public class TFGMultiMachines {
                         .where('Y', blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
                                 .and(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                                 .and(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                                .and(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
-                                        .setMaxGlobalLimited(2))
-                                .and(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
+                                .and(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                                .and(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
                                 .and(maint))
                         .where('Z', blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
                                 .and(exportPredicate)
@@ -446,7 +446,6 @@ public class TFGMultiMachines {
                     .where(' ', Predicates.any())
                     .where('H', blocks(GTBlocks.CASING_PTFE_INERT.get()))
                     .where('A', blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get()))
-                    .where('F', blocks(TFGBlocks_Casings.IRON_DESH_CASING.get()))
                     .where('F', blocks(TFGBlocks_Casings.ULTRAVIOLET_CASING.get()))
                     .where('D', blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
                     .where('B', blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("megacells", "mega_crafting_unit"))))
@@ -498,6 +497,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.SMR_GENERATOR)
             .recipeModifier(SMRGenerator2::recipeModifier, true)
+            .generator(true)
             .appearanceBlock(TFGBlocks_Casings.DESH_PTFE_CASING)
             .workableCasingModel(TFGCore.id( "block/casings/machine_casing_desh_ptfe"), TFGCore.id("block/machines/smr"))
             .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
@@ -507,8 +507,8 @@ public class TFGMultiMachines {
                     .where('X', controller(definition))
                     .where('A', blocks(TFGBlocks_Casings.OSTRUM_CARBON_CASING.get()))
                     .where('B', blocks(TFGBlocks_Casings.DESH_PTFE_CASING.get()).setMinGlobalLimited(1)
-                            .and(abilities((TFGPartAbility.SMR_FLUID_INPUT)))
-                            .and(abilities((PartAbility.EXPORT_FLUIDS)))
+                            .and(abilities(TFGPartAbility.SMR_FLUID_INPUT).setMaxGlobalLimited(3, 3))
+                            .and(abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1, 1))
                             .and(Predicates.autoAbilities(true, false, false))
                             .and(abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
                     .where('D', blocks(TFGBlocks_Casings.HEAT_PIPE_CASING.get()))
@@ -965,7 +965,7 @@ public class TFGMultiMachines {
                             .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
                                     VN[GTValues.HV]))
                             .setExactLimit(1)
-                            .and(abilities(PartAbility.OUTPUT_ENERGY)).setExactLimit(1))
+                            .and(abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1)))
                     .where('H', blocks(GTBlocks.CASING_STEEL_TURBINE.get())
                             .and(Predicates.autoAbilities(definition.getRecipeTypes(), false, false, true, true, true, true))
                             .and(Predicates.autoAbilities(true, false, false))) // needsMuffler = false
@@ -1083,6 +1083,8 @@ public class TFGMultiMachines {
                     .where('G', blocks(GTBlocks.FIREBOX_BRONZE.get()))
                     .where('H', abilities(PartAbility.MUFFLER).setExactLimit(1))
                     .build())
+            .additionalDisplay((controller, syncManager) -> controller instanceof OreProcessingBeneathMachine machine ?
+                    machine.createGasDisplayWidgets(syncManager) : List.of())
             .register();
 
     // I made this beautiful and well-designed multiblock that looks aesthetically perfect especially for Tom
@@ -1460,7 +1462,7 @@ public class TFGMultiMachines {
                     .where('A', blocks(TFGBlocks_Casings.BLACK_STEEL_CASING.get()).setMinGlobalLimited(16)
                             .and(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setPreviewCount(1))
                             .and(ability(TFGPartAbility.BATTERY_DYNAMO, LV, MV, HV).setExactLimit(1).setPreviewCount(1))
-                            .and(ability(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .and(Predicates.autoAbilities(true, false, false)))
                     .where('B', blocks(AllBlocks.METAL_GIRDER.get()))
                     .where('E', blocks(TFGBlocks_Casings.COMBUSTION_EXHAUST_CASING.values().stream()
                             .map(Supplier::get).toArray(Block[]::new)))
@@ -1490,7 +1492,7 @@ public class TFGMultiMachines {
                     .where('A', blocks(TFGBlocks_Casings.BLACK_STEEL_CASING.get()).setMinGlobalLimited(16)
                             .and(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setPreviewCount(1))
                             .and(ability(TFGPartAbility.BATTERY_DYNAMO, LV, MV, HV).setExactLimit(1).setPreviewCount(1))
-                            .and(ability(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .and(Predicates.autoAbilities(true, false, false)))
                     .where('B', blocks(TFGBlocks_Girders.BRASS_BEAM.get()))
                     .where('E', blocks(TFGBlocks_Casings.GAS_EXHAUST_CASING.values().stream()
                             .map(Supplier::get).toArray(Block[]::new)))
@@ -1521,8 +1523,8 @@ public class TFGMultiMachines {
                     .where('X', controller(definition))
                     .where('A', blocks(TFGBlocks_Casings.BLACK_STEEL_CASING.get()).setMinGlobalLimited(16)
                             .and(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setPreviewCount(1))
-                            .and(ability(TFGPartAbility.BATTERY_DYNAMO, LV, MV).setExactLimit(1).setPreviewCount(1))
-                            .and(ability(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .and(ability(TFGPartAbility.BATTERY_DYNAMO, LV, MV, HV).setExactLimit(1).setPreviewCount(1))
+                            .and(Predicates.autoAbilities(true, false, false)))
                     .where('B', blocks(TFGBlocks_Girders.WROUGHT_IRON_BEAM.get()))
                     .where('E', blocks(TFGBlocks_Casings.STEAM_EXHAUST_CASING.values().stream()
                             .map(Supplier::get).toArray(Block[]::new)))

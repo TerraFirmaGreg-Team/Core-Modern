@@ -86,6 +86,8 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
         buddingTier = TFGPredicates.getTierForBlock(buddingBlock);
         buddingPos = buddingBlockPos;
 
+        redstonePorts.clear();
+
         for (MultiblockPartMachine part : getParts()) {
             if (part instanceof MEAssemblerRedstonePort port) {
                 redstonePorts.add(port);
@@ -212,7 +214,8 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
                 .setEnabledIf(w -> buddingTierValue.getIntValue() >= MAX_TIER));
 
         widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.budding_charger.progress",
-                Component.literal(chargeProgressValue.getIntValue() + "%").withStyle(ChatFormatting.AQUA))).asWidget());
+                Component.literal(chargeProgressValue.getIntValue() + "%").withStyle(ChatFormatting.AQUA))).asWidget()
+                .setEnabledIf(w -> buddingTierValue.getIntValue() >= 0 && buddingTierValue.getIntValue() < MAX_TIER));
 
         return widgets;
     }

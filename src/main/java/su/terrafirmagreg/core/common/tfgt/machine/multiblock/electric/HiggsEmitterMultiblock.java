@@ -222,7 +222,7 @@ public class HiggsEmitterMultiblock extends WorkableElectricMultiblockMachine im
     }
 
     @Override
-    public Level getLevel() {
-        return super.getLevel();
+    public Level getEnvironmentLevel() {
+        return getLevel();
     }
 }

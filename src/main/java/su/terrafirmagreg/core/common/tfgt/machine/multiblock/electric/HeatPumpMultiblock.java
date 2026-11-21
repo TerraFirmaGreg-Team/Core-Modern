@@ -1,11 +1,17 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
+import static su.terrafirmagreg.core.common.tfgt.ui.TFGUITextures.BUTTON_FIND_LEAK;
+
+import java.util.List;
+import java.util.function.Supplier;
+
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.mui.MachineUIPanelBuilder;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -21,11 +27,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
 import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.factory.PosGuiData;
 import brachy.modularui.screen.UISettings;
+import brachy.modularui.utils.serialization.network.ByteBufAdapters;
+import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.GenericSyncValue;
+import brachy.modularui.value.sync.InteractionSyncHandler;
 import brachy.modularui.value.sync.PanelSyncManager;
 import brachy.modularui.value.sync.SyncHandlers;
-import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widgets.ButtonWidget;
 import brachy.modularui.widgets.layout.Flow;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
@@ -78,14 +88,52 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
     }
 
     @Override
-    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
-        super.buildMainUI(mainWidget, guiData, syncManager, settings);
+    public MachineUIPanelBuilder getPanelBuilder(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        InteractionSyncHandler traceHandler = new InteractionSyncHandler();
+        traceHandler.setOnMousePressed(mouseData -> {
+            if (!mouseData.isClient())
+                machine.requestFrontBreachTrace();
+        });
 
-        var col = Flow.col().coverChildren();
+        BooleanSyncValue showTraceSync = new BooleanSyncValue(this::showTraceButton);
+        syncManager.syncValue("showTraceButton", showTraceSync);
 
-        addStatusText(col, syncManager);
+        return super.getPanelBuilder(data, syncManager, settings)
+                .rightConfigurators(flow -> flow.child(new ButtonWidget<>()
+                        .overlay(BUTTON_FIND_LEAK)
+                        .size(18, 18)
+                        .syncHandler(traceHandler)
+                        .setEnabledIf(w -> showTraceSync.getBoolValue())
+                        .tooltip(tooltip -> tooltip.addLine(
+                                Component.translatable("tfg.machine.oxygen_distributor.find_leak")))));
+    }
 
-        col.child(Flow.row()
+    @Override
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
+
+        GenericSyncValue<Component> statusSync = componentSync(this::computeStatus);
+        GenericSyncValue<Component> scanSync = componentSync(this::computeScanStatus);
+        GenericSyncValue<Component> sizeSync = componentSync(() -> Component.translatable(
+                "tfg.machine.oxygen_distributor.size",
+                FormattingUtil.formatNumbers(machine.getFrontInteriorSize())).withStyle(ChatFormatting.AQUA));
+        GenericSyncValue<Component> energySync = componentSync(() -> Component.translatable(
+                "tfg.machine.oxygen_distributor.energy",
+                String.format("%,.0f", machine.computeEnergyCostPerTick())).withStyle(ChatFormatting.AQUA));
+        syncManager.syncValue("heatPumpStatus", statusSync);
+        syncManager.syncValue("heatPumpScan", scanSync);
+        syncManager.syncValue("heatPumpSize", sizeSync);
+        syncManager.syncValue("heatPumpEnergy", energySync);
+
+        if (!isFormed())
+            return widgets;
+
+        widgets.add(dynamicLine(statusSync));
+        widgets.add(dynamicLine(scanSync));
+        widgets.add(dynamicLine(sizeSync));
+        widgets.add(dynamicLine(energySync));
+
+        widgets.add(Flow.row()
                 .coverChildren()
                 .childPadding(4)
                 .child(Text.lang("tfg.machine.heat_pump.temperature").asWidget())
@@ -98,66 +146,51 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
                                 .allowC2S())
                         .tooltip(t -> t.addLine(Component.translatable("tfg.machine.heat_pump.temperature.tooltip")))));
 
-        col.child(new ButtonWidget<>()
-                .overlay(Text.str("💨"))
-                .size(18, 18)
-                .onUpdateListener(w -> w.setEnabled(showTraceButton()))
-                .onMousePressed((ctx, i) -> {
-                    if (!isRemote()) {
-                        machine.requestFrontBreachTrace();
-                        return true;
-                    }
-                    return false;
-                })
-                .tooltip(tooltip -> tooltip.addLine(Component.translatable("tfg.machine.oxygen_distributor.find_leak"))));
-
-        mainWidget.child(col);
+        return widgets;
     }
 
-    private void addStatusText(ParentWidget<?> widget, PanelSyncManager syncManager) {
-        if (!isFormed()) {
-            widget.child(Text.lang("tfg.machine.unformed").withStyle(ChatFormatting.GRAY).asWidget());
-            return;
-        }
-        if (machine.isBlocked()) {
-            widget.child(Text.lang("tfg.machine.heat_pump.status.blocked")
-                    .withStyle(ChatFormatting.RED).asWidget());
-            return;
-        }
+    private static GenericSyncValue<Component> componentSync(Supplier<Component> getter) {
+        return GenericSyncValue.builder(Component.class)
+                .adapter(ByteBufAdapters.COMPONENT)
+                .getter(getter)
+                .build();
+    }
+
+    private static IWidget dynamicLine(GenericSyncValue<Component> sync) {
+        return Text.dynamic(() -> {
+            Component value = sync.getValue();
+            return value == null ? Component.empty() : value;
+        }).asWidget();
+    }
+
+    private Component computeStatus() {
+        if (machine.isBlocked())
+            return Component.translatable("tfg.machine.heat_pump.status.blocked").withStyle(ChatFormatting.RED);
 
         Component ventProblem = getVentProblem();
-        if (isWorking()) {
-            widget.child(Text.lang("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN).asWidget());
+        if (isWorking())
+            return Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN);
+        if (ventProblem != null)
+            return ventProblem.copy().withStyle(ChatFormatting.RED);
+        if (getEnergyInputPerSec() < machine.computeEnergyCostPerTick())
+            return Component.translatable("tfg.machine.oxygen_distributor.status.no_energy").withStyle(ChatFormatting.RED);
+        if (recipeLogic.isIdle() && recipeLogic.getBestFailureReason() != null)
+            return recipeLogic.getBestFailureReason().copy().withStyle(ChatFormatting.RED);
+        return Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY);
+    }
 
-        } else if (ventProblem != null) {
-            widget.child(Text.of(ventProblem.copy().withStyle(ChatFormatting.RED)).asWidget());
-
-        } else if (getEnergyInputPerSec() < machine.computeEnergyCostPerTick()) {
-            widget.child(Text.lang("tfg.machine.oxygen_distributor.status.no_energy")
-                    .withStyle(ChatFormatting.RED).asWidget());
-
-        } else if (recipeLogic.isIdle() && recipeLogic.getBestFailureReason() != null) {
-            widget.child(Text.of(recipeLogic.getBestFailureReason().copy().withStyle(ChatFormatting.RED)).asWidget());
-
-        } else {
-            widget.child(Text.lang("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY).asWidget());
-        }
-
-        switch (machine.getFrontScan().status()) {
-            case SEALED, SAVED_DATA -> widget.child(Text.lang("tfg.machine.oxygen_distributor.status.sealed")
-                    .withStyle(ChatFormatting.AQUA).asWidget());
-            case ESCAPED_DIMENSION, ESCAPED_BUILD_HEIGHT, ESCAPED_UNLOADED -> widget
-                    .child(Text.lang("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.YELLOW).asWidget());
-            case BLOCK_LIMIT -> widget.child(Text.lang("tfg.machine.oxygen_distributor.status.scan_limit")
-                    .withStyle(ChatFormatting.YELLOW).asWidget());
-            case NULL -> widget.child(Text.lang("tfg.machine.oxygen_distributor.status.scanning")
-                    .withStyle(ChatFormatting.YELLOW).asWidget());
-        }
-
-        widget.child(Text.lang("tfg.machine.oxygen_distributor.size",
-                FormattingUtil.formatNumbers(machine.getFrontInteriorSize())).withStyle(ChatFormatting.AQUA).asWidget());
-        widget.child(Text.lang("tfg.machine.oxygen_distributor.energy",
-                String.format("%,.0f", machine.computeEnergyCostPerTick())).withStyle(ChatFormatting.AQUA).asWidget());
+    private Component computeScanStatus() {
+        return switch (machine.getFrontScan().status()) {
+            case SEALED, SAVED_DATA -> Component.translatable("tfg.machine.oxygen_distributor.status.sealed")
+                    .withStyle(ChatFormatting.AQUA);
+            case ESCAPED_DIMENSION, ESCAPED_BUILD_HEIGHT, ESCAPED_UNLOADED -> Component
+                    .translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.YELLOW);
+            case BLOCK_LIMIT -> Component.translatable("tfg.machine.oxygen_distributor.status.scan_limit")
+                    .withStyle(ChatFormatting.YELLOW);
+            case NULL -> Component.translatable("tfg.machine.oxygen_distributor.status.scanning")
+                    .withStyle(ChatFormatting.YELLOW);
+            default -> Component.empty();
+        };
     }
 
     //////////////////////////////////////
@@ -220,6 +253,7 @@ public class HeatPumpMultiblock extends WorkableElectricMultiblockMachine implem
 
     @Override
     public void onMachineDestroyed() {
+        super.onMachineDestroyed();
         machine.onRemoved();
     }
 
