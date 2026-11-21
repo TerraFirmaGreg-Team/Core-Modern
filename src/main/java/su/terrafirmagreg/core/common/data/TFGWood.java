@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.common.data;
 
 import java.util.Locale;
+import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -26,19 +28,19 @@ public enum TFGWood implements RegistryWood {
     GLACIAN(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
-            MapColor.NONE),
+            MapColor.NONE, TFGWood::AdAstraGlacianSpecialBlockHandler),
     STROPHAR(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
-            MapColor.NONE),
+            MapColor.NONE, TFGWood::AdAstraStemSpecialBlockHandler),
     AERONOS(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
-            MapColor.NONE),
+            MapColor.NONE, TFGWood::AdAstraStemSpecialBlockHandler),
     GINKGO(ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
-            MapColor.NONE);
+            MapColor.NONE, TFGWood::WansSpecialBlockHandler);
 
     public static final TFGWood[] VALUES = values();
 
@@ -56,6 +58,8 @@ public enum TFGWood implements RegistryWood {
     public final ResourceLocation logTexture;
     public final ResourceLocation strippedLogTexture;
     public final String baseModNamespace;
+    @Nullable
+    public final BiFunction<TFGWood, Wood.BlockType, Optional<Block>> blockTypeSpecialHandler;
 
     TFGWood(MapColor woodColor, MapColor barkColor, int daysToGrow, int autumnIndex) {
         this.generateWood = true;
@@ -72,9 +76,10 @@ public enum TFGWood implements RegistryWood {
         this.logTexture = TFGCore.id("block/wood/log/" + serializedName);
         this.strippedLogTexture = TFGCore.id("block/wood/stripped_log/" + serializedName);
         this.baseModNamespace = "";
+        this.blockTypeSpecialHandler = null;
     }
 
-    TFGWood(ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor) {
+    TFGWood(ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor, @Nullable BiFunction<TFGWood, Wood.BlockType, Optional<Block>> blockTypeSpecialHandler) {
         this.generateWood = false;
         this.serializedName = this.name().toLowerCase(Locale.ROOT);
         this.woodColor = mapColor;
@@ -88,6 +93,7 @@ public enum TFGWood implements RegistryWood {
         this.logTexture = log;
         this.strippedLogTexture = stripped_log;
         this.baseModNamespace = plank.getNamespace();
+        this.blockTypeSpecialHandler = blockTypeSpecialHandler;
     }
 
     @Override
@@ -108,14 +114,18 @@ public enum TFGWood implements RegistryWood {
     @Override
     public Supplier<Block> getBlock(Wood.BlockType type) {
         return () -> {
-            //If we do have our own block for this wood type, get it
-            if (TFGBlocks_Wood.WOODS.get(this).containsKey(type)) {
+            //If we generate the blocks ourselves we can get it directly. If not, make sure the type is within the map
+            if (generateWood || TFGBlocks_Wood.WOODS.get(this).containsKey(type)) {
                 return TFGBlocks_Wood.WOODS.get(this).get(type).get();
-            } else { //Otherwise, use the forge registry to get the "equivalent" block. There's probably a better way of doing this, but if we ask for the Stairs block of the Aeronos TFGWood it should return the Aeronos stair from Ad Astra.
-                TFGCore.LOGGER.info("Penis!");
-                if (type == Wood.BlockType.STRIPPED_LOG) {
-
+            } else { //We need to do a special handling for this.
+                    //If we have a special block type handler, get try to get the block that way.
+                if (blockTypeSpecialHandler != null) {
+                    Optional<Block> block = blockTypeSpecialHandler.apply(this, type);
+                    if (block.isPresent()) {
+                        return block.get();
+                    }
                 }
+                //Otherwise return it from the registry.
                 return ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(baseModNamespace, getSerializedName() + "_" + type.name().toLowerCase()));
             }
         };
@@ -153,5 +163,48 @@ public enum TFGWood implements RegistryWood {
             BlockSetType.register(wood.blockSet);
             WoodType.register(wood.woodType);
         }
+    }
+
+    private static Optional<Block> AdAstraStemSpecialBlockHandler(TFGWood wood, Wood.BlockType blockType) {
+        Optional<Block> result = Optional.empty();
+        switch (blockType) {
+            case LOG, STRIPPED_LOG, WOOD, STRIPPED_WOOD ->
+                result = Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(wood.baseModNamespace, wood.getSerializedName() + "_stem")));
+        }
+        return result;
+    }
+
+    private static Optional<Block> WansSpecialBlockHandler(TFGWood wood, Wood.BlockType blockType) {
+        Optional<Block> result = Optional.empty();
+        switch (blockType) {
+            case STRIPPED_LOG ->
+                result = Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(wood.baseModNamespace, "stripped_" + wood.getSerializedName() + "_log")));
+            case STRIPPED_WOOD ->
+                result = Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(wood.baseModNamespace, "stripped_" + wood.getSerializedName() + "_wood")));
+        }
+        return result;
+    }
+
+    private static Optional<Block> AdAstraGlacianSpecialBlockHandler(TFGWood wood, Wood.BlockType blockType) {
+        BiFunction<String, String, Optional<Block>> getFromKJSOrAdAstra = (kjsPath, adAstraPath) -> {
+            ResourceLocation kjsResourceLocation = ResourceLocation.fromNamespaceAndPath("tfg", kjsPath);
+            ResourceLocation adAstraResourceLocation = ResourceLocation.fromNamespaceAndPath("ad_astra", adAstraPath);
+
+            if (ForgeRegistries.BLOCKS.containsKey(kjsResourceLocation)) {
+                return Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(kjsResourceLocation));
+            } else if (ForgeRegistries.BLOCKS.containsKey(adAstraResourceLocation)) {
+                return Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(adAstraResourceLocation));
+            }
+            return Optional.empty();
+        };
+
+        Optional<Block> result = Optional.empty();
+        switch (blockType) {
+            case LOG -> result = getFromKJSOrAdAstra.apply("glacian_log", "glacian_log");
+            case STRIPPED_LOG -> result = getFromKJSOrAdAstra.apply("glacian_log_stripped", "stripped_glacian_log");
+            case WOOD -> result = getFromKJSOrAdAstra.apply("glacian_wood", "glacian_log");
+            case STRIPPED_WOOD -> result = getFromKJSOrAdAstra.apply("glacian_wood_stripped", "stripped_glacian_log");
+        }
+        return result;
     }
 }

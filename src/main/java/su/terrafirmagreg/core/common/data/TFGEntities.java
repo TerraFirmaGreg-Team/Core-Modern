@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.common.data;
 
+import java.util.Map;
+
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.tterrag.registrate.util.entry.EntityEntry;
 
 import net.dries007.tfc.client.model.entity.TFCWolfModel;
@@ -211,6 +214,8 @@ public class TFGEntities {
             .properties(p -> p.sized(1.3f, 1.4f))
             .renderer(() -> RNRPlowRenderer::new)
             .register();
+
+    public static final Map<TFGWatercraftMaterial, EntityEntry<CanoeEntity>> CANOES = null;
 
     @SubscribeEvent
     public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {

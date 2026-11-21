@@ -27,6 +27,7 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_FirmaCiv;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
@@ -129,6 +130,7 @@ public class CommonProxy {
             add(AE2wtlib.QUANTUM_BRIDGE_CARD, TFGItems.WIRELESS_ORDER_TERMINAL.get(), 1, GuiText.WirelessTerminals.getTranslationKey());
 
             TFGBlockEntities.finaliseBEModification();
+            TFGBlocks_FirmaCiv.registerFrames();
             TFGFluids.registerFluidInteractions();
             registerFlowerPots();
             TFGTrades.init();
