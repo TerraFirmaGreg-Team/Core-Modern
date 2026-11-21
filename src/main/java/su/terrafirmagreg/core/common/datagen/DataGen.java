@@ -31,5 +31,6 @@ public class DataGen {
         generator.addProvider(event.includeClient(), new TFGBlockStateProvider(packOutput, existingFileHelper));
 
         var blockTagGenerator = generator.addProvider(event.includeServer(), new TFGBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new TFGItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
     }
 }

@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.common.data;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import com.alekiponi.alekiships.common.entity.vehicle.AbstractVehicle;
 import com.alekiponi.alekiships.util.BoatMaterial;
@@ -12,7 +11,6 @@ import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.data.items.TFGItems;
@@ -51,11 +49,6 @@ public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     private final TFGWood tfgWood;
     public final WoodKind woodKind;
 
-    public Supplier<Block> getWoodBlockType(Wood.BlockType blockType) {
-        //If we're generating the wood blocks, get it directly
-        return tfgWood.getBlock(blockType);
-    }
-
     public RegistryWood getWood() {
         return tfgWood;
     }
@@ -83,7 +76,11 @@ public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
 
     @Override
     public Optional<EntityType<? extends AbstractVehicle>> getEntityType(BoatType boatType) {
-        return Optional.empty();
+        return switch (boatType) {
+            case ROWBOAT -> Optional.of(TFGEntities.ROWBOATS.get(this).get());
+            case SLOOP -> Optional.empty();
+            case CONSTRUCTION_SLOOP -> Optional.empty();
+        };
     }
 
     @Override

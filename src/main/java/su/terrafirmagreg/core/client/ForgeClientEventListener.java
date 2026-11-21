@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.client;
 
+import com.alekiponi.alekiships.client.render.entity.vehicle.RowboatRenderer;
+import com.alekiponi.alekiships.util.CommonHelper;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.CanoeRenderer;
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
 
@@ -16,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -152,6 +155,11 @@ public class ForgeClientEventListener {
                 event.registerEntityRenderer(TFGEntities.CANOES.get(material).get(),
                         context -> new CanoeRenderer(context,
                                 ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + material.getSerializedName() + ".png")));
+            } else if (material.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
+                event.registerEntityRenderer(TFGEntities.ROWBOATS.get(material).get(),
+                        context -> new RowboatRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/rowboat/" + material.getSerializedName()),
+                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
+                                        "textures/entity/watercraft/rowboat/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
             }
         }
     }

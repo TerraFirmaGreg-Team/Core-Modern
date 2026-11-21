@@ -3,6 +3,8 @@ package su.terrafirmagreg.core.common.data;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alekiponi.alekiships.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.alekiships.util.AlekiShipsTags;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.tterrag.registrate.util.entry.EntityEntry;
 
@@ -77,18 +79,28 @@ public class TFGEntities {
         for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
             if (watercraftMaterial.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
                 putCanoeEntity(watercraftMaterial);
+            } else if (watercraftMaterial.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
+                putRowboatEntity(watercraftMaterial);
             }
         }
     }
 
     private static void putCanoeEntity(TFGWatercraftMaterial watercraftMaterial) {
         String name = "dugout_canoe/" + watercraftMaterial.getSerializedName();
-        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<CanoeEntity> entityType, Level level) -> {
-            return new CanoeEntity(entityType, level, watercraftMaterial);
-        }, MobCategory.MISC)
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<CanoeEntity> entityType, Level level) -> new CanoeEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
                 .properties(p -> p.sized(1.125f, 0.625f))
                 .register();
         CANOES.put(watercraftMaterial, entry);
+    }
+
+    private static void putRowboatEntity(TFGWatercraftMaterial watercraftMaterial) {
+        String name = "rowboat/" + watercraftMaterial.getSerializedName();
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<RowboatEntity> entityType, Level level) -> new RowboatEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+                .properties(p -> p.sized(1.875f, 0.625f))
+                .tag(AlekiShipsTags.Entities.ROWBOATS)
+                .register();
+
+        ROWBOATS.put(watercraftMaterial, entry);
     }
 
     public static final EntityEntry<TFCDromedaryCamel> DROMEDARY_CAMEL = TFGCore.REGISTRATE.entity("dromedary_camel", TFCDromedaryCamel::new, MobCategory.CREATURE)
@@ -234,6 +246,7 @@ public class TFGEntities {
             .register();
 
     public static final Map<TFGWatercraftMaterial, EntityEntry<CanoeEntity>> CANOES = new HashMap<>();
+    public static final Map<TFGWatercraftMaterial, EntityEntry<RowboatEntity>> ROWBOATS = new HashMap<>();
 
     @SubscribeEvent
     public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {
