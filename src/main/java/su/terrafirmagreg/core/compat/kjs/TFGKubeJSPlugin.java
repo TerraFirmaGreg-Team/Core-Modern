@@ -20,6 +20,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.TFGPropertyKeys;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
 import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialFlags;
+import su.terrafirmagreg.core.common.tfgt.recipe.modifier.MicrobialCultivatorModifier;
 import su.terrafirmagreg.core.compat.kjs.events.TFGAE2PowerConsumption;
 import su.terrafirmagreg.core.compat.kjs.events.TFGServerEvents;
 import su.terrafirmagreg.core.compat.kjs.events.TFGStartupEvents;
@@ -67,6 +68,7 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         event.add("TFGMaterialFlags", TFGMaterialFlags.class);
         event.add("TFGHelpers", TFGHelpers.class);
         event.add("TFGRockGetters", TFGRockGetters.class);
+        event.add("MicrobialCultivatorBacteria", MicrobialCultivatorModifier.class);
 
         event.add("ToolHelper", ToolHelper.class);
         event.add("MaterialFlags", MaterialFlags.class);

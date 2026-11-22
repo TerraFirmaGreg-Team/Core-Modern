@@ -49,6 +49,13 @@ public class TFGTRecipeTypes {
                     }))
             .setSound(GTSoundEntries.BATH);
 
+    public static final GTRecipeType MICROBIAL_CULTIVATION_RECIPES = GTRecipeTypes
+            .register(TFGCore.id("microbial_cultivation"), GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 2, 8)
+            .UI(builder -> builder.setProgressBar(new ProgressBarTextureSet(20, ProgressDrawable.Direction.RIGHT, PROGRESS_BAR_DNA)))
+            .setSound(GTSoundEntries.BATH);
+
     public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
             .register(TFGCore.id("growth_chamber"), GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)

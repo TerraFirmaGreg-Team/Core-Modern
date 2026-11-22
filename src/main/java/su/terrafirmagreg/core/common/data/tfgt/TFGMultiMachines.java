@@ -91,6 +91,8 @@ import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellTrait;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.ISPOutputRecipeLogic;
 import su.terrafirmagreg.core.common.tfgt.recipe.modifier.AnimalProductModifier;
+import su.terrafirmagreg.core.common.tfgt.recipe.modifier.DiversityModifier;
+import su.terrafirmagreg.core.common.tfgt.recipe.modifier.MicrobialCultivatorModifier;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
 public class TFGMultiMachines {
@@ -267,6 +269,29 @@ public class TFGMultiMachines {
                     .build())
             .register();
 
+    public static final MultiblockMachineDefinition MICROBIAL_CULTIVATOR = REGISTRATE
+            .multiblock("microbial_cultivator", MicrobialCultivatorMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
+            .recipeType(TFGTRecipeTypes.MICROBIAL_CULTIVATION_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, MicrobialCultivatorModifier.INSTANCE,
+                    DiversityModifier.of(x -> (float) (0.1 * Math.pow(x, 2))))
+            .appearanceBlock(TFGBlocks_Casings.BIOCULTURE_CASING)
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_bioculture"),
+                    TFGCore.id("block/machines/bioreactor"))
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AXA", "AGA", "AGA", "AAA")
+                    .slice("AAA", "G G", "G G", "AAA")
+                    .slice("AAA", "AGA", "AGA", "AAA")
+                    .where('X', controller(definition))
+                    .where('G', blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
+                    .where('A', blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get())
+                            .and(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .and(Predicates.autoAbilities(true, false, false)))
+                    .where(' ', Predicates.air())
+                    .build())
+            .register();
 
     public static final MultiblockMachineDefinition NUCLEAR_TURBINE = REGISTRATE
             .multiblock("nuclear_turbine", (holder) -> new NuclearLargeTurbineMachine(holder, GTValues.EV))
