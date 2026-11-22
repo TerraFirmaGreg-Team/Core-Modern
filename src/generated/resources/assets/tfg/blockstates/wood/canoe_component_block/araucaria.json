@@ -1,0 +1,274 @@
+{
+  "variants": {
+    "canoe_carved=1,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/0",
+      "y": 90
+    },
+    "canoe_carved=1,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/0"
+    },
+    "canoe_carved=1,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/0",
+      "y": 180
+    },
+    "canoe_carved=1,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/0",
+      "y": 270
+    },
+    "canoe_carved=10,end=false,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/9",
+      "y": 90
+    },
+    "canoe_carved=10,end=false,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/9"
+    },
+    "canoe_carved=10,end=false,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/9",
+      "y": 180
+    },
+    "canoe_carved=10,end=false,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/9",
+      "y": 270
+    },
+    "canoe_carved=10,end=true,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/9",
+      "y": 90
+    },
+    "canoe_carved=10,end=true,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/9"
+    },
+    "canoe_carved=10,end=true,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/9",
+      "y": 180
+    },
+    "canoe_carved=10,end=true,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/9",
+      "y": 270
+    },
+    "canoe_carved=11,end=false,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/10",
+      "y": 90
+    },
+    "canoe_carved=11,end=false,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/10"
+    },
+    "canoe_carved=11,end=false,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/10",
+      "y": 180
+    },
+    "canoe_carved=11,end=false,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/10",
+      "y": 270
+    },
+    "canoe_carved=11,end=true,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/10",
+      "y": 90
+    },
+    "canoe_carved=11,end=true,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/10"
+    },
+    "canoe_carved=11,end=true,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/10",
+      "y": 180
+    },
+    "canoe_carved=11,end=true,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/10",
+      "y": 270
+    },
+    "canoe_carved=12,end=false,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/11",
+      "y": 90
+    },
+    "canoe_carved=12,end=false,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/11"
+    },
+    "canoe_carved=12,end=false,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/11",
+      "y": 180
+    },
+    "canoe_carved=12,end=false,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/11",
+      "y": 270
+    },
+    "canoe_carved=12,end=true,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/11",
+      "y": 90
+    },
+    "canoe_carved=12,end=true,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/11"
+    },
+    "canoe_carved=12,end=true,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/11",
+      "y": 180
+    },
+    "canoe_carved=12,end=true,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/11",
+      "y": 270
+    },
+    "canoe_carved=13,end=false,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/12",
+      "y": 90
+    },
+    "canoe_carved=13,end=false,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/12"
+    },
+    "canoe_carved=13,end=false,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/12",
+      "y": 180
+    },
+    "canoe_carved=13,end=false,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/12",
+      "y": 270
+    },
+    "canoe_carved=13,end=true,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/12",
+      "y": 90
+    },
+    "canoe_carved=13,end=true,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/12"
+    },
+    "canoe_carved=13,end=true,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/12",
+      "y": 180
+    },
+    "canoe_carved=13,end=true,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/12",
+      "y": 270
+    },
+    "canoe_carved=2,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/1",
+      "y": 90
+    },
+    "canoe_carved=2,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/1"
+    },
+    "canoe_carved=2,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/1",
+      "y": 180
+    },
+    "canoe_carved=2,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/1",
+      "y": 270
+    },
+    "canoe_carved=3,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/2",
+      "y": 90
+    },
+    "canoe_carved=3,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/2"
+    },
+    "canoe_carved=3,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/2",
+      "y": 180
+    },
+    "canoe_carved=3,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/2",
+      "y": 270
+    },
+    "canoe_carved=4,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/3",
+      "y": 90
+    },
+    "canoe_carved=4,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/3"
+    },
+    "canoe_carved=4,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/3",
+      "y": 180
+    },
+    "canoe_carved=4,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/3",
+      "y": 270
+    },
+    "canoe_carved=5,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/4",
+      "y": 90
+    },
+    "canoe_carved=5,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/4"
+    },
+    "canoe_carved=5,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/4",
+      "y": 180
+    },
+    "canoe_carved=5,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/4",
+      "y": 270
+    },
+    "canoe_carved=6,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/5",
+      "y": 90
+    },
+    "canoe_carved=6,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/5"
+    },
+    "canoe_carved=6,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/5",
+      "y": 180
+    },
+    "canoe_carved=6,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/5",
+      "y": 270
+    },
+    "canoe_carved=7,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/6",
+      "y": 90
+    },
+    "canoe_carved=7,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/6"
+    },
+    "canoe_carved=7,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/6",
+      "y": 180
+    },
+    "canoe_carved=7,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/6",
+      "y": 270
+    },
+    "canoe_carved=8,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/7",
+      "y": 90
+    },
+    "canoe_carved=8,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/7"
+    },
+    "canoe_carved=8,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/7",
+      "y": 180
+    },
+    "canoe_carved=8,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/all/7",
+      "y": 270
+    },
+    "canoe_carved=9,end=false,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/8",
+      "y": 90
+    },
+    "canoe_carved=9,end=false,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/8"
+    },
+    "canoe_carved=9,end=false,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/8",
+      "y": 180
+    },
+    "canoe_carved=9,end=false,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/middle/8",
+      "y": 270
+    },
+    "canoe_carved=9,end=true,facing=east": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/8",
+      "y": 90
+    },
+    "canoe_carved=9,end=true,facing=north": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/8"
+    },
+    "canoe_carved=9,end=true,facing=south": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/8",
+      "y": 180
+    },
+    "canoe_carved=9,end=true,facing=west": {
+      "model": "tfg:block/wood/canoe_component_block/araucaria/end/8",
+      "y": 270
+    }
+  }
+}

@@ -1,5 +1,13 @@
 package su.terrafirmagreg.core.common.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.alekiponi.alekiships.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.alekiships.common.entity.vehicle.SloopEntity;
+import com.alekiponi.alekiships.common.entity.vehicle.SloopUnderConstructionEntity;
+import com.alekiponi.alekiships.util.AlekiShipsTags;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.tterrag.registrate.util.entry.EntityEntry;
 
 import net.dries007.tfc.client.model.entity.TFCWolfModel;
@@ -7,9 +15,13 @@ import net.minecraft.client.model.CamelModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -67,9 +79,6 @@ import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptorRenderer;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @SuppressWarnings("unused")
 public class TFGEntities {
-    public static void init() {
-    }
-
     public static final EntityEntry<TFCDromedaryCamel> DROMEDARY_CAMEL = TFGCore.REGISTRATE.entity("dromedary_camel", TFCDromedaryCamel::new, MobCategory.CREATURE)
             .properties(p -> p.sized(1.7F, 2.375F).clientTrackingRange(10))
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
@@ -211,6 +220,62 @@ public class TFGEntities {
             .properties(p -> p.sized(1.3f, 1.4f))
             .renderer(() -> RNRPlowRenderer::new)
             .register();
+
+    public static final Map<TFGWatercraftMaterial, EntityEntry<CanoeEntity>> CANOES = new HashMap<>();
+    public static final Map<TFGWatercraftMaterial, EntityEntry<RowboatEntity>> ROWBOATS = new HashMap<>();
+    public static final Map<TFGWatercraftMaterial, EntityEntry<SloopEntity>> SLOOPS = new HashMap<>();
+    public static final Map<TFGWatercraftMaterial, EntityEntry<SloopUnderConstructionEntity>> SLOOPS_UNDER_CONSTRUCTION = new HashMap<>();
+
+    public static void init() {
+        for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
+            if (watercraftMaterial.tfgWood.woodKind == TFGWood.WoodKind.SOFT) {
+                putCanoeEntity(watercraftMaterial);
+            } else if (watercraftMaterial.tfgWood.woodKind == TFGWood.WoodKind.HARD) {
+                putRowboatEntity(watercraftMaterial);
+                putSloopEntity(watercraftMaterial);
+                putSloopUnderConstructionEntity(watercraftMaterial);
+            }
+        }
+    }
+
+    private static void putCanoeEntity(TFGWatercraftMaterial watercraftMaterial) {
+        String name = "dugout_canoe/" + watercraftMaterial.getSerializedName();
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<CanoeEntity> entityType, Level level) -> new CanoeEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+                .properties(p -> p.sized(1.125f, 0.625f))
+                .register();
+        CANOES.put(watercraftMaterial, entry);
+    }
+
+    private static void putRowboatEntity(TFGWatercraftMaterial watercraftMaterial) {
+        String name = "rowboat/" + watercraftMaterial.getSerializedName();
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<RowboatEntity> entityType, Level level) -> new RowboatEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+                .properties(p -> p.sized(1.875f, 0.625f))
+                .tag(AlekiShipsTags.Entities.ROWBOATS)
+                .register();
+
+        ROWBOATS.put(watercraftMaterial, entry);
+    }
+
+    private static void putSloopEntity(TFGWatercraftMaterial watercraftMaterial) {
+        String name = "sloop/" + watercraftMaterial.getSerializedName();
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<SloopEntity> entityType, Level level) -> new SloopEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+                .properties(p -> p.sized(3f, 0.75f).setTrackingRange(20).fireImmune())
+                .tag(AlekiShipsTags.Entities.SLOOPS)
+                .tag(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("carryon", "entity_blacklist")))
+                .register();
+
+        SLOOPS.put(watercraftMaterial, entry);
+    }
+
+    private static void putSloopUnderConstructionEntity(TFGWatercraftMaterial watercraftMaterial) {
+        String name = "sloop_construction/" + watercraftMaterial.getSerializedName();
+        var entry = TFGCore.REGISTRATE
+                .entity(name, (EntityType<SloopUnderConstructionEntity> entityType, Level level) -> new SloopUnderConstructionEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+                .properties(p -> p.sized(4f, 0.75f).setTrackingRange(20).fireImmune().noSummon())
+                .register();
+
+        SLOOPS_UNDER_CONSTRUCTION.put(watercraftMaterial, entry);
+    }
 
     @SubscribeEvent
     public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {

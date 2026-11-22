@@ -78,6 +78,7 @@ public final class TFGBlocks {
         TFGBlocks_Struts.init();
         TFGBlocks_PalmTrees.init();
         TFGBlocks_Create.init();
+        TFGBlocks_FirmaCiv.init();
     }
 
     ////// Decoration blocks

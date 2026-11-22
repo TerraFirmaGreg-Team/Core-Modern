@@ -1,7 +1,10 @@
 package su.terrafirmagreg.core.common.datagen;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.gregtechceu.gtceu.api.registry.registrate.SoundEntryBuilder;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -19,11 +22,15 @@ public class DataGen {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         generator.addProvider(event.includeClient(), new SoundEntryBuilder.SoundEntryProvider(packOutput, TFGCore.MOD_ID));
         generator.addProvider(event.includeClient(), new TFGSoundProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new TFGItemModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new TFGBlockModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new TFGBlockStateProvider(packOutput, existingFileHelper));
+
+        //        var blockTagGenerator = generator.addProvider(event.includeServer(), new TFGBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
+        //        generator.addProvider(event.includeServer(), new TFGItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
     }
 }

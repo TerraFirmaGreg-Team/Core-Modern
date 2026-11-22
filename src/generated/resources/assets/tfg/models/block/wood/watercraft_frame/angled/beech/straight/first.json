@@ -1,0 +1,6 @@
+{
+  "parent": "alekiships:block/watercraft_frame/angled/template/straight/first",
+  "textures": {
+    "plank": "tfg:block/wood/planks/beech"
+  }
+}

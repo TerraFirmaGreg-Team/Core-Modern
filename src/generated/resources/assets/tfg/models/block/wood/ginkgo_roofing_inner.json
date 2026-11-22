@@ -1,0 +1,8 @@
+{
+  "parent": "alekiroofs:block/roofing_inner",
+  "textures": {
+    "bottom": "wan_ancient_beasts:block/ginkgo_planks",
+    "side": "wan_ancient_beasts:block/ginkgo_planks",
+    "top": "wan_ancient_beasts:block/ginkgo_planks"
+  }
+}

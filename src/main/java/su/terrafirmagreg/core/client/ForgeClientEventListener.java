@@ -1,5 +1,12 @@
 package su.terrafirmagreg.core.client;
 
+import com.alekiponi.alekiships.AlekiShips;
+import com.alekiponi.alekiships.client.render.entity.vehicle.RowboatRenderer;
+import com.alekiponi.alekiships.client.render.entity.vehicle.SloopConstructionRenderer;
+import com.alekiponi.alekiships.client.render.entity.vehicle.SloopRenderer;
+import com.alekiponi.alekiships.client.resources.PaintedTextureGenerator;
+import com.alekiponi.alekiships.util.CommonHelper;
+import com.alekiponi.firmaciv.client.render.entity.vehicle.CanoeRenderer;
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
 
 import net.dries007.tfc.client.TFCColors;
@@ -15,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -36,9 +44,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
 import su.terrafirmagreg.core.client.renderer.CloudRendererHelper;
 import su.terrafirmagreg.core.client.renderer.SkyboxRenderer;
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
-import su.terrafirmagreg.core.common.data.TFGEntities;
-import su.terrafirmagreg.core.common.data.TFGPlant;
+import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
@@ -144,6 +150,30 @@ public class ForgeClientEventListener {
                 .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
         event.registerEntityRenderer(TFGEntities.BACTRIAN_CAMEL.get(),
                 ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
+
+        for (final TFGWatercraftMaterial material : TFGWatercraftMaterial.values()) {
+            if (material.tfgWood.woodKind == TFGWood.WoodKind.SOFT) {
+                event.registerEntityRenderer(TFGEntities.CANOES.get(material).get(),
+                        context -> new CanoeRenderer(context,
+                                TFGCore.id("textures/entity/watercraft/dugout_canoe/" + material.getSerializedName() + ".png")));
+
+            } else if (material.tfgWood.woodKind == TFGWood.WoodKind.HARD) {
+                event.registerEntityRenderer(TFGEntities.SLOOPS_UNDER_CONSTRUCTION.get(material).get(),
+                        context -> new SloopConstructionRenderer(context,
+                                TFGCore.id("textures/entity/watercraft/sloop_construction/" + material.getSerializedName() + ".png")));
+
+                //Both built rowboats and sloops can be dyed, the dyed texture generation happens on the "registerReloadListeners" method below.
+                event.registerEntityRenderer(TFGEntities.ROWBOATS.get(material).get(),
+                        context -> new RowboatRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/rowboat/" + material.getSerializedName() + ".png"),
+                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> TFGCore.id(
+                                        "textures/entity/watercraft/rowboat/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
+
+                event.registerEntityRenderer(TFGEntities.SLOOPS.get(material).get(),
+                        context -> new SloopRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop/" + material.getSerializedName() + ".png"),
+                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> TFGCore.id(
+                                        "textures/entity/watercraft/sloop/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
+            }
+        }
     }
 
     @SubscribeEvent
@@ -156,5 +186,20 @@ public class ForgeClientEventListener {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         CloudRendererHelper.onClientTick();
+    }
+
+    public static void registerReloadListeners(final RegisterClientReloadListenersEvent event) {
+        ResourceLocation rowboatPaint = ResourceLocation.fromNamespaceAndPath(AlekiShips.MOD_ID, "entity/watercraft/rowboat/paint");
+        ResourceLocation sloopPaint = ResourceLocation.fromNamespaceAndPath(AlekiShips.MOD_ID, "entity/watercraft/sloop/paint");
+
+        for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
+            if (watercraftMaterial.tfgWood.woodKind != TFGWood.WoodKind.HARD)
+                continue;
+
+            event.registerReloadListener(
+                    new PaintedTextureGenerator(TFGCore.id("entity/watercraft/rowboat/" + watercraftMaterial.getSerializedName()), rowboatPaint));
+            event.registerReloadListener(
+                    new PaintedTextureGenerator(TFGCore.id("entity/watercraft/sloop/" + watercraftMaterial.getSerializedName()), sloopPaint));
+        }
     }
 }

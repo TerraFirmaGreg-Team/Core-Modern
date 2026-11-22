@@ -1,0 +1,8 @@
+{
+  "parent": "firmaciv:block/canoe_component_block/template/end/9",
+  "textures": {
+    "0": "wan_ancient_beasts:block/stripped_ginkgo_log",
+    "1": "wan_ancient_beasts:block/stripped_ginkgo_log_top",
+    "particle": "wan_ancient_beasts:block/stripped_ginkgo_log"
+  }
+}
