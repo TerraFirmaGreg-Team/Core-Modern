@@ -40,6 +40,7 @@ public final class TFGSounds {
     public static final SoundEntry FIRE_CLICK_CLICK = TFGCore.REGISTRATE.sound(TFGCore.id("fire_click_click")).build();
     public static final SoundEntry FIRE_WHOOSH = TFGCore.REGISTRATE.sound(TFGCore.id("fire_whoosh")).build();
     public static final SoundEntry BURNER = TFGCore.REGISTRATE.sound(TFGCore.id("burner")).addVariant(TFGCore.id("burner_1")).addVariant(TFGCore.id("burner_2")).build();
+    public static final SoundEntry COOKING = TFGCore.REGISTRATE.sound(TFGCore.id("cooking")).addVariant(TFGCore.id("cooking_1")).addVariant(TFGCore.id("cooking_2")).build();
 
     public static void init() {
     }

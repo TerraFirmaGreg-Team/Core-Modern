@@ -1,9 +1,12 @@
 package su.terrafirmagreg.core.compat.emi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.blocks.OvenType;
 import com.eerussianguy.firmalife.common.util.Plantable;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -18,10 +21,14 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
@@ -29,9 +36,10 @@ import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.SlotWidget;
-import dev.emi.emi.api.widget.TextureWidget;
-import dev.emi.emi.api.widget.WidgetHolder;
+import dev.emi.emi.api.widget.*;
+import electrolyte.greate.compat.jei.category.animations.TieredAnimatedMechanicalPress;
+import electrolyte.greate.registry.MechanicalMixers;
+import electrolyte.greate.registry.MechanicalPresses;
 import electrolyte.greate.compat.gtceu.common.data.machines.GreateMachines;
 import electrolyte.greate.registry.CrushingWheels;
 import electrolyte.greate.registry.EncasedFans;
@@ -44,12 +52,17 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
+import su.terrafirmagreg.core.common.recipe.MixingBowlRecipe;
+import su.terrafirmagreg.core.common.recipe.SkilletRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.SMRGenerator2;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
 import su.terrafirmagreg.core.compat.ae2.terminal.WOTMenu;
+import su.terrafirmagreg.core.compat.emi.widgets.BasinlessTieredMixer;
+import su.terrafirmagreg.core.compat.emi.widgets.BasinlessVacuumChamber;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -86,6 +99,15 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory SMR_ADDITIVES = new EmiRecipeCategory(TFGCore.id("smr_additives"),
             EmiStack.of(TFGMultiMachines.SMR_GENERATOR.getBlock().asItem()));
+
+    public static final EmiRecipeCategory COPPER_POT = new EmiRecipeCategory(TFGCore.id("copper_pot"),
+            EmiStack.of(TFGBlocks.COPPER_POT.get()));
+
+    public static final EmiRecipeCategory SKILLET = new EmiRecipeCategory(TFGCore.id("skillet"),
+            EmiStack.of(TFGBlocks.SKILLET.get()));
+
+    public static final EmiRecipeCategory MIXING_BOWL = new EmiRecipeCategory(TFGCore.id("mixing_bowl"),
+            EmiStack.of(TFGBlocks.MIXING_BOWL.get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -220,6 +242,25 @@ public class TFGEmiPlugin implements EmiPlugin {
             emiRegistry.addWorkstation(GREENHOUSE_PLANTABLE, EmiStack.of(GreenhousePlantableEmiRecipe.resolvePlanterBlock(plantable.getPlanterType())));
             emiRegistry.addRecipe(new GreenhousePlantableEmiRecipe(plantable));
         }
+
+        //Cooking Appliances
+        emiRegistry.addCategory(COPPER_POT);
+        emiRegistry.addWorkstation(COPPER_POT, EmiStack.of(TFGBlocks.COPPER_POT.get().asItem()));
+        for (CopperPotRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.COPPER_POT.get())) {
+            emiRegistry.addRecipe(new CopperPotEmiRecipe(recipe));
+        }
+
+        emiRegistry.addCategory(SKILLET);
+        emiRegistry.addWorkstation(SKILLET, EmiStack.of(TFGBlocks.SKILLET.get().asItem()));
+        for (SkilletRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.SKILLET.get())) {
+            emiRegistry.addRecipe(new SkilletEmiRecipe(recipe));
+        }
+
+        emiRegistry.addCategory(MIXING_BOWL);
+        emiRegistry.addWorkstation(MIXING_BOWL, EmiStack.of(TFGBlocks.MIXING_BOWL.get().asItem()));
+        for (MixingBowlRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.MIXING_BOWL.get())) {
+            emiRegistry.addRecipe(new MixingBowlEmiRecipe(recipe));
+        }
     }
 
     private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
@@ -256,5 +297,133 @@ public class TFGEmiPlugin implements EmiPlugin {
         };
         widget.drawBack(false);
         holder.add(widget);
+    }
+
+    /**
+     * Creates a GT circuit number widget.
+     * I'm sure GT has a public method for this. But it was faster to make one than to look.
+     * @param holder WidgetHolder.
+     * @param circuit Circuit number.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     */
+    public static void createCircuitNumberWidget(WidgetHolder holder, int circuit, int offsetX, int offsetY) {
+        if (circuit < 0 || circuit > 32) {
+            return;
+        }
+
+        ItemStack circuitStack = new ItemStack(GTItems.PROGRAMMED_CIRCUIT.get());
+        circuitStack.getOrCreateTag().putInt("Configuration", circuit);
+        Ingredient configuredCircuit = StrictNBTIngredient.of(circuitStack);
+
+        holder.add(new SlotWidget(EmiIngredient.of(configuredCircuit), offsetX, offsetY));
+    }
+
+    /**
+     * Creates a {@link BasinlessTieredMixer} widget.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     * @param tier Mixer tier. [0-9]
+     * @param renderSlot Whether to render the blank slot for viewing the stack tooltip.
+     */
+    public static void createBasinlessMixerWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY, int tier, boolean renderSlot) {
+        Widget widget = new Widget() {
+            @Override
+            public Bounds getBounds() {
+                return new Bounds(offsetX, offsetY, 48, 48);
+            }
+
+            @Override
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                new BasinlessTieredMixer(MechanicalMixers.MECHANICAL_MIXERS[tier].get())
+                        .draw(graphics, offsetX, offsetY);
+            }
+        };
+        holder.add(widget);
+        if (renderSlot) {
+            TFGEmiPlugin.createBlankItemWidget(holder, stack, offsetX, offsetY - 18);
+        }
+    }
+
+    /**
+     * Creates a {@link TieredAnimatedMechanicalPress} widget without a basin.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     * @param tier Press tier. [0-9]
+     * @param renderSlot Whether to render the blank slot for viewing the stack tooltip.
+     */
+    public static void createBasinlessPressWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY, int tier, boolean renderSlot) {
+        Widget widget = new Widget() {
+            @Override
+            public Bounds getBounds() {
+                return new Bounds(offsetX, offsetY, 48, 48);
+            }
+
+            @Override
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                new TieredAnimatedMechanicalPress(MechanicalPresses.MECHANICAL_PRESSES[tier].get(), false)
+                        .draw(graphics, offsetX, offsetY);
+            }
+        };
+        holder.add(widget);
+        if (renderSlot) {
+            TFGEmiPlugin.createBlankItemWidget(holder, stack, offsetX, offsetY - 18);
+        }
+    }
+
+    /**
+     * Creates a {@link BasinlessVacuumChamber} widget.
+     * @param holder WidgetHolder.
+     * @param stack Item stack.
+     * @param offsetX X-position on screen.
+     * @param offsetY Y-position on screen.
+     * @param mode `false` for vacuum, `true` for pressure.
+     * @param renderSlot Whether to render the blank slot for viewing the stack tooltip.
+     */
+    public static void createBasinlessVacuumChamberWidget(WidgetHolder holder, EmiIngredient stack, int offsetX, int offsetY, boolean mode, boolean renderSlot) {
+        Widget widget = new Widget() {
+            @Override
+            public Bounds getBounds() {
+                return new Bounds(offsetX, offsetY, 48, 48);
+            }
+
+            @Override
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                new BasinlessVacuumChamber()
+                        .draw(graphics, offsetX, offsetY, mode);
+            }
+        };
+        holder.add(widget);
+        if (renderSlot) {
+            TFGEmiPlugin.createBlankItemWidget(holder, stack, offsetX, offsetY - 18);
+        }
+    }
+
+    /**
+     * Gets heat sources as an EmiIngredient.
+     * @return EmiIngredient list of heat sources.
+     */
+    public static EmiIngredient heatSources() {
+        List<EmiStack> heatersList = new ArrayList<>();
+        heatersList.add(EmiStack.of(TFGBlocks.GAS_BURNER.get().asItem()));
+        heatersList.add(EmiStack.of(TFGBlocks.FIRE_BOX.get().asItem()));
+        for (OvenType type : OvenType.values()) {
+            heatersList.add(EmiStack.of(FLBlocks.CURED_OVEN_BOTTOM.get(type).get().asItem()));
+            heatersList.add(EmiStack.of(FLBlocks.INSULATED_OVEN_BOTTOM.get(type).get().asItem()));
+        }
+        return EmiIngredient.of(heatersList);
+    }
+
+    /**
+     * Gets the negative x-offset of a component to center the text.
+     * @return Text length divided by 2.
+     */
+    public static int centeredTextOffset(Component component) {
+        int tempTextLength = Minecraft.getInstance().font.width(component.getVisualOrderText());
+        return tempTextLength / 2;
     }
 }

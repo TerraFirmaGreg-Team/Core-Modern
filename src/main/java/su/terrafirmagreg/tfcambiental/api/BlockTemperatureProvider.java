@@ -54,12 +54,12 @@ import net.minecraftforge.registries.RegistryObject;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import su.terrafirmagreg.core.common.block.ParticleEmitterDecorationBlock;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
-import su.terrafirmagreg.tfcambiental.api.BlockTemperatureProvider.TempModifierSpec;
 import su.terrafirmagreg.tfcambiental.item.TFCAmbientalItems;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifierStorage;
@@ -107,6 +107,7 @@ public interface BlockTemperatureProvider {
             if (blockEntity != null) {
                 addScaled(storage, handleCharcoalForge(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleGasBurner(player, blockEntity), distanceMultiplier);
+                addScaled(storage, handleFireBox(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleFirePit(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handlePot(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleGrill(player, blockEntity), distanceMultiplier);
@@ -173,6 +174,18 @@ public interface BlockTemperatureProvider {
                 change = change * 0.3f;
             }
             return TempModifier.defined(Math.min(6f, change), 0);
+        }
+        return TempModifier.none();
+    }
+
+    static Optional<TempModifier> handleFireBox(Player player, BlockEntity entity) {
+        if (entity instanceof FireBoxBlockEntity forge) {
+            float temp = forge.getTemperature();
+            float change = temp / 140f;
+            if (hasProtection(player)) {
+                change = change * 0.3f;
+            }
+            return TempModifier.defined(change, 0);
         }
         return TempModifier.none();
     }

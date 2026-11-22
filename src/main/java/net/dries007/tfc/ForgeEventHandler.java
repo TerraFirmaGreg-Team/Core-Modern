@@ -123,7 +123,6 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -229,12 +228,12 @@ import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.FluidPostProcess;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
-import su.terrafirmagreg.core.common.block.GasBurnerBlock;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.block.appliances.FireBoxBlock;
+import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
+import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
-
-import static net.dries007.tfc.TerraFirmaCraft.LOGGER;
 
 
 public final class ForgeEventHandler
@@ -923,6 +922,11 @@ public final class ForgeEventHandler
         else if (blockEntity instanceof GasBurnerBlockEntity burner && state.getValue(GasBurnerBlock.LIT))
         {
             burner.extinguish(state);
+            event.setCanceled(true);
+        }
+        else if (blockEntity instanceof FireBoxBlockEntity fireBox && state.getValue(FireBoxBlock.LIT))
+        {
+            fireBox.extinguish(state);
             event.setCanceled(true);
         }
         else if (blockEntity instanceof CrucibleBlockEntity crucible)

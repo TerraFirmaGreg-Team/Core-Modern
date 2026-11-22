@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/copper_pot_parent",
+  "textures": {
+    "0": "tfg:block/cooking_appliances/copper_pot_1"
+  }
+}

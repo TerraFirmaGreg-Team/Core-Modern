@@ -1,5 +1,9 @@
 {
   "values": [
-    "tfg:gas_burner"
+    "tfg:gas_burner",
+    "tfg:copper_pot",
+    "tfg:skillet",
+    "tfg:fire_box",
+    "tfg:fire_box_top_oven"
   ]
 }

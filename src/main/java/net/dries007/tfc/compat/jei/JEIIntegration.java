@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.eerussianguy.firmalife.compat.jei.FLJEIPlugin;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -38,6 +40,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.RegistryObject;
@@ -96,6 +99,8 @@ import net.dries007.tfc.compat.jei.transfer.WeldingRecipeTransferInfo;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.KnappingType;
 import su.terrafirmagreg.core.client.screen.TFGNutritionScreen;
+import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 @JeiPlugin
 public final class JEIIntegration implements IModPlugin
@@ -227,7 +232,17 @@ public final class JEIIntegration implements IModPlugin
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registry)
     {
+        // Heating
         registry.addRecipeCatalyst(new ItemStack(TFCBlocks.FIREPIT.get()), HEATING);
+        registry.addRecipeCatalyst(new ItemStack(TFCBlocks.GRILL.get()), HEATING);
+        registry.addRecipeCatalyst(new ItemStack(TFCBlocks.CRUCIBLE.get()), HEATING);
+        registry.addRecipeCatalyst(new ItemStack(TFGBlocks.FIRE_BOX_TOP_OVEN.get()), HEATING);
+        for (ItemStack stack : Ingredient.of(TFGTags.Items.FirmalifeOvenTops).getItems()) {
+            registry.addRecipeCatalyst(stack, HEATING);
+        }
+        // Registering fire box oven as FL oven recipe catalyst here since we don't have JEI compat core side.
+        registry.addRecipeCatalyst(new ItemStack(TFGBlocks.FIRE_BOX_TOP_OVEN.get()), FLJEIPlugin.OVEN);
+
         registry.addRecipeCatalyst(new ItemStack(TFCBlocks.QUERN.get()), QUERN);
         registry.addRecipeCatalyst(new ItemStack(TFCItems.POT.get()), SIMPLE_POT);
         registry.addRecipeCatalyst(new ItemStack(TFCItems.POT.get()), SOUP_POT);
