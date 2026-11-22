@@ -34,7 +34,7 @@ public class GuzzlerMixin extends Monster {
                 .add(Attributes.ATTACK_DAMAGE, 30.0F)
                 .add(Attributes.ATTACK_KNOCKBACK, 2.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)
-                .add(Attributes.FOLLOW_RANGE, 32.0F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F)
                 .add(Attributes.ARMOR, 12F));
     }
 

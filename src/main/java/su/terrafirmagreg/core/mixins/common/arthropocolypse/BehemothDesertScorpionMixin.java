@@ -26,7 +26,7 @@ public class BehemothDesertScorpionMixin extends PathfinderMob {
                 .add(Attributes.MAX_HEALTH, 200.0F)
                 .add(Attributes.ARMOR, 10.0F)
                 .add(Attributes.ARMOR_TOUGHNESS, 4)
-                .add(Attributes.FOLLOW_RANGE, 24.0F)
+                .add(Attributes.FOLLOW_RANGE, 48.0F)
                 .add(Attributes.ATTACK_SPEED, 0.5F)
                 .add(Attributes.ATTACK_DAMAGE, 3 + 10)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.1)

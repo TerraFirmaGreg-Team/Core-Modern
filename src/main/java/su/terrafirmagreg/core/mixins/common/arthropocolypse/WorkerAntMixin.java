@@ -26,7 +26,7 @@ public class WorkerAntMixin extends ClimbableEntity {
         cir.setReturnValue(Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 30.0F)
                 .add(Attributes.ARMOR, 6.0F)
-                .add(Attributes.FOLLOW_RANGE, 24.0F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F)
                 .add(Attributes.ATTACK_SPEED, 1.0F)
                 .add(Attributes.ATTACK_DAMAGE, 11)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.2)

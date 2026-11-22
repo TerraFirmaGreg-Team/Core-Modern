@@ -32,7 +32,8 @@ public class UmberSpiderMixin extends Spider {
                 .add(Attributes.MAX_HEALTH, 100.0f)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
                 .add(Attributes.ATTACK_DAMAGE, 20.0F)
-                .add(Attributes.ARMOR, 4.0F));
+                .add(Attributes.ARMOR, 4.0F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F));
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"), remap = true)

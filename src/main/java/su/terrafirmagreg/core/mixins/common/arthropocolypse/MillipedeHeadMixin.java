@@ -23,7 +23,7 @@ public class MillipedeHeadMixin extends Monster {
     private static void tfg$createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.setReturnValue(Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 120.0F)
-                .add(Attributes.FOLLOW_RANGE, 22.0F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F)
                 .add(Attributes.ARMOR, 16.0F)
                 .add(Attributes.ATTACK_DAMAGE, 20.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)

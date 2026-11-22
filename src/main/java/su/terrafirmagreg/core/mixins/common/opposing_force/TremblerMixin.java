@@ -34,6 +34,7 @@ public class TremblerMixin extends Monster {
                 .add(Attributes.ATTACK_DAMAGE, 12.0F)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F)
                 .add(Attributes.ARMOR, 20.0F));
     }
 

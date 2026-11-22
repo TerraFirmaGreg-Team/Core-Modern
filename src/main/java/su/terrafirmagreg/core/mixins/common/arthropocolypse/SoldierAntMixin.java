@@ -37,7 +37,7 @@ public class SoldierAntMixin extends ClimbableEntity {
         cir.setReturnValue(Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 60.0F)
                 .add(Attributes.ARMOR, 10.0F)
-                .add(Attributes.FOLLOW_RANGE, 24.0F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F)
                 .add(Attributes.ATTACK_SPEED, 0.5F)
                 .add(Attributes.ATTACK_DAMAGE, 14)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.4)

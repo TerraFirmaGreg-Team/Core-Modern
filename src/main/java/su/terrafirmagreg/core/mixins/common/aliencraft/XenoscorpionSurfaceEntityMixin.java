@@ -62,7 +62,7 @@ public class XenoscorpionSurfaceEntityMixin extends Monster {
                 .add(Attributes.ATTACK_DAMAGE, 20.0F)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.4F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)
-                .add(Attributes.FOLLOW_RANGE, 32.0F)
+                .add(Attributes.FOLLOW_RANGE, 48.0F)
                 .add(Attributes.ARMOR, 10F));
     }
 

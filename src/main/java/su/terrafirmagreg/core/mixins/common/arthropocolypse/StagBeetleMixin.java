@@ -42,7 +42,7 @@ public class StagBeetleMixin extends ClimbableEntity {
         cir.setReturnValue(Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 90.0F)
                 .add(Attributes.ARMOR, 10.0F)
-                .add(Attributes.FOLLOW_RANGE, 24.0F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F)
                 .add(Attributes.ATTACK_SPEED, 1.0F)
                 .add(Attributes.ATTACK_DAMAGE, 20)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5F)

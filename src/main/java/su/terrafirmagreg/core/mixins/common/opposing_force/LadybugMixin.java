@@ -30,7 +30,8 @@ public class LadybugMixin extends Monster {
                 .add(Attributes.ATTACK_DAMAGE, 20.0F)
                 .add(Attributes.ARMOR, 10.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5F)
-                .add(Attributes.ATTACK_KNOCKBACK, 1.5f));
+                .add(Attributes.ATTACK_KNOCKBACK, 1.5f)
+                .add(Attributes.FOLLOW_RANGE, 36.0F));
     }
 
     @Override

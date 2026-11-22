@@ -32,6 +32,7 @@ public class HangingSpiderMixin extends Spider {
                 .add(Attributes.MAX_HEALTH, 70.0f)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
                 .add(Attributes.ATTACK_DAMAGE, 15.0F)
+                .add(Attributes.FOLLOW_RANGE, 36.0F)
                 .add(Attributes.ARMOR, 6.0F));
     }
 

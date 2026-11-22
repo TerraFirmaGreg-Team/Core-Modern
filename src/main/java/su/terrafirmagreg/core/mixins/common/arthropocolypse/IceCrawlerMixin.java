@@ -27,7 +27,8 @@ public class IceCrawlerMixin extends PathfinderMob {
                 .add(Attributes.MAX_HEALTH, 70.0F)
                 .add(Attributes.ARMOR, 6.0F)
                 .add(Attributes.MOVEMENT_SPEED, 0.2)
-                .add(Attributes.ATTACK_DAMAGE, 12));
+                .add(Attributes.ATTACK_DAMAGE, 12)
+                .add(Attributes.FOLLOW_RANGE, 36.0F));
     }
 
     @Override
