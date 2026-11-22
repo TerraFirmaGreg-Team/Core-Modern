@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
+import su.terrafirmagreg.core.TFGCore;
 
 public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     //Softwoods
@@ -56,7 +57,7 @@ public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     @Override
     public Item getRailing() {
         //TODO handle railing stuff
-        ResourceLocation lumberLocation = ResourceLocation.fromNamespaceAndPath("tfg", "wood/lumber/" + getSerializedName());
+        ResourceLocation lumberLocation = TFGCore.id("wood/lumber/" + getSerializedName());
         return ForgeRegistries.ITEMS.getValue(lumberLocation);
     }
 

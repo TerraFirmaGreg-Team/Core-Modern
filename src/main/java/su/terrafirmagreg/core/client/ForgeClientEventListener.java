@@ -158,22 +158,22 @@ public class ForgeClientEventListener {
             if (material.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
                 event.registerEntityRenderer(TFGEntities.CANOES.get(material).get(),
                         context -> new CanoeRenderer(context,
-                                ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + material.getSerializedName() + ".png")));
+                                TFGCore.id("textures/entity/watercraft/dugout_canoe/" + material.getSerializedName() + ".png")));
 
             } else if (material.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
                 event.registerEntityRenderer(TFGEntities.SLOOPS_UNDER_CONSTRUCTION.get(material).get(),
                         context -> new SloopConstructionRenderer(context,
-                                ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop_construction/" + material.getSerializedName() + ".png")));
+                                TFGCore.id("textures/entity/watercraft/sloop_construction/" + material.getSerializedName() + ".png")));
 
                 //Both built rowboats and sloops can be dyed, the dyed texture generation happens on the "registerReloadListeners" method below.
                 event.registerEntityRenderer(TFGEntities.ROWBOATS.get(material).get(),
                         context -> new RowboatRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/rowboat/" + material.getSerializedName() + ".png"),
-                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
+                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> TFGCore.id(
                                         "textures/entity/watercraft/rowboat/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
 
                 event.registerEntityRenderer(TFGEntities.SLOOPS.get(material).get(),
                         context -> new SloopRenderer(context, ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/watercraft/sloop/" + material.getSerializedName() + ".png"),
-                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
+                                CommonHelper.mapOfKeys(DyeColor.class, dyeColor -> TFGCore.id(
                                         "textures/entity/watercraft/sloop/" + material.getSerializedName() + "/" + dyeColor.getSerializedName()))));
             }
         }
@@ -200,9 +200,9 @@ public class ForgeClientEventListener {
                 continue;
 
             event.registerReloadListener(
-                    new PaintedTextureGenerator(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "entity/watercraft/rowboat/" + watercraftMaterial.getSerializedName()), rowboatPaint));
+                    new PaintedTextureGenerator(TFGCore.id("entity/watercraft/rowboat/" + watercraftMaterial.getSerializedName()), rowboatPaint));
             event.registerReloadListener(
-                    new PaintedTextureGenerator(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "entity/watercraft/sloop/" + watercraftMaterial.getSerializedName()), sloopPaint));
+                    new PaintedTextureGenerator(TFGCore.id( "entity/watercraft/sloop/" + watercraftMaterial.getSerializedName()), sloopPaint));
         }
     }
 }
