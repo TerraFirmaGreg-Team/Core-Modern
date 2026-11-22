@@ -180,6 +180,14 @@ public abstract class CropBlock extends net.minecraft.world.level.block.CropBloc
 
         if (level.getBlockEntity(pos) instanceof CropBlockEntity crop)
         {
+            // Display primary crop nutrient for TFC's CropBlockEntity
+            text.add(Component.translatable("tfg.tooltip.crop.fertilizer").append(Component.translatable(
+                    switch (((CropBlock)(state.getBlock())).getPrimaryNutrient()) {
+                        case NITROGEN -> "tfg.tooltip.fertilizer.nitrogen";
+                        case POTASSIUM -> "tfg.tooltip.fertilizer.potassium";
+                        case PHOSPHOROUS -> "tfg.tooltip.fertilizer.phosphorus";
+                    }
+            )));
             if (isDebug)
             {
                 text.add(Component.literal(String.format("[Debug] Growth = %.4f Yield = %.4f Expiry = %.4f Last Tick = %d Delta = %d", crop.getGrowth(), crop.getYield(), crop.getExpiry(), crop.getLastGrowthTick(), Calendars.get(level).getTicks() - crop.getLastGrowthTick())));

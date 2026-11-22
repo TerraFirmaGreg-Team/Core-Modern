@@ -1,5 +1,8 @@
 {
-    "mixins": ["common.space_gravity.ZeroGravityPushHelperMixin"],
+    "mixins": [
+        "client.firmalife.FLLargePlanterBlockMixin",
+        "common.space_gravity.ZeroGravityPushHelperMixin"
+    ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
     "plugin": "su.terrafirmagreg.core.mixins.TFGOptionalMixinPlugin",
