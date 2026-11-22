@@ -37,12 +37,11 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.*;
-import electrolyte.greate.compat.jei.category.animations.TieredAnimatedMechanicalPress;
-import electrolyte.greate.registry.MechanicalMixers;
-import electrolyte.greate.registry.MechanicalPresses;
 import electrolyte.greate.compat.gtceu.common.data.machines.GreateMachines;
+import electrolyte.greate.compat.jei.category.animations.TieredAnimatedMechanicalPress;
 import electrolyte.greate.registry.CrushingWheels;
 import electrolyte.greate.registry.EncasedFans;
+import electrolyte.greate.registry.MechanicalMixers;
 import electrolyte.greate.registry.MechanicalPresses;
 
 import su.terrafirmagreg.core.TFGCore;
