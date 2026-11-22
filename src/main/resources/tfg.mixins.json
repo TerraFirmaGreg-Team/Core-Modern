@@ -352,7 +352,6 @@
         "client.carryon.ClientEventsMixin",
         "client.firmalife.CompostTumblerBlockEntityRendererMixin",
         "client.firmalife.FLBeehiveBlockMixin",
-        "client.firmalife.FLLargePlanterBlockMixin",
         "client.ftb.ClientTeamManagerImplMixin",
         "client.ftb.QuestScreenMixin",
         "client.gtceu.ISurfaceRockRendererAccessor",
