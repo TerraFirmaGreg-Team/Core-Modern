@@ -3,11 +3,11 @@ package su.terrafirmagreg.core.common.data;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alekiponi.alekiships.common.entity.vehicle.RowboatEntity;
-import com.alekiponi.alekiships.common.entity.vehicle.SloopEntity;
-import com.alekiponi.alekiships.common.entity.vehicle.SloopUnderConstructionEntity;
 import com.alekiponi.alekiships.util.AlekiShipsTags;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.FirmacivRowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.FirmacivSloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.FirmacivSloopUnderConstructionEntity;
 import com.tterrag.registrate.util.entry.EntityEntry;
 
 import net.dries007.tfc.client.model.entity.TFCWolfModel;
@@ -222,9 +222,9 @@ public class TFGEntities {
             .register();
 
     public static final Map<TFGWatercraftMaterial, EntityEntry<CanoeEntity>> CANOES = new HashMap<>();
-    public static final Map<TFGWatercraftMaterial, EntityEntry<RowboatEntity>> ROWBOATS = new HashMap<>();
-    public static final Map<TFGWatercraftMaterial, EntityEntry<SloopEntity>> SLOOPS = new HashMap<>();
-    public static final Map<TFGWatercraftMaterial, EntityEntry<SloopUnderConstructionEntity>> SLOOPS_UNDER_CONSTRUCTION = new HashMap<>();
+    public static final Map<TFGWatercraftMaterial, EntityEntry<FirmacivRowboatEntity>> ROWBOATS = new HashMap<>();
+    public static final Map<TFGWatercraftMaterial, EntityEntry<FirmacivSloopEntity>> SLOOPS = new HashMap<>();
+    public static final Map<TFGWatercraftMaterial, EntityEntry<FirmacivSloopUnderConstructionEntity>> SLOOPS_UNDER_CONSTRUCTION = new HashMap<>();
 
     public static void init() {
         for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
@@ -248,7 +248,7 @@ public class TFGEntities {
 
     private static void putRowboatEntity(TFGWatercraftMaterial watercraftMaterial) {
         String name = "rowboat/" + watercraftMaterial.getSerializedName();
-        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<RowboatEntity> entityType, Level level) -> new RowboatEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<FirmacivRowboatEntity> entityType, Level level) -> new FirmacivRowboatEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
                 .properties(p -> p.sized(1.875f, 0.625f))
                 .tag(AlekiShipsTags.Entities.ROWBOATS)
                 .register();
@@ -258,7 +258,7 @@ public class TFGEntities {
 
     private static void putSloopEntity(TFGWatercraftMaterial watercraftMaterial) {
         String name = "sloop/" + watercraftMaterial.getSerializedName();
-        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<SloopEntity> entityType, Level level) -> new SloopEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+        var entry = TFGCore.REGISTRATE.entity(name, (EntityType<FirmacivSloopEntity> entityType, Level level) -> new FirmacivSloopEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
                 .properties(p -> p.sized(3f, 0.75f).setTrackingRange(20).fireImmune())
                 .tag(AlekiShipsTags.Entities.SLOOPS)
                 .tag(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("carryon", "entity_blacklist")))
@@ -270,7 +270,8 @@ public class TFGEntities {
     private static void putSloopUnderConstructionEntity(TFGWatercraftMaterial watercraftMaterial) {
         String name = "sloop_construction/" + watercraftMaterial.getSerializedName();
         var entry = TFGCore.REGISTRATE
-                .entity(name, (EntityType<SloopUnderConstructionEntity> entityType, Level level) -> new SloopUnderConstructionEntity(entityType, level, watercraftMaterial), MobCategory.MISC)
+                .entity(name, (EntityType<FirmacivSloopUnderConstructionEntity> entityType, Level level) -> new FirmacivSloopUnderConstructionEntity(entityType, level, watercraftMaterial),
+                        MobCategory.MISC)
                 .properties(p -> p.sized(4f, 0.75f).setTrackingRange(20).fireImmune().noSummon())
                 .register();
 
