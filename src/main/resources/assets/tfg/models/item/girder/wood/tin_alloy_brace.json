@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/girder/wood/item",
+  "textures": {
+    "0": "tfg:block/girder/pole/tin_alloy_brace"
+  }
+}

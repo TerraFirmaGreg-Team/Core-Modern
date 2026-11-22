@@ -1,0 +1,95 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_pole"
+      },
+      "when": {
+        "x": "false",
+        "z": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_x"
+      },
+      "when": {
+        "x": "true",
+        "z": "false",
+        "top": "false",
+        "bottom": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_x_cross"
+      },
+      "when": {
+        "OR": [
+          { "x": "true", "z": "true" },
+          { "x": "true", "top": "true" },
+          { "x": "true", "bottom": "true" }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_z"
+      },
+      "when": {
+        "x": "false",
+        "z": "true",
+        "top": "false",
+        "bottom": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_z_cross"
+      },
+      "when": {
+        "OR": [
+          { "x": "true", "z": "true" },
+          { "z": "true", "top": "true" },
+          { "z": "true", "bottom": "true" }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_top"
+      },
+      "when": {
+        "OR": [
+          { "x": "true", "top": "true" },
+          { "z": "true", "top": "true" }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_bottom"
+      },
+      "when": {
+        "OR": [
+          { "x": "true", "bottom": "true" },
+          { "z": "true", "bottom": "true" }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/wood/brass_brace/block_cross"
+      },
+      "when": {
+        "OR": [
+          { "x": "true", "z": "true" },
+          { "x": "true", "top": "true" },
+          { "x": "true", "bottom": "true" },
+          { "z": "true", "top": "true" },
+          { "z": "true", "bottom": "true" }
+        ]
+      }
+    }
+  ]
+}

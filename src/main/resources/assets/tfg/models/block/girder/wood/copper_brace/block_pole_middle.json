@@ -1,0 +1,8 @@
+{
+  "parent": "tfg:block/girder/wood/block_pole_middle",
+  "textures": {
+    "2": "tfg:block/girder/pole/copper_brace",
+    "3": "tfg:block/girder/pole_side/copper_brace",
+    "particle": "tfg:block/girder/wood/copper_brace"
+  }
+}

@@ -4,8 +4,10 @@ import com.simibubi.create.content.decoration.girder.GirderBlock;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.createmod.catnip.placement.PlacementHelpers;
 import net.minecraft.resources.ResourceLocation;
@@ -40,6 +42,12 @@ public class TFGBlocks_Girders {
         GIRDERS.add(COPPER_TRUSS);
         GIRDERS.add(STEEL_TRUSS);
         GIRDERS.add(ZINC_TRUSS);
+
+        GIRDERS.add(TIN_ALLOY_BRACE);
+        GIRDERS.add(BRASS_BRACE);
+        GIRDERS.add(COPPER_BRACE);
+        GIRDERS.add(METAL_BRACE);
+        GIRDERS.add(ZINC_BRACE);
     }
 
     public static final BlockEntry<TFGGirderBlock> TIN_ALLOY_BEAM = TFGCore.REGISTRATE
@@ -204,6 +212,71 @@ public class TFGBlocks_Girders {
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/zinc"));
+            })
+            .tag(TFGTags.Items.GIRDER).build()
+            .register();
+
+    public static final BlockEntry<TFGGirderBlock> TIN_ALLOY_BRACE = TFGCore.REGISTRATE
+            .block("girder/wood/tin_alloy_brace", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.TIN_ALLOY_BRACE)), false))
+            .initialProperties(SharedProperties::wooden)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.WOOD))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
+            .item().model((ctx, prov) -> {
+                prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/wood/item")).texture("0", TFGCore.id("block/girder/wood/tin_alloy_brace"));
+            })
+            .tag(TFGTags.Items.GIRDER).build()
+            .register();
+
+    public static final BlockEntry<TFGGirderBlock> BRASS_BRACE = TFGCore.REGISTRATE
+            .block("girder/wood/brass_brace", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.BRASS_BRACE)), false))
+            .initialProperties(SharedProperties::wooden)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.WOOD))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
+            .item().model((ctx, prov) -> {
+                prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/wood/item")).texture("0", TFGCore.id("block/girder/wood/brass_brace"));
+            })
+            .tag(TFGTags.Items.GIRDER).build()
+            .register();
+
+    public static final BlockEntry<TFGGirderBlock> COPPER_BRACE = TFGCore.REGISTRATE
+            .block("girder/wood/copper_brace", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.COPPER_BRACE)), false))
+            .initialProperties(SharedProperties::wooden)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.WOOD))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
+            .item().model((ctx, prov) -> {
+                prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/wood/item")).texture("0", TFGCore.id("block/girder/wood/copper_brace"));
+            })
+            .tag(TFGTags.Items.GIRDER).build()
+            .register();
+
+    public static final BlockEntry<TFGGirderBlock> METAL_BRACE = TFGCore.REGISTRATE
+            .block("girder/wood/metal_brace", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.METAL_BRACE)), false))
+            .initialProperties(SharedProperties::wooden)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.WOOD))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
+            .item().model((ctx, prov) -> {
+                prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/wood/item")).texture("0", TFGCore.id("block/girder/wood/metal_brace"));
+            })
+            .tag(TFGTags.Items.GIRDER).build()
+            .register();
+
+    public static final BlockEntry<TFGGirderBlock> ZINC_BRACE = TFGCore.REGISTRATE
+            .block("girder/wood/zinc_brace", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.ZINC_BRACE)), false))
+            .initialProperties(SharedProperties::wooden)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.WOOD))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
+            .item().model((ctx, prov) -> {
+                prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/wood/item")).texture("0", TFGCore.id("block/girder/wood/zinc_brace"));
             })
             .tag(TFGTags.Items.GIRDER).build()
             .register();
