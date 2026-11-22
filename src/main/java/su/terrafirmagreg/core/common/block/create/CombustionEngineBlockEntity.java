@@ -127,9 +127,9 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     }
 
     // I put random balues from Greate here
-    private static final float[] LEGACY_TIER_CAPACITY = { 8, 32, 128, 512, 2048, 8192, 32768, 131072, 524288, 2097152 };
+    private static final float[] LEGACY_TIER_CAPACITY = { 32, 128, 512, 2048, 8192, 32768, 131072, 524288, 2097152, 8388608 };
 
-    private static float legacyTierCapacity(@Nullable Material material) {
+    private static float tierCapacity(@Nullable Material material) {
         if (material == null || !material.hasProperty(GreatePropertyKeys.KINETIC))
             return Float.MAX_VALUE;
         int tier = material.getProperty(GreatePropertyKeys.KINETIC).getTier();
@@ -138,7 +138,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
     @Override
     public float calculateAddedStressCapacity() {
-        float capacity = legacyTierCapacity(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
+        float capacity = tierCapacity(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
         lastCapacityProvided = capacity;
         return capacity;
     }
