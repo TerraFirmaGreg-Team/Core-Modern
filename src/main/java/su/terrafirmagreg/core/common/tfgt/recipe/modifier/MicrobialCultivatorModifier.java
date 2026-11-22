@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -16,7 +17,6 @@ import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -25,7 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.MicrobialCultivatorMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.InputHistoryTrait;
 
-/** Modifier that adds bacteria fluids to the recipe output based on the syringe's contents. */
+/** Modifier that sets output to bacteria fluids based on the syringe's contents. */
 public final class MicrobialCultivatorModifier implements RecipeModifier {
 
     public static final MicrobialCultivatorModifier INSTANCE = new MicrobialCultivatorModifier();
@@ -66,10 +66,8 @@ public final class MicrobialCultivatorModifier implements RecipeModifier {
             return RecipeModifier.nullWrongType(MicrobialCultivatorMachine.class, machine);
 
         ItemStack syringe = history.getActiveInput();
-        if (syringe == null || !syringe.hasTag() || !syringe.getTag().contains("mob_type", Tag.TAG_STRING))
-            return ModifierFunction.IDENTITY;
-
-        List<Content> fluids = fluidsFor(syringe.getTag().getString("mob_type"));
+        String mobType = syringe != null && syringe.getTag() != null ? syringe.getTag().getString("mob_type") : null;
+        List<Content> fluids = fluidsFor(mobType);
         return modified -> {
             GTRecipe copy = modified.copy();
             copy.outputs.put(FluidRecipeCapability.CAP, fluids);
@@ -77,7 +75,10 @@ public final class MicrobialCultivatorModifier implements RecipeModifier {
         };
     }
 
-    private static List<Content> fluidsFor(String mobType) {
+    private static List<Content> fluidsFor(@Nullable String mobType) {
+        if (mobType == null)
+            return List.of();
+
         List<Yield> yields = yieldsFor(mobType);
         List<Content> fluids = new ArrayList<>(yields.size());
         int maxChance = ChanceLogic.getMaxChancedValue();
