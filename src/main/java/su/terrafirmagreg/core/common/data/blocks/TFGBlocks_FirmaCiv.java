@@ -314,7 +314,7 @@ public class TFGBlocks_FirmaCiv {
 
                     multipartBuilder.part().modelFile(
                             shape == StairsShape.STRAIGHT ? straight : shape == StairsShape.INNER_LEFT || shape == StairsShape.INNER_RIGHT ? inner : outer)
-                            .rotationY(yRot)/*.uvLock(yRot != 0)*/.addModel()
+                            .rotationY(yRot).addModel()
                             .condition(AngledWoodenBoatFrameBlock.FACING, facing)
                             .condition(AngledWoodenBoatFrameBlock.SHAPE, shape);
 
