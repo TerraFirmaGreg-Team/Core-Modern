@@ -59,7 +59,12 @@ public class TFGPartialModels {
             "girder/truss/wrought_iron",
             "girder/truss/copper",
             "girder/truss/steel",
-            "girder/truss/zinc"
+            "girder/truss/zinc",
+            "girder/wood/tin_alloy_brace",
+            "girder/wood/brass_brace",
+            "girder/wood/metal_brace",
+            "girder/wood/copper_brace",
+            "girder/wood/zinc_brace"
     };
 
     private static final String[] BEAM_GIRDER_VARIANTS = {
@@ -67,7 +72,12 @@ public class TFGPartialModels {
             "girder/beam/brass",
             "girder/beam/wrought_iron",
             "girder/beam/copper",
-            "girder/beam/zinc"
+            "girder/beam/zinc",
+            "girder/wood/tin_alloy_brace",
+            "girder/wood/brass_brace",
+            "girder/wood/metal_brace",
+            "girder/wood/copper_brace",
+            "girder/wood/zinc_brace"
     };
 
     static {
