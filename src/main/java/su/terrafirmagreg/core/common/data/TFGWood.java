@@ -199,24 +199,24 @@ public enum TFGWood implements RegistryWood {
     }
 
     private static Optional<Block> AdAstraGlacianSpecialBlockHandler(TFGWood wood, Wood.BlockType blockType) {
-        BiFunction<String, String, Optional<Block>> getFromKJSOrAdAstra = (kjsPath, adAstraPath) -> {
+        BiFunction<String, String, Optional<Block>> getFromAdAstraOrKJS = (kjsPath, adAstraPath) -> {
             ResourceLocation kjsResourceLocation = ResourceLocation.fromNamespaceAndPath("tfg", kjsPath);
             ResourceLocation adAstraResourceLocation = ResourceLocation.fromNamespaceAndPath("ad_astra", adAstraPath);
 
-            if (ForgeRegistries.BLOCKS.containsKey(kjsResourceLocation)) {
-                return Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(kjsResourceLocation));
-            } else if (ForgeRegistries.BLOCKS.containsKey(adAstraResourceLocation)) {
+            if (ForgeRegistries.BLOCKS.containsKey(adAstraResourceLocation)) {
                 return Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(adAstraResourceLocation));
+            } else if (ForgeRegistries.BLOCKS.containsKey(kjsResourceLocation)) {
+                return Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(kjsResourceLocation));
             }
             return Optional.empty();
         };
 
         Optional<Block> result = Optional.empty();
         switch (blockType) {
-            case LOG -> result = getFromKJSOrAdAstra.apply("glacian_log", "glacian_log");
-            case STRIPPED_LOG -> result = getFromKJSOrAdAstra.apply("glacian_log_stripped", "stripped_glacian_log");
-            case WOOD -> result = getFromKJSOrAdAstra.apply("glacian_wood", "glacian_log");
-            case STRIPPED_WOOD -> result = getFromKJSOrAdAstra.apply("glacian_wood_stripped", "stripped_glacian_log");
+            case LOG -> result = getFromAdAstraOrKJS.apply("glacian_log", "glacian_log");
+            case STRIPPED_LOG -> result = getFromAdAstraOrKJS.apply("glacian_log_stripped", "stripped_glacian_log");
+            case WOOD -> result = getFromAdAstraOrKJS.apply("glacian_wood", "glacian_log");
+            case STRIPPED_WOOD -> result = getFromAdAstraOrKJS.apply("glacian_wood_stripped", "stripped_glacian_log");
         }
         return result;
     }
