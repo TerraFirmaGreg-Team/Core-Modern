@@ -147,8 +147,6 @@ public class TFGBlocks_FirmaCiv {
         })
                 .blockstate(canoeComponentBlockState(watercraftMaterial))
                 .tag(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)
-                .loot((registrateBlockLootTables, canoeComponentBlock) -> registrateBlockLootTables.add(canoeComponentBlock,
-                        registrateBlockLootTables.createSingleItemTable(watercraftMaterial.getRailing())))
                 .register();
 
         CANOE_COMPONENT_BLOCKS.put(watercraftMaterial, entry);

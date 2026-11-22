@@ -175,3 +175,10 @@ mandatory=true
 versionRange="1.15.21-forge,1.20.1"
 ordering="AFTER"
 side="BOTH"
+
+[[dependencies."${mod_id}"]]
+modId="wan_ancient_beasts"
+mandatory=true
+versionRange="8761414"
+ordering="AFTER"
+side="BOTH"
