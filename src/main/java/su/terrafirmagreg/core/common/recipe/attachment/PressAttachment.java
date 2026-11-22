@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
+import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -76,10 +77,9 @@ public record PressAttachment(@Nullable Integer circuit) implements RecipeAttach
         if (press != null) {
             var behaviour = press.getPressingBehaviour();
             if (!behaviour.running) {
-                press.startProcessingBasin();
+                behaviour.start(PressingBehaviour.Mode.BASIN);
                 press.sendData();
-            }
-            if (behaviour.runningTicks > 120) {
+            } else if (behaviour.runningTicks >= 120 && behaviour.runningTicks < 160) {
                 behaviour.runningTicks = 121;
                 behaviour.prevRunningTicks = 121;
             }
@@ -105,6 +105,33 @@ public record PressAttachment(@Nullable Integer circuit) implements RecipeAttach
 
     @Override
     public void assembleOutputs(CookingApplianceBlockEntity appliance) {
+        MechanicalPressBlockEntity press = getPress(appliance);
+        if (press != null) {
+            releasePress(press);
+        }
+    }
+
+    public static void releasePress(MechanicalPressBlockEntity press) {
+        if (press != null && press.getPressingBehaviour().running) {
+            var behaviour = press.getPressingBehaviour();
+            if (behaviour.runningTicks < 160) {
+                int returnTicks = getReturnTicks(behaviour.runningTicks);
+                behaviour.runningTicks = returnTicks;
+                behaviour.prevRunningTicks = returnTicks;
+                press.sendData();
+            }
+        }
+    }
+
+    public static int getReturnTicks(int runningTicks) {
+        if (runningTicks >= 120) {
+            return 160;
+        }
+        if (runningTicks <= 0) {
+            return 240;
+        }
+        float offset = (float) Math.pow((double) runningTicks / 120.0, 3.0);
+        return Math.min(240, Math.max(160, Math.round(240.0f - 80.0f * offset)));
     }
 
     @Override

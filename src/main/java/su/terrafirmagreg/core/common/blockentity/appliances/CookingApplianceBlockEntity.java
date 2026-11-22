@@ -269,17 +269,18 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
 
             if (press != null && press.getPressingBehaviour().running) {
                 var behaviour = press.getPressingBehaviour();
-                if (behaviour.runningTicks >= 120 || behaviour.runningTicks == -120) {
+                if ((behaviour.runningTicks >= 120 && behaviour.runningTicks < 160) || behaviour.runningTicks == -120) {
                     behaviour.runningTicks = -120;
                     behaviour.prevRunningTicks = 120;
+                    appliance.renderPressParticles(press);
                 }
             }
         } else {
             if (press != null && press.getPressingBehaviour().running) {
                 var behaviour = press.getPressingBehaviour();
                 if (behaviour.runningTicks == -120) {
-                    behaviour.runningTicks = 121;
-                    behaviour.prevRunningTicks = 121;
+                    behaviour.runningTicks = 160;
+                    behaviour.prevRunningTicks = 160;
                 }
             }
         }
@@ -350,6 +351,43 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         for (InventoryFluidTank tank : inventory.tanks) {
             FluidStack fluid = tank.getFluid();
             spawnSwirlFluidParticles(this.level, pos, fluid, 0, speed, radius, particleCount, 0.3);
+        }
+    }
+
+    // Mechanical press particles and sounds.
+    public void renderPressParticles(MechanicalPressBlockEntity press) {
+        if (this.level == null || !this.level.isClientSide) {
+            return;
+        }
+
+        float speed = press.getSpeed();
+        if (speed == 0) {
+            return;
+        }
+
+        if (this.level.getGameTime() % 6 != 0) {
+            return;
+        }
+
+        // The sloppiest of noises.
+        this.level.playLocalSound(press.getBlockPos(), SoundEvents.BUCKET_FILL_TADPOLE, SoundSource.BLOCKS, 0.5F, 0.4F, false);
+        this.level.playLocalSound(press.getBlockPos(), SoundEvents.CORAL_BLOCK_HIT, SoundSource.BLOCKS, 0.3F, 0.3F, false);
+        this.level.playLocalSound(press.getBlockPos(), SoundEvents.WART_BLOCK_PLACE, SoundSource.BLOCKS, 0.3F, 0.3F, false);
+
+        BlockPos pressPos = press.getBlockPos();
+        double radius = 0.25;
+        int particleCount = 1;
+
+        // Render item particles.
+        for (int i = 0; i < getItemInputCount(); i++) {
+            ItemStack stack = getItemInputStack(i);
+            spawnSwirlItemParticles(this.level, pressPos, stack, 1.75, speed, radius, particleCount, 1);
+        }
+
+        // Render fluid particles.
+        for (InventoryFluidTank tank : inventory.tanks) {
+            FluidStack fluid = tank.getFluid();
+            spawnSwirlFluidParticles(this.level, pressPos, fluid, 1.75, speed, radius, particleCount, 1);
         }
     }
 
@@ -492,6 +530,10 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
                 cookingTicks = 0;
                 cachedRecipe = null;
                 cachedRecipeId = null;
+            }
+
+            if (supportsAttachments()) {
+                PressAttachment.releasePress(PressAttachment.getPress(this));
             }
 
             CookingError detectedErrors = CookingError.NONE;
@@ -974,8 +1016,8 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             if (press != null && press.getPressingBehaviour().running) {
                 var behaviour = press.getPressingBehaviour();
                 if (behaviour.runningTicks == -120) {
-                    behaviour.runningTicks = 121;
-                    behaviour.prevRunningTicks = 121;
+                    behaviour.runningTicks = 160;
+                    behaviour.prevRunningTicks = 160;
                 }
             }
         }

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.devices.DeviceBlock;
@@ -90,7 +91,7 @@ public class FireBoxBlock extends DeviceBlock implements IBellowsConsumer, IItem
         boolean isChimneyOpen = level.getBlockState(posChimney).isAir();
 
         double forwardOffset = 0.7D;
-        double backOffset = 0.6D;
+        double backOffset = 0.7D;
         double chimneyOffset = 0.6D;
 
         if (rand.nextInt(8) == 0) {
@@ -111,7 +112,7 @@ public class FireBoxBlock extends DeviceBlock implements IBellowsConsumer, IItem
             for (int i = 0; i < rand.nextInt(2); i++) {
                 int smokeChance = airTicks > 0 ? 3 : 8;
                 if (rand.nextInt(smokeChance) == 0) {
-                    SimpleParticleType smokeType = airTicks > 0 ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
+                    SimpleParticleType smokeType = airTicks > 0 ? TFCParticles.SMOKE_2.get() : TFCParticles.SMOKE_1.get();
                     level.addParticle(smokeType, px, py + 0.3D, pz, 0, 0.05D, 0);
                 }
             }

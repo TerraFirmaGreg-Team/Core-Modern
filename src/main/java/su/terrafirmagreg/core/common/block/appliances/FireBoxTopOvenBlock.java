@@ -357,7 +357,9 @@ public class FireBoxTopOvenBlock extends DeviceBlock implements IHighlightHandle
                 double x = pos.getX() + 0.3D;
                 double y = pos.getY() + 0.5D;
                 double z = pos.getZ() + 0.3D;
-                level.playLocalSound(x, y, z, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 0.25F, random.nextFloat() * 0.7F + 0.4F, false);
+                if (random.nextFloat() > 0.8f) {
+                    level.playLocalSound(x, y, z, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 0.25F, random.nextFloat() * 0.7F + 0.4F, false);
+                }
                 if (random.nextFloat() > 0.97f) {
                     level.addParticle(ParticleTypes.FLAME, x + random.nextFloat() * 0.6D, y + random.nextFloat() * 0.2D, z + random.nextFloat() * 0.6D, 0, 0.005D, 0);
                 }

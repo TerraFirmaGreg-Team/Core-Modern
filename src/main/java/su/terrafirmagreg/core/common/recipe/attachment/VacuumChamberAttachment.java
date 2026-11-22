@@ -75,10 +75,13 @@ public record VacuumChamberAttachment(boolean mode) implements RecipeAttachment 
             if (!chamber.running) {
                 chamber.startProcessingBasin();
                 chamber.sendData();
-            }
-            if (chamber.runningTicks >= 20) {
-                chamber.runningTicks = 20;
+            } else if (chamber.runningTicks > 20) {
+                chamber.runningTicks = Math.max(0, 40 - chamber.runningTicks);
+                chamber.processingTicks = -1;
+                chamber.sendData();
+            } else if (chamber.runningTicks == 20 && chamber.processingTicks != 20) {
                 chamber.processingTicks = 20;
+                chamber.sendData();
             }
         }
     }

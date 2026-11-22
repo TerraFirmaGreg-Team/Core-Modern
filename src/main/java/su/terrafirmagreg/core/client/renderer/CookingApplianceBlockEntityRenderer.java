@@ -16,11 +16,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.fluids.FluidStack;
@@ -127,8 +130,11 @@ public class CookingApplianceBlockEntityRenderer<T extends CookingApplianceBlock
         }
 
         // Don't render items if there is a block above copper pot.
-        BlockState above = appliance.getLevel().getBlockState(appliance.getBlockPos().above());
-        if (!above.isAir() && appliance instanceof CopperPotBlockEntity) {
+        Level level = appliance.getLevel();
+        BlockPos pos = appliance.getBlockPos();
+        BlockState above = level.getBlockState(pos.above());
+        boolean stopRender = above.canOcclude() && Block.isFaceFull(above.getOcclusionShape(level, pos.above()), Direction.DOWN);
+        if (stopRender && appliance instanceof CopperPotBlockEntity) {
             return;
         }
 

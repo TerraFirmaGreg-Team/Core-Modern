@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.block.appliances;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.capabilities.size.IItemSize;
 import net.dries007.tfc.common.capabilities.size.Size;
@@ -71,7 +72,7 @@ public class SkilletBlock extends CookingApplianceBlock implements IItemSize {
                 if (aboveState.isAir()) {
                     if (temperature > 100) {
                         if (rand.nextInt(5) == 0) {
-                            level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 0.2F + (rand.nextFloat() * 0.3F), z, 0, 0.04D, 0);
+                            level.addParticle(TFCParticles.SMOKE_1.get(), x, y + 0.2F + (rand.nextFloat() * 0.3F), z, 0, 0.04D, 0);
                         }
                     }
 
