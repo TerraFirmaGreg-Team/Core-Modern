@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.blockentity;
+package su.terrafirmagreg.core.common.blockentity.appliances;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +43,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.GasBurnerBlock;
+import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
 import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;

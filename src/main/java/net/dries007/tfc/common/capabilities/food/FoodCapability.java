@@ -332,6 +332,81 @@ public final class FoodCapability
     }
 
     /**
+     * Checks if two food stacks can stack together taking into account creation date difference,
+     * tolerance, and rotten state for recipe outputs.
+     * @param stack1 First stack.
+     * @param stack2 Second stack.
+     * @param maxCreationDateDifferenceRatio Maximum allowed creation date difference ratio (ex. 0.30f for 30%).
+     * @return true if stacks can stack together without making output rotten or exceeding creation date difference tolerance.
+     */
+    public static boolean areFoodStacksStackable(ItemStack stack1, ItemStack stack2, float maxCreationDateDifferenceRatio)
+    {
+        if (stack1.isEmpty() || stack2.isEmpty() || stack1.getItem() != stack2.getItem())
+        {
+            return false;
+        }
+
+        final @Nullable IFood food1 = get(stack1);
+        final @Nullable IFood food2 = get(stack2);
+
+        if (food1 == null || food2 == null)
+        {
+            return false;
+        }
+
+        // Never merge onto a rotten stack or merge rotten food.
+        if (food1.isRotten() || food2.isRotten())
+        {
+            return false;
+        }
+
+        long creationDate1 = food1.getCreationDate();
+        long creationDate2 = food2.getCreationDate();
+
+        if (creationDate1 == FoodHandler.ROTTEN_CREATION_DATE || creationDate2 == FoodHandler.ROTTEN_CREATION_DATE)
+        {
+            return false;
+        }
+
+        long rottenDate1 = food1.getRottenDate();
+        long rottenDate2 = food2.getRottenDate();
+
+        if (rottenDate1 == FoodHandler.ROTTEN_DATE || rottenDate2 == FoodHandler.ROTTEN_DATE)
+        {
+            return false;
+        }
+
+        boolean nonDecaying1 = food1.isTransientNonDecaying() || rottenDate1 == FoodHandler.NEVER_DECAY_DATE || creationDate1 == FoodHandler.NEVER_DECAY_CREATION_DATE;
+        boolean nonDecaying2 = food2.isTransientNonDecaying() || rottenDate2 == FoodHandler.NEVER_DECAY_DATE || creationDate2 == FoodHandler.NEVER_DECAY_CREATION_DATE;
+
+        if (nonDecaying1 != nonDecaying2)
+        {
+            return false;
+        }
+
+        if (!nonDecaying1)
+        {
+            long totalLifespan1 = rottenDate1 - creationDate1;
+            long totalLifespan2 = rottenDate2 - creationDate2;
+
+            if (totalLifespan1 <= 0 || totalLifespan2 <= 0)
+            {
+                return false;
+            }
+
+            long totalLifespan = Math.min(totalLifespan1, totalLifespan2);
+            long diff = Math.abs(creationDate1 - creationDate2);
+
+            if ((double) diff / (double) totalLifespan > (double) maxCreationDateDifferenceRatio)
+            {
+                return false;
+            }
+        }
+
+        return areStacksStackableExceptCreationDate(stack1, stack2);
+    }
+
+    /**
      * This is a nice way of checking if two stacks are stackable, ignoring the creation date: copy both stacks, give them the same creation date, then check compatibility
      * This will also not stack items which have different traits, which is intended
      *

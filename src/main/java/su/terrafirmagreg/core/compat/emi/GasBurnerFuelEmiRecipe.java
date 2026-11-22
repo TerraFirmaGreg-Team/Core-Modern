@@ -23,7 +23,7 @@ import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 
@@ -102,7 +102,7 @@ public class GasBurnerFuelEmiRecipe implements EmiRecipe {
         final MutableComponent unitHeatValue = heatUnit.formatRange(temp);
         Font font = Minecraft.getInstance().font;
         int burnerCapacity = GasBurnerBlockEntity.CAPACITY;
-        String daysPerTank = String.valueOf(recipe.getDuration() * burnerCapacity / 24000);
+        String daysPerTank = String.format("%.2f", (float) recipe.getDuration() * burnerCapacity / recipe.getFluid().amount() / 24000);
 
         int offset = 6;
         int slotSize = 18;

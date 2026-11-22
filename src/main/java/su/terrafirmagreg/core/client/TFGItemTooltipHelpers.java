@@ -21,6 +21,7 @@ import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +43,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
+import su.terrafirmagreg.core.common.block.appliances.*;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
@@ -142,6 +144,36 @@ public class TFGItemTooltipHelpers {
                     .append(Component.literal(": ")
                             .append(Component.translatable("tfc.tooltip.time_delta_days", daysToGrow)
                                     .withStyle(ChatFormatting.ITALIC, dynamicColor))));
+        }
+
+        // Copper Pot
+        if (block instanceof CopperPotBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.copper_pot.flavor_text")));
+        }
+
+        // Condenser
+        if (block instanceof CondenserBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.condenser.flavor_text")));
+        }
+
+        // Skillet
+        if (block instanceof SkilletBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.skillet.flavor_text")));
+        }
+
+        // Mixing Bowl
+        if (block instanceof MixingBowlBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.mixing_bowl.flavor_text")));
+        }
+
+        // Fire Box
+        if (block instanceof FireBoxBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.fire_box.flavor_text")));
+        }
+
+        // Fire Box Top Oven
+        if (block instanceof FireBoxTopOvenBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.fire_box_top_oven.flavor_text")));
         }
     }
 
@@ -286,5 +318,18 @@ public class TFGItemTooltipHelpers {
 
     private static String formatReduction(double multiplier) {
         return String.format("%.0f%%", (1.0 - multiplier) * 100);
+    }
+
+    /**
+     * Component helper for "press-shift" tooltips.
+     * @param component Component to display.
+     * @return Component to display or shift display.
+     */
+    public static Component shiftHintTooltip(Component component) {
+        if (Screen.hasShiftDown()) {
+            return component;
+        } else {
+            return Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD);
+        }
     }
 }

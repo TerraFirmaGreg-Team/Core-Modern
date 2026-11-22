@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "facing=east,received_heat=0": {
+      "model": "tfg:block/cooking_appliances/copper_pot_0",
+      "y": 270
+    },
+    "facing=east,received_heat=1": {
+      "model": "tfg:block/cooking_appliances/copper_pot_1",
+      "y": 270
+    },
+    "facing=east,received_heat=2": {
+      "model": "tfg:block/cooking_appliances/copper_pot_2",
+      "y": 270
+    },
+    "facing=east,received_heat=3": {
+      "model": "tfg:block/cooking_appliances/copper_pot_3",
+      "y": 270
+    },
+    "facing=east,received_heat=4": {
+      "model": "tfg:block/cooking_appliances/copper_pot_4",
+      "y": 270
+    },
+    "facing=north,received_heat=0": {
+      "model": "tfg:block/cooking_appliances/copper_pot_0",
+      "y": 180
+    },
+    "facing=north,received_heat=1": {
+      "model": "tfg:block/cooking_appliances/copper_pot_1",
+      "y": 180
+    },
+    "facing=north,received_heat=2": {
+      "model": "tfg:block/cooking_appliances/copper_pot_2",
+      "y": 180
+    },
+    "facing=north,received_heat=3": {
+      "model": "tfg:block/cooking_appliances/copper_pot_3",
+      "y": 180
+    },
+    "facing=north,received_heat=4": {
+      "model": "tfg:block/cooking_appliances/copper_pot_4",
+      "y": 180
+    },
+    "facing=south,received_heat=0": {
+      "model": "tfg:block/cooking_appliances/copper_pot_0"
+    },
+    "facing=south,received_heat=1": {
+      "model": "tfg:block/cooking_appliances/copper_pot_1"
+    },
+    "facing=south,received_heat=2": {
+      "model": "tfg:block/cooking_appliances/copper_pot_2"
+    },
+    "facing=south,received_heat=3": {
+      "model": "tfg:block/cooking_appliances/copper_pot_3"
+    },
+    "facing=south,received_heat=4": {
+      "model": "tfg:block/cooking_appliances/copper_pot_4"
+    },
+    "facing=west,received_heat=0": {
+      "model": "tfg:block/cooking_appliances/copper_pot_0",
+      "y": 90
+    },
+    "facing=west,received_heat=1": {
+      "model": "tfg:block/cooking_appliances/copper_pot_1",
+      "y": 90
+    },
+    "facing=west,received_heat=2": {
+      "model": "tfg:block/cooking_appliances/copper_pot_2",
+      "y": 90
+    },
+    "facing=west,received_heat=3": {
+      "model": "tfg:block/cooking_appliances/copper_pot_3",
+      "y": 90
+    },
+    "facing=west,received_heat=4": {
+      "model": "tfg:block/cooking_appliances/copper_pot_4",
+      "y": 90
+    }
+  }
+}
