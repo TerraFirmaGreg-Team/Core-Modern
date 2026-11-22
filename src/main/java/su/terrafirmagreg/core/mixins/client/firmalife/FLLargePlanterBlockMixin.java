@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.mixins.client.firmalife;
 import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Show plants primary nutrients for Firmalife greenhouse planter blocks
  */
-@Pseudo
 @Mixin(value = LargePlanterBlock.class, remap = false)
 public class FLLargePlanterBlockMixin {
     @Inject(method = "addHoeOverlayInfo", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 3))
