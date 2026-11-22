@@ -147,7 +147,7 @@ public class TFGBlockEntities {
 
     //Unsure why i cannot make this be a CanoeComponentBlockEntity but whatever
     public static final BlockEntityEntry<BlockEntity> CANOE_COMPONENT_BLOCK_ENTITY;
-    
+
     public static final BlockEntityEntry<CopperPotBlockEntity> COPPER_POT = TFGCore.REGISTRATE
             .blockEntity("copper_pot", CopperPotBlockEntity::new)
             .validBlock(TFGBlocks.COPPER_POT)
@@ -213,7 +213,7 @@ public class TFGBlockEntities {
                 (blockEntityType, blockPos, blockState) -> new CanoeComponentBlockEntity(blockPos, blockState));
 
         for (TFGWatercraftMaterial watercraftMaterial : TFGWatercraftMaterial.values()) {
-            if (watercraftMaterial.woodKind != TFGWatercraftMaterial.WoodKind.SOFT) {
+            if (watercraftMaterial.tfgWood.woodKind != TFGWood.WoodKind.SOFT) {
                 continue;
             }
             canoeComponentBlockEntityBuilder.validBlock(TFGBlocks_FirmaCiv.CANOE_COMPONENT_BLOCKS.get(watercraftMaterial));

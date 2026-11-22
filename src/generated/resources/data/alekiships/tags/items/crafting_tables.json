@@ -1,11 +1,11 @@
 {
   "values": [
     "tfg:wood/workbench/araucaria",
-    "tfg:wood/workbench/ginkgo",
     "tfg:wood/workbench/beech",
     "tfg:wood/workbench/mahoe",
     "tfg:wood/workbench/glacian",
+    "tfg:wood/workbench/strophar",
     "tfg:wood/workbench/aeronos",
-    "tfg:wood/workbench/strophar"
+    "tfg:wood/workbench/ginkgo"
   ]
 }

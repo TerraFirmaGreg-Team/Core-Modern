@@ -14,41 +14,27 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import su.terrafirmagreg.core.TFGCore;
 
 public enum TFGWatercraftMaterial implements BoatMaterial, CanoeMaterial {
     //Softwoods
-    ARAUCARIA(TFGWood.ARAUCARIA, TFGWatercraftMaterial.WoodKind.SOFT),
-    GINKGO(TFGWood.GINKGO, WoodKind.SOFT),
+    ARAUCARIA(TFGWood.ARAUCARIA),
+    GINKGO(TFGWood.GINKGO),
     //Hardwoods
-    BEECH(TFGWood.BEECH, WoodKind.HARD),
-    MAHOE(TFGWood.MAHOE, WoodKind.HARD),
-    GLACIAN(TFGWood.GLACIAN, WoodKind.HARD),
+    BEECH(TFGWood.BEECH),
+    MAHOE(TFGWood.MAHOE),
+    GLACIAN(TFGWood.GLACIAN),
     //None, Aeronos and Strophar don't have RotatedPillarBlocks and as a result they can't be used to make boats, sad!
-    AERONOS(TFGWood.AERONOS, WoodKind.NONE),
-    STROPHAR(TFGWood.STROPHAR, WoodKind.NONE),
+    AERONOS(TFGWood.AERONOS),
+    STROPHAR(TFGWood.STROPHAR),
     ;
 
-    public enum WoodKind {
-        //Makes canoes
-        SOFT(),
-        //Makes Rowboats and Sloops
-        HARD(),
-        //Cant be used for boats
-        NONE();
-
-        WoodKind() {
-
-        }
-    }
-
-    TFGWatercraftMaterial(TFGWood tfgWood, WoodKind woodKind) {
+    TFGWatercraftMaterial(TFGWood tfgWood) {
         this.tfgWood = tfgWood;
-        this.woodKind = woodKind;
     }
 
-    private final TFGWood tfgWood;
-    public final WoodKind woodKind;
+    public final TFGWood tfgWood;
 
     public RegistryWood getWood() {
         return tfgWood;

@@ -1,39 +1,21 @@
 package su.terrafirmagreg.core.common.datagen;
 
-import java.util.concurrent.CompletableFuture;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.alekiponi.firmaciv.util.FirmacivTags;
+import com.tterrag.registrate.providers.RegistrateTagsProvider;
 
 import net.dries007.tfc.common.blocks.wood.Wood;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_FirmaCiv;
+import su.terrafirmagreg.core.common.data.TFGWatercraftMaterial;
 
-public class TFGBlockTagGenerator extends BlockTagsProvider {
-    public TFGBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, TFGCore.MOD_ID, existingFileHelper);
-    }
+public class TFGBlockTagGenerator {
+    public static void generateTags(RegistrateTagsProvider.IntrinsicImpl<Block> blockIntrinsic) {
+        var ginkgoStrippedLog = TFGWatercraftMaterial.GINKGO.getWood().getBlock(Wood.BlockType.STRIPPED_LOG).get();
 
-    @Override
-    protected void addTags(HolderLookup.Provider provider) {
-        TFGBlocks_FirmaCiv.CANOE_COMPONENT_BLOCKS.forEach(((watercraftMaterial, canoeComponentBlockBlockEntry) -> {
-            tag(FirmacivTags.Blocks.CAN_MAKE_CANOE)
-                    .addOptional(getResourceLocation(watercraftMaterial.getWood().getBlock(Wood.BlockType.STRIPPED_LOG).get()));
-            tag(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED)
-                    .addOptional(getResourceLocation(watercraftMaterial.getWood().getBlock(Wood.BlockType.STRIPPED_LOG).get()));
-        }));
-    }
-
-    private ResourceLocation getResourceLocation(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block);
+        //We need to add these tags to the Ginkgo logs, otherwise making canoes out of them becomes impossible.
+        blockIntrinsic.addTag(FirmacivTags.Blocks.CAN_MAKE_CANOE)
+                .add(ginkgoStrippedLog);
+        blockIntrinsic.addTag(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED)
+                .add(ginkgoStrippedLog);
     }
 }

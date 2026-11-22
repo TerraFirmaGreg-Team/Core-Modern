@@ -21,26 +21,35 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Wood;
 
 public enum TFGWood implements RegistryWood {
-    ARAUCARIA(MapColor.TERRACOTTA_WHITE, MapColor.WOOD, 10, 0),
-    BEECH(MapColor.TERRACOTTA_CYAN, MapColor.WOOD, 10, 0),
-    MAHOE(MapColor.TERRACOTTA_BLUE, MapColor.WOOD, 10, 0),
+    ARAUCARIA(MapColor.TERRACOTTA_WHITE, MapColor.WOOD, 10, 0, WoodKind.SOFT),
+    BEECH(MapColor.TERRACOTTA_CYAN, MapColor.WOOD, 10, 0, WoodKind.HARD),
+    MAHOE(MapColor.TERRACOTTA_BLUE, MapColor.WOOD, 10, 0, WoodKind.HARD),
 
     GLACIAN(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
-            MapColor.NONE, TFGWood::AdAstraGlacianSpecialBlockHandler),
+            MapColor.NONE, TFGWood::AdAstraGlacianSpecialBlockHandler, WoodKind.HARD),
     STROPHAR(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
-            MapColor.NONE, TFGWood::AdAstraStemSpecialBlockHandler),
+            MapColor.NONE, TFGWood::AdAstraStemSpecialBlockHandler, WoodKind.NONE),
     AERONOS(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
-            MapColor.NONE, TFGWood::AdAstraStemSpecialBlockHandler),
+            MapColor.NONE, TFGWood::AdAstraStemSpecialBlockHandler, WoodKind.NONE),
     GINKGO(ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
-            MapColor.NONE, TFGWood::WansSpecialBlockHandler);
+            MapColor.NONE, TFGWood::WansSpecialBlockHandler, WoodKind.SOFT);
+
+    public enum WoodKind {
+        //Makes canoes
+        SOFT,
+        //Makes Rowboats and Sloops
+        HARD,
+        //Cant be used for boats
+        NONE;
+    }
 
     public static final TFGWood[] VALUES = values();
 
@@ -58,10 +67,11 @@ public enum TFGWood implements RegistryWood {
     public final ResourceLocation logTexture;
     public final ResourceLocation strippedLogTexture;
     public final String baseModNamespace;
+    public final WoodKind woodKind;
     @Nullable
     public final BiFunction<TFGWood, Wood.BlockType, Optional<Block>> blockTypeSpecialHandler;
 
-    TFGWood(MapColor woodColor, MapColor barkColor, int daysToGrow, int autumnIndex) {
+    TFGWood(MapColor woodColor, MapColor barkColor, int daysToGrow, int autumnIndex, WoodKind woodKind) {
         this.generateWood = true;
         this.serializedName = this.name().toLowerCase(Locale.ROOT);
         this.woodColor = woodColor;
@@ -76,10 +86,12 @@ public enum TFGWood implements RegistryWood {
         this.logTexture = TFGCore.id("block/wood/log/" + serializedName);
         this.strippedLogTexture = TFGCore.id("block/wood/stripped_log/" + serializedName);
         this.baseModNamespace = "";
+        this.woodKind = woodKind;
         this.blockTypeSpecialHandler = null;
     }
 
-    TFGWood(ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor, @Nullable BiFunction<TFGWood, Wood.BlockType, Optional<Block>> blockTypeSpecialHandler) {
+    TFGWood(ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor, @Nullable BiFunction<TFGWood, Wood.BlockType, Optional<Block>> blockTypeSpecialHandler,
+            WoodKind woodKind) {
         this.generateWood = false;
         this.serializedName = this.name().toLowerCase(Locale.ROOT);
         this.woodColor = mapColor;
@@ -93,6 +105,7 @@ public enum TFGWood implements RegistryWood {
         this.logTexture = log;
         this.strippedLogTexture = stripped_log;
         this.baseModNamespace = plank.getNamespace();
+        this.woodKind = woodKind;
         this.blockTypeSpecialHandler = blockTypeSpecialHandler;
     }
 

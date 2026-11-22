@@ -1,7 +1,7 @@
 {
   "values": [
-    "tfg:wood/planks/mahoe",
+    "ad_astra:glacian_planks",
     "tfg:wood/planks/beech",
-    "ad_astra:glacian_planks"
+    "tfg:wood/planks/mahoe"
   ]
 }

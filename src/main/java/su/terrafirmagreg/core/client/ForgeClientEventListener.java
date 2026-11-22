@@ -44,10 +44,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
 import su.terrafirmagreg.core.client.renderer.CloudRendererHelper;
 import su.terrafirmagreg.core.client.renderer.SkyboxRenderer;
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
-import su.terrafirmagreg.core.common.data.TFGEntities;
-import su.terrafirmagreg.core.common.data.TFGPlant;
-import su.terrafirmagreg.core.common.data.TFGWatercraftMaterial;
+import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
@@ -155,12 +152,12 @@ public class ForgeClientEventListener {
                 ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
 
         for (final TFGWatercraftMaterial material : TFGWatercraftMaterial.values()) {
-            if (material.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
+            if (material.tfgWood.woodKind == TFGWood.WoodKind.SOFT) {
                 event.registerEntityRenderer(TFGEntities.CANOES.get(material).get(),
                         context -> new CanoeRenderer(context,
                                 TFGCore.id("textures/entity/watercraft/dugout_canoe/" + material.getSerializedName() + ".png")));
 
-            } else if (material.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
+            } else if (material.tfgWood.woodKind == TFGWood.WoodKind.HARD) {
                 event.registerEntityRenderer(TFGEntities.SLOOPS_UNDER_CONSTRUCTION.get(material).get(),
                         context -> new SloopConstructionRenderer(context,
                                 TFGCore.id("textures/entity/watercraft/sloop_construction/" + material.getSerializedName() + ".png")));
@@ -196,13 +193,13 @@ public class ForgeClientEventListener {
         ResourceLocation sloopPaint = ResourceLocation.fromNamespaceAndPath(AlekiShips.MOD_ID, "entity/watercraft/sloop/paint");
 
         for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
-            if (watercraftMaterial.woodKind != TFGWatercraftMaterial.WoodKind.HARD)
+            if (watercraftMaterial.tfgWood.woodKind != TFGWood.WoodKind.HARD)
                 continue;
 
             event.registerReloadListener(
                     new PaintedTextureGenerator(TFGCore.id("entity/watercraft/rowboat/" + watercraftMaterial.getSerializedName()), rowboatPaint));
             event.registerReloadListener(
-                    new PaintedTextureGenerator(TFGCore.id( "entity/watercraft/sloop/" + watercraftMaterial.getSerializedName()), sloopPaint));
+                    new PaintedTextureGenerator(TFGCore.id("entity/watercraft/sloop/" + watercraftMaterial.getSerializedName()), sloopPaint));
         }
     }
 }

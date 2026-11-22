@@ -228,9 +228,9 @@ public class TFGEntities {
 
     public static void init() {
         for (var watercraftMaterial : TFGWatercraftMaterial.values()) {
-            if (watercraftMaterial.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
+            if (watercraftMaterial.tfgWood.woodKind == TFGWood.WoodKind.SOFT) {
                 putCanoeEntity(watercraftMaterial);
-            } else if (watercraftMaterial.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
+            } else if (watercraftMaterial.tfgWood.woodKind == TFGWood.WoodKind.HARD) {
                 putRowboatEntity(watercraftMaterial);
                 putSloopEntity(watercraftMaterial);
                 putSloopUnderConstructionEntity(watercraftMaterial);

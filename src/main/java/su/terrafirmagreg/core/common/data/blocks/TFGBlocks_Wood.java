@@ -4,6 +4,8 @@ import static com.eerussianguy.firmalife.common.blocks.FLBlocks.*;
 
 import java.util.Map;
 
+import com.alekiponi.alekiships.util.AlekiShipsTags;
+import com.alekiponi.firmaciv.util.FirmacivTags;
 import com.eerussianguy.beneath.common.blocks.Stem;
 import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
@@ -198,7 +200,8 @@ public class TFGBlocks_Wood {
     private static BlockEntry<LogBlock> stripped_log(TFGWood wood) {
         var properties = ExtendedProperties.of(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? wood.woodColor() : wood.barkColor()).strength(7.5f).sound(SoundType.WOOD)
                 .instrument(NoteBlockInstrument.BASS).requiresCorrectToolForDrops().flammableLikeLogs();
-        return TFGCore.REGISTRATE.block("wood/stripped_log/" + wood.serializedName, p -> new LogBlock(properties, null))
+
+        var blockBuilder = TFGCore.REGISTRATE.block("wood/stripped_log/" + wood.serializedName, p -> new LogBlock(properties, null))
                 .blockstate((ctx, prov) -> {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log/" + wood.serializedName + "_top"));
                 })
@@ -211,8 +214,13 @@ public class TFGBlocks_Wood {
                 .tag(ItemTags.LOGS, ItemTags.LOGS_THAT_BURN)
                 .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "stripped_logs")))
-                .build()
-                .register();
+                .build();
+
+        if (wood.woodKind == TFGWood.WoodKind.SOFT) {
+            blockBuilder.tag(FirmacivTags.Blocks.CAN_MAKE_CANOE, FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
+        }
+
+        return blockBuilder.register();
     }
 
     private static BlockEntry<LogBlock> wood(TFGWood wood, Map<Wood.BlockType, BlockEntry<? extends Block>> blocks) {
@@ -271,15 +279,21 @@ public class TFGBlocks_Wood {
 
     private static BlockEntry<Block> plank(TFGWood wood) {
         var plankBlock = Wood.BlockType.PLANKS.create(wood).get();
-        return TFGCore.REGISTRATE.block("wood/planks/" + wood.serializedName, p -> plankBlock)
+
+        var builder = TFGCore.REGISTRATE.block("wood/planks/" + wood.serializedName, p -> plankBlock)
                 .blockstate((ctx, prov) -> {
                     prov.simpleBlock(ctx.getEntry());
                 })
                 .tag(BlockTags.PLANKS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
-                .tag(ItemTags.PLANKS).build()
-                .register();
+                .tag(ItemTags.PLANKS);
+
+        if (wood.woodKind == TFGWood.WoodKind.HARD) {
+            builder.tag(FirmacivTags.Items.HARD_WOOD);
+        }
+
+        return builder.build().register();
     }
 
     private static BlockEntry<Block> door(TFGWood wood) {
@@ -492,7 +506,7 @@ public class TFGBlocks_Wood {
                 .tag(TFCTags.Blocks.WORKBENCHES)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
-                .tag(TFCTags.Items.WORKBENCHES).build()
+                .tag(TFCTags.Items.WORKBENCHES, AlekiShipsTags.Items.CRAFTING_TABLES).build()
                 .register();
     }
 
@@ -516,7 +530,7 @@ public class TFGBlocks_Wood {
                 .tag(Tags.Items.CHESTS,
                         Tags.Items.CHESTS_WOODEN,
                         TFGTags.Items.DEFAULT_CHESTS,
-                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmaciv", "chests")))
+                        FirmacivTags.Items.CHESTS)
                 .build()
                 .register();
     }

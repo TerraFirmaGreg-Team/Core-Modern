@@ -47,6 +47,7 @@ import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGWatercraftMaterial;
+import su.terrafirmagreg.core.common.data.TFGWood;
 
 //Taken and Modified from FirmaCivPlus, rewritten to use Registrate
 //All of FirmaCiv's OG datagen is done with a Python based framework, so a lot of this code was rewriting that datagen to work with Java datagen. Some things might be a bit silly because of that
@@ -64,9 +65,9 @@ public class TFGBlocks_FirmaCiv {
         for (var woodEntry : TFGWatercraftMaterial.values()) {
             putWoodRoofing(woodEntry);
 
-            if (woodEntry.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
+            if (woodEntry.tfgWood.woodKind == TFGWood.WoodKind.SOFT) {
                 putCanoeComponentBlock(woodEntry);
-            } else if (woodEntry.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
+            } else if (woodEntry.tfgWood.woodKind == TFGWood.WoodKind.HARD) {
                 putAngledBoatFrameBlock(woodEntry);
                 putFlatBoatFrameBlock(woodEntry);
             }
@@ -177,7 +178,7 @@ public class TFGBlocks_FirmaCiv {
 
     private static NonNullBiConsumer<DataGenContext<Block, CanoeComponentBlock>, RegistrateBlockstateProvider> canoeComponentBlockState(TFGWatercraftMaterial watercraftMaterial) {
         return (dataGenContext, blockStateProvider) -> {
-            if (watercraftMaterial.woodKind != TFGWatercraftMaterial.WoodKind.SOFT) {
+            if (watercraftMaterial.tfgWood.woodKind != TFGWood.WoodKind.SOFT) {
                 return;
             }
 
@@ -297,7 +298,7 @@ public class TFGBlocks_FirmaCiv {
 
     private static NonNullBiConsumer<DataGenContext<Block, FirmacivAngledWoodenBoatFrameBlock>, RegistrateBlockstateProvider> angledBoatFrameBlockState(TFGWatercraftMaterial watercraftMaterial) {
         return (dataGenContext, blockStateProvider) -> {
-            if (watercraftMaterial.woodKind != TFGWatercraftMaterial.WoodKind.HARD)
+            if (watercraftMaterial.tfgWood.woodKind != TFGWood.WoodKind.HARD)
                 return;
 
             ModelFile.ExistingModelFile straight = blockStateProvider.models().getExistingFile(ResourceLocation.fromNamespaceAndPath(Firmaciv.MOD_ID, "block/watercraft_frame/angled/straight"));
@@ -409,7 +410,7 @@ public class TFGBlocks_FirmaCiv {
 
     private static NonNullBiConsumer<DataGenContext<Block, FirmacivFlatWoodenBoatFrameBlock>, RegistrateBlockstateProvider> flatBoatFrameBlockState(TFGWatercraftMaterial watercraftMaterial) {
         return (datagenContext, blockStateProvider) -> {
-            if (watercraftMaterial.woodKind != TFGWatercraftMaterial.WoodKind.HARD) {
+            if (watercraftMaterial.tfgWood.woodKind != TFGWood.WoodKind.HARD) {
                 return;
             }
 
@@ -445,9 +446,9 @@ public class TFGBlocks_FirmaCiv {
 
     public static void registerFrames() {
         for (var material : TFGWatercraftMaterial.values()) {
-            if (material.woodKind == TFGWatercraftMaterial.WoodKind.SOFT) {
+            if (material.tfgWood.woodKind == TFGWood.WoodKind.SOFT) {
                 CanoeComponentBlock.registerCanoeComponent((RotatedPillarBlock) material.getWood().getBlock(Wood.BlockType.STRIPPED_LOG).get(), CANOE_COMPONENT_BLOCKS.get(material).get());
-            } else if (material.woodKind == TFGWatercraftMaterial.WoodKind.HARD) {
+            } else if (material.tfgWood.woodKind == TFGWood.WoodKind.HARD) {
                 FirmacivBlocks.BOAT_FRAME_ANGLED.get()
                         .registerFrame(material.getWood().getBlock(Wood.BlockType.PLANKS).get().asItem(),
                                 TFGBlocks_FirmaCiv.WOODEN_BOAT_FRAME_ANGLED.get(material).get());

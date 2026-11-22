@@ -1,12 +1,6 @@
 {
   "values": [
-    {
-      "id": "tfg:wood/stripped_log/araucaria",
-      "required": false
-    },
-    {
-      "id": "wan_ancient_beasts:stripped_ginkgo_log",
-      "required": false
-    }
+    "wan_ancient_beasts:stripped_ginkgo_log",
+    "tfg:wood/stripped_log/araucaria"
   ]
 }
