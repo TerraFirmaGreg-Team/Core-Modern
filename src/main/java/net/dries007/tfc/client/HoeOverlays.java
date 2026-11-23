@@ -32,7 +32,7 @@ public class HoeOverlays
             if (targetedState.getBlock() instanceof HoeOverlayBlock overlayBlock)
             {
                 final List<Component> lines = new ArrayList<>();
-                overlayBlock.addHoeOverlayInfo(world, targetedPos, targetedState, lines, TFCConfig.CLIENT.enableDebug.get());
+                overlayBlock.addHoeOverlayFertilizer(world, targetedPos, targetedState, lines, TFCConfig.CLIENT.enableDebug.get());
                 if (!lines.isEmpty())
                 {
                     int x = window.getGuiScaledWidth() / 2 + 3;
