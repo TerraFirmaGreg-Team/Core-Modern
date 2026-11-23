@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "axis=x,sealed=false": {
+      "model": "tfg:block/cooking_appliances/baking_dish_yellow_open",
+      "y": 90
+    },
+    "axis=x,sealed=true": {
+      "model": "tfg:block/cooking_appliances/baking_dish_yellow_closed",
+      "y": 90
+    },
+    "axis=z,sealed=false": {
+      "model": "tfg:block/cooking_appliances/baking_dish_yellow_open"
+    },
+    "axis=z,sealed=true": {
+      "model": "tfg:block/cooking_appliances/baking_dish_yellow_closed"
+    }
+  }
+}

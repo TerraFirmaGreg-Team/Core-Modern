@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/baking_dish_closed_parent",
+  "textures": {
+    "0": "tfg:block/cooking_appliances/baking_dish_yellow"
+  }
+}

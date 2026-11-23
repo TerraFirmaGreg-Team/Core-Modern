@@ -1,9 +1,8 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -20,6 +19,7 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.blocks.LargeVesselBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -30,6 +30,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.material.MapColor;
@@ -545,6 +546,42 @@ public final class TFGBlocks {
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_0")))
             .build()
             .register();
+
+    public static final Map<DyeColor, BlockEntry<LargeVesselBlock>> BAKING_DISHES = Arrays.stream(DyeColor.values())
+            .collect(Collectors.toMap(color -> color, color -> TFGCore.REGISTRATE
+                    .block("baking_dish_" + color.getSerializedName(), p -> new LargeVesselBlock(ExtendedProperties.of(Blocks.TERRACOTTA)
+                            .sound(SoundType.DECORATED_POT)
+                            .blockEntity(TFCBlockEntities.LARGE_VESSEL)
+                            .strength(3.0f, 5.0f)
+                            .mapColor(color.getMapColor())
+                            .noOcclusion()))
+                    .blockstate((ctx, prov) -> {
+                        var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                        for (boolean sealed : LargeVesselBlock.SEALED.getPossibleValues()) {
+                            String open = sealed ? "_closed" : "_open";
+
+                            var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + open, TFGCore.id("block/baking_dish" + open + "_parent"))
+                                    .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName()));
+                            for (Direction.Axis dir : LargeVesselBlock.AXIS.getPossibleValues()) {
+                                int yRot = (dir == Direction.Axis.X) ? 90 : 0;
+
+                                builder.partialState()
+                                        .with(LargeVesselBlock.SEALED, sealed)
+                                        .with(LargeVesselBlock.AXIS, dir)
+                                        .modelForState()
+                                        .modelFile(model)
+                                        .rotationY(yRot)
+                                        .addModel();
+                            }
+                        }
+                    })
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                    .loot(RegistrateBlockLootTables::dropSelf)
+                    .item(BlockItem::new)
+                    .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_closed")))
+                    .build()
+                    .register()));
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {
         return (ctx, b) -> ctx.add(b, LootTable.lootTable().withPool(
