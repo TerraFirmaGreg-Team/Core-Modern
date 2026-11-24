@@ -10,8 +10,43 @@
       ],
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "tfg:baking_dish_red"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "tfg:baking_dish_red",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "sealed": "true"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_name",
+                  "source": "block_entity"
+                },
+                {
+                  "function": "minecraft:copy_nbt",
+                  "ops": [
+                    {
+                      "op": "replace",
+                      "source": "inventory",
+                      "target": "BlockEntityTag.inventory"
+                    }
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "tfg:baking_dish_red"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "tfg:baking_dish_red"
+            }
+          ]
         }
       ],
       "rolls": 1.0

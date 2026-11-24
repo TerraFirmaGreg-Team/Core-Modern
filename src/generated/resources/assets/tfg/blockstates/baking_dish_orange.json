@@ -1,18 +1,34 @@
 {
   "variants": {
-    "axis=x,sealed=false": {
+    "facing=east,sealed=false": {
       "model": "tfg:block/cooking_appliances/baking_dish_orange_open",
       "y": 90
     },
-    "axis=x,sealed=true": {
+    "facing=east,sealed=true": {
       "model": "tfg:block/cooking_appliances/baking_dish_orange_closed",
       "y": 90
     },
-    "axis=z,sealed=false": {
+    "facing=north,sealed=false": {
       "model": "tfg:block/cooking_appliances/baking_dish_orange_open"
     },
-    "axis=z,sealed=true": {
+    "facing=north,sealed=true": {
       "model": "tfg:block/cooking_appliances/baking_dish_orange_closed"
+    },
+    "facing=south,sealed=false": {
+      "model": "tfg:block/cooking_appliances/baking_dish_orange_open",
+      "y": 180
+    },
+    "facing=south,sealed=true": {
+      "model": "tfg:block/cooking_appliances/baking_dish_orange_closed",
+      "y": 180
+    },
+    "facing=west,sealed=false": {
+      "model": "tfg:block/cooking_appliances/baking_dish_orange_open",
+      "y": 270
+    },
+    "facing=west,sealed=true": {
+      "model": "tfg:block/cooking_appliances/baking_dish_orange_closed",
+      "y": 270
     }
   }
 }

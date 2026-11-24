@@ -1,3 +1,11 @@
 {
-  "parent": "tfg:block/cooking_appliances/baking_dish_green_closed"
+  "parent": "tfg:block/cooking_appliances/baking_dish_green_open",
+  "overrides": [
+    {
+      "model": "tfg:block/cooking_appliances/baking_dish_green_closed",
+      "predicate": {
+        "tfc:sealed": 1.0
+      }
+    }
+  ]
 }
