@@ -116,6 +116,8 @@ public final class TFGTags {
 
         public static final TagKey<Item> OVEN_BLACKLISTED = createItemTag("oven_blacklisted");
 
+        public static final TagKey<Item> BAKING_DISHES = createItemTag("baking_dishes");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }
@@ -162,6 +164,8 @@ public final class TFGTags {
         public static final TagKey<Block> HORNFELS = createBlockTag("hornfels");
         public static final TagKey<Block> UNPOSTER_GROWABLE = createBlockTag("unposter_growable");
         public static final TagKey<Block> SILK_MOTH_BLOCKS = createBlockTag("silk_moth_blocks");
+
+        public static final TagKey<Block> BAKING_DISHES = createBlockTag("baking_dishes");
 
         // Environment system tags
         public static final TagKey<Block> AtmospherePassable = createBlockTag("atmosphere_passable");
