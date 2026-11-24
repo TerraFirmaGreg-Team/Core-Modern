@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -37,14 +38,11 @@ import electrolyte.greate.registry.MechanicalPresses;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.TFGRegistries;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
-import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
-import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
-import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
-import su.terrafirmagreg.core.common.recipe.MixingBowlRecipe;
-import su.terrafirmagreg.core.common.recipe.SkilletRecipe;
+import su.terrafirmagreg.core.common.recipe.*;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.compat.ae2.terminal.OrderTerminalMenu;
@@ -90,6 +88,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory MIXING_BOWL = new EmiRecipeCategory(TFGCore.id("mixing_bowl"),
             EmiStack.of(TFGBlocks.MIXING_BOWL.get()));
+
+    public static final EmiRecipeCategory BAKING_DISH = new EmiRecipeCategory(TFGCore.id("baking_dish"),
+            EmiStack.of(TFGBlocks.BAKING_DISHES.get(DyeColor.RED).get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -216,6 +217,14 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(MIXING_BOWL, EmiStack.of(TFGBlocks.MIXING_BOWL.get().asItem()));
         for (MixingBowlRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.MIXING_BOWL.get())) {
             emiRegistry.addRecipe(new MixingBowlEmiRecipe(recipe));
+        }
+
+        // Baking Dish
+        emiRegistry.addCategory(BAKING_DISH);
+        emiRegistry.addWorkstation(BAKING_DISH, EmiIngredient.of(TFGTags.Items.BAKING_DISHES));
+        emiRegistry.addWorkstation(BAKING_DISH, EmiStack.of(TFGBlocks.FIRE_BOX_TOP_OVEN.get().asItem()));
+        for (BakingDishRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.BAKING_DISH.get())) {
+            emiRegistry.addRecipe(new BakingDishEmiRecipe(recipe));
         }
     }
 

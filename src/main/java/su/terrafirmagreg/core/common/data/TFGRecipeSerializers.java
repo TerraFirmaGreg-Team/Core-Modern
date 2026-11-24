@@ -7,6 +7,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.BakingDishRecipe;
 import su.terrafirmagreg.core.common.recipe.CookingApplianceRecipe;
 import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
@@ -27,4 +28,6 @@ public class TFGRecipeSerializers {
             () -> new CookingApplianceRecipe.Serializer<>(SkilletRecipe::new));
     public static final RegistryObject<CookingApplianceRecipe.Serializer<MixingBowlRecipe>> MIXING_BOWL = RECIPE_SERIALIZERS.register("mixing_bowl",
             () -> new CookingApplianceRecipe.Serializer<>(MixingBowlRecipe::new));
+    public static final RegistryObject<CookingApplianceRecipe.Serializer<BakingDishRecipe>> BAKING_DISH = RECIPE_SERIALIZERS.register("baking_dish",
+            () -> new CookingApplianceRecipe.Serializer<>(BakingDishRecipe::new));
 }

@@ -27,6 +27,7 @@ import electrolyte.greate.content.kinetics.base.TieredSingleAxisRotatingVisual;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.renderer.BakingDishBlockEntityRenderer;
 import su.terrafirmagreg.core.client.renderer.CookingApplianceBlockEntityRenderer;
 import su.terrafirmagreg.core.client.renderer.FireBoxTopOvenBlockEntityRenderer;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelInstance;
@@ -180,6 +181,14 @@ public class TFGBlockEntities {
             .blockEntity("fire_box_top_oven", FireBoxTopOvenBlockEntity::new)
             .validBlock(TFGBlocks.FIRE_BOX_TOP_OVEN)
             .renderer(() -> FireBoxTopOvenBlockEntityRenderer::new)
+            .register();
+
+    @SuppressWarnings("unchecked")
+    public static final BlockEntityEntry<BakingDishBlockEntity> BAKING_DISH = TFGCore.REGISTRATE
+            .<BakingDishBlockEntity>blockEntity("baking_dish", BakingDishBlockEntity::new)
+            .validBlocks((NonNullSupplier<? extends Block>[]) TFGBlocks.BAKING_DISHES.values().toArray(NonNullSupplier[]::new))
+            .validBlock(TFGBlocks.BAKING_DISH_CERAMIC)
+            .renderer(() -> BakingDishBlockEntityRenderer::new)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();

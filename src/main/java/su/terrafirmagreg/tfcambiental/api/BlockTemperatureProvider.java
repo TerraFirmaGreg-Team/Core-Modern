@@ -55,6 +55,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 import su.terrafirmagreg.core.common.block.ParticleEmitterDecorationBlock;
 import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxTopOvenBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
@@ -108,6 +109,7 @@ public interface BlockTemperatureProvider {
                 addScaled(storage, handleCharcoalForge(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleGasBurner(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleFireBox(player, blockEntity), distanceMultiplier);
+                addScaled(storage, handleFireBoxTopOven(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleFirePit(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handlePot(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleGrill(player, blockEntity), distanceMultiplier);
@@ -178,10 +180,22 @@ public interface BlockTemperatureProvider {
         return TempModifier.none();
     }
 
+    static Optional<TempModifier> handleFireBoxTopOven(Player player, BlockEntity entity) {
+        if (entity instanceof FireBoxTopOvenBlockEntity fbtobe) {
+            float temp = fbtobe.getTemperature();
+            float change = temp / 1500f;
+            if (hasProtection(player)) {
+                change = change * 0.3f;
+            }
+            return TempModifier.defined(change, 0);
+        }
+        return TempModifier.none();
+    }
+
     static Optional<TempModifier> handleFireBox(Player player, BlockEntity entity) {
-        if (entity instanceof FireBoxBlockEntity forge) {
-            float temp = forge.getTemperature();
-            float change = temp / 140f;
+        if (entity instanceof FireBoxBlockEntity fbbe) {
+            float temp = fbbe.getTemperature();
+            float change = temp / 300f;
             if (hasProtection(player)) {
                 change = change * 0.3f;
             }

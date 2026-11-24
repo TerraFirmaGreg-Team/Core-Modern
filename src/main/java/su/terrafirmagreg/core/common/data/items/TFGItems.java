@@ -277,4 +277,10 @@ public class TFGItems {
             .model((ctx, prov) -> prov.generated(ctx, ResourceLocation.withDefaultNamespace("block/red_mushroom")))
             .tag(Tags.Items.MUSHROOMS, TFCTags.Items.FOODS, BeneathItemTags.UNPOSTABLE)
             .register();
+
+    public static final ItemEntry<Item> BAKING_DISH_UNFIRED = TFGCore.REGISTRATE.item("baking_dish_unfired", Item::new)
+            .properties(p -> p.stacksTo(1))
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/cooking_appliances/" + ctx.getName())))
+            .tag(TFCTags.Items.UNFIRED_POTTERY, TFCTags.Items.CLAY_RECYCLE_5)
+            .register();
 }
