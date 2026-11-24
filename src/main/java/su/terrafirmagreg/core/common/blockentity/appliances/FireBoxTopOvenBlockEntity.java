@@ -15,11 +15,14 @@ import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.capabilities.heat.IHeatBlock;
 import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.IntArrayBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -33,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
 import lombok.Getter;
@@ -40,7 +44,10 @@ import lombok.Getter;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.appliances.FireBoxTopOvenBlock;
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
+import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.item.BakingDishItem;
+import su.terrafirmagreg.core.common.recipe.BakingDishRecipe;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements IHeatable, IHeatBlock {
@@ -136,6 +143,14 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
                     HeatCapability.addTemp(inputHeat, oven.temperature, modifier);
                 }
 
+                if (inputStack.getItem() instanceof BakingDishItem) {
+                    if (oven.inventory.getStackInSlot(SLOT_OUTPUT_START + slot).isEmpty()) {
+                        if (oven.tryBakeDish(level, slot, inputStack, inputHeat.getTemperature(), state, pos)) {
+                            continue;
+                        }
+                    }
+                }
+
                 WrappedHeatingRecipe recipe = oven.cachedRecipes[slot];
                 if (recipe == null) {
                     recipe = WrappedHeatingRecipe.getRecipe(inputStack);
@@ -151,7 +166,6 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
                         if (!burnt) {
                             HeatCapability.setTemperature(output, inputHeat.getTemperature());
                             FoodCapability.applyTrait(output, TFGFoodTraits.FIRE_BOX_BAKED);
-                            FoodCapability.setCreationDate(output, FoodCapability.getRoundedCreationDate());
                         }
 
                         oven.inventory.setStackInSlot(slot, ItemStack.EMPTY);
@@ -164,6 +178,85 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
                 }
             }
         }
+    }
+
+    /**
+     * Method for baking dish meal recipes.
+     */
+    private boolean tryBakeDish(Level level, int slot, ItemStack dishStack, float temperature, BlockState state, BlockPos pos) {
+        CompoundTag beTag = dishStack.getTagElement(Helpers.BLOCK_ENTITY_TAG);
+        ItemStackHandler items = new ItemStackHandler(BakingDishBlockEntity.ITEM_SLOTS);
+        FluidTank tank = new FluidTank(BakingDishBlockEntity.FLUID_CAPACITY);
+
+        if (beTag != null) {
+            if (beTag.contains("inventory", Tag.TAG_COMPOUND)) {
+                CompoundTag invTag = beTag.getCompound("inventory");
+                if (invTag.contains("inventory", Tag.TAG_COMPOUND)) {
+                    items.deserializeNBT(invTag.getCompound("inventory"));
+                } else if (invTag.contains("Items", Tag.TAG_LIST)) {
+                    items.deserializeNBT(invTag);
+                }
+                if (invTag.contains("tanks", Tag.TAG_LIST)) {
+                    ListTag tanksTag = invTag.getList("tanks", Tag.TAG_COMPOUND);
+                    if (!tanksTag.isEmpty()) {
+                        tank.readFromNBT(tanksTag.getCompound(0));
+                    }
+                }
+            }
+            if (tank.isEmpty()) {
+                if (beTag.contains("tanks", Tag.TAG_LIST)) {
+                    ListTag tanksTag = beTag.getList("tanks", Tag.TAG_COMPOUND);
+                    if (!tanksTag.isEmpty()) {
+                        tank.readFromNBT(tanksTag.getCompound(0));
+                    }
+                } else if (beTag.contains("tank", Tag.TAG_COMPOUND)) {
+                    tank.readFromNBT(beTag.getCompound("tank"));
+                }
+            }
+        }
+
+        boolean hasItems = false;
+        for (int i = 0; i < items.getSlots(); i++) {
+            if (!items.getStackInSlot(i).isEmpty()) {
+                hasItems = true;
+                break;
+            }
+        }
+        if (!hasItems && tank.isEmpty()) {
+            return false;
+        }
+
+        for (BakingDishRecipe recipe : level.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.BAKING_DISH.get())) {
+            if (recipe.matches(items, tank, temperature)) {
+                recipe.assembleOutputs(items, tank, level.registryAccess(), temperature);
+
+                ItemStack outputStack = dishStack.copy();
+                HeatCapability.setTemperature(outputStack, temperature);
+                CompoundTag newBeTag = outputStack.getOrCreateTagElement(Helpers.BLOCK_ENTITY_TAG);
+                CompoundTag newInvTag = newBeTag.contains("inventory", Tag.TAG_COMPOUND) ? newBeTag.getCompound("inventory") : new CompoundTag();
+                newInvTag.put("inventory", items.serializeNBT());
+                ListTag newTanksTag = new ListTag();
+                if (!tank.isEmpty()) {
+                    newTanksTag.add(tank.writeToNBT(new CompoundTag()));
+                }
+                newInvTag.put("tanks", newTanksTag);
+                newBeTag.put("inventory", newInvTag);
+                newBeTag.remove("tanks");
+                newBeTag.remove("tank");
+
+                this.inventory.setStackInSlot(slot, ItemStack.EMPTY);
+                this.inventory.setStackInSlot(SLOT_OUTPUT_START + slot, outputStack);
+                this.setAndUpdateSlots(slot);
+                this.setAndUpdateSlots(SLOT_OUTPUT_START + slot);
+                this.cachedRecipes[slot] = null;
+                this.markForSync();
+                this.setChanged();
+
+                fanFareEffects(level, pos, state, slot, false);
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void fanFareEffects(Level level, BlockPos pos, BlockState state, int slot, boolean burnt) {
