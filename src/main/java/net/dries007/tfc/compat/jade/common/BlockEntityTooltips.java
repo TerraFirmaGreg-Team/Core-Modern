@@ -409,7 +409,7 @@ public final class BlockEntityTooltips
             {
                 final List<Component> text = new ArrayList<>();
                 final BlockPos pos1 = entity.getBlockPos();
-                overlay.addHoeOverlayInfo(level, pos1, level.getBlockState(pos1), text, false);
+                overlay.addHoeOverlayFertilizer(level, pos1, level.getBlockState(pos1), text, TFCConfig.CLIENT.enableDebug.get());
                 text.forEach(tooltip);
             }
         }

@@ -40,6 +40,13 @@ public class TFGBlocks_Struts {
         STRUTS.add(strut("tin_alloy", "truss", TFGCore.id("block/girder/truss/tin_alloy")));
         STRUTS.add(strut("zinc", "truss", TFGCore.id("block/girder/truss/zinc")));
         STRUTS.add(strut("wrought_iron", "truss", TFGCore.id("block/girder/truss/wrought_iron")));
+
+        // Wood Struts
+        STRUTS.add(woodStrut("metal_brace", "wood", TFGCore.id("block/girder/wood/metal_brace")));
+        STRUTS.add(woodStrut("brass_brace", "wood", TFGCore.id("block/girder/wood/brass_brace")));
+        STRUTS.add(woodStrut("copper_brace", "wood", TFGCore.id("block/girder/wood/copper_brace")));
+        STRUTS.add(woodStrut("tin_alloy_brace", "wood", TFGCore.id("block/girder/wood/tin_alloy_brace")));
+        STRUTS.add(woodStrut("zinc_brace", "wood", TFGCore.id("block/girder/wood/zinc_brace")));
     }
 
     public static BlockEntry<TFGStrutBlock> strut(String id, String type, ResourceLocation texLoc) {
@@ -71,6 +78,45 @@ public class TFGBlocks_Struts {
                     TFGBlockEntities.addValidBEBlock(TFGBlockEntities.STRUT, block);
                 })
                 .tag(TFGTags.Blocks.STRUT, BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(StrutBlockItem::new)
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/" + type + "_item"))
+                        .texture("0", texLoc)
+                        .texture("1_0", texLoc)
+                        .texture("particle", texLoc))
+                .tag(TFGTags.Items.STRUT)
+                .build()
+                .register();
+    }
+
+    public static BlockEntry<TFGStrutBlock> woodStrut(String id, String type, ResourceLocation texLoc) {
+        String fullId = "strut/" + type + "/" + id;
+
+        return TFGCore.REGISTRATE.block(fullId, p -> new TFGStrutBlock(p, new StrutModelType(
+                TFGCore.id("block/" + fullId),
+                texLoc)))
+                .properties(p -> p
+                        .mapColor(MapColor.WOOD)
+                        .strength(3f, 6f)
+                        .noOcclusion()
+                        .sound(SoundType.WOOD))
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().withExistingParent(fullId + "_attachment", TFGCore.id("block/strut/" + type + "_attachment"))
+                            .texture("0", texLoc)
+                            .texture("particle", texLoc);
+
+                    ModelFile extraModel = prov.models().withExistingParent(fullId, TFGCore.id("block/strut/" + type))
+                            .texture("0", texLoc)
+                            .texture("particle", texLoc);
+
+                    var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                    buildGirderStrutBlockStateEntry(builder, model, false);
+                    buildGirderStrutBlockStateEntry(builder, model, true);
+                })
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFGBlockEntities.STRUT, block);
+                })
+                .tag(TFGTags.Blocks.STRUT, BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
                 .item(StrutBlockItem::new)
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/" + type + "_item"))
                         .texture("0", texLoc)
