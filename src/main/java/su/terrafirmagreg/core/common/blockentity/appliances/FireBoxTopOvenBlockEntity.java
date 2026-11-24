@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.blockentity.appliances;
 
+import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -136,8 +137,8 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
                     if (FoodCapability.hasTrait(inputStack, TFGFoodTraits.FIRE_BOX_BAKED)) {
                         // Already baked items continue to heat up much slower.
                         modifier = 1.1F;
-                    } else if (FoodCapability.has(inputStack)) {
-                        // Food items heat up slower than metals.
+                    } else if (FoodCapability.has(inputStack) || inputStack.is(TFGTags.Items.BAKING_DISHES)) {
+                        // Food items and the baking dishes heat up slower.
                         modifier = 1.4F;
                     }
                     HeatCapability.addTemp(inputHeat, oven.temperature, modifier);
