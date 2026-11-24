@@ -13,6 +13,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 
 import net.dries007.tfc.client.ClientHelpers;
+import net.dries007.tfc.config.FoodExpiryTooltipStyle;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -152,13 +153,24 @@ public interface IFood extends INetworkFood
                 final long rottenCalendarTime = Calendars.CLIENT.ticksToCalendarTicks(rottenDate); // Date food rots on.
                 final long ticksRemaining = rottenDate - Calendars.CLIENT.getTicks(); // Ticks remaining until rotten
 
-                final MutableComponent tooltip = switch (TFCConfig.CLIENT.foodExpiryTooltipStyle.get())
-                    {
-                        case EXPIRY -> Component.translatable("tfc.tooltip.food_expiry_date", ICalendar.getTimeAndDate(rottenCalendarTime, Calendars.CLIENT.getCalendarDaysInMonth()));
-                        case TIME_LEFT -> Component.translatable("tfc.tooltip.food_expiry_left", Calendars.CLIENT.getTimeDelta(ticksRemaining));
-                        case BOTH -> Component.translatable("tfc.tooltip.food_expiry_date_and_left", ICalendar.getTimeAndDate(rottenCalendarTime, Calendars.CLIENT.getCalendarDaysInMonth()), Calendars.CLIENT.getTimeDelta(ticksRemaining));
-                        default -> null;
-                    };
+                final FoodExpiryTooltipStyle style = TFCConfig.CLIENT.foodExpiryTooltipStyle.get();
+                final MutableComponent tooltip;
+                if (style == FoodExpiryTooltipStyle.EXPIRY)
+                {
+                    tooltip = Component.translatable("tfc.tooltip.food_expiry_date", ICalendar.getTimeAndDate(rottenCalendarTime, Calendars.CLIENT.getCalendarDaysInMonth()));
+                }
+                else if (style == FoodExpiryTooltipStyle.TIME_LEFT)
+                {
+                    tooltip = Component.translatable("tfc.tooltip.food_expiry_left", Calendars.CLIENT.getTimeDelta(ticksRemaining));
+                }
+                else if (style == FoodExpiryTooltipStyle.BOTH)
+                {
+                    tooltip = Component.translatable("tfc.tooltip.food_expiry_date_and_left", ICalendar.getTimeAndDate(rottenCalendarTime, Calendars.CLIENT.getCalendarDaysInMonth()), Calendars.CLIENT.getTimeDelta(ticksRemaining));
+                }
+                else
+                {
+                    tooltip = null;
+                }
                 if (tooltip != null)
                 {
                     text.add(tooltip.withStyle(ChatFormatting.DARK_GREEN));
