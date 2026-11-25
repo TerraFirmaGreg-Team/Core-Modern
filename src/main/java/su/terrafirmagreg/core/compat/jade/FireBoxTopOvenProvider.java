@@ -21,6 +21,8 @@ import snownee.jade.api.config.IPluginConfig;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxTopOvenBlockEntity;
+import su.terrafirmagreg.core.common.item.BakingDishItem;
+import su.terrafirmagreg.core.common.recipe.BakingDishRecipe;
 
 public class FireBoxTopOvenProvider implements IBlockComponentProvider {
 
@@ -62,7 +64,15 @@ public class FireBoxTopOvenProvider implements IBlockComponentProvider {
                         if (!stack.isEmpty()) {
                             float itemTemp = HeatCapability.getTemperature(stack);
                             WrappedHeatingRecipe recipe = WrappedHeatingRecipe.getRecipe(stack);
-                            float targetTemp = recipe != null ? recipe.temperature() : temp;
+                            float targetTemp = temp;
+                            if (recipe != null) {
+                                targetTemp = recipe.temperature();
+                            } else if (stack.getItem() instanceof BakingDishItem) {
+                                BakingDishRecipe bakingRecipe = BakingDishRecipe.getRecipe(stack, accessor.getLevel());
+                                if (bakingRecipe != null) {
+                                    targetTemp = bakingRecipe.getMinTemp();
+                                }
+                            }
                             int tempPercentage = targetTemp > 0 ? Mth.clamp(Math.round((itemTemp / targetTemp) * 20f) * 5, 0, 100) : 0;
                             Component tempComponent = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(itemTemp);
                             MutableComponent line;

@@ -138,6 +138,16 @@ public class ClientProxy extends CommonProxy {
             }
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_HUSK.get(), RenderType.cutout());
 
+            // Baking dishes sealed item model property
+            TFGBlocks.BAKING_DISHES.values().forEach(dish -> ItemProperties.register(
+                    dish.get().asItem(),
+                    Helpers.identifier("sealed"),
+                    (stack, level, entity, unused) -> stack.hasTag() ? 1.0f : 0f));
+
+            ItemProperties.register(TFGBlocks.BAKING_DISH_CERAMIC.asItem(),
+                    Helpers.identifier("sealed"),
+                    (stack, level, entity, unused) -> stack.hasTag() ? 1.0f : 0f);
+
             // Wood
             TFGBlocks_Wood.WOODS.values().forEach(map -> {
                 // Changes the item model when a barrel is sealed

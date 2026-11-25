@@ -1,9 +1,8 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -17,6 +16,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -25,22 +25,26 @@ import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -55,6 +59,8 @@ import su.terrafirmagreg.core.common.block.appliances.*;
 import su.terrafirmagreg.core.common.blockentity.appliances.*;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.item.BakingDishItem;
 import su.terrafirmagreg.core.common.item.CookingApplianceBlockItem;
 import su.terrafirmagreg.core.common.item.GasBurnerBlockItem;
 import su.terrafirmagreg.core.common.item.MixingBowlItem;
@@ -354,7 +360,7 @@ public final class TFGBlocks {
     public static final BlockEntry<CopperPotBlock> COPPER_POT = TFGCore.REGISTRATE
             .block("copper_pot", p -> new CopperPotBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
                     .blockEntity(TFGBlockEntities.COPPER_POT)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .mapColor(MapColor.COLOR_ORANGE)
                     .noOcclusion()
                     .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
@@ -394,7 +400,7 @@ public final class TFGBlocks {
     public static final BlockEntry<CondenserBlock> CONDENSER = TFGCore.REGISTRATE
             .block("condenser", p -> new CondenserBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
                     .sound(SoundType.COPPER)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .noOcclusion()
                     .blockEntity(TFGBlockEntities.CONDENSER)
                     .mapColor(MapColor.COLOR_ORANGE)
@@ -422,7 +428,7 @@ public final class TFGBlocks {
             .block("skillet", p -> new SkilletBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
                     .sound(SoundType.NETHERITE_BLOCK)
                     .blockEntity(TFGBlockEntities.SKILLET)
-                    .strength(3.0f, 7.0f)
+                    .strength(2.0f, 7.0f)
                     .mapColor(MapColor.COLOR_BLACK)
                     .noOcclusion()
                     .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
@@ -451,7 +457,7 @@ public final class TFGBlocks {
             .block("mixing_bowl", p -> new MixingBowlBlock(ExtendedProperties.of(Blocks.CRAFTING_TABLE)
                     .sound(SoundType.SCAFFOLDING)
                     .blockEntity(TFGBlockEntities.MIXING_BOWL)
-                    .strength(5, 10)
+                    .strength(1.0F, 3.0f)
                     .mapColor(MapColor.WOOD)
                     .noOcclusion()
                     .ticks(MixingBowlBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
@@ -486,7 +492,7 @@ public final class TFGBlocks {
     public static final BlockEntry<FireBoxBlock> FIRE_BOX = TFGCore.REGISTRATE
             .block("fire_box", p -> new FireBoxBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
                     .sound(SoundType.NETHERITE_BLOCK)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .noOcclusion()
                     .mapColor(MapColor.COLOR_BLACK)
                     .blockEntity(TFGBlockEntities.FIRE_BOX)
@@ -519,7 +525,7 @@ public final class TFGBlocks {
     public static final BlockEntry<FireBoxTopOvenBlock> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
             .block("fire_box_top_oven", p -> new FireBoxTopOvenBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
                     .sound(SoundType.NETHERITE_BLOCK)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .noOcclusion()
                     .mapColor(MapColor.COLOR_BLACK)
                     .blockEntity(TFGBlockEntities.FIRE_BOX_TOP_OVEN)
@@ -543,6 +549,115 @@ public final class TFGBlocks {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
             .item(BlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_0")))
+            .build()
+            .register();
+
+    public static final Map<DyeColor, BlockEntry<BakingDishBlock>> BAKING_DISHES = Arrays.stream(DyeColor.values())
+            .collect(Collectors.toMap(color -> color, color -> TFGCore.REGISTRATE
+                    .block("baking_dish_" + color.getSerializedName(), p -> new BakingDishBlock(ExtendedProperties.of(Blocks.TERRACOTTA)
+                            .sound(SoundType.DECORATED_POT)
+                            .blockEntity(TFGBlockEntities.BAKING_DISH)
+                            .strength(2.0f, 5.0f)
+                            .mapColor(color.getMapColor())
+                            .noOcclusion()))
+                    .blockstate((ctx, prov) -> {
+                        var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                        // Generates the unfired model for the unfired dyed baking dish items.
+                        prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + "_unfired", TFGCore.id("block/baking_dish_open_parent"))
+                                .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName() + "_unfired"));
+
+                        for (boolean sealed : BakingDishBlock.SEALED.getPossibleValues()) {
+                            String open = sealed ? "_closed" : "_open";
+
+                            var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + open, TFGCore.id("block/baking_dish" + open + "_parent"))
+                                    .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName()));
+                            for (Direction dir : Direction.Plane.HORIZONTAL) {
+
+                                builder.partialState()
+                                        .with(BakingDishBlock.SEALED, sealed)
+                                        .with(BakingDishBlock.FACING, dir)
+                                        .modelForState()
+                                        .modelFile(model)
+                                        .rotationY((int) dir.getOpposite().toYRot())
+                                        .addModel();
+                            }
+                        }
+                    })
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFGTags.Blocks.BAKING_DISHES)
+                    .loot((tables, block) -> tables.add(block, LootTable.lootTable()
+                            .withPool(LootPool.lootPool()
+                                    .setRolls(ConstantValue.exactly(1))
+                                    .add(AlternativesEntry.alternatives(
+                                            LootItem.lootTableItem(block)
+                                                    .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                            .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                                    .hasProperty(BakingDishBlock.SEALED, true)))
+                                                    .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                                    .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                                            .copy("inventory", "BlockEntityTag.inventory", CopyNbtFunction.MergeStrategy.REPLACE)),
+                                            LootItem.lootTableItem(block)))
+                                    .when(ExplosionCondition.survivesExplosion()))))
+                    .item(BakingDishItem::new)
+                    .tag(TFGTags.Items.BAKING_DISHES)
+                    .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_open"))
+                            .override()
+                            .predicate(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "sealed"), 1.0f)
+                            .model(prov.getExistingFile(prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_closed"))))
+                    .build()
+                    .register()));
+
+    public static final BlockEntry<BakingDishBlock> BAKING_DISH_CERAMIC = TFGCore.REGISTRATE
+            .block("baking_dish_ceramic", p -> new BakingDishBlock(ExtendedProperties.of(Blocks.TERRACOTTA)
+                    .sound(SoundType.DECORATED_POT)
+                    .blockEntity(TFGBlockEntities.BAKING_DISH)
+                    .strength(2.0f, 5.0f)
+                    .mapColor(MapColor.TERRACOTTA_BROWN)
+                    .noOcclusion()))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                // Generates the unfired model for the clay baking dish item.
+                prov.models().withExistingParent("cooking_appliances/baking_dish_unfired", TFGCore.id("block/baking_dish_open_parent"))
+                        .texture("0", TFGCore.id("block/cooking_appliances/baking_dish_unfired"));
+
+                for (boolean sealed : BakingDishBlock.SEALED.getPossibleValues()) {
+                    String open = sealed ? "_closed" : "_open";
+
+                    var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + open, TFGCore.id("block/baking_dish" + open + "_parent"))
+                            .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName()));
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+
+                        builder.partialState()
+                                .with(BakingDishBlock.SEALED, sealed)
+                                .with(BakingDishBlock.FACING, dir)
+                                .modelForState()
+                                .modelFile(model)
+                                .rotationY((int) dir.getOpposite().toYRot())
+                                .addModel();
+                    }
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFGTags.Blocks.BAKING_DISHES)
+            .loot((tables, block) -> tables.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1))
+                            .add(AlternativesEntry.alternatives(
+                                    LootItem.lootTableItem(block)
+                                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                    .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                            .hasProperty(BakingDishBlock.SEALED, true)))
+                                            .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                            .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                                    .copy("inventory", "BlockEntityTag.inventory", CopyNbtFunction.MergeStrategy.REPLACE)),
+                                    LootItem.lootTableItem(block)))
+                            .when(ExplosionCondition.survivesExplosion()))))
+            .item(BakingDishItem::new)
+            .tag(TFGTags.Items.BAKING_DISHES)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_open"))
+                    .override()
+                    .predicate(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "sealed"), 1.0f)
+                    .model(prov.getExistingFile(prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_closed"))))
             .build()
             .register();
 

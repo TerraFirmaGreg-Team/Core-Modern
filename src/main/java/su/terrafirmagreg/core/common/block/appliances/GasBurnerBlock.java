@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.block.appliances;
 
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
@@ -21,10 +23,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,6 +36,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -51,7 +57,7 @@ public class GasBurnerBlock extends DeviceBlock {
     protected static final VoxelShape SHAPE = Shapes.or(Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D), Block.box(1.0D, 9.0D, 1.0D, 15.0D, 16.0D, 15.0D));
 
     public GasBurnerBlock(ExtendedProperties properties) {
-        super(properties, InventoryRemoveBehavior.SAVE);
+        super(properties, InventoryRemoveBehavior.DROP);
         registerDefaultState(getStateDefinition().any()
                 .setValue(HEAT, 0)
                 .setValue(LIT, false)
@@ -274,4 +280,17 @@ public class GasBurnerBlock extends DeviceBlock {
         return false;
     }
 
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+        List<ItemStack> drops = super.getDrops(state, params);
+        BlockEntity be = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (be instanceof GasBurnerBlockEntity burner) {
+            for (ItemStack stack : drops) {
+                if (stack.is(this.asItem())) {
+                    burner.saveToItem(stack);
+                }
+            }
+        }
+        return drops;
+    }
 }

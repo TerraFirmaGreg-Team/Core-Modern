@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.block.appliances;
 
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
@@ -23,17 +25,21 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.SkilletBlockEntity;
 
 /**
  * Base class for cooking appliances like {@link CopperPotBlock}.
@@ -54,7 +60,7 @@ public abstract class CookingApplianceBlock extends DeviceBlock {
     }
 
     public CookingApplianceBlock(ExtendedProperties properties) {
-        this(properties, InventoryRemoveBehavior.SAVE);
+        this(properties, InventoryRemoveBehavior.NOOP);
     }
 
     @Override
@@ -139,5 +145,19 @@ public abstract class CookingApplianceBlock extends DeviceBlock {
     @Override
     public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
         return false;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+        List<ItemStack> drops = super.getDrops(state, params);
+        BlockEntity be = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (be instanceof CookingApplianceBlockEntity appliance && !(appliance instanceof SkilletBlockEntity)) {
+            for (ItemStack stack : drops) {
+                if (stack.is(this.asItem())) {
+                    appliance.saveToItem(stack);
+                }
+            }
+        }
+        return drops;
     }
 }

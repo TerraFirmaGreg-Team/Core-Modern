@@ -243,6 +243,30 @@ public class GasBurnerBlockEntity extends TickableInventoryBlockEntity<ItemStack
     }
 
     @Override
+    public void saveToItem(@NotNull ItemStack stack) {
+        if (tank.isEmpty()) {
+            stack.removeTagKey(Helpers.BLOCK_ENTITY_TAG);
+            return;
+        }
+
+        CompoundTag tag = new CompoundTag();
+        tag.put("tank", tank.writeToNBT(new CompoundTag()));
+        stack.addTagElement(Helpers.BLOCK_ENTITY_TAG, tag);
+    }
+
+    public boolean isEmpty() {
+        if (!tank.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < inventory.getSlots(); i++) {
+            if (!inventory.getStackInSlot(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public void loadAdditional(CompoundTag nbt) {
         tank.readFromNBT(nbt.getCompound("tank"));
         temperature = nbt.getFloat("temperature");

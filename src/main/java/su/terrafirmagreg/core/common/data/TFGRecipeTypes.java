@@ -8,6 +8,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.BakingDishRecipe;
 import su.terrafirmagreg.core.common.recipe.CopperPotRecipe;
 import su.terrafirmagreg.core.common.recipe.GasBurnerFuelRecipe;
 import su.terrafirmagreg.core.common.recipe.MixingBowlRecipe;
@@ -22,6 +23,7 @@ public class TFGRecipeTypes {
     public static final RegistryObject<RecipeType<CopperPotRecipe>> COPPER_POT = register("copper_pot");
     public static final RegistryObject<RecipeType<SkilletRecipe>> SKILLET = register("skillet");
     public static final RegistryObject<RecipeType<MixingBowlRecipe>> MIXING_BOWL = register("mixing_bowl");
+    public static final RegistryObject<RecipeType<BakingDishRecipe>> BAKING_DISH = register("baking_dish");
 
     private static <R extends Recipe<?>> RegistryObject<RecipeType<R>> register(String name) {
         return RECIPE_TYPES.register(name, () -> new RecipeType<R>() {

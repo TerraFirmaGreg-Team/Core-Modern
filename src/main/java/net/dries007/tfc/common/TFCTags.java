@@ -309,6 +309,8 @@ public class TFCTags
 		public static final TagKey<Item> SEWING_TABLES = create("sewing_tables");
 		public static final TagKey<Item> JAR_SHELVES = create("jar_shelves");
 		public static final TagKey<Item> BOOKSHELVES = create("bookshelves");
+        public static final TagKey<Item> UNFIRED_POTTERY = create("unfired_pottery");
+        public static final TagKey<Item> CLAY_RECYCLE_5 = create("clay_recycle_5");
 
 		public static TagKey<Item> mobEquipmentSlotTag(EquipmentSlot slot)
         {

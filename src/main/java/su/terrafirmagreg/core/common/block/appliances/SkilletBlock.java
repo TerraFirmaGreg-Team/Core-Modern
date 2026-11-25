@@ -34,7 +34,7 @@ public class SkilletBlock extends CookingApplianceBlock implements IItemSize {
             Block.box(13.0D, 1.0D, 3.0D, 14.0D, 3.0D, 13.0D));
 
     public SkilletBlock(ExtendedProperties properties) {
-        super(properties, InventoryRemoveBehavior.DROP);
+        super(properties);
     }
 
     @Nullable
@@ -98,5 +98,16 @@ public class SkilletBlock extends CookingApplianceBlock implements IItemSize {
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            if (!level.isClientSide && level.getBlockEntity(pos) instanceof CookingApplianceBlockEntity appliance) {
+                appliance.ejectInventory();
+                level.updateNeighbourForOutputSignal(pos, this);
+            }
+            level.removeBlockEntity(pos);
+        }
     }
 }

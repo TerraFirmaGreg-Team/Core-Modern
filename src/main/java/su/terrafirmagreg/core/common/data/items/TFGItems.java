@@ -1,5 +1,9 @@
 package su.terrafirmagreg.core.common.data.items;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.eerussianguy.beneath.common.items.BeneathItemTags;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
@@ -17,10 +21,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
 
@@ -32,6 +33,7 @@ import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.item.*;
@@ -277,4 +279,18 @@ public class TFGItems {
             .model((ctx, prov) -> prov.generated(ctx, ResourceLocation.withDefaultNamespace("block/red_mushroom")))
             .tag(Tags.Items.MUSHROOMS, TFCTags.Items.FOODS, BeneathItemTags.UNPOSTABLE)
             .register();
+
+    public static final ItemEntry<Item> BAKING_DISH_UNFIRED = TFGCore.REGISTRATE.item("baking_dish_unfired", Item::new)
+            .properties(p -> p.stacksTo(1))
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/cooking_appliances/" + ctx.getName())))
+            .tag(TFCTags.Items.UNFIRED_POTTERY, TFCTags.Items.CLAY_RECYCLE_5, TFGTags.Items.UNFIRED_BAKING_DISHES)
+            .register();
+
+    public static final Map<DyeColor, ItemEntry<Item>> BAKING_DISHES_UNFIRED = Arrays.stream(DyeColor.values())
+            .collect(Collectors.toMap(color -> color, color -> TFGCore.REGISTRATE
+                    .item("baking_dish_" + color.getSerializedName() + "_unfired", Item::new)
+                    .properties(p -> p.stacksTo(1))
+                    .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/cooking_appliances/" + ctx.getName())))
+                    .tag(TFCTags.Items.UNFIRED_POTTERY, TFCTags.Items.CLAY_RECYCLE_5, TFGTags.Items.UNFIRED_BAKING_DISHES)
+                    .register()));
 }

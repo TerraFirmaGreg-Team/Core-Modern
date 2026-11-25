@@ -1,0 +1,56 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "tfg:baking_dish_purple",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "sealed": "true"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_name",
+                  "source": "block_entity"
+                },
+                {
+                  "function": "minecraft:copy_nbt",
+                  "ops": [
+                    {
+                      "op": "replace",
+                      "source": "inventory",
+                      "target": "BlockEntityTag.inventory"
+                    }
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "tfg:baking_dish_purple"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "tfg:baking_dish_purple"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tfg:blocks/baking_dish_purple"
+}

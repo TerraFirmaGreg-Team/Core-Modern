@@ -38,7 +38,6 @@ import su.terrafirmagreg.core.common.blockentity.appliances.CopperPotBlockEntity
  * Base class for cooking appliance block items.
  * Handles storing inventories on break and managing their tooltips.
  */
-@SuppressWarnings("NoTranslation")
 public class CookingApplianceBlockItem extends BlockItem {
 
     public CookingApplianceBlockItem(Block block, Properties properties) {
@@ -247,8 +246,7 @@ public class CookingApplianceBlockItem extends BlockItem {
                 return 0;
             }
             List<FluidTank> tanks = getAllTanks();
-            int inputCount = CopperPotBlockEntity.FLUID_INPUTS;
-            for (int i = 0; i < Math.min(inputCount, tanks.size()); i++) {
+            for (int i = 0; i < Math.min(this.inputCount, tanks.size()); i++) {
                 FluidTank tank = tanks.get(i);
                 if (!tank.getFluid().isEmpty() && tank.getFluid().isFluidEqual(resource)) {
                     int filled = tank.fill(resource, action);

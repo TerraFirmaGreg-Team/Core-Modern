@@ -175,6 +175,11 @@ public class TFGItemTooltipHelpers {
         if (block instanceof FireBoxTopOvenBlock) {
             tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.fire_box_top_oven.flavor_text")));
         }
+
+        // Baking Dish
+        if (block instanceof BakingDishBlock) {
+            tooltip.add(shiftHintTooltip(Component.translatable("tfg.tooltip.baking_dish.flavor_text")));
+        }
     }
 
     @SuppressWarnings({ "deprecation", "ConstantConditions" })

@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 
 import su.terrafirmagreg.core.common.block.appliances.FireBoxTopOvenBlock;
 import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxTopOvenBlockEntity;
+import su.terrafirmagreg.core.common.item.BakingDishItem;
 
 public class FireBoxTopOvenBlockEntityRenderer implements BlockEntityRenderer<FireBoxTopOvenBlockEntity> {
 
@@ -42,13 +43,29 @@ public class FireBoxTopOvenBlockEntityRenderer implements BlockEntityRenderer<Fi
                 if (item.isEmpty()) {
                     item = cap.getStackInSlot(9 + i);
                 }
+                float yOffset = 0.08F;
+                float scale = 0.28F;
+                float rotX = 90F;
+                float rotZ = 180F;
                 if (!item.isEmpty()) {
+                    boolean isBakingDish = item.getItem() instanceof BakingDishItem;
+                    if (isBakingDish) {
+                        yOffset = 0.15F;
+                        scale = 0.6F;
+                        rotX = 0F;
+                        rotZ = 0F;
+                    }
                     poseStack.pushPose();
                     Vec3 center = FireBoxTopOvenBlock.SLOT_CENTERS[dirIndex][i];
-                    poseStack.translate(center.x, 0.0625D, center.z);
-                    poseStack.scale(0.28f, 0.28f, 0.28f);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(90F));
-                    poseStack.mulPose(Axis.ZP.rotationDegrees(180F + facing.toYRot()));
+                    poseStack.translate(center.x, yOffset, center.z);
+                    poseStack.scale(scale, scale, scale);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(rotX));
+
+                    if (isBakingDish) {
+                        poseStack.mulPose(Axis.YP.rotationDegrees(180F - facing.toYRot()));
+                    } else {
+                        poseStack.mulPose(Axis.ZP.rotationDegrees(rotZ + facing.toYRot()));
+                    }
 
                     itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffer, oven.getLevel(), 0);
                     poseStack.popPose();
