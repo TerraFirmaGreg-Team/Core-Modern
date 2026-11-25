@@ -48,18 +48,24 @@ public class FireBoxTopOvenBlockEntityRenderer implements BlockEntityRenderer<Fi
                 float rotX = 90F;
                 float rotZ = 180F;
                 if (!item.isEmpty()) {
-                    if (item.getItem() instanceof BakingDishItem) {
+                    boolean isBakingDish = item.getItem() instanceof BakingDishItem;
+                    if (isBakingDish) {
                         yOffset = 0.15F;
                         scale = 0.6F;
                         rotX = 0F;
-                        rotZ = 90F;
+                        rotZ = 0F;
                     }
                     poseStack.pushPose();
                     Vec3 center = FireBoxTopOvenBlock.SLOT_CENTERS[dirIndex][i];
                     poseStack.translate(center.x, yOffset, center.z);
                     poseStack.scale(scale, scale, scale);
                     poseStack.mulPose(Axis.XP.rotationDegrees(rotX));
-                    poseStack.mulPose(Axis.ZP.rotationDegrees(rotZ + facing.toYRot()));
+
+                    if (isBakingDish) {
+                        poseStack.mulPose(Axis.YP.rotationDegrees(180F - facing.toYRot()));
+                    } else {
+                        poseStack.mulPose(Axis.ZP.rotationDegrees(rotZ + facing.toYRot()));
+                    }
 
                     itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffer, oven.getLevel(), 0);
                     poseStack.popPose();
