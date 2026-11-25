@@ -4,6 +4,7 @@
     "config": {
         "integrity": 0.7,
         "block": "tfc:plant/moss",
+        "tide_height": 2,
         "radius": 4,
         "height": 7
     }

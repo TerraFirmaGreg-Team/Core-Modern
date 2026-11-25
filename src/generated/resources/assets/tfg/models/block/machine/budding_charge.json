@@ -6,83 +6,55 @@
     "all": "tfg:block/casings/machine_casing_ptfe_black"
   },
   "variants": {
-    "is_formed=false,recipe_logic_status=idle": {
+    "recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
+          "overlay_bottom": "tfg:block/machines/wireless_charger/overlay_bottom",
+          "overlay_front": "tfg:block/machines/wireless_charger/overlay_front",
+          "overlay_side": "tfg:block/machines/wireless_charger/overlay_side",
+          "overlay_top": "tfg:block/machines/wireless_charger/overlay_top"
         }
       }
     },
-    "is_formed=false,recipe_logic_status=suspend": {
+    "recipe_logic_status=suspend": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
+          "overlay_bottom": "tfg:block/machines/wireless_charger/overlay_bottom",
+          "overlay_front": "tfg:block/machines/wireless_charger/overlay_front",
+          "overlay_side": "tfg:block/machines/wireless_charger/overlay_side",
+          "overlay_top": "tfg:block/machines/wireless_charger/overlay_top"
         }
       }
     },
-    "is_formed=false,recipe_logic_status=waiting": {
+    "recipe_logic_status=waiting": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
+          "overlay_bottom": "tfg:block/machines/wireless_charger/overlay_bottom_active",
+          "overlay_front": "tfg:block/machines/wireless_charger/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/wireless_charger/overlay_front_active_emissive",
+          "overlay_side": "tfg:block/machines/wireless_charger/overlay_side_active",
+          "overlay_top": "tfg:block/machines/wireless_charger/overlay_top_active",
+          "overlay_top_emissive": "tfg:block/machines/wireless_charger/overlay_top_active_emissive"
         }
       }
     },
-    "is_formed=false,recipe_logic_status=working": {
+    "recipe_logic_status=working": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=idle": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=suspend": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=waiting": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=working": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
+          "overlay_bottom": "tfg:block/machines/wireless_charger/overlay_bottom_active",
+          "overlay_front": "tfg:block/machines/wireless_charger/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/wireless_charger/overlay_front_active_emissive",
+          "overlay_side": "tfg:block/machines/wireless_charger/overlay_side_active",
+          "overlay_top": "tfg:block/machines/wireless_charger/overlay_top_active",
+          "overlay_top_emissive": "tfg:block/machines/wireless_charger/overlay_top_active_emissive"
         }
       }
     }

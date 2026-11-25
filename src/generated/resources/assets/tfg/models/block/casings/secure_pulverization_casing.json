@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "tfg:block/casings/unique/secure_maceration_red_casing"
+  }
+}

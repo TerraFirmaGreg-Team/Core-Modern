@@ -24,12 +24,15 @@ import electrolyte.greate.content.kinetics.base.TieredSingleAxisRotatingVisual;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.renderer.CookingApplianceBlockEntityRenderer;
+import su.terrafirmagreg.core.client.renderer.FireBoxTopOvenBlockEntityRenderer;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelInstance;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelRenderer;
 import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
 import su.terrafirmagreg.core.common.block.create.CombustionEngineBlockEntity;
 import su.terrafirmagreg.core.common.block.create.CombustionEngineRenderer;
 import su.terrafirmagreg.core.common.blockentity.*;
+import su.terrafirmagreg.core.common.blockentity.appliances.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderBlockEntity;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
@@ -77,6 +80,10 @@ public class TFGBlockEntities {
 
     public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)
             .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
+            .register();
+
+    public static final BlockEntityEntry<TierLockedAcidBlockEntity> TIER_LOCKED_ACID_BLOCK_ENTITY = TFGCore.REGISTRATE.blockEntity("tier_locked_acid_block", TierLockedAcidBlockEntity::new)
+            .validBlock(TFGBlocks_Venus.VENUS_HORNFELS)
             .register();
 
     @SuppressWarnings("unchecked")
@@ -133,6 +140,40 @@ public class TFGBlockEntities {
     public static final BlockEntityEntry<GasBurnerBlockEntity> GAS_BURNER = TFGCore.REGISTRATE
             .blockEntity("gas_burner", GasBurnerBlockEntity::new)
             .validBlock(TFGBlocks.GAS_BURNER)
+            .register();
+
+    public static final BlockEntityEntry<CopperPotBlockEntity> COPPER_POT = TFGCore.REGISTRATE
+            .blockEntity("copper_pot", CopperPotBlockEntity::new)
+            .validBlock(TFGBlocks.COPPER_POT)
+            .renderer(() -> CookingApplianceBlockEntityRenderer.CopperPot::new)
+            .register();
+
+    public static final BlockEntityEntry<SkilletBlockEntity> SKILLET = TFGCore.REGISTRATE
+            .blockEntity("skillet", SkilletBlockEntity::new)
+            .validBlock(TFGBlocks.SKILLET)
+            .renderer(() -> CookingApplianceBlockEntityRenderer.Skillet::new)
+            .register();
+
+    public static final BlockEntityEntry<CondenserBlockEntity> CONDENSER = TFGCore.REGISTRATE
+            .blockEntity("condenser", CondenserBlockEntity::new)
+            .validBlock(TFGBlocks.CONDENSER)
+            .register();
+
+    public static final BlockEntityEntry<MixingBowlBlockEntity> MIXING_BOWL = TFGCore.REGISTRATE
+            .blockEntity("mixing_bowl", MixingBowlBlockEntity::new)
+            .validBlock(TFGBlocks.MIXING_BOWL)
+            .renderer(() -> CookingApplianceBlockEntityRenderer.MixingBowl::new)
+            .register();
+
+    public static final BlockEntityEntry<FireBoxBlockEntity> FIRE_BOX = TFGCore.REGISTRATE
+            .blockEntity("fire_box", FireBoxBlockEntity::new)
+            .validBlock(TFGBlocks.FIRE_BOX)
+            .register();
+
+    public static final BlockEntityEntry<FireBoxTopOvenBlockEntity> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
+            .blockEntity("fire_box_top_oven", FireBoxTopOvenBlockEntity::new)
+            .validBlock(TFGBlocks.FIRE_BOX_TOP_OVEN)
+            .renderer(() -> FireBoxTopOvenBlockEntityRenderer::new)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();

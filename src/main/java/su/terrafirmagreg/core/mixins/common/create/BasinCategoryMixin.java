@@ -30,7 +30,8 @@ public abstract class BasinCategoryMixin {
         if (!requiredHeat.testBlazeBurner(BlazeBurnerBlock.HeatLevel.NONE)) {
             builder
                     .addSlot(RecipeIngredientRole.CATALYST, 153, 81)
-                    .addItemStack(TFGBlocks.GAS_BURNER.asStack());
+                    .addItemStack(TFGBlocks.GAS_BURNER.asStack())
+                    .addItemStack(TFGBlocks.FIRE_BOX.asStack());
         }
 
         ci.cancel();

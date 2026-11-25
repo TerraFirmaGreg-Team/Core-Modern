@@ -1,0 +1,167 @@
+package su.terrafirmagreg.core.common.recipe.attachment;
+
+import org.jetbrains.annotations.Nullable;
+
+import com.google.gson.JsonObject;
+import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
+import com.simibubi.create.content.kinetics.press.PressingBehaviour;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
+import electrolyte.greate.content.kinetics.base.ICircuitHolder;
+
+import su.terrafirmagreg.core.common.blockentity.appliances.CookingApplianceBlockEntity;
+
+/**
+ * Cooking appliance attachment for mechanical presses.
+ */
+public record PressAttachment(@Nullable Integer circuit) implements RecipeAttachment {
+
+    public static final String TYPE = "press";
+
+    public static MechanicalPressBlockEntity getPress(CookingApplianceBlockEntity appliance) {
+        Level level = appliance.getLevel();
+        if (level == null) {
+            return null;
+        }
+        BlockPos abovePos = appliance.getBlockPos().above();
+        if (!level.getBlockState(abovePos).isAir()) {
+            return null;
+        }
+        BlockEntity be = level.getBlockEntity(abovePos.above());
+        if (be instanceof MechanicalPressBlockEntity press) {
+            return press;
+        }
+        return null;
+    }
+
+    @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Override
+    public boolean isPresent(CookingApplianceBlockEntity appliance) {
+        return getPress(appliance) != null;
+    }
+
+    @Override
+    public boolean matches(CookingApplianceBlockEntity appliance, Level level) {
+        MechanicalPressBlockEntity press = getPress(appliance);
+        if (press == null) {
+            return false;
+        }
+        if (Math.abs(press.getSpeed()) == 0) {
+            return false;
+        }
+        if (circuit != null) {
+            return press instanceof ICircuitHolder circuitHolder && circuitHolder.getCircuitNumber() == circuit;
+        }
+        return true;
+    }
+
+    @Override
+    public CookingApplianceBlockEntity.CookingError getError(CookingApplianceBlockEntity appliance) {
+        if (!matches(appliance, appliance.getLevel())) {
+            return CookingApplianceBlockEntity.CookingError.INSUFFICIENT_PRESS;
+        }
+        return CookingApplianceBlockEntity.CookingError.NONE;
+    }
+
+    @Override
+    public void tickActive(CookingApplianceBlockEntity appliance) {
+        MechanicalPressBlockEntity press = getPress(appliance);
+        if (press != null) {
+            var behaviour = press.getPressingBehaviour();
+            if (!behaviour.running) {
+                behaviour.start(PressingBehaviour.Mode.BASIN);
+                press.sendData();
+            } else if (behaviour.runningTicks >= 120 && behaviour.runningTicks < 160) {
+                behaviour.runningTicks = 121;
+                behaviour.prevRunningTicks = 121;
+            }
+        }
+    }
+
+    @Override
+    public float getSpeedMultiplier(CookingApplianceBlockEntity appliance) {
+        MechanicalPressBlockEntity press = getPress(appliance);
+        if (press != null) {
+            float rpm = Math.abs(press.getSpeed());
+            if (rpm > 0) {
+                return (rpm / 16.0f) * 1.5f;
+            }
+        }
+        return 1.0f;
+    }
+
+    @Override
+    public boolean canFitOutputs(CookingApplianceBlockEntity appliance) {
+        return true;
+    }
+
+    @Override
+    public void assembleOutputs(CookingApplianceBlockEntity appliance) {
+        MechanicalPressBlockEntity press = getPress(appliance);
+        if (press != null) {
+            releasePress(press);
+        }
+    }
+
+    public static void releasePress(MechanicalPressBlockEntity press) {
+        if (press != null && press.getPressingBehaviour().running) {
+            var behaviour = press.getPressingBehaviour();
+            if (behaviour.runningTicks < 160) {
+                int returnTicks = getReturnTicks(behaviour.runningTicks);
+                behaviour.runningTicks = returnTicks;
+                behaviour.prevRunningTicks = returnTicks;
+                press.sendData();
+            }
+        }
+    }
+
+    public static int getReturnTicks(int runningTicks) {
+        if (runningTicks >= 120) {
+            return 160;
+        }
+        if (runningTicks <= 0) {
+            return 240;
+        }
+        float offset = (float) Math.pow((double) runningTicks / 120.0, 3.0);
+        return Math.min(240, Math.max(160, Math.round(240.0f - 80.0f * offset)));
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", TYPE);
+        if (circuit != null) {
+            obj.addProperty("circuit", circuit);
+        }
+        return obj;
+    }
+
+    public static PressAttachment fromJson(JsonObject json) {
+        Integer circuit = null;
+        if (json.has("circuit") && !json.get("circuit").isJsonNull()) {
+            circuit = json.get("circuit").getAsInt();
+        }
+        return new PressAttachment(circuit);
+    }
+
+    @Override
+    public void toNetwork(FriendlyByteBuf buffer) {
+        buffer.writeBoolean(circuit != null);
+        if (circuit != null) {
+            buffer.writeVarInt(circuit);
+        }
+    }
+
+    public static PressAttachment fromNetwork(FriendlyByteBuf buffer) {
+        Integer circuit = buffer.readBoolean() ? buffer.readVarInt() : null;
+        return new PressAttachment(circuit);
+    }
+}

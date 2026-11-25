@@ -38,6 +38,7 @@ public final class TFGTags {
 
         public static final TagKey<Item> MartianHerbivoreFoods = createItemTag("martian_herbivore_foods");
         public static final TagKey<Item> MartianPiscivoreFoods = createItemTag("martian_piscivore_foods");
+        public static final TagKey<Item> VenusianArthropodFoods = createItemTag("venusian_arthropod_foods");
         public static final TagKey<Item> EmptySyringe = createItemTag("empty_dna_syringes");
 
         public static final TagKey<Item> InsulatingContainer = createItemTag("insulating_container");
@@ -95,6 +96,8 @@ public final class TFGTags {
 
         public static final TagKey<Item> DYNAMIC_COLOR = createItemTag("dynamic_color");
 
+        public static final TagKey<Item> WirelessChargerBoosted = createItemTag("wireless_charger/boosted");
+
         // Used in an interface mixin, which can't have local fields, so they live here instead
         public static final TagKey<Item> RICH_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "rich_raw_materials"));
         public static final TagKey<Item> POOR_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "poor_raw_materials"));
@@ -105,6 +108,15 @@ public final class TFGTags {
         public static final TagKey<Item> CRAFTING_STATIONS = createItemTag("crafting_stations");
 
         public static final TagKey<Item> TROWEL_BLACKLIST = createItemTag("trowel_blacklist");
+
+        public static final TagKey<Item> FLUORAPATITE_SAND = createItemTag("fluorapatite_sand");
+        public static final TagKey<Item> FLUORAPATITE_SANDSTONE = createItemTag("fluorapatite_sandstone");
+        public static final TagKey<Item> SULFIE_FOOD = createItemTag("sulfie_food");
+
+        public static final TagKey<Item> APPLIANCE_CATALYSTS = createItemTag("appliance_catalysts");
+        public static final TagKey<Item> APPLIANCE_TOOLS = createItemTag("appliance_tools");
+
+        public static final TagKey<Item> OVEN_BLACKLISTED = createItemTag("oven_blacklisted");
 
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
@@ -151,6 +163,7 @@ public final class TFGTags {
         public static final TagKey<Block> FALLING_CONCUSSIVE = createBlockTag("falling_concussive");
         public static final TagKey<Block> HORNFELS = createBlockTag("hornfels");
         public static final TagKey<Block> UNPOSTER_GROWABLE = createBlockTag("unposter_growable");
+        public static final TagKey<Block> SILK_MOTH_BLOCKS = createBlockTag("silk_moth_blocks");
 
         // Environment system tags
         public static final TagKey<Block> AtmospherePassable = createBlockTag("atmosphere_passable");
@@ -178,6 +191,7 @@ public final class TFGTags {
         public static final TagKey<Fluid> SMR_FLUIDS = createFluidTag("smr_fluids");
         public static final TagKey<Fluid> GT_OILS = createFluidTag("oils");
         public static final TagKey<Fluid> OreProcGas = createFluidTag("ore_proc_gas");
+        public static final TagKey<Fluid> CONDENSER_COOLANTS = createFluidTag("condenser_coolants");
 
         private static TagKey<Fluid> createFluidTag(String path) {
             return createFluidTag(TFGCore.id(path));
@@ -193,8 +207,8 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> IgnoresCacti = createEntityTag("ignores_cacti");
         public static final TagKey<EntityType<?>> NotRammedByRammers = createEntityTag("not_rammed_by_rammers");
         public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("fishing_net_scoopable");
-        public static final TagKey<EntityType<?>> Genderless = createEntityTag("genderless");
         public static final TagKey<EntityType<?>> RammingAnimals = createEntityTag("ramming_animals");
+        public static final TagKey<EntityType<?>> VenusPrey = createEntityTag("venus_prey");
 
         private static TagKey<EntityType<?>> createEntityTag(String path) {
             return createEntityTag(TFGCore.id(path));

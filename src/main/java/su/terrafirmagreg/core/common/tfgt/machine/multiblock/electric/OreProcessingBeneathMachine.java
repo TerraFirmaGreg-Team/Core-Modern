@@ -2,34 +2,39 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import java.util.*;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.capability.recipe.*;
-import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
 import net.minecraftforge.fluids.FluidStack;
+
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.utils.Alignment;
+import brachy.modularui.utils.serialization.network.ByteBufAdapters;
+import brachy.modularui.value.sync.*;
+import brachy.modularui.widget.ParentWidget;
+import brachy.modularui.widgets.dynamic.DynamicWidget;
+import brachy.modularui.widgets.layout.Flow;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -40,10 +45,6 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 @MethodsReturnNonnullByDefault
 public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachine {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            OreProcessingBeneathMachine.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
     private static final double MIN_RATIO = 0.15; // Under this amount the machine won't start
     private static final double MAX_RATIO = 0.85; // Over this amount the machine won't start
     private static final double OPTIMAL_RATIO = 0.50; // The percentage of fluid in the hatch so it's optimal
@@ -52,110 +53,46 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     private static final int MAX_PARALLELS = 8; // Amount of parallel
     private static final double PARALLEL_EU_DISCOUNT = 0.75;
 
-    @Persisted
-    @DescSynced
-    private double gasModifier = 1.0;
-
-    @Persisted
-    @DescSynced
-    private int gasLevelPercent = 0;
-
-    private final ConditionalSubscriptionHandler gasUpdateSubscription;
-
-    public OreProcessingBeneathMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
-        this.gasUpdateSubscription = new ConditionalSubscriptionHandler(this, this::tickGasInfo, this::isFormed);
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        gasModifier = 1.0;
-        gasLevelPercent = 0;
-        gasUpdateSubscription.updateSubscription();
-    }
-
-    @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
-        gasModifier = 1.0;
-        gasLevelPercent = 0;
-        gasUpdateSubscription.updateSubscription();
+    public OreProcessingBeneathMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     // Gas Logic - Check the amount of gas
 
-    private void tickGasInfo() {
-        if (getOffsetTimer() % 20 != 0)
-            return;
-
-        long[] tankInfo = getGasTankInfo();
-        if (tankInfo == null || tankInfo[1] == 0) {
-            gasLevelPercent = 0;
-            gasModifier = 0.0;
-            return;
-        }
-        double ratio = (double) tankInfo[0] / tankInfo[1];
-        gasLevelPercent = (int) (ratio * 100);
-        gasModifier = calculateGaussianModifier(ratio);
-    }
-
-    @Nullable
-    private long[] getGasTankInfo() {
-        var handlers = Objects.requireNonNullElseGet(
-                getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP),
-                Collections::<IRecipeHandler<?>>emptyList);
-
-        for (var handler : handlers) {
+    /**
+     * @return the fill ratio of the first tank holding a tfg:ore_proc_gas fluid, or -1 if there is none
+     */
+    private double getGasRatio() {
+        for (var handler : getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP)) {
             if (handler instanceof NotifiableFluidTank tank) {
                 for (int i = 0; i < tank.getTanks(); i++) {
                     FluidStack stack = tank.getFluidInTank(i);
-                    if (!stack.isEmpty() && stack.getFluid().is(TFGTags.Fluids.OreProcGas)) { // Use a tag tfg:ore_proc_gas
-                        long stored = stack.getAmount();
-                        long capacity = tank.getTankCapacity(i);
-                        return new long[] { stored, capacity };
+                    if (!stack.isEmpty() && stack.getFluid().is(TFGTags.Fluids.OreProcGas)) {
+                        int capacity = tank.getTankCapacity(i);
+                        return capacity <= 0 ? -1 : (double) stack.getAmount() / capacity;
                     }
                 }
             }
         }
-        return null;
+        return -1;
     }
 
-    private double calculateGaussianModifier(double ratio) {
+    private int getGasLevelPercent() {
+        double ratio = getGasRatio();
+        return ratio < 0 ? -1 : (int) (ratio * 100);
+    }
+
+    private static double calculateGaussianModifier(double ratio) {
         double exponent = -Math.pow(ratio - OPTIMAL_RATIO, 2) / (2 * SIGMA * SIGMA);
         return Math.exp(exponent);
     }
 
-    // Recipe Logic
-
-    @Override
-    public boolean beforeWorking(@Nullable GTRecipe recipe) {
-        if (!super.beforeWorking(recipe))
-            return false;
-
-        if (gasLevelPercent == 0 && getGasTankInfo() == null) {
-            RecipeLogic.putFailureReason(this, recipe,
-                    Component.translatable("tfg.machine.ore_processing_beneath.no_gas")
-                            .withStyle(ChatFormatting.RED));
-            return false;
-        }
-
-        double ratio = gasLevelPercent / 100.0;
-        if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
-            RecipeLogic.putFailureReason(this, recipe,
-                    Component.translatable("tfg.machine.ore_processing_beneath.gas_critical",
-                            gasLevelPercent)
-                            .withStyle(ChatFormatting.RED));
-            return false;
-        }
-
-        return true;
+    private int getOutputModifierPercent() {
+        double ratio = getGasRatio();
+        return ratio < 0 ? 0 : (int) (calculateGaussianModifier(ratio) * 100);
     }
+
+    // Recipe Logic
 
     public static @NotNull ModifierFunction parallelModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof OreProcessingBeneathMachine processor)) {
@@ -170,6 +107,8 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
         }
 
         int parallels = ParallelLogic.getParallelAmount(machine, recipe, maxParallel);
+        if (parallels <= 0)
+            return ModifierFunction.NULL;
         if (parallels == 1)
             return ModifierFunction.IDENTITY;
 
@@ -199,7 +138,17 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
             return RecipeModifier.nullWrongType(OreProcessingBeneathMachine.class, machine);
         }
 
-        double modifier = processor.gasModifier;
+        double ratio = processor.getGasRatio();
+        if (ratio < 0) {
+            return ModifierFunction.cancel(Component.translatable("tfg.machine.ore_processing_beneath.no_gas")
+                    .withStyle(ChatFormatting.RED));
+        }
+        if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
+            return ModifierFunction.cancel(Component.translatable("tfg.machine.ore_processing_beneath.gas_critical",
+                    (int) (ratio * 100)).withStyle(ChatFormatting.RED));
+        }
+
+        double modifier = calculateGaussianModifier(ratio);
 
         return r -> {
             Map<RecipeCapability<?>, List<Content>> newOutputs = new HashMap<>();
@@ -209,8 +158,8 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
                 for (Content content : entry.getValue()) {
                     if (content.isChanced()) {
                         // Byproduct only if chance isn't guarantee
-                        int newChance = (int) (content.chance * modifier);
-                        newContents.add(new Content(content.getContent(), newChance, content.maxChance, content.tierChanceBoost));
+                        int newChance = (int) (content.chance() * modifier);
+                        newContents.add(new Content(content.content(), newChance, content.maxChance()));
                     } else {
                         // If Guarantee keep the number
                         newContents.add(content);
@@ -220,93 +169,132 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
             }
 
             var copied = new GTRecipe(r.recipeType, r.id,
-                    new HashMap<>(r.inputs), newOutputs,
-                    new HashMap<>(r.tickInputs), new HashMap<>(r.tickOutputs),
-                    new HashMap<>(r.inputChanceLogics), new HashMap<>(r.outputChanceLogics),
-                    new HashMap<>(r.tickInputChanceLogics), new HashMap<>(r.tickOutputChanceLogics),
-                    new ArrayList<>(r.conditions), new ArrayList<>(r.ingredientActions),
-                    r.data, r.duration, r.recipeCategory, r.groupColor);
-            copied.parallels = r.parallels;
-            copied.subtickParallels = r.subtickParallels;
+                    r.inputs, newOutputs,
+                    r.tickInputs, r.tickOutputs,
+                    r.inputChanceLogics, r.outputChanceLogics,
+                    r.tickInputChanceLogics, r.tickOutputChanceLogics,
+                    r.conditions, r.ingredientActions,
+                    r.data, r.duration, r.parallels, r.subtickParallels, r.batchParallels, r.recipeCategory, r.groupColor, r.keepSpoilingProgress);
             copied.ocLevel = r.ocLevel;
-            copied.batchParallels = r.batchParallels;
+            copied.outputModifier = r.outputModifier;
             return copied;
         };
     }
 
     // GUI
 
-    @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
-        super.addDisplayText(textList);
+    private int getCurrentParallels() {
+        var lastRecipe = getRecipeLogic().getLastUnrolledRecipe();
+        return getRecipeLogic().isWorking() && lastRecipe != null ? lastRecipe.parallels : 0;
+    }
 
-        if (!isFormed())
-            return;
+    private List<Component> getFluidConsumptionLines() {
+        var lastRecipe = getRecipeLogic().getLastUnrolledRecipe();
+        if (!getRecipeLogic().isWorking() || lastRecipe == null || lastRecipe.parallels <= 1)
+            return List.of();
 
-        List<Component> customLines = new ArrayList<>();
+        var tickFluids = lastRecipe.tickInputs.get(FluidRecipeCapability.CAP);
+        if (tickFluids == null)
+            return List.of();
 
-        if (gasLevelPercent == 0 && gasModifier == 0.0) {
-            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.no_gas")
-                    .withStyle(ChatFormatting.RED));
-        } else {
-            double ratio = gasLevelPercent / 100.0;
-            int modifierPercent = (int) (gasModifier * 100);
+        List<Component> lines = new ArrayList<>();
+        for (Content content : tickFluids) {
+            var ingredient = FluidRecipeCapability.CAP.of(content.content());
+            if (ingredient.getStacks().length == 0)
+                continue;
+            FluidStack stack = ingredient.getStacks()[0];
 
-            ChatFormatting levelColor;
-            if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
-                levelColor = ChatFormatting.RED;
-            } else if (Math.abs(ratio - OPTIMAL_RATIO) < 0.10) {
-                levelColor = ChatFormatting.GREEN;
+            Component amountText;
+            if (content.isChanced()) {
+                double avg = stack.getAmount()
+                        * ((double) content.chance() / content.maxChance())
+                        * lastRecipe.parallels;
+                amountText = Component.literal("≈ " + String.format("%.1f", avg) + " mB/t")
+                        .withStyle(ChatFormatting.AQUA);
             } else {
-                levelColor = ChatFormatting.YELLOW;
+                amountText = Component.literal(stack.getAmount() + " mB/t")
+                        .withStyle(ChatFormatting.AQUA);
             }
-
-            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.gas_level",
-                    Component.literal(gasLevelPercent + "%").withStyle(levelColor)));
-
-            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier",
-                    Component.literal(modifierPercent + "%")
-                            .withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW))
-                    .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            Component.translatable("tfg.machine.ore_processing_beneath.output_modifier.tooltip")))));
-
-            var lastRecipe = getRecipeLogic().getLastRecipe();
-            if (getRecipeLogic().isWorking() && lastRecipe != null && lastRecipe.parallels > 1) {
-                customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.parallel_info",
-                        Component.literal(lastRecipe.parallels + "/" + MAX_PARALLELS).withStyle(ChatFormatting.AQUA))
-                        .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                Component.translatable("tfg.machine.ore_processing_beneath.parallel_info.tooltip",
-                                        MAX_PARALLELS)))));
-
-                var tickFluids = lastRecipe.tickInputs.get(FluidRecipeCapability.CAP);
-                if (tickFluids != null) {
-                    for (Content content : tickFluids) {
-                        var ingredient = FluidRecipeCapability.CAP.of(content.content);
-                        if (ingredient.getStacks().length > 0) {
-                            FluidStack stack = ingredient.getStacks()[0];
-
-                            Component amountText;
-                            if (content.isChanced()) {
-                                double avg = stack.getAmount()
-                                        * ((double) content.chance / content.maxChance)
-                                        * lastRecipe.parallels;
-                                amountText = Component.literal("≈ " + String.format("%.1f", avg) + " mB/t")
-                                        .withStyle(ChatFormatting.AQUA);
-                            } else {
-                                amountText = Component.literal(stack.getAmount() + " mB/t")
-                                        .withStyle(ChatFormatting.AQUA);
-                            }
-
-                            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption",
-                                    stack.getDisplayName(), amountText)
-                                    .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                            Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption.tooltip")))));
-                        }
-                    }
-                }
-            }
+            lines.add(Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption",
+                    stack.getDisplayName(), amountText));
         }
+        return lines;
+    }
 
-        textList.addAll(Math.min(5, textList.size()), customLines);
+    @Override
+    public void buildMainUI(ParentWidget<?> mainWidget, PosGuiData guiData, PanelSyncManager syncManager,
+            UISettings settings) {
+        mainWidget.child(getMainTextPanel(syncManager, 260, 200).margin(4, 2));
+    }
+
+    public List<IWidget> createGasDisplayWidgets(PanelSyncManager syncManager) {
+        List<IWidget> widgets = new ArrayList<>();
+
+        BooleanSyncValue isFormed = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
+                () -> new BooleanSyncValue(this::isFormed));
+        IntSyncValue gasLevel = new IntSyncValue(this::getGasLevelPercent);
+        IntSyncValue outputModifier = new IntSyncValue(this::getOutputModifierPercent);
+        IntSyncValue parallels = new IntSyncValue(this::getCurrentParallels);
+        GenericListSyncHandler<Component> fluidLines = new GenericListSyncHandler.Builder<Component>()
+                .adapter(ByteBufAdapters.COMPONENT)
+                .getter(this::getFluidConsumptionLines)
+                .build();
+
+        syncManager.syncValue("oreProcGasLevel", gasLevel);
+        syncManager.syncValue("oreProcOutputModifier", outputModifier);
+        syncManager.syncValue("oreProcParallels", parallels);
+        syncManager.syncValue("oreProcFluidLines", fluidLines);
+
+        widgets.add(Text.lang("tfg.machine.ore_processing_beneath.no_gas")
+                .withStyle(ChatFormatting.RED).asWidget()
+                .setEnabledIf($ -> isFormed.getBoolValue() && gasLevel.getIntValue() < 0));
+
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.ore_processing_beneath.gas_level",
+                gasLevel.getIntValue()).withStyle(gasLevelColor(gasLevel.getIntValue()))).asWidget()
+                .setEnabledIf($ -> isFormed.getBoolValue() && gasLevel.getIntValue() >= 0));
+
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.ore_processing_beneath.output_modifier",
+                outputModifier.getIntValue())
+                .withStyle(outputModifier.getIntValue() >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW)).asWidget()
+                .tooltip(t -> t.addLine(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier.tooltip")))
+                .setEnabledIf($ -> isFormed.getBoolValue() && gasLevel.getIntValue() >= 0));
+
+        widgets.add(Text.dynamic(() -> Component.translatable("tfg.machine.ore_processing_beneath.parallel_info",
+                Component.literal(parallels.getIntValue() + "/" + MAX_PARALLELS).withStyle(ChatFormatting.AQUA))).asWidget()
+                .tooltip(t -> t.addLine(Component.translatable("tfg.machine.ore_processing_beneath.parallel_info.tooltip",
+                        MAX_PARALLELS)))
+                .setEnabledIf($ -> isFormed.getBoolValue() && parallels.getIntValue() > 1));
+
+        DynamicLinkedSyncHandler<GenericListSyncHandler<Component>> fluidLinesHandler = new DynamicLinkedSyncHandler<>(
+                fluidLines)
+                .widgetProvider((psm, list) -> {
+                    Flow column = Flow.column()
+                            .widthRel(1)
+                            .coverChildrenHeight()
+                            .crossAxisAlignment(Alignment.CrossAxis.START);
+                    for (Component line : list.getValue()) {
+                        column.child(Text.comp(line).asWidget()
+                                .tooltip(t -> t.addLine(Component.translatable(
+                                        "tfg.machine.ore_processing_beneath.fluid_consumption.tooltip"))));
+                    }
+                    return column;
+                });
+
+        widgets.add(new DynamicWidget<>()
+                .widthRel(1)
+                .coverChildrenHeight()
+                .syncHandler(fluidLinesHandler)
+                .setEnabledIf($ -> isFormed.getBoolValue() && parallels.getIntValue() > 1));
+
+        return widgets;
+    }
+
+    private static ChatFormatting gasLevelColor(int percent) {
+        double ratio = percent / 100.0;
+        if (ratio < MIN_RATIO || ratio > MAX_RATIO)
+            return ChatFormatting.RED;
+        if (Math.abs(ratio - OPTIMAL_RATIO) < 0.10)
+            return ChatFormatting.GREEN;
+        return ChatFormatting.YELLOW;
     }
 }

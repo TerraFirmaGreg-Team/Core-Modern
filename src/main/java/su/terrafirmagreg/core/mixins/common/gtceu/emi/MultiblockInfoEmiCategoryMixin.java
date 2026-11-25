@@ -11,8 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
-import com.gregtechceu.gtceu.integration.emi.multipage.MultiblockInfoEmiCategory;
-import com.gregtechceu.gtceu.integration.emi.multipage.MultiblockInfoEmiRecipe;
+import com.gregtechceu.gtceu.integration.recipeviewer.emi.MultiblockInfoEmiCategory;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -43,7 +42,7 @@ public class MultiblockInfoEmiCategoryMixin {
                 .filter(MultiblockMachineDefinition.class::isInstance)
                 .map(MultiblockMachineDefinition.class::cast)
                 .filter(MultiblockMachineDefinition::isRenderXEIPreview)
-                .map(MultiblockInfoEmiRecipe::new)
+                .map(MultiblockInfoEmiCategory.MultiblockInfoEmiWrapper::new)
                 .filter(multi -> !tfg$excludedMultis.contains(multi.getId()))
                 .forEach(registry::addRecipe);
         ci.cancel();

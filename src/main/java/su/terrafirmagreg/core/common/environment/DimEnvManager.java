@@ -297,7 +297,14 @@ public class DimEnvManager extends SavedData {
         }
 
         provider.setRoomScan(newScan);
+
+        for (TemperatureProvider temperatureProvider : temperatureProviders.values()) {
+            if (temperatureProvider.inheritsFrom(provider))
+                temperatureProvider.requestMachineRevalidation();
+        }
+
         setSavedDataDirty();
+
     }
 
     // ==================== Oxygen Queries ====================

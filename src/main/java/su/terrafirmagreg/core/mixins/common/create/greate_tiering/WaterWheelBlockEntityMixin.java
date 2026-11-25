@@ -20,7 +20,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import electrolyte.greate.content.gtceu.material.GreatePropertyKeys;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
 import electrolyte.greate.registry.GreateMaterials;
 
@@ -33,18 +32,15 @@ public class WaterWheelBlockEntityMixin extends GeneratingKineticBlockEntity imp
 
     // Ignore the warning, Create Picky Waterwheels adds its own Override to this method, which then our mixin
     // injects into at runtime
-    @Inject(method = "addToGoggleTooltip", at = @At("HEAD"), remap = false)
+    @Inject(method = "addToGoggleTooltip", at = @At("HEAD"), remap = false, require = 0)
     public void tfg$addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, CallbackInfoReturnable<Boolean> cir) {
         if (!tooltip.isEmpty()) {
             CreateLang.builder().space();
         }
 
         var tierMaterial = (Object) this instanceof LargeWaterWheelBlockEntity ? GTMaterials.Steel : GreateMaterials.AndesiteAlloy;
-        float capacity = tierMaterial.getProperty(GreatePropertyKeys.KINETIC).getMaxCapacity();
 
-        Lang.builder("greate").translate("tooltip.capacity").style(ChatFormatting.GRAY).forGoggles(tooltip);
-        Lang.builder("greate").add(CreateLang.number(capacity).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
-                .add(CreateLang.text("at current shaft tier").style(ChatFormatting.DARK_GRAY))).forGoggles(tooltip, 1);
+        addToGoggleTooltip(tooltip, tierMaterial, getSpeed());
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);
         CreateLang.number(stress).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space().add(CreateLang.text("consumed").style(ChatFormatting.DARK_GRAY)).space()

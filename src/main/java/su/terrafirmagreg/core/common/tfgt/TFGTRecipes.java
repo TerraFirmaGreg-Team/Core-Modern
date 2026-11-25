@@ -114,6 +114,24 @@ public class TFGTRecipes {
         VanillaRecipeHelper.addShapelessNBTClearingRecipe(provider, "super_tank_nbt_ulv",
                 TFGMachines.ULV_SUPER_TANK.asStack(), TFGMachines.ULV_SUPER_TANK.asStack());
 
+        for (int tier = GTValues.LV; tier < TFGMachines.BATTERY_DYNAMO_HATCH.length; tier++) {
+            var hatch = TFGMachines.BATTERY_DYNAMO_HATCH[tier];
+            if (hatch == null)
+                continue;
+
+            GTRecipeTypes.ASSEMBLER_RECIPES
+                    .recipeBuilder(TFGCore.id("battery_dynamo_hatch_" + GTValues.VNL[tier]))
+                    .inputItems(GTMachines.ENERGY_OUTPUT_HATCH[tier])
+                    .inputItems(TFGCraftingComponents.BATTERY.get(tier), 1)
+                    .inputItems(GTCraftingComponents.WIRE_OCT.get(tier), 2)
+                    .inputItems(TFGCraftingComponents.DOUBLE_PLATE.get(tier), 2)
+                    .outputItems(hatch, 1)
+                    .duration(5 * 20)
+                    .EUt(GTValues.VA[tier - 1])
+                    .addMaterialInfo(true)
+                    .save(provider);
+        }
+
         GTRecipeTypes.ASSEMBLER_RECIPES.recipeBuilder("hv_4a_energy_output")
                 .inputItems(GTMachines.ENERGY_OUTPUT_HATCH[GTValues.HV])
                 .inputItems(GTCraftingComponents.WIRE_QUAD.get(GTValues.HV), 2)

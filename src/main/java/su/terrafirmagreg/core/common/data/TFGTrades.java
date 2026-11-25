@@ -46,7 +46,6 @@ import tfchotornot.common.items.HNItems;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Wood;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.items.TFGItems_Medicines;
 import su.terrafirmagreg.tfc_textile.item.TFCTextileItems;
@@ -194,7 +193,7 @@ public class TFGTrades {
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.ITEM_FRAME, 1), 4, 4));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.ARMOR_STAND, 1), 2, 4));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.GLOW_ITEM_FRAME, 1), 4, 4));
-		earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.GUNPOWDER, 4), 1, 10));
+        earthTrades.add(new TFGItemListing("Gold", new ItemStack(Items.GUNPOWDER, 4), 1, 10));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(BeneathItems.JUICER.get(), 1), 2, 1));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(FirmacivItems.BAROMETER.get(), 1), 4, 1));
         earthTrades.add(new TFGItemListing("Gold", new ItemStack(FirmacivItems.FIRMACIV_COMPASS.get(), 1), 1, 1));
@@ -230,26 +229,26 @@ public class TFGTrades {
         var cowBucket = new ItemStack(TFCItems.WOODEN_BUCKET.get());
         cowBucket.setTag(NbtUtils.snbtToStructure("{fluid: {Amount: 1000, FluidName: \"minecraft:milk\"}}"));
         earthTrades.add(new TFGItemListing("Iron", cowBucket, 5, 4));
-		
-		var yakBucket = new ItemStack(TFCItems.WOODEN_BUCKET.get());
-		yakBucket.setTag(NbtUtils.snbtToStructure("{fluid: {Amount: 1000, FluidName: \"firmalife:yak_milk\"}}"));
-		earthTrades.add(new TFGItemListing("Iron", yakBucket, 5, 4));
 
-		var goatBucket = new ItemStack(TFCItems.WOODEN_BUCKET.get());
-		goatBucket.setTag(NbtUtils.snbtToStructure("{fluid: {Amount: 1000, FluidName: \"firmalife:goat_milk\"}}"));
-		earthTrades.add(new TFGItemListing("Iron", goatBucket, 5, 4));
+        var yakBucket = new ItemStack(TFCItems.WOODEN_BUCKET.get());
+        yakBucket.setTag(NbtUtils.snbtToStructure("{fluid: {Amount: 1000, FluidName: \"firmalife:yak_milk\"}}"));
+        earthTrades.add(new TFGItemListing("Iron", yakBucket, 5, 4));
 
-		var jellieBucket = new ItemStack(TFCItems.WOODEN_BUCKET.get());
-		jellieBucket.setTag(NbtUtils.snbtToStructure("{fluid: {Amount: 1000, FluidName: \"tfg:jellie_milk\"}}"));
-		earthTrades.add(new TFGItemListing("Iron", jellieBucket, 5, 4));
+        var goatBucket = new ItemStack(TFCItems.WOODEN_BUCKET.get());
+        goatBucket.setTag(NbtUtils.snbtToStructure("{fluid: {Amount: 1000, FluidName: \"firmalife:goat_milk\"}}"));
+        earthTrades.add(new TFGItemListing("Iron", goatBucket, 5, 4));
 
-		var invarLighter = new ItemStack(GTItems.TOOL_LIGHTER_INVAR, 1);
-		invarLighter.setTag(NbtUtils.snbtToStructure("{Fluid:{Amount:100,FluidName:\"gtceu:propane\"},lighterOpen:0b}"));
-		earthTrades.add(new TFGItemListing("Iron", invarLighter, 4, 1));
+        var jellieBucket = new ItemStack(TFCItems.WOODEN_BUCKET.get());
+        jellieBucket.setTag(NbtUtils.snbtToStructure("{fluid: {Amount: 1000, FluidName: \"tfg:jellie_milk\"}}"));
+        earthTrades.add(new TFGItemListing("Iron", jellieBucket, 5, 4));
 
-		var platLighter = new ItemStack(GTItems.TOOL_LIGHTER_PLATINUM, 1);
-		platLighter.setTag(NbtUtils.snbtToStructure("{Fluid:{Amount:1000,FluidName:\"gtceu:butane\"},lighterOpen:0b}"));
-		earthTrades.add(new TFGItemListing("Industrial Iron", platLighter, 4, 1));
+        var invarLighter = new ItemStack(GTItems.TOOL_LIGHTER_INVAR, 1);
+        invarLighter.setTag(NbtUtils.snbtToStructure("{Fluid:{Amount:100,FluidName:\"gtceu:propane\"},lighterOpen:0b}"));
+        earthTrades.add(new TFGItemListing("Iron", invarLighter, 4, 1));
+
+        var platLighter = new ItemStack(GTItems.TOOL_LIGHTER_PLATINUM, 1);
+        platLighter.setTag(NbtUtils.snbtToStructure("{Fluid:{Amount:1000,FluidName:\"gtceu:butane\"},lighterOpen:0b}"));
+        earthTrades.add(new TFGItemListing("Industrial Iron", platLighter, 4, 1));
 
         List<VillagerTrades.ItemListing> medicineTrades = new ArrayList<>();
 

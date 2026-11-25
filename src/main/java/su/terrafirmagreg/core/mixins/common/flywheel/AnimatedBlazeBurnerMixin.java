@@ -16,7 +16,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.minecraft.client.gui.GuiGraphics;
 
-import su.terrafirmagreg.core.common.block.GasBurnerBlock;
+import su.terrafirmagreg.core.common.block.appliances.GasBurnerBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 @Mixin(value = AnimatedBlazeBurner.class, remap = false)
@@ -46,7 +46,7 @@ public abstract class AnimatedBlazeBurnerMixin extends AnimatedKinetics {
             heatState = 3;
         }
 
-        int cycle = (int) ((System.currentTimeMillis() / 1000) % 3);
+        int cycle = (int) ((System.currentTimeMillis() / 1000) % 4);
 
         switch (cycle) {
             case 1:
@@ -61,7 +61,15 @@ public abstract class AnimatedBlazeBurnerMixin extends AnimatedKinetics {
                 break;
             case 2:
                 blockElement(TFGBlocks.GAS_BURNER.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, heatState).setValue(GasBurnerBlock.LIT, true))
-                        .atLocal(0, 1.65, 0)
+                        .rotate(0, 180, 0)
+                        .atLocal(1, 1.65, 1)
+                        .scale(scale)
+                        .render(graphics);
+                break;
+            case 3:
+                blockElement(TFGBlocks.FIRE_BOX.get().defaultBlockState().setValue(GasBurnerBlock.HEAT, heatState).setValue(GasBurnerBlock.LIT, true))
+                        .rotate(0, 180, 0)
+                        .atLocal(1, 1.65, 1)
                         .scale(scale)
                         .render(graphics);
                 break;

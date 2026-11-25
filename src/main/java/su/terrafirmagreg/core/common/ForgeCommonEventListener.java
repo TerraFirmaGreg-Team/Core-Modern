@@ -12,9 +12,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -30,6 +34,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -37,7 +42,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.MissingMappingsEvent;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.block.appliances.SkilletBlock;
+import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
 import su.terrafirmagreg.core.common.data.TFGCommands;
@@ -71,6 +78,17 @@ public final class ForgeCommonEventListener {
         } else if (level.getBlockState(pos.below()).is(TFGBlocks.GAS_BURNER.get())) {
             BlockEntity entity = level.getBlockEntity(pos.below());
             if (entity instanceof GasBurnerBlockEntity burner && burner.light(level.getBlockState(pos.below()))) {
+                event.setCanceled(true);
+            }
+        }
+        if (state.is(TFGBlocks.FIRE_BOX.get())) {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity instanceof FireBoxBlockEntity fireBox && fireBox.light(state)) {
+                event.setCanceled(true);
+            }
+        } else if (level.getBlockState(pos.below()).is(TFGBlocks.FIRE_BOX.get())) {
+            BlockEntity entity = level.getBlockEntity(pos.below());
+            if (entity instanceof FireBoxBlockEntity fireBox && fireBox.light(level.getBlockState(pos.below()))) {
                 event.setCanceled(true);
             }
         }
@@ -160,6 +178,25 @@ public final class ForgeCommonEventListener {
     @SubscribeEvent
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(BedrockFluidSpoutLoader.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void onAttack(AttackEntityEvent event) {
+        Player player = event.getEntity();
+        Level level = player.level();
+
+        if (!level.isClientSide() && event.getTarget() instanceof LivingEntity target) {
+            ItemStack heldItem = player.getMainHandItem();
+            if (heldItem.getItem() instanceof BlockItem blockItem) {
+                if (blockItem.getBlock() instanceof SkilletBlock) {
+
+                    level.playSound(null, target.getX(), target.getY(), target.getZ(),
+                            SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 3.0F, 0.1F);
+
+                    target.knockback(2.0F, player.getX() - target.getX(), player.getZ() - target.getZ());
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -262,20 +299,23 @@ public final class ForgeCommonEventListener {
         event.getAllMappings(Registries.BLOCK).forEach(ForgeCommonEventListener::remapBlocks);
         event.getAllMappings(Registries.ITEM).forEach(ForgeCommonEventListener::remapItems);
         event.getAllMappings(Registries.BLOCK_ENTITY_TYPE).forEach(ForgeCommonEventListener::remapBlockEntities);
+        event.getAllMappings(Registries.BIOME).forEach(ForgeCommonEventListener::remapBiomes);
     }
 
     private static void remapBlocks(MissingMappingsEvent.Mapping<Block> mapping) {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlock());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlock());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlock());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlock());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
-            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlock());
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
+        if (mapping.getKey().equals(TFGCore.id("large_steel_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
 
     }
 
@@ -283,27 +323,50 @@ public final class ForgeCommonEventListener {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getItem());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getItem());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getItem());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getItem());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
-            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getItem());
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
+        if (mapping.getKey().equals(TFGCore.id("large_steel_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
     }
 
     private static void remapBlockEntities(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlockEntityType());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlockEntityType());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
-            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlockEntityType());
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
+        if (mapping.getKey().equals(TFGCore.id("large_steel_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
+    }
+
+    private static void remapBiomes(MissingMappingsEvent.Mapping<Biome> mapping) {
+        if (!mapping.getKey().getNamespace().equals("tfc"))
+            return;
+
+        String path = mapping.getKey().getPath();
+        // This biome no longer exists
+        if (path.equals("inverted_badlands"))
+            path = "hoodoos";
+
+        var found = mapping.getRegistry().getValue(TFGCore.id("earth/" + path));
+        if (found != null) {
+            mapping.remap(found);
+        } else {
+            // Fallback
+            TFGCore.LOGGER.warn("Failed to remap old TFC biome: {}, using tfg:earth/ocean as a fallback", mapping.getKey());
+            mapping.remap(mapping.getRegistry().getValue(TFGCore.id("earth/ocean")));
+        }
     }
 }

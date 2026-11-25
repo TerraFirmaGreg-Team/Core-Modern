@@ -1,0 +1,69 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:fissure",
+    "config": {
+        "wall_state": "tfc:rock/raw/basalt",
+        "count": 3,
+        "radius": 6,
+        "decoration": {
+            "blocks": [
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/rhyolite"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/basalt"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/andesite"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/dacite"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/granite"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/diorite"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/gabbro"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/quartzite"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/slate"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/phyllite"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/schist"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/gneiss"]
+                },
+                {
+                    "with": [{"block": "minecraft:emerald_ore"}],
+                    "replace": ["tfc:rock/raw/marble"]
+                }
+            ],
+            "count": 6,
+            "radius": 3,
+            "rarity": 3
+        },
+        "fluid_state": "tfc:fluid/spring_water"
+    }
+}

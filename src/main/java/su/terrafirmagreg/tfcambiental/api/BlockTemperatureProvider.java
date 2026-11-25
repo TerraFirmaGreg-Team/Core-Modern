@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 
 import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
-import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
@@ -54,12 +54,12 @@ import net.minecraftforge.registries.RegistryObject;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import su.terrafirmagreg.core.common.block.ParticleEmitterDecorationBlock;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.FireBoxBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.appliances.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
-import su.terrafirmagreg.tfcambiental.api.BlockTemperatureProvider.TempModifierSpec;
 import su.terrafirmagreg.tfcambiental.item.TFCAmbientalItems;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifierStorage;
@@ -107,6 +107,7 @@ public interface BlockTemperatureProvider {
             if (blockEntity != null) {
                 addScaled(storage, handleCharcoalForge(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleGasBurner(player, blockEntity), distanceMultiplier);
+                addScaled(storage, handleFireBox(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleFirePit(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handlePot(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleGrill(player, blockEntity), distanceMultiplier);
@@ -173,6 +174,18 @@ public interface BlockTemperatureProvider {
                 change = change * 0.3f;
             }
             return TempModifier.defined(Math.min(6f, change), 0);
+        }
+        return TempModifier.none();
+    }
+
+    static Optional<TempModifier> handleFireBox(Player player, BlockEntity entity) {
+        if (entity instanceof FireBoxBlockEntity forge) {
+            float temp = forge.getTemperature();
+            float change = temp / 140f;
+            if (hasProtection(player)) {
+                change = change * 0.3f;
+            }
+            return TempModifier.defined(change, 0);
         }
         return TempModifier.none();
     }
@@ -350,8 +363,7 @@ public interface BlockTemperatureProvider {
 
         spec = CAPABILITY_BLOCKS.get(block);
         if (spec != null) {
-            var cap = GTCapabilityHelper.getRecipeLogic(player.level(), blockPos, null);
-            if (cap != null && cap.isActive()) {
+            if (player.level().getBlockEntity(blockPos) instanceof IRecipeLogicMachine rlMachine && rlMachine.isActive()) {
                 return spec.create();
             }
         }
@@ -381,10 +393,9 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleMultiblockInside(Player player, BlockEntity blockEntity) {
-        if (blockEntity instanceof IMachineBlockEntity machineBE &&
-                machineBE.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine &&
+        if (blockEntity instanceof WorkableElectricMultiblockMachine machine &&
                 machine.isFormed()
-                && isPosInCacheSafe(machine, player.blockPosition())
+                && machine.getPatternState(MultiblockControllerMachine.DEFAULT_STRUCTURE).getCache().containsKey(player.blockPosition().asLong())
                 && machine.getRecipeLogic().isWorking()) {
 
             float temp;
@@ -402,20 +413,6 @@ public interface BlockTemperatureProvider {
             return Optional.of(new TempModifier(temp, 100f));
         }
         return TempModifier.none();
-    }
-
-    private static boolean isPosInCacheSafe(WorkableElectricMultiblockMachine machine, BlockPos pos) {
-        var lock = machine.getPatternLock();
-        if (!lock.tryLock()) {
-            return false;
-        }
-        try {
-            return machine.getMultiblockState().isPosInCache(pos);
-        } catch (NullPointerException ignored) {
-            return false;
-        } finally {
-            lock.unlock();
-        }
     }
 
     static Optional<TempModifier> handleEncasedFan(Player player, BlockEntity blockEntity) {

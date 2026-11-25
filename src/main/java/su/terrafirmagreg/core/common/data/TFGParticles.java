@@ -47,6 +47,9 @@ public class TFGParticles {
     public static final RegistryObject<SimpleParticleType> DECOMPRESSION = PARTICLES.register("decompression",
             () -> new SimpleParticleType(false));
 
+    public static final RegistryObject<SimpleParticleType> LARGE_SMOKE = PARTICLES.register("large_smoke",
+            () -> new SimpleParticleType(true));
+
     // Martian wind dust
     public static final RegistryObject<SimpleParticleType> DARK_MARS_WIND = PARTICLES.register("dark_mars_wind",
             () -> new SimpleParticleType(false));

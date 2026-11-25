@@ -10,7 +10,7 @@ public interface IEnvironmentMachine {
 
     BlockPos getPos();
 
-    Level getLevel();
+    Level getEnvironmentLevel();
 
     /**
      * @return Whether the machine is currently active and providing its environment effect

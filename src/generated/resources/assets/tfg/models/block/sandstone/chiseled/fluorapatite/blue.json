@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "tfg:block/sandstone/fluorapatite/bottom_blue",
+    "side": "tfg:block/sandstone/fluorapatite/chiseled_blue",
+    "top": "tfg:block/sandstone/fluorapatite/top_blue"
+  }
+}

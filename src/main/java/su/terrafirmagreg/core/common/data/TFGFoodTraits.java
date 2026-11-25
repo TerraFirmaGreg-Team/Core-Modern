@@ -17,4 +17,7 @@ public class TFGFoodTraits {
 
     public static final FoodTrait CELLARED = FoodTrait.register(TFGCore.id("cellared"),
             new FoodTrait(0.35f, "tfg.tooltip.food_trait.cellared"));
+
+    public static final FoodTrait FIRE_BOX_BAKED = FoodTrait.register(TFGCore.id("fire_box_baked"),
+            new FoodTrait(0.6f, "tfg.tooltip.foodtrait.fire_box_baked"));
 }

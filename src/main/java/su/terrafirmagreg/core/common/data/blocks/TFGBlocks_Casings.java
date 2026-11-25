@@ -1,10 +1,10 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.registry.registrate.provider.GTBlockstateProvider;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
@@ -164,6 +164,12 @@ public class TFGBlocks_Casings {
     public static final BlockEntry<Block> PTFE_BLACK_CASING = createCasingBlock("casings/machine_casing_ptfe_black",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_ptfe_black")));
 
+    public static final BlockEntry<Block> ROBUST_BLUE_STEEL_CASING = createCasingBlock("casings/machine_casing_robust_blue_steel",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/robust_blue_steel")));
+
+    public static final BlockEntry<Block> BLACK_STEEL_CASING = createCasingBlock("casings/machine_casing_black_steel",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_black_steel")));
+
     public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_blue_solar_panel",
             (ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
                     GTCEu.id("block/casings/steam/steel/side"),
@@ -257,6 +263,26 @@ public class TFGBlocks_Casings {
             ModelUtils.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")),
             SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, true);
 
+    public static final Map<Integer, BlockEntry<ActiveBlock>> GAS_EXHAUST_CASING = createTieredGeneratorCasings("gas_exhaust", GTValues.HV);
+    public static final Map<Integer, BlockEntry<ActiveBlock>> COMBUSTION_EXHAUST_CASING = createTieredGeneratorCasings("combustion_exhaust", GTValues.HV);
+    public static final Map<Integer, BlockEntry<ActiveBlock>> STEAM_EXHAUST_CASING = createTieredGeneratorCasings("steam_exhaust", GTValues.MV);
+
+    private static Map<Integer, BlockEntry<ActiveBlock>> createTieredGeneratorCasings(String name,
+            int maxTier) {
+        Map<Integer, BlockEntry<ActiveBlock>> casings = new LinkedHashMap<>();
+        for (int tier = GTValues.LV; tier <= maxTier; tier++) {
+            String tierName = GTValues.VN[tier].toLowerCase(Locale.ROOT);
+            casings.put(tier, createActiveCasingBlock("casings/" + name + "_" + tierName,
+                    ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/" + name + "/" + tierName)),
+                    SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, true));
+        }
+        return Collections.unmodifiableMap(casings);
+    }
+
+    public static final BlockEntry<ActiveBlock> CRUSHING_WHEELS_RED = createActiveCasingBlock("casings/crushing_wheels_red",
+            ModelUtils.createActiveModel(TFGCore.id("block/casings/unique/crushing_wheels_red")),
+            SoundType.METAL, 6, 5, MapColor.COLOR_RED, true);
+
     public static final BlockEntry<ActiveBlock> ULTRAVIOLET_CASING = createActiveCasingBlock("casings/machine_casing_ultraviolet",
             ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ultraviolet")),
             SoundType.GLASS, 6, 5, MapColor.COLOR_LIGHT_GRAY, false);
@@ -292,9 +318,15 @@ public class TFGBlocks_Casings {
     public static final BlockEntry<Block> STERLING_SILVER_CASING = createCasingBlock("casings/sterling_silver_casing",
             GTModels.cubeAllModel(TFGCore.id("block/casings/sterling_silver_casing")));
 
+    public static final BlockEntry<Block> SECURE_PULVERIZATION_CASING = createCasingBlock("casings/secure_pulverization_casing",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/unique/secure_maceration_red_casing")));
+
     public static final BlockEntry<ActiveBlock> AE2_CASING = createActiveCasingBlock("casings/machine_casing_ae2",
             ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ae2")),
             SoundType.METAL, 6, 5, MapColor.COLOR_BLACK, false);
+
+    public static final BlockEntry<Block> MALDONITE_CASING = createCasingBlock("casings/machine_casing_maldonite", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_maldonite")),
+            SoundType.COPPER, 5.5f, 6f, MapColor.COLOR_RED, false);
 
     public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> modelProvider,
             SoundType sound, float strength, float explosionResist, MapColor mapColor, boolean onlyDropWithTool) {

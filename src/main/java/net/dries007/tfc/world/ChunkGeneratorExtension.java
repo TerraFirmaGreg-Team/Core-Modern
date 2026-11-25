@@ -7,6 +7,8 @@
 package net.dries007.tfc.world;
 
 import java.util.function.UnaryOperator;
+
+import net.dries007.tfc.world.chunkdata.ChunkDataGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
@@ -27,56 +29,58 @@ import net.dries007.tfc.world.settings.Settings;
  */
 public interface ChunkGeneratorExtension
 {
-    /**
-     * Retrieves the {@link ChunkGeneratorExtension} from a structure generator state, if the underlying generator is present and
-     * is a TFC compatible chunk generator. This is set in {@link #initRandomState(ChunkMap, ServerLevel)} in the individual generator,
-     * by caching it through the {@link net.minecraft.world.level.levelgen.RandomState}.
-     * @param state The chunk generator structure state.
-     * @return The underlying chunk generator.
-     */
-    static @Nullable ChunkGeneratorExtension getFromStructureState(ChunkGeneratorStructureState state)
-    {
-        return ((RandomStateExtension) (Object) state.randomState()).tfc$getChunkGeneratorExtension();
-    }
+	/**
+	 * Retrieves the {@link ChunkGeneratorExtension} from a structure generator state, if the underlying generator is present and
+	 * is a TFC compatible chunk generator. This is set in {@link #initRandomState(ChunkMap, ServerLevel)} in the individual generator,
+	 * by caching it through the {@link net.minecraft.world.level.levelgen.RandomState}.
+	 * @param state The chunk generator structure state.
+	 * @return The underlying chunk generator.
+	 */
+	static @Nullable ChunkGeneratorExtension getFromStructureState(ChunkGeneratorStructureState state)
+	{
+		return ((RandomStateExtension) (Object) state.randomState()).tfc$getChunkGeneratorExtension();
+	}
 
-    /**
-     * @return The world generator settings.
-     */
-    Settings settings();
+	/**
+	 * @return The world generator settings.
+	 */
+	Settings settings();
 
-    /**
-     * @return The rock layer settings.
-     */
-    default RockLayerSettings rockLayerSettings()
-    {
-        return settings().rockLayerSettings();
-    }
+	/**
+	 * @return The rock layer settings.
+	 */
+	default RockLayerSettings rockLayerSettings()
+	{
+		return settings().rockLayerSettings();
+	}
 
-    /**
-     * Used on client to set the settings via the preset configuration screen.
-     * This is technically compatible with any {@link ChunkGeneratorExtension} but will only exist if it is registered via {@link net.minecraftforge.client.event.RegisterPresetEditorsEvent} for that screen.
-     */
-    void applySettings(UnaryOperator<Settings> settings);
+	/**
+	 * Used on client to set the settings via the preset configuration screen.
+	 * This is technically compatible with any {@link ChunkGeneratorExtension} but will only exist if it is registered via {@link RegisterPresetEditorsEvent} for that screen.
+	 */
+	void applySettings(UnaryOperator<Settings> settings);
 
-    ChunkDataProvider chunkDataProvider();
+	ChunkDataGenerator chunkDataGenerator();
 
-    Aquifer getOrCreateAquifer(ChunkAccess chunk);
+	ChunkDataProvider chunkDataProvider();
 
-    /**
-     * Find the spawn biome. This is by default a bouncer to {@link BiomeSourceExtension#findSpawnBiome(Settings, RandomSource)}, which uses the {@link #settings()} from the chunk generator.
-     */
-    default BlockPos findSpawnBiome(RandomSource random)
-    {
-        return ((BiomeSourceExtension) self().getBiomeSource()).findSpawnBiome(settings(), random);
-    }
+	Aquifer getOrCreateAquifer(ChunkAccess chunk);
 
-    /**
-     * Called from the initialization of {@link ChunkMap}, to initialize seed-based properties on any chunk generator implementing {@link ChunkGeneratorExtension}.
-     */
-    void initRandomState(ChunkMap chunkMap, ServerLevel level);
+	/**
+	 * Find the spawn biome. This is by default a bouncer to {@link BiomeSourceExtension#findSpawnBiome(Settings, RandomSource)}, which uses the {@link #settings()} from the chunk generator.
+	 */
+	default BlockPos findSpawnBiome(RandomSource random)
+	{
+		return ((BiomeSourceExtension) self().getBiomeSource()).findSpawnBiome(settings(), random);
+	}
 
-    default ChunkGenerator self()
-    {
-        return (ChunkGenerator) this;
-    }
+	/**
+	 * Called from the initialization of {@link ChunkMap}, to initialize seed-based properties on any chunk generator implementing {@link ChunkGeneratorExtension}.
+	 */
+	void initRandomState(ChunkMap chunkMap, ServerLevel level);
+
+	default ChunkGenerator self()
+	{
+		return (ChunkGenerator) this;
+	}
 }

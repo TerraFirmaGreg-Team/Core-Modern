@@ -76,6 +76,11 @@ public class TFCAquifer implements Aquifer
     private int[] surfaceHeights;
     private boolean shouldScheduleFluidUpdate;
 
+    public ChunkBaseBlockSource baseBlockSource()
+    {
+        return baseBlockSource;
+    }
+
     public TFCAquifer(ChunkPos chunkPos, ChunkNoiseSamplingSettings settings, ChunkBaseBlockSource baseBlockSource, int seaLevel, PositionalRandomFactory fork, NormalNoise barrierNoise)
     {
         final int maxGridX = gridXZ(chunkPos.getMaxBlockX()) + 1;

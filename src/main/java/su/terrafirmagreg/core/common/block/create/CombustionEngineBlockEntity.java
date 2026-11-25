@@ -7,6 +7,9 @@ package su.terrafirmagreg.core.common.block.create;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.sound.AutoReleasedSound;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.simibubi.create.content.contraptions.bearing.WindmillBearingBlockEntity;
@@ -39,6 +42,7 @@ import earth.terrarium.adastra.api.systems.OxygenApi;
 import earth.terrarium.adastra.api.systems.PlanetData;
 import earth.terrarium.adastra.client.utils.ClientData;
 import electrolyte.greate.GreateValues;
+import electrolyte.greate.compat.gtceu.material.GreatePropertyKeys;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
 import lombok.Getter;
 
@@ -122,9 +126,18 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         targetDirection.setValue(Math.max(-1, Math.min(1, targetDirection.getValue())));
     }
 
+    private static final float[] TIER_CAPACITY = { 1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144 };
+
+    private static float tierCapacity(@Nullable Material material) {
+        if (material == null || !material.hasProperty(GreatePropertyKeys.KINETIC))
+            return Float.MAX_VALUE;
+        int tier = material.getProperty(GreatePropertyKeys.KINETIC).getTier();
+        return tier >= 0 && tier < TIER_CAPACITY.length ? TIER_CAPACITY[tier] : Float.MAX_VALUE;
+    }
+
     @Override
     public float calculateAddedStressCapacity() {
-        float capacity = GreateValues.getMaxCapacityFromMaterial(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
+        float capacity = tierCapacity(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
         lastCapacityProvided = capacity;
         return capacity;
     }
@@ -144,7 +157,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         CreateLang.translate("tooltip.capacityProvided")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
-        CreateLang.number(lastCapacityProvided)
+        CreateLang.number(lastCapacityProvided * 32)
                 .translate("generic.unit.stress")
                 .style(ChatFormatting.AQUA)
                 .space()
@@ -152,7 +165,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
                         .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);
 
-        ITieredKineticBlockEntity.super.addToGoggleTooltip(tooltip, isPlayerSneaking, GreateValues.TM[tier], capacity, stress);
+        ITieredKineticBlockEntity.super.addToGoggleTooltip(tooltip, GreateValues.TM[tier], getSpeed());
         return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
     }
 

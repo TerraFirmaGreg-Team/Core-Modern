@@ -1,105 +1,161 @@
 {
-  "$schema": "../schema.json",
-  "includes": ["../terminals/terminal.json"],
-  "widgets": {
-    "destinationSearch": {
-      "left": 7,
-      "top": 78,
-      "width": 105,
-      "height": 12
+    "terminalStyle": {
+        "firstRow": {
+            "texture": "guis/tfg/order_terminal.png",
+            "srcRect": [
+                0,
+                17,
+                195,
+                18
+            ]
+        },
+        "lastRow": {
+            "texture": "guis/tfg/order_terminal.png",
+            "srcRect": [
+                0,
+                53,
+                195,
+                18
+            ]
+        },
+        "bottom": {
+            "texture": "guis/tfg/order_terminal.png",
+            "srcRect": [
+                0,
+                71,
+                195,
+                44
+            ]
+        },
+        "header": {
+            "texture": "guis/tfg/order_terminal.png",
+            "srcRect": [
+                0,
+                0,
+                195,
+                17
+            ]
+        },
+        "row": {
+            "texture": "guis/tfg/order_terminal.png",
+            "srcRect": [
+                0,
+                35,
+                195,
+                18
+            ]
+        }
     },
-    "destinationScrollbar": {
-      "left": 156,
-      "top": 93
+    "images": {
+        "stagingBottom": {
+            "texture": "guis/tfg/order_staging.png",
+            "textureWidth": 69,
+            "srcRect": [
+                0,
+                64,
+                69,
+                3
+            ],
+            "textureHeight": 67
+        },
+        "stagingRow": {
+            "texture": "guis/tfg/order_staging.png",
+            "textureWidth": 69,
+            "srcRect": [
+                0,
+                20,
+                69,
+                18
+            ],
+            "textureHeight": 67
+        },
+        "stagingStrip": {
+            "texture": "guis/tfg/order_staging.png",
+            "textureWidth": 69,
+            "srcRect": [
+                0,
+                57,
+                69,
+                1
+            ],
+            "textureHeight": 67
+        },
+        "stagingTop": {
+            "texture": "guis/tfg/order_staging.png",
+            "textureWidth": 69,
+            "srcRect": [
+                0,
+                0,
+                69,
+                20
+            ],
+            "textureHeight": 67
+        },
+        "bottomEnd": {
+            "texture": "guis/tfg/order_terminal.png",
+            "srcRect": [
+                0,
+                137,
+                195,
+                119
+            ]
+        },
+        "stagingRowsEnd": {
+            "texture": "guis/tfg/order_staging.png",
+            "textureWidth": 69,
+            "srcRect": [
+                0,
+                56,
+                69,
+                1
+            ],
+            "textureHeight": 67
+        },
+        "cellRow": {
+            "texture": "guis/tfg/order_terminal.png",
+            "srcRect": [
+                0,
+                115,
+                195,
+                22
+            ]
+        }
     },
-    "stagingToggle": {
-      "left": 152,
-      "top": 75
-    },
-    "stagingPanel": {
-      "left": 173,
-      "top": 92,
-      "width": 69,
-      "height": 67
-    },
-    "stagingConfirm": {
-      "left": 176,
-      "top": 134,
-      "width": 63,
-      "height": 20
+    "$schema": "../schema.json",
+    "includes": ["../terminals/terminal.json"],
+    "text": {"dialog_title": {
+        "text": {"translate": "gui.ae2.Terminal"},
+        "position": {
+            "top": 6,
+            "left": 8
+        }
+    }},
+    "widgets": {
+        "stagingPanel": {
+            "top": 92,
+            "left": 173,
+            "width": 69,
+            "height": 67
+        },
+        "stagingToggle": {
+            "top": 75,
+            "left": 152
+        },
+        "stagingConfirm": {
+            "top": 134,
+            "left": 176,
+            "width": 63,
+            "height": 20
+        },
+        "destinationScrollbar": {
+            "top": 93,
+            "left": 156
+        },
+        "destinationSearch": {
+            "top": 78,
+            "left": 7,
+            "width": 105,
+            "height": 12
+        }
     }
-  },
-  "text": {
-    "dialog_title": {
-      "text": {
-        "translate": "gui.ae2.Terminal"
-      },
-      "position": {
-        "left": 8,
-        "top": 6
-      }
-    }
-  },
-  "terminalStyle": {
-    "header": {
-      "texture": "guis/tfg/order_terminal.png",
-      "srcRect": [0, 0, 195, 17]
-    },
-    "firstRow": {
-      "texture": "guis/tfg/order_terminal.png",
-      "srcRect": [0, 17, 195, 18]
-    },
-    "row": {
-      "texture": "guis/tfg/order_terminal.png",
-      "srcRect": [0, 35, 195, 18]
-    },
-    "lastRow": {
-      "texture": "guis/tfg/order_terminal.png",
-      "srcRect": [0, 53, 195, 18]
-    },
-    "bottom": {
-      "texture": "guis/tfg/order_terminal.png",
-      "srcRect": [0, 71, 195, 44]
-    }
-  },
-  "images": {
-    "cellRow": {
-      "texture": "guis/tfg/order_terminal.png",
-      "srcRect": [0, 115, 195, 22]
-    },
-    "bottomEnd": {
-      "texture": "guis/tfg/order_terminal.png",
-      "srcRect": [0, 137, 195, 119]
-    },
-    "stagingTop": {
-      "texture": "guis/tfg/order_staging.png",
-      "textureWidth": 69,
-      "textureHeight": 67,
-      "srcRect": [0, 0, 69, 20]
-    },
-    "stagingRow": {
-      "texture": "guis/tfg/order_staging.png",
-      "textureWidth": 69,
-      "textureHeight": 67,
-      "srcRect": [0, 20, 69, 18]
-    },
-    "stagingRowsEnd": {
-      "texture": "guis/tfg/order_staging.png",
-      "textureWidth": 69,
-      "textureHeight": 67,
-      "srcRect": [0, 56, 69, 1]
-    },
-    "stagingStrip": {
-      "texture": "guis/tfg/order_staging.png",
-      "textureWidth": 69,
-      "textureHeight": 67,
-      "srcRect": [0, 57, 69, 1]
-    },
-    "stagingBottom": {
-      "texture": "guis/tfg/order_staging.png",
-      "textureWidth": 69,
-      "textureHeight": 67,
-      "srcRect": [0, 64, 69, 3]
-    }
-  }
 }

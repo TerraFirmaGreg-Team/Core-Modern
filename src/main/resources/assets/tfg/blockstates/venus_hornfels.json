@@ -1,0 +1,7 @@
+{"variants": {"": [
+    {"model": "tfg:block/venus_hornfels"},
+    {
+        "y": 180,
+        "model": "tfg:block/venus_hornfels"
+    }
+]}}

@@ -4,39 +4,29 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.IRedstoneSignalMachine;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class MEAssemblerRedstonePort extends MultiblockPartMachine implements IRedstoneSignalMachine {
+public class MEAssemblerRedstonePort extends MultiblockPartMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            MEAssemblerRedstonePort.class, MultiblockPartMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Persisted
+    @SaveField
     private int signal = 0;
 
-    public MEAssemblerRedstonePort(IMachineBlockEntity holder) {
-        super(holder);
+    public MEAssemblerRedstonePort(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     public void trySetSignal(int newSignal) {
         if (newSignal == signal)
             return;
         signal = newSignal;
-        updateSignal();
+        notifyBlockUpdate();
     }
 
     @Override

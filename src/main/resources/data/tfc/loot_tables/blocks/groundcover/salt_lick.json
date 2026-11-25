@@ -1,7 +1,7 @@
 {
     "pools": [{
         "entries": [{
-            "name": "tfc:powder/salt",
+            "name": "gtceu:small_salt_dust",
             "type": "minecraft:item"
         }],
         "name": "loot_pool",

@@ -1,0 +1,17 @@
+{
+    "feature": "tfg:earth/stratovolcano_rivulet",
+    "placement": [
+        {
+            "count": 3,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "min_easing": 0.7,
+            "variant": "fuji",
+            "hash_max": 0.4,
+            "type": "tfc:stratovolcano"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -165,18 +165,6 @@ public final class TFCBlocks
 
     // Ores
 
-    public static final Map<Rock, Map<Ore, RegistryObject<Block>>> ORES = Helpers.mapOfKeys(Rock.class, rock ->
-        Helpers.mapOfKeys(Ore.class, ore -> !ore.isGraded(), ore ->
-            register(("ore/" + ore.name() + "/" + rock.name()), () -> ore.create(rock))
-        )
-    );
-    public static final Map<Rock, Map<Ore, Map<Ore.Grade, RegistryObject<Block>>>> GRADED_ORES = Helpers.mapOfKeys(Rock.class, rock ->
-        Helpers.mapOfKeys(Ore.class, Ore::isGraded, ore ->
-            Helpers.mapOfKeys(Ore.Grade.class, grade ->
-                register(("ore/" + grade.name() + "_" + ore.name() + "/" + rock.name()), () -> ore.create(rock))
-            )
-        )
-    );
     public static final Map<Ore, RegistryObject<Block>> SMALL_ORES = Helpers.mapOfKeys(Ore.class, Ore::isGraded, type ->
         register(("ore/small_" + type.name()), () -> GroundcoverBlock.looseOre(Properties.of().mapColor(MapColor.NONE).strength(0.05F, 0.0F).sound(SoundType.NETHER_ORE).noCollission().pushReaction(PushReaction.DESTROY)))
     );

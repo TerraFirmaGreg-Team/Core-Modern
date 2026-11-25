@@ -15,9 +15,7 @@ import su.terrafirmagreg.core.client.overlay.AirLevelOverlay;
 import su.terrafirmagreg.core.client.overlay.GlassblowingOverlay;
 import su.terrafirmagreg.core.client.overlay.VignetteOverlay;
 import su.terrafirmagreg.core.client.renderer.SprayCanHudOverlay;
-import su.terrafirmagreg.core.client.screen.ArtisanTableScreen;
-import su.terrafirmagreg.core.client.screen.GasBurnerScreen;
-import su.terrafirmagreg.core.client.screen.LargeNestBoxScreen;
+import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.client.screen.ae2.OrderAmountScreen;
 import su.terrafirmagreg.core.client.screen.ae2.OrderTerminalScreen;
 import su.terrafirmagreg.core.client.screen.ae2.WOTScreen;
@@ -42,6 +40,10 @@ public final class TFGClientScreens {
             InitScreens.register(OrderTerminalMenu.TYPE, OrderTerminalScreen::new, "/screens/tfg/order_terminal.json");
             InitScreens.register(WOTMenu.TYPE, WOTScreen::new, "/screens/tfg/wireless_order_terminal.json");
             InitScreens.register(OrderAmountMenu.TYPE, OrderAmountScreen::new, "/screens/tfg/order_amount.json");
+            MenuScreens.register(TFGContainers.COPPER_POT.get(), CopperPotScreen::new);
+            MenuScreens.register(TFGContainers.SKILLET.get(), SkilletScreen::new);
+            MenuScreens.register(TFGContainers.MIXING_BOWL.get(), MixingBowlScreen::new);
+            MenuScreens.register(TFGContainers.FIRE_BOX.get(), FireBoxScreen::new);
         });
     }
 
