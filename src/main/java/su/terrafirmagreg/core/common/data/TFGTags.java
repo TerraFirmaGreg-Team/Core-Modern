@@ -117,6 +117,7 @@ public final class TFGTags {
         public static final TagKey<Item> OVEN_BLACKLISTED = createItemTag("oven_blacklisted");
 
         public static final TagKey<Item> BAKING_DISHES = createItemTag("baking_dishes");
+        public static final TagKey<Item> UNFIRED_BAKING_DISHES = createItemTag("unfired_baking_dishes");
 
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));

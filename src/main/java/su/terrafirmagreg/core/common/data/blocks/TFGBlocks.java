@@ -563,6 +563,10 @@ public final class TFGBlocks {
                     .blockstate((ctx, prov) -> {
                         var builder = prov.getVariantBuilder(ctx.getEntry());
 
+                        // Generates the unfired model for the unfired dyed baking dish items.
+                        prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + "_unfired", TFGCore.id("block/baking_dish_open_parent"))
+                                .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName() + "_unfired"));
+
                         for (boolean sealed : BakingDishBlock.SEALED.getPossibleValues()) {
                             String open = sealed ? "_closed" : "_open";
 
