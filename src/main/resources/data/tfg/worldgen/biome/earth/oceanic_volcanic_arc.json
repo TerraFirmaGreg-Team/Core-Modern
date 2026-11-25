@@ -69,20 +69,12 @@
     },
     "__comment__": "This file was automatically created by mcresources",
     "spawners": {
-        "ambient": [
-            {
-                "weight": 100,
-                "minCount": 1,
-                "type": "minecraft:bat",
-                "maxCount": 2
-            },
-            {
-                "weight": 100,
-                "minCount": 5,
-                "type": "fowlplay:gull",
-                "maxCount": 8
-            }
-        ],
+        "ambient": [{
+            "weight": 100,
+            "minCount": 1,
+            "type": "minecraft:bat",
+            "maxCount": 2
+        }],
         "axolotls": [
             {
                 "weight": 30,

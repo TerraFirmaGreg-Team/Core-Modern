@@ -75,10 +75,10 @@
             "maxCount": 2
         }],
         "ambient": [{
-            "weight": 10,
+            "weight": 100,
             "minCount": 1,
-            "type": "fowlplay:goose",
-            "maxCount": 4
+            "type": "minecraft:bat",
+            "maxCount": 2
         }],
         "axolotls": [],
         "water_ambient": [

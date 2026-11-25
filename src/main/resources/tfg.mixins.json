@@ -130,8 +130,6 @@
         "common.forge.CapabilityProviderMixin",
         "common.forge.ForgeConfigSpecMixin",
         "common.forge.ItemHandlerHelperMixin",
-        "common.fowlplay.BirdEntityMixin",
-        "common.fowlplay.FPMobCategoryMixin",
         "common.fowlplay.PenguinEntityMixin",
         "common.fowlplay.SpawnPredicatesMixin",
         "common.grappling_hook.AirFrictionControllerMixin",
