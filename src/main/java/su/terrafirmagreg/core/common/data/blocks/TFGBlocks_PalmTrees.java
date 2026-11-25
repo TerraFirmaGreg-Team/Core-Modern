@@ -13,6 +13,7 @@ import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.crop.DecayingBlock;
 import net.dries007.tfc.common.blocks.wood.TFCLeavesBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
+import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
@@ -159,7 +161,9 @@ public class TFGBlocks_PalmTrees {
                                 }
                             })
                             .tag(TFGTags.Blocks.FALLING_CONCUSSIVE, TFCTags.Blocks.TOUGHNESS_1, TFGTags.Blocks.HarvesterHarvestable)
-                            .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
+                            .loot((provider, block) -> provider.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
+                                    .setRolls(ConstantValue.exactly(1.0F))
+                                    .add(DynamicLoot.dynamicEntry(DecayingBlock.DECAYING_DYNAMIC_DROP_ID)))))
                             .item(BlockItem::new)
                             .model((ctx, prov) -> prov.basicItem(TFGCore.id(ctx.getName())))
                             .build()

@@ -100,11 +100,11 @@ public class TFGBlocks_Struts {
                         .noOcclusion()
                         .sound(SoundType.WOOD))
                 .blockstate((ctx, prov) -> {
-                    ModelFile model = prov.models().withExistingParent(fullId + "_attachment", TFGCore.id("block/strut/" + type + "_attachment"))
+                    ModelFile model = prov.models().withExistingParent(fullId + "_attachment", TFGCore.id("block/strut/wood_beam_attachment"))
                             .texture("0", texLoc)
                             .texture("particle", texLoc);
 
-                    ModelFile extraModel = prov.models().withExistingParent(fullId, TFGCore.id("block/strut/" + type))
+                    ModelFile extraModel = prov.models().withExistingParent(fullId, TFGCore.id("block/strut/wood_beam"))
                             .texture("0", texLoc)
                             .texture("particle", texLoc);
 
@@ -118,7 +118,7 @@ public class TFGBlocks_Struts {
                 })
                 .tag(TFGTags.Blocks.STRUT, BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
                 .item(StrutBlockItem::new)
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/" + type + "_item"))
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/wood_beam_item"))
                         .texture("0", texLoc)
                         .texture("1_0", texLoc)
                         .texture("particle", texLoc))
