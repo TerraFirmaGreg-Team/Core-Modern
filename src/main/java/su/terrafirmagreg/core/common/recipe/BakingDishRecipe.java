@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.FoodHandler;
+import net.dries007.tfc.common.capabilities.food.FoodTraits;
 import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.recipes.RecipeHelpers;
@@ -303,9 +304,7 @@ public class BakingDishRecipe extends CookingApplianceRecipe {
                     totalOutput += outputFluid.getAmount();
                 }
             }
-            if (totalOutput > capacity) {
-                return false;
-            }
+            return totalOutput <= capacity;
         }
 
         return true;
@@ -350,6 +349,7 @@ public class BakingDishRecipe extends CookingApplianceRecipe {
                     }
                     HeatCapability.setTemperature(out, containerTemp);
                     FoodCapability.applyTrait(out, TFGFoodTraits.FIRE_BOX_BAKED);
+                    FoodCapability.applyTrait(out, FoodTraits.PRESERVED);
                     outputsToInsert.add(out.copy());
                 }
             }
@@ -369,11 +369,27 @@ public class BakingDishRecipe extends CookingApplianceRecipe {
             }
         }
 
-        // Clear all existing fluid in the tank
-        for (int i = 0; i < fluids.getTanks(); i++) {
-            FluidStack inTank = fluids.getFluidInTank(i);
-            if (!inTank.isEmpty()) {
-                fluids.drain(inTank.getAmount(), IFluidHandler.FluidAction.EXECUTE);
+        // Handle existing fluid in the tank.
+        if (!this.fluidOutputs.isEmpty()) {
+            // Clear all existing fluid in the tank if expecting an output fluid.
+            for (int i = 0; i < fluids.getTanks(); i++) {
+                FluidStack inTank = fluids.getFluidInTank(i);
+                if (!inTank.isEmpty()) {
+                    fluids.drain(inTank.getAmount(), IFluidHandler.FluidAction.EXECUTE);
+                }
+            }
+        } else {
+            // Otherwise only consume the exact fluid amounts required by the recipe.
+            for (FluidStackIngredient reqFluid : this.fluidIngredients) {
+                int remainingToDrain = reqFluid.amount();
+                for (int i = 0; i < fluids.getTanks() && remainingToDrain > 0; i++) {
+                    FluidStack inTank = fluids.getFluidInTank(i);
+                    if (!inTank.isEmpty() && reqFluid.test(inTank)) {
+                        int toDrain = Math.min(inTank.getAmount(), remainingToDrain);
+                        FluidStack drained = fluids.drain(new FluidStack(inTank, toDrain), IFluidHandler.FluidAction.EXECUTE);
+                        remainingToDrain -= drained.getAmount();
+                    }
+                }
             }
         }
 

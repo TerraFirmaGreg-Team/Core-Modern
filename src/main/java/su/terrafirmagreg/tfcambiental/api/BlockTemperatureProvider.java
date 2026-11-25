@@ -183,7 +183,7 @@ public interface BlockTemperatureProvider {
     static Optional<TempModifier> handleFireBoxTopOven(Player player, BlockEntity entity) {
         if (entity instanceof FireBoxTopOvenBlockEntity fbtobe) {
             float temp = fbtobe.getTemperature();
-            float change = temp / 1500f;
+            float change = temp / 200f;
             if (hasProtection(player)) {
                 change = change * 0.3f;
             }
@@ -195,7 +195,7 @@ public interface BlockTemperatureProvider {
     static Optional<TempModifier> handleFireBox(Player player, BlockEntity entity) {
         if (entity instanceof FireBoxBlockEntity fbbe) {
             float temp = fbbe.getTemperature();
-            float change = temp / 300f;
+            float change = temp / 120f;
             if (hasProtection(player)) {
                 change = change * 0.3f;
             }

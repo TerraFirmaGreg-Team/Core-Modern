@@ -7,6 +7,7 @@ import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.container.BlockEntityContainer;
 import net.dries007.tfc.common.container.ButtonHandlerContainer;
 import net.dries007.tfc.common.container.CallbackSlot;
+import net.dries007.tfc.common.container.PestContainer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +21,7 @@ import su.terrafirmagreg.core.common.block.appliances.BakingDishBlock;
 import su.terrafirmagreg.core.common.blockentity.appliances.BakingDishBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 
-public class BakingDishContainer extends BlockEntityContainer<BakingDishBlockEntity> implements ButtonHandlerContainer {
+public class BakingDishContainer extends BlockEntityContainer<BakingDishBlockEntity> implements ButtonHandlerContainer, PestContainer {
 
     public static final int BUTTON_SEAL = 0;
     public static final int BUTTON_FLUID_IDX = 1;

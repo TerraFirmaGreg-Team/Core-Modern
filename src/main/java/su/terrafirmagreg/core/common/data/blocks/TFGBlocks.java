@@ -360,7 +360,7 @@ public final class TFGBlocks {
     public static final BlockEntry<CopperPotBlock> COPPER_POT = TFGCore.REGISTRATE
             .block("copper_pot", p -> new CopperPotBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
                     .blockEntity(TFGBlockEntities.COPPER_POT)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .mapColor(MapColor.COLOR_ORANGE)
                     .noOcclusion()
                     .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
@@ -400,7 +400,7 @@ public final class TFGBlocks {
     public static final BlockEntry<CondenserBlock> CONDENSER = TFGCore.REGISTRATE
             .block("condenser", p -> new CondenserBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
                     .sound(SoundType.COPPER)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .noOcclusion()
                     .blockEntity(TFGBlockEntities.CONDENSER)
                     .mapColor(MapColor.COLOR_ORANGE)
@@ -428,7 +428,7 @@ public final class TFGBlocks {
             .block("skillet", p -> new SkilletBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
                     .sound(SoundType.NETHERITE_BLOCK)
                     .blockEntity(TFGBlockEntities.SKILLET)
-                    .strength(3.0f, 7.0f)
+                    .strength(2.0f, 7.0f)
                     .mapColor(MapColor.COLOR_BLACK)
                     .noOcclusion()
                     .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
@@ -457,7 +457,7 @@ public final class TFGBlocks {
             .block("mixing_bowl", p -> new MixingBowlBlock(ExtendedProperties.of(Blocks.CRAFTING_TABLE)
                     .sound(SoundType.SCAFFOLDING)
                     .blockEntity(TFGBlockEntities.MIXING_BOWL)
-                    .strength(5, 10)
+                    .strength(1.0F, 3.0f)
                     .mapColor(MapColor.WOOD)
                     .noOcclusion()
                     .ticks(MixingBowlBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
@@ -492,7 +492,7 @@ public final class TFGBlocks {
     public static final BlockEntry<FireBoxBlock> FIRE_BOX = TFGCore.REGISTRATE
             .block("fire_box", p -> new FireBoxBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
                     .sound(SoundType.NETHERITE_BLOCK)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .noOcclusion()
                     .mapColor(MapColor.COLOR_BLACK)
                     .blockEntity(TFGBlockEntities.FIRE_BOX)
@@ -525,7 +525,7 @@ public final class TFGBlocks {
     public static final BlockEntry<FireBoxTopOvenBlock> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
             .block("fire_box_top_oven", p -> new FireBoxTopOvenBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
                     .sound(SoundType.NETHERITE_BLOCK)
-                    .strength(3.0f, 6.0f)
+                    .strength(2.0f, 6.0f)
                     .noOcclusion()
                     .mapColor(MapColor.COLOR_BLACK)
                     .blockEntity(TFGBlockEntities.FIRE_BOX_TOP_OVEN)
@@ -557,7 +557,7 @@ public final class TFGBlocks {
                     .block("baking_dish_" + color.getSerializedName(), p -> new BakingDishBlock(ExtendedProperties.of(Blocks.TERRACOTTA)
                             .sound(SoundType.DECORATED_POT)
                             .blockEntity(TFGBlockEntities.BAKING_DISH)
-                            .strength(3.0f, 5.0f)
+                            .strength(2.0f, 5.0f)
                             .mapColor(color.getMapColor())
                             .noOcclusion()))
                     .blockstate((ctx, prov) -> {
@@ -607,7 +607,7 @@ public final class TFGBlocks {
             .block("baking_dish_ceramic", p -> new BakingDishBlock(ExtendedProperties.of(Blocks.TERRACOTTA)
                     .sound(SoundType.DECORATED_POT)
                     .blockEntity(TFGBlockEntities.BAKING_DISH)
-                    .strength(3.0f, 5.0f)
+                    .strength(2.0f, 5.0f)
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .noOcclusion()))
             .blockstate((ctx, prov) -> {

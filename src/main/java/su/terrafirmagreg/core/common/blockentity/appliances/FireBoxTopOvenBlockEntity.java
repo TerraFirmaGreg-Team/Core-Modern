@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.blockentity.appliances;
 
-import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -245,10 +244,28 @@ public class FireBoxTopOvenBlockEntity extends TickableInventoryBlockEntity<Item
                 newBeTag.remove("tanks");
                 newBeTag.remove("tank");
 
-                this.inventory.setStackInSlot(slot, ItemStack.EMPTY);
-                this.inventory.setStackInSlot(SLOT_OUTPUT_START + slot, outputStack);
+                // Check if another baking dish recipe can still run on the remaining contents.
+                boolean hasMoreRecipes = false;
+                for (BakingDishRecipe nextRecipe : level.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.BAKING_DISH.get())) {
+                    if (nextRecipe.matchItemInputs(items, false).matches()
+                            && nextRecipe.matchFluidInputs(tank)
+                            && nextRecipe.canFitOutputs(items, tank)) {
+                        hasMoreRecipes = true;
+                        break;
+                    }
+                }
+
+                if (hasMoreRecipes) {
+                    // Keep in an input slot so the oven continues baking the next batch.
+                    this.inventory.setStackInSlot(slot, outputStack);
+                } else {
+                    // All possible recipes are done.
+                    this.inventory.setStackInSlot(slot, ItemStack.EMPTY);
+                    this.inventory.setStackInSlot(SLOT_OUTPUT_START + slot, outputStack);
+                    this.setAndUpdateSlots(SLOT_OUTPUT_START + slot);
+                }
+
                 this.setAndUpdateSlots(slot);
-                this.setAndUpdateSlots(SLOT_OUTPUT_START + slot);
                 this.cachedRecipes[slot] = null;
                 this.markForSync();
                 this.setChanged();

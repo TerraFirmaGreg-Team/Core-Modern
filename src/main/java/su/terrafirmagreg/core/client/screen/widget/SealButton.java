@@ -27,12 +27,12 @@ public class SealButton extends Button {
     private final BlockEntity blockEntity;
     private final int buttonId;
 
-    public SealButton(BlockEntity blockEntity, int guiLeft, int guiTop) {
-        this(blockEntity, guiLeft, guiTop, 0);
+    public SealButton(BlockEntity blockEntity, int x, int y) {
+        this(blockEntity, x, y, 0);
     }
 
-    public SealButton(BlockEntity blockEntity, int guiLeft, int guiTop, int buttonId) {
-        super(guiLeft, guiTop, SIZE, SIZE, SEAL, b -> {
+    public SealButton(BlockEntity blockEntity, int x, int y, int buttonId) {
+        super(x, y, SIZE, SIZE, SEAL, b -> {
         }, RenderHelpers.NARRATION);
         this.blockEntity = blockEntity;
         this.buttonId = buttonId;
@@ -54,5 +54,9 @@ public class SealButton extends Button {
 
         final int v = isSealed ? 0 : SIZE;
         graphics.blit(LargeVesselScreen.BACKGROUND, getX(), getY(), 236, v, SIZE, SIZE, 256, 256);
+
+        if (RenderHelpers.isInside(mouseX, mouseY, getX(), getY(), SIZE, SIZE)) {
+            graphics.fill(getX(), getY(), getX() + SIZE, getY() + SIZE, -2130706433);
+        }
     }
 }

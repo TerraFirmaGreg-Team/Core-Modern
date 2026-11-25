@@ -33,6 +33,7 @@ import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeatBlock;
 import net.dries007.tfc.common.container.ISlotCallback;
 import net.dries007.tfc.common.recipes.ingredients.FluidStackIngredient;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.IntArrayBuilder;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.minecraft.ChatFormatting;
@@ -1045,6 +1046,32 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
     }
 
     @Override
+    public void saveToItem(@NotNull ItemStack stack) {
+        if (isEmpty()) {
+            stack.removeTagKey(Helpers.BLOCK_ENTITY_TAG);
+            return;
+        }
+
+        CompoundTag tag = new CompoundTag();
+        tag.put("inventory", inventory.serializeNBT());
+        stack.addTagElement(Helpers.BLOCK_ENTITY_TAG, tag);
+    }
+
+    public boolean isEmpty() {
+        for (int i = 0; i < inventory.getItemHandler().getSlots(); i++) {
+            if (!inventory.getItemHandler().getStackInSlot(i).isEmpty()) {
+                return false;
+            }
+        }
+        for (InventoryFluidTank tank : inventory.getTankArray()) {
+            if (!tank.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public void saveAdditional(CompoundTag nbt) {
         nbt.putFloat("temperature", this.temperature);
         nbt.putFloat("targetTemperature", this.targetTemperature);
@@ -1189,6 +1216,9 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
             }
             if (slot == appliance.getToolSlot()) {
                 return stack.is(TFGTags.Items.APPLIANCE_TOOLS);
+            }
+            if (stack.is(TFGTags.Items.APPLIANCE_CATALYSTS) || stack.is(TFGTags.Items.APPLIANCE_TOOLS)) {
+                return false;
             }
             return slot < appliance.getItemOutputStartSlot();
         }
