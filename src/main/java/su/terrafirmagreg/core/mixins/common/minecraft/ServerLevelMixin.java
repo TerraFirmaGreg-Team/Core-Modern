@@ -20,6 +20,7 @@ import earth.terrarium.adastra.api.planets.Planet;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.utils.CalendarSleepHelper;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
+import su.terrafirmagreg.core.utils.VenusEnvironmentalHelpers;
 
 // higher priority to inject just before TFC does with its environmental helper
 @Mixin(value = ServerLevel.class, priority = 900)
@@ -36,6 +37,9 @@ public abstract class ServerLevelMixin {
 
         if (level.dimension().equals(Planet.MARS)) {
             MarsEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
+        }
+        if (level.dimension().equals(Planet.VENUS)) {
+            VenusEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
         }
 
         // Ad Astra's ServerLevelMixin also injects at TAIL with a popPush, which pops a section

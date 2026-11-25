@@ -9,16 +9,20 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.Helpers;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.Tags;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.TierLockedAcidBlock;
+import su.terrafirmagreg.core.common.block.VenusFireBlock;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGBlocks_Venus {
@@ -31,7 +35,7 @@ public class TFGBlocks_Venus {
                             .mapColor(type.getMapColor())
                             .strength(0.5F)
                             .sound(SoundType.SAND))
-                    .tag(TFCTags.Blocks.CAN_LANDSLIDE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, Tags.Blocks.SAND)
+                    .tag(TFCTags.Blocks.CAN_LANDSLIDE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, Tags.Blocks.SAND, TFGTags.Blocks.VenusFireImmune)
                     .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry()))
                     .item(BlockItem::new)
                     .tag(Tags.Items.SAND, TFGTags.Items.FLUORAPATITE_SAND)
@@ -45,7 +49,7 @@ public class TFGBlocks_Venus {
                             .strength(0.8f)
                             .explosionResistance(0.8f)
                             .requiresCorrectToolForDrops())
-                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE)
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE, TFGTags.Blocks.VenusFireImmune)
                     .blockstate((ctx, prov) -> {
                         var side = TFGCore.id("block/sandstone/fluorapatite/bottom_" + type.nameLower());
                         var top = TFGCore.id("block/sandstone/fluorapatite/top_" + type.nameLower());
@@ -64,7 +68,7 @@ public class TFGBlocks_Venus {
                             .strength(0.8f)
                             .explosionResistance(0.8f)
                             .requiresCorrectToolForDrops())
-                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE)
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE, TFGTags.Blocks.VenusFireImmune)
                     .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeAll(ctx.getName(),
                             TFGCore.id("block/sandstone/fluorapatite/top_" + type.nameLower()))))
                     .item(BlockItem::new)
@@ -79,7 +83,7 @@ public class TFGBlocks_Venus {
                             .strength(0.8f)
                             .explosionResistance(0.8f)
                             .requiresCorrectToolForDrops())
-                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE)
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE, TFGTags.Blocks.VenusFireImmune)
                     .blockstate((ctx, prov) -> {
                         prov.simpleBlock(ctx.getEntry(),
                                 prov.models().cubeBottomTop(ctx.getName(),
@@ -99,7 +103,7 @@ public class TFGBlocks_Venus {
                             .strength(0.8f)
                             .explosionResistance(0.8f)
                             .requiresCorrectToolForDrops())
-                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE)
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.SANDSTONE, TFGTags.Blocks.VenusFireImmune)
                     .blockstate((ctx, prov) -> {
                         prov.simpleBlock(ctx.getEntry(),
                                 prov.models().cubeBottomTop(ctx.getName(),
@@ -120,7 +124,7 @@ public class TFGBlocks_Venus {
                     .explosionResistance(1200)
                     .requiresCorrectToolForDrops()
                     .pushReaction(PushReaction.IGNORE))
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE, CustomTags.NEEDS_NEUTRONIUM_TOOL)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE, CustomTags.NEEDS_NEUTRONIUM_TOOL, TFGTags.Blocks.VenusFireImmune)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .build()
@@ -132,9 +136,17 @@ public class TFGBlocks_Venus {
                     .sound(SoundType.NETHER_BRICKS)
                     .strength(0.5F)
                     .requiresCorrectToolForDrops())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, Tags.Blocks.STONE, TFGTags.Blocks.VenusFireImmune)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .build()
+            .register();
+
+    public static final BlockEntry<VenusFireBlock> VENUS_FIRE = TFGCore.REGISTRATE.block("venus_fire", VenusFireBlock::new)
+            .initialProperties(() -> Blocks.SOUL_FIRE)
+            .properties(BlockBehaviour.Properties::noLootTable)
+            .addLayer(() -> RenderType::cutout)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(BlockTags.FIRE, TFGTags.Blocks.DoNotDestroyInSpace)
             .register();
 }

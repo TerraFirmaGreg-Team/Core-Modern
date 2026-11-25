@@ -133,6 +133,7 @@ public final class TFGTags {
         public static final TagKey<Block> Casings = createBlockTag("casings");
         public static final TagKey<Block> HarvesterHarvestable = createBlockTag("harvester_harvestable");
         public static final TagKey<Block> DoNotDestroyInSpace = createBlockTag("do_not_destroy_in_space");
+        public static final TagKey<Block> VenusFireImmune = createBlockTag("venus_fire_immune");
         public static final TagKey<Block> HeightmapIgnore = createBlockTag("heightmap_ignore");
         public static final TagKey<Block> DecorativePlantAttachable = createBlockTag("decorative_plant_attachable");
         public static final TagKey<Block> TitaniumConcrete = createBlockTag("titanium_concrete");
