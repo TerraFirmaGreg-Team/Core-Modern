@@ -1,7 +1,7 @@
 {
-  "parent": "tfg:block/girder/wood/block_pole",
-  "textures": {
-    "2": "tfg:block/girder/pole/zinc_brace",
-    "particle": "tfg:block/girder/wood/zinc_brace"
-  }
+    "parent": "tfg:block/girder/wood/block_pole",
+    "textures": {
+        "2": "tfg:block/girder/pole/zinc_brace",
+        "particle": "tfg:block/girder/wood/zinc_brace"
+    }
 }

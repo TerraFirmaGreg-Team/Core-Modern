@@ -1,28 +1,94 @@
 {
-	"format_version": "1.9.0",
-	"credit": "Made with Blockbench",
-	"elements": [
-		{
-			"from": [0, 5, 5],
-			"to": [16, 11, 11],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 9, 7]},
-			"faces": {
-				"north": {"uv": [0, 0, 8, 3], "texture": "#0"},
-				"east": {"uv": [11.5, 1.5, 14.5, 4.5], "rotation": 270, "texture": "#0"},
-				"south": {"uv": [0, 0, 8, 3], "texture": "#0"},
-				"west": {"uv": [11.5, 1.5, 14.5, 4.5], "rotation": 270, "texture": "#0"},
-				"up": {"uv": [0, 0, 8, 3], "texture": "#0"},
-				"down": {"uv": [0, 0, 8, 3], "texture": "#0"}
-			}
-		}
-	],
-	"groups": [
-		{
-			"name": "Beam X",
-			"origin": [8, 13, 8],
-			"scope": 0,
-			"color": 0,
-			"children": [0]
-		}
-	]
+    "format_version": "1.9.0",
+    "elements": [{
+        "rotation": {
+            "origin": [
+                8,
+                9,
+                7
+            ],
+            "angle": 0,
+            "axis": "y"
+        },
+        "from": [
+            0,
+            5,
+            5
+        ],
+        "to": [
+            16,
+            11,
+            11
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    11.5,
+                    1.5,
+                    14.5,
+                    4.5
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "south": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    3
+                ],
+                "texture": "#0"
+            },
+            "north": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    3
+                ],
+                "texture": "#0"
+            },
+            "west": {
+                "uv": [
+                    11.5,
+                    1.5,
+                    14.5,
+                    4.5
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "up": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    3
+                ],
+                "texture": "#0"
+            },
+            "down": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    3
+                ],
+                "texture": "#0"
+            }
+        }
+    }],
+    "groups": [{
+        "color": 0,
+        "children": [0],
+        "origin": [
+            8,
+            13,
+            8
+        ],
+        "scope": 0,
+        "name": "Beam X"
+    }],
+    "credit": "Made with Blockbench"
 }

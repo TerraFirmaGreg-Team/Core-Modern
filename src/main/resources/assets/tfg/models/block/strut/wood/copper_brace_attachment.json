@@ -1,7 +1,7 @@
 {
-  "parent": "tfg:block/strut/wood_beam_attachment",
-  "textures": {
-    "0": "tfg:block/girder/wood/copper_brace",
-    "particle": "tfg:block/girder/wood/copper_brace"
-  }
+    "parent": "tfg:block/strut/wood_beam_attachment",
+    "textures": {
+        "0": "tfg:block/girder/wood/copper_brace",
+        "particle": "tfg:block/girder/wood/copper_brace"
+    }
 }

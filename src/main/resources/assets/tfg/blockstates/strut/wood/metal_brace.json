@@ -1,56 +1,50 @@
-{
-  "variants": {
-    "facing=down,waterlogged=false": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 180
+{"variants": {
+    "facing=north,waterlogged=true": {
+        "x": 90,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
     },
     "facing=down,waterlogged=true": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 180
-    },
-    "facing=east,waterlogged=false": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90,
-      "y": 90
-    },
-    "facing=east,waterlogged=true": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90,
-      "y": 90
-    },
-    "facing=north,waterlogged=false": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90
-    },
-    "facing=north,waterlogged=true": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90
+        "x": 180,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
     },
     "facing=south,waterlogged=false": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90,
-      "y": 180
+        "x": 90,
+        "y": 180,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
+    },
+    "facing=up,waterlogged=false": {"model": "tfg:block/strut/wood/metal_brace_attachment"},
+    "facing=east,waterlogged=false": {
+        "x": 90,
+        "y": 90,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
+    },
+    "facing=east,waterlogged=true": {
+        "x": 90,
+        "y": 90,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
     },
     "facing=south,waterlogged=true": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90,
-      "y": 180
+        "x": 90,
+        "y": 180,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
     },
-    "facing=up,waterlogged=false": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment"
-    },
-    "facing=up,waterlogged=true": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment"
-    },
+    "facing=up,waterlogged=true": {"model": "tfg:block/strut/wood/metal_brace_attachment"},
     "facing=west,waterlogged=false": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90,
-      "y": 270
+        "x": 90,
+        "y": 270,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
+    },
+    "facing=down,waterlogged=false": {
+        "x": 180,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
     },
     "facing=west,waterlogged=true": {
-      "model": "tfg:block/strut/wood/metal_brace_attachment",
-      "x": 90,
-      "y": 270
+        "x": 90,
+        "y": 270,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
+    },
+    "facing=north,waterlogged=false": {
+        "x": 90,
+        "model": "tfg:block/strut/wood/metal_brace_attachment"
     }
-  }
-}
+}}

@@ -1,7 +1,7 @@
 {
-  "parent": "tfg:block/strut/wood_beam_item",
-  "textures": {
-    "0": "tfg:block/girder/wood/tin_alloy_brace",
-    "particle": "tfg:block/girder/wood/tin_alloy_brace"
-  }
+    "parent": "tfg:block/strut/wood_beam_item",
+    "textures": {
+        "0": "tfg:block/girder/wood/tin_alloy_brace",
+        "particle": "tfg:block/girder/wood/tin_alloy_brace"
+    }
 }

@@ -1,7 +1,7 @@
 {
-  "parent": "tfg:block/girder/wood/bracket_west",
-  "textures": {
-    "0": "tfg:block/girder/wood/brass_brace",
-    "particle": "tfg:block/girder/wood/brass_brace"
-  }
+    "parent": "tfg:block/girder/wood/bracket_west",
+    "textures": {
+        "0": "tfg:block/girder/wood/brass_brace",
+        "particle": "tfg:block/girder/wood/brass_brace"
+    }
 }

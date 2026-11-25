@@ -1,7 +1,7 @@
 {
-  "parent": "tfg:block/girder/wood/block_top",
-  "textures": {
-    "0": "tfg:block/girder/wood/copper_brace",
-    "particle": "tfg:block/girder/wood/copper_brace"
-  }
+    "parent": "tfg:block/girder/wood/block_top",
+    "textures": {
+        "0": "tfg:block/girder/wood/copper_brace",
+        "particle": "tfg:block/girder/wood/copper_brace"
+    }
 }
