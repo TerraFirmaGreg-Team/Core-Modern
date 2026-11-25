@@ -10,6 +10,11 @@
     "tfg:girder/truss/wrought_iron",
     "tfg:girder/truss/copper",
     "tfg:girder/truss/steel",
-    "tfg:girder/truss/zinc"
+    "tfg:girder/truss/zinc",
+    "tfg:girder/wood/tin_alloy_brace",
+    "tfg:girder/wood/brass_brace",
+    "tfg:girder/wood/copper_brace",
+    "tfg:girder/wood/metal_brace",
+    "tfg:girder/wood/zinc_brace"
   ]
 }

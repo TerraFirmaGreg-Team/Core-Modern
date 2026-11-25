@@ -1,6 +1,4 @@
 {
-  "parent": "tfg:block/girder/wood/item",
-  "textures": {
-    "0": "tfg:block/girder/pole/brass_brace"
-  }
+    "parent": "tfg:block/girder/wood/item",
+    "textures": {"0": "tfg:block/girder/pole/brass_brace"}
 }

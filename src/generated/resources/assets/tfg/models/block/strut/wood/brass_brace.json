@@ -1,5 +1,5 @@
 {
-  "parent": "tfg:block/strut/wood_beam_attachment",
+  "parent": "tfg:block/strut/wood_beam",
   "textures": {
     "0": "tfg:block/girder/wood/brass_brace",
     "particle": "tfg:block/girder/wood/brass_brace"

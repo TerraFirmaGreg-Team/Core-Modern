@@ -11,6 +11,11 @@
     "tfg:strut/truss/copper",
     "tfg:strut/truss/tin_alloy",
     "tfg:strut/truss/zinc",
-    "tfg:strut/truss/wrought_iron"
+    "tfg:strut/truss/wrought_iron",
+    "tfg:strut/wood/metal_brace",
+    "tfg:strut/wood/brass_brace",
+    "tfg:strut/wood/copper_brace",
+    "tfg:strut/wood/tin_alloy_brace",
+    "tfg:strut/wood/zinc_brace"
   ]
 }

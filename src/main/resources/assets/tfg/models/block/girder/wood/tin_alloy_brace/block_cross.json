@@ -1,7 +1,7 @@
 {
-  "parent": "tfg:block/girder/wood/block_cross",
-  "textures": {
-    "0": "tfg:block/girder/pole/tin_alloy_brace",
-    "particle": "tfg:block/girder/pole/tin_alloy_brace"
-  }
+    "parent": "tfg:block/girder/wood/block_cross",
+    "textures": {
+        "0": "tfg:block/girder/pole/tin_alloy_brace",
+        "particle": "tfg:block/girder/pole/tin_alloy_brace"
+    }
 }
