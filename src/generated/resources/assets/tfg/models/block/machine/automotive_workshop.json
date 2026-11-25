@@ -20,8 +20,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/gcym/industrial_steam_casing",
-          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front_idle",
-          "overlay_front_emissive": "tfg:block/machines/automotive_workshop/overlay_front_idle_emissive"
+          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front"
         }
       }
     },
@@ -30,8 +29,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/gcym/industrial_steam_casing",
-          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front_idle",
-          "overlay_front_emissive": "tfg:block/machines/automotive_workshop/overlay_front_idle_emissive"
+          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/automotive_workshop/overlay_front_active_emissive"
         }
       }
     },
@@ -59,8 +58,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/gcym/industrial_steam_casing",
-          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front_idle",
-          "overlay_front_emissive": "tfg:block/machines/automotive_workshop/overlay_front_idle_emissive"
+          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front"
         }
       }
     },
@@ -69,8 +67,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/gcym/industrial_steam_casing",
-          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front_idle",
-          "overlay_front_emissive": "tfg:block/machines/automotive_workshop/overlay_front_idle_emissive"
+          "overlay_front": "tfg:block/machines/automotive_workshop/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/automotive_workshop/overlay_front_active_emissive"
         }
       }
     },
