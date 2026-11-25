@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/mixing_bowl_parent",
+  "textures": {
+    "0": "tfg:block/cooking_appliances/mixing_bowl_bottom",
+    "1": "tfg:block/cooking_appliances/mixing_bowl_side"
+  }
+}

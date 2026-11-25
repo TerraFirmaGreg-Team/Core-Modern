@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/cooking_appliances/condenser",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "tfg:block/cooking_appliances/condenser",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "tfg:block/cooking_appliances/condenser"
+    },
+    "facing=west": {
+      "model": "tfg:block/cooking_appliances/condenser",
+      "y": 90
+    }
+  }
+}

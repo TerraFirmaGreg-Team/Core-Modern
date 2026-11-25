@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.eerussianguy.firmalife.common.FLTags;
@@ -42,15 +44,20 @@ import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
+import su.terrafirmagreg.core.common.block.appliances.*;
+import su.terrafirmagreg.core.common.blockentity.appliances.*;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.item.CookingApplianceBlockItem;
 import su.terrafirmagreg.core.common.item.GasBurnerBlockItem;
+import su.terrafirmagreg.core.common.item.MixingBowlItem;
 import su.terrafirmagreg.core.compat.ae2.provider.StorageProviderBlock;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -341,6 +348,201 @@ public final class TFGBlocks {
     public static final BlockEntry<StorageProviderBlock> STORAGE_PROVIDER = TFGCore.REGISTRATE.block("storage_provider", p -> new StorageProviderBlock())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<CopperPotBlock> COPPER_POT = TFGCore.REGISTRATE
+            .block("copper_pot", p -> new CopperPotBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
+                    .blockEntity(TFGBlockEntities.COPPER_POT)
+                    .strength(3.0f, 6.0f)
+                    .mapColor(MapColor.COLOR_ORANGE)
+                    .noOcclusion()
+                    .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                for (int level = 0; level <= Collections.max(CookingApplianceBlock.RECEIVED_HEAT.getPossibleValues()); level++) {
+
+                    var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + "_" + level, TFGCore.id("block/" + ctx.getName() + "_parent"))
+                            .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName() + "_" + level));
+
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+                        builder.partialState()
+                                .with(CookingApplianceBlock.RECEIVED_HEAT, level)
+                                .with(CopperPotBlock.FACING, dir)
+                                .modelForState()
+                                .modelFile(model)
+                                .rotationY((int) dir.toYRot())
+                                .addModel();
+                    }
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE)
+            .loot((lt, block) -> lt.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .name("loot_pool")
+                            .setRolls(ConstantValue.exactly(1))
+                            .add(LootItem.lootTableItem(block)
+                                    .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                    .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                            .copy("inventory", "BlockEntityTag.inventory", CopyNbtFunction.MergeStrategy.REPLACE)))
+                            .when(ExplosionCondition.survivesExplosion()))))
+            .item(CookingApplianceBlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_0")))
+            .build()
+            .register();
+
+    public static final BlockEntry<CondenserBlock> CONDENSER = TFGCore.REGISTRATE
+            .block("condenser", p -> new CondenserBlock(ExtendedProperties.of(Blocks.COPPER_BLOCK)
+                    .sound(SoundType.COPPER)
+                    .strength(3.0f, 6.0f)
+                    .noOcclusion()
+                    .blockEntity(TFGBlockEntities.CONDENSER)
+                    .mapColor(MapColor.COLOR_ORANGE)
+                    .serverTicks(CondenserBlockEntity::serverTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName(), TFGCore.id("block/" + ctx.getName() + "_parent"))
+                        .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName()));
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    builder.partialState()
+                            .with(CondenserBlock.FACING, dir)
+                            .modelForState()
+                            .modelFile(model)
+                            .rotationY((int) dir.toYRot())
+                            .addModel();
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName())))
+            .build()
+            .register();
+
+    public static final BlockEntry<SkilletBlock> SKILLET = TFGCore.REGISTRATE
+            .block("skillet", p -> new SkilletBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .blockEntity(TFGBlockEntities.SKILLET)
+                    .strength(3.0f, 7.0f)
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .noOcclusion()
+                    .ticks(CookingApplianceBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName(), TFGCore.id("block/" + ctx.getName() + "_parent"))
+                        .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName()));
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    builder.partialState()
+                            .with(SkilletBlock.FACING, dir)
+                            .modelForState()
+                            .modelFile(model)
+                            .rotationY((int) dir.toYRot())
+                            .addModel();
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE)
+            .loot(RegistrateBlockLootTables::dropSelf)
+            .item(BlockItem::new)
+            .tag(TFCTags.Items.USABLE_ON_TOOL_RACK)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName())))
+            .build()
+            .register();
+
+    public static final BlockEntry<MixingBowlBlock> MIXING_BOWL = TFGCore.REGISTRATE
+            .block("mixing_bowl", p -> new MixingBowlBlock(ExtendedProperties.of(Blocks.CRAFTING_TABLE)
+                    .sound(SoundType.SCAFFOLDING)
+                    .blockEntity(TFGBlockEntities.MIXING_BOWL)
+                    .strength(5, 10)
+                    .mapColor(MapColor.WOOD)
+                    .noOcclusion()
+                    .ticks(MixingBowlBlockEntity::serverTick, CookingApplianceBlockEntity::clientTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName(), TFGCore.id("block/" + ctx.getName() + "_parent"))
+                        .texture("0", TFGCore.id("block/cooking_appliances/" + ctx.getName() + "_bottom"))
+                        .texture("1", TFGCore.id("block/cooking_appliances/" + ctx.getName() + "_side"));
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    builder.partialState()
+                            .with(MixingBowlBlock.FACING, dir)
+                            .modelForState()
+                            .modelFile(model)
+                            .rotationY((int) dir.toYRot())
+                            .addModel();
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_AXE)
+            .loot((tables, block) -> tables.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1))
+                            .add(LootItem.lootTableItem(block)
+                                    .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                    .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                            .copy("inventory", "BlockEntityTag.inventory", CopyNbtFunction.MergeStrategy.REPLACE)))
+                            .when(ExplosionCondition.survivesExplosion()))))
+            .item(MixingBowlItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName())))
+            .build()
+            .register();
+
+    public static final BlockEntry<FireBoxBlock> FIRE_BOX = TFGCore.REGISTRATE
+            .block("fire_box", p -> new FireBoxBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .strength(3.0f, 6.0f)
+                    .noOcclusion()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .blockEntity(TFGBlockEntities.FIRE_BOX)
+                    .lightLevel(state -> state.getValue(GasBurnerBlock.LIT) ? 12 : 0)
+                    .serverTicks(FireBoxBlockEntity::serverTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                for (boolean lit : FireBoxBlock.LIT.getPossibleValues()) {
+                    String litString = lit ? "_lit" : "";
+
+                    var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + litString,
+                            TFGCore.id("block/" + ctx.getName() + litString + "_parent"));
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+                        builder.partialState()
+                                .with(FireBoxBlock.LIT, lit)
+                                .with(FireBoxBlock.FACING, dir)
+                                .modelForState()
+                                .modelFile(model)
+                                .rotationY((int) dir.getOpposite().toYRot())
+                                .addModel();
+                    }
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName())))
+            .build()
+            .register();
+
+    public static final BlockEntry<FireBoxTopOvenBlock> FIRE_BOX_TOP_OVEN = TFGCore.REGISTRATE
+            .block("fire_box_top_oven", p -> new FireBoxTopOvenBlock(ExtendedProperties.of(Blocks.IRON_BLOCK)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .strength(3.0f, 6.0f)
+                    .noOcclusion()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .blockEntity(TFGBlockEntities.FIRE_BOX_TOP_OVEN)
+                    .serverTicks(FireBoxTopOvenBlockEntity::serverTick)))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                int variantCount = 8;
+
+                List<ModelFile> models = new ArrayList<>(variantCount);
+                for (int variant = 0; variant <= variantCount - 1; variant++) {
+                    var model = prov.models().withExistingParent("cooking_appliances/" + ctx.getName() + "_" + variant, TFGCore.id("block/" + ctx.getName() + "_parent"))
+                            .texture("4", TFGCore.id("block/cooking_appliances/fire_box_oven_back_" + variant));
+                    models.add(model);
+                }
+
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    var stateBuilder = builder.partialState().with(FireBoxTopOvenBlock.FACING, dir);
+                    models.forEach(m -> stateBuilder.addModels(new ConfiguredModel(m, 0, (int) dir.getOpposite().toYRot(), false)));
+                }
+            })
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.THERMOMETER_READABLE, FLTags.Blocks.OVEN_BLOCKS, FLTags.Blocks.OVEN_INSULATION)
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/cooking_appliances/" + ctx.getName() + "_0")))
+            .build()
             .register();
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {

@@ -126,19 +126,18 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         targetDirection.setValue(Math.max(-1, Math.min(1, targetDirection.getValue())));
     }
 
-    // I put random balues from Greate here
-    private static final float[] LEGACY_TIER_CAPACITY = { 8, 32, 128, 512, 2048, 8192, 32768, 131072, 524288, 2097152 };
+    private static final float[] TIER_CAPACITY = { 1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144 };
 
-    private static float legacyTierCapacity(@Nullable Material material) {
+    private static float tierCapacity(@Nullable Material material) {
         if (material == null || !material.hasProperty(GreatePropertyKeys.KINETIC))
             return Float.MAX_VALUE;
         int tier = material.getProperty(GreatePropertyKeys.KINETIC).getTier();
-        return tier >= 0 && tier < LEGACY_TIER_CAPACITY.length ? LEGACY_TIER_CAPACITY[tier] : Float.MAX_VALUE;
+        return tier >= 0 && tier < TIER_CAPACITY.length ? TIER_CAPACITY[tier] : Float.MAX_VALUE;
     }
 
     @Override
     public float calculateAddedStressCapacity() {
-        float capacity = legacyTierCapacity(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
+        float capacity = tierCapacity(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
         lastCapacityProvided = capacity;
         return capacity;
     }
@@ -158,7 +157,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         CreateLang.translate("tooltip.capacityProvided")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
-        CreateLang.number(lastCapacityProvided)
+        CreateLang.number(lastCapacityProvided * 32)
                 .translate("generic.unit.stress")
                 .style(ChatFormatting.AQUA)
                 .space()

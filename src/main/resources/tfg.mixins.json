@@ -336,6 +336,7 @@
         "common.vintageimprovements.HelveKineticBlockEntityMixin",
         "common.vintageimprovements.HelveKineticBlockMixin",
         "common.vintageimprovements.PressurizingCategoryMixin",
+        "common.vintageimprovements.VacuumChamberBlockEntityAccessor",
         "common.vintageimprovements.VacuumChamberBlockEntityMixin",
         "common.vintageimprovements.VacuumChamberBlockMixin",
         "common.vintageimprovements.VacuumizingCategoryMixin",

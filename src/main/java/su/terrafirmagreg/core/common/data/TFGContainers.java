@@ -20,11 +20,9 @@ import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.ArtisanTableBlockEntity;
-import su.terrafirmagreg.core.common.blockentity.GasBurnerBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.LargeNestBoxBlockEntity;
-import su.terrafirmagreg.core.common.container.ArtisanTableContainer;
-import su.terrafirmagreg.core.common.container.GasBurnerBlockContainer;
-import su.terrafirmagreg.core.common.container.LargeNestBoxContainer;
+import su.terrafirmagreg.core.common.blockentity.appliances.*;
+import su.terrafirmagreg.core.common.container.*;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowContainer;
 
 public class TFGContainers {
@@ -49,6 +47,26 @@ public class TFGContainers {
     public static final RegistryObject<MenuType<GasBurnerBlockContainer>> GAS_BURNER = TFGContainers
             .<GasBurnerBlockEntity, GasBurnerBlockContainer>registerBlockEntityContainer("gas_burner",
                     TFGBlockEntities.GAS_BURNER, GasBurnerBlockContainer::create);
+
+    public static final RegistryObject<MenuType<CopperPotContainer>> COPPER_POT = TFGContainers
+            .<CopperPotBlockEntity, CopperPotContainer>registerBlockEntityContainer("copper_pot",
+                    TFGBlockEntities.COPPER_POT, CopperPotContainer::create);
+
+    public static final RegistryObject<MenuType<SkilletContainer>> SKILLET = TFGContainers
+            .<SkilletBlockEntity, SkilletContainer>registerBlockEntityContainer("skillet",
+                    TFGBlockEntities.SKILLET, SkilletContainer::create);
+
+    public static final RegistryObject<MenuType<MixingBowlContainer>> MIXING_BOWL = TFGContainers
+            .<MixingBowlBlockEntity, MixingBowlContainer>registerBlockEntityContainer("mixing_bowl",
+                    TFGBlockEntities.MIXING_BOWL, MixingBowlContainer::create);
+
+    public static final RegistryObject<MenuType<FireBoxContainer>> FIRE_BOX = TFGContainers
+            .<FireBoxBlockEntity, FireBoxContainer>registerBlockEntityContainer("fire_box",
+                    TFGBlockEntities.FIRE_BOX, FireBoxContainer::create);
+
+    public static final RegistryObject<MenuType<FireBoxTopOvenContainer>> FIRE_BOX_TOP_OVEN = TFGContainers
+            .<FireBoxTopOvenBlockEntity, FireBoxTopOvenContainer>registerBlockEntityContainer("fire_box_top_oven",
+                    TFGBlockEntities.FIRE_BOX_TOP_OVEN, FireBoxTopOvenContainer::create);
 
     public static <T extends InventoryBlockEntity<?>, C extends BlockEntityContainer<T>> RegistryObject<MenuType<C>> registerBlockEntityContainer(
             String name, Supplier<BlockEntityType<T>> type, BlockEntityContainer.Factory<T, C> factory) {
