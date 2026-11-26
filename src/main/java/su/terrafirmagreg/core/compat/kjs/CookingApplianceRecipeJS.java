@@ -41,6 +41,7 @@ public class CookingApplianceRecipeJS extends RecipeJS {
     private final List<JsonObject> fluidOutputs = new ArrayList<>();
     private final List<AttachmentJS> attachments = new ArrayList<>();
     private Ingredient catalyst = Ingredient.EMPTY;
+    private float catalystChance = 1.0f;
     private Ingredient tool = Ingredient.EMPTY;
     private int toolDamage = 1;
     private int duration = 100;
@@ -124,6 +125,21 @@ public class CookingApplianceRecipeJS extends RecipeJS {
         }
         updateJson();
         return this;
+    }
+
+    public CookingApplianceRecipeJS catalyst(Object catalyst, float chance) {
+        this.catalystChance = chance;
+        return catalyst(catalyst);
+    }
+
+    public CookingApplianceRecipeJS catalystChance(float chance) {
+        this.catalystChance = chance;
+        updateJson();
+        return this;
+    }
+
+    public CookingApplianceRecipeJS catalystConsumptionChance(float chance) {
+        return catalystChance(chance);
     }
 
     public CookingApplianceRecipeJS tool(Object tool) {
@@ -323,6 +339,9 @@ public class CookingApplianceRecipeJS extends RecipeJS {
 
         if (catalyst != null && !catalyst.isEmpty()) {
             json.add("catalyst", catalyst.toJson());
+            if (catalystChance != 1.0f) {
+                json.addProperty("catalyst_chance", catalystChance);
+            }
         }
 
         if (tool != null && !tool.isEmpty()) {

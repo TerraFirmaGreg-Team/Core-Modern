@@ -132,7 +132,7 @@ public class CopperPotEmiRecipe implements EmiRecipe {
         }
         // Catalyst
         if (!recipe.getCatalyst().isEmpty()) {
-            this.inputs.add(EmiIngredient.of(recipe.getCatalyst()));
+            this.inputs.add(EmiIngredient.of(recipe.getCatalyst()).setChance(recipe.getCatalystChance()));
         }
         // Tool
         if (!recipe.getTool().isEmpty()) {
@@ -374,7 +374,7 @@ public class CopperPotEmiRecipe implements EmiRecipe {
         int catalystX = inputFluidX + (SLOT_SIZE * 3) + 8;
         int catalystY = inputFluidY - 6;
         if (!recipe.getCatalyst().isEmpty()) {
-            holder.addSlot(EmiIngredient.of(recipe.getCatalyst()), catalystX, catalystY);
+            holder.addSlot(EmiIngredient.of(recipe.getCatalyst()).setChance(recipe.getCatalystChance()), catalystX, catalystY);
         }
 
         // Render Tool slot

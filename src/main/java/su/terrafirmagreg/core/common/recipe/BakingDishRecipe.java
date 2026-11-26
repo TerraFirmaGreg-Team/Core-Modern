@@ -54,7 +54,7 @@ public class BakingDishRecipe extends CookingApplianceRecipe {
             List<FluidStack> fluidOutputs,
             int duration,
             float minTemp) {
-        super(id, itemIngredients, fluidIngredients, catalyst, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, List.of());
+        super(id, itemIngredients, fluidIngredients, catalyst, 1.0f, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, List.of());
     }
 
     public BakingDishRecipe(
@@ -69,7 +69,23 @@ public class BakingDishRecipe extends CookingApplianceRecipe {
             int duration,
             float minTemp,
             List<RecipeAttachment> attachments) {
-        super(id, itemIngredients, fluidIngredients, catalyst, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, attachments);
+        super(id, itemIngredients, fluidIngredients, catalyst, 1.0f, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, attachments);
+    }
+
+    public BakingDishRecipe(
+            ResourceLocation id,
+            NonNullList<Ingredient> itemIngredients,
+            List<FluidStackIngredient> fluidIngredients,
+            Ingredient catalyst,
+            float catalystChance,
+            Ingredient tool,
+            int toolDamage,
+            List<ItemStackProvider> itemOutputs,
+            List<FluidStack> fluidOutputs,
+            int duration,
+            float minTemp,
+            List<RecipeAttachment> attachments) {
+        super(id, itemIngredients, fluidIngredients, catalyst, catalystChance, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, attachments);
     }
 
     @Override

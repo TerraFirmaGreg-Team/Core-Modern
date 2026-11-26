@@ -113,7 +113,7 @@ public class SkilletEmiRecipe implements EmiRecipe {
         this.inputs = new ArrayList<>(this.itemInputs);
         // Catalyst
         if (!recipe.getCatalyst().isEmpty()) {
-            this.inputs.add(EmiIngredient.of(recipe.getCatalyst()));
+            this.inputs.add(EmiIngredient.of(recipe.getCatalyst()).setChance(recipe.getCatalystChance()));
         }
         // Tool
         if (!recipe.getTool().isEmpty()) {
@@ -188,7 +188,7 @@ public class SkilletEmiRecipe implements EmiRecipe {
         // Catalyst
         int catalystX = inputItemX + (SLOT_SIZE * 3) + 9;
         if (!recipe.getCatalyst().isEmpty()) {
-            holder.addSlot(EmiIngredient.of(recipe.getCatalyst()), catalystX, inputItemY + 1).drawBack(false);
+            holder.addSlot(EmiIngredient.of(recipe.getCatalyst()).setChance(recipe.getCatalystChance()), catalystX, inputItemY + 1).drawBack(false);
         }
 
         // Tool

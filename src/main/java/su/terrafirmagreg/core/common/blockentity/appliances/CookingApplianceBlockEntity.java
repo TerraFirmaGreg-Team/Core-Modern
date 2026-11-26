@@ -635,9 +635,12 @@ public abstract class CookingApplianceBlockEntity extends TickableInventoryBlock
         if (!recipe.getCatalyst().isEmpty()) {
             ItemStack catalyst = getCatalystStack();
             if (!catalyst.isEmpty() && recipe.getCatalyst().test(catalyst)) {
-                catalyst.shrink(1);
-                if (catalyst.isEmpty()) {
-                    setCatalystStack(ItemStack.EMPTY);
+                float chance = recipe.getCatalystChance();
+                if (chance > 0 && (chance >= 1.0f || (level != null ? level.random.nextFloat() < chance : Math.random() < chance))) {
+                    catalyst.shrink(1);
+                    if (catalyst.isEmpty()) {
+                        setCatalystStack(ItemStack.EMPTY);
+                    }
                 }
             }
         }

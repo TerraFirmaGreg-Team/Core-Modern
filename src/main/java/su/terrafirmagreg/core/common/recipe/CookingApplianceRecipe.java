@@ -50,6 +50,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                 NonNullList<Ingredient> itemIngredients,
                 List<FluidStackIngredient> fluidIngredients,
                 Ingredient catalyst,
+                float catalystChance,
                 Ingredient tool,
                 int toolDamage,
                 List<ItemStackProvider> itemOutputs,
@@ -70,6 +71,8 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
     protected final List<FluidStackIngredient> fluidIngredients;
     @Getter
     protected final Ingredient catalyst;
+    @Getter
+    protected final float catalystChance;
     @Getter
     protected final Ingredient tool;
     @Getter
@@ -96,7 +99,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             List<FluidStack> fluidOutputs,
             int duration,
             float minTemp) {
-        this(id, itemIngredients, fluidIngredients, catalyst, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, List.of());
+        this(id, itemIngredients, fluidIngredients, catalyst, 1.0f, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, List.of());
     }
 
     public CookingApplianceRecipe(
@@ -111,10 +114,27 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             int duration,
             float minTemp,
             List<RecipeAttachment> attachments) {
+        this(id, itemIngredients, fluidIngredients, catalyst, 1.0f, tool, toolDamage, itemOutputs, fluidOutputs, duration, minTemp, attachments);
+    }
+
+    public CookingApplianceRecipe(
+            ResourceLocation id,
+            NonNullList<Ingredient> itemIngredients,
+            List<FluidStackIngredient> fluidIngredients,
+            Ingredient catalyst,
+            float catalystChance,
+            Ingredient tool,
+            int toolDamage,
+            List<ItemStackProvider> itemOutputs,
+            List<FluidStack> fluidOutputs,
+            int duration,
+            float minTemp,
+            List<RecipeAttachment> attachments) {
         this.id = id;
         this.itemIngredients = itemIngredients;
         this.fluidIngredients = fluidIngredients;
         this.catalyst = catalyst != null ? catalyst : Ingredient.EMPTY;
+        this.catalystChance = Math.max(0.0f, Math.min(1.0f, catalystChance));
         this.tool = tool != null ? tool : Ingredient.EMPTY;
         this.toolDamage = Math.max(0, toolDamage);
         this.itemOutputs = itemOutputs;
@@ -753,6 +773,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             if (json.has("catalyst")) {
                 catalyst = Ingredient.fromJson(json.get("catalyst"));
             }
+            float catalystChance = JsonHelpers.getAsFloat(json, "catalyst_chance", JsonHelpers.getAsFloat(json, "catalyst_consumption_chance", 1.0f));
 
             Ingredient tool = Ingredient.EMPTY;
             if (json.has("tool")) {
@@ -818,6 +839,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                     itemIngredients,
                     fluidIngredients,
                     catalyst,
+                    catalystChance,
                     tool,
                     toolDamage,
                     itemOutputs,
@@ -842,6 +864,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             }
 
             Ingredient catalyst = Ingredient.fromNetwork(buffer);
+            float catalystChance = buffer.readFloat();
             Ingredient tool = Ingredient.fromNetwork(buffer);
             int toolDamage = buffer.readVarInt();
 
@@ -874,6 +897,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
                     itemIngredients,
                     fluidIngredients,
                     catalyst,
+                    catalystChance,
                     tool,
                     toolDamage,
                     itemOutputs,
@@ -896,6 +920,7 @@ public abstract class CookingApplianceRecipe implements ISimpleRecipe<Container>
             }
 
             recipe.catalyst.toNetwork(buffer);
+            buffer.writeFloat(recipe.catalystChance);
             recipe.tool.toNetwork(buffer);
             buffer.writeVarInt(recipe.toolDamage);
 
