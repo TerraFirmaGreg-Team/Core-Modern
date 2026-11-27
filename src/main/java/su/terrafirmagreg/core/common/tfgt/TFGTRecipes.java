@@ -4,7 +4,6 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_IMPORT_BUS;
 
 import java.util.function.Consumer;
 
-import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
@@ -22,6 +21,7 @@ import electrolyte.greate.registry.Pumps;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCraftingComponents;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
@@ -52,10 +52,10 @@ public class TFGTRecipes {
                 'H', GTCraftingComponents.HULL,
                 'B', GTCraftingComponents.CABLE,
                 'A', GTCraftingComponents.CONVEYOR,
-                'V', FLBlocks.VAT.get(),
+                'V', TFGBlocks.COPPER_POT.get(),
                 'M', GTCraftingComponents.GRINDER,
                 'P', GTCraftingComponents.PUMP,
-                'G', GTCraftingComponents.GLASS,
+                'G', TFGBlocks.MIXING_BOWL.get(),
                 'C', GTCraftingComponents.CIRCUIT,
                 'W', TFGCraftingComponents.WHISK);
 
