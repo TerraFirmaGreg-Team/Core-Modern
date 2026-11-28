@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
 
@@ -30,7 +31,13 @@ public class PressureProvider {
     private RoomScan roomScan = RoomScan.empty();
 
     @Nullable
-    private IEnvironmentMachine attachedMachine;
+    private IEnvironmentMachine.IAtmosphereMachine attachedMachine;
+
+    /** Last pressure supplied by the machine, in Pa, used while its chunk is unloaded */
+    @Getter
+    @Setter
+    @Nullable
+    private Float pressure = DimensionEnvironment.EARTH_PRESSURE;
 
     public PressureProvider(BlockPos machinePos) {
         this.machinePos = machinePos;
@@ -41,16 +48,13 @@ public class PressureProvider {
      * Works even when the machine is unloaded, using cached room data.
      */
     public Optional<Float> getPressure(BlockPos pos) {
-        if (!roomScan.isSealed()) {
+        if (!roomScan.isSealed() || !roomScan.containsEnvelope(pos)) {
             return Optional.empty();
         }
-        if (attachedMachine != null && !attachedMachine.isWorking()) {
-            return Optional.empty();
+        if (attachedMachine != null) {
+            return attachedMachine.isWorking() ? Optional.of(attachedMachine.getPressure()) : Optional.empty();
         }
-        if (roomScan.containsEnvelope(pos)) {
-            return Optional.of(1.0f);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(pressure);
     }
 
     public boolean isMachineLoaded() {
@@ -61,11 +65,15 @@ public class PressureProvider {
         return attachedMachine != null && attachedMachine.isWorking();
     }
 
-    public void attach(IEnvironmentMachine machine) {
+    public void attach(IEnvironmentMachine.IAtmosphereMachine machine) {
         this.attachedMachine = machine;
+        this.pressure = machine.getPressure();
     }
 
     public void detach() {
+        if (attachedMachine != null) {
+            this.pressure = attachedMachine.isWorking() ? attachedMachine.getPressure() : null;
+        }
         this.attachedMachine = null;
     }
 
@@ -77,6 +85,9 @@ public class PressureProvider {
 
     public void save(CompoundTag tag) {
         tag.putLong("pos", machinePos.asLong());
+        if (pressure != null) {
+            tag.putFloat("pressure", pressure);
+        }
 
         if (roomScan.isSealed()) {
             tag.putLongArray("envelope", roomScan.envelope().toLongArray());
@@ -91,6 +102,9 @@ public class PressureProvider {
     public static PressureProvider load(CompoundTag tag) {
         BlockPos pos = BlockPos.of(tag.getLong("pos"));
         PressureProvider provider = new PressureProvider(pos);
+        if (tag.contains("pressure", Tag.TAG_FLOAT)) {
+            provider.pressure = tag.getFloat("pressure");
+        }
 
         if (tag.contains("envelope")) {
             LongOpenHashSet envelope = new LongOpenHashSet(tag.getLongArray("envelope"));

@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.annotation.Nullable;
+
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -15,6 +17,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkEvent;
@@ -30,6 +33,7 @@ import appeng.api.networking.spatial.ISpatialService;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.EnvironmentClientCache;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 /**
  * Global class with static state managing environment systems across all dimensions.
@@ -65,23 +69,33 @@ public final class EnvironmentSystem {
     }
 
     /**
-     * Checks if a position has oxygen (server-side, or client-side via cache).
+     * Gets the atmosphere at a position (server-side, or client-side via cache).
      *
      * @param level The level to check in
      * @param pos The position to check
-     * @return true if the position has oxygen
+     * @return The atmosphere at the position, falling back to the dimension's natural atmosphere, or null for vacuum
      */
-    public static boolean hasOxygen(Level level, BlockPos pos) {
+    public static @Nullable Fluid getAtmosphere(Level level, BlockPos pos) {
+        Fluid natural = DimensionEnvironment.get(level.dimension()).atmosphere();
         if (!(level instanceof ServerLevel)) {
-            return EnvironmentClientCache.hasOxygen(pos);
+            return EnvironmentClientCache.getAtmosphere(pos, natural);
         }
 
         DimEnvManager manager = managers.get(level.dimension());
         if (manager == null) {
-            return false;
+            return natural;
         }
 
-        return manager.hasOxygen(pos);
+        return manager.getAtmosphere(pos);
+    }
+
+    /**
+     * Use getAtmosphere instead.
+     */
+    @Deprecated
+    public static boolean hasOxygen(Level level, BlockPos pos) {
+        Fluid atmosphere = getAtmosphere(level, pos);
+        return atmosphere != null && atmosphere.is(TFGTags.Fluids.BreathableAir);
     }
 
     /**

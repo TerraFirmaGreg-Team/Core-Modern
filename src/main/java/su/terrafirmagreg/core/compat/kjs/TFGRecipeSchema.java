@@ -20,13 +20,15 @@ public interface TFGRecipeSchema {
     @Accessors(chain = true, fluent = true)
     class TFGRecipeJS extends GTRecipeSchema.GTRecipeJS {
 
-        // Oxygenated Conditions.
+        // Atmosphere Conditions.
         public GTRecipeSchema.GTRecipeJS isOxygenated(boolean isOxygenated) {
-            return this.addCondition(new OxygenatedCondition(false, isOxygenated));
+            if (!isOxygenated)
+                throw new IllegalArgumentException("isOxygenated(false) is no longer supported; omit the call or use atmosphere(...)");
+            return this.addCondition(AtmosphereCondition.breathable());
         }
 
-        public GTRecipeSchema.GTRecipeJS isOxygenated(boolean isOxygenated, boolean reverse) {
-            return this.addCondition(new OxygenatedCondition(reverse, isOxygenated));
+        public GTRecipeSchema.GTRecipeJS atmosphere(String fluidTag) {
+            return this.addCondition(new AtmosphereCondition(AtmosphereCondition.fluidTag(fluidTag)));
         }
 
         // Month Conditions.

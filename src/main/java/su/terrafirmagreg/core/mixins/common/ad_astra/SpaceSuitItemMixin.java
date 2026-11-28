@@ -51,7 +51,7 @@ public abstract class SpaceSuitItemMixin {
                 new SimpleFluidContainer(
                         FluidConstants.fromMillibuckets(tankSize),
                         1,
-                        (t, f) -> f.is(TFGTags.Fluids.BreathableCompressedAir)));
+                        (t, f) -> f.is(TFGTags.Fluids.CompressedAir) && f.is(TFGTags.Fluids.BreathableAir)));
     }
 
     /**

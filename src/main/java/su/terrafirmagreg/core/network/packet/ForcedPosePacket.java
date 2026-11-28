@@ -29,14 +29,11 @@ public class ForcedPosePacket {
     }
 
     public static void encode(ForcedPosePacket pkt, FriendlyByteBuf buf) {
-        buf.writeBoolean(pkt.pose != null);
-        if (pkt.pose != null)
-            buf.writeEnum(pkt.pose);
+        buf.writeNullable(pkt.pose, FriendlyByteBuf::writeEnum);
     }
 
     public static ForcedPosePacket decode(FriendlyByteBuf buf) {
-        Pose pose = buf.readBoolean() ? buf.readEnum(Pose.class) : null;
-        return new ForcedPosePacket(pose);
+        return new ForcedPosePacket(buf.readNullable(b -> b.readEnum(Pose.class)));
     }
 
     public static void handle(ForcedPosePacket pkt, Supplier<NetworkEvent.Context> ctx) {

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -31,7 +32,7 @@ public final class EnvironmentClientCache {
      * Atmosphere state at a position.
      */
     public record EnvironmentState(
-            boolean hasOxygen,
+            @Nullable Fluid atmosphere,
             float gravity,
             float temperature,
             float pressure) {
@@ -86,16 +87,12 @@ public final class EnvironmentClientCache {
     }
 
     /**
-     * Checks if a position has oxygen from the client cache.
-     * Returns true by default if query is pending.
+     * Gets the atmosphere at a position from the client cache.
+     * Returns the supplied fallback if query is pending.
      */
-    public static boolean hasOxygen(BlockPos pos) {
-        return hasOxygen(pos, true);
-    }
-
-    public static boolean hasOxygen(BlockPos pos, boolean fallback) {
+    public static @Nullable Fluid getAtmosphere(BlockPos pos, Fluid fallback) {
         EnvironmentState state = get(pos);
-        return state != null ? state.hasOxygen() : fallback;
+        return state != null ? state.atmosphere() : fallback;
     }
 
     /**

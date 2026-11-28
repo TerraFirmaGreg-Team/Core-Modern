@@ -49,18 +49,21 @@ public class ClientDecompressionEvent extends AbstractTickableSoundInstance {
     private Vec3 breachCenter;
     private Vec3 outwardAxis;
     private Quaternionf rotation;
+    private boolean inward;
     private final int durationTicks;
     private int elapsed;
 
     private final List<Particle> particles = new ArrayList<>();
     private final RandomSource random = RandomSource.create();
 
-    private ClientDecompressionEvent(BlockPos breachPos, int durationTicks, int elapsedOffset, Vec3 breachAxis) {
+    private ClientDecompressionEvent(BlockPos breachPos, int durationTicks, int elapsedOffset, Vec3 breachAxis,
+            boolean inward) {
         super(SoundEvents.ELYTRA_FLYING, SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
         this.breachPos = breachPos;
         this.breachCenter = Vec3.atCenterOf(breachPos);
         this.durationTicks = durationTicks;
         this.elapsed = elapsedOffset;
+        this.inward = inward;
         this.x = breachCenter.x;
         this.y = breachCenter.y;
         this.z = breachCenter.z;
@@ -114,11 +117,10 @@ public class ClientDecompressionEvent extends AbstractTickableSoundInstance {
 
         int count = Math.max(1, (int) Math.round(PARTICLES_PER_TICK * timeScale * timeScale));
         for (int i = 0; i < count; i++) {
-            // Spawn position: interior half-sphere only (cy < 0 = inside the room), biased toward the breach.
+            // Spawn position: half-sphere only (cy < 0 = inside the room), biased toward the breach.
             // Spherical coords: rho = radius, phi = polar angle from Y, tau = azimuthal angle in XZ.
             double rho = (SPAWN_RADIUS - 0.5) * random.nextDouble() + 0.5;
-            //double phi = Math.acos(-random.nextDouble()); // [PI/2, PI]: interior half only
-            double phi = Math.acos(2 * random.nextDouble() - 1);
+            double phi = inward ? Math.acos(random.nextDouble()) : Math.acos(2 * random.nextDouble() - 1);
             double tau = random.nextDouble() * 2 * Math.PI;
 
             double sinPhi = Math.sin(phi);
@@ -161,6 +163,8 @@ public class ClientDecompressionEvent extends AbstractTickableSoundInstance {
                     // Axial/radial force: interior particles sucked in, exterior pushed away.
                     double side = offset.dot(outwardAxis); // positive = exterior, negative = interior
                     double sign = side >= 0 ? 1.0 : -1.0;
+                    if (inward)
+                        sign = -sign;
                     Vec3 inoutDir = offset.scale(sign / dist);
                     p.xd += inoutDir.x * force;
                     p.yd += inoutDir.y * force;
@@ -204,18 +208,18 @@ public class ClientDecompressionEvent extends AbstractTickableSoundInstance {
         ACTIVE.remove(breachPos);
     }
 
-    public static void start(BlockPos pos, int durationTicks, Vec3 breachAxis) {
+    public static void start(BlockPos pos, int durationTicks, Vec3 breachAxis, boolean inward) {
         stop(pos);
-        var instance = new ClientDecompressionEvent(pos, durationTicks, 0, breachAxis);
+        var instance = new ClientDecompressionEvent(pos, durationTicks, 0, breachAxis, inward);
         ACTIVE.put(pos, instance);
         Minecraft.getInstance().getSoundManager().play(instance);
     }
 
-    public static void shift(BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks, Vec3 breachAxis) {
+    public static void shift(BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks, Vec3 breachAxis, boolean inward) {
         ClientDecompressionEvent instance = ACTIVE.remove(oldPos);
         if (instance == null) {
             if (!ACTIVE.containsKey(newPos)) {
-                instance = new ClientDecompressionEvent(newPos, durationTicks, elapsedTicks, breachAxis);
+                instance = new ClientDecompressionEvent(newPos, durationTicks, elapsedTicks, breachAxis, inward);
                 ACTIVE.put(newPos, instance);
                 Minecraft.getInstance().getSoundManager().play(instance);
             }
@@ -226,6 +230,7 @@ public class ClientDecompressionEvent extends AbstractTickableSoundInstance {
         instance.x = instance.breachCenter.x;
         instance.y = instance.breachCenter.y;
         instance.z = instance.breachCenter.z;
+        instance.inward = inward;
         instance.setBreachAxis(breachAxis);
         ACTIVE.put(newPos, instance);
     }

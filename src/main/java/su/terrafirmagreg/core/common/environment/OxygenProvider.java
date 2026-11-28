@@ -7,12 +7,18 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import lombok.Getter;
 import lombok.Setter;
+
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 /**
  * Lightweight oxygen provider that persists independently of the GT machine.
@@ -30,33 +36,54 @@ public class OxygenProvider {
 
     /** The attached machine, if its chunk is loaded */
     @Nullable
-    private IEnvironmentMachine attachedMachine;
+    private IEnvironmentMachine.IAtmosphereMachine attachedMachine;
+
+    /** Last atmosphere supplied by the machine, used while its chunk is unloaded */
+    @Getter
+    @Setter
+    @Nullable
+    private Fluid atmosphere;
+
+    /** Last pressure supplied by the machine, in Pa */
+    @Getter
+    @Setter
+    private float pressure = DimensionEnvironment.EARTH_PRESSURE;
 
     public OxygenProvider(BlockPos machinePos) {
         this.machinePos = machinePos;
     }
 
     /**
-     * Checks if this provider currently supplies oxygen to the given position.
+     * Gets the atmosphere this provider supplies to the given position.
      * Works even when the machine is unloaded, using cached room data.
      */
-    public boolean hasOxygen(BlockPos pos) {
-        // Need sealed room data and either the machine is loaded and working,
-        //  or the machine is unloaded (TODO: And was working last time it was loaded)
+    @Nullable
+    public Fluid getAtmosphere(BlockPos pos) {
         if (!roomScan.isSealed()) {
-            return false;
+            return null;
         }
 
-        if (attachedMachine != null && !attachedMachine.isWorking()) {
-            // Machine is loaded but not working (no power, etc.)
-            return false;
+        if (!roomScan.containsEnvelope(pos)) {
+            return null;
         }
 
-        // Machine is either working or unloaded
-        // TODO Maybe cache whether the machine was working when it was last loaded. Cos now it's a bit weird that
-        // TODO  machines that don't even have infra around them count as providing oxygen when unloaded.
-        // TODO  Maybe we cache on unload only? Or just whenever work status changes?
-        return roomScan.containsEnvelope(pos);
+        if (attachedMachine != null) {
+            if (!attachedMachine.isWorking()) {
+                return null;
+            }
+            atmosphere = attachedMachine.getAtmosphere();
+            pressure = attachedMachine.getPressure();
+        }
+        return atmosphere;
+    }
+
+    /**
+     * Use getAtmosphere instead.
+     */
+    @Deprecated
+    public boolean hasOxygen(BlockPos pos) {
+        Fluid supplied = getAtmosphere(pos);
+        return supplied != null && supplied.is(TFGTags.Fluids.BreathableAir);
     }
 
     /** @return Whether the machine is currently loaded and attached */
@@ -70,12 +97,22 @@ public class OxygenProvider {
     }
 
     /** Called when the machine's chunk loads and the machine attaches to this provider. */
-    public void attach(IEnvironmentMachine machine) {
+    public void attach(IEnvironmentMachine.IAtmosphereMachine machine) {
         this.attachedMachine = machine;
+        this.atmosphere = machine.getAtmosphere();
+        this.pressure = machine.getPressure();
     }
 
     /** Called when the machine's chunk unloads. */
     public void detach() {
+        if (attachedMachine != null) {
+            if (attachedMachine.isWorking()) {
+                this.atmosphere = attachedMachine.getAtmosphere();
+                this.pressure = attachedMachine.getPressure();
+            } else {
+                this.atmosphere = null;
+            }
+        }
         this.attachedMachine = null;
     }
 
@@ -90,6 +127,10 @@ public class OxygenProvider {
 
     public void save(CompoundTag tag) {
         tag.putLong("pos", machinePos.asLong());
+        if (atmosphere != null) {
+            tag.putString("atmosphere", ForgeRegistries.FLUIDS.getKey(atmosphere).toString());
+        }
+        tag.putFloat("pressure", pressure);
 
         if (roomScan.isSealed()) {
             tag.putLongArray("envelope", roomScan.envelope().toLongArray());
@@ -105,6 +146,12 @@ public class OxygenProvider {
     public static OxygenProvider load(CompoundTag tag) {
         BlockPos pos = BlockPos.of(tag.getLong("pos"));
         OxygenProvider provider = new OxygenProvider(pos);
+        if (tag.contains("atmosphere", Tag.TAG_STRING)) {
+            provider.atmosphere = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(tag.getString("atmosphere")));
+        }
+        if (tag.contains("pressure", Tag.TAG_FLOAT)) {
+            provider.pressure = tag.getFloat("pressure");
+        }
 
         if (tag.contains("status")) {
             LongOpenHashSet envelope = new LongOpenHashSet(tag.getLongArray("envelope"));

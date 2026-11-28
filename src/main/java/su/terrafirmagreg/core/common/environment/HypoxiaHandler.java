@@ -39,7 +39,7 @@ public final class HypoxiaHandler {
     private static final int BREATH_LOSS_VACUUM = 4;
 
     /** Armstrong limit, constant use to see if the player is in a vacuum dimension depending of the defined value in DimensionEnvironment */
-    private static final float ARMSTRONG_LIMIT = 0.0618f;
+    private static final float ARMSTRONG_LIMIT = 6_300.0f;
 
     private static final int DAMAGE_INTERVAL = 20;
 

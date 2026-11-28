@@ -33,7 +33,7 @@ public record EnvironmentQueryPacket(BlockPos pos) {
 
             // Query all environment properties
             EnvironmentClientCache.EnvironmentState state = new EnvironmentClientCache.EnvironmentState(
-                    EnvironmentSystem.hasOxygen(player.level(), pkt.pos),
+                    EnvironmentSystem.getAtmosphere(player.level(), pkt.pos),
                     EnvironmentSystem.getGravity(player.level(), pkt.pos),
                     EnvironmentSystem.getTemperature(player.level(), pkt.pos),
                     EnvironmentSystem.getPressure(player.level(), pkt.pos));

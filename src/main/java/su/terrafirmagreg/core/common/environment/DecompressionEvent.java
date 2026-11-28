@@ -22,8 +22,9 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.ForcedPosePacket;
 
 /**
- * Represents an active decompression event caused by a sealed room being breached.
- * Pulls entities toward the breach point from inside the room, and pushes them mildly away on the outside.
+ * Represents an active breach event caused by a sealed room being breached.
+ * Outward decompression pulls interior entities toward the breach and pushes exterior entities away.
+ * Inward implosion pushes interior entities away from the breach and pulls exterior entities toward it.
  * <p>
  * Created when a room transitions from sealed to escaped (build height or dimension limit).
  * Cancelled early if the room re-seals or the machine is removed.
@@ -34,6 +35,8 @@ public class DecompressionEvent {
     private BlockPos breachPoint;
     @Getter
     private final RoomScan oldRoomScan;
+    @Getter
+    private final boolean inward;
     private final int durationTicks;
     private int elapsed;
 
@@ -58,15 +61,17 @@ public class DecompressionEvent {
     /**
      * @param breachPoint The block where the room was breached
      * @param oldRoomScan The room scan from before the breach. Used to determine which entities are inside the old room.
+     * @param inward True when outside pressure exceeds inside pressure.
      */
-    public DecompressionEvent(ServerLevel level, BlockPos breachPoint, RoomScan oldRoomScan) {
+    public DecompressionEvent(ServerLevel level, BlockPos breachPoint, RoomScan oldRoomScan, boolean inward) {
         this.breachPoint = breachPoint;
         this.oldRoomScan = oldRoomScan;
+        this.inward = inward;
         this.durationTicks = Mth.clamp(Mth.floor(oldRoomScan.interiorSize() * TICKS_PER_BLOCK), MIN_DURATION, MAX_DURATION);
         this.elapsed = 0;
         Vec3 breachAxis = computeBreachAxis(breachPoint, oldRoomScan);
         if (breachAxis != null) {
-            TFGNetworkHandler.sendDecompressionEventStart(level, breachPoint, durationTicks, breachAxis);
+            TFGNetworkHandler.sendDecompressionEventStart(level, breachPoint, durationTicks, breachAxis, inward);
         } else {
             finish(level);
         }
@@ -75,7 +80,7 @@ public class DecompressionEvent {
     /**
      * Sample all 6 neighbors of the breach block to determine the breach direction.
      * Inside = neighbor is in the old room's interior. Outside = neighbor is not in the envelope.
-     * Returns the normalized vector from the averaged outside to averaged inside positions.
+     * Returns the normalized outward vector from the averaged inside to averaged outside positions.
      */
     static @Nullable Vec3 computeBreachAxis(BlockPos breachPoint, RoomScan oldRoomScan) {
         Vec3 insideSum = Vec3.ZERO;
@@ -184,11 +189,10 @@ public class DecompressionEvent {
         if (distance < 0.1)
             return;
 
-        Vec3 direction = offset.normalize();
+        Vec3 direction = (inward ? offset.scale(-1.0) : offset).normalize();
 
         // Linear falloff because it's more fun in gameplay than quadratic
-        double force = BASE_FORCE / distance * timeScale;
-        force = Mth.clamp(force, 0, MAX_FORCE);
+        double force = Mth.clamp(BASE_FORCE / distance * timeScale, 0, MAX_FORCE);
 
         if (force < MIN_FORCE)
             return;
@@ -241,7 +245,7 @@ public class DecompressionEvent {
         }
     }
 
-    /** Force for entities outside the room being pushed away */
+    /** Force for entities outside the room: pushed away, or pulled toward the breach during implosion */
     private void applyExteriorForce(Entity entity, Vec3 breachCenter, double timeScale) {
         Vec3 entityCenter = entity.position().add(0, entity.getBbHeight() * 0.5, 0);
         Vec3 offset = entityCenter.subtract(breachCenter);
@@ -250,9 +254,8 @@ public class DecompressionEvent {
         if (distance < 0.1 || distance > EXTERIOR_RADIUS)
             return;
 
-        Vec3 direction = offset.normalize();
-        double force = EXTERIOR_BASE_FORCE / distance * timeScale;
-        force = Math.min(force, MAX_FORCE);
+        Vec3 direction = (inward ? offset.scale(-1.0) : offset).normalize();
+        double force = Math.min(EXTERIOR_BASE_FORCE / distance * timeScale, MAX_FORCE);
 
         if (force < MIN_FORCE)
             return;
@@ -287,7 +290,7 @@ public class DecompressionEvent {
     public void shiftBreachPoint(ServerLevel level, BlockPos newBreachPoint) {
         Vec3 breachAxis = computeBreachAxis(newBreachPoint, oldRoomScan);
         if (breachAxis != null) {
-            TFGNetworkHandler.sendDecompressionEventShift(level, breachPoint, newBreachPoint, durationTicks, elapsed, breachAxis);
+            TFGNetworkHandler.sendDecompressionEventShift(level, breachPoint, newBreachPoint, durationTicks, elapsed, breachAxis, inward);
             this.breachPoint = newBreachPoint;
         } else {
             finish(level);

@@ -187,16 +187,16 @@ public class TFGNetworkHandler {
         sendToAllAround(level, pos, packet);
     }
 
-    public static void sendDecompressionEventStart(ServerLevel level, BlockPos pos, int durationTicks, Vec3 breachAxis) {
-        sendToAllAround(level, pos, DecompressionEventPacket.start(pos, durationTicks, breachAxis));
+    public static void sendDecompressionEventStart(ServerLevel level, BlockPos pos, int durationTicks, Vec3 breachAxis, boolean inward) {
+        sendToAllAround(level, pos, DecompressionEventPacket.start(pos, durationTicks, breachAxis, inward));
     }
 
     public static void sendDecompressionEventStop(ServerLevel level, BlockPos pos) {
         sendToAllAround(level, pos, DecompressionEventPacket.stop(pos));
     }
 
-    public static void sendDecompressionEventShift(ServerLevel level, BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks, Vec3 newBreachAxis) {
-        DecompressionEventPacket pkt = DecompressionEventPacket.shift(oldPos, newPos, durationTicks, elapsedTicks, newBreachAxis);
+    public static void sendDecompressionEventShift(ServerLevel level, BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks, Vec3 newBreachAxis, boolean inward) {
+        DecompressionEventPacket pkt = DecompressionEventPacket.shift(oldPos, newPos, durationTicks, elapsedTicks, newBreachAxis, inward);
         // Send in both locations to affect all players. Client handles dedup.
         sendToAllAround(level, oldPos, pkt);
         sendToAllAround(level, newPos, pkt);

@@ -35,7 +35,7 @@ public abstract class GasTankItemMixin {
                 new SimpleFluidContainer(
                         FluidConstants.fromMillibuckets(holder.getItem() == ModItems.GAS_TANK.get() ? 4000 : 8000),
                         1,
-                        (t, f) -> f.is(TFGTags.Fluids.BreathableCompressedAir)));
+                        (t, f) -> f.is(TFGTags.Fluids.CompressedAir) && f.is(TFGTags.Fluids.BreathableAir)));
     }
 
     /** Check which hand the used gas tank is in and update that hand. */

@@ -13,14 +13,16 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import earth.terrarium.adastra.common.registry.ModBlocks;
 
+import su.terrafirmagreg.core.common.environment.DimensionEnvironment;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 
-@SuppressWarnings({ "NoTranslation", "deprecation" })
+@SuppressWarnings("NoTranslation")
 public class EnvironmentApiDisplaySource extends NumericSingleLineDisplaySource {
 
     @Override
@@ -29,9 +31,6 @@ public class EnvironmentApiDisplaySource extends NumericSingleLineDisplaySource 
         BlockPos pos = context.getSourcePos();
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
-        MutableComponent oxygen = EnvironmentSystem.hasOxygen(level, pos)
-                ? Component.translatable("tfg.tooltip.recipe_condition.oxygenated.true")
-                : Component.translatable("tfg.tooltip.recipe_condition.oxygenated.false");
         float pressure = EnvironmentSystem.getPressure(level, pos);
         float gravity = EnvironmentSystem.getGravity(level, pos);
 
@@ -42,21 +41,28 @@ public class EnvironmentApiDisplaySource extends NumericSingleLineDisplaySource 
         int mode = context.sourceConfig().getInt("Mode");
         return switch (mode) {
             case 0 ->
-                // Oxygenated
-                oxygen;
+                // Pressure Pa
+                Component.translatable("tfg.tooltip.environment.pressure_pa", String.format("%,.0f", pressure));
             case 1 ->
                 // Pressure atm
-                Component.translatable("tfg.tooltip.environment.pressure_atm", String.format("%.2f", pressure));
+                Component.translatable("tfg.tooltip.environment.pressure_atm", String.format("%.2f", pressure / DimensionEnvironment.EARTH_PRESSURE));
             case 2 ->
-                // Pressure pascal
-                Component.translatable("tfg.tooltip.environment.pressure_pascal", String.format("%.1f", pressure * 101.3F));
+                // Pressure kPa
+                Component.translatable("tfg.tooltip.environment.pressure_kpa", String.format("%.1f", pressure / 1000.0F));
             case 3 ->
                 // Pressure bar
-                Component.translatable("tfg.tooltip.environment.pressure_bar", String.format("%.2f", pressure * 1.013F));
-            case 4 ->
+                Component.translatable("tfg.tooltip.environment.pressure_bar", String.format("%.2f", pressure / 100_000.0F));
+            case 4 -> {
+                // Atmosphere
+                Fluid atmosphere = EnvironmentSystem.getAtmosphere(level, pos);
+                yield atmosphere == null
+                        ? Component.translatable("tfg.tooltip.environment.atmosphere.none")
+                        : Component.translatable("tfg.tooltip.environment.atmosphere", atmosphere.getFluidType().getDescription());
+            }
+            case 5 ->
                 // Gravity m/s/s
                 Component.translatable("tfg.tooltip.environment.gravity_mss", String.format("%.1f", gravity));
-            case 5 ->
+            case 6 ->
                 // Gravity b/s/s
                 Component.translatable("tfg.tooltip.environment.gravity_bss", String.format("%.1f", gravity));
             default -> {
@@ -83,10 +89,11 @@ public class EnvironmentApiDisplaySource extends NumericSingleLineDisplaySource 
         if (!isFirstLine) {
             builder.addSelectionScrollInput(0, 120, (si, l) -> si
                     .forOptions(CreateLang.translatedOptions("display_source.environment",
-                            "oxygen",
+                            "pressure_pa",
                             "pressure_atm",
-                            "pressure_pascal",
+                            "pressure_kpa",
                             "pressure_bar",
+                            "atmosphere",
                             "gravity_mss",
                             "gravity_bss",
                             "redstone_power"))

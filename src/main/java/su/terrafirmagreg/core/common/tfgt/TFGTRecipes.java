@@ -181,7 +181,7 @@ public class TFGTRecipes {
         // The actual per-tick consumption is scaled by room volume in EnvironmentRecipeLogic.
         TFGTRecipeTypes.OXYGEN_DISTRIBUTION.recipeBuilder("oxygen_distribution")
                 .perTick(true)
-                .inputFluids(FluidIngredient.of(TFGTags.Fluids.BreathableCompressedAir, 1))
+                .inputFluids(FluidIngredient.of(TFGTags.Fluids.CompressedAir, 100))
                 .perTick(false)
                 .duration(20)
                 .EUt(16)

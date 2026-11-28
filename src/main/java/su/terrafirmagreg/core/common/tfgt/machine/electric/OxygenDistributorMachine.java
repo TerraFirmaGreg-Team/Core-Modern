@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
@@ -56,7 +58,7 @@ import su.terrafirmagreg.core.common.tfgt.ui.TFGUITextures;
  * Attach to a GT machine wrapper ({@link OxygenDistributorSingleblock} or a multiblock) via composition.
  * The GT wrapper handles registration and lifecycle hooks; this class handles everything else.
  */
-public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnvironmentMachine {
+public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnvironmentMachine.IAtmosphereMachine {
 
     /** GT machine wrapper hosting this logic */
     private final IOxygenDistributorHost host;
@@ -64,6 +66,14 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     /** The provider that holds our room data and handles oxygen queries */
     @Nullable
     private OxygenProvider provider;
+
+    /** The provider that exposes this room's pressure to the dimension */
+    @Nullable
+    private PressureProvider pressureProvider;
+
+    /** Atmosphere supplied by the current recipe */
+    @Nullable
+    private Fluid currentAtmosphere;
 
     /** Pending scan result from async validation */
     private RoomScan newRoomScan;
@@ -117,6 +127,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     /** Called by the wrapper's beforeWorking. */
     public void beforeWorking(@Nullable GTRecipe recipe) {
         updateFluidCost(recipe);
+        currentAtmosphere = resolveAtmosphere(recipe);
     }
 
     private void updateFluidCost(@Nullable GTRecipe recipe) {
@@ -127,33 +138,41 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             return;
         }
 
-        int baseCost = 0;
-        var fluidInputs = recipe.getTickInputContents(FluidRecipeCapability.CAP);
-        if (!fluidInputs.isEmpty()) {
-            baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).content()).getAmount();
-        }
+        FluidIngredient ingredient = getFluidIngredient(recipe);
+        int baseCost = ingredient == null ? 0 : ingredient.getAmount();
         // baseCost mB/min per 10k blocks -> mB/tick for actual volume and multiply by Rotor Efficiency
         envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * EnclosedRoomEnergyCurve.BASE_VOLUME) * host.getConsumptionMultiplier());
+    }
+
+    @Nullable
+    private static FluidIngredient getFluidIngredient(GTRecipe recipe) {
+        var fluidInputs = recipe.getTickInputContents(FluidRecipeCapability.CAP);
+        if (fluidInputs.isEmpty())
+            return null;
+        return fluidInputs.get(0).content() instanceof FluidIngredient ingredient ? ingredient : null;
+    }
+
+    @Nullable
+    private Fluid resolveAtmosphere(@Nullable GTRecipe recipe) {
+        if (recipe == null)
+            return null;
+
+        FluidIngredient ingredient = getFluidIngredient(recipe);
+        FluidStack stack = host.getAtmosphereInput();
+        if (ingredient == null || stack == null || !ingredient.test(stack))
+            return null;
+
+        return stack.getFluid();
     }
 
     private int computeEffectiveVolume() {
         RoomScan scan = getRoomScan();
         if (scan.isSealed()) {
             return Math.max(1, scan.interiorSize());
-
         } else if (scan.status() == Status.NULL) {
             return 1;
-
-        } else {
-            // Unsealed: cost based on BASE_VOLUME, scaled by pressure difference
-            float pressure = manager != null ? manager.getPressure(getPos()) : 0.0f;
-            if (pressure < 1.0f) {
-                float leakFactor = 1.0f - pressure;
-                return Math.max(1, (int) (EnclosedRoomEnergyCurve.BASE_VOLUME * (1.0f + 0.3f * leakFactor)));
-            } else {
-                return Math.max(1, (int) (EnclosedRoomEnergyCurve.BASE_VOLUME / pressure));
-            }
         }
+        return EnclosedRoomEnergyCurve.BASE_VOLUME;
     }
 
     //////////////////////////////////////
@@ -433,17 +452,21 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         TFGCore.LOGGER.debug("Registered in {} new chunks for block change listening", toAdd.size());
 
         manager.updateProvider(provider, oldScan, newScan);
+        if (pressureProvider != null)
+            manager.updatePressureProvider(pressureProvider, pressureProvider.getRoomScan(), newScan);
 
         host.setShowTraceButton(!newScan.isSealed() && newScan.status() != Status.NULL && newScan.hasEscapePoint());
 
-        // Decompression: sealed && working -> breached
+        float insidePressure = getPressure();
+        float outsidePressure = manager.getDimensionPressure();
+        float pressureDifferential = (insidePressure - outsidePressure) / Math.max(insidePressure, outsidePressure);
         if (isWorking()
                 && oldScan.isSealed()
                 && newScan.status() == Status.ESCAPED_BUILD_HEIGHT
-                && manager.getPressure(getPos()) < DimensionEnvironment.DECOMPRESSION_THRESHOLD) {
+                && Math.abs(pressureDifferential) >= 0.05f) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
-                activeDecompression = manager.startDecompression(breachPoint, oldScan);
+                activeDecompression = manager.startDecompression(breachPoint, oldScan, pressureDifferential < 0.0f);
             }
         }
 
@@ -568,16 +591,23 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
         manager = EnvironmentSystem.getManager(level);
         provider = manager.getOrCreateProvider(getPos());
         provider.attach(this);
+        pressureProvider = manager.getOrCreatePressureProvider(getPos());
+        pressureProvider.attach(this);
+        manager.updatePressureProvider(pressureProvider, pressureProvider.getRoomScan(), provider.getRoomScan());
         requestValidation();
     }
 
     public void onUnload() {
         TFGCore.LOGGER.debug("onUnload, pos={}, provider={}", getPos(), provider != null);
-        if (provider == null)
+        if (provider == null && pressureProvider == null)
             return;
-        provider.detach();
+        if (provider != null)
+            provider.detach();
+        if (pressureProvider != null)
+            pressureProvider.detach();
         deregisterListeners();
         provider = null;
+        pressureProvider = null;
     }
 
     public void onRemoved() {
@@ -586,7 +616,9 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             return;
         deregisterListeners();
         manager.removeProvider(getPos());
+        manager.removePressureProvider(getPos());
         provider = null;
+        pressureProvider = null;
     }
 
     private void deregisterListeners() {
@@ -618,5 +650,16 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     @Override
     public boolean isWorking() {
         return host.getRecipeLogic() != null && host.getRecipeLogic().isWorking();
+    }
+
+    @Override
+    public float getPressure() {
+        return DimensionEnvironment.EARTH_PRESSURE;
+    }
+
+    @Override
+    @Nullable
+    public Fluid getAtmosphere() {
+        return isWorking() ? currentAtmosphere : null;
     }
 }

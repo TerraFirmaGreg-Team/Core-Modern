@@ -183,7 +183,8 @@ public final class TFGTags {
     }
 
     public static final class Fluids {
-        public static final TagKey<Fluid> BreathableCompressedAir = createFluidTag("breathable_compressed_air");
+        public static final TagKey<Fluid> CompressedAir = createFluidTag("compressed_air");
+        public static final TagKey<Fluid> BreathableAir = createFluidTag("breathable_air");
         public static final TagKey<Fluid> WarmingDrinks = createFluidTag("warming_drinks");
         public static final TagKey<Fluid> CoolingDrinks = createFluidTag("cooling_drinks");
         public static final TagKey<Fluid> WATER_BOILER = createFluidTag("water_boiler");

@@ -8,12 +8,15 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.mui.MachineUIPanelBuilder;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.fluids.FluidStack;
 
 import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.factory.PosGuiData;
@@ -106,6 +109,18 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     @Override
     public long getEnergyInputPerSec() {
         return Math.max(0, getEnergyContainer().getInputPerSec());
+    }
+
+    @Override
+    @Nullable
+    public FluidStack getAtmosphereInput() {
+        for (MultiblockPartMachine part : getParts()) {
+            if (part instanceof FluidHatchPartMachine hatch) {
+                FluidStack stack = hatch.tank.getFluidInTank(0);
+                return stack.isEmpty() ? null : stack;
+            }
+        }
+        return null;
     }
 
     @Override

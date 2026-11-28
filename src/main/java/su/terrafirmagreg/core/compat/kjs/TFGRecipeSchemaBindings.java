@@ -14,13 +14,15 @@ import su.terrafirmagreg.core.common.tfgt.recipe.condition.*;
 @SuppressWarnings("unused")
 public final class TFGRecipeSchemaBindings {
 
-    // Oxygenated Conditions.
+    // Atmosphere Conditions.
     public static GTRecipeJS isOxygenated(GTRecipeJS recipe, boolean isOxygenated) {
-        return recipe.addCondition(new OxygenatedCondition(false, isOxygenated));
+        if (!isOxygenated)
+            throw new IllegalArgumentException("isOxygenated(false) is not supported");
+        return recipe.addCondition(AtmosphereCondition.breathable());
     }
 
-    public static GTRecipeJS isOxygenated(GTRecipeJS recipe, boolean isOxygenated, boolean reverse) {
-        return recipe.addCondition(new OxygenatedCondition(reverse, isOxygenated));
+    public static GTRecipeJS hasAtmosphere(GTRecipeJS recipe, String fluidTag) {
+        return recipe.addCondition(new AtmosphereCondition(AtmosphereCondition.fluidTag(fluidTag)));
     }
 
     // Month Conditions.

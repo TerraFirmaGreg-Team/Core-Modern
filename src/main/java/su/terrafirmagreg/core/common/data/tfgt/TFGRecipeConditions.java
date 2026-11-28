@@ -16,7 +16,7 @@ public class TFGRecipeConditions {
     private TFGRecipeConditions() {
     }
 
-    public static RecipeConditionType<OxygenatedCondition> OXYGENATED;
+    public static RecipeConditionType<AtmosphereCondition> ATMOSPHERE;
     public static RecipeConditionType<MonthCondition> MONTHS;
     public static RecipeConditionType<SeasonCondition> SEASONS;
     public static RecipeConditionType<AverageTemperatureCondition> CLIMATE_AVG_TEMPERATURE;
@@ -29,7 +29,7 @@ public class TFGRecipeConditions {
     }
 
     static {
-        OXYGENATED = register("oxygenated", OxygenatedCondition::new, OxygenatedCondition.CODEC);
+        ATMOSPHERE = register("atmosphere", AtmosphereCondition::new, AtmosphereCondition.CODEC);
         MONTHS = register("months", MonthCondition::new, MonthCondition.CODEC);
         SEASONS = register("seasons", SeasonCondition::new, SeasonCondition.CODEC);
         CLIMATE_AVG_TEMPERATURE = register("climate_avg_temperature", AverageTemperatureCondition::new, AverageTemperatureCondition.CODEC);

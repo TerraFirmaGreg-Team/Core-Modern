@@ -8,7 +8,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.environment.DimEnvManager;
 import su.terrafirmagreg.core.common.environment.DimensionEnvironment;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
@@ -33,10 +36,12 @@ public class DebugEnvironmentCommand {
     private static int checkEnvironment(CommandSourceStack source, ServerLevel level, BlockPos pos) {
         DimEnvManager manager = EnvironmentSystem.getManager(level);
 
-        // Oxygen status
-        boolean hasOxygen = EnvironmentSystem.hasOxygen(level, pos);
+        // Atmosphere status
+        Fluid atmosphere = EnvironmentSystem.getAtmosphere(level, pos);
+        String atmosphereName = atmosphere == null ? "none" : ForgeRegistries.FLUIDS.getKey(atmosphere).toString();
         source.sendSuccess(() -> Component.literal(String.format(
-                "Oxygen at %s: %s", pos.toShortString(), hasOxygen ? "YES" : "NO")), false);
+                "Atmosphere at %s: %s (breathable=%s)", pos.toShortString(), atmosphereName,
+                atmosphere != null && atmosphere.is(TFGTags.Fluids.BreathableAir))), false);
 
         // Temperature status
         float temperature = EnvironmentSystem.getTemperature(level, pos);
@@ -52,7 +57,7 @@ public class DebugEnvironmentCommand {
         // Pressure status
         float pressure = EnvironmentSystem.getPressure(level, pos);
         source.sendSuccess(() -> Component.literal(String.format(
-                "Pressure at %s: %.3f atm", pos.toShortString(), pressure)), false);
+                "Pressure at %s: %,.0f Pa", pos.toShortString(), pressure)), false);
 
         // Oxygen providers
         int oxygenCount = 0;

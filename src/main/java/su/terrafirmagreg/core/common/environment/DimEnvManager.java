@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.level.BlockEvent;
 
@@ -27,6 +28,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo;
 import su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo.PassType;
 
@@ -310,32 +312,39 @@ public class DimEnvManager extends SavedData {
     // ==================== Oxygen Queries ====================
 
     /**
-     * Checks if a position has oxygen (from any source - flood fill or bubble).
+     * Gets the atmosphere at a position (from the natural environment, flood fill or bubble).
      *
      * @param pos Position to check
-     * @return true if the position has oxygen
+     * @return The atmosphere at the position, falling back to the dimension's natural atmosphere, or null for vacuum
      */
-    public boolean hasOxygen(BlockPos pos) {
-        if (environment.hasOxygen())
-            return true;
-
-        if (oxygenIndex.isEmpty())
-            return false;
-
-        ProfilerFiller profiler = level.getProfiler();
-        profiler.push("tfg.environment.hasOxygen");
-        ChunkPos chunkPos = new ChunkPos(pos);
-        Set<OxygenProvider> providerSet = oxygenIndex.get(chunkPos);
-        if (providerSet != null) {
-            for (OxygenProvider provider : providerSet) {
-                if (provider.hasOxygen(pos)) {
-                    profiler.pop();
-                    return true;
+    public @Nullable Fluid getAtmosphere(BlockPos pos) {
+        if (!oxygenIndex.isEmpty()) {
+            ProfilerFiller profiler = level.getProfiler();
+            profiler.push("tfg.environment.getAtmosphere");
+            ChunkPos chunkPos = new ChunkPos(pos);
+            Set<OxygenProvider> providerSet = oxygenIndex.get(chunkPos);
+            if (providerSet != null) {
+                for (OxygenProvider provider : providerSet) {
+                    Fluid supplied = provider.getAtmosphere(pos);
+                    if (supplied != null) {
+                        profiler.pop();
+                        return supplied;
+                    }
                 }
             }
+            profiler.pop();
         }
-        profiler.pop();
-        return false;
+
+        return environment.atmosphere();
+    }
+
+    /**
+     * Use getAtmosphere instead.
+     */
+    @Deprecated
+    public boolean hasOxygen(BlockPos pos) {
+        Fluid atmosphere = getAtmosphere(pos);
+        return atmosphere != null && atmosphere.is(TFGTags.Fluids.BreathableAir);
     }
 
     /**
@@ -359,7 +368,14 @@ public class DimEnvManager extends SavedData {
     // ==================== Pressure Queries ====================
 
     /**
-     * Gets the pressure at a position, in atmospheres.
+     * Gets this dimension's natural pressure, in pascals (Pa).
+     */
+    public float getDimensionPressure() {
+        return environment.pressure();
+    }
+
+    /**
+     * Gets the pressure at a position, in pascals (Pa).
      * Currently returns the dimension default, but may depend on Y-level in the future
      * (e.g. Europa ocean depth).
      */
@@ -383,12 +399,12 @@ public class DimEnvManager extends SavedData {
 
     // ==================== Decompression Events ====================
 
-    public DecompressionEvent startDecompression(BlockPos breachPoint, RoomScan oldRoomScan) {
+    public DecompressionEvent startDecompression(BlockPos breachPoint, RoomScan oldRoomScan, boolean inward) {
         for (DecompressionEvent existing : activeDecompressions) {
             if (existing.getBreachPoint().equals(breachPoint))
                 return existing;
         }
-        DecompressionEvent event = new DecompressionEvent(level, breachPoint, oldRoomScan);
+        DecompressionEvent event = new DecompressionEvent(level, breachPoint, oldRoomScan, inward);
         activeDecompressions.add(event);
         return event;
     }
